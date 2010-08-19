@@ -1,0 +1,72 @@
+/*
+ * Copyright (C) 2010 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+package org.exoplatform.web.controller.router;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.protocol.ControllerResponse;
+import org.exoplatform.web.controller.protocol.ProcessResponse;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+/**
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+public abstract class AbstractTestController extends TestCase
+{
+
+   public void assertProcessResponse(String controllerId, String path, Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   {
+      assertNotNull(response);
+      assertEquals(ProcessResponse.class, response.getClass());
+      assertEquals(controllerId, ((ProcessResponse)response).getControllerId());
+      // todo check path and define semantic
+      // assertEquals(path, ((ProcessResponse)response).getPath());
+      assertEquals(parameters, ((ProcessResponse)response).getParameters());
+   }
+
+   public void assertProcessResponse(String controllerId, ControllerResponse response)
+   {
+      assertProcessResponse(controllerId, null, Collections.<QualifiedName, String[]>emptyMap(), response);
+   }
+
+   public void assertProcessResponse(String controllerId, String path, ControllerResponse response)
+   {
+      assertProcessResponse(controllerId, path, Collections.<QualifiedName, String[]>emptyMap(), response);
+   }
+
+   public void assertProcessResponse(String controllerId, Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   {
+      assertProcessResponse(controllerId, null, parameters, response);
+   }
+
+   public void assertEquals(Map<QualifiedName, String[]> expectedParameters, Map<QualifiedName, String[]> parameters)
+   {
+      Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
+      for (Map.Entry<QualifiedName, String[]> expectedEntry : expectedParameters.entrySet())
+      {
+         Assert.assertEquals(Arrays.asList(expectedEntry.getValue()), Arrays.asList(parameters.get(expectedEntry.getKey())));
+      }
+   }
+}

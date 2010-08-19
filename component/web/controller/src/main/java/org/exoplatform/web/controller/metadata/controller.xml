@@ -1,0 +1,24 @@
+<router>
+
+    <route match="/private/{gtn:sitename}" to="SiteController">
+      <parameter name="gtn:sitetype" value="portal"/>
+    </route>
+
+    <route match="/groups/{gtn:sitename}" to="SiteController">
+      <parameter name="gtn:sitetype" value="group"/>
+    </route>
+
+    <route match="/users/{gtn:sitename}" to="SiteController">
+      <parameter name="gtn:sitetype" value="user"/>
+    </route>
+
+    <route match="/" to="foo"/>
+
+    <route match="/public" to="foo"/>
+
+    <route match="/download" to="DownloadController"/>
+
+    <route match="/upload" to="UploadController"/>
+
+</router>
+
