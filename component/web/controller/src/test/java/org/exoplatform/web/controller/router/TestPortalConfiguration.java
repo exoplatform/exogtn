@@ -44,8 +44,12 @@ public class TestPortalConfiguration extends AbstractTestController
       ControllerRefMetaData portalControllerRef = new ControllerRefMetaData("site");
       portalControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "portal");
       routerMD.addRoute("/private/{{gtn}sitename}/{{gtn}path:.*}", portalControllerRef);
-      routerMD.addRoute("/groups/{{gtn}sitename}/{{gtn}path:.*}", new ControllerRefMetaData("site"));
-      routerMD.addRoute("/users/{{gtn}sitename}/{{gtn}path:.*}", new ControllerRefMetaData("site"));
+      ControllerRefMetaData groupControllerRef = new ControllerRefMetaData("site");
+      groupControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "group");
+      routerMD.addRoute("/groups/{{gtn}sitename}/{{gtn}path:.*}", groupControllerRef);
+      ControllerRefMetaData userControllerRef = new ControllerRefMetaData("site");
+      userControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "user");
+      routerMD.addRoute("/users/{{gtn}sitename}/{{gtn}path:.*}", userControllerRef);
 
       //
       this.router = new Router(routerMD);
@@ -57,7 +61,10 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{""});
+
+      //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic")));
+      assertEquals("private/classic", router.render("site", expectedParameters));
    }
 
    public void testPrivateClassicSlash() throws Exception
@@ -67,7 +74,10 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{""});
+
+      //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/")));
+      assertEquals("private/classic", router.render("site", expectedParameters));
    }
 
    public void testPrivateClassicHome() throws Exception
@@ -76,6 +86,9 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"home"});
+
+      //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/home")));
+      assertEquals("private/classic/home", router.render("site", expectedParameters));
    }
 }
