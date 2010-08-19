@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -48,43 +47,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun
- * 14, 2006
+ * Just a class that contains the Page related action listeners
+ * 
+ * @author <a href="mailto:trongtt@gmail.com">Tran The Trong</a>
+ * @version $Revision$
  */
 public class UIPageActionListener
 {
-   static public class ChangePageNodeActionListener extends EventListener<UIPortal>
+   static public class ChangePageNodeActionListener extends EventListener<UIPortalApplication>
    {
-      public void execute(Event<UIPortal> event) throws Exception
+      public void execute(Event<UIPortalApplication> event) throws Exception
       {
-         UIPortal showedUIPortal = event.getSource();
-         UIPortalApplication uiPortalApp = showedUIPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiPortalApp = event.getSource();
+         UIPortal showedUIPortal = uiPortalApp.getShowedUIPortal();
          
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
          
-         String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
+         String uri = ((PageNodeEvent<UIPortalApplication>)event).getTargetNodeUri();
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withReadCheck();
          builder.withTemporalCheck();
-         UserNode naviPath = userPortal.resolvePath(builder.build(), uri);
-
-         if (naviPath == null)
+         UserNode targetNode = userPortal.resolvePath(builder.build(), uri);
+         if (targetNode == null)
          {
             UIPageBody uiPageBody = showedUIPortal.findFirstComponentOfType(UIPageBody.class);
             uiPageBody.setUIComponent(null);
             return;
-         }
+         }         
+         UserNavigation targetNav = targetNode.getNavigation();
          
-         UserNavigation targetNav = naviPath.getNavigation();
-         
-         UserNode currentNavPath = showedUIPortal.getNavPath();
-         
+         UserNode currentNavPath = showedUIPortal.getNavPath();         
          if(currentNavPath != null && currentNavPath.getNavigation().getKey().equals(targetNav.getKey()))
          {
             //Case 1: Both navigation type and id are not changed, but current page node is changed
-            if(!currentNavPath.getURI().equals(naviPath.getURI()))
+            if(!currentNavPath.getURI().equals(targetNode.getURI()))
             {
-               showedUIPortal.setNavPath(naviPath);
+               showedUIPortal.setNavPath(targetNode);
             }
          }
          else
@@ -97,7 +95,7 @@ public class UIPageActionListener
             showedUIPortal = uiPortalApp.getCachedUIPortal(targetNav.getKey());
             if (showedUIPortal != null)
             {
-               showedUIPortal.setNavPath(naviPath);
+               showedUIPortal.setNavPath(targetNode);
                uiPortalApp.setShowedUIPortal(showedUIPortal);
                
                //Temporary solution to fix edit inline error while switching between navigations
@@ -115,7 +113,7 @@ public class UIPageActionListener
                {
                   return;
                }
-               showedUIPortal.setNavPath(naviPath);
+               showedUIPortal.setNavPath(targetNode);
                uiPortalApp.setShowedUIPortal(showedUIPortal);
                uiPortalApp.putCachedUIPortal(showedUIPortal);
             }
@@ -124,13 +122,13 @@ public class UIPageActionListener
          showedUIPortal.refreshUIPage();
       }
 
-      private UIPortal buildUIPortal(SiteKey newPageNav, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception
+      private UIPortal buildUIPortal(SiteKey siteKey, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception
       {
          DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
          if(storage == null){
             return null;
          }
-         PortalConfig portalConfig = storage.getPortalConfig(newPageNav.getTypeName(), newPageNav.getName());
+         PortalConfig portalConfig = storage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
          Container layout = portalConfig.getPortalLayout();
          if(layout != null)
          {

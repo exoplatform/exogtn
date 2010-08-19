@@ -63,46 +63,37 @@ public class PortalStateManager extends StateManager
          appState = (ApplicationState)session.getAttribute(APPLICATION_ATTRIBUTE_PREFIX + key);
       }
 
-      //
-
-      //
       UIApplication uiapp = null;
       if (appState != null)
       {
+         log.debug("Found application " + key + " :" + appState.getApplication());
          if (Safe.equals(context.getRemoteUser(), appState.getUserName()))
          {
             uiapp = appState.getApplication();
          }
-      }
-
-      //
-      if (appState != null)
-      {
-         log.debug("Found application " + key + " :" + appState.getApplication());
       }
       else
       {
          log.debug("Application " + key + " not found");
       }
 
-      // Looks like some necessary hacking
-      if (context instanceof PortalRequestContext)
-      {
-         PortalRequestContext portalRC = (PortalRequestContext)context;
-         UserPortalConfig config = getUserPortalConfig(portalRC);
-         if (config == null)
-         {
-            HttpServletResponse response = portalRC.getResponse();
-            response.sendRedirect(portalRC.getRequest().getContextPath() + "/portal-unavailable.jsp");
-            portalRC.setResponseComplete(true);
-            return null;
-         }
-         portalRC.setAttribute(UserPortalConfig.class, config);
-      }
-
       //
       if (uiapp == null)
       {
+         if (context instanceof PortalRequestContext)
+         {
+            PortalRequestContext portalRC = (PortalRequestContext)context;
+            UserPortalConfig config = getUserPortalConfig(portalRC);
+            if (config == null)
+            {
+               HttpServletResponse response = portalRC.getResponse();
+               response.sendRedirect(portalRC.getRequest().getContextPath() + "/portal-unavailable.jsp");
+               portalRC.setResponseComplete(true);
+               return null;
+            }
+            portalRC.setAttribute(UserPortalConfig.class, config);
+         }
+         
          ConfigurationManager cmanager = app.getConfigurationManager();
          String uirootClass = cmanager.getApplication().getUIRootComponent();
          Class<? extends UIApplication> type = (Class<UIApplication>) Thread.currentThread().getContextClassLoader().loadClass(uirootClass);

@@ -87,8 +87,8 @@ public class UIMainActionListener
 
          UIPortalComposer portalComposer =
             uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-         portalComposer.setId("UIPageEditor");
+         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
          portalComposer.setShowControl(true);
          portalComposer.setEditted(false);
          portalComposer.setCollapse(false);
@@ -150,8 +150,8 @@ public class UIMainActionListener
 
          UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
          portalComposer.setRendered(false);
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-         portalComposer.setId("UIPageEditor");
+         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
          portalComposer.setShowControl(true);
          portalComposer.setEditted(true);
          portalComposer.setCollapse(false);
@@ -240,7 +240,7 @@ public class UIMainActionListener
          uiComposer.setShowControl(true);
          uiComposer.setEditted(false);
          uiComposer.setCollapse(false);
-         uiComposer.setId("UIPortalComposer");
+         uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
 
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);

@@ -293,7 +293,7 @@ public class UISiteManagement extends UIContainer
          uiComposer.setCollapse(false);
          uiComposer.setShowControl(true);
          uiComposer.setComponentConfig(UIPortalComposer.class, null);
-         uiComposer.setId("UIPortalComposer");
+         uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
          
          UIPortal uiPortal = Util.getUIPortal();
          uiWorkingWS.setBackupUIPortal(uiPortal);

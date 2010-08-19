@@ -36,6 +36,7 @@ import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -322,7 +323,7 @@ public class UIPortalNavigation extends UIComponent
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
-         UIPortal uiPortal = Util.getUIPortal();
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
 
          TreeNode selectedNode = event.getSource().getTreeNodes().findNodes(treePath);
@@ -333,9 +334,9 @@ public class UIPortalNavigation extends UIComponent
             return;
          }
          
-         PageNodeEvent<UIPortal> pnevent;
-         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getNode().getURI());
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         PageNodeEvent<UIPortalApplication> pnevent;
+         pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getNode().getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
       }
    }
 

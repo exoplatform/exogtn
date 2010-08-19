@@ -31,6 +31,8 @@ import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.event.Event;
 
 import java.util.List;
 
@@ -114,10 +116,12 @@ public class PortalRequestHandler extends WebRequestHandler
          UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
          if (context.getUIApplication() != uiApp)
             context.setUIApplication(uiApp);
-
+         
          if (uiApp != null)
+         {
             uiApp.processDecode(context);
-
+         }
+         
          if (!context.isResponseComplete() && !context.getProcessRender())
          {
             startRequestPhaseLifecycle(app, context, lifecycles, Phase.ACTION);

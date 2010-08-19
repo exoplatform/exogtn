@@ -54,6 +54,7 @@ public class UIPortalActionListener
       }
    }
 
+   //TODO This method seems not to be used
    static public class ChangeWindowStateActionListener extends EventListener<UIPortal>
    {
       public void execute(Event<UIPortal> event) throws Exception

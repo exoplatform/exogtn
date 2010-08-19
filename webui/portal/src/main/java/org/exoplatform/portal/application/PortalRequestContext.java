@@ -29,7 +29,9 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
+import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -42,6 +44,7 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.event.Event;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
@@ -69,7 +72,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PortalRequestContext extends WebuiRequestContext
 {
-
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestContext");
 
    final static public int PUBLIC_ACCESS = 0;
@@ -113,9 +115,9 @@ public class PortalRequestContext extends WebuiRequestContext
    private List<Element> extraMarkupHeaders;
 
    private final PortalURLBuilder urlBuilder;
-   
-   private Map<String, String[]> parameterMap;
 
+   private Map<String, String[]> parameterMap;
+   
    private Locale locale = Locale.ENGLISH;
 
    public JavascriptManager getJavascriptManager()
@@ -123,18 +125,30 @@ public class PortalRequestContext extends WebuiRequestContext
       return jsmanager_;
    }
 
+   /**
+    * Analyze a request and split this request's URI to get useful information
+    * then keep it in following properties of PortalRequestContext :<br/>
+    * 1. <code>requestURI</code> : The decoded URI of this request <br/>
+    * 2. <code>portalOwner</code> : The portal name ( "classic" for instance )<br/>
+    * 3. <code>portalURI</code> : The URI to current portal ( "/portal/classic/ for instance )<br/>
+    * 4. <code>nodePath</code> : The path that is used to reflect to a navigation node
+    * 
+    * @param app an instance of {@link PortalApplication}
+    * @param req the {@ HttpServletRequest} object that is sent to the {@link PortalController} servlet
+    * @param res 
+    * @throws Exception
+    */
    public PortalRequestContext(WebuiApplication app, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       super(app);
       request_ = req;
       response_ = res;
       response_.setBufferSize(1024 * 100);
-      setSessionId(req.getSession().getId());
-      
-      
+      setSessionId(request_.getSession().getId());
+
       //The encoding needs to be set before reading any of the parameters since the parameters's encoding
       //is set at the first access.
-      
+
       //TODO use the encoding from the locale-config.xml file
       response_.setContentType("text/html; charset=UTF-8");
       try
@@ -145,20 +159,20 @@ public class PortalRequestContext extends WebuiRequestContext
       {
          log.error("Encoding not supported", e);
       }
-      
+
       // Query parameters from the request will be set in the servlet container url encoding and not
       // necessarly in utf-8 format. So we need to directly parse the parameters from the query string.
       parameterMap = new HashMap<String, String[]>();
       parameterMap.putAll(request_.getParameterMap());
-      String queryString = req.getQueryString();
+      String queryString = request_.getQueryString();
       if (queryString != null)
       {
          Map<String, String[]> queryParams = QueryStringParser.getInstance().parseQueryString(queryString);
          parameterMap.putAll(queryParams);
       }
-      
-      ajaxRequest_ = "true".equals(req.getParameter("ajaxRequest"));
-      String cache = req.getParameter(CACHE_LEVEL);
+
+      ajaxRequest_ = "true".equals(request_.getParameter("ajaxRequest"));
+      String cache = request_.getParameter(CACHE_LEVEL);
       if (cache != null)
       {
          cacheLevel_ = cache;
@@ -170,8 +184,8 @@ public class PortalRequestContext extends WebuiRequestContext
       // req.getPathInfo will already have the encoding set from the server.
       // We need to use the UTF-8 value since this is how we store the portal name.
       // Reconstructing the getPathInfo from the non server decoded values.
-      String servletPath = URLDecoder.decode(req.getServletPath(), "UTF-8");
-      String contextPath = URLDecoder.decode(req.getContextPath(), "UTF-8");
+      String servletPath = URLDecoder.decode(request_.getServletPath(), "UTF-8");
+      String contextPath = URLDecoder.decode(request_.getContextPath(), "UTF-8");
       String pathInfo = "/";
       if (decodedURI.length() > servletPath.length() + contextPath.length())
          pathInfo = decodedURI.substring(servletPath.length() + contextPath.length());
@@ -336,7 +350,7 @@ public class PortalRequestContext extends WebuiRequestContext
    {
       return portalURI;
    }
-
+   
    public URLBuilder<UIComponent> getURLBuilder()
    {
       return urlBuilder;
@@ -365,10 +379,10 @@ public class PortalRequestContext extends WebuiRequestContext
       }
       return writer_;
    }
-   
+
    final public void setWriter(Writer writer)
    {
-	   this.writer_ = writer;
+      this.writer_ = writer;
    }
 
    final public boolean useAjax()
@@ -428,10 +442,11 @@ public class PortalRequestContext extends WebuiRequestContext
          response_.setHeader(key, headers.get(key));
       }
    }
-   
+
    public List<String> getExtraMarkupHeadersAsStrings() throws Exception
    {
       List<String> markupHeaders = new ArrayList<String>();
+
       if (extraMarkupHeaders != null && !extraMarkupHeaders.isEmpty())
       {
          for (Element element : extraMarkupHeaders)
@@ -441,29 +456,30 @@ public class PortalRequestContext extends WebuiRequestContext
             markupHeaders.add(sw.toString());
          }
       }
+
       return markupHeaders;
    }
-   
+
    /**
     * Get the extra markup headers to add to the head of the html.
     * @return The markup to be added.
     */
    public List<Element> getExtraMarkupHeaders()
    {
-	   return this.extraMarkupHeaders;
+      return this.extraMarkupHeaders;
    }
-   
+
    /**
     * Add an extra markup to the head of the html page.
     * @param element The element to add
     */
    public void addExtraMarkupHeader(Element element)
    {
-	  if (this.extraMarkupHeaders == null)
-	  {
-		  this.extraMarkupHeaders = new ArrayList<Element>();
-	  }
-	  this.extraMarkupHeaders.add(element);
+      if (this.extraMarkupHeaders == null)
+      {
+         this.extraMarkupHeaders = new ArrayList<Element>();
+      }
+      this.extraMarkupHeaders.add(element);
    }
 
    final public static UserPortalContext USER_PORTAL_CONTEXT = new UserPortalContext()

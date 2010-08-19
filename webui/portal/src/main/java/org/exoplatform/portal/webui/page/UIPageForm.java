@@ -307,7 +307,7 @@ public class UIPageForm extends UIFormTabPane
             PortalDataMapper.toUIPage(uiPage, page);
          } catch(NoSuchDataException de){
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.notExistOrDeleted", null, ApplicationMessage.ERROR));
-            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById("UIPageEditor");
+            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById(UIPortalComposer.UIPAGE_EDITOR);
             if(uiPortalComposer != null){
                Event aboutEvent = new Event<UIPortalComposer>(uiPortalComposer, "Abort", event.getRequestContext());
                uiPortalComposer.broadcast(aboutEvent, event.getExecutionPhase());

@@ -23,6 +23,7 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -100,9 +101,9 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       public void execute(Event<UIBreadcumbs> event) throws Exception
       {
          String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-         UIPortal uiPortal = Util.getUIPortal();
-         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         PageNodeEvent<UIPortalApplication> pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, uri);
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
       }
    }
 

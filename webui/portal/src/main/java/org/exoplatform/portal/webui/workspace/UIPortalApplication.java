@@ -30,11 +30,13 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -50,6 +52,7 @@ import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
@@ -68,7 +71,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * This extends the UIApplication and hence is a sibling of UIPortletApplication
  * (used by any eXo Portlets as the Parent class to build the portlet component
@@ -78,7 +80,8 @@ import java.util.Set;
  * display the normal or webos portal layouts - UIPopupWindow: a popup window
  * that display or not
  */
-@ComponentConfig(lifecycle = UIPortalApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl")
+@ComponentConfig(lifecycle = UIPortalApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl", events = {
+      @EventConfig(listeners = ChangePageNodeActionListener.class)})
 public class UIPortalApplication extends UIApplication
 {
    public static final int NORMAL_MODE = 0;
@@ -93,7 +96,7 @@ public class UIPortalApplication extends UIApplication
 
    private int modeState = NORMAL_MODE;
 
-   private String nodePath_;
+   private String lastNodePath;
 
    private Orientation orientation_ = Orientation.LT;
 
@@ -303,6 +306,16 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
+   public String getLastNodePath()
+   {
+      return lastNodePath;
+   }
+
+   public void setLastNodePath(String lastNodePath)
+   {
+      this.lastNodePath = lastNodePath;
+   }
+   
    public Collection<String> getJavascriptURLs()
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
@@ -503,29 +516,27 @@ public class UIPortalApplication extends UIApplication
    }
 
    /**
-    * The processDecode() method is doing 3 actions: 
-    * 1) if the nodePath is null (case of the first request) a call to 
-    * super.processDecode(context) is made and we end the method here 
-    * 2) if the nodePath exist but is equals to the current one 
-    * then we also call super and stops here 
-    * 3) if the requested nodePath is not equals to the current one or current 
-    * page no longer exists, then an event of type PageNodeEvent.CHANGE_PAGE_NODE 
-    * is sent to the associated EventListener; a call to super is then done
+    * The processDecode() method first check if : <p>
+    * 1/ The requested nodePath is not equals to the last visited one 
+    * then an event of type PageNodeEvent.CHANGE_PAGE_NODE 
+    * is sent to the associated EventListener, a call to super is then done. <br>
+    * 2/ Otherwise, we call super and stops here.
     */
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
       String nodePath = pcontext.getNodePath().trim();
-      
-      if (!nodePath.equals(nodePath_) || !isPageExist())
+      if(!nodePath.equals(lastNodePath))
       {
-         nodePath_ = nodePath;
-         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(showedUIPortal, PageNodeEvent.CHANGE_PAGE_NODE, nodePath_);
-         showedUIPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         lastNodePath = nodePath;
+         PageNodeEvent<UIPortalApplication> pnevent =
+            new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, nodePath);
+         broadcast(pnevent, Event.Phase.PROCESS);
       }
+      
       super.processDecode(context);
    }
-
+   
    /**
     * The processrender() method handles the creation of the returned HTML
     * either for a full page render or in the case of an AJAX call The first

@@ -27,7 +27,6 @@ import org.exoplatform.webui.event.Event;
  */
 public class PageNodeEvent<T extends UIComponent> extends Event<T>
 {
-
    final static public String CHANGE_PAGE_NODE = "ChangePageNode";
 
    private String targetNodeUri;
@@ -37,7 +36,7 @@ public class PageNodeEvent<T extends UIComponent> extends Event<T>
       super(source, name, null);
       this.targetNodeUri = targetNodeUri;
    }
-
+   
    public String getTargetNodeUri()
    {
       return targetNodeUri;
