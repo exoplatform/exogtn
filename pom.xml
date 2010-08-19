@@ -895,7 +895,9 @@
     <profile>
       <id>hsqldb</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!nohsqldb</name>
+        </property>
       </activation>
       <dependencies>
         <dependency>
@@ -941,6 +943,7 @@
         </plugins>
       </build>
     </profile>
+    <!-- To activate mysql5 profile use: "-Pmysql5 -Dnohsqldb" -->
     <profile>
       <id>mysql5</id>
       <dependencies>
