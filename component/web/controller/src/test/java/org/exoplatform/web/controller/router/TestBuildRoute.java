@@ -24,10 +24,8 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
