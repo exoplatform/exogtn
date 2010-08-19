@@ -307,12 +307,12 @@ class Route
                String parameterName;
                if (colon == -1)
                {
-                  regex = "([^/]+)";
+                  regex = "[^/]+";
                   parameterName = parameterDef;
                }
                else
                {
-                  regex = "(" + parameterDef.substring(colon + 1) + ")";
+                  regex = parameterDef.substring(colon + 1);
                   parameterName = parameterDef.substring(0, colon);
                }
 
@@ -332,7 +332,9 @@ class Route
 
 
                //
+               builder.appendExpression("(");
                builder.appendExpression(regex);
+               builder.appendExpression(")");
                parameterNames.add(parameterQName);
                parameterPatterns.add(Pattern.compile("^" + regex + "$"));
                previous = end.get(i) + 1;

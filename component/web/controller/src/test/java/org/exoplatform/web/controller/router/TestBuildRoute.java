@@ -25,6 +25,7 @@ import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,6 @@ public class TestBuildRoute extends TestCase
       }
    }
    
-/*
    public void testParameterSegment()
    {
       String[] paths = {"/{a}","{a}"};
@@ -76,11 +76,18 @@ public class TestBuildRoute extends TestCase
          RouterMetaData routerMD = new RouterMetaData();
          routerMD.addRoute(path, ref1);
          Router router = new Router(routerMD);
-         Route expectedRoute = new Route();
-         PatternRoute a = new PatternRoute(Pattern.compile("^([^/]+)"), Arrays.asList(new QualifiedName("a")));
-         a.controllerRef = "ref1";
-         expectedRoute.patternRoutes.add(a);
-         assertEquals(expectedRoute, router.root);
+
+         //
+         assertEquals(0, router.root.simpleRoutes.size());
+         assertEquals(1, router.root.patternRoutes.size());
+         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals("^([^/]+)", patternRoute.pattern.toString());
+         assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
+         assertEquals(1, patternRoute.parameterPatterns.size());
+         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals(2, patternRoute.chunks.size());
+         assertEquals("", patternRoute.chunks.get(0));
+         assertEquals("", patternRoute.chunks.get(1));
       }
    }
 
@@ -92,11 +99,18 @@ public class TestBuildRoute extends TestCase
          RouterMetaData routerMD = new RouterMetaData();
          routerMD.addRoute(path, ref1);
          Router router = new Router(routerMD);
-         Route expectedRoute = new Route();
-         PatternRoute a = new PatternRoute(Pattern.compile("^([^/]+)"), Arrays.asList(new QualifiedName("q", "a")));
-         a.controllerRef = "ref1";
-         expectedRoute.patternRoutes.add(a);
-         assertEquals(expectedRoute, router.root);
+
+         //
+         assertEquals(0, router.root.simpleRoutes.size());
+         assertEquals(1, router.root.patternRoutes.size());
+         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals("^([^/]+)", patternRoute.pattern.toString());
+         assertEquals(Collections.singletonList(new QualifiedName("q", "a")), patternRoute.parameterNames);
+         assertEquals(1, patternRoute.parameterPatterns.size());
+         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals(2, patternRoute.chunks.size());
+         assertEquals("", patternRoute.chunks.get(0));
+         assertEquals("", patternRoute.chunks.get(1));
       }
    }
 
@@ -108,14 +122,20 @@ public class TestBuildRoute extends TestCase
          RouterMetaData routerMD = new RouterMetaData();
          routerMD.addRoute(path, ref1);
          Router router = new Router(routerMD);
-         Route expectedRoute = new Route();
-         PatternRoute a = new PatternRoute(Pattern.compile("^(.*)"), Arrays.asList(new QualifiedName("a")));
-         a.controllerRef = "ref1";
-         expectedRoute.patternRoutes.add(a);
-         assertEquals(expectedRoute, router.root);
+
+         //
+         assertEquals(0, router.root.simpleRoutes.size());
+         assertEquals(1, router.root.patternRoutes.size());
+         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals("^(.*)", patternRoute.pattern.toString());
+         assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
+         assertEquals(1, patternRoute.parameterPatterns.size());
+         assertEquals("^.*$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals(2, patternRoute.chunks.size());
+         assertEquals("", patternRoute.chunks.get(0));
+         assertEquals("", patternRoute.chunks.get(1));
       }
    }
-*/
 
    private void assertEquals(Route expectedRoute, Route route)
    {
