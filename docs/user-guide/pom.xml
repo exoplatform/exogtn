@@ -25,7 +25,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- FIXME parent not in sync with current hierarchy -->
     <parent>
         <groupId>org.gatein.doc</groupId>
         <artifactId>docs-aggregator</artifactId>

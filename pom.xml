@@ -94,7 +94,8 @@
       <module>starter</module>
       <module>packaging</module>
       <module>testsuite</module>
-   </modules>
+      <module>docs</module> 
+  </modules>
 
    <dependencyManagement>
       <dependencies>
