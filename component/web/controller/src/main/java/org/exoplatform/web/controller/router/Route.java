@@ -145,15 +145,19 @@ class Route
    {
       String path = context.getPath();
 
+      ProcessResponse ret = null;
+
       // Anything that does not begin with '/' returns null
       if (path.length() > 0 && path.charAt(0) == '/')
       {
+
+
          // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
          if (path.length() == 1)
          {
             if (controllerRef != null)
             {
-               return new ProcessResponse(controllerRef, context.getPath(), context.getParameters());
+               ret = new ProcessResponse(controllerRef, context.getPath(), context.getParameters());
             }
          }
          else
@@ -201,7 +205,7 @@ class Route
                // If we do have a response we return it
                if (response != null)
                {
-                  return response;
+                  ret = response;
                }
             }
          }
@@ -245,14 +249,15 @@ class Route
                // If we do have a response we return it
                if (response != null)
                {
-                  return response;
+                  ret = response;
+                  break;
                }
             }
          }
       }
 
       //
-      return null;
+      return ret;
    }
 
    /** . */
