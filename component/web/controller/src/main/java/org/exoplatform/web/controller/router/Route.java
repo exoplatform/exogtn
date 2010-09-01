@@ -177,14 +177,6 @@ class Route
             {
                Map<QualifiedName, String[]> parameters = context.getParameters();
 
-               // Update parameters
-               if (route.routeParameters.size() > 0)
-               {
-                  parameters = new HashMap<QualifiedName, String[]>(parameters);
-                  // julien : do a safe put all here on String[]
-                  parameters.putAll(route.routeParameters);
-               }
-
                // Determine next path
                String nextPath;
                if (pos == path.length())
@@ -220,8 +212,6 @@ class Route
             {
                // Update parameters
                Map<QualifiedName, String[]> parameters = new HashMap<QualifiedName, String[]>(context.getParameters());
-               // julien : do a safe put all here on String[]
-               parameters.putAll(route.routeParameters);
                int group = 1;
                for (QualifiedName parameterName : route.parameterNames)
                {
@@ -251,6 +241,22 @@ class Route
                {
                   ret = response;
                   break;
+               }
+            }
+         }
+
+         // Update parameters if it is possible
+         if (ret != null)
+         {
+            if (routeParameters.size() > 0)
+            {
+               for (Map.Entry<QualifiedName, String[]> entry : routeParameters.entrySet())
+               {
+                  if (!ret.getParameters().containsKey(entry.getKey()))
+                  {
+                     // julien : should do a safe put all here on String[]
+                     ret.getParameters().put(entry.getKey(), entry.getValue());
+                  }
                }
             }
          }

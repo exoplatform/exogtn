@@ -58,9 +58,18 @@ public class ControllerRefMetaData
       this.ref = ref;
    }
 
-   public void setParameter(QualifiedName name, String... value)
+   public ControllerRefMetaData addParameter(QualifiedName name, String first, String... rest)
    {
+      String[] value = new String[1 + rest.length];
+      value[0] = first;
+      System.arraycopy(rest, 0, value, 1, rest.length);
       parameters.put(name, value);
+      return this;
+   }
+
+   public ControllerRefMetaData addParameter(String name, String first, String... rest)
+   {
+      return addParameter(new QualifiedName(name), first, rest);
    }
 
    public Map<QualifiedName, String[]> getParameters()

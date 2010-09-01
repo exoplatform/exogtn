@@ -42,13 +42,13 @@ public class TestPortalConfiguration extends AbstractTestController
    {
       RouterMetaData routerMD = new RouterMetaData();
       ControllerRefMetaData portalControllerRef = new ControllerRefMetaData("site");
-      portalControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "portal");
+      portalControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
       routerMD.addRoute("/private/{{gtn}sitename}/{{gtn}path:.*}", portalControllerRef);
       ControllerRefMetaData groupControllerRef = new ControllerRefMetaData("site");
-      groupControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "group");
+      groupControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "group");
       routerMD.addRoute("/groups/{{gtn}sitename}/{{gtn}path:.*}", groupControllerRef);
       ControllerRefMetaData userControllerRef = new ControllerRefMetaData("site");
-      userControllerRef.setParameter(new QualifiedName("gtn", "sitetype"), "user");
+      userControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "user");
       routerMD.addRoute("/users/{{gtn}sitename}/{{gtn}path:.*}", userControllerRef);
 
       //

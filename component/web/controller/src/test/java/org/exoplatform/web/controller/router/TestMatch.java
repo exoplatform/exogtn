@@ -128,6 +128,15 @@ public class TestMatch extends AbstractTestController
       assertProcessResponse("ref1", Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
    }
 
+   public void testParameterPropagationToDescendants() throws Exception
+   {
+      RouterMetaData routerMD = new RouterMetaData();
+      routerMD.addRoute("/", new ControllerRefMetaData("ref1").addParameter("p", "a"));
+      routerMD.addRoute("/a", new ControllerRefMetaData("ref2"));
+      Router router = new Router(routerMD);
+      assertProcessResponse("ref2", Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
+   }
+
    public void testWildcardPattern() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
