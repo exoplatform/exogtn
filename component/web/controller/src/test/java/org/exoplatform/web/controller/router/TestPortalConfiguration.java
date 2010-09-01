@@ -64,7 +64,7 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic")));
-      assertEquals("private/classic", router.render("site", expectedParameters));
+      assertEquals("/private/classic", router.render("site", expectedParameters));
    }
 
    public void testPrivateClassicSlash() throws Exception
@@ -77,7 +77,7 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/")));
-      assertEquals("private/classic", router.render("site", expectedParameters));
+      assertEquals("/private/classic", router.render("site", expectedParameters));
    }
 
    public void testPrivateClassicHome() throws Exception
@@ -89,6 +89,6 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/home")));
-      assertEquals("private/classic/home", router.render("site", expectedParameters));
+      assertEquals("/private/classic/home", router.render("site", expectedParameters));
    }
 }

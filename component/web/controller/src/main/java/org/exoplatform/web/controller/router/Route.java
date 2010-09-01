@@ -63,6 +63,9 @@ class Route
       this.routeParameters = new HashMap<QualifiedName, String[]>();
    }
 
+   /**
+    * todo: a version that does not string concatenation but instead a buffer 
+    */
    String render(String controllerId, Map<QualifiedName, String[]> blah)
    {
       if (controllerRef != null && controllerRef.equals(controllerId))
@@ -75,7 +78,7 @@ class Route
                return null;
             }
          }
-         return "";
+         return "/";
       }
       else
       {
@@ -84,13 +87,13 @@ class Route
             String b = a.getValue().render(controllerId, blah);
             if (b != null)
             {
-               if (b.length() > 0)
+               if (b.length() > 1)
                {
-                  return a.getKey() + "/" + b;
+                  return "/" + a.getKey() + b;
                }
                else
                {
-                  return a.getKey();
+                  return "/" + a.getKey();
                }
             }
          }
@@ -128,13 +131,13 @@ class Route
             String bilto = a.render(controllerId, blah);
             if (bilto != null)
             {
-               if (bilto.length() > 0)
+               if (bilto.length() > 1)
                {
-                  return sb + "/" + bilto;
+                  return "/" + sb + bilto;
                }
                else
                {
-                  return sb.toString();
+                  return "/" + sb.toString();
                }
             }
          }
