@@ -38,7 +38,7 @@ public abstract class AbstractTestController extends TestCase
 
    public void assertProcessResponse(String controllerId, String path, Map<QualifiedName, String[]> parameters, ControllerResponse response)
    {
-      assertNotNull(response);
+      assertNotNull("Was not expecting a null response", response);
       assertEquals(ProcessResponse.class, response.getClass());
       assertEquals(controllerId, ((ProcessResponse)response).getControllerId());
       // todo check path and define semantic

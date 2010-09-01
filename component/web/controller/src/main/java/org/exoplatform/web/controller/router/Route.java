@@ -146,89 +146,109 @@ class Route
    {
       String path = context.getPath();
 
-      // Remove any leading '/'
-      while (path.length() > 0 && path.charAt(0) == '/')
+      // Anything that does not begin with '/' returns null
+      if (path.length() > 0 && path.charAt(0) == '/')
       {
-         path = path.substring(1);
-      }
-
-      //
-      if (path.isEmpty())
-      {
-         if (controllerRef != null)
+         // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
+         if (path.length() == 1)
          {
-            return new ProcessResponse(controllerRef, context.getPath(), context.getParameters());
-         }
-      }
-      else
-      {
-         int pos = path.indexOf('/');
-         String segment;
-         if (pos == -1)
-         {
-            segment = path;
+            if (controllerRef != null)
+            {
+               return new ProcessResponse(controllerRef, context.getPath(), context.getParameters());
+            }
          }
          else
          {
-            segment = path.substring(0, pos);
-         }
-         Route route = simpleRoutes.get(segment);
-         if (route != null)
-         {
-            Map<QualifiedName, String[]> parameters = context.getParameters();
-            if (route.routeParameters.size() > 0)
+            // Find the next '/' for determining the segment and next path
+            int pos = path.indexOf('/', 1);
+            if (pos == -1)
             {
-               parameters = new HashMap<QualifiedName, String[]>(parameters);
+               pos = path.length();
+            }
+
+            String segment = path.substring(1, pos);
+
+            // Try to find a route for the segment
+            Route route = simpleRoutes.get(segment);
+            if (route != null)
+            {
+               Map<QualifiedName, String[]> parameters = context.getParameters();
+
+               // Update parameters
+               if (route.routeParameters.size() > 0)
+               {
+                  parameters = new HashMap<QualifiedName, String[]>(parameters);
+                  // julien : do a safe put all here on String[]
+                  parameters.putAll(route.routeParameters);
+               }
+
+               // Determine next path
+               String nextPath;
+               if (pos == path.length())
+               {
+                  nextPath = "/";
+               }
+               else
+               {
+                  nextPath = path.substring(pos);
+               }
+
+               // Build next controller context
+               ControllerContext nextContext = new ControllerContext(nextPath, parameters);
+
+               // Delegate the process to the next route
+               ProcessResponse response = route.route(nextContext);
+
+               // If we do have a response we return it
+               if (response != null)
+               {
+                  return response;
+               }
+            }
+         }
+
+         // Try to find a pattern matching route
+         for (PatternRoute route : patternRoutes)
+         {
+            Matcher matcher = route.pattern.matcher(path.substring(1));
+
+            // We match
+            if (matcher.find())
+            {
+               // Update parameters
+               Map<QualifiedName, String[]> parameters = new HashMap<QualifiedName, String[]>(context.getParameters());
                // julien : do a safe put all here on String[]
                parameters.putAll(route.routeParameters);
-            }
-            ControllerContext nextContext = new ControllerContext(
-               path.substring(segment.length()),
-               parameters
-            );
-            ProcessResponse response = route.route(nextContext);
-            if (response != null)
-            {
-               return response;
-            }
-         }
-      }
+               int group = 1;
+               for (QualifiedName parameterName : route.parameterNames)
+               {
+                  parameters.put(parameterName, new String[]{matcher.group(group++)});
+               }
 
-      // Try to find a pattern matching route
-      for (PatternRoute route : patternRoutes)
-      {
-         Matcher matcher = route.pattern.matcher(path);
+               // Build next controller context
+               int nextPos = matcher.end() + 1;
+               String nextPath;
+               if (path.length() == nextPos)
+               {
+                  nextPath = "/";
+               }
+               else
+               {
+                  nextPath = path.substring(nextPos);
+               }
 
-         boolean matched = false;
-         if (matcher.find())
-         {
-            int end = matcher.end();
-            if (end >= path.length())
-            {
-               matched = true;
-            }
-            else if (path.charAt(end) == '/')
-            {
-               matched = true;
-            }
-         }
+               //
+               ControllerContext nextContext = new ControllerContext(nextPath, parameters);
 
-         // We match
-         if (matched)
-         {
-            Map<QualifiedName, String[]> parameters = new HashMap<QualifiedName, String[]>(context.getParameters());
-            // julien : do a safe put all here on String[]
-            parameters.putAll(route.routeParameters);
-            int group = 1;
-            for (QualifiedName parameterName : route.parameterNames)
-            {
-               parameters.put(parameterName, new String[]{matcher.group(group++)});
+               // Delegate to next route
+               ProcessResponse response = route.route(nextContext);
+
+               // If we do have a response we return it
+               if (response != null)
+               {
+                  return response;
+               }
             }
-            ControllerContext nextContext = new ControllerContext(
-               path.substring(matcher.end()),
-               parameters
-            );
-            return route.route(nextContext);
          }
       }
 
