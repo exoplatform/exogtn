@@ -25,7 +25,6 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
 import org.exoplatform.web.controller.protocol.ControllerResponse;
-import org.exoplatform.web.controller.protocol.ProcessResponse;
 
 import java.io.IOException;
 import java.util.Map;
@@ -48,9 +47,7 @@ public class Router implements Controller
       for (Map.Entry<String, ControllerRefMetaData> routeMetaData : metaData.getRoutes().entrySet())
       {
          String path = routeMetaData.getKey();
-         Route route = root.append(path);
-         route.controllerRef = routeMetaData.getValue().getRef();
-         route.routeParameters.putAll(routeMetaData.getValue().getParameters());
+         root.append(path, routeMetaData.getValue().getRef(), routeMetaData.getValue().getParameters());
       }
 
       //

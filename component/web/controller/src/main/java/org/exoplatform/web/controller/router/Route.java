@@ -269,7 +269,24 @@ class Route
    /** . */
    private static final Pattern PARAMETER_REGEX = Pattern.compile("^(?:\\{([^\\}]*)\\})?(.*)$");
 
-   Route append(String path)
+   Route append(
+      String path,
+      String controllerRef,
+      Map<QualifiedName, String[]> parameters)
+   {
+      Route route = append(path);
+      route.controllerRef = controllerRef;
+      route.routeParameters.putAll(parameters);
+      return route;
+   }
+
+   /**
+    * Append a path, creates the necessary routes and returns the last route added.
+    *
+    * @param path the path to append
+    * @return the last route added
+    */
+   private Route append(String path)
    {
       int pos = path.length();
       int level = 0;
