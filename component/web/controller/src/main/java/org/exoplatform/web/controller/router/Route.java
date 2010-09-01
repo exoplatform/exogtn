@@ -33,10 +33,6 @@ import java.util.regex.Pattern;
 
 /**
  * The implementation of the routing algorithm.
- * It should but does not yet implement:
- * - check JAX-RS algorithm (compare)
- * - should somehow validate regular expression
- * - nice to have '*' equivalent to {path:.*}
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
