@@ -42,12 +42,15 @@ public class TestPortalConfiguration extends AbstractTestController
    {
       RouterMetaData routerMD = new RouterMetaData();
       ControllerRefMetaData portalControllerRef = new ControllerRefMetaData();
+      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       portalControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
       routerMD.addRoute("/private/{{gtn}sitename}{{gtn}path:.*}", portalControllerRef);
       ControllerRefMetaData groupControllerRef = new ControllerRefMetaData();
+      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       groupControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "group");
       routerMD.addRoute("/groups/{{gtn}sitename}{{gtn}path:.*}", groupControllerRef);
       ControllerRefMetaData userControllerRef = new ControllerRefMetaData();
+      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       userControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "user");
       routerMD.addRoute("/users/{{gtn}sitename}{{gtn}path:.*}", userControllerRef);
 
@@ -58,6 +61,7 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testPrivateClassic() throws Exception
    {
       Map<QualifiedName, String[]> expectedParameters = new HashMap<QualifiedName, String[]>();
+      expectedParameters.put(new QualifiedName("gtn", "controller"), new String[]{"site"});
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{""});
@@ -71,6 +75,7 @@ public class TestPortalConfiguration extends AbstractTestController
    {
       router.process(new ControllerContext("/private/classic/"));
       Map<QualifiedName, String[]> expectedParameters = new HashMap<QualifiedName, String[]>();
+      expectedParameters.put(new QualifiedName("gtn", "controller"), new String[]{"site"});
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"/"});
@@ -83,6 +88,7 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testPrivateClassicHome() throws Exception
    {
       Map<QualifiedName, String[]> expectedParameters = new HashMap<QualifiedName, String[]>();
+      expectedParameters.put(new QualifiedName("gtn", "controller"), new String[]{"site"});
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"/home"});
