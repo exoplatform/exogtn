@@ -22,8 +22,6 @@ package org.exoplatform.web.controller.router;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.protocol.ControllerResponse;
-import org.exoplatform.web.controller.protocol.ProcessResponse;
 
 import java.util.Arrays;
 import java.util.Collections;
