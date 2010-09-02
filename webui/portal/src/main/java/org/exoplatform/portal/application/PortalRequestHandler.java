@@ -54,7 +54,7 @@ public class PortalRequestHandler extends WebRequestHandler
 
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
-   private String[] PATHS = {"/public{gtn{path}:.*}", "/private{gtn{path}:.*}"};
+   private String[] PATHS = {"/public{gtn{path}:/.*}", "/private{gtn{path}:/.*}"};
 
    public String[] getPath()
    {
