@@ -47,16 +47,16 @@ public class Router implements Controller
       for (Map.Entry<String, ControllerRefMetaData> routeMetaData : metaData.getRoutes().entrySet())
       {
          String path = routeMetaData.getKey();
-         root.append(path, routeMetaData.getValue().getRef(), routeMetaData.getValue().getParameters());
+         root.append(path, routeMetaData.getValue().getParameters());
       }
 
       //
       this.root = root;
    }
 
-   public String render(String controllerId, Map<QualifiedName, String[]> blah)
+   public String render(Map<QualifiedName, String[]> blah)
    {
-      return root.render(controllerId, blah);
+      return root.render(blah);
    }
 
    public ControllerResponse process(ControllerContext controllerContext) throws IOException

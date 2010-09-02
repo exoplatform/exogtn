@@ -32,40 +32,32 @@ public final class ProcessResponse extends ControllerResponse
 {
 
    /** . */
-   private final String controllerId;
-
-   /** . */
    private final String path;
 
    /** . */
    private final Map<QualifiedName, String[]> parameters;
 
-   public ProcessResponse(String controllerId)
+   public ProcessResponse()
    {
-      this(controllerId, null, Collections.<QualifiedName, String[]>emptyMap());
+      this(null, Collections.<QualifiedName, String[]>emptyMap());
    }
 
-   public ProcessResponse(String controllerId, String path)
+   public ProcessResponse(String path)
    {
-      this(controllerId, path, Collections.<QualifiedName, String[]>emptyMap());
+      this(path, Collections.<QualifiedName, String[]>emptyMap());
    }
 
-   public ProcessResponse(String controllerId, Map<QualifiedName, String[]> parameters)
+   public ProcessResponse(Map<QualifiedName, String[]> parameters)
    {
-      this(controllerId, null, parameters);
+      this(null, parameters);
    }
 
-   public ProcessResponse(String controllerId, String path, Map<QualifiedName, String[]> parameters)
+   public ProcessResponse(String path, Map<QualifiedName, String[]> parameters)
    {
-      if (controllerId == null)
-      {
-         throw new NullPointerException();
-      }
       if (parameters == null)
       {
          throw new NullPointerException();
       }
-      this.controllerId = controllerId;
       this.path = path;
       this.parameters = parameters;
    }
@@ -73,11 +65,6 @@ public final class ProcessResponse extends ControllerResponse
    public String getPath()
    {
       return path;
-   }
-
-   public String getControllerId()
-   {
-      return controllerId;
    }
 
    public Map<QualifiedName, String[]> getParameters()

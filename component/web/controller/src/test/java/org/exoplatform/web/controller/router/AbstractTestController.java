@@ -36,29 +36,28 @@ import java.util.Map;
 public abstract class AbstractTestController extends TestCase
 {
 
-   public void assertProcessResponse(String controllerId, String path, Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   public void assertProcessResponse(String path, Map<QualifiedName, String[]> parameters, ControllerResponse response)
    {
       assertNotNull("Was not expecting a null response", response);
       assertEquals(ProcessResponse.class, response.getClass());
-      assertEquals(controllerId, ((ProcessResponse)response).getControllerId());
       // todo check path and define semantic
       // assertEquals(path, ((ProcessResponse)response).getPath());
       assertEquals(parameters, ((ProcessResponse)response).getParameters());
    }
 
-   public void assertProcessResponse(String controllerId, ControllerResponse response)
+   public void assertProcessResponse(ControllerResponse response)
    {
-      assertProcessResponse(controllerId, null, Collections.<QualifiedName, String[]>emptyMap(), response);
+      assertProcessResponse(null, Collections.<QualifiedName, String[]>emptyMap(), response);
    }
 
-   public void assertProcessResponse(String controllerId, String path, ControllerResponse response)
+   public void assertProcessResponse(String path, ControllerResponse response)
    {
-      assertProcessResponse(controllerId, path, Collections.<QualifiedName, String[]>emptyMap(), response);
+      assertProcessResponse(path, Collections.<QualifiedName, String[]>emptyMap(), response);
    }
 
-   public void assertProcessResponse(String controllerId, Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   public void assertProcessResponse(Map<QualifiedName, String[]> parameters, ControllerResponse response)
    {
-      assertProcessResponse(controllerId, null, parameters, response);
+      assertProcessResponse(null, parameters, response);
    }
 
    public void assertEquals(Map<QualifiedName, String[]> expectedParameters, Map<QualifiedName, String[]> parameters)

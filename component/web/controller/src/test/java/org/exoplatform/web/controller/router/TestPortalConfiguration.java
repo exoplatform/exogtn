@@ -41,15 +41,15 @@ public class TestPortalConfiguration extends AbstractTestController
    protected void setUp() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      ControllerRefMetaData portalControllerRef = new ControllerRefMetaData("site");
+      ControllerRefMetaData portalControllerRef = new ControllerRefMetaData();
       portalControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
-      routerMD.addRoute("/private/{{gtn}sitename}/{{gtn}path:.*}", portalControllerRef);
-      ControllerRefMetaData groupControllerRef = new ControllerRefMetaData("site");
+      routerMD.addRoute("/private/{{gtn}sitename}{{gtn}path:.*}", portalControllerRef);
+      ControllerRefMetaData groupControllerRef = new ControllerRefMetaData();
       groupControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "group");
-      routerMD.addRoute("/groups/{{gtn}sitename}/{{gtn}path:.*}", groupControllerRef);
-      ControllerRefMetaData userControllerRef = new ControllerRefMetaData("site");
+      routerMD.addRoute("/groups/{{gtn}sitename}{{gtn}path:.*}", groupControllerRef);
+      ControllerRefMetaData userControllerRef = new ControllerRefMetaData();
       userControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "user");
-      routerMD.addRoute("/users/{{gtn}sitename}/{{gtn}path:.*}", userControllerRef);
+      routerMD.addRoute("/users/{{gtn}sitename}{{gtn}path:.*}", userControllerRef);
 
       //
       this.router = new Router(routerMD);
@@ -63,8 +63,8 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{""});
 
       //
-      assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic")));
-      assertEquals("/private/classic", router.render("site", expectedParameters));
+      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic")));
+      assertEquals("/private/classic", router.render(expectedParameters));
    }
 
    public void testPrivateClassicSlash() throws Exception
@@ -73,11 +73,11 @@ public class TestPortalConfiguration extends AbstractTestController
       Map<QualifiedName, String[]> expectedParameters = new HashMap<QualifiedName, String[]>();
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
-      expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{""});
+      expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"/"});
 
       //
-      assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/")));
-      assertEquals("/private/classic", router.render("site", expectedParameters));
+      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic/")));
+      assertEquals("/private/classic/", router.render(expectedParameters));
    }
 
    public void testPrivateClassicHome() throws Exception
@@ -85,10 +85,10 @@ public class TestPortalConfiguration extends AbstractTestController
       Map<QualifiedName, String[]> expectedParameters = new HashMap<QualifiedName, String[]>();
       expectedParameters.put(new QualifiedName("gtn", "sitename"), new String[]{"classic"});
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), new String[]{"portal"});
-      expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"home"});
+      expectedParameters.put(new QualifiedName("gtn", "path"), new String[]{"/home"});
 
       //
-      assertProcessResponse("site", expectedParameters, router.process(new ControllerContext("/private/classic/home")));
-      assertEquals("/private/classic/home", router.render("site", expectedParameters));
+      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic/home")));
+      assertEquals("/private/classic/home", router.render(expectedParameters));
    }
 }

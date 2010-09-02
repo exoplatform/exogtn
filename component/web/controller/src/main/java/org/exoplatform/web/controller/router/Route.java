@@ -26,6 +26,7 @@ import org.exoplatform.web.controller.protocol.ProcessResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -41,7 +42,10 @@ class Route
 {
 
    /** . */
-   String controllerRef;
+   final Route parent;
+
+   /** . */
+   boolean terminal;
 
    /** . */
    final Map<String, SimpleRoute> simpleRoutes;
@@ -52,96 +56,153 @@ class Route
    /** . */
    final Map<QualifiedName, String[]> routeParameters;
 
+   protected Route(Route parent)
+   {
+      if (parent == null)
+      {
+         throw new NullPointerException("No null parent");
+      }
+
+      //
+      this.parent = parent;
+      this.terminal = false;
+      this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
+      this.patternRoutes = new ArrayList<PatternRoute>();
+      this.routeParameters = new HashMap<QualifiedName, String[]>();
+   }
+
    Route()
    {
-      this.simpleRoutes = new HashMap<String, SimpleRoute>();
+      this.parent = null;
+      this.terminal = false;
+      this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
       this.patternRoutes = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String[]>();
    }
 
    /**
-    * todo: a version that does not string concatenation but instead a buffer 
+    * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
+    * a way to optimize it later with some precompilation. 
     */
-   String render(String controllerId, Map<QualifiedName, String[]> blah)
+   final String render(Map<QualifiedName, String[]> blah)
    {
-      if (controllerRef != null && controllerRef.equals(controllerId))
+      Route r = find(blah);
+      if (r == null)
       {
-         for (Map.Entry<QualifiedName, String[]> entry : routeParameters.entrySet())
-         {
-            String[] a = blah.get(entry.getKey());
-            if (a == null || !Arrays.equals(entry.getValue(), a))
-            {
-               return null;
-            }
-         }
-         return "/";
+         return null;
       }
       else
       {
-         for (Map.Entry<String, SimpleRoute> a : simpleRoutes.entrySet())
+         if (r instanceof PatternRoute || r instanceof SimpleRoute)
          {
-            String b = a.getValue().render(controllerId, blah);
-            if (b != null)
-            {
-               if (b.length() > 1)
-               {
-                  return "/" + a.getKey() + b;
-               }
-               else
-               {
-                  return "/" + a.getKey();
-               }
-            }
-         }
-         there:
-         for (PatternRoute a : patternRoutes)
-         {
-            int i = 0;
-            while (i < a.parameterNames.size())
-            {
-               String[] value = blah.get(a.parameterNames.get(i));
-               if (value == null || value.length < 1)
-               {
-                  continue there;
-               }
-               if (!a.parameterPatterns.get(i).matcher(value[0]).matches())
-               {
-                  continue there;
-               }
-               i++;
-            }
-
-            //
-            i = 0;
             StringBuilder sb = new StringBuilder();
-            while (i < a.parameterNames.size())
-            {
-               sb.append(a.chunks.get(i));
-               String[] value = blah.get(a.parameterNames.get(i));
-               sb.append(value[0]);
-               i++;
-            }
-            sb.append(a.chunks.get(i));
+            r.render(blah, sb);
+            return sb.toString();
+         }
+         else
+         {
+            return "/";
+         }
+      }
+   }
 
-            //
-            String bilto = a.render(controllerId, blah);
-            if (bilto != null)
+   private void render(Map<QualifiedName, String[]> blah, StringBuilder sb)
+   {
+      if (parent != null)
+      {
+         parent.render(blah, sb);
+      }
+
+      //
+      if (this instanceof SimpleRoute)
+      {
+         SimpleRoute sr = (SimpleRoute)this;
+         sb.append('/').append(sr.value);
+      }
+      else if (this instanceof PatternRoute)
+      {
+         PatternRoute pr = (PatternRoute)this;
+         sb.append('/');
+         int i = 0;
+         while (i < pr.parameterNames.size())
+         {
+            sb.append(pr.chunks.get(i));
+            String[] value = blah.get(pr.parameterNames.get(i));
+            sb.append(value[0]);
+            i++;
+         }
+         sb.append(pr.chunks.get(i));
+      }
+   }
+
+   final Route find(Map<QualifiedName, String[]> blah)
+   {
+
+      // Remove what is matched
+      Map<QualifiedName, String[]> abc = new HashMap<QualifiedName, String[]>(blah);
+
+      // Match first the static parameteters
+      for (Map.Entry<QualifiedName, String[]> a : routeParameters.entrySet())
+      {
+         String[] s = blah.get(a.getKey());
+         if (s == null || !Arrays.equals(a.getValue(), s))
+         {
+            return null;
+         }
+         else
+         {
+            abc.remove(a.getKey());
+         }
+      }
+
+      // Match any pattern parameter
+      if (this instanceof PatternRoute)
+      {
+         PatternRoute prt = (PatternRoute)this;
+         for (int i = 0;i < prt.parameterNames.size();i++)
+         {
+            QualifiedName qd = prt.parameterNames.get(i);
+            String[] s = blah.get(qd);
+            if (s == null || !prt.parameterPatterns.get(i).matcher(s[0]).matches())
             {
-               if (bilto.length() > 1)
-               {
-                  return "/" + sb + bilto;
-               }
-               else
-               {
-                  return "/" + sb.toString();
-               }
+               return null;
+            }
+            else
+            {
+               abc.remove(qd);
             }
          }
       }
+
+      //
+      if (abc.isEmpty() && terminal)
+      {
+         return this;
+      }
+
+      //
+      for (SimpleRoute route : simpleRoutes.values())
+      {
+         Route a = route.find(abc);
+         if (a != null)
+         {
+            return a;
+         }
+      }
+      for (PatternRoute route : patternRoutes)
+      {
+         Route a = route.find(abc);
+         if (a != null)
+         {
+            return a;
+         }
+      }
+
+      //
       return null;
    }
 
-   ProcessResponse route(ControllerContext context)
+   final ProcessResponse route(ControllerContext context)
    {
       String path = context.getPath();
 
@@ -155,9 +216,9 @@ class Route
          // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
          if (path.length() == 1)
          {
-            if (controllerRef != null)
+            if (terminal)
             {
-               ret = new ProcessResponse(controllerRef, context.getPath(), context.getParameters());
+               ret = new ProcessResponse(context.getPath(), context.getParameters());
             }
          }
          else
@@ -269,13 +330,12 @@ class Route
    /** . */
    private static final Pattern PARAMETER_REGEX = Pattern.compile("^(?:\\{([^\\}]*)\\})?(.*)$");
 
-   Route append(
+   final Route append(
       String path,
-      String controllerRef,
       Map<QualifiedName, String[]> parameters)
    {
       Route route = append(path);
-      route.controllerRef = controllerRef;
+      route.terminal = true;
       route.routeParameters.putAll(parameters);
       return route;
    }
@@ -329,7 +389,7 @@ class Route
          }
          else
          {
-            SimpleRoute route = new SimpleRoute(path.substring(0, pos));
+            SimpleRoute route = new SimpleRoute(this, path.substring(0, pos));
             simpleRoutes.put(route.value, route);
             next = route;
          }
@@ -391,7 +451,7 @@ class Route
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly
             Pattern pattern = builder.build();
-            PatternRoute route = new PatternRoute(pattern, parameterNames, parameterPatterns, chunks);
+            PatternRoute route = new PatternRoute(this, pattern, parameterNames, parameterPatterns, chunks);
             patternRoutes.add(route);
             next = route;
          }

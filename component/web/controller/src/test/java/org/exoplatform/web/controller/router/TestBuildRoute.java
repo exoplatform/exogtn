@@ -34,7 +34,7 @@ import java.util.Map;
 public class TestBuildRoute extends TestCase
 {
 
-   private ControllerRefMetaData ref1 = new ControllerRefMetaData("ref1");
+   private ControllerRefMetaData ref1 = new ControllerRefMetaData();
 
    public void testRoot()
    {
@@ -45,7 +45,6 @@ public class TestBuildRoute extends TestCase
          routerMD.addRoute(path, ref1);
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
-         expectedRoute.controllerRef = "ref1";
          assertEquals(expectedRoute, router.root);
       }
    }
@@ -59,8 +58,7 @@ public class TestBuildRoute extends TestCase
          routerMD.addRoute(path, ref1);
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
-         SimpleRoute a = new SimpleRoute("a");
-         a.controllerRef = "ref1";
+         SimpleRoute a = new SimpleRoute(expectedRoute, "a");
          expectedRoute.simpleRoutes.put("a", a);
          assertEquals(expectedRoute, router.root);
       }
@@ -138,7 +136,6 @@ public class TestBuildRoute extends TestCase
    private void assertEquals(Route expectedRoute, Route route)
    {
       assertEquals(expectedRoute.getClass(), route.getClass());
-      assertEquals(expectedRoute.controllerRef, route.controllerRef);
       assertEquals(expectedRoute.simpleRoutes.keySet(), route.simpleRoutes.keySet());
       for (Map.Entry<String, SimpleRoute> entry : expectedRoute.simpleRoutes.entrySet())
       {

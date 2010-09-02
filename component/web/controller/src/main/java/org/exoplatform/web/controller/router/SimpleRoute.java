@@ -29,8 +29,11 @@ class SimpleRoute extends Route
    /** . */
    final String value;
 
-   public SimpleRoute(String value)
+   SimpleRoute(Route parent, String value)
    {
+      super(parent);
+
+      //
       this.value = value;
    }
 }

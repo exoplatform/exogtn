@@ -32,30 +32,11 @@ public class ControllerRefMetaData
 {
 
    /** . */
-   private String ref;
-
-   /** . */
    private final Map<QualifiedName, String[]> parameters;
 
    public ControllerRefMetaData()
    {
-      this(null);
-   }
-
-   public ControllerRefMetaData(String ref)
-   {
-      this.ref = ref;
       this.parameters = new HashMap<QualifiedName, String[]>();
-   }
-
-   public String getRef()
-   {
-      return ref;
-   }
-
-   public void setRef(String ref)
-   {
-      this.ref = ref;
    }
 
    public ControllerRefMetaData addParameter(QualifiedName name, String first, String... rest)
