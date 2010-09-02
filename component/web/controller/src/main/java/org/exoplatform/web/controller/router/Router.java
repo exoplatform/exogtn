@@ -19,21 +19,19 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.Controller;
-import org.exoplatform.web.controller.ControllerContext;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
+import org.exoplatform.web.controller.metadata.RouteMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
-import org.exoplatform.web.controller.protocol.ControllerResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Router implements Controller
+public class Router
 {
 
    /** . */
@@ -44,7 +42,7 @@ public class Router implements Controller
       Route root = new Route();
 
       //
-      for (Map.Entry<String, ControllerRefMetaData> routeMetaData : metaData.getRoutes().entrySet())
+      for (Map.Entry<String, RouteMetaData> routeMetaData : metaData.getRoutes().entrySet())
       {
          String path = routeMetaData.getKey();
          root.append(path, routeMetaData.getValue().getParameters());
@@ -59,8 +57,8 @@ public class Router implements Controller
       return root.render(parameters);
    }
 
-   public ControllerResponse process(ControllerContext controllerContext) throws IOException
+   public Map<QualifiedName, String> process(String path) throws IOException
    {
-      return root.route(controllerContext);
+      return root.route(path, new HashMap<QualifiedName, String>());
    }
 }

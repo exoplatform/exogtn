@@ -19,9 +19,7 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.ControllerContext;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.protocol.ProcessResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -201,11 +199,18 @@ class Route
       return null;
    }
 
-   final ProcessResponse route(ControllerContext context)
+   /**
+    * Note : the parameters arguments is modified, I don't like it much but as this is only used
+    * by the framework, there is no side effects, but I should investigate about doing this in a
+    * better way.
+    *
+    * @param path the path
+    * @param parameters the parameters
+    * @return null or the parameters when it matches
+    */
+   final Map<QualifiedName, String> route(String path, Map<QualifiedName, String> parameters)
    {
-      String path = context.getPath();
-
-      ProcessResponse ret = null;
+      Map<QualifiedName, String> ret = null;
 
       // Anything that does not begin with '/' returns null
       if (path.length() > 0 && path.charAt(0) == '/')
@@ -217,7 +222,7 @@ class Route
          {
             if (terminal)
             {
-               ret = new ProcessResponse(context.getPath(), context.getParameters());
+               ret = parameters;
             }
          }
          else
@@ -235,8 +240,6 @@ class Route
             Route route = simpleRoutes.get(segment);
             if (route != null)
             {
-               Map<QualifiedName, String> parameters = context.getParameters();
-
                // Determine next path
                String nextPath;
                if (pos == path.length())
@@ -248,11 +251,8 @@ class Route
                   nextPath = path.substring(pos);
                }
 
-               // Build next controller context
-               ControllerContext nextContext = new ControllerContext(nextPath, parameters);
-
                // Delegate the process to the next route
-               ProcessResponse response = route.route(nextContext);
+               Map<QualifiedName, String> response = route.route(nextPath, parameters);
 
                // If we do have a response we return it
                if (response != null)
@@ -262,45 +262,44 @@ class Route
             }
          }
 
-         // Try to find a pattern matching route
-         for (PatternRoute route : patternRoutes)
+         // Try to find a pattern matching route otherwise
+         if (ret == null)
          {
-            Matcher matcher = route.pattern.matcher(path.substring(1));
-
-            // We match
-            if (matcher.find())
+            for (PatternRoute route : patternRoutes)
             {
-               // Update parameters
-               Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>(context.getParameters());
-               int group = 1;
-               for (QualifiedName parameterName : route.parameterNames)
-               {
-                  parameters.put(parameterName, matcher.group(group++));
-               }
+               Matcher matcher = route.pattern.matcher(path.substring(1));
 
-               // Build next controller context
-               int nextPos = matcher.end() + 1;
-               String nextPath;
-               if (path.length() == nextPos)
+               // We match
+               if (matcher.find())
                {
-                  nextPath = "/";
-               }
-               else
-               {
-                  nextPath = path.substring(nextPos);
-               }
+                  // Update parameters
+                  int group = 1;
+                  for (QualifiedName parameterName : route.parameterNames)
+                  {
+                     parameters.put(parameterName, matcher.group(group++));
+                  }
 
-               //
-               ControllerContext nextContext = new ControllerContext(nextPath, parameters);
+                  // Build next controller context
+                  int nextPos = matcher.end() + 1;
+                  String nextPath;
+                  if (path.length() == nextPos)
+                  {
+                     nextPath = "/";
+                  }
+                  else
+                  {
+                     nextPath = path.substring(nextPos);
+                  }
 
-               // Delegate to next route
-               ProcessResponse response = route.route(nextContext);
+                  // Delegate to next route
+                  Map<QualifiedName, String> response = route.route(nextPath, parameters);
 
-               // If we do have a response we return it
-               if (response != null)
-               {
-                  ret = response;
-                  break;
+                  // If we do have a response we return it
+                  if (response != null)
+                  {
+                     ret = response;
+                     break;
+                  }
                }
             }
          }
@@ -312,10 +311,9 @@ class Route
             {
                for (Map.Entry<QualifiedName, String> entry : routeParameters.entrySet())
                {
-                  if (!ret.getParameters().containsKey(entry.getKey()))
+                  if (!ret.containsKey(entry.getKey()))
                   {
-                     // julien : should do a safe put all here on String[]
-                     ret.getParameters().put(entry.getKey(), entry.getValue());
+                     ret.put(entry.getKey(), entry.getValue());
                   }
                }
             }

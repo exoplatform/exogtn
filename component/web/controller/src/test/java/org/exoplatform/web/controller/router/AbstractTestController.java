@@ -35,31 +35,6 @@ import java.util.Map;
  */
 public abstract class AbstractTestController extends TestCase
 {
-
-   public void assertProcessResponse(String path, Map<QualifiedName, String> parameters, ControllerResponse response)
-   {
-      assertNotNull("Was not expecting a null response", response);
-      assertEquals(ProcessResponse.class, response.getClass());
-      // todo check path and define semantic
-      // assertEquals(path, ((ProcessResponse)response).getPath());
-      assertEquals(parameters, ((ProcessResponse)response).getParameters());
-   }
-
-   public void assertProcessResponse(ControllerResponse response)
-   {
-      assertProcessResponse(null, Collections.<QualifiedName, String>emptyMap(), response);
-   }
-
-   public void assertProcessResponse(String path, ControllerResponse response)
-   {
-      assertProcessResponse(path, Collections.<QualifiedName, String>emptyMap(), response);
-   }
-
-   public void assertProcessResponse(Map<QualifiedName, String> parameters, ControllerResponse response)
-   {
-      assertProcessResponse(null, parameters, response);
-   }
-
    public void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
    {
       Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());

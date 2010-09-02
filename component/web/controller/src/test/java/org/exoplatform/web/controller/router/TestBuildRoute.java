@@ -21,7 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
+import org.exoplatform.web.controller.metadata.RouteMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
 
 import java.util.Collections;
@@ -34,7 +34,7 @@ import java.util.Map;
 public class TestBuildRoute extends TestCase
 {
 
-   private ControllerRefMetaData ref1 = new ControllerRefMetaData();
+   private RouteMetaData ref1 = new RouteMetaData();
 
    public void testRoot()
    {

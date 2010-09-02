@@ -30,14 +30,14 @@ public class RouterMetaData
 {
 
    /** . */
-   private final Map<String, ControllerRefMetaData> routes;
+   private final Map<String, RouteMetaData> routes;
 
    public RouterMetaData()
    {
-      this.routes = new HashMap<String, ControllerRefMetaData>();
+      this.routes = new HashMap<String, RouteMetaData>();
    }
 
-   public void addRoute(String pathTemplate, ControllerRefMetaData controller)
+   public void addRoute(String pathTemplate, RouteMetaData controller)
    {
       if (pathTemplate == null)
       {
@@ -52,7 +52,7 @@ public class RouterMetaData
       routes.put(pathTemplate, controller);
    }
 
-   public Map<String, ControllerRefMetaData> getRoutes()
+   public Map<String, RouteMetaData> getRoutes()
    {
       return routes;
    }

@@ -19,9 +19,8 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.ControllerContext;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.ControllerRefMetaData;
+import org.exoplatform.web.controller.metadata.RouteMetaData;
 import org.exoplatform.web.controller.metadata.RouterMetaData;
 
 import java.util.HashMap;
@@ -41,15 +40,15 @@ public class TestPortalConfiguration extends AbstractTestController
    protected void setUp() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      ControllerRefMetaData portalControllerRef = new ControllerRefMetaData();
+      RouteMetaData portalControllerRef = new RouteMetaData();
       portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       portalControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
       routerMD.addRoute("/private/{{gtn}sitename}{{gtn}path:.*}", portalControllerRef);
-      ControllerRefMetaData groupControllerRef = new ControllerRefMetaData();
+      RouteMetaData groupControllerRef = new RouteMetaData();
       portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       groupControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "group");
       routerMD.addRoute("/groups/{{gtn}sitename}{{gtn}path:.*}", groupControllerRef);
-      ControllerRefMetaData userControllerRef = new ControllerRefMetaData();
+      RouteMetaData userControllerRef = new RouteMetaData();
       portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
       userControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "user");
       routerMD.addRoute("/users/{{gtn}sitename}{{gtn}path:.*}", userControllerRef);
@@ -67,13 +66,13 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "");
 
       //
-      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic")));
+      assertEquals(expectedParameters, router.process("/private/classic"));
       assertEquals("/private/classic", router.render(expectedParameters));
    }
 
    public void testPrivateClassicSlash() throws Exception
    {
-      router.process(new ControllerContext("/private/classic/"));
+      router.process("/private/classic/");
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
       expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
       expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
@@ -81,7 +80,7 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "/");
 
       //
-      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic/")));
+      assertEquals(expectedParameters, router.process("/private/classic/"));
       assertEquals("/private/classic/", router.render(expectedParameters));
    }
 
@@ -94,7 +93,7 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "/home");
 
       //
-      assertProcessResponse(expectedParameters, router.process(new ControllerContext("/private/classic/home")));
+      assertEquals(expectedParameters, router.process("/private/classic/home"));
       assertEquals("/private/classic/home", router.render(expectedParameters));
    }
 }

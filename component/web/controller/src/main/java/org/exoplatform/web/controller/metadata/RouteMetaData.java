@@ -17,50 +17,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller;
+package org.exoplatform.web.controller.metadata;
+
+import org.exoplatform.web.controller.QualifiedName;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>The controller context captures the state of a stage in the decoding of a request. The controller context
- * should not be mutated, if a new controller with modified state is needed, a new controller should be created
- * with the new state.</p>
- *
- * <p>The context augments the http request and response with additional state. Usually this state is obtained
- * from a processing context and is used by a controller to create a response.</p>
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ControllerContext
+public class RouteMetaData
 {
 
-   /** The current path. */
-   final String path;
+   /** . */
+   private final Map<QualifiedName, String> parameters;
 
-   /** The current parameters. */
-   final Map<QualifiedName, String> parameters;
-
-   public ControllerContext(String path)
+   public RouteMetaData()
    {
-      this.path = path;
       this.parameters = new HashMap<QualifiedName, String>();
    }
 
-   public ControllerContext(String path, Map<QualifiedName, String> parameters)
+   public RouteMetaData addParameter(QualifiedName name, String value)
    {
-      this.path = path;
-      this.parameters = parameters;
+      parameters.put(name, value);
+      return this;
+   }
+
+   public RouteMetaData addParameter(String name, String value)
+   {
+      return addParameter(new QualifiedName(name), value);
    }
 
    public Map<QualifiedName, String> getParameters()
    {
       return parameters;
-   }
-
-   public String getPath()
-   {
-      return path;
    }
 }
