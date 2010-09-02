@@ -35,24 +35,24 @@ public final class ProcessResponse extends ControllerResponse
    private final String path;
 
    /** . */
-   private final Map<QualifiedName, String[]> parameters;
+   private final Map<QualifiedName, String> parameters;
 
    public ProcessResponse()
    {
-      this(null, Collections.<QualifiedName, String[]>emptyMap());
+      this(null, Collections.<QualifiedName, String>emptyMap());
    }
 
    public ProcessResponse(String path)
    {
-      this(path, Collections.<QualifiedName, String[]>emptyMap());
+      this(path, Collections.<QualifiedName, String>emptyMap());
    }
 
-   public ProcessResponse(Map<QualifiedName, String[]> parameters)
+   public ProcessResponse(Map<QualifiedName, String> parameters)
    {
       this(null, parameters);
    }
 
-   public ProcessResponse(String path, Map<QualifiedName, String[]> parameters)
+   public ProcessResponse(String path, Map<QualifiedName, String> parameters)
    {
       if (parameters == null)
       {
@@ -67,7 +67,7 @@ public final class ProcessResponse extends ControllerResponse
       return path;
    }
 
-   public Map<QualifiedName, String[]> getParameters()
+   public Map<QualifiedName, String> getParameters()
    {
       return parameters;
    }

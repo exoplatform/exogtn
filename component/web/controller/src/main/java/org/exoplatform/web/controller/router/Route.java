@@ -24,7 +24,6 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.protocol.ProcessResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,7 +53,7 @@ class Route
    final List<PatternRoute> patternRoutes;
 
    /** . */
-   final Map<QualifiedName, String[]> routeParameters;
+   final Map<QualifiedName, String> routeParameters;
 
    protected Route(Route parent)
    {
@@ -68,7 +67,7 @@ class Route
       this.terminal = false;
       this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
       this.patternRoutes = new ArrayList<PatternRoute>();
-      this.routeParameters = new HashMap<QualifiedName, String[]>();
+      this.routeParameters = new HashMap<QualifiedName, String>();
    }
 
    Route()
@@ -77,14 +76,14 @@ class Route
       this.terminal = false;
       this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
       this.patternRoutes = new ArrayList<PatternRoute>();
-      this.routeParameters = new HashMap<QualifiedName, String[]>();
+      this.routeParameters = new HashMap<QualifiedName, String>();
    }
 
    /**
     * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
     * a way to optimize it later with some precompilation. 
     */
-   final String render(Map<QualifiedName, String[]> blah)
+   final String render(Map<QualifiedName, String> blah)
    {
       Route r = find(blah);
       if (r == null)
@@ -106,7 +105,7 @@ class Route
       }
    }
 
-   private void render(Map<QualifiedName, String[]> blah, StringBuilder sb)
+   private void render(Map<QualifiedName, String> blah, StringBuilder sb)
    {
       if (parent != null)
       {
@@ -127,31 +126,31 @@ class Route
          while (i < pr.parameterNames.size())
          {
             sb.append(pr.chunks.get(i));
-            String[] value = blah.get(pr.parameterNames.get(i));
-            sb.append(value[0]);
+            String value = blah.get(pr.parameterNames.get(i));
+            sb.append(value);
             i++;
          }
          sb.append(pr.chunks.get(i));
       }
    }
 
-   final Route find(Map<QualifiedName, String[]> blah)
+   final Route find(Map<QualifiedName, String> blah)
    {
 
       // Remove what is matched
-      Map<QualifiedName, String[]> abc = new HashMap<QualifiedName, String[]>(blah);
+      Map<QualifiedName, String> abc = new HashMap<QualifiedName, String>(blah);
 
       // Match first the static parameteters
-      for (Map.Entry<QualifiedName, String[]> a : routeParameters.entrySet())
+      for (Map.Entry<QualifiedName, String> a : routeParameters.entrySet())
       {
-         String[] s = blah.get(a.getKey());
-         if (s == null || !Arrays.equals(a.getValue(), s))
+         String s = blah.get(a.getKey());
+         if (a.getValue().equals(s))
          {
-            return null;
+            abc.remove(a.getKey());
          }
          else
          {
-            abc.remove(a.getKey());
+            return null;
          }
       }
 
@@ -162,14 +161,14 @@ class Route
          for (int i = 0;i < prt.parameterNames.size();i++)
          {
             QualifiedName qd = prt.parameterNames.get(i);
-            String[] s = blah.get(qd);
-            if (s == null || !prt.parameterPatterns.get(i).matcher(s[0]).matches())
+            String s = blah.get(qd);
+            if (s != null && prt.parameterPatterns.get(i).matcher(s).matches())
             {
-               return null;
+               abc.remove(qd);
             }
             else
             {
-               abc.remove(qd);
+               return null;
             }
          }
       }
@@ -236,7 +235,7 @@ class Route
             Route route = simpleRoutes.get(segment);
             if (route != null)
             {
-               Map<QualifiedName, String[]> parameters = context.getParameters();
+               Map<QualifiedName, String> parameters = context.getParameters();
 
                // Determine next path
                String nextPath;
@@ -272,11 +271,11 @@ class Route
             if (matcher.find())
             {
                // Update parameters
-               Map<QualifiedName, String[]> parameters = new HashMap<QualifiedName, String[]>(context.getParameters());
+               Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>(context.getParameters());
                int group = 1;
                for (QualifiedName parameterName : route.parameterNames)
                {
-                  parameters.put(parameterName, new String[]{matcher.group(group++)});
+                  parameters.put(parameterName, matcher.group(group++));
                }
 
                // Build next controller context
@@ -311,7 +310,7 @@ class Route
          {
             if (routeParameters.size() > 0)
             {
-               for (Map.Entry<QualifiedName, String[]> entry : routeParameters.entrySet())
+               for (Map.Entry<QualifiedName, String> entry : routeParameters.entrySet())
                {
                   if (!ret.getParameters().containsKey(entry.getKey()))
                   {
@@ -332,7 +331,7 @@ class Route
 
    final Route append(
       String path,
-      Map<QualifiedName, String[]> parameters)
+      Map<QualifiedName, String> parameters)
    {
       Route route = append(path);
       route.terminal = true;

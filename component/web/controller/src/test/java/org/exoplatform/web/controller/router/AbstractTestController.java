@@ -36,7 +36,7 @@ import java.util.Map;
 public abstract class AbstractTestController extends TestCase
 {
 
-   public void assertProcessResponse(String path, Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   public void assertProcessResponse(String path, Map<QualifiedName, String> parameters, ControllerResponse response)
    {
       assertNotNull("Was not expecting a null response", response);
       assertEquals(ProcessResponse.class, response.getClass());
@@ -47,23 +47,23 @@ public abstract class AbstractTestController extends TestCase
 
    public void assertProcessResponse(ControllerResponse response)
    {
-      assertProcessResponse(null, Collections.<QualifiedName, String[]>emptyMap(), response);
+      assertProcessResponse(null, Collections.<QualifiedName, String>emptyMap(), response);
    }
 
    public void assertProcessResponse(String path, ControllerResponse response)
    {
-      assertProcessResponse(path, Collections.<QualifiedName, String[]>emptyMap(), response);
+      assertProcessResponse(path, Collections.<QualifiedName, String>emptyMap(), response);
    }
 
-   public void assertProcessResponse(Map<QualifiedName, String[]> parameters, ControllerResponse response)
+   public void assertProcessResponse(Map<QualifiedName, String> parameters, ControllerResponse response)
    {
       assertProcessResponse(null, parameters, response);
    }
 
-   public void assertEquals(Map<QualifiedName, String[]> expectedParameters, Map<QualifiedName, String[]> parameters)
+   public void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
    {
       Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
-      for (Map.Entry<QualifiedName, String[]> expectedEntry : expectedParameters.entrySet())
+      for (Map.Entry<QualifiedName, String> expectedEntry : expectedParameters.entrySet())
       {
          Assert.assertEquals(Arrays.asList(expectedEntry.getValue()), Arrays.asList(parameters.get(expectedEntry.getKey())));
       }

@@ -40,21 +40,21 @@ public class ControllerContext
    final String path;
 
    /** The current parameters. */
-   final Map<QualifiedName, String[]> parameters;
+   final Map<QualifiedName, String> parameters;
 
    public ControllerContext(String path)
    {
       this.path = path;
-      this.parameters = new HashMap<QualifiedName, String[]>();
+      this.parameters = new HashMap<QualifiedName, String>();
    }
 
-   public ControllerContext(String path, Map<QualifiedName, String[]> parameters)
+   public ControllerContext(String path, Map<QualifiedName, String> parameters)
    {
       this.path = path;
       this.parameters = parameters;
    }
 
-   public Map<QualifiedName, String[]> getParameters()
+   public Map<QualifiedName, String> getParameters()
    {
       return parameters;
    }

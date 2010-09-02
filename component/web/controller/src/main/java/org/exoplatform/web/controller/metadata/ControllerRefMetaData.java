@@ -32,28 +32,25 @@ public class ControllerRefMetaData
 {
 
    /** . */
-   private final Map<QualifiedName, String[]> parameters;
+   private final Map<QualifiedName, String> parameters;
 
    public ControllerRefMetaData()
    {
-      this.parameters = new HashMap<QualifiedName, String[]>();
+      this.parameters = new HashMap<QualifiedName, String>();
    }
 
-   public ControllerRefMetaData addParameter(QualifiedName name, String first, String... rest)
+   public ControllerRefMetaData addParameter(QualifiedName name, String value)
    {
-      String[] value = new String[1 + rest.length];
-      value[0] = first;
-      System.arraycopy(rest, 0, value, 1, rest.length);
       parameters.put(name, value);
       return this;
    }
 
-   public ControllerRefMetaData addParameter(String name, String first, String... rest)
+   public ControllerRefMetaData addParameter(String name, String value)
    {
-      return addParameter(new QualifiedName(name), first, rest);
+      return addParameter(new QualifiedName(name), value);
    }
 
-   public Map<QualifiedName, String[]> getParameters()
+   public Map<QualifiedName, String> getParameters()
    {
       return parameters;
    }

@@ -43,7 +43,7 @@ public class TestMatch extends AbstractTestController
       assertNull(router.process(new ControllerContext("")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/")));
 
       //
       assertNull(router.process(new ControllerContext("/a")));
@@ -59,7 +59,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a")));
 
       //
       assertNull(router.process(new ControllerContext("a")));
@@ -68,7 +68,7 @@ public class TestMatch extends AbstractTestController
       assertNull(router.process(new ControllerContext("a/")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a/")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a/")));
 
       //
       assertNull(router.process(new ControllerContext("")));
@@ -96,10 +96,10 @@ public class TestMatch extends AbstractTestController
       assertNull(router.process(new ControllerContext("a/b")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a/b")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a/b")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a/b/")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a/b/")));
 
       //
       assertNull(router.process(new ControllerContext("a/b/")));
@@ -125,7 +125,7 @@ public class TestMatch extends AbstractTestController
       RouterMetaData routerMD = new RouterMetaData();
       routerMD.addRoute("/{p}", new ControllerRefMetaData());
       Router router = new Router(routerMD);
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a"), router.process(new ControllerContext("/a")));
    }
 
    public void testParameterPropagationToDescendants() throws Exception
@@ -134,7 +134,7 @@ public class TestMatch extends AbstractTestController
       routerMD.addRoute("/", new ControllerRefMetaData().addParameter("p", "a"));
       routerMD.addRoute("/a", new ControllerRefMetaData());
       Router router = new Router(routerMD);
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a"), router.process(new ControllerContext("/a")));
    }
 
    public void testWildcardPattern() throws Exception
@@ -144,16 +144,16 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{""}), router.process(new ControllerContext("/")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), ""), router.process(new ControllerContext("/")));
 
       //
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a"), router.process(new ControllerContext("/a")));
 
       //
       assertNull(router.process(new ControllerContext("a")));
 
       //
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a/b"}), router.process(new ControllerContext("/a/b")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a/b"), router.process(new ControllerContext("/a/b")));
    }
 
    public void testSimplePattern() throws Exception
@@ -163,7 +163,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a"), router.process(new ControllerContext("/a")));
 
       //
       assertNull(router.process(new ControllerContext("a")));
@@ -186,12 +186,12 @@ public class TestMatch extends AbstractTestController
       assertNull(router.process(new ControllerContext("a")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a")));
 
       //
-      assertProcessResponse(Collections.<QualifiedName, String[]>emptyMap(), router.process(new ControllerContext("/a/")));
+      assertProcessResponse(Collections.<QualifiedName, String>emptyMap(), router.process(new ControllerContext("/a/")));
 
       //
-      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), new String[]{"a"}), router.process(new ControllerContext("/a/b")));
+      assertProcessResponse(Collections.singletonMap(new QualifiedName("p"), "a"), router.process(new ControllerContext("/a/b")));
    }
 }

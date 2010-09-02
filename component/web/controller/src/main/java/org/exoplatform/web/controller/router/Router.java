@@ -54,9 +54,9 @@ public class Router implements Controller
       this.root = root;
    }
 
-   public String render(Map<QualifiedName, String[]> blah)
+   public String render(Map<QualifiedName, String> parameters)
    {
-      return root.render(blah);
+      return root.render(parameters);
    }
 
    public ControllerResponse process(ControllerContext controllerContext) throws IOException
