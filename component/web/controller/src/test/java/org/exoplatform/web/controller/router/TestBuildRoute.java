@@ -34,15 +34,13 @@ import java.util.Map;
 public class TestBuildRoute extends TestCase
 {
 
-   private RouteMetaData ref1 = new RouteMetaData();
-
    public void testRoot()
    {
       String[] paths = {"/",""};
       for (String path : paths)
       {
          RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(path, ref1);
+         routerMD.addRoute(new RouteMetaData(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
          assertEquals(expectedRoute, router.root);
@@ -55,7 +53,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(path, ref1);
+         routerMD.addRoute(new RouteMetaData(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
          SimpleRoute a = new SimpleRoute(expectedRoute, "a");
@@ -70,7 +68,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(path, ref1);
+         routerMD.addRoute(new RouteMetaData(path));
          Router router = new Router(routerMD);
 
          //
@@ -93,7 +91,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(path, ref1);
+         routerMD.addRoute(new RouteMetaData(path));
          Router router = new Router(routerMD);
 
          //
@@ -116,7 +114,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(path, ref1);
+         routerMD.addRoute(new RouteMetaData(path));
          Router router = new Router(routerMD);
 
          //

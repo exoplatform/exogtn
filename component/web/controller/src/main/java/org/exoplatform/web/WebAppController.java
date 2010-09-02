@@ -25,6 +25,7 @@ import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Application;
+import org.exoplatform.web.controller.router.Router;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +55,8 @@ public class WebAppController
    private volatile HashMap<String, Application> applications_;
 
    private HashMap<String, WebRequestHandler> handlers_;
+
+   private Router router;
 
    /**
     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the

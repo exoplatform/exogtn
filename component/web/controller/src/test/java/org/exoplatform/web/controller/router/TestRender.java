@@ -35,7 +35,7 @@ public class TestRender extends AbstractTestController
    public void testRoot() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/"));
       Router router = new Router(routerMD);
 
       //
@@ -45,7 +45,7 @@ public class TestRender extends AbstractTestController
    public void testA() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/a", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/a"));
       Router router = new Router(routerMD);
 
       //
@@ -55,7 +55,7 @@ public class TestRender extends AbstractTestController
    public void testAB() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/a/b", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/a/b"));
       Router router = new Router( routerMD);
 
       //
@@ -65,7 +65,7 @@ public class TestRender extends AbstractTestController
    public void testParameter() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/{p}", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/{p}"));
       Router router = new Router(routerMD);
 
       //
@@ -76,7 +76,7 @@ public class TestRender extends AbstractTestController
    public void testWildcardPattern() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/{p:.*}", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/{p:.*}"));
       Router router = new Router(routerMD);
 
       //
@@ -92,7 +92,7 @@ public class TestRender extends AbstractTestController
    public void testSimplePattern() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/{p:a}", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/{p:a}"));
       Router router = new Router(routerMD);
 
       //
@@ -105,8 +105,8 @@ public class TestRender extends AbstractTestController
    public void testPrecedence() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      routerMD.addRoute("/a", new RouteMetaData());
-      routerMD.addRoute("/{p:a}/b", new RouteMetaData());
+      routerMD.addRoute(new RouteMetaData("/a"));
+      routerMD.addRoute(new RouteMetaData("/{p:a}/b"));
       Router router = new Router(routerMD);
 
       //

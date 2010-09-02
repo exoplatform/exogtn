@@ -40,18 +40,24 @@ public class TestPortalConfiguration extends AbstractTestController
    protected void setUp() throws Exception
    {
       RouterMetaData routerMD = new RouterMetaData();
-      RouteMetaData portalControllerRef = new RouteMetaData();
-      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
-      portalControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
-      routerMD.addRoute("/private/{{gtn}sitename}{{gtn}path:.*}", portalControllerRef);
-      RouteMetaData groupControllerRef = new RouteMetaData();
-      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
-      groupControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "group");
-      routerMD.addRoute("/groups/{{gtn}sitename}{{gtn}path:.*}", groupControllerRef);
-      RouteMetaData userControllerRef = new RouteMetaData();
-      portalControllerRef.addParameter(new QualifiedName("gtn", "controller"), "site");
-      userControllerRef.addParameter(new QualifiedName("gtn", "sitetype"), "user");
-      routerMD.addRoute("/users/{{gtn}sitename}{{gtn}path:.*}", userControllerRef);
+
+      //
+      RouteMetaData portalRouteMD = new RouteMetaData("/private/{{gtn}sitename}{{gtn}path:.*}");
+      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
+      portalRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
+      routerMD.addRoute(portalRouteMD);
+
+      //
+      RouteMetaData groupRouteMD = new RouteMetaData("/groups/{{gtn}sitename}{{gtn}path:.*}");
+      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
+      groupRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "group");
+      routerMD.addRoute(groupRouteMD);
+
+      //
+      RouteMetaData userRouteMD = new RouteMetaData("/users/{{gtn}sitename}{{gtn}path:.*}");
+      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
+      userRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "user");
+      routerMD.addRoute(userRouteMD);
 
       //
       this.router = new Router(routerMD);

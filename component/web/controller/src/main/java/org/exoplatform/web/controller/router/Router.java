@@ -39,17 +39,18 @@ public class Router
 
    public Router(RouterMetaData metaData)
    {
-      Route root = new Route();
+      this.root = new Route();
 
       //
-      for (Map.Entry<String, RouteMetaData> routeMetaData : metaData.getRoutes().entrySet())
+      for (RouteMetaData routeMetaData : metaData.getRoutes())
       {
-         String path = routeMetaData.getKey();
-         root.append(path, routeMetaData.getValue().getParameters());
+         addRoute(routeMetaData);
       }
+   }
 
-      //
-      this.root = root;
+   public void addRoute(RouteMetaData routeMetaData)
+   {
+      root.append(routeMetaData.getPath(), routeMetaData.getParameters());
    }
 
    public String render(Map<QualifiedName, String> parameters)

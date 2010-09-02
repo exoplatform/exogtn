@@ -32,11 +32,20 @@ public class RouteMetaData
 {
 
    /** . */
+   private final String path;
+
+   /** . */
    private final Map<QualifiedName, String> parameters;
 
-   public RouteMetaData()
+   public RouteMetaData(String path)
    {
+      this.path = path;
       this.parameters = new HashMap<QualifiedName, String>();
+   }
+
+   public String getPath()
+   {
+      return path;
    }
 
    public RouteMetaData addParameter(QualifiedName name, String value)

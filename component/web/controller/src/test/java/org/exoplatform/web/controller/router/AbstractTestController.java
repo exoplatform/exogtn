@@ -35,6 +35,7 @@ public abstract class AbstractTestController extends TestCase
 {
    public void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
    {
+      assertNotNull(parameters);
       Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
       for (Map.Entry<QualifiedName, String> expectedEntry : expectedParameters.entrySet())
       {

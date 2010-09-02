@@ -37,23 +37,19 @@ public class RouterMetaData
       this.routes = new HashMap<String, RouteMetaData>();
    }
 
-   public void addRoute(String pathTemplate, RouteMetaData controller)
+   public void addRoute(RouteMetaData controller)
    {
-      if (pathTemplate == null)
-      {
-         throw new NullPointerException();
-      }
       if (controller == null)
       {
          throw new NullPointerException();
       }
 
       //
-      routes.put(pathTemplate, controller);
+      routes.put(controller.getPath(), controller);
    }
 
-   public Map<String, RouteMetaData> getRoutes()
+   public Iterable<RouteMetaData> getRoutes()
    {
-      return routes;
+      return routes.values();
    }
 }
