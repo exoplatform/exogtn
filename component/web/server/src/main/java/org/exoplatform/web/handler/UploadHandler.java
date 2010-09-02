@@ -26,9 +26,11 @@ import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
+import org.exoplatform.web.controller.QualifiedName;
 
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +54,7 @@ public class UploadHandler extends WebRequestHandler
       return new String[]{"/upload"};
    }
 
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
    {
       String action = req.getParameter("action");
       String[] uploadIds = req.getParameterValues("uploadId");

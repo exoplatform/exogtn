@@ -29,12 +29,14 @@ import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
 import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +54,7 @@ public class PortalRequestHandler extends WebRequestHandler
 
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
-   private String[] PATHS = {"/public", "/private"};
+   private String[] PATHS = {"/public{gtn{path}:.*}", "/private{gtn{path}:.*}"};
 
    public String[] getPath()
    {
@@ -90,7 +92,7 @@ public class PortalRequestHandler extends WebRequestHandler
     *   12) Release the context from the thread
     * 
     */
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
    {
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");

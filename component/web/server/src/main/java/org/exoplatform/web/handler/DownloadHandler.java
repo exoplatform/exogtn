@@ -25,10 +25,12 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
+import org.exoplatform.web.controller.QualifiedName;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +50,7 @@ public class DownloadHandler extends WebRequestHandler
       return new String[]{"/download"};
    }
 
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
    {
       String resourceId = req.getParameter("resourceId");
       res.setHeader("Cache-Control", "private max-age=600, s-maxage=120");

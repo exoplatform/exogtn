@@ -22,15 +22,19 @@ package org.exoplatform.web;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Application;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.RouteMetaData;
+import org.exoplatform.web.controller.metadata.RouterMetaData;
 import org.exoplatform.web.controller.router.Router;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -48,14 +52,18 @@ import javax.servlet.http.HttpServletResponse;
 public class WebAppController
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:WebAppController");
+   /** . */
+   protected static Logger log = LoggerFactory.getLogger(WebAppController.class);
 
+   /** . */
    private HashMap<String, Object> attributes_;
 
    private volatile HashMap<String, Application> applications_;
 
-   private HashMap<String, WebRequestHandler> handlers_;
+   /** . */
+   private HashMap<String, WebRequestHandler> handlers;
 
+   /** . */
    private Router router;
 
    /**
@@ -69,7 +77,8 @@ public class WebAppController
    {
       applications_ = new HashMap<String, Application>();
       attributes_ = new HashMap<String, Object>();
-      handlers_ = new HashMap<String, WebRequestHandler>();
+      this.handlers = new HashMap<String, WebRequestHandler>();
+      this.router = new Router(new RouterMetaData());
    }
 
    public Object getAttribute(String name, Object value)
@@ -126,22 +135,32 @@ public class WebAppController
       return (T)result;
    }
 
+   private static final QualifiedName HANDLER_PARAM = new QualifiedName("ctrl", "handler");
+
    public void register(WebRequestHandler handler) throws Exception
    {
       for (String path : handler.getPath())
-         handlers_.put(path, handler);
+      {
+         RouteMetaData routeMetaData = new RouteMetaData(path);
+
+         //
+         String handlerKey = "" + System.identityHashCode(handler);
+
+         //
+         routeMetaData.addParameter(HANDLER_PARAM, handlerKey);
+
+         //
+         handlers.put(handlerKey, handler);
+
+         //
+         router.addRoute(routeMetaData);
+      }
    }
    
-   public void unregister(String[] paths)
-   {
-      for (String path : paths)
-         handlers_.remove(path);
-   }
-
    public void onHandlersInit(ServletConfig config) throws Exception
    {
-      Collection<WebRequestHandler> handlers = handlers_.values();
-      for (WebRequestHandler handler : handlers)
+      Collection<WebRequestHandler> hls = handlers.values();
+      for (WebRequestHandler handler : hls)
       {
          handler.onInit(this, config);
       }
@@ -160,23 +179,36 @@ public class WebAppController
     */
    public void service(HttpServletRequest req, HttpServletResponse res) throws Exception
    {
-      WebRequestHandler handler = handlers_.get(req.getServletPath());
-      if (log.isDebugEnabled())
+
+      String portalPath = req.getRequestURI().substring(req.getContextPath().length());
+      log.info("Portal path: " + portalPath);
+
+      //
+      Map<QualifiedName, String> parameters = router.process(portalPath);
+      log.info("Decoded parameters: " + parameters);
+
+      //
+      if (parameters != null)
       {
-         log.debug("Servlet Path: " + req.getServletPath());
-         log.debug("Handler used for this path: " + handler);
-      }
-      if (handler != null)
-      {
-         ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
-         RequestLifeCycle.begin(portalContainer);
-         try
+         String handlerKey = parameters.get(HANDLER_PARAM);
+         if (handlerKey != null)
          {
-            handler.execute(this, req, res);
-         }
-         finally
-         {
-            RequestLifeCycle.end();
+            WebRequestHandler handler = handlers.get(handlerKey);
+            log.info("Handler used for this path: " + handler);
+
+            //
+            ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
+            RequestLifeCycle.begin(portalContainer);
+
+            //
+            try
+            {
+               handler.execute(this, req, res, parameters);
+            }
+            finally
+            {
+               RequestLifeCycle.end();
+            }
          }
       }
    }

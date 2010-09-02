@@ -20,10 +20,12 @@
 package org.exoplatform.web;
 
 import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.web.controller.QualifiedName;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS
@@ -45,7 +47,11 @@ abstract public class WebRequestHandler extends BaseComponentPlugin
 
    abstract public String[] getPath();
 
-   abstract public void execute(WebAppController app, HttpServletRequest req, HttpServletResponse res) throws Exception;
+   abstract public void execute(
+      WebAppController app,
+      HttpServletRequest req,
+      HttpServletResponse res,
+      Map<QualifiedName, String> parameters) throws Exception;
 
    public void onDestroy(WebAppController controler) throws Exception
    {
