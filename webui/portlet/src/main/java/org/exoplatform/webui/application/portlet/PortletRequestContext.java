@@ -19,6 +19,15 @@
 
 package org.exoplatform.webui.application.portlet;
 
+import org.exoplatform.commons.utils.WriterPrinter;
+import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
+
 import java.io.Writer;
 
 import javax.portlet.ActionResponse;
@@ -28,14 +37,6 @@ import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.StateAwareResponse;
-
-import org.exoplatform.commons.utils.WriterPrinter;
-import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 
 /**
  * The request context of a portlet
@@ -130,6 +131,12 @@ public class PortletRequestContext extends WebuiRequestContext
    public PortletResponse getResponse()
    {
       return response_;
+   }
+
+   @Override
+   public URLFactory getURLFactory()
+   {
+      return parentAppRequestContext_.getURLFactory();
    }
 
    public String getRemoteUser()

@@ -41,6 +41,7 @@ import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -250,6 +251,12 @@ public class PortalRequestContext extends WebuiRequestContext
 
       //
       return title;
+   }
+
+   @Override
+   public URLFactory getURLFactory()
+   {
+      throw new UnsupportedOperationException();
    }
 
    public Orientation getOrientation()

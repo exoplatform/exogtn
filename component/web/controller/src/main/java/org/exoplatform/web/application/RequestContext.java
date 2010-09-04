@@ -20,6 +20,7 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.url.URLFactory;
 
 import java.io.Writer;
 import java.util.HashMap;
@@ -67,6 +68,13 @@ abstract public class RequestContext
    {
       return parentAppRequestContext_.getLocale();
    }
+
+   /**
+    * Returns the URL factory associated with this context.
+    *
+    * @return the URL factory
+    */
+   public abstract URLFactory getURLFactory();
 
    /**
     * Returns the orientation for the current request.
