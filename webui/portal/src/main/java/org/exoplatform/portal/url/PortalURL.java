@@ -23,6 +23,8 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceURL;
 
+import java.io.IOException;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -59,6 +61,18 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
 
       //
       sb.append(requestContext.getPortalURI());
+
+      //
+      try
+      {
+         locator.append(sb);
+      }
+      catch (IOException e)
+      {
+         AssertionError ae = new AssertionError();
+         ae.initCause(e);
+         throw ae;
+      }
 
       //
       return sb.toString();

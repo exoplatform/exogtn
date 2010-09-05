@@ -73,9 +73,10 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     *
     * @param resource the new resource
     */
-   public final void setResource(R resource)
+   public final ResourceURL setResource(R resource)
    {
       locator.setResource(resource);
+      return this;
    }
 
    /**

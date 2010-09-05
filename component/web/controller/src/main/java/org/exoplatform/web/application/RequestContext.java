@@ -83,6 +83,17 @@ abstract public class RequestContext
 
    public final <R, L extends ResourceLocator<R>> ResourceURL<R, L> createURL(ResourceType<R, L> resourceType, R resource)
    {
+      ResourceURL<R, L> url = createURL(resourceType);
+
+      // Set the resource on the URL
+      url.setResource(resource);
+
+      //
+      return url;
+   }
+
+   public final <R, L extends ResourceLocator<R>> ResourceURL<R, L> createURL(ResourceType<R, L> resourceType)
+   {
       // Get the provider
       LocatorProvider provider = getLocatorProvider();
 
@@ -96,13 +107,7 @@ abstract public class RequestContext
       }
 
       // Create an URL from the locator
-      ResourceURL<R, L> url = newURL(resourceType, locator);
-
-      // Set the resource on the URL
-      url.setResource(resource);
-
-      // Returns the URL object
-      return url;
+      return newURL(resourceType, locator);
    }
 
    /**

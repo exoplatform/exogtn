@@ -8,8 +8,8 @@
 	import org.exoplatform.portal.mop.SiteKey;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
-%>
-<%
+	import org.exoplatform.web.url.ResourceURL;
+
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
 	JavascriptManager jsmanager = pcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.webui.UISiteMap') ;
@@ -22,12 +22,14 @@
 	def actionExpandAll = uicomponent.event("ExpandAllNode");
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
-	public void renderNodes(TreeNode rootTree, String portalUri, boolean useAjax) {
-		def childrenNodes=rootTree.getChildren();
-		int childrenSize = childrenNodes.size() ;
-		int size = 0;
-		for(treeNode in childrenNodes) {
-
+	ResourceURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+							
+	public void renderNodes(TreeNode rootTree, ResourceURL nodeURL, boolean useAjax) {
+		List childrenNodes=rootTree.getChildren();
+		int childrenSize = childrenNodes.size() ;  
+		int size = 0;	
+		for(treeNode in childrenNodes) {	
+		
 			// count size;
 			size++;
 
@@ -35,11 +37,11 @@
 			def treePath = node.getId();			
 			String label = node.getEncodedResolvedLabel();											
 			if(useAjax){
-				actionLink = uicomponent.event("SelectNode", treePath);
-			}else{
-				actionLink = portalUri + node.getURI();
-			}
-
+				actionLink = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());
+			}else{	
+				actionLink = nodeURL.setResource(node).toString();
+			}	
+			
 			lastNode = '';
 			if (size == childrenSize) {
 				lastNode = 'LastNode';
@@ -59,9 +61,9 @@
 							</div>
 							<div class="ChildrenContainer" style="display: block">
 					""";
-
-					renderNodes(treeNode, portalUri, useAjax);
-
+					
+					renderNodes(treeNode, nodeURL, useAjax);
+					
 				} else {
 				    MimeResponse res = _ctx.getRequestContext().getResponse();
 					ResourceURL resourceURL = res.createResourceURL();
@@ -119,7 +121,7 @@
 	<div class="SitemapContent">
 		<div class="UISiteTree">
 			<% TreeNode treeNodeRoot = uicomponent.getTreeNodes() ;%>
-			<% renderNodes(treeNodeRoot,portalURI,useAJAX); %>
+			<% renderNodes(treeNodeRoot,nodeURL,useAJAX); %>
 		</div>
 	</div>
 </div>
