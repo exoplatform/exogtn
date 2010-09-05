@@ -17,42 +17,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.url;
+package org.exoplatform.portal.url.navigation;
+
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.ResourceType;
 
 import java.io.IOException;
 
 /**
- * <p>A locator for a resource.</p>
- *
- * <p>This class is abstract to allow locator subclass to add specific parameters.</p>
+ * A resource locator for navigation nodes.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <R> the resource parameter type
  */
-public interface ResourceLocator<R>
+public class NavigationLocator implements ResourceLocator<PageNode>
 {
 
-   /**
-    * Returns the current resource actually set on this locator.
-    *
-    * @return the resource
-    */
-   R getResource();
+   /** . */
+   public static final ResourceType<PageNode, NavigationLocator> TYPE = new ResourceType<PageNode, NavigationLocator>(){};
 
-   /**
-    * Set the resource on this locator.
-    *
-    * @param resource the resource to set
-    */
-   void setResource(R resource);
+   /** . */
+   private PageNode resource;
 
-   /**
-    * Append the resource locator path.
-    *
-    * @param appendable the appendable
-    * @throws IOException any IOException thrown by the appendable
-    */
-   void append(Appendable appendable) throws IOException;
+   public PageNode getResource()
+   {
+      return resource;
+   }
 
+   public void setResource(PageNode resource)
+   {
+      this.resource = resource;
+   }
+
+   public void append(Appendable appendable) throws IOException
+   {
+      appendable.append(resource.getUri());
+   }
 }

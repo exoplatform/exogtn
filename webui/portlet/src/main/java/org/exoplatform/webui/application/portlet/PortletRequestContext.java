@@ -22,7 +22,10 @@ package org.exoplatform.webui.application.portlet;
 import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.url.LocatorFactory;
+import org.exoplatform.web.url.LocatorProvider;
+import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.ResourceURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -72,6 +75,12 @@ public class PortletRequestContext extends WebuiRequestContext
       setSessionId(req.getPortletSession(true).getId());
 
       urlBuilder = new PortletURLBuilder();
+   }
+
+   @Override
+   public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   {
+      return parentAppRequestContext_.newURL(resourceType, locator);
    }
 
    public void init(Writer writer, PortletRequest req, PortletResponse res)
@@ -134,9 +143,9 @@ public class PortletRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public LocatorFactory getLocatorFactory()
+   public LocatorProvider getLocatorProvider()
    {
-      return parentAppRequestContext_.getLocatorFactory();
+      return parentAppRequestContext_.getLocatorProvider();
    }
 
    public String getRemoteUser()

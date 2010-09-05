@@ -25,20 +25,8 @@ package org.exoplatform.web.url;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  * @param <R> the resource parameter type
- * @param <C> the resource context parameter type
  * @param <L> the resource locator parameter type
  */
-public abstract class ResourceType<R, C, L extends ResourceLocator<R>>
+public abstract class ResourceType<R, L extends ResourceLocator<R>>
 {
-
-   public abstract Class<C> getContextType();
-
-   /**
-    * Creates a new locator instance with the specified context.
-    *
-    * @param context the context
-    * @return a new locator instance
-    */
-   protected abstract L newLocator(C context);
-
 }

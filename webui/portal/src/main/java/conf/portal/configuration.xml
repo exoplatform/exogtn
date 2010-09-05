@@ -69,6 +69,17 @@
       </component-plugins>
    </component>  
 
+  <component>
+      <type>org.exoplatform.portal.url.LocatorProviderService</type>
+    <component-plugins>
+      <component-plugin>
+        <name>navigation.locator.plugin</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.portal.url.navigation.NavigationLocatorPlugin</type>
+      </component-plugin>
+    </component-plugins>
+  </component>
+  
   <external-component-plugins>
      <target-component>org.exoplatform.web.WebAppController</target-component>
      <component-plugin>
@@ -92,5 +103,4 @@
         </init-params>
      </component-plugin>
   </external-component-plugins>
-
 </configuration>

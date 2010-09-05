@@ -20,7 +20,10 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.url.LocatorFactory;
+import org.exoplatform.web.url.LocatorProvider;
+import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.ResourceURL;
 
 import java.io.Writer;
 import java.util.HashMap;
@@ -74,7 +77,33 @@ abstract public class RequestContext
     *
     * @return the locator factory
     */
-   public abstract LocatorFactory getLocatorFactory();
+   public abstract LocatorProvider getLocatorProvider();
+
+   public abstract <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator);
+
+   public final <R, L extends ResourceLocator<R>> ResourceURL<R, L> createURL(ResourceType<R, L> resourceType, R resource)
+   {
+      // Get the provider
+      LocatorProvider provider = getLocatorProvider();
+
+      // Obtain a locator for the resource type
+      L locator = provider.newLocator(resourceType);
+
+      //
+      if (locator == null)
+      {
+         throw new IllegalArgumentException("No resource locator found for the resource type " + resourceType);
+      }
+
+      // Create an URL from the locator
+      ResourceURL<R, L> url = newURL(resourceType, locator);
+
+      // Set the resource on the URL
+      url.setResource(resource);
+
+      // Returns the URL object
+      return url;
+   }
 
    /**
     * Returns the orientation for the current request.

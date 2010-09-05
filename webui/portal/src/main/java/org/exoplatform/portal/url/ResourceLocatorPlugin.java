@@ -17,42 +17,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.url;
+package org.exoplatform.portal.url;
 
-import java.io.IOException;
+import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.ResourceType;
 
 /**
- * <p>A locator for a resource.</p>
- *
- * <p>This class is abstract to allow locator subclass to add specific parameters.</p>
+ * A plugin for adding resource locator to the {@link LocatorProviderService}.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <R> the resource parameter type
  */
-public interface ResourceLocator<R>
+public abstract class ResourceLocatorPlugin<R, L extends ResourceLocator<R>> extends BaseComponentPlugin
 {
 
    /**
-    * Returns the current resource actually set on this locator.
+    * Returns the resource type.
     *
-    * @return the resource
+    * @return the resource type
     */
-   R getResource();
+   protected abstract ResourceType<R, L> getResourceType();
 
    /**
-    * Set the resource on this locator.
+    * Returns a new locator instance.
     *
-    * @param resource the resource to set
+    * @return a new locator instance
     */
-   void setResource(R resource);
-
-   /**
-    * Append the resource locator path.
-    *
-    * @param appendable the appendable
-    * @throws IOException any IOException thrown by the appendable
-    */
-   void append(Appendable appendable) throws IOException;
+   protected abstract L newLocator();
 
 }

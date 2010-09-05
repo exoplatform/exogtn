@@ -25,14 +25,14 @@ import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.portal.url.PortalLocatorFactory;
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
+import org.exoplatform.portal.url.LocatorProviderService;
+import org.exoplatform.portal.url.PortalURL;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -42,11 +42,13 @@ import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.url.LocatorFactory;
+import org.exoplatform.web.url.LocatorProvider;
+import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.ResourceURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.event.Event;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
@@ -123,7 +125,7 @@ public class PortalRequestContext extends WebuiRequestContext
    private Locale locale = Locale.ENGLISH;
 
    /** . */
-   private final PortalLocatorFactory locatorFactory;
+   private final LocatorProviderService locatorFactory;
 
    public JavascriptManager getJavascriptManager()
    {
@@ -148,7 +150,7 @@ public class PortalRequestContext extends WebuiRequestContext
       super(app);
 
       //
-      locatorFactory = new PortalLocatorFactory();
+      locatorFactory = (LocatorProviderService)PortalContainer.getComponent(LocatorProviderService.class);
 
       //
       request_ = req;
@@ -222,6 +224,12 @@ public class PortalRequestContext extends WebuiRequestContext
       urlBuilder = new PortalURLBuilder(requestURI_);
    }
 
+   @Override
+   public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   {
+      return new PortalURL<R,L>(this, locator);
+   }
+
    public void refreshResourceBundle() throws Exception
    {
       appRes_ = getApplication().getResourceBundle(getLocale());
@@ -263,7 +271,7 @@ public class PortalRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public LocatorFactory getLocatorFactory()
+   public LocatorProvider getLocatorProvider()
    {
       return locatorFactory;
    }
