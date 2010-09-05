@@ -20,28 +20,34 @@
 package org.exoplatform.web.url;
 
 /**
- * Abstracts the URL of a resource.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <R> the resource parameter type
  */
-public abstract class ResourceURL<R>
+public abstract class LocatorFactory
 {
 
    /**
-    * Returns the current resource actually set.
+    * Returns a resource context for a resource type or null if none can be found.
     *
-    * @return the resource
+    * @param resourceType the resource type
+    * @param <R> the resource parameter type
+    * @param <C> the resource context parameter type
+    * @param <L> the resource locator parameter type
+    * @return the context
+    * @throws NullPointerException if the resource type is null
     */
-   public abstract R getResource();
+   protected abstract <R, C, L extends ResourceLocator<R>> C getContext(ResourceType<R, C, L> resourceType) throws NullPointerException;
 
-   /**
-    * Set the resource on this URL.
-    *
-    * @param resource the resource to set
-    */
-   public abstract void setResource(R resource);
+   public <R, C, U extends ResourceLocator<R>> U newLocator(ResourceType<R, C, U> resourceType)
+   {
+      C context = getContext(resourceType);
+      return resourceType.newLocator(context);
+   }
 
-
+   public <R, C, L extends ResourceLocator<R>> L newLocator(ResourceType<R, C, L> resourceType, R resource)
+   {
+      L locator = newLocator(resourceType);
+      locator.setResource(resource);
+      return locator;
+   }
 }

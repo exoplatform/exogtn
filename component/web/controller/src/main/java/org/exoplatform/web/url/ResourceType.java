@@ -26,17 +26,19 @@ package org.exoplatform.web.url;
  * @version $Revision$
  * @param <R> the resource parameter type
  * @param <C> the resource context parameter type
- * @param <U> the resource URL parameter type
+ * @param <L> the resource locator parameter type
  */
-public abstract class ResourceType<R, C, U extends ResourceURL<R>>
+public abstract class ResourceType<R, C, L extends ResourceLocator<R>>
 {
 
+   public abstract Class<C> getContextType();
+
    /**
-    * Creates a new URL instance with the specified context.
+    * Creates a new locator instance with the specified context.
     *
     * @param context the context
-    * @return a new URL instance
+    * @return a new locator instance
     */
-   protected abstract U newURL(C context);
+   protected abstract L newLocator(C context);
 
 }

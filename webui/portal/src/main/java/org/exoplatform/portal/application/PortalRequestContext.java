@@ -31,6 +31,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
+import org.exoplatform.portal.url.PortalLocatorFactory;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -41,7 +42,7 @@ import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.LocatorFactory;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -121,6 +122,9 @@ public class PortalRequestContext extends WebuiRequestContext
    
    private Locale locale = Locale.ENGLISH;
 
+   /** . */
+   private final PortalLocatorFactory locatorFactory;
+
    public JavascriptManager getJavascriptManager()
    {
       return jsmanager_;
@@ -142,6 +146,11 @@ public class PortalRequestContext extends WebuiRequestContext
    public PortalRequestContext(WebuiApplication app, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       super(app);
+
+      //
+      locatorFactory = new PortalLocatorFactory();
+
+      //
       request_ = req;
       response_ = res;
       response_.setBufferSize(1024 * 100);
@@ -254,9 +263,9 @@ public class PortalRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public URLFactory getURLFactory()
+   public LocatorFactory getLocatorFactory()
    {
-      throw new UnsupportedOperationException();
+      return locatorFactory;
    }
 
    public Orientation getOrientation()

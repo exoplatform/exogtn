@@ -19,25 +19,38 @@
 
 package org.exoplatform.web.url;
 
+import java.io.IOException;
+
 /**
+ * Abstracts the URL of a resource.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @param <R> the resource parameter type
  */
-public abstract class URLFactory
+public abstract class ResourceLocator<R>
 {
 
-   protected abstract <R, C, U extends ResourceURL<R>> C getContext(ResourceType<R, C, U> resourceType);
+   /**
+    * Returns the current resource actually set.
+    *
+    * @return the resource
+    */
+   public abstract R getResource();
 
-   public <R, C, U extends ResourceURL<R>> U newURL(ResourceType<R, C, U> resourceType)
-   {
-      C context = getContext(resourceType);
-      return resourceType.newURL(context);
-   }
+   /**
+    * Set the resource on this locator.
+    *
+    * @param resource the resource to set
+    */
+   public abstract void setResource(R resource);
 
-   public <R, C, U extends ResourceURL<R>> U newURL(ResourceType<R, C, U> resourceType, R resource)
-   {
-      U url = newURL(resourceType);
-      url.setResource(resource);
-      return url;
-   }
+   /**
+    * Append the resource locator path.
+    *
+    * @param appendable the appendable
+    * @throws IOException any IOException thrown by the appendable
+    */
+   public abstract void append(Appendable appendable) throws IOException;
+
 }

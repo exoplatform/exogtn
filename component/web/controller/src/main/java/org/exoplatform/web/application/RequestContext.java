@@ -20,7 +20,7 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.LocatorFactory;
 
 import java.io.Writer;
 import java.util.HashMap;
@@ -70,11 +70,11 @@ abstract public class RequestContext
    }
 
    /**
-    * Returns the URL factory associated with this context.
+    * Returns the locator factory associated with this context.
     *
-    * @return the URL factory
+    * @return the locator factory
     */
-   public abstract URLFactory getURLFactory();
+   public abstract LocatorFactory getLocatorFactory();
 
    /**
     * Returns the orientation for the current request.
