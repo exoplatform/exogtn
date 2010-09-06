@@ -30,11 +30,13 @@
 .UIWorkingWorkspace {
 	width: 980px;
 	margin: auto;
-	background: #b5b6b6;
+	background: #fff;
 }
 
 .UIWorkingWorkspace .UIPageBody {
-
+   border-bottom:1px solid #B4B4B4;
+   border-left:1px solid #B4B4B4;
+   border-right:1px solid #B4B4B4;
 }
 
 .MaskLayer {

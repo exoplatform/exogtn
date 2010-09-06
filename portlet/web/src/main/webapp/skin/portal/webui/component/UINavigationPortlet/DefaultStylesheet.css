@@ -25,8 +25,12 @@
  */
 
 .UINavigationPortlet {
-  background: #b6b6b6;
-  padding: 0px 8px;
+  background: #a3a3a3;
+  padding: 0;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #b4b4b4;
+  border-right: 1px solid #b4b4b4;
 }
 	
 .UINavigationPortlet .UINavigationBar {
@@ -34,7 +38,7 @@
 }
 
 .UINavigationPortlet .UINavigationBar .UIHorizontalTabs {
-	height: 33px;
+	height: 30px;
 }
 
 .UINavigationPortlet .UINavigationBar .UIHorizontalTabs .TabsContainer {
@@ -43,20 +47,21 @@
 }
 
 .UINavigationPortlet .UINavigationBar .LeftNavigationBar {
-	background: url('DefaultSkin/background/LeftNavigation.gif') no-repeat left top;
-	padding-left: 3px;
-	height: 32px;
+	background: url('DefaultSkin/background/nav-bg.jpg') no-repeat left top; /* orientation=lt */
+   background: url('DefaultSkin/background/nav-bg-rtl.jpg') no-repeat left top; /* orientation=rt */
+	/*padding-left: 3px;*/
+	height: 30px;
 }
 
 .UINavigationPortlet .UINavigationBar .RightNavigationBar {
-	background: url('DefaultSkin/background/RightNavigation.gif') no-repeat right top;
-	padding-right: 3px;
-	height: 32px;
+	/*padding-right: 3px;*/
+   background: none;
+	height: 29px;
 }
 
 .UINavigationPortlet .UINavigationBar .MiddleNavigationBar {
-	height: 32px;
-	background: url('DefaultSkin/background/MiddleNavigation.gif') repeat-x;
+	height: 29px;
+	background: none;
 	padding: 0px 8px 0px 8px; 
 }
 
@@ -77,12 +82,12 @@
 
 .UINavigationPortlet .UITab .NormalNavigationTab {
 	line-height: 26px; 
-	margin: 6px 8px 0px 0px; 
+	margin: 4px 8px 0px 0px;
 }
 
 .UINavigationPortlet .UITab .NormalNavigationTab .LeftTab {
 	line-height: 21px;
-	padding-left: 3px;
+	padding-left: 11px;
 }
 
 .UINavigationPortlet .UITab .NormalNavigationTab .RightTab {
@@ -93,7 +98,7 @@
 .UINavigationPortlet .UITab .NormalNavigationTab .MiddleTab {
 	line-height: 21px;
 	text-align: center;
-	padding: 0px 4px 0px 4px;
+	padding: 1px 4px 0px 4px;
 }
 
 .UINavigationPortlet .UITab .NormalNavigationTab .TabIcon {
@@ -108,8 +113,8 @@
 .UINavigationPortlet .UITab .NormalNavigationTab .DropDownArrowIcon {
 	padding-right: 16px; /* orientation=lt */
 	padding-left: 16px; /* orientation=rt */
-	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
-	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
+        background: none; /* orientation=lt */
+        background: none; /* orientation=rt */
 	cursor: pointer;
 	border-right: 1px solid #0a4da6;
 }
@@ -117,42 +122,44 @@
 /*###############-Hightlight Navigation Tab	-################*/
 
 .UINavigationPortlet .UITab .HighlightNavigationTab {
-	line-height: 26px;  
-	margin: 6px 8px 0px 0px; 
+	line-height: 29px;
+	/*margin: 0px 8px 0px 0px;*/
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab .LeftTab {
-	line-height: 26px; 
+	line-height: 29px; 
 	padding-left: 3px;
-	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat left -108px;
+	background: #fff url('DefaultSkin/background/active-button-bg.gif') repeat-x 0 0;
+	border-left: 1px solid #000;
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab .RightTab {
-	line-height: 26px; 
+	line-height: 29px; 
 	padding-right: 3px;
-	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat right -130px;
+	background: #fff url('DefaultSkin/background/active-button-bg.gif') repeat-x 0 0;
+	border-right: 1px solid #000;
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab .MiddleTab {
-	height: 21px; 
+	height: 29px; 
 	text-align: center;
-	padding: 0px 4px 0px 4px;
-	background: #6d94c8;
-	margin-bottom: 4px;
+	padding: 1px 4px 0px 4px;
+	background: none;
+	margin-bottom: 0;
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab .TabIcon {
 	color: #fff;
-	line-height: 21px;
+	line-height: 29px;
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab a {
-	color: #fff;
+	color: #3c3c3c;
 }
 
 .UINavigationPortlet .UITab .HighlightNavigationTab .DropDownArrowIcon {
-	padding-right: 16px; /* orientation=lt */
-	padding-left: 16px; /* orientation=rt */
+	padding-right: 0px; /* orientation=lt */
+	padding-left: 0px; /* orientation=rt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
 	cursor: default;
@@ -162,46 +169,49 @@
 /*###############-Selected Navigation Tab-################*/
 
 .UINavigationPortlet .UITab .SelectedNavigationTab {
-	line-height: 26px; 
-	margin: 6px 8px 0px 0px; 
+	line-height: 29px;
+	/*margin: 0 8px 0px 0px;*/
 }
 
 
 .UINavigationPortlet .UITab .SelectedNavigationTab .LeftTab {
-	line-height: 21px; 
-	background: #0a4da6 url('DefaultSkin/background/NavigationTab.gif') no-repeat left -28px;
+	line-height: 29px;
 	padding-left: 3px;
+	background: #fff url('DefaultSkin/background/active-button-bg.gif') repeat-x 0 0;
+   border-left: 1px solid #000;
 }
 
 .UINavigationPortlet .UITab .SelectedNavigationTab .RightTab {
-	line-height: 21px; 
-	background: #0a4da6 url('DefaultSkin/background/NavigationTab.gif') no-repeat right -55px;
+	line-height: 29px;
 	padding-right: 3px;
+	background: #fff url('DefaultSkin/background/active-button-bg.gif') repeat-x 0 0;
+   border-right: 1px solid #000;
 }
 
 .UINavigationPortlet .UITab .SelectedNavigationTab .MiddleTab {
-	line-height: 21px;
-	background: #0a4da6 url('DefaultSkin/background/NavigationTab.gif') repeat-x;
+	height: 29px;
 	text-align: center;
-	padding: 0px 4px 0px 4px;
+	padding: 1px 4px 0px 4px;
+	background: none;
+	margin-bottom: 0;
 }
 
 .UINavigationPortlet .UITab .SelectedNavigationTab .TabIcon {
-	color: #f57a00;
-	line-height: 21px;
-	padding-bottom: 5px;
-	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat center -82px;;
+	color: #fff;
+	line-height: 29px;
+   padding-bottom:0;
+   background: none;
 }
 
 .UINavigationPortlet .UITab .SelectedNavigationTab a {
-	color: #f57a00;
+	color: #3c3c3c;
 }
 
 .UINavigationPortlet .UITab .SelectedNavigationTab .DropDownArrowIcon {
 	padding-right: 16px; /* orientation=lt */
 	padding-left: 16px; /* orientation=rt */
-	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right center;	/* orientation=lt */
-	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left center; /* orientation=rt */
+	background: none;	/* orientation=lt */
+	background: none; /* orientation=rt */
 	cursor: pointer;
 	border-right: 1px solid white;
 }
@@ -346,15 +356,15 @@
 
 /***********GroupNavigation*************/
 .UINavigationPortlet .GroupNavigation .LeftNavigationBar {
-	background: url('DefaultSkin/background/NavGroup.gif') no-repeat left top;
+	background: #c7c3ad none no-repeat left top;
 }
 
 .UINavigationPortlet .GroupNavigation .RightNavigationBar {
-	background: url('DefaultSkin/background/NavGroup.gif') no-repeat right top;
+	background: #c7c3ad none no-repeat right top;
 }
 
 .UINavigationPortlet .GroupNavigation .MiddleNavigationBar {
-	background: url('DefaultSkin/background/NavGroup.gif') repeat-x center bottom;
+	background: #c7c3ad none repeat-x center bottom;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .NormalNavigationTab .MiddleTab .DropDownArrowIcon {
@@ -362,15 +372,14 @@
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .LeftTab {
-	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat left -152px;
+	background: #fff none no-repeat left -152px;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .RightTab {
-	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat right -174px;
-}
+	background: #fff none no-repeat right -174px;}
 
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .MiddleTab {
-	background: #ffcf01;
+	background: #fff;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .MiddleTab .DropDownArrowIcon {
@@ -378,15 +387,15 @@
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .LeftTab {
-	background: #ffa200 url('DefaultSkin/background/NavigationTab.gif') no-repeat left -28px;
+	background: #fff none no-repeat left -28px;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .RightTab {
-	background: #ffa200 url('DefaultSkin/background/NavigationTab.gif') no-repeat right -55px;
+	background: #fff none no-repeat right -55px;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .MiddleTab {
-	background: #ffa200 url('DefaultSkin/background/NavigationTab.gif') repeat-x;
+	background: #fff none repeat-x;
 }
 
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .MiddleTab .DropDownArrowIcon {

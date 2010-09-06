@@ -18,11 +18,7 @@
 		<div class="PortletDecoration">
 		
 			<div class="HomePortletAdBackround">
-				<div class="AdImageLeft">
-					<div class="AdImageRight">
-						<div class="EmptyBlock"><%=_ctx.appRes("UIHomePagePortlet.Label.Slogan")%></div>
-					</div>
-				</div>
+				<img src="/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/epp/redbox-tab1-bg.jpg" alt="" usemap="#epp-main"/>
 			</div>
 			
 			<div class="HomePortletContent">
@@ -31,7 +27,7 @@
 						<div class="MiddleAccountsContainer">
 							<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.Label.Title")%></div>
 							<div class="AccountsContainerDeco">
-								<div class="AccountBlock AdministratorUser">
+								<div class="AccountBlock AdministratorUser" onclick="window.location='${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn'">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
 										<div class="Username">
@@ -45,7 +41,7 @@
 									</div>
 								</div>	
 								<div class="SeparatorLine"><span></span></div>
-								<div class="AccountBlock ManagerUser">
+								<div class="AccountBlock ManagerUser" onclick="window.location='${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn'">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
 										<div class="Username">
@@ -59,7 +55,7 @@
 									</div>
 								</div>
 								<div class="SeparatorLine"><span></span></div>
-								<div class="AccountBlock NormalUser">
+								<div class="AccountBlock NormalUser" onclick="window.location='${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn'">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
 										<div class="Username">
@@ -73,7 +69,7 @@
 									</div>
 								</div>
 								<div class="SeparatorLine"><span></span></div>
-								<div class="AccountBlock DemoUser" style="margin-right: 0px;">
+								<div class="AccountBlock DemoUser" style="margin-right: 0px;" onclick="window.location='${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn'">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
 										<div class="Username">
@@ -97,4 +93,4 @@
 	</div>	
 	<div class="ClearBoth"><span></span></div>
 </div>
-
+<map id="epp-main" name="epp-main"><area shape="rect" alt="" title="" coords="34,150,300,172" href="/portal/docs/gatein-3-10.pdf" target="_blank" /><area shape="rect" alt="" title="" coords="34,175,220,199" href="/portal/docs/JBoss_Portals_0310.pdf" target="_blank" /><area shape="rect" alt="" title="" coords="33,205,129,222" href="http://www.jboss.com/products/platforms/portals/" target="_blank" /><area shape="rect" alt="" title="" coords="147,5,312,31" href="http://vimeo.com/channels/gatein" target="" /></map>

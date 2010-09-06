@@ -51,10 +51,11 @@
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer {	
-	background: url('background/ToolbarContainer.gif') repeat-x left top;	
+	background: #f6f6f6 none repeat-x left top;
 	height: 32px;
-	border-left: 1px solid white;
-	border-right: 1px solid white;
+	border-left: 1px solid #a2a2a2;
+	border-right: 1px solid #a2a2a2;
+	border-bottom: 1px solid #dedede;
 }
 
 .UIToolbarContainer .ToolbarContainer a {
@@ -62,7 +63,7 @@
 	padding: 0px 5px 0px 35px; /* orientation=lt */
 	padding: 0px 35px 0px 5px; /* orientation=rt */
 	white-space: nowrap;
-	color: #3e3e3e;
+	color: #540306;
 }
 
 .UIToolbarContainer .UITab a:hover {
@@ -238,9 +239,9 @@
 /***************UIStarToolBarPortlet*****************/
 
 .UIStarToolBarPortlet {
-	background: url('background/GateinLogo.gif') no-repeat 10px 6px; /* orientation=lt */
-	background: url('background/GateinLogo.gif') no-repeat 23px 5px; /* orientation=rt */
-	width: 64px;
+	background: url('background/RedHatLogo.gif') no-repeat 6px 4px; /* orientation=lt */
+	background: url('background/RedHatLogo.gif') no-repeat 6px 4px; /* orientation=rt */
+	width: 82px;
 	height: 32px;
 }
 
