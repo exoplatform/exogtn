@@ -35,9 +35,9 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
    /** . */
    private final PortalRequestContext requestContext;
 
-   public PortalURL(PortalRequestContext requestContext, L locator)
+   public PortalURL(PortalRequestContext requestContext, L locator, Boolean ajax)
    {
-      super(locator);
+      super(locator, ajax);
 
       //
       if (requestContext == null)

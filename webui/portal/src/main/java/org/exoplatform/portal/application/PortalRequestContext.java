@@ -227,7 +227,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R,L>(this, locator);
+      return new PortalURL<R,L>(this, locator, false);
    }
 
    public void refreshResourceBundle() throws Exception

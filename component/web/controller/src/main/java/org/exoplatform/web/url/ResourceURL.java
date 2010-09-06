@@ -31,13 +31,17 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
    /** . */
    protected final L locator;
 
+   /** . */
+   protected Boolean ajax;
+
    /**
-    * Create a new instance.
+    * Create a resource URL instance.
     *
     * @param locator the resource locator that can't be null
+    * @param ajax the ajax mode
     * @throws NullPointerException if the resource locator is null
     */
-   public ResourceURL(L locator) throws NullPointerException
+   public ResourceURL(L locator, Boolean ajax) throws NullPointerException
    {
       if (locator == null)
       {
@@ -46,6 +50,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
 
       //
       this.locator = locator;
+      this.ajax = ajax;
    }
 
    /**
@@ -56,6 +61,28 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
    public final L getResourceLocator()
    {
       return locator;
+   }
+
+   /**
+    * Returns the ajax mode.
+    *
+    * @return the ajax mode
+    */
+   public final Boolean getAjax()
+   {
+      return ajax;
+   }
+
+   /**
+    * Update the ajax mode.
+    *
+    * @param ajax the new ajax mode
+    * @return this object
+    */
+   public final ResourceURL setAjax(Boolean ajax)
+   {
+      this.ajax = ajax;
+      return this;
    }
 
    /**
