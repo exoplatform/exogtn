@@ -163,7 +163,6 @@
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
 	cursor: default;
-	border-right: 1px solid #6d94c8;
 }
 
 /*###############-Selected Navigation Tab-################*/
