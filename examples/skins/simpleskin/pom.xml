@@ -24,7 +24,7 @@
 
   <parent>
     <groupId>org.gatein.portal.examples.skins</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>skins-parent</artifactId>
     <version>5.1.0-epp-ER01-SNAPSHOT</version>
   </parent> 
 
