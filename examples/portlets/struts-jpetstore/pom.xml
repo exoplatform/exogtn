@@ -5,7 +5,7 @@
    <parent>
       <groupId>org.gatein.portal.examples.portlets</groupId>
       <artifactId>parent</artifactId>
-      <version>3.2.0-Beta01-SNAPSHOT</version>
+      <version>5.1.0-epp-ER01-SNAPSHOT</version>
    </parent>
 
    <artifactId>struts-jpetstore</artifactId>
