@@ -9,7 +9,7 @@
    </parent>
 
    <groupId>org.gatein.portal.examples.skins</groupId>
-   <artifactId>parent</artifactId>
+   <artifactId>skins-parent</artifactId>
    <packaging>pom</packaging>
    <name>GateIn Skins</name>
 
