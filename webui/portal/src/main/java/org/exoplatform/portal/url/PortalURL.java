@@ -19,11 +19,16 @@
 
 package org.exoplatform.portal.url;
 
+import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceURL;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,6 +36,8 @@ import java.io.IOException;
  */
 public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L>
 {
+
+   private List<Parameter> params;
 
    /** . */
    private final PortalRequestContext requestContext;
@@ -49,32 +56,91 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       this.requestContext = requestContext;
    }
 
+   public PortalURL<R, L> addParameters(Parameter... param)
+   {
+      if (params == null)
+      {
+         params = new ArrayList<Parameter>();
+      }
+      params.addAll(Arrays.asList(param));
+      return this;
+   }
+
+   public PortalURL<R, L> setParameters(Parameter... param)
+   {
+      params = (param != null) ? Arrays.asList(param) : null;
+      return this;
+   }
+
+   public Parameter[] getParameters()
+   {
+      return (Parameter[])params.toArray();
+   }
+
    public String toString()
    {
-      if (locator.getResource() == null)
+      //
+      StringBuilder url = new StringBuilder();
+
+      if (ajax)
       {
-         throw new IllegalStateException("No resource set of the portal URL");
+         url.append(requestContext.getRequestURI());
+      }
+      else
+      {
+         if (locator.getResource() == null)
+         {
+            throw new IllegalStateException("No resource set of the portal URL");
+         }
+         
+         //
+         url.append(requestContext.getPortalURI());
+         
+         //
+         try
+         {
+            locator.append(url);
+         }
+         catch (IOException e)
+         {
+            AssertionError ae = new AssertionError();
+            ae.initCause(e);
+            throw ae;
+         }
       }
 
-      //
-      StringBuilder sb = new StringBuilder();
-
-      //
-      sb.append(requestContext.getPortalURI());
-
-      //
-      try
+      if (ajax || params != null)
       {
-         locator.append(sb);
-      }
-      catch (IOException e)
-      {
-         AssertionError ae = new AssertionError();
-         ae.initCause(e);
-         throw ae;
+         url.append("?");
+         boolean addedAmpersand = false;
+
+         if (params != null)
+         {
+            for (Parameter param : params)
+            {
+               if (addedAmpersand)
+               {
+                  url.append(Constants.AMPERSAND);
+               }
+               url.append(param.getName()).append("=").append(param.getValue());
+               addedAmpersand = true;
+            }
+         }
+
+         if (ajax)
+         {
+            if (addedAmpersand)
+            {
+               url.append(Constants.AMPERSAND);
+            }
+            url.append("ajaxRequest=true");
+
+            //adding the ajaxGet javascript function to handle the response
+            url.insert(0, "javascript:ajaxGet('");
+            url.append("')");
+         }
       }
 
-      //
-      return sb.toString();
+      return url.toString();
    }
 }

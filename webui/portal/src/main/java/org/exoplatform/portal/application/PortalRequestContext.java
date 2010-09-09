@@ -85,6 +85,8 @@ public class PortalRequestContext extends WebuiRequestContext
    final static public String UI_COMPONENT_ACTION = "portal:action";
 
    final static public String UI_COMPONENT_ID = "portal:componentId";
+   
+   final static public String TARGET_NODE = "portal:targetNode";
 
    final static public String CACHE_LEVEL = "portal:cacheLevel";
 
@@ -137,7 +139,7 @@ public class PortalRequestContext extends WebuiRequestContext
     * then keep it in following properties of PortalRequestContext :<br/>
     * 1. <code>requestURI</code> : The decoded URI of this request <br/>
     * 2. <code>portalOwner</code> : The portal name ( "classic" for instance )<br/>
-    * 3. <code>portalURI</code> : The URI to current portal ( "/portal/classic/ for instance )<br/>
+    * 3. <code>portalURI</code> : The URI to current portal ( "/portal/public/classic/ for instance )<br/>
     * 4. <code>nodePath</code> : The path that is used to reflect to a navigation node
     * 
     * @param app an instance of {@link PortalApplication}

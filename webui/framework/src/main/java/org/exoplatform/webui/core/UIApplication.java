@@ -125,10 +125,9 @@ abstract public class UIApplication extends UIContainer
       }
       catch (Throwable t)
       {
-         Object[] args = {t.getMessage()};
          ApplicationMessage msg =
-            new ApplicationMessage("UIApplication.msg.unknown-error", args, ApplicationMessage.ERROR);
-         getUIPopupMessages().addMessage(msg);
+            new ApplicationMessage("UIApplication.msg.unknown-error", null, ApplicationMessage.ERROR);
+         uiPopupMessages_.addMessage(msg);
          log.error("Error during the processAction phase", t);
       }
    }

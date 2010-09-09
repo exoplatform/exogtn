@@ -19,11 +19,11 @@
 
 package org.exoplatform.portal.url.navigation;
 
-import org.exoplatform.portal.config.model.PageNode;
+import java.io.IOException;
+
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
-
-import java.io.IOException;
 
 /**
  * A resource locator for navigation nodes.
@@ -31,27 +31,27 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocator implements ResourceLocator<PageNode>
+public class NavigationLocator implements ResourceLocator<UserNode>
 {
 
    /** . */
-   public static final ResourceType<PageNode, NavigationLocator> TYPE = new ResourceType<PageNode, NavigationLocator>(){};
+   public static final ResourceType<UserNode, NavigationLocator> TYPE = new ResourceType<UserNode, NavigationLocator>(){};
 
    /** . */
-   private PageNode resource;
+   private UserNode resource;
 
-   public PageNode getResource()
+   public UserNode getResource()
    {
       return resource;
    }
 
-   public void setResource(PageNode resource)
+   public void setResource(UserNode resource)
    {
       this.resource = resource;
    }
 
    public void append(Appendable appendable) throws IOException
    {
-      appendable.append(resource.getUri());
+      appendable.append(resource.getURI());
    }
 }

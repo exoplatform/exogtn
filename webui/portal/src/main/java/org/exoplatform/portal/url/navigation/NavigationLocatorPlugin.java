@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.url.navigation;
 
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.url.ResourceLocatorPlugin;
 import org.exoplatform.web.url.ResourceType;
 
@@ -27,11 +27,11 @@ import org.exoplatform.web.url.ResourceType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocatorPlugin extends ResourceLocatorPlugin<PageNode, NavigationLocator>
+public class NavigationLocatorPlugin extends ResourceLocatorPlugin<UserNode, NavigationLocator>
 {
 
    @Override
-   protected ResourceType<PageNode, NavigationLocator> getResourceType()
+   protected ResourceType<UserNode, NavigationLocator> getResourceType()
    {
       return NavigationLocator.TYPE;
    }

@@ -9,6 +9,9 @@
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.web.url.ResourceURL;
+	import org.exoplatform.web.application.Parameter;
+  
+	def navigations = uicomponent.getNavigations();
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
 	JavascriptManager jsmanager = pcontext.getJavascriptManager();
@@ -32,15 +35,20 @@
 		
 			// count size;
 			size++;
+			
+			node = treeNode.getNode();
+			nav = treeNode.getNavigation();
+			String label = node.encodedResolvedLabel;	
+			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
+			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
 
-			def node = treeNode.getNode();
-			def treePath = node.getId();			
-			String label = node.getEncodedResolvedLabel();											
 			if(useAjax){
-				actionLink = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());
-			}else{	
-				actionLink = nodeURL.setResource(node).toString();
-			}	
+        nodeURL.setAjax(true);
+        nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
+			} else {
+         nodeURL.setResource(node);
+      }
+			actionLink = nodeURL.toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {

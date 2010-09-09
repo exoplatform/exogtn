@@ -60,6 +60,11 @@
              <value>GroupNavigation</value>
              <read-only>true</read-only>
            </preference>
+           <preference>
+             <name>useAJAX</name>
+             <value>false</value>
+             <read-only>false</read-only>
+           </preference>
          </preferences>
        </portlet>
        <access-permissions>Everyone</access-permissions>

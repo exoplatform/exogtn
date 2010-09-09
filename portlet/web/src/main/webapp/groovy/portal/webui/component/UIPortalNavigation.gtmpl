@@ -4,30 +4,33 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.gatein.common.text.EntityEncoder;
 	import javax.portlet.MimeResponse;
-	import javax.portlet.ResourceURL;
+	import org.exoplatform.web.url.ResourceURL;
+	import org.exoplatform.web.application.Parameter;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.webui.UIHorizontalTabs');
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
-	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');
-	
+	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');	
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
 	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
-	public void renderChildrenContainer(UserNode node) {
+	PortalRequestContext pcontext = Util.getPortalRequestContext();     
+    ResourceURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+  
+	public void renderChildrenContainer(UserNode node, ResourceURL nodeURL) {
 		print """
 			<ul class="MenuItemContainer " style="display: none;">
 		""";
 				for(child in node.getChildren()) {
-					renderChildNode(child);
+					renderChildNode(child, nodeURL);
 				}
 		print """				
 			</ul>
 		""";	  
 	}  
 	
-	public void renderChildNode(UserNode node) {
+	public void renderChildNode(UserNode node, ResourceURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
@@ -41,7 +44,7 @@
 		if (node.getChildrenCount() > 0) {
 		   arrowIcon = "ArrowIcon";
 		   MimeResponse res = _ctx.getRequestContext().getResponse();
-		   ResourceURL resourceURL = res.createResourceURL();
+		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 		   resourceURL.setResourceID(res.encodeURL(node.getURI()));
 		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
@@ -54,18 +57,25 @@
 		}
 		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
+		
+		nodeURL.setResource(node);
+	    String nonAjaxURL = nodeURL.setParameters(null).setAjax(false).toString();
+	    if(uicomponent.isUseAjax()){
+	      nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
+	    }
+		
 		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		if(node.getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
 				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a  class="ItemIcon $icon" onclick="$onclickEvt">$label</a>
+							<a  class="ItemIcon $icon" onclick="" + nodeURL.setAjax(true).toString() + "">$label</a>
 				""";
 			} else {
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a class="ItemIcon $icon" href="$pageURI">$label</a>
+							<a class="ItemIcon $icon" href="$nonAjaxURL">$label</a>
 				""";
 			}
 		} else {
@@ -76,7 +86,7 @@
 		}
 		
 		if (node.getChildren().size() > 0) {
-			renderChildrenContainer(node);
+			renderChildrenContainer(node, nodeURL);
 		}		
 		print "</li>";					
 	}
@@ -97,7 +107,7 @@
 					}
 					
 					if (node.getChildrenCount() > 0) {
-					   	ResourceURL resourceURL = res.createResourceURL();
+					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 						resourceURL.setResourceID(res.encodeURL(node.getURI()));										
 	%>			
 					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=resourceURL.toString() %>">
@@ -119,14 +129,18 @@
 								EntityEncoder entityEncoder = EntityEncoder.FULL;
 								label=entityEncoder.encode(label);
 					 			if(node.getPageRef() != null) {
+					 			    nodeURL.setResource(node);
+                                    String nonAjaxURL = nodeURL.setParameters(null).setAjax(false).toString();
+                                    
 					 				if(uicomponent.isUseAjax()) {
+					 				    nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
 					 					String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;";
 					 		%>
-							 			<a class="TabIcon ${iconType}" onclick="$onclickEvt">$label</a>
+							 			<a class="TabIcon ${iconType}" onclick="<%=nodeURL.setAjax(true).toString()%>">$label</a>
 							<%
 									} else {
 							%>
-										<a class="TabIcon ${iconType}" href="$pageURI">$label</a>
+										<a class="TabIcon ${iconType}" href="$nonAjaxURL">$label</a>
 							<%	    }
 								} else {%>
 									<a class="TabIcon ${iconType}" href="javascript:void(0)">$label</a>
@@ -135,7 +149,7 @@
 						<%
                              /*Render Popup Menu*/
                              if (node.getChildren().size() > 0) {
-                                     renderChildrenContainer(node);
+                                     renderChildrenContainer(node, nodeURL);
                              }
                            %>
 					</li>									
