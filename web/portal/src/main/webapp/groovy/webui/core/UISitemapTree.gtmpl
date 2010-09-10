@@ -26,6 +26,7 @@
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
 	ResourceURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	nodeURL.setAjax(true);
 							
 	public void renderNodes(TreeNode rootTree, ResourceURL nodeURL, boolean useAjax) {
 		List childrenNodes=rootTree.getChildren();
@@ -42,13 +43,7 @@
 			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
 			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
 
-			if(useAjax){
-        nodeURL.setAjax(true);
-        nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
-			} else {
-         nodeURL.setResource(node);
-      }
-			actionLink = nodeURL.toString();
+      String actionLink = nodeURL.setResource(node).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {
@@ -64,7 +59,7 @@
 							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionCollapse">
 					""";
 					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					      else println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: block">
@@ -84,7 +79,7 @@
 							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionExpand">
 					""";
 					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					      else println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: none">
@@ -113,8 +108,8 @@
 
 			}
 
-		}
-	  }
+		}		
+	}  
 %>
 
 <div id="UISiteMap" class="UISitemap" >

@@ -59,10 +59,8 @@
 		label = entityEncoder.encode(label);
 		
 		nodeURL.setResource(node);
-	    String nonAjaxURL = nodeURL.setParameters(null).setAjax(false).toString();
-	    if(uicomponent.isUseAjax()){
-	      nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
-	    }
+		String nonAjaxURL = nodeURL.setAjax(false).toString();
+	    String ajaxURL = nodeURL.setAjax(true).toString();
 		
 		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		if(node.getPageRef() != null) {
@@ -70,7 +68,7 @@
 				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a  class="ItemIcon $icon" onclick="" + nodeURL.setAjax(true).toString() + "">$label</a>
+							<a  class="ItemIcon $icon" onclick="$ajaxURL">$label</a>
 				""";
 			} else {
 				print """
@@ -130,13 +128,14 @@
 								label=entityEncoder.encode(label);
 					 			if(node.getPageRef() != null) {
 					 			    nodeURL.setResource(node);
-                                    String nonAjaxURL = nodeURL.setParameters(null).setAjax(false).toString();
+                                    String nonAjaxURL = nodeURL.setAjax(false).toString();
+                                    String ajaxURL = nodeURL.setAjax(true).toString();
                                     
 					 				if(uicomponent.isUseAjax()) {
 					 				    nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
 					 					String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;";
 					 		%>
-							 			<a class="TabIcon ${iconType}" onclick="<%=nodeURL.setAjax(true).toString()%>">$label</a>
+							 			<a class="TabIcon ${iconType}" onclick="$ajaxURL">$label</a>
 							<%
 									} else {
 							%>

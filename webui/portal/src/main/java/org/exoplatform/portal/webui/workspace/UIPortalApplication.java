@@ -19,21 +19,18 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserPortalConfig;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -49,6 +46,7 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.web.url.ResourceURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -116,6 +114,10 @@ public class UIPortalApplication extends UIApplication
    private Map<SiteKey, UIPortal> all_UIPortals;
    
    private UIPortal showedUIPortal;
+   
+   private boolean isAjaxInLastRequest;
+   
+   private String lastNonAjaxUri;
    
    /**
     * The constructor of this class is used to build the tree of UI components
@@ -497,43 +499,69 @@ public class UIPortalApplication extends UIApplication
          uiContainer.setStorageId(container.getStorageId());
          PortalDataMapper.toUIContainer(uiContainer, container);
          UISiteBody uiSiteBody = uiContainer.findFirstComponentOfType(UISiteBody.class);
-         //uiSiteBody.setUIComponent(uiPortal);
          uiSiteBody.setUIComponent(this.showedUIPortal);
          uiContainer.setRendered(true);
          uiViewWS.setUIComponent(uiContainer);
       }
       else
       {
-         //uiViewWS.setUIComponent(uiPortal);
          uiViewWS.setUIComponent(this.showedUIPortal);
       }
-      // uiWorkingWorkspace.addChild(UIPortalToolPanel.class, null,
-      // null).setRendered(false);
-      // editInlineWS.addChild(UIPortalToolPanel.class, null,
-      // null).setRendered(false);
       addChild(UIMaskWorkspace.class, UIPortalApplication.UI_MASK_WS_ID, null);
    }
 
    /**
-    * The processDecode() method first check if : <p>
-    * 1/ The requested nodePath is not equals to the last visited one 
-    * then an event of type PageNodeEvent.CHANGE_PAGE_NODE 
-    * is sent to the associated EventListener, a call to super is then done. <br>
-    * 2/ Otherwise, we call super and stops here.
+    * The processDecode() method is doing 3 actions: <br/>
+    * 1) if this is a non ajax request and the last is an ajax one,
+    * then we check if the requested nodePath is equal to last non ajax nodePath and
+    * is not equal to the last nodePath, the server performs a 302 redirect on the last nodePath.<br/>
+    * 2) if the nodePath exist but is equals to the current one 
+    * then we also call super and stops here.<br/>
+    * 3) if the requested nodePath is not equals to the current one or current 
+    * page no longer exists, then an event of type PageNodeEvent.CHANGE_NODE 
+    * is sent to the associated EventListener; a call to super is then done.
     */
+   @Override
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
-      String nodePath = pcontext.getNodePath().trim();
-      if(!nodePath.equals(lastNodePath))
+      String nodePath = pcontext.getNodePath();
+      boolean isAjax = pcontext.useAjax();
+      
+      if (!isAjax)
+      {
+         if (isAjaxInLastRequest)
+         {
+            isAjaxInLastRequest = false;
+            if (nodePath.equals(lastNonAjaxUri) && !nodePath.equals(lastNodePath))
+            {
+               ResourceURL<UserNode, NavigationLocator> nodeURL =
+                  pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+               nodeURL.setResource(getShowedUIPortal().getSelectedUserNode());
+               pcontext.sendRedirect(nodeURL.toString());
+               return;
+            }
+         }
+         lastNonAjaxUri = nodePath;
+      }
+      
+      isAjaxInLastRequest = isAjax;
+      
+      if (!nodePath.equals(lastNodePath))
       {
          lastNodePath = nodePath;
+
          PageNodeEvent<UIPortalApplication> pnevent =
             new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, nodePath);
          broadcast(pnevent, Event.Phase.PROCESS);
       }
       
-      super.processDecode(context);
+      if (!isAjax)
+      {
+         lastNonAjaxUri = nodePath;
+      }
+
+      super.processDecode(pcontext);
    }
    
    /**
@@ -692,31 +720,6 @@ public class UIPortalApplication extends UIApplication
    public void setUserPortalConfig(UserPortalConfig userPortalConfig)
    {
       this.userPortalConfig_ = userPortalConfig;
-   }
-   
-   private boolean isPageExist() throws Exception 
-   {
-      WebuiRequestContext context = Util.getPortalRequestContext();
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService userPortalConfigService =
-         (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      Page page = null;
-      UserNode pageNode = Util.getUIPortal().getSelectedUserNode();
-      if (pageNode != null)
-      {
-         try
-         {
-            if (pageNode.getPageRef() != null)
-            {
-               page = userPortalConfigService.getPage(pageNode.getPageRef(), context.getRemoteUser());
-            }
-         }
-         catch (NoSuchDataException nsde)
-         {
-            return false;
-         }         
-      }
-      return (page != null);
    }
 
    /**

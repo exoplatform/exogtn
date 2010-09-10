@@ -85,7 +85,7 @@ public class PortalRequestContext extends WebuiRequestContext
    final static public String UI_COMPONENT_ACTION = "portal:action";
 
    final static public String UI_COMPONENT_ID = "portal:componentId";
-   
+
    final static public String TARGET_NODE = "portal:targetNode";
 
    final static public String CACHE_LEVEL = "portal:cacheLevel";
@@ -123,7 +123,7 @@ public class PortalRequestContext extends WebuiRequestContext
    private final PortalURLBuilder urlBuilder;
 
    private Map<String, String[]> parameterMap;
-   
+
    private Locale locale = Locale.ENGLISH;
 
    /** . */
@@ -229,7 +229,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R,L>(this, locator, false);
+      return new PortalURL<R, L>(this, locator, false);
    }
 
    public void refreshResourceBundle() throws Exception
@@ -376,7 +376,7 @@ public class PortalRequestContext extends WebuiRequestContext
    {
       return portalURI;
    }
-   
+
    public URLBuilder<UIComponent> getURLBuilder()
    {
       return urlBuilder;

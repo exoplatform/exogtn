@@ -19,11 +19,11 @@
 
 package org.exoplatform.portal.url.navigation;
 
-import java.io.IOException;
-
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
+
+import java.io.IOException;
 
 /**
  * A resource locator for navigation nodes.

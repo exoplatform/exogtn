@@ -82,31 +82,24 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       //
       StringBuilder url = new StringBuilder();
 
-      if (ajax)
+      if (locator.getResource() == null)
       {
-         url.append(requestContext.getRequestURI());
+         throw new IllegalStateException("No resource set of the portal URL");
       }
-      else
+
+      //
+      url.append(requestContext.getPortalURI());
+
+      //
+      try
       {
-         if (locator.getResource() == null)
-         {
-            throw new IllegalStateException("No resource set of the portal URL");
-         }
-         
-         //
-         url.append(requestContext.getPortalURI());
-         
-         //
-         try
-         {
-            locator.append(url);
-         }
-         catch (IOException e)
-         {
-            AssertionError ae = new AssertionError();
-            ae.initCause(e);
-            throw ae;
-         }
+         locator.append(url);
+      }
+      catch (IOException e)
+      {
+         AssertionError ae = new AssertionError();
+         ae.initCause(e);
+         throw ae;
       }
 
       if (ajax || params != null)
