@@ -19,16 +19,11 @@
 
 package org.exoplatform.portal.url;
 
-import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceURL;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -36,8 +31,6 @@ import java.util.List;
  */
 public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L>
 {
-
-   private List<Parameter> params;
 
    /** . */
    private final PortalRequestContext requestContext;
@@ -56,35 +49,21 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       this.requestContext = requestContext;
    }
 
-   public PortalURL<R, L> addParameters(Parameter... param)
-   {
-      if (params == null)
-      {
-         params = new ArrayList<Parameter>();
-      }
-      params.addAll(Arrays.asList(param));
-      return this;
-   }
-
-   public PortalURL<R, L> setParameters(Parameter... param)
-   {
-      params = (param != null) ? Arrays.asList(param) : null;
-      return this;
-   }
-
-   public Parameter[] getParameters()
-   {
-      return (Parameter[])params.toArray();
-   }
-
    public String toString()
    {
       //
       StringBuilder url = new StringBuilder();
 
+      //
       if (locator.getResource() == null)
       {
-         throw new IllegalStateException("No resource set of the portal URL");
+         throw new IllegalStateException("No resource set on portal URL");
+      }
+
+      //
+      if (ajax)
+      {
+         url.append("javascript:ajaxGet('");
       }
 
       //
@@ -102,38 +81,14 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
          throw ae;
       }
 
-      if (ajax || params != null)
+      //
+      if (ajax)
       {
-         url.append("?");
-         boolean addedAmpersand = false;
-
-         if (params != null)
-         {
-            for (Parameter param : params)
-            {
-               if (addedAmpersand)
-               {
-                  url.append(Constants.AMPERSAND);
-               }
-               url.append(param.getName()).append("=").append(param.getValue());
-               addedAmpersand = true;
-            }
-         }
-
-         if (ajax)
-         {
-            if (addedAmpersand)
-            {
-               url.append(Constants.AMPERSAND);
-            }
-            url.append("ajaxRequest=true");
-
-            //adding the ajaxGet javascript function to handle the response
-            url.insert(0, "javascript:ajaxGet('");
-            url.append("')");
-         }
+         url.append("?ajaxRequest=true");
+         url.append("')");
       }
 
+      //
       return url.toString();
    }
 }
