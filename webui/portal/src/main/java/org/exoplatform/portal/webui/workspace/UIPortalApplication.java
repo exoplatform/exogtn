@@ -551,6 +551,11 @@ public class UIPortalApplication extends UIApplication
       {
          lastNodePath = nodePath;
 
+         StringBuilder baseUriInJS = new StringBuilder("eXo.env.server.portalBaseURL=\"");
+         baseUriInJS.append(pcontext.getRequestURI()).append("\";");
+
+         pcontext.getJavascriptManager().addCustomizedOnLoadScript(baseUriInJS.toString());
+
          PageNodeEvent<UIPortalApplication> pnevent =
             new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, nodePath);
          broadcast(pnevent, Event.Phase.PROCESS);

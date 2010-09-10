@@ -53,7 +53,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
