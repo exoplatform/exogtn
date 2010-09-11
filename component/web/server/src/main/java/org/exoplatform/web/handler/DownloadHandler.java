@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.controller.QualifiedName;
@@ -50,7 +51,13 @@ public class DownloadHandler extends WebRequestHandler
       return new String[]{"/download"};
    }
 
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
+   @Override
+   public void execute(ControllerContext context) throws Exception
+   {
+      execute(context.getController(), context.getRequest(), context.getResponse());
+   }
+
+   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       String resourceId = req.getParameter("resourceId");
       res.setHeader("Cache-Control", "private max-age=600, s-maxage=120");

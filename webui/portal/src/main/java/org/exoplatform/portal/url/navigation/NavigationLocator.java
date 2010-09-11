@@ -52,6 +52,6 @@ public class NavigationLocator implements ResourceLocator<UserNode>
 
    public void append(Appendable appendable) throws IOException
    {
-      appendable.append(resource.getURI());
+      appendable.append('/').append(resource.getURI());
    }
 }

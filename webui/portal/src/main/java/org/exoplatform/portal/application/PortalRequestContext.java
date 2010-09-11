@@ -40,6 +40,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.LocatorProvider;
@@ -94,9 +95,11 @@ public class PortalRequestContext extends WebuiRequestContext
 
    final static public String REQUEST_METADATA = "portal:requestMetadata".intern();
 
-   private String portalOwner_;
+   /** The site name decoded from the request. */
+   private final String portalOwner_;
 
-   private String nodePath_;
+   /** The path decoded from the request. */
+   private final String nodePath_;
 
    private String requestURI_;
 
@@ -129,6 +132,9 @@ public class PortalRequestContext extends WebuiRequestContext
    /** . */
    private final LocatorProviderService locatorFactory;
 
+   /** . */
+   private final ControllerContext controllerContext;
+
    public JavascriptManager getJavascriptManager()
    {
       return jsmanager_;
@@ -141,22 +147,22 @@ public class PortalRequestContext extends WebuiRequestContext
     * 2. <code>portalOwner</code> : The portal name ( "classic" for instance )<br/>
     * 3. <code>portalURI</code> : The URI to current portal ( "/portal/public/classic/ for instance )<br/>
     * 4. <code>nodePath</code> : The path that is used to reflect to a navigation node
-    * 
-    * @param app an instance of {@link PortalApplication}
-    * @param req the {@ HttpServletRequest} object that is sent to the {@link PortalController} servlet
-    * @param res 
-    * @throws Exception
     */
-   public PortalRequestContext(WebuiApplication app, HttpServletRequest req, HttpServletResponse res) throws Exception
+   public PortalRequestContext(
+      WebuiApplication app,
+      ControllerContext controllerContext,
+      String requestSiteName,
+      String requestPath) throws Exception
    {
       super(app);
 
       //
-      locatorFactory = (LocatorProviderService)PortalContainer.getComponent(LocatorProviderService.class);
+      this.locatorFactory = (LocatorProviderService)PortalContainer.getComponent(LocatorProviderService.class);
+      this.controllerContext = controllerContext;
 
       //
-      request_ = req;
-      response_ = res;
+      request_ = controllerContext.getRequest();
+      response_ = controllerContext.getResponse();
       response_.setBufferSize(1024 * 100);
       setSessionId(request_.getSession().getId());
 
@@ -192,9 +198,10 @@ public class PortalRequestContext extends WebuiRequestContext
          cacheLevel_ = cache;
       }
 
-      requestURI_ = req.getRequestURI();
+      requestURI_ = request_.getRequestURI();
       String decodedURI = URLDecoder.decode(requestURI_, "UTF-8");
 
+/*
       // req.getPathInfo will already have the encoding set from the server.
       // We need to use the UTF-8 value since this is how we store the portal name.
       // Reconstructing the getPathInfo from the non server decoded values.
@@ -211,6 +218,10 @@ public class PortalRequestContext extends WebuiRequestContext
       }
       portalOwner_ = pathInfo.substring(1, colonIndex);
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
+*/
+      //
+      portalOwner_ = requestSiteName;
+      nodePath_ = requestPath;
 
       portalURI = decodedURI.substring(0, decodedURI.lastIndexOf(nodePath_)) + "/";
 
@@ -230,6 +241,11 @@ public class PortalRequestContext extends WebuiRequestContext
    public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
       return new PortalURL<R, L>(this, locator, false);
+   }
+
+   public ControllerContext getControllerContext()
+   {
+      return controllerContext;
    }
 
    public void refreshResourceBundle() throws Exception

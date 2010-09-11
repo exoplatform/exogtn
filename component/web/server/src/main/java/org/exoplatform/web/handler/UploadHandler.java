@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.controller.QualifiedName;
@@ -54,7 +55,13 @@ public class UploadHandler extends WebRequestHandler
       return new String[]{"/upload"};
    }
 
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
+   @Override
+   public void execute(ControllerContext context) throws Exception
+   {
+      execute(context.getController(), context.getRequest(), context.getResponse());
+   }
+
+   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       String action = req.getParameter("action");
       String[] uploadIds = req.getParameterValues("uploadId");

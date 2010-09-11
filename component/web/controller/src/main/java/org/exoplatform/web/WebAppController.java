@@ -53,6 +53,9 @@ public class WebAppController
 {
 
    /** . */
+   public static final QualifiedName HANDLER_PARAM = new QualifiedName("gtn", "handler");
+
+   /** . */
    protected static Logger log = LoggerFactory.getLogger(WebAppController.class);
 
    /** . */
@@ -64,7 +67,7 @@ public class WebAppController
    private HashMap<String, WebRequestHandler> handlers;
 
    /** . */
-   private Router router;
+   final Router router;
 
    /**
     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the
@@ -135,8 +138,6 @@ public class WebAppController
       return (T)result;
    }
 
-   private static final QualifiedName HANDLER_PARAM = new QualifiedName("ctrl", "handler");
-
    public void register(WebRequestHandler handler) throws Exception
    {
       for (String path : handler.getPath())
@@ -144,7 +145,7 @@ public class WebAppController
          RouteMetaData routeMetaData = new RouteMetaData(path);
 
          //
-         String handlerKey = "" + System.identityHashCode(handler);
+         String handlerKey = handler.getClass().getSimpleName();
 
          //
          routeMetaData.addParameter(HANDLER_PARAM, handlerKey);
@@ -201,9 +202,12 @@ public class WebAppController
             RequestLifeCycle.begin(portalContainer);
 
             //
+            ControllerContext context = new ControllerContext(this, req, res, parameters);
+
+            //
             try
             {
-               handler.execute(this, req, res, parameters);
+               handler.execute(context);
             }
             finally
             {

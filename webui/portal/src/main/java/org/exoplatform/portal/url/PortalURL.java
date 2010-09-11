@@ -20,10 +20,16 @@
 package org.exoplatform.portal.url;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.PortalRequestHandler;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceURL;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -67,12 +73,10 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       }
 
       //
-      url.append(requestContext.getPortalURI());
-
-      //
+      StringBuilder builder = new StringBuilder();
       try
       {
-         locator.append(url);
+         locator.append(builder);
       }
       catch (IOException e)
       {
@@ -80,6 +84,19 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
          ae.initCause(e);
          throw ae;
       }
+
+      // julien : find out how to change the hardcoded "classic"
+      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+      parameters.put(PortalRequestHandler.REQUEST_PATH, builder.toString());
+      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, "classic");
+      parameters.put(WebAppController.HANDLER_PARAM, PortalRequestHandler.class.getSimpleName());
+
+      //
+      ControllerContext controllerContext = requestContext.getControllerContext();
+      String s = controllerContext.renderURL(parameters);
+
+      //
+      url.append(s);
 
       //
       if (ajax)

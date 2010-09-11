@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
@@ -32,11 +33,8 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.event.Event;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +52,14 @@ public class PortalRequestHandler extends WebRequestHandler
 
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
+
+   /** . */
+   public static final QualifiedName REQUEST_PATH = new QualifiedName("gtn", "path");
+
+   /** . */
+   public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
+
+   /** . */
    private String[] PATHS = {"/public/{{gtn}sitename}{{gtn}path:.*}", "/private/{{gtn}sitename}{{gtn}path:.*}"};
 
    public String[] getPath()
@@ -92,13 +98,24 @@ public class PortalRequestHandler extends WebRequestHandler
     *   12) Release the context from the thread
     * 
     */
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res, Map<QualifiedName, String> parameters) throws Exception
+   @SuppressWarnings("unchecked")
+   @Override
+   public void execute(ControllerContext controllerContext) throws Exception
    {
+      HttpServletRequest req = controllerContext.getRequest();
+      HttpServletResponse res = controllerContext.getResponse();
+
+
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");
 
-      PortalApplication app = controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      PortalRequestContext context = new PortalRequestContext(app, req, res);
+      //
+      String requestPath = controllerContext.getParameter(REQUEST_PATH);
+      String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
+
+      //
+      PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
+      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteName, requestPath);
       if (context.getPortalOwner().length() == 0) {
          res.sendRedirect(req.getContextPath());
          return;
