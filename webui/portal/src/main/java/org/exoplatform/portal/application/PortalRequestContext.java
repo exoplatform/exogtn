@@ -41,8 +41,10 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
@@ -223,8 +225,14 @@ public class PortalRequestContext extends WebuiRequestContext
       portalOwner_ = requestSiteName;
       nodePath_ = requestPath;
 
-      portalURI = decodedURI.substring(0, decodedURI.lastIndexOf(nodePath_)) + "/";
+//      portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
+      Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
+      tmp.put(WebAppController.HANDLER_PARAM, "portal");
+      tmp.put(PortalRequestHandler.REQUEST_SITE_NAME, requestSiteName);
+      tmp.put(PortalRequestHandler.REQUEST_PATH, "");
+      portalURI = controllerContext.renderURL(tmp);
 
+      //
       if (decodedURI.indexOf("/public/") >= 0)
       {
          accessPath = PUBLIC_ACCESS;

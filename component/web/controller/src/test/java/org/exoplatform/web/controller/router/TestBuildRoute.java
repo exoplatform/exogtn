@@ -21,8 +21,8 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteMetaData;
-import org.exoplatform.web.controller.metadata.RouterMetaData;
+import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.util.Collections;
 import java.util.Map;
@@ -39,8 +39,8 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/",""};
       for (String path : paths)
       {
-         RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(new RouteMetaData(path));
+         RouterDescriptor routerMD = new RouterDescriptor();
+         routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
          assertEquals(expectedRoute, router.root);
@@ -52,8 +52,8 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/a","a"};
       for (String path : paths)
       {
-         RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(new RouteMetaData(path));
+         RouterDescriptor routerMD = new RouterDescriptor();
+         routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
          SimpleRoute a = new SimpleRoute(expectedRoute, "a");
@@ -67,8 +67,8 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
-         RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(new RouteMetaData(path));
+         RouterDescriptor routerMD = new RouterDescriptor();
+         routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
 
          //
@@ -90,8 +90,8 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{{q}a}","{{q}a}"};
       for (String path : paths)
       {
-         RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(new RouteMetaData(path));
+         RouterDescriptor routerMD = new RouterDescriptor();
+         routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
 
          //
@@ -113,8 +113,8 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a:.*}","{a:.*}"};
       for (String path : paths)
       {
-         RouterMetaData routerMD = new RouterMetaData();
-         routerMD.addRoute(new RouteMetaData(path));
+         RouterDescriptor routerMD = new RouterDescriptor();
+         routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
 
          //
@@ -129,6 +129,19 @@ public class TestBuildRoute extends TestCase
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));
       }
+   }
+
+   public void testSamePrefix()
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/public/foo"));
+      routerMD.addRoute(new RouteDescriptor("/public/bar"));
+
+      //
+      Router router = new Router(routerMD);
+      Route publicRoute = router.root.simpleRoutes.get("public");
+      assertNotNull(publicRoute.simpleRoutes.get("foo"));
+      assertNotNull(publicRoute.simpleRoutes.get("bar"));
    }
 
    private void assertEquals(Route expectedRoute, Route route)

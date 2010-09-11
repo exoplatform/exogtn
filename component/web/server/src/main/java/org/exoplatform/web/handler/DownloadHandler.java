@@ -26,12 +26,10 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.controller.QualifiedName;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,10 +43,9 @@ import javax.servlet.http.HttpServletResponse;
 public class DownloadHandler extends WebRequestHandler
 {
 
-   @Override
-   public String[] getPath()
+   public String getHandlerName()
    {
-      return new String[]{"/download"};
+      return "download";
    }
 
    @Override

@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,30 +28,39 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouterMetaData
+public class RouteDescriptor
 {
 
    /** . */
-   private final Map<String, RouteMetaData> routes;
+   private final String path;
 
-   public RouterMetaData()
+   /** . */
+   private final Map<QualifiedName, String> parameters;
+
+   public RouteDescriptor(String path)
    {
-      this.routes = new HashMap<String, RouteMetaData>();
+      this.path = path;
+      this.parameters = new HashMap<QualifiedName, String>();
    }
 
-   public void addRoute(RouteMetaData controller)
+   public String getPath()
    {
-      if (controller == null)
-      {
-         throw new NullPointerException();
-      }
-
-      //
-      routes.put(controller.getPath(), controller);
+      return path;
    }
 
-   public Iterable<RouteMetaData> getRoutes()
+   public RouteDescriptor addParameter(QualifiedName name, String value)
    {
-      return routes.values();
+      parameters.put(name, value);
+      return this;
+   }
+
+   public RouteDescriptor addParameter(String name, String value)
+   {
+      return addParameter(new QualifiedName(name), value);
+   }
+
+   public Map<QualifiedName, String> getParameters()
+   {
+      return parameters;
    }
 }

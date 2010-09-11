@@ -386,8 +386,13 @@ class Route
          }
          else
          {
-            SimpleRoute route = new SimpleRoute(this, path.substring(0, pos));
-            simpleRoutes.put(route.value, route);
+            String segment = path.substring(0, pos);
+            SimpleRoute route = simpleRoutes.get(segment);
+            if (route == null)
+            {
+               route = new SimpleRoute(this, segment);
+               simpleRoutes.put(route.value, route);
+            }
             next = route;
          }
       }

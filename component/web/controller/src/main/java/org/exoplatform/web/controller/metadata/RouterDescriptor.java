@@ -19,48 +19,37 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.exoplatform.web.controller.QualifiedName;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteMetaData
+public class RouterDescriptor
 {
 
    /** . */
-   private final String path;
+   private final List<RouteDescriptor> routes;
 
-   /** . */
-   private final Map<QualifiedName, String> parameters;
-
-   public RouteMetaData(String path)
+   public RouterDescriptor()
    {
-      this.path = path;
-      this.parameters = new HashMap<QualifiedName, String>();
+      this.routes = new ArrayList<RouteDescriptor>();
    }
 
-   public String getPath()
+   public void addRoute(RouteDescriptor controller)
    {
-      return path;
+      if (controller == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      routes.add(controller);
    }
 
-   public RouteMetaData addParameter(QualifiedName name, String value)
+   public Iterable<RouteDescriptor> getRoutes()
    {
-      parameters.put(name, value);
-      return this;
-   }
-
-   public RouteMetaData addParameter(String name, String value)
-   {
-      return addParameter(new QualifiedName(name), value);
-   }
-
-   public Map<QualifiedName, String> getParameters()
-   {
-      return parameters;
+      return routes;
    }
 }

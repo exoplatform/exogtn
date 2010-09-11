@@ -109,7 +109,7 @@
   </filter-mapping>
    <filter-mapping>
      <filter-name>RememberMeFilter</filter-name>
-     <url-pattern>/public/*</url-pattern>
+     <servlet-name>portal</servlet-name>
    </filter-mapping>
 
    <filter-mapping>
@@ -252,30 +252,7 @@
 	  <servlet-name>javascript</servlet-name>
 	  <url-pattern>/javascript/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/private/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/public/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/admin/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/service</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/upload/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/download/*</url-pattern>
-	</servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>portal</servlet-name>
     <url-pattern>/standalone/*</url-pattern>
@@ -288,6 +265,11 @@
   <servlet-mapping>
     <servlet-name>Controller</servlet-name>
     <url-pattern>/connector</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>portal</servlet-name>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

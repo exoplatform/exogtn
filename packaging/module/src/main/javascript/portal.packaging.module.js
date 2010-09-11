@@ -100,6 +100,8 @@ function getModule(params)
    module.component.web = {}
    module.component.web.controller =
    new Project("org.exoplatform.portal", "exo.portal.component.web.controller", "jar", module.version).
+      addDependency(new Project("org.codehaus.staxmate", "staxmate", "jar", "2.0.0")).
+      addDependency(new Project("org.codehaus.woodstox", "stax2-api", "jar", "3.0.2")).
       addDependency(module.component.common);
 
    module.component.web.security =

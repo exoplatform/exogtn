@@ -89,7 +89,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(PortalRequestHandler.REQUEST_PATH, builder.toString());
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, "classic");
-      parameters.put(WebAppController.HANDLER_PARAM, PortalRequestHandler.class.getSimpleName());
+      parameters.put(WebAppController.HANDLER_PARAM, "portal");
 
       //
       ControllerContext controllerContext = requestContext.getControllerContext();

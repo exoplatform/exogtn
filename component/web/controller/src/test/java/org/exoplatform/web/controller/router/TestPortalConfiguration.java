@@ -20,8 +20,8 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteMetaData;
-import org.exoplatform.web.controller.metadata.RouterMetaData;
+import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,22 +39,22 @@ public class TestPortalConfiguration extends AbstractTestController
    @Override
    protected void setUp() throws Exception
    {
-      RouterMetaData routerMD = new RouterMetaData();
+      RouterDescriptor routerMD = new RouterDescriptor();
 
       //
-      RouteMetaData portalRouteMD = new RouteMetaData("/private/{{gtn}sitename}{{gtn}path:.*}");
+      RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{{gtn}sitename}{{gtn}path:.*}");
       portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
       portalRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
       routerMD.addRoute(portalRouteMD);
 
       //
-      RouteMetaData groupRouteMD = new RouteMetaData("/groups/{{gtn}sitename}{{gtn}path:.*}");
+      RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{{gtn}sitename}{{gtn}path:.*}");
       portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
       groupRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "group");
       routerMD.addRoute(groupRouteMD);
 
       //
-      RouteMetaData userRouteMD = new RouteMetaData("/users/{{gtn}sitename}{{gtn}path:.*}");
+      RouteDescriptor userRouteMD = new RouteDescriptor("/users/{{gtn}sitename}{{gtn}path:.*}");
       portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
       userRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "user");
       routerMD.addRoute(userRouteMD);

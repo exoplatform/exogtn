@@ -41,7 +41,7 @@ abstract public class WebRequestHandler extends BaseComponentPlugin
       
    }
 
-   abstract public String[] getPath();
+   public abstract String getHandlerName();
 
    abstract public void execute(ControllerContext context) throws Exception;
 

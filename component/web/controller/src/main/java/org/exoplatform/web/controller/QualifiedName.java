@@ -28,6 +28,22 @@ package org.exoplatform.web.controller;
 public class QualifiedName
 {
 
+   public static QualifiedName parse(String qname)
+   {
+      if (qname.length() > 0)
+      {
+         if (qname.charAt(0) == '{')
+         {
+            int index = qname.indexOf('}', 1);
+            if (index != -1)
+            {
+               return new QualifiedName(qname.substring(1, index), qname.substring(index + 1));
+            }
+         }
+      }
+      return new QualifiedName(qname);
+   }
+
    /** . */
    private final String qualifier;
 

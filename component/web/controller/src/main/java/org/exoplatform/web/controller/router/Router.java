@@ -20,8 +20,8 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteMetaData;
-import org.exoplatform.web.controller.metadata.RouterMetaData;
+import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,18 +37,18 @@ public class Router
    /** . */
    final Route root;
 
-   public Router(RouterMetaData metaData)
+   public Router(RouterDescriptor metaData)
    {
       this.root = new Route();
 
       //
-      for (RouteMetaData routeMetaData : metaData.getRoutes())
+      for (RouteDescriptor routeMetaData : metaData.getRoutes())
       {
          addRoute(routeMetaData);
       }
    }
 
-   public void addRoute(RouteMetaData routeMetaData)
+   public void addRoute(RouteDescriptor routeMetaData)
    {
       root.append(routeMetaData.getPath(), routeMetaData.getParameters());
    }

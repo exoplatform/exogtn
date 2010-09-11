@@ -27,11 +27,9 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.controller.QualifiedName;
 
 import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,10 +47,9 @@ public class UploadHandler extends WebRequestHandler
       PROGRESS, UPLOAD, DELETE, ABORT
    }
 
-   @Override
-   public String[] getPath()
+   public String getHandlerName()
    {
-      return new String[]{"/upload"};
+      return "upload";
    }
 
    @Override

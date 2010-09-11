@@ -59,12 +59,9 @@ public class PortalRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
 
-   /** . */
-   private String[] PATHS = {"/public/{{gtn}sitename}{{gtn}path:.*}", "/private/{{gtn}sitename}{{gtn}path:.*}"};
-
-   public String[] getPath()
+   public String getHandlerName()
    {
-      return PATHS;
+      return "portal";
    }
    
    @Override

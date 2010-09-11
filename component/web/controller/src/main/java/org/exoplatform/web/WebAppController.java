@@ -22,14 +22,16 @@ package org.exoplatform.web;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteMetaData;
-import org.exoplatform.web.controller.metadata.RouterMetaData;
+import org.exoplatform.web.controller.metadata.DescriptorBuilder;
+import org.exoplatform.web.controller.metadata.RouterDescriptor;
 import org.exoplatform.web.controller.router.Router;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,6 +41,8 @@ import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
 /**
  * Created by The eXo Platform SAS
@@ -76,12 +80,21 @@ public class WebAppController
     * 
     * @throws Exception
     */
-   public WebAppController() throws Exception
+   public WebAppController(ConfigurationManager configurationManager) throws Exception
    {
-      applications_ = new HashMap<String, Application>();
-      attributes_ = new HashMap<String, Object>();
+      // Read configuration (a bit hardcoded for now)
+      URL routerURL = configurationManager.getResource("war:/conf/router.xml");
+      XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
+      RouterDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
+
+      // Build router from configuration
+      Router router = new Router(routerDesc);
+
+      //
+      this.applications_ = new HashMap<String, Application>();
+      this.attributes_ = new HashMap<String, Object>();
       this.handlers = new HashMap<String, WebRequestHandler>();
-      this.router = new Router(new RouterMetaData());
+      this.router = router;
    }
 
    public Object getAttribute(String name, Object value)
@@ -140,22 +153,7 @@ public class WebAppController
 
    public void register(WebRequestHandler handler) throws Exception
    {
-      for (String path : handler.getPath())
-      {
-         RouteMetaData routeMetaData = new RouteMetaData(path);
-
-         //
-         String handlerKey = handler.getClass().getSimpleName();
-
-         //
-         routeMetaData.addParameter(HANDLER_PARAM, handlerKey);
-
-         //
-         handlers.put(handlerKey, handler);
-
-         //
-         router.addRoute(routeMetaData);
-      }
+      handlers.put(handler.getHandlerName(), handler);
    }
    
    public void onHandlersInit(ServletConfig config) throws Exception

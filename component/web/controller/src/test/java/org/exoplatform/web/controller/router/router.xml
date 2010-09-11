@@ -1,0 +1,22 @@
+<router
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_router_1_0 http://www.gatein.org/xml/ns/gatein_router_1_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_router_1_0">
+
+  <route path="/public/{{gtn}sitename}{{gtn}path:.*}">
+    <parameter name="{gtn}handler" value="portal"/>
+  </route>
+
+  <route path="/private/{{gtn}sitename}{{gtn}path:.*}">
+    <parameter name="{gtn}handler" value="portal"/>
+  </route>
+
+  <route path="/upload">
+    <parameter name="{gtn}handler" value="upload"/>
+  </route>
+
+  <route path="/download">
+    <parameter name="{gtn}handler" value="download"/>
+  </route>
+
+</router>
