@@ -229,7 +229,7 @@ public class PortalRequestContext extends WebuiRequestContext
       Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
       tmp.put(WebAppController.HANDLER_PARAM, "portal");
       tmp.put(PortalRequestHandler.REQUEST_SITE_NAME, requestSiteName);
-      tmp.put(PortalRequestHandler.REQUEST_PATH, "");
+      tmp.put(PortalRequestHandler.REQUEST_PATH, "/");
       portalURI = controllerContext.renderURL(tmp);
 
       //
