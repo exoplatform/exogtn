@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.RouteDescriptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -321,17 +322,7 @@ class Route
    /** . */
    private static final Pattern PARAMETER_REGEX = Pattern.compile("^(?:\\{([^\\}]*)\\})?(.*)$");
 
-   final Route append(
-      String path,
-      Map<QualifiedName, String> parameters)
-   {
-      Route route = append(path);
-      route.terminal = true;
-      route.routeParameters.putAll(parameters);
-      return route;
-   }
-
-   <R extends Route> R add(R route)
+   final <R extends Route> R add(R route)
    {
       if (route.parent != null)
       {
@@ -366,31 +357,59 @@ class Route
       }
    }
 
-   Set<String> getSegmentNames()
+   final Set<String> getSegmentNames()
    {
       return segments.keySet();
    }
 
-   int getSegmentSize(String segmentName)
+   final int getSegmentSize(String segmentName)
    {
       List<SegmentRoute> routes = segments.get(segmentName);
       return routes != null ? routes.size() : 0;
    }
 
-   SegmentRoute getSegment(String segmentName, int index)
+   final SegmentRoute getSegment(String segmentName, int index)
    {
       List<SegmentRoute> routes = segments.get(segmentName);
       return routes != null ? routes.get(index) : null;
    }
 
-   int getPatternSize()
+   final int getPatternSize()
    {
       return patterns.size();
    }
 
-   PatternRoute getPattern(int index)
+   final PatternRoute getPattern(int index)
    {
       return patterns.get(index);
+   }
+
+   final Route append(RouteDescriptor descriptor)
+   {
+      Route route = append(descriptor.getPath());
+
+      //
+      route.terminal = true;
+      route.routeParameters.putAll(descriptor.getParameters());
+
+      //
+      for (RouteDescriptor childDescriptor : descriptor.getChildren())
+      {
+         route.append(childDescriptor);
+      }
+
+      //
+      return route;
+   }
+
+   final Route append(
+      String path,
+      Map<QualifiedName, String> parameters)
+   {
+      Route route = append(path);
+      route.terminal = true;
+      route.routeParameters.putAll(parameters);
+      return route;
    }
 
    /**

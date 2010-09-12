@@ -37,7 +37,7 @@ public class RouterDescriptor
       this.routes = new ArrayList<RouteDescriptor>();
    }
 
-   public void addRoute(RouteDescriptor controller)
+   public RouterDescriptor addRoute(RouteDescriptor controller)
    {
       if (controller == null)
       {
@@ -46,6 +46,9 @@ public class RouterDescriptor
 
       //
       routes.add(controller);
+
+      //
+      return this;
    }
 
    public Iterable<RouteDescriptor> getRoutes()

@@ -21,7 +21,9 @@ package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,10 +39,14 @@ public class RouteDescriptor
    /** . */
    private final Map<QualifiedName, String> parameters;
 
+   /** . */
+   private final List<RouteDescriptor> children;
+
    public RouteDescriptor(String path)
    {
       this.path = path;
       this.parameters = new HashMap<QualifiedName, String>();
+      this.children = new ArrayList<RouteDescriptor>();
    }
 
    public String getPath()
@@ -62,5 +68,16 @@ public class RouteDescriptor
    public Map<QualifiedName, String> getParameters()
    {
       return parameters;
+   }
+
+   public RouteDescriptor addChild(RouteDescriptor child)
+   {
+      children.add(child);
+      return this;
+   }
+
+   public List<RouteDescriptor> getChildren()
+   {
+      return children;
    }
 }

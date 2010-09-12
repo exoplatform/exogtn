@@ -23,7 +23,7 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
-import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,35 +31,26 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Router
+public class TestHierarchy extends AbstractTestController
 {
 
-   /** . */
-   final Route root;
-
-   public Router(RouterDescriptor metaData)
+   public void testFoo() throws Exception
    {
-      this.root = new Route();
+
+      RouteDescriptor descriptor = new RouteDescriptor("/a").
+         addParameter("foo", "bar").
+         addChild(new RouteDescriptor("/b").addParameter("juu", "daa"));
 
       //
-      for (RouteDescriptor routeMetaData : metaData.getRoutes())
-      {
-         addRoute(routeMetaData);
-      }
-   }
+      Router router = new Router(new RouterDescriptor().addRoute(descriptor));
 
-   public void addRoute(RouteDescriptor routeMetaData)
-   {
-      root.append(routeMetaData);
-   }
+      //
+      assertEquals(Collections.singletonMap(new QualifiedName("foo"), "bar"), router.process("/a"));
 
-   public String render(Map<QualifiedName, String> parameters)
-   {
-      return root.render(parameters);
-   }
-
-   public Map<QualifiedName, String> process(String path) throws IOException
-   {
-      return root.route(path, new HashMap<QualifiedName, String>());
+      //
+      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
+      expected.put(new QualifiedName("foo"), "bar");
+      expected.put(new QualifiedName("juu"), "daa");
+      assertEquals(expected, router.process("/a/b"));
    }
 }
