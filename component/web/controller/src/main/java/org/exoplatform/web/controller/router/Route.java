@@ -46,10 +46,10 @@ class Route
    boolean terminal;
 
    /** . */
-   private final Map<String, List<SimpleRoute>> simpleRoutes;
+   private final Map<String, List<SegmentRoute>> segments;
 
    /** Actually here we allow to store several times the same pattern and routing could be optimized instead. */
-   private final List<PatternRoute> patternRoutes;
+   private final List<PatternRoute> patterns;
 
    /** . */
    private final Map<QualifiedName, String> routeParameters;
@@ -58,8 +58,8 @@ class Route
    {
       this.parent = null;
       this.terminal = false;
-      this.simpleRoutes = new LinkedHashMap<String, List<SimpleRoute>>();
-      this.patternRoutes = new ArrayList<PatternRoute>();
+      this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
+      this.patterns = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
    }
 
@@ -76,7 +76,7 @@ class Route
       }
       else
       {
-         if (r instanceof PatternRoute || r instanceof SimpleRoute)
+         if (r instanceof PatternRoute || r instanceof SegmentRoute)
          {
             StringBuilder sb = new StringBuilder();
             r.render(blah, sb);
@@ -97,9 +97,9 @@ class Route
       }
 
       //
-      if (this instanceof SimpleRoute)
+      if (this instanceof SegmentRoute)
       {
-         SimpleRoute sr = (SimpleRoute)this;
+         SegmentRoute sr = (SegmentRoute)this;
          sb.append('/').append(sr.name);
       }
       else if (this instanceof PatternRoute)
@@ -164,9 +164,9 @@ class Route
       }
 
       //
-      for (List<SimpleRoute> routes : simpleRoutes.values())
+      for (List<SegmentRoute> routes : segments.values())
       {
-         for (SimpleRoute route : routes)
+         for (SegmentRoute route : routes)
          {
             Route a = route.find(abc);
             if (a != null)
@@ -175,7 +175,7 @@ class Route
             }
          }
       }
-      for (PatternRoute route : patternRoutes)
+      for (PatternRoute route : patterns)
       {
          Route a = route.find(abc);
          if (a != null)
@@ -226,7 +226,7 @@ class Route
             String segment = path.substring(1, pos);
 
             // Try to find a route for the segment
-            List<SimpleRoute> routes = simpleRoutes.get(segment);
+            List<SegmentRoute> routes = segments.get(segment);
             if (routes != null)
             {
                // Determine next path
@@ -241,7 +241,7 @@ class Route
                }
 
                //
-               for (SimpleRoute route : routes)
+               for (SegmentRoute route : routes)
                {
                   // Delegate the process to the next route
                   Map<QualifiedName, String> response = route.route(nextPath, parameters);
@@ -259,7 +259,7 @@ class Route
          // Try to find a pattern matching route otherwise
          if (ret == null)
          {
-            for (PatternRoute route : patternRoutes)
+            for (PatternRoute route : patterns)
             {
                Matcher matcher = route.pattern.matcher(path.substring(1));
 
@@ -339,14 +339,14 @@ class Route
       }
 
       //
-      if (route instanceof SimpleRoute)
+      if (route instanceof SegmentRoute)
       {
-         SimpleRoute segment = (SimpleRoute)route;
-         List<SimpleRoute> routes = simpleRoutes.get(segment.name);
+         SegmentRoute segment = (SegmentRoute)route;
+         List<SegmentRoute> routes = segments.get(segment.name);
          if (routes == null)
          {
-            routes = new ArrayList<SimpleRoute>();
-            simpleRoutes.put(segment.name, routes);
+            routes = new ArrayList<SegmentRoute>();
+            segments.put(segment.name, routes);
          }
          routes.add(segment);
          ((Route)segment).parent = this;
@@ -356,7 +356,7 @@ class Route
       {
          PatternRoute pattern = (PatternRoute)route;
 
-         patternRoutes.add(pattern);
+         patterns.add(pattern);
          route.parent = this;
          return (R)pattern;
       }
@@ -368,29 +368,29 @@ class Route
 
    Set<String> getSegmentNames()
    {
-      return simpleRoutes.keySet();
+      return segments.keySet();
    }
 
    int getSegmentSize(String segmentName)
    {
-      List<SimpleRoute> routes = simpleRoutes.get(segmentName);
+      List<SegmentRoute> routes = segments.get(segmentName);
       return routes != null ? routes.size() : 0;
    }
 
-   SimpleRoute getSegment(String segmentName, int index)
+   SegmentRoute getSegment(String segmentName, int index)
    {
-      List<SimpleRoute> routes = simpleRoutes.get(segmentName);
+      List<SegmentRoute> routes = segments.get(segmentName);
       return routes != null ? routes.get(index) : null;
    }
 
    int getPatternSize()
    {
-      return patternRoutes.size();
+      return patterns.size();
    }
 
    PatternRoute getPattern(int index)
    {
-      return patternRoutes.get(index);
+      return patterns.get(index);
    }
 
    /**
@@ -443,7 +443,7 @@ class Route
          else
          {
             String segment = path.substring(0, pos);
-            SimpleRoute route = new SimpleRoute(segment);
+            SegmentRoute route = new SegmentRoute(segment);
             add(route);
             next = route;
          }

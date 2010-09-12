@@ -23,13 +23,13 @@ package org.exoplatform.web.controller.router;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class SimpleRoute extends Route
+class SegmentRoute extends Route
 {
 
    /** . */
    final String name;
 
-   SimpleRoute(String name)
+   SegmentRoute(String name)
    {
       this.name = name;
    }

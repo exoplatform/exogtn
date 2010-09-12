@@ -55,7 +55,7 @@ public class TestBuildRoute extends TestCase
          routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
-         expectedRoute.add(new SimpleRoute("a"));
+         expectedRoute.add(new SegmentRoute("a"));
          assertEquals(expectedRoute, router.root);
       }
    }
@@ -153,9 +153,9 @@ public class TestBuildRoute extends TestCase
          assertEquals(expectedRoute.getSegmentSize(segmentName), route.getSegmentSize(segmentName));
          for (int segmentIndex = 0;segmentIndex < expectedRoute.getSegmentSize(segmentName);segmentIndex++)
          {
-            SimpleRoute expectedSimpleRoute = expectedRoute.getSegment(segmentName, segmentIndex);
-            SimpleRoute simpleRoute  = route.getSegment(segmentName, segmentIndex);
-            assertEquals(expectedSimpleRoute, simpleRoute);
+            SegmentRoute expectedSegmentRoute = expectedRoute.getSegment(segmentName, segmentIndex);
+            SegmentRoute segmentRoute  = route.getSegment(segmentName, segmentIndex);
+            assertEquals(expectedSegmentRoute, segmentRoute);
          }
       }
       assertEquals(expectedRoute.getPatternSize(), route.getPatternSize());
@@ -168,9 +168,9 @@ public class TestBuildRoute extends TestCase
          assertEquals(((PatternRoute)expectedRoute).pattern.toString(), ((PatternRoute)route).pattern.toString());
          assertEquals(((PatternRoute)expectedRoute).parameterNames, ((PatternRoute)route).parameterNames);
       }
-      else if (route instanceof SimpleRoute)
+      else if (route instanceof SegmentRoute)
       {
-         assertEquals(((SimpleRoute)expectedRoute).name, ((SimpleRoute)route).name);
+         assertEquals(((SegmentRoute)expectedRoute).name, ((SegmentRoute)route).name);
       }
    }
 }
