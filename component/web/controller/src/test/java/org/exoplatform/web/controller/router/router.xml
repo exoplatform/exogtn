@@ -19,4 +19,11 @@
     <parameter name="{gtn}handler" value="download"/>
   </route>
 
+  <route path="/a">
+    <parameter name="a" value="a_value"/>
+    <route path="/b">
+      <parameter name="b" value="b_value"/>
+    </route>
+  </route>
+
 </router>

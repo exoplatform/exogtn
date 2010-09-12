@@ -25,7 +25,9 @@ import org.codehaus.staxmate.in.SMInputCursor;
 import org.exoplatform.web.controller.QualifiedName;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -50,23 +52,36 @@ public class DescriptorBuilder
       SMInputCursor routeC = routerC.childElementCursor(routeQN);
       while (routeC.getNext() != null)
       {
-         String path = routeC.getAttrValue("path");
-         RouteDescriptor routeDesc = new RouteDescriptor(path);
-
-         //
-         SMInputCursor parameterC = routeC.childElementCursor(parameterQN);
-         while (parameterC.getNext() != null)
-         {
-            String name = parameterC.getAttrValue("name");
-            String value = parameterC.getAttrValue("value");
-            routeDesc.addParameter(QualifiedName.parse(name), value);
-         }
-
-         //
-         routerDesc.addRoute(routeDesc);
+         build(routeC, routerDesc.getRoutes());
       }
 
       //
       return routerDesc;
    }
+
+   private void build(SMInputCursor routeC, List<RouteDescriptor> descriptors) throws XMLStreamException
+   {
+      String path = routeC.getAttrValue("path");
+      RouteDescriptor routeDesc = new RouteDescriptor(path);
+
+      //
+      SMInputCursor childC = routeC.childElementCursor();
+      while (childC.getNext() != null)
+      {
+         if (childC.getQName().equals(parameterQN))
+         {
+            String name = childC.getAttrValue("name");
+            String value = childC.getAttrValue("value");
+            routeDesc.addParameter(QualifiedName.parse(name), value);
+         }
+         else if (childC.getQName().equals(routeQN))
+         {
+            build(childC, routeDesc.getChildren());
+         }
+      }
+
+      //
+      descriptors.add(routeDesc);
+   }
+
 }

@@ -51,7 +51,7 @@ public class RouterDescriptor
       return this;
    }
 
-   public Iterable<RouteDescriptor> getRoutes()
+   public List<RouteDescriptor> getRoutes()
    {
       return routes;
    }

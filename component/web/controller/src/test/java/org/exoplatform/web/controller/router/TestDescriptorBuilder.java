@@ -21,6 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
@@ -70,5 +71,15 @@ public class TestDescriptorBuilder extends TestCase
       RouteDescriptor route4 = i.next();
       assertEquals("/download", route4.getPath());
       assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "download"), route4.getParameters());
+
+      //
+      assertTrue(i.hasNext());
+      RouteDescriptor route5 = i.next();
+      assertEquals("/a", route5.getPath());
+      assertEquals(Collections.singletonMap(new QualifiedName("a"), "a_value"), route5.getParameters());
+      assertEquals(1, route5.getChildren().size());
+      RouteDescriptor route5_1 = route5.getChildren().get(0);
+      assertEquals("/b", route5_1.getPath());
+      assertEquals(Collections.singletonMap(new QualifiedName("b"), "b_value"), route5_1.getParameters());
    }
 }
