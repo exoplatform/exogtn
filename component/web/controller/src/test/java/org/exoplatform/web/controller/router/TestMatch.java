@@ -24,6 +24,8 @@ import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -192,5 +194,32 @@ public class TestMatch extends AbstractTestController
 
       //
       assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.process("/a/b"));
+   }
+
+   public void testTwoRules1() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/a").addParameter("b", "b"));
+      routerMD.addRoute(new RouteDescriptor("/a/b"));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals(Collections.singletonMap(new QualifiedName("b"), "b"), router.process("/a"));
+      assertEquals(Collections.<QualifiedName, String>emptyMap(), router.process("/a/b"));
+   }
+
+   public void testTwoRules2() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{a}").addParameter("b", "b"));
+      routerMD.addRoute(new RouteDescriptor("/{a}/b"));
+      Router router = new Router(routerMD);
+
+      //
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(new QualifiedName("a"), "a");
+      expectedParameters.put(new QualifiedName("b"), "b");
+      assertEquals(expectedParameters, router.process("/a"));
+      assertEquals(Collections.singletonMap(new QualifiedName("a"), "a"), router.process("/a/b"));
    }
 }

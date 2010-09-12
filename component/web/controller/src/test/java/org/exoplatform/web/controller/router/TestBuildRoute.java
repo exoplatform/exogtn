@@ -24,7 +24,9 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +59,7 @@ public class TestBuildRoute extends TestCase
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
          SimpleRoute a = new SimpleRoute(expectedRoute, "a");
-         expectedRoute.simpleRoutes.put("a", a);
+         expectedRoute.simpleRoutes.put("a", Arrays.asList(a));
          assertEquals(expectedRoute, router.root);
       }
    }
@@ -139,16 +141,18 @@ public class TestBuildRoute extends TestCase
 
       //
       Router router = new Router(routerMD);
-      Route publicRoute = router.root.simpleRoutes.get("public");
-      assertNotNull(publicRoute.simpleRoutes.get("foo"));
-      assertNotNull(publicRoute.simpleRoutes.get("bar"));
+      assertEquals(2, router.root.simpleRoutes.get("public").size());
+      Route publicRoute1 = router.root.simpleRoutes.get("public").get(0);
+      assertEquals(1, publicRoute1.simpleRoutes.get("foo").size());
+      Route publicRoute2 = router.root.simpleRoutes.get("public").get(1);
+      assertEquals(1, publicRoute2.simpleRoutes.get("bar").size());
    }
 
    private void assertEquals(Route expectedRoute, Route route)
    {
       assertEquals(expectedRoute.getClass(), route.getClass());
       assertEquals(expectedRoute.simpleRoutes.keySet(), route.simpleRoutes.keySet());
-      for (Map.Entry<String, SimpleRoute> entry : expectedRoute.simpleRoutes.entrySet())
+      for (Map.Entry<String, List<SimpleRoute>> entry : expectedRoute.simpleRoutes.entrySet())
       {
          assertEquals(entry.getValue(), expectedRoute.simpleRoutes.get(entry.getKey()));
       }

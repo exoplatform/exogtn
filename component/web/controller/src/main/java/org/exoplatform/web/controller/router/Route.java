@@ -45,7 +45,7 @@ class Route
    boolean terminal;
 
    /** . */
-   final Map<String, SimpleRoute> simpleRoutes;
+   final Map<String, List<SimpleRoute>> simpleRoutes;
 
    /** . */
    final List<PatternRoute> patternRoutes;
@@ -63,7 +63,7 @@ class Route
       //
       this.parent = parent;
       this.terminal = false;
-      this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
+      this.simpleRoutes = new LinkedHashMap<String, List<SimpleRoute>>();
       this.patternRoutes = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
    }
@@ -72,7 +72,7 @@ class Route
    {
       this.parent = null;
       this.terminal = false;
-      this.simpleRoutes = new LinkedHashMap<String, SimpleRoute>();
+      this.simpleRoutes = new LinkedHashMap<String, List<SimpleRoute>>();
       this.patternRoutes = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
    }
@@ -178,12 +178,15 @@ class Route
       }
 
       //
-      for (SimpleRoute route : simpleRoutes.values())
+      for (List<SimpleRoute> routes : simpleRoutes.values())
       {
-         Route a = route.find(abc);
-         if (a != null)
+         for (SimpleRoute route : routes)
          {
-            return a;
+            Route a = route.find(abc);
+            if (a != null)
+            {
+               return a;
+            }
          }
       }
       for (PatternRoute route : patternRoutes)
@@ -237,8 +240,8 @@ class Route
             String segment = path.substring(1, pos);
 
             // Try to find a route for the segment
-            Route route = simpleRoutes.get(segment);
-            if (route != null)
+            List<SimpleRoute> routes = simpleRoutes.get(segment);
+            if (routes != null)
             {
                // Determine next path
                String nextPath;
@@ -251,13 +254,18 @@ class Route
                   nextPath = path.substring(pos);
                }
 
-               // Delegate the process to the next route
-               Map<QualifiedName, String> response = route.route(nextPath, parameters);
-
-               // If we do have a response we return it
-               if (response != null)
+               //
+               for (SimpleRoute route : routes)
                {
-                  ret = response;
+                  // Delegate the process to the next route
+                  Map<QualifiedName, String> response = route.route(nextPath, parameters);
+
+                  // If we do have a response we return it
+                  if (response != null)
+                  {
+                     ret = response;
+                     break;
+                  }
                }
             }
          }
@@ -387,12 +395,14 @@ class Route
          else
          {
             String segment = path.substring(0, pos);
-            SimpleRoute route = simpleRoutes.get(segment);
-            if (route == null)
+            List<SimpleRoute> routes = simpleRoutes.get(segment);
+            if (routes == null)
             {
-               route = new SimpleRoute(this, segment);
-               simpleRoutes.put(route.value, route);
+               routes = new ArrayList<SimpleRoute>();
+               simpleRoutes.put(segment, routes);
             }
+            SimpleRoute route = new SimpleRoute(this, segment);
+            routes.add(route);
             next = route;
          }
       }
