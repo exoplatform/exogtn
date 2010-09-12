@@ -47,7 +47,7 @@ class Route
    /** . */
    final Map<String, List<SimpleRoute>> simpleRoutes;
 
-   /** . */
+   /** Actually here we allow to store several times the same pattern and routing could be optimized instead. */
    final List<PatternRoute> patternRoutes;
 
    /** . */
