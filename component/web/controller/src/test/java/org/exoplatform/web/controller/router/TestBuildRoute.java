@@ -24,10 +24,7 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -58,8 +55,7 @@ public class TestBuildRoute extends TestCase
          routerMD.addRoute(new RouteDescriptor(path));
          Router router = new Router(routerMD);
          Route expectedRoute = new Route();
-         SimpleRoute a = new SimpleRoute(expectedRoute, "a");
-         expectedRoute.simpleRoutes.put("a", Arrays.asList(a));
+         expectedRoute.add(new SimpleRoute("a"));
          assertEquals(expectedRoute, router.root);
       }
    }
@@ -74,9 +70,9 @@ public class TestBuildRoute extends TestCase
          Router router = new Router(routerMD);
 
          //
-         assertEquals(0, router.root.simpleRoutes.size());
-         assertEquals(1, router.root.patternRoutes.size());
-         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals(0, router.root.getSegmentNames().size());
+         assertEquals(1, router.root.getPatternSize());
+         PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
@@ -97,9 +93,9 @@ public class TestBuildRoute extends TestCase
          Router router = new Router(routerMD);
 
          //
-         assertEquals(0, router.root.simpleRoutes.size());
-         assertEquals(1, router.root.patternRoutes.size());
-         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals(0, router.root.getSegmentNames().size());
+         assertEquals(1, router.root.getPatternSize());
+         PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("q", "a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
@@ -120,9 +116,9 @@ public class TestBuildRoute extends TestCase
          Router router = new Router(routerMD);
 
          //
-         assertEquals(0, router.root.simpleRoutes.size());
-         assertEquals(1, router.root.patternRoutes.size());
-         PatternRoute patternRoute = router.root.patternRoutes.get(0);
+         assertEquals(0, router.root.getSegmentNames().size());
+         assertEquals(1, router.root.getPatternSize());
+         PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^(.*)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
@@ -141,25 +137,31 @@ public class TestBuildRoute extends TestCase
 
       //
       Router router = new Router(routerMD);
-      assertEquals(2, router.root.simpleRoutes.get("public").size());
-      Route publicRoute1 = router.root.simpleRoutes.get("public").get(0);
-      assertEquals(1, publicRoute1.simpleRoutes.get("foo").size());
-      Route publicRoute2 = router.root.simpleRoutes.get("public").get(1);
-      assertEquals(1, publicRoute2.simpleRoutes.get("bar").size());
+      assertEquals(2, router.root.getSegmentSize("public"));
+      Route publicRoute1 = router.root.getSegment("public", 0);
+      assertEquals(1, publicRoute1.getSegmentSize("foo"));
+      Route publicRoute2 = router.root.getSegment("public", 1);
+      assertEquals(1, publicRoute2.getSegmentSize("bar"));
    }
 
    private void assertEquals(Route expectedRoute, Route route)
    {
       assertEquals(expectedRoute.getClass(), route.getClass());
-      assertEquals(expectedRoute.simpleRoutes.keySet(), route.simpleRoutes.keySet());
-      for (Map.Entry<String, List<SimpleRoute>> entry : expectedRoute.simpleRoutes.entrySet())
+      assertEquals(expectedRoute.getSegmentNames(), route.getSegmentNames());
+      for (String segmentName : expectedRoute.getSegmentNames())
       {
-         assertEquals(entry.getValue(), expectedRoute.simpleRoutes.get(entry.getKey()));
+         assertEquals(expectedRoute.getSegmentSize(segmentName), route.getSegmentSize(segmentName));
+         for (int segmentIndex = 0;segmentIndex < expectedRoute.getSegmentSize(segmentName);segmentIndex++)
+         {
+            SimpleRoute expectedSimpleRoute = expectedRoute.getSegment(segmentName, segmentIndex);
+            SimpleRoute simpleRoute  = route.getSegment(segmentName, segmentIndex);
+            assertEquals(expectedSimpleRoute, simpleRoute);
+         }
       }
-      assertEquals(expectedRoute.patternRoutes.size(), route.patternRoutes.size());
-      for (int i = 0;i < expectedRoute.patternRoutes.size();i++)
+      assertEquals(expectedRoute.getPatternSize(), route.getPatternSize());
+      for (int i = 0;i < expectedRoute.getPatternSize();i++)
       {
-         assertEquals(expectedRoute.patternRoutes.get(i), route.patternRoutes.get(i));
+         assertEquals(expectedRoute.getPattern(i), route.getPattern(i));
       }
       if (route instanceof PatternRoute)
       {
@@ -168,7 +170,7 @@ public class TestBuildRoute extends TestCase
       }
       else if (route instanceof SimpleRoute)
       {
-         assertEquals(((SimpleRoute)expectedRoute).value, ((SimpleRoute)route).value);
+         assertEquals(((SimpleRoute)expectedRoute).name, ((SimpleRoute)route).name);
       }
    }
 }

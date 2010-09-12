@@ -27,13 +27,10 @@ class SimpleRoute extends Route
 {
 
    /** . */
-   final String value;
+   final String name;
 
-   SimpleRoute(Route parent, String value)
+   SimpleRoute(String name)
    {
-      super(parent);
-
-      //
-      this.value = value;
+      this.name = name;
    }
 }

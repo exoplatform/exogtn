@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,34 +40,19 @@ class Route
 {
 
    /** . */
-   final Route parent;
+   private Route parent;
 
    /** . */
    boolean terminal;
 
    /** . */
-   final Map<String, List<SimpleRoute>> simpleRoutes;
+   private final Map<String, List<SimpleRoute>> simpleRoutes;
 
    /** Actually here we allow to store several times the same pattern and routing could be optimized instead. */
-   final List<PatternRoute> patternRoutes;
+   private final List<PatternRoute> patternRoutes;
 
    /** . */
-   final Map<QualifiedName, String> routeParameters;
-
-   protected Route(Route parent)
-   {
-      if (parent == null)
-      {
-         throw new NullPointerException("No null parent");
-      }
-
-      //
-      this.parent = parent;
-      this.terminal = false;
-      this.simpleRoutes = new LinkedHashMap<String, List<SimpleRoute>>();
-      this.patternRoutes = new ArrayList<PatternRoute>();
-      this.routeParameters = new HashMap<QualifiedName, String>();
-   }
+   private final Map<QualifiedName, String> routeParameters;
 
    Route()
    {
@@ -114,7 +100,7 @@ class Route
       if (this instanceof SimpleRoute)
       {
          SimpleRoute sr = (SimpleRoute)this;
-         sb.append('/').append(sr.value);
+         sb.append('/').append(sr.name);
       }
       else if (this instanceof PatternRoute)
       {
@@ -345,6 +331,68 @@ class Route
       return route;
    }
 
+   <R extends Route> R add(R route)
+   {
+      if (route.parent != null)
+      {
+         throw new IllegalArgumentException();
+      }
+
+      //
+      if (route instanceof SimpleRoute)
+      {
+         SimpleRoute segment = (SimpleRoute)route;
+         List<SimpleRoute> routes = simpleRoutes.get(segment.name);
+         if (routes == null)
+         {
+            routes = new ArrayList<SimpleRoute>();
+            simpleRoutes.put(segment.name, routes);
+         }
+         routes.add(segment);
+         ((Route)segment).parent = this;
+         return (R)segment;
+      }
+      else if (route instanceof PatternRoute)
+      {
+         PatternRoute pattern = (PatternRoute)route;
+
+         patternRoutes.add(pattern);
+         route.parent = this;
+         return (R)pattern;
+      }
+      else
+      {
+         throw new IllegalArgumentException();
+      }
+   }
+
+   Set<String> getSegmentNames()
+   {
+      return simpleRoutes.keySet();
+   }
+
+   int getSegmentSize(String segmentName)
+   {
+      List<SimpleRoute> routes = simpleRoutes.get(segmentName);
+      return routes != null ? routes.size() : 0;
+   }
+
+   SimpleRoute getSegment(String segmentName, int index)
+   {
+      List<SimpleRoute> routes = simpleRoutes.get(segmentName);
+      return routes != null ? routes.get(index) : null;
+   }
+
+   int getPatternSize()
+   {
+      return patternRoutes.size();
+   }
+
+   PatternRoute getPattern(int index)
+   {
+      return patternRoutes.get(index);
+   }
+
    /**
     * Append a path, creates the necessary routes and returns the last route added.
     *
@@ -395,14 +443,8 @@ class Route
          else
          {
             String segment = path.substring(0, pos);
-            List<SimpleRoute> routes = simpleRoutes.get(segment);
-            if (routes == null)
-            {
-               routes = new ArrayList<SimpleRoute>();
-               simpleRoutes.put(segment, routes);
-            }
-            SimpleRoute route = new SimpleRoute(this, segment);
-            routes.add(route);
+            SimpleRoute route = new SimpleRoute(segment);
+            add(route);
             next = route;
          }
       }
@@ -463,8 +505,12 @@ class Route
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly
             Pattern pattern = builder.build();
-            PatternRoute route = new PatternRoute(this, pattern, parameterNames, parameterPatterns, chunks);
-            patternRoutes.add(route);
+            PatternRoute route = new PatternRoute(pattern, parameterNames, parameterPatterns, chunks);
+
+            // Wire
+            add(route);
+
+            //
             next = route;
          }
          else

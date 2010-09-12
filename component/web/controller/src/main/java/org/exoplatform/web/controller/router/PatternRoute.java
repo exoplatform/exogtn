@@ -44,15 +44,11 @@ class PatternRoute extends Route
    final List<String> chunks;
 
    PatternRoute(
-      Route parent,
       Pattern pattern,
       List<QualifiedName> parameterNames,
       List<Pattern> parameterPatterns,
       List<String> chunks)
    {
-      super(parent);
-      
-      //
       if (chunks.size() != parameterNames.size() + 1)
       {
          throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + parameterNames.size() + 1);
