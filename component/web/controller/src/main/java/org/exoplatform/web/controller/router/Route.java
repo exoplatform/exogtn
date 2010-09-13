@@ -55,6 +55,9 @@ class Route
    /** . */
    private final Map<QualifiedName, String> routeParameters;
 
+   /** . */
+   private final Map<QualifiedName, String> queryParams;
+
    Route()
    {
       this.parent = null;
@@ -62,6 +65,7 @@ class Route
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
+      this.queryParams = new HashMap<QualifiedName, String>();
    }
 
    /**
@@ -190,29 +194,22 @@ class Route
    }
 
    /**
-    * Note : the parameters arguments is modified, I don't like it much but as this is only used
-    * by the framework, there is no side effects, but I should investigate about doing this in a
-    * better way.
-    *
     * @param path the path
-    * @param parameters the parameters
     * @return null or the parameters when it matches
     */
-   final Map<QualifiedName, String> route(String path, Map<QualifiedName, String> parameters)
+   final Map<QualifiedName, String> route(String path)
    {
       Map<QualifiedName, String> ret = null;
 
       // Anything that does not begin with '/' returns null
       if (path.length() > 0 && path.charAt(0) == '/')
       {
-
-
          // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
          if (path.length() == 1)
          {
             if (terminal)
             {
-               ret = parameters;
+               ret = new HashMap<QualifiedName, String>();
             }
          }
          else
@@ -245,7 +242,7 @@ class Route
                for (SegmentRoute route : routes)
                {
                   // Delegate the process to the next route
-                  Map<QualifiedName, String> response = route.route(nextPath, parameters);
+                  Map<QualifiedName, String> response = route.route(nextPath);
 
                   // If we do have a response we return it
                   if (response != null)
@@ -267,13 +264,6 @@ class Route
                // We match
                if (matcher.find())
                {
-                  // Update parameters
-                  int group = 1;
-                  for (QualifiedName parameterName : route.parameterNames)
-                  {
-                     parameters.put(parameterName, matcher.group(group++));
-                  }
-
                   // Build next controller context
                   int nextPos = matcher.end() + 1;
                   String nextPath;
@@ -287,11 +277,19 @@ class Route
                   }
 
                   // Delegate to next route
-                  Map<QualifiedName, String> response = route.route(nextPath, parameters);
+                  Map<QualifiedName, String> response = route.route(nextPath);
 
                   // If we do have a response we return it
                   if (response != null)
                   {
+                     // Append parameters
+                     int group = 1;
+                     for (QualifiedName parameterName : route.parameterNames)
+                     {
+                        response.put(parameterName, matcher.group(group++));
+                     }
+
+                     //
                      ret = response;
                      break;
                   }

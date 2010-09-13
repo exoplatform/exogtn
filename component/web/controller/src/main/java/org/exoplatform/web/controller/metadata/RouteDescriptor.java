@@ -40,12 +40,16 @@ public class RouteDescriptor
    private final Map<QualifiedName, String> parameters;
 
    /** . */
+   private final Map<QualifiedName, String> queryParams;
+
+   /** . */
    private final List<RouteDescriptor> children;
 
    public RouteDescriptor(String path)
    {
       this.path = path;
       this.parameters = new HashMap<QualifiedName, String>();
+      this.queryParams = new HashMap<QualifiedName, String>();
       this.children = new ArrayList<RouteDescriptor>();
    }
 
@@ -69,6 +73,23 @@ public class RouteDescriptor
    {
       return parameters;
    }
+
+   public RouteDescriptor addQueryParam(QualifiedName name, String value)
+   {
+      queryParams.put(name, value);
+      return this;
+   }
+
+   public RouteDescriptor addQueryParam(String name, String value)
+   {
+      return addQueryParam(new QualifiedName(name), value);
+   }
+
+   public Map<QualifiedName, String> getQueryParams()
+   {
+      return queryParams;
+   }
+
 
    public RouteDescriptor addChild(RouteDescriptor child)
    {

@@ -60,6 +60,6 @@ public class Router
 
    public Map<QualifiedName, String> process(String path) throws IOException
    {
-      return root.route(path, new HashMap<QualifiedName, String>());
+      return root.route(path);
    }
 }
