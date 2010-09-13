@@ -24,6 +24,8 @@ import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.RenderContext;
+import org.exoplatform.web.controller.router.SimpleRenderContext;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceURL;
 
@@ -40,6 +42,12 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
 
    /** . */
    private final PortalRequestContext requestContext;
+
+   /** . */
+   private StringBuilder buffer;
+
+   /** . */
+   private SimpleRenderContext renderContext;
 
    public PortalURL(PortalRequestContext requestContext, L locator, Boolean ajax)
    {
@@ -58,7 +66,15 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
    public String toString()
    {
       //
-      StringBuilder url = new StringBuilder();
+      if (renderContext == null)
+      {
+         buffer = new StringBuilder();
+         renderContext = new SimpleRenderContext(buffer);
+      }
+      else
+      {
+         renderContext.reset();
+      }
 
       //
       if (locator.getResource() == null)
@@ -69,7 +85,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       //
       if (ajax)
       {
-         url.append("javascript:ajaxGet('");
+         buffer.append("javascript:ajaxGet('");
       }
 
       //
@@ -92,20 +108,16 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
 
       //
-      ControllerContext controllerContext = requestContext.getControllerContext();
-      String s = controllerContext.renderURL(parameters);
-
-      //
-      url.append(s);
+      requestContext.getControllerContext().renderURL(parameters, renderContext);
 
       //
       if (ajax)
       {
-         url.append("?ajaxRequest=true");
-         url.append("')");
+         buffer.append("?ajaxRequest=true");
+         buffer.append("')");
       }
 
       //
-      return url.toString();
+      return buffer.toString();
    }
 }

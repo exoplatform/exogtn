@@ -20,6 +20,8 @@
 package org.exoplatform.web;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.RenderContext;
+import org.exoplatform.web.controller.router.SimpleRenderContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +46,9 @@ public class ControllerContext
    /** . */
    private final Map<QualifiedName, String> parameters;
 
+   /** . */
+   private SimpleRenderContext renderContext;
+
    ControllerContext(
       WebAppController controller,
       HttpServletRequest request,
@@ -54,6 +59,7 @@ public class ControllerContext
       this.request = request;
       this.response = response;
       this.parameters = parameters;
+      this.renderContext = null;
    }
 
    public WebAppController getController()
@@ -76,8 +82,32 @@ public class ControllerContext
       return parameters.get(parameter);
    }
 
+   public void renderURL(Map<QualifiedName, String> parameters, RenderContext renderContext)
+   {
+      renderContext.appendPath(request.getContextPath());
+
+      //
+      controller.router.render(parameters, renderContext);
+   }
+
    public String renderURL(Map<QualifiedName, String> parameters)
    {
-      return request.getContextPath() +  controller.router.render(parameters);
+      if (renderContext == null)
+      {
+         renderContext = new SimpleRenderContext();
+      }
+      else
+      {
+         renderContext.reset();
+      }
+
+      //
+      renderContext.appendPath(request.getContextPath());
+
+      //
+      controller.router.render(parameters, renderContext);
+
+      //
+      return renderContext.getPath();
    }
 }
