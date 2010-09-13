@@ -88,24 +88,17 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
          buffer.append("javascript:ajaxGet('");
       }
 
-      //
-      StringBuilder builder = new StringBuilder();
-      try
-      {
-         locator.append(builder);
-      }
-      catch (IOException e)
-      {
-         AssertionError ae = new AssertionError();
-         ae.initCause(e);
-         throw ae;
-      }
-
       // julien : find out how to change the hardcoded "classic"
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(PortalRequestHandler.REQUEST_PATH, builder.toString());
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, "classic");
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
+
+      //
+      for (QualifiedName parameterName : locator.getParameterNames())
+      {
+         String parameterValue = locator.getParameterValue(parameterName);
+         parameters.put(parameterName, parameterValue);
+      }
 
       //
       requestContext.getControllerContext().renderURL(parameters, renderContext);

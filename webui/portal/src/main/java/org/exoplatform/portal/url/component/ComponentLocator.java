@@ -17,57 +17,42 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url.navigation;
+package org.exoplatform.portal.url.component;
 
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;
-import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.webui.core.UIComponent;
 
 import java.util.Collections;
 import java.util.Set;
 
 /**
- * A resource locator for navigation nodes.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocator implements ResourceLocator<UserNode>
+public class ComponentLocator implements ResourceLocator<UIComponent>
 {
-   public static final QualifiedName PATH = new QualifiedName("gtn", "path");
 
    /** . */
-   public static final ResourceType<UserNode, NavigationLocator> TYPE = new ResourceType<UserNode, NavigationLocator>(){};
+   private UIComponent resource;
 
-   /** . */
-   private static final Set<QualifiedName> PARAMETER_NAMES = Collections.singleton(PATH);
-
-   /** . */
-   private UserNode resource;
-
-   public UserNode getResource()
+   public UIComponent getResource()
    {
       return resource;
    }
 
-   public void setResource(UserNode resource)
+   public void setResource(UIComponent resource)
    {
       this.resource = resource;
    }
 
    public Set<QualifiedName> getParameterNames()
    {
-      return PARAMETER_NAMES;
+      return Collections.emptySet();
    }
 
    public String getParameterValue(QualifiedName parameterName)
    {
-      if (PATH.equals(parameterName))
-      {
-         return "/" + resource.getURI();
-      }
       return null;
    }
 }

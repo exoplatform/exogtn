@@ -19,7 +19,9 @@
 
 package org.exoplatform.web.url;
 
-import java.io.IOException;
+import org.exoplatform.web.controller.QualifiedName;
+
+import java.util.Set;
 
 /**
  * <p>A locator for a resource.</p>
@@ -48,11 +50,18 @@ public interface ResourceLocator<R>
    void setResource(R resource);
 
    /**
-    * Append the resource locator path.
+    * Returns the set of parameter names provided this locator.
     *
-    * @param appendable the appendable
-    * @throws IOException any IOException thrown by the appendable
+    * @return the parameter names
     */
-   void append(Appendable appendable) throws IOException;
+   Set<QualifiedName> getParameterNames();
+
+   /**
+    * Returns a specified parameter value or null when it is not available
+    *
+    * @param parameterName the parameter name
+    * @return the parameter value
+    */
+   String getParameterValue(QualifiedName parameterName);
 
 }
