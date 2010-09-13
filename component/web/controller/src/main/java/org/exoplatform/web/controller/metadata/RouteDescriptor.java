@@ -40,7 +40,7 @@ public class RouteDescriptor
    private final Map<QualifiedName, String> parameters;
 
    /** . */
-   private final Map<QualifiedName, String> queryParams;
+   private final Map<String, RequestParamDescriptor> requestParams;
 
    /** . */
    private final List<RouteDescriptor> children;
@@ -49,7 +49,7 @@ public class RouteDescriptor
    {
       this.path = path;
       this.parameters = new HashMap<QualifiedName, String>();
-      this.queryParams = new HashMap<QualifiedName, String>();
+      this.requestParams = new HashMap<String, RequestParamDescriptor>();
       this.children = new ArrayList<RouteDescriptor>();
    }
 
@@ -66,7 +66,7 @@ public class RouteDescriptor
 
    public RouteDescriptor addParameter(String name, String value)
    {
-      return addParameter(new QualifiedName(name), value);
+      return addParameter(QualifiedName.parse(name), value);
    }
 
    public Map<QualifiedName, String> getParameters()
@@ -74,22 +74,26 @@ public class RouteDescriptor
       return parameters;
    }
 
-   public RouteDescriptor addQueryParam(QualifiedName name, String value)
+   public RouteDescriptor addRequestParam(QualifiedName name, String matchName, String matchValue)
    {
-      queryParams.put(name, value);
+      return addRequestParam(new RequestParamDescriptor(name, matchName, matchValue));
+   }
+
+   public RouteDescriptor addRequestParam(String name, String matchName, String matchValue)
+   {
+      return addRequestParam(QualifiedName.parse(name), matchName, matchValue);
+   }
+
+   public RouteDescriptor addRequestParam(RequestParamDescriptor requestParam)
+   {
+      requestParams.put(requestParam.getMatchName(), requestParam);
       return this;
    }
 
-   public RouteDescriptor addQueryParam(String name, String value)
+   public Map<String, RequestParamDescriptor> getRequestParams()
    {
-      return addQueryParam(new QualifiedName(name), value);
+      return requestParams;
    }
-
-   public Map<QualifiedName, String> getQueryParams()
-   {
-      return queryParams;
-   }
-
 
    public RouteDescriptor addChild(RouteDescriptor child)
    {

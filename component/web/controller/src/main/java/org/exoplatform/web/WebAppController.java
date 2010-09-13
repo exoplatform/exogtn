@@ -183,7 +183,7 @@ public class WebAppController
       log.info("Portal path: " + portalPath);
 
       //
-      Map<QualifiedName, String> parameters = router.process(portalPath);
+      Map<QualifiedName, String> parameters = router.route(portalPath);
       log.info("Decoded parameters: " + parameters);
 
       //

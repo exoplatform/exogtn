@@ -20,9 +20,11 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -56,7 +58,7 @@ class Route
    private final Map<QualifiedName, String> routeParameters;
 
    /** . */
-   private final Map<QualifiedName, String> queryParams;
+   private final Map<String, RequestParamDef> requestParamDefs;
 
    Route()
    {
@@ -65,7 +67,7 @@ class Route
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
-      this.queryParams = new HashMap<QualifiedName, String>();
+      this.requestParamDefs = new HashMap<String, RequestParamDef>();
    }
 
    /**
@@ -195,11 +197,40 @@ class Route
 
    /**
     * @param path the path
+    * @param requestParams the query parameters
     * @return null or the parameters when it matches
     */
-   final Map<QualifiedName, String> route(String path)
+   final Map<QualifiedName, String> route(String path, Map<String, String[]> requestParams)
    {
       Map<QualifiedName, String> ret = null;
+
+      // Check request parameters
+      Map<QualifiedName, String> routeRequestParams = Collections.emptyMap();
+      if (requestParamDefs.size() > 0)
+      {
+         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         {
+            String[] values = requestParams.get(requestParamDef.getMatchName());
+            if (values != null && values.length > 0)
+            {
+               String value = values[0];
+               if (value != null)
+               {
+                  Matcher matcher = requestParamDef.matchValue.matcher(value);
+                  if (matcher.matches())
+                  {
+                     if (routeRequestParams.isEmpty())
+                     {
+                        routeRequestParams = new HashMap<QualifiedName, String>();
+                     }
+                     routeRequestParams.put(requestParamDef.getName(), value);
+                     continue;
+                  }
+               }
+            }
+            return null;
+         }
+      }
 
       // Anything that does not begin with '/' returns null
       if (path.length() > 0 && path.charAt(0) == '/')
@@ -242,7 +273,7 @@ class Route
                for (SegmentRoute route : routes)
                {
                   // Delegate the process to the next route
-                  Map<QualifiedName, String> response = route.route(nextPath);
+                  Map<QualifiedName, String> response = route.route(nextPath, requestParams);
 
                   // If we do have a response we return it
                   if (response != null)
@@ -277,7 +308,7 @@ class Route
                   }
 
                   // Delegate to next route
-                  Map<QualifiedName, String> response = route.route(nextPath);
+                  Map<QualifiedName, String> response = route.route(nextPath, requestParams);
 
                   // If we do have a response we return it
                   if (response != null)
@@ -303,6 +334,16 @@ class Route
             if (routeParameters.size() > 0)
             {
                for (Map.Entry<QualifiedName, String> entry : routeParameters.entrySet())
+               {
+                  if (!ret.containsKey(entry.getKey()))
+                  {
+                     ret.put(entry.getKey(), entry.getValue());
+                  }
+               }
+            }
+            if (routeRequestParams.size() > 0)
+            {
+               for (Map.Entry<QualifiedName, String> entry : routeRequestParams.entrySet())
                {
                   if (!ret.containsKey(entry.getKey()))
                   {
@@ -389,6 +430,11 @@ class Route
       //
       route.terminal = true;
       route.routeParameters.putAll(descriptor.getParameters());
+      for (RequestParamDescriptor requestParamDescriptor : descriptor.getRequestParams().values())
+      {
+         RequestParamDef requestParamDef = new RequestParamDef(requestParamDescriptor);
+         route.requestParamDefs.put(requestParamDef.getMatchName(), requestParamDef);
+      }
 
       //
       for (RouteDescriptor childDescriptor : descriptor.getChildren())
@@ -471,13 +517,13 @@ class Route
          {
             List<QualifiedName> parameterNames = new ArrayList<QualifiedName>();
             PatternBuilder builder = new PatternBuilder();
-            builder.appendExpression("^");
+            builder.expr("^");
             List<String> chunks = new ArrayList<String>();
             List<Pattern> parameterPatterns = new ArrayList<Pattern>();
             int previous = 0;
             for (int i = 0;i < start.size();i++)
             {
-               builder.append(path, previous, start.get(i));
+               builder.litteral(path, previous, start.get(i));
                chunks.add(path.substring(previous, start.get(i)));
                String parameterDef = path.substring(start.get(i) + 1, end.get(i));
                int colon = parameterDef.indexOf(':');
@@ -510,14 +556,14 @@ class Route
 
 
                //
-               builder.appendExpression("(");
-               builder.appendExpression(regex);
-               builder.appendExpression(")");
+               builder.expr("(");
+               builder.expr(regex);
+               builder.expr(")");
                parameterNames.add(parameterQName);
                parameterPatterns.add(Pattern.compile("^" + regex + "$"));
                previous = end.get(i) + 1;
             }
-            builder.append(path, previous, pos);
+            builder.litteral(path, previous, pos);
             chunks.add(path.substring(previous, pos));
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly

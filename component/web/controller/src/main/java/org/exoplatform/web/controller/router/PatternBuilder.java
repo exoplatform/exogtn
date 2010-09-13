@@ -34,32 +34,46 @@ class PatternBuilder
    /** . */
    private final StringBuilder buffer = new StringBuilder();
 
-   public void appendExpression(String s)
+   public PatternBuilder expr(String s)
    {
       buffer.append(s);
+      return this;
    }
 
-   public void append(String s, int from, int to)
+   public PatternBuilder expr(char s)
+   {
+      buffer.append(s);
+      return this;
+   }
+
+   public PatternBuilder litteral(String s, int from, int to)
    {
       for (int i = from;i < to;i++)
       {
          char c = s.charAt(i);
-         append(c);
+         litteral(c);
       }
+      return this;
    }
 
-   public void append(String s, int from)
+   public PatternBuilder litteral(String s, int from)
    {
-      append(s, from, s.length());
+      return litteral(s, from, s.length());
    }
 
-   public void append(char c)
+   public PatternBuilder litteral(String s)
+   {
+      return litteral(s, 0, s.length());
+   }
+
+   public PatternBuilder litteral(char c)
    {
       buffer.append("\\u");
       buffer.append(TABLE[(c & 0xF000) >> 12]);
       buffer.append(TABLE[(c & 0x0F00) >> 8]);
       buffer.append(TABLE[(c & 0x00F0) >> 4]);
       buffer.append(TABLE[c & 0x000F]);
+      return this;
    }
 
    public Pattern build()

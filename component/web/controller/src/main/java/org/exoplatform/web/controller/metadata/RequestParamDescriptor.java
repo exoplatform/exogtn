@@ -17,40 +17,59 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestHierarchy extends AbstractTestController
+public class RequestParamDescriptor
 {
 
-   public void testFoo() throws Exception
+   /** . */
+   private QualifiedName name;
+
+   /** . */
+   private String matchName;
+
+   /** . */
+   private String matchValue;
+
+   public RequestParamDescriptor(QualifiedName name, String matchName, String matchValue)
    {
-
-      RouteDescriptor descriptor = new RouteDescriptor("/a").
-         addParameter("foo", "bar").
-         addChild(new RouteDescriptor("/b").addParameter("juu", "daa"));
+      if (name == null)
+      {
+         throw new NullPointerException("No null name accepted");
+      }
+      if (matchName == null)
+      {
+         throw new NullPointerException("No null match name accepted");
+      }
+      if (matchValue == null)
+      {
+         throw new NullPointerException("No null match value accepted");
+      }
 
       //
-      Router router = new Router(new RouterDescriptor().addRoute(descriptor));
+      this.name = name;
+      this.matchName = matchName;
+      this.matchValue = matchValue;
+   }
 
-      //
-      assertEquals(Collections.singletonMap(new QualifiedName("foo"), "bar"), router.route("/a"));
+   public QualifiedName getName()
+   {
+      return name;
+   }
 
-      //
-      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(new QualifiedName("foo"), "bar");
-      expected.put(new QualifiedName("juu"), "daa");
-      assertEquals(expected, router.route("/a/b"));
+   public String getMatchName()
+   {
+      return matchName;
+   }
+
+   public String getMatchValue()
+   {
+      return matchValue;
    }
 }

@@ -72,13 +72,13 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "");
 
       //
-      assertEquals(expectedParameters, router.process("/private/classic"));
+      assertEquals(expectedParameters, router.route("/private/classic"));
       assertEquals("/private/classic", router.render(expectedParameters));
    }
 
    public void testPrivateClassicSlash() throws Exception
    {
-      router.process("/private/classic/");
+      router.route("/private/classic/");
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
       expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
       expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
@@ -86,7 +86,7 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "/");
 
       //
-      assertEquals(expectedParameters, router.process("/private/classic/"));
+      assertEquals(expectedParameters, router.route("/private/classic/"));
       assertEquals("/private/classic/", router.render(expectedParameters));
    }
 
@@ -99,7 +99,7 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "path"), "/home");
 
       //
-      assertEquals(expectedParameters, router.process("/private/classic/home"));
+      assertEquals(expectedParameters, router.route("/private/classic/home"));
       assertEquals("/private/classic/home", router.render(expectedParameters));
    }
 }

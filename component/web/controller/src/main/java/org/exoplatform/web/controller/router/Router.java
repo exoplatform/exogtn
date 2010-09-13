@@ -24,7 +24,7 @@ import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -58,8 +58,13 @@ public class Router
       return root.render(parameters);
    }
 
-   public Map<QualifiedName, String> process(String path) throws IOException
+   public Map<QualifiedName, String> route(String path) throws IOException
    {
-      return root.route(path);
+      return route(path, Collections.<String, String[]>emptyMap());
+   }
+
+   public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams) throws IOException
+   {
+      return root.route(path, queryParams);
    }
 }
