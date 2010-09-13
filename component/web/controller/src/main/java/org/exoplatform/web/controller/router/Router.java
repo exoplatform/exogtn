@@ -53,9 +53,16 @@ public class Router
       root.append(routeMetaData);
    }
 
+   public void render(Map<QualifiedName, String> parameters, RenderContext renderContext)
+   {
+      root.render(parameters, renderContext);
+   }
+
    public String render(Map<QualifiedName, String> parameters)
    {
-      return root.render(parameters);
+      SimpleRenderContext renderContext = new SimpleRenderContext();
+      render(parameters, renderContext);
+      return renderContext.getPath();
    }
 
    public Map<QualifiedName, String> route(String path) throws IOException

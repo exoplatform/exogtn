@@ -74,54 +74,56 @@ class Route
     * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
     * a way to optimize it later with some precompilation. 
     */
-   final String render(Map<QualifiedName, String> blah)
+   final void render(Map<QualifiedName, String> blah, RenderContext renderContext)
    {
       Route r = find(blah);
-      if (r == null)
+      if (r != null)
       {
-         return null;
-      }
-      else
-      {
-         if (r instanceof PatternRoute || r instanceof SegmentRoute)
-         {
-            StringBuilder sb = new StringBuilder();
-            r.render(blah, sb);
-            return sb.toString();
-         }
-         else
-         {
-            return "/";
-         }
+         r._render(blah, renderContext);
       }
    }
 
-   private void render(Map<QualifiedName, String> blah, StringBuilder sb)
+   private void _render(Map<QualifiedName, String> blah, RenderContext renderContext)
    {
-      if (parent != null)
+      if (parent != null && parent.parent != null)
       {
-         parent.render(blah, sb);
+         parent._render(blah, renderContext);
+      }
+
+      //
+      if (requestParamDefs.size() > 0)
+      {
+         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         {
+            String s = blah.get(requestParamDef.getName());
+            renderContext.appendQueryParameter(requestParamDef.getMatchName(), s);
+         }
       }
 
       //
       if (this instanceof SegmentRoute)
       {
          SegmentRoute sr = (SegmentRoute)this;
-         sb.append('/').append(sr.name);
+         renderContext.appendPath('/');
+         renderContext.appendPath(sr.name);
       }
       else if (this instanceof PatternRoute)
       {
          PatternRoute pr = (PatternRoute)this;
-         sb.append('/');
+         renderContext.appendPath('/');
          int i = 0;
          while (i < pr.parameterNames.size())
          {
-            sb.append(pr.chunks.get(i));
+            renderContext.appendPath(pr.chunks.get(i));
             String value = blah.get(pr.parameterNames.get(i));
-            sb.append(value);
+            renderContext.appendPath(value);
             i++;
          }
-         sb.append(pr.chunks.get(i));
+         renderContext.appendPath(pr.chunks.get(i));
+      }
+      else
+      {
+         renderContext.appendPath("/");
       }
    }
 
@@ -141,6 +143,25 @@ class Route
          }
          else
          {
+            return null;
+         }
+      }
+
+      // Match any request parameter
+      if (requestParamDefs.size() > 0)
+      {
+         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         {
+            String a = blah.get(requestParamDef.name);
+            if (a != null)
+            {
+               if (requestParamDef.matchValue.matcher(a).matches())
+               {
+                  //
+                  abc.remove(requestParamDef.name);
+                  continue;
+               }
+            }
             return null;
          }
       }

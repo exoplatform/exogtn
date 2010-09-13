@@ -50,33 +50,26 @@ class RequestParamDef
       //
       PatternBuilder matchValue = new PatternBuilder();
       matchValue.expr("^");
-      boolean litteral = true;
+      int level = 0;
       for (char c : descriptor.getMatchValue().toCharArray())
       {
          switch (c)
          {
             case '{':
-               if (litteral)
-               {
-                  litteral = false;
-               }
-               else
+
+               if (level++ > 0)
                {
                   matchValue.expr('{');
                }
                break;
             case '}':
-               if (litteral)
-               {
-                  litteral = true;
-               }
-               else
+               if (--level > 0)
                {
                   matchValue.expr('}');
                }
                break;
             default:
-               if (litteral)
+               if (level == 0)
                {
                   matchValue.litteral(c);
                }
