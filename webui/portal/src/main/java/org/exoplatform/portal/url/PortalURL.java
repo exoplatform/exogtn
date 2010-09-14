@@ -91,12 +91,30 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       }
 
       //
+
+      //
       if (ajax)
       {
-         buffer.append("javascript:ajaxGet('");
+         buffer.append("javascript:");
+         if (confirm != null && confirm.length() > 0)
+         {
+            buffer.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
+         }
+         buffer.append("ajaxGet('");
+      }
+      else
+      {
+         if (confirm != null && confirm.length() > 0)
+         {
+            // Need to find a way to make the confirm message appear
+            // I think we could use :
+            // 1/ the if(confirm('')) ...
+            // 2/ a call function that updates window.location
+            // for now it is disabled
+         }
       }
 
-      // julien : find out how to change the hardcoded "classic"
+      //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
       parameters.put(PortalRequestHandler.ACCESS, access);
@@ -113,9 +131,26 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       requestContext.getControllerContext().renderURL(parameters, renderContext);
 
       //
+      boolean questionMarkDone = false;
+      Map<String, String> queryParams = renderContext.getQueryParams();
+      System.out.println("queryParams = " + queryParams);
+      if (queryParams.size() > 0)
+      {
+         for (Map.Entry<String, String> entry : queryParams.entrySet())
+         {
+            buffer.append(questionMarkDone ? "&amp;" : "?");
+            buffer.append(entry.getKey());
+            buffer.append('=');
+            buffer.append(entry.getValue());
+            questionMarkDone = true;
+         }
+      }
+
+      //
       if (ajax)
       {
-         buffer.append("?ajaxRequest=true");
+         buffer.append(questionMarkDone ? "&amp;" : "?");
+         buffer.append("ajaxRequest=true");
          buffer.append("')");
       }
 

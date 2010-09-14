@@ -52,6 +52,7 @@ import org.exoplatform.web.url.ResourceURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.url.ComponentLocator;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
@@ -258,8 +259,7 @@ public class PortalRequestContext extends WebuiRequestContext
       }
 
       //
-      urlBuilder = new PortalURLBuilder(requestURI_);
-//      urlBuilder = new PortalURLBuilder(createURL(ComponentLocator.TYPE));
+      urlBuilder = new PortalURLBuilder(this, createURL(ComponentLocator.TYPE));
    }
 
    @Override

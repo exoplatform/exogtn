@@ -31,18 +31,23 @@ public class SimpleRenderContext implements RenderContext
 {
 
    /** . */
-   private StringBuilder sb = null;
+   private static final Map<String, String> EMPTY = Collections.emptyMap();
 
    /** . */
-   private Map<String, String> queryParams = Collections.emptyMap();
+   private StringBuilder sb;
+
+   /** . */
+   private Map<String, String> queryParams;
 
    public SimpleRenderContext()
    {
+      this(null);
    }
 
    public SimpleRenderContext(StringBuilder sb)
    {
       this.sb = sb;
+      this.queryParams = EMPTY;
    }
 
    public String getPath()
@@ -87,7 +92,7 @@ public class SimpleRenderContext implements RenderContext
 
    public void appendQueryParameter(String parameterName, String paramaterValue)
    {
-      if (queryParams.isEmpty())
+      if (queryParams == EMPTY)
       {
          queryParams = new HashMap<String, String>();
       }

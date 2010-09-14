@@ -20,10 +20,12 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.web.application.Parameter;
-import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.url.ResourceURL;
+import org.exoplatform.webui.application.UIComponentURLBuilder;
 import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.exoplatform.webui.url.ComponentLocator;
 
 import java.net.URLEncoder;
 
@@ -31,14 +33,24 @@ import java.net.URLEncoder;
  * Created by The eXo Platform SAS
  * Apr 3, 2007  
  */
-public class PortalURLBuilder extends URLBuilder<UIComponent>
+public class PortalURLBuilder extends UIComponentURLBuilder
 {
 
    private static Logger LOGGER = LoggerFactory.getLogger(PortalURLBuilder.class);
 
-   public PortalURLBuilder(String baseURL)
+   public PortalURLBuilder(PortalRequestContext ctx, ResourceURL<UIComponent, ComponentLocator> url)
    {
-      super(baseURL);
+      super(configure(ctx, url));
+   }
+
+   /*
+    * This is a hack.
+    */
+   private static ResourceURL<UIComponent, ComponentLocator> configure(PortalRequestContext prc, ResourceURL<UIComponent, ComponentLocator> url)
+   {
+      String path = prc.getNodePath();
+      url.getResourceLocator().setParameterValue(PortalRequestHandler.REQUEST_PATH, path);
+      return url;
    }
 
    @SuppressWarnings("unused")

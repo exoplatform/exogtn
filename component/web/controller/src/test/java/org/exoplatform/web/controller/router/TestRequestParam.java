@@ -138,7 +138,6 @@ public class TestRequestParam extends AbstractTestController
       router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext1);
       assertEquals("/a", renderContext1.getPath());
       assertEquals(Collections.singletonMap("a", "a"), renderContext1.getQueryParams());
-
       SimpleRenderContext renderContext2 = new SimpleRenderContext();
       router.render(expectedParameters, renderContext2);
       assertEquals("/a/b", renderContext2.getPath());
@@ -157,6 +156,16 @@ public class TestRequestParam extends AbstractTestController
       //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/", Collections.<String, String[]>emptyMap()));
       assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "a"), router.route("/", Collections.singletonMap("a", new String[]{"a"})));
+
+      //
+      SimpleRenderContext renderContext1 = new SimpleRenderContext();
+      router.render(Collections.<QualifiedName, String>emptyMap(), renderContext1);
+      assertEquals("/", renderContext1.getPath());
+      assertEquals(Collections.<String, String>emptyMap(), renderContext1.getQueryParams());
+      SimpleRenderContext renderContext2 = new SimpleRenderContext();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext2);
+      assertEquals("/", renderContext2.getPath());
+      assertEquals(Collections.singletonMap("a", "a"), renderContext2.getQueryParams());
    }
 
 }

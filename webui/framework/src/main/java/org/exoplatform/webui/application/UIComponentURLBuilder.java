@@ -35,19 +35,12 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
    /** . */
    private final ResourceURL<UIComponent, ComponentLocator> url;
 
-/*
    public UIComponentURLBuilder(ResourceURL<UIComponent, ComponentLocator> url)
    {
-      this.url = url;
-   }
-*/
-
-   public UIComponentURLBuilder(String baseURL)
-   {
-      super(baseURL);
+      super("foo");
 
       //
-      url = null;
+      this.url = url;
    }
 
    @Override
@@ -74,9 +67,14 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
       //
       locator.setAction(action);
       locator.setTargetBeanId(targetBeanId);
-      for (Parameter param : params)
+
+      //
+      if (params != null)
       {
-         locator.addParameter(param);
+         for (Parameter param : params)
+         {
+            locator.addParameter(param);
+         }
       }
 
       //

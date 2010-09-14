@@ -6,21 +6,17 @@
   <route path="/public/{{gtn}sitename}{{gtn}path:.*}">
     <param name="{gtn}handler" value="portal"/>
     <param name="{gtn}access" value="public"/>
-<!--
     <request-param name="{gtn}componentid" matchName="portal:componentId" required="false"/>
     <request-param name="{gtn}action" matchName="portal:action" required="false"/>
     <request-param name="{gtn}objectid" matchName="objectId" required="false"/>
--->
   </route>
 
   <route path="/private/{{gtn}sitename}{{gtn}path:.*}">
     <param name="{gtn}handler" value="portal"/>
     <param name="{gtn}access" value="private"/>
-<!--
     <request-param name="{gtn}componentid" matchName="portal:componentId" required="false"/>
     <request-param name="{gtn}action" matchName="portal:action" required="false"/>
     <request-param name="{gtn}objectid" matchName="objectId" required="false"/>
--->
   </route>
 
   <route path="/upload">

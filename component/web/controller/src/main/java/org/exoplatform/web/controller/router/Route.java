@@ -96,7 +96,10 @@ class Route
          for (RequestParamDef requestParamDef : requestParamDefs.values())
          {
             String s = blah.get(requestParamDef.getName());
-            renderContext.appendQueryParameter(requestParamDef.getMatchName(), s);
+            if (s != null)
+            {
+               renderContext.appendQueryParameter(requestParamDef.getMatchName(), s);
+            }
          }
       }
 
@@ -157,10 +160,13 @@ class Route
             {
                if (requestParamDef.matchValue(a))
                {
-                  //
                   abc.remove(requestParamDef.name);
                   continue;
                }
+            }
+            else if (!requestParamDef.isRequired())
+            {
+               continue;
             }
             return null;
          }

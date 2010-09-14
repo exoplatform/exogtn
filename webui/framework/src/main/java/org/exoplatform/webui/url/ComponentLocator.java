@@ -59,18 +59,6 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
       this.parameters = new HashMap<QualifiedName, String>();
    }
 
-   private void setParameter(QualifiedName parameterName, String parameterValue)
-   {
-      if (parameterValue == null)
-      {
-         parameters.remove(parameterName);
-      }
-      else
-      {
-         parameters.put(parameterName, parameterValue);
-      }
-   }
-
    public UIComponent getResource()
    {
       return resource;
@@ -78,7 +66,7 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
 
    public void setResource(UIComponent resource)
    {
-      setParameter(COMPONENT, resource != null ? resource.getId() : null);
+      setParameterValue(COMPONENT, resource != null ? resource.getId() : null);
 
       //
       this.resource = resource;
@@ -91,7 +79,7 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
 
    public void setAction(String action)
    {
-      setParameter(ACTION, action);
+      setParameterValue(ACTION, action);
    }
 
    public String getTargetBeanId()
@@ -101,7 +89,7 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
 
    public void setTargetBeanId(String targetBeanId)
    {
-      setParameter(TARGET, targetBeanId);
+      setParameterValue(TARGET, targetBeanId);
    }
 
    public void addParameter(Parameter param)
@@ -117,5 +105,17 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
    public String getParameterValue(QualifiedName parameterName)
    {
       return parameters.get(parameterName);
+   }
+
+   public void setParameterValue(QualifiedName parameterName, String parameterValue)
+   {
+      if (parameterValue == null)
+      {
+         parameters.remove(parameterName);
+      }
+      else
+      {
+         parameters.put(parameterName, parameterValue);
+      }
    }
 }
