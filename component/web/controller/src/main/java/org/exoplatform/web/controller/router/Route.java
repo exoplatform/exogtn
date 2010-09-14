@@ -70,7 +70,7 @@ class Route
       this.requestParamDefs = new HashMap<String, RequestParamDef>();
    }
 
-   /**
+   /*
     * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
     * a way to optimize it later with some precompilation. 
     */
@@ -79,15 +79,15 @@ class Route
       Route r = find(blah);
       if (r != null)
       {
-         r._render(blah, renderContext);
+         r._render(blah, renderContext, false);
       }
    }
 
-   private void _render(Map<QualifiedName, String> blah, RenderContext renderContext)
+   private void _render(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
    {
-      if (parent != null && parent.parent != null)
+      if (parent != null)
       {
-         parent._render(blah, renderContext);
+         parent._render(blah, renderContext, true);
       }
 
       //
@@ -126,7 +126,10 @@ class Route
       }
       else
       {
-         renderContext.appendPath("/");
+         if (!hasChildren)
+         {
+            renderContext.appendPath("/");
+         }
       }
    }
 

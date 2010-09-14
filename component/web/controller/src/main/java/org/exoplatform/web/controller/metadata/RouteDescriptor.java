@@ -90,7 +90,7 @@ public class RouteDescriptor
       return requestParams;
    }
 
-   public RouteDescriptor addChild(RouteDescriptor child)
+   public RouteDescriptor addRoute(RouteDescriptor child)
    {
       children.add(child);
       return this;

@@ -117,7 +117,7 @@ public class TestRequestParam extends AbstractTestController
    public void testInheritance() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "a", true).addChild(new RouteDescriptor("/b").addRequestParam(QualifiedName.parse("bar"), "b", "b", true)));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "a", true).addRoute(new RouteDescriptor("/b").addRequestParam(QualifiedName.parse("bar"), "b", "b", true)));
       Router router = new Router(descriptor);
 
       //
@@ -166,6 +166,30 @@ public class TestRequestParam extends AbstractTestController
       router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext2);
       assertEquals("/", renderContext2.getPath());
       assertEquals(Collections.singletonMap("a", "a"), renderContext2.getQueryParams());
+   }
+
+   public void testMatchDescendantOfRootParameters() throws Exception
+   {
+      RouterDescriptor descriptor = new RouterDescriptor();
+      descriptor.
+         addRoute(new RouteDescriptor("/").
+            addRequestParam(QualifiedName.parse("foo"), "a", "a", false).
+            addRoute(new RouteDescriptor("/a").
+               addRequestParam(QualifiedName.parse("bar"), "b", "b", false))
+         );
+      Router router = new Router(descriptor);
+
+      //
+      SimpleRenderContext renderContext = new SimpleRenderContext();
+      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+      parameters.put(QualifiedName.parse("foo"), "a");
+      parameters.put(QualifiedName.parse("bar"), "b");
+      router.render(parameters, renderContext);
+      assertEquals("/a", renderContext.getPath());
+      Map<String, String> expectedRequestParameters = new HashMap<String, String>();
+      expectedRequestParameters.put("a", "a");
+      expectedRequestParameters.put("b", "b");
+      assertEquals(expectedRequestParameters, renderContext.getQueryParams());
    }
 
 }
