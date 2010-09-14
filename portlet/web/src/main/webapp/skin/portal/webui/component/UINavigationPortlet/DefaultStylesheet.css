@@ -381,10 +381,6 @@
 	background: #fff;
 }
 
-.UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .MiddleTab .DropDownArrowIcon {
-	border-right: 1px solid #ffcf01;
-}
-
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .LeftTab {
 	background: #fff none no-repeat left -28px;
 }
