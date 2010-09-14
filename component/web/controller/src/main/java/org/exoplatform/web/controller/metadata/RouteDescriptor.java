@@ -37,7 +37,7 @@ public class RouteDescriptor
    private final String path;
 
    /** . */
-   private final Map<QualifiedName, String> parameters;
+   private final Map<QualifiedName, String> params;
 
    /** . */
    private final Map<String, RequestParamDescriptor> requestParams;
@@ -48,7 +48,7 @@ public class RouteDescriptor
    public RouteDescriptor(String path)
    {
       this.path = path;
-      this.parameters = new HashMap<QualifiedName, String>();
+      this.params = new HashMap<QualifiedName, String>();
       this.requestParams = new HashMap<String, RequestParamDescriptor>();
       this.children = new ArrayList<RouteDescriptor>();
    }
@@ -58,30 +58,25 @@ public class RouteDescriptor
       return path;
    }
 
-   public RouteDescriptor addParameter(QualifiedName name, String value)
+   public RouteDescriptor addParam(QualifiedName name, String value)
    {
-      parameters.put(name, value);
+      params.put(name, value);
       return this;
    }
 
-   public RouteDescriptor addParameter(String name, String value)
+   public RouteDescriptor addParam(String name, String value)
    {
-      return addParameter(QualifiedName.parse(name), value);
+      return addParam(QualifiedName.parse(name), value);
    }
 
-   public Map<QualifiedName, String> getParameters()
+   public Map<QualifiedName, String> getParams()
    {
-      return parameters;
+      return params;
    }
 
-   public RouteDescriptor addRequestParam(QualifiedName name, String matchName, String matchValue)
+   public RouteDescriptor addRequestParam(QualifiedName name, String matchName, String matchValue, boolean required)
    {
-      return addRequestParam(new RequestParamDescriptor(name, matchName, matchValue));
-   }
-
-   public RouteDescriptor addRequestParam(String name, String matchName, String matchValue)
-   {
-      return addRequestParam(QualifiedName.parse(name), matchName, matchValue);
+      return addRequestParam(new RequestParamDescriptor(name, matchName, matchValue, required));
    }
 
    public RouteDescriptor addRequestParam(RequestParamDescriptor requestParam)

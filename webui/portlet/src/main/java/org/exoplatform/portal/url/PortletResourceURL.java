@@ -17,42 +17,55 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url.component;
+package org.exoplatform.portal.url;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.web.url.ResourceURL;
 
-import java.util.Collections;
-import java.util.Set;
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletURL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentLocator implements ResourceLocator<UIComponent>
+public class PortletResourceURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L>
 {
 
    /** . */
-   private UIComponent resource;
+   public static final QualifiedName CONFIRM = new QualifiedName("gtn", "confirm");
 
-   public UIComponent getResource()
+   /** . */
+   private PortletURL url;
+
+   private final MimeResponse response;
+
+
+   public PortletResourceURL(MimeResponse response, L locator, Boolean ajax) throws NullPointerException
    {
-      return resource;
+      super(locator, ajax);
+
+      //
+      this.response = response;
    }
 
-   public void setResource(UIComponent resource)
+   @Override
+   public String toString()
    {
-      this.resource = resource;
-   }
+      if (url == null)
+      {
+         url = response.createActionURL();
+      }
 
-   public Set<QualifiedName> getParameterNames()
-   {
-      return Collections.emptySet();
-   }
+      //
+      for (QualifiedName parameterName : locator.getParameterNames())
+      {
+         String parameterValue = locator.getParameterValue(parameterName);
+         url.setParameter(parameterName.getValue(), parameterValue);
+      }
 
-   public String getParameterValue(QualifiedName parameterName)
-   {
-      return null;
+      //
+      return url.toString();
    }
 }

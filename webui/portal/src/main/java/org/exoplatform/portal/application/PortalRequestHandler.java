@@ -59,6 +59,9 @@ public class PortalRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
 
+   /** . */
+   public static final QualifiedName ACCESS = new QualifiedName("gtn", "access");
+
    public String getHandlerName()
    {
       return "portal";
@@ -109,10 +112,11 @@ public class PortalRequestHandler extends WebRequestHandler
       //
       String requestPath = controllerContext.getParameter(REQUEST_PATH);
       String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
+      String access = controllerContext.getParameter(ACCESS);
 
       //
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteName, requestPath);
+      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteName, requestPath, access);
       if (context.getPortalOwner().length() == 0) {
          res.sendRedirect(req.getContextPath());
          return;

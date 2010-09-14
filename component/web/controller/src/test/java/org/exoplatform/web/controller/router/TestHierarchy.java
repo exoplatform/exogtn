@@ -38,8 +38,8 @@ public class TestHierarchy extends AbstractTestController
    {
 
       RouteDescriptor descriptor = new RouteDescriptor("/a").
-         addParameter("foo", "bar").
-         addChild(new RouteDescriptor("/b").addParameter("juu", "daa"));
+         addParam("foo", "bar").
+         addChild(new RouteDescriptor("/b").addParam("juu", "daa"));
 
       //
       Router router = new Router(new RouterDescriptor().addRoute(descriptor));

@@ -29,15 +29,18 @@ public class RequestParamDescriptor
 {
 
    /** . */
-   private QualifiedName name;
+   private final QualifiedName name;
 
    /** . */
-   private String matchName;
+   private final String matchName;
 
    /** . */
-   private String matchValue;
+   private final String matchValue;
 
-   public RequestParamDescriptor(QualifiedName name, String matchName, String matchValue)
+   /** . */
+   private final boolean required;
+
+   public RequestParamDescriptor(QualifiedName name, String matchName, String matchValue, boolean required)
    {
       if (name == null)
       {
@@ -47,15 +50,12 @@ public class RequestParamDescriptor
       {
          throw new NullPointerException("No null match name accepted");
       }
-      if (matchValue == null)
-      {
-         throw new NullPointerException("No null match value accepted");
-      }
 
       //
       this.name = name;
       this.matchName = matchName;
       this.matchValue = matchValue;
+      this.required = required;
    }
 
    public QualifiedName getName()
@@ -71,5 +71,10 @@ public class RequestParamDescriptor
    public String getMatchValue()
    {
       return matchValue;
+   }
+
+   public boolean isRequired()
+   {
+      return required;
    }
 }

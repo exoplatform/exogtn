@@ -155,7 +155,7 @@ class Route
             String a = blah.get(requestParamDef.name);
             if (a != null)
             {
-               if (requestParamDef.matchValue.matcher(a).matches())
+               if (requestParamDef.matchValue(a))
                {
                   //
                   abc.remove(requestParamDef.name);
@@ -231,25 +231,24 @@ class Route
       {
          for (RequestParamDef requestParamDef : requestParamDefs.values())
          {
+            String value = null;
             String[] values = requestParams.get(requestParamDef.getMatchName());
-            if (values != null && values.length > 0)
+            if (values != null && values.length > 0 && values[0] != null)
             {
-               String value = values[0];
-               if (value != null)
-               {
-                  Matcher matcher = requestParamDef.matchValue.matcher(value);
-                  if (matcher.matches())
-                  {
-                     if (routeRequestParams.isEmpty())
-                     {
-                        routeRequestParams = new HashMap<QualifiedName, String>();
-                     }
-                     routeRequestParams.put(requestParamDef.getName(), value);
-                     continue;
-                  }
-               }
+               value = values[0];
             }
-            return null;
+            if (value != null && requestParamDef.matchValue(value))
+            {
+               if (routeRequestParams.isEmpty())
+               {
+                  routeRequestParams = new HashMap<QualifiedName, String>();
+               }
+               routeRequestParams.put(requestParamDef.getName(), value);
+            }
+            else if (requestParamDef.isRequired())
+            {
+               return null;
+            }
          }
       }
 
@@ -450,7 +449,7 @@ class Route
 
       //
       route.terminal = true;
-      route.routeParameters.putAll(descriptor.getParameters());
+      route.routeParameters.putAll(descriptor.getParams());
       for (RequestParamDescriptor requestParamDescriptor : descriptor.getRequestParams().values())
       {
          RequestParamDef requestParamDef = new RequestParamDef(requestParamDescriptor);

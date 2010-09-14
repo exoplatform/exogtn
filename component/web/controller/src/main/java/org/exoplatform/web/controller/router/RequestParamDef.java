@@ -40,6 +40,9 @@ class RequestParamDef
    /** . */
    final Pattern matchValue;
 
+   /** . */
+   final boolean required;
+
    RequestParamDef(RequestParamDescriptor descriptor)
    {
       if (descriptor == null)
@@ -48,47 +51,53 @@ class RequestParamDef
       }
 
       //
-      PatternBuilder matchValue = new PatternBuilder();
-      matchValue.expr("^");
-      int level = 0;
-      for (char c : descriptor.getMatchValue().toCharArray())
+      Pattern matchValue = null;
+      if (descriptor.getMatchValue() != null)
       {
-         switch (c)
+         PatternBuilder matchValueBuilder = new PatternBuilder();
+         matchValueBuilder.expr("^");
+         int level = 0;
+         for (char c : descriptor.getMatchValue().toCharArray())
          {
-            case '{':
+            switch (c)
+            {
+               case '{':
 
-               if (level++ > 0)
-               {
-                  matchValue.expr('{');
-               }
-               break;
-            case '}':
-               if (--level > 0)
-               {
-                  matchValue.expr('}');
-               }
-               break;
-            default:
-               if (level == 0)
-               {
-                  matchValue.litteral(c);
-               }
-               else
-               {
-                  matchValue.expr(c);
-               }
-               break;
+                  if (level++ > 0)
+                  {
+                     matchValueBuilder.expr('{');
+                  }
+                  break;
+               case '}':
+                  if (--level > 0)
+                  {
+                     matchValueBuilder.expr('}');
+                  }
+                  break;
+               default:
+                  if (level == 0)
+                  {
+                     matchValueBuilder.litteral(c);
+                  }
+                  else
+                  {
+                     matchValueBuilder.expr(c);
+                  }
+                  break;
+            }
          }
+         matchValueBuilder.expr("$");
+         matchValue = matchValueBuilder.build();
       }
-      matchValue.expr("$");
 
       //
       this.name = descriptor.getName();
       this.matchName = descriptor.getMatchName();
-      this.matchValue = matchValue.build();
+      this.matchValue = matchValue;
+      this.required = descriptor.isRequired();
    }
 
-   RequestParamDef(QualifiedName name, String matchName, Pattern matchValue)
+   RequestParamDef(QualifiedName name, String matchName, Pattern matchValue, boolean required)
    {
       if (name == null)
       {
@@ -107,6 +116,7 @@ class RequestParamDef
       this.name = name;
       this.matchName = matchName;
       this.matchValue = matchValue;
+      this.required = required;
    }
 
    public QualifiedName getName()
@@ -122,5 +132,15 @@ class RequestParamDef
    public Pattern getMatchValue()
    {
       return matchValue;
+   }
+
+   public boolean matchValue(String value)
+   {
+      return matchValue == null || matchValue.matcher(value).matches();
+   }
+
+   public boolean isRequired()
+   {
+      return required;
    }
 }

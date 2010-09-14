@@ -34,6 +34,9 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
    /** . */
    protected Boolean ajax;
 
+   /** . */
+   protected String confirm;
+
    /**
     * Create a resource URL instance.
     *
@@ -51,6 +54,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
       //
       this.locator = locator;
       this.ajax = ajax;
+      this.confirm = null;
    }
 
    /**
@@ -83,6 +87,26 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
    {
       this.ajax = ajax;
       return this;
+   }
+
+   /**
+    * Returns the confirm message.
+    *
+    * @return the confirm message
+    */
+   public String getConfirm()
+   {
+      return confirm;
+   }
+
+   /**
+    * Updates the confirm message.
+    *
+    * @param confirm the new confirm message
+    */
+   public void setConfirm(String confirm)
+   {
+      this.confirm = confirm;
    }
 
    /**

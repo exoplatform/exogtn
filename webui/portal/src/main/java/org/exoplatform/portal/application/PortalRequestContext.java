@@ -103,15 +103,23 @@ public class PortalRequestContext extends WebuiRequestContext
    /** The path decoded from the request. */
    private final String nodePath_;
 
-   private String requestURI_;
+   /** . */
+   private final String access;
 
-   private String portalURI;
+   /** . */
+   private final String requestURI_;
 
-   private int accessPath = -1;
+   /** . */
+   private final String portalURI;
 
-   private HttpServletRequest request_;
+   /** . */
+   private final int accessPath;
 
-   private HttpServletResponse response_;
+   /** . */
+   private final HttpServletRequest request_;
+
+   /** . */
+   private final HttpServletResponse response_;
 
    private String cacheLevel_ = "cacheLevelPortlet";
 
@@ -154,7 +162,8 @@ public class PortalRequestContext extends WebuiRequestContext
       WebuiApplication app,
       ControllerContext controllerContext,
       String requestSiteName,
-      String requestPath) throws Exception
+      String requestPath,
+      String access) throws Exception
    {
       super(app);
 
@@ -222,33 +231,41 @@ public class PortalRequestContext extends WebuiRequestContext
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
 */
       //
-      portalOwner_ = requestSiteName;
-      nodePath_ = requestPath;
+      this.portalOwner_ = requestSiteName;
+      this.nodePath_ = requestPath;
+      this.access = access;
 
 //      portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
       Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
       tmp.put(WebAppController.HANDLER_PARAM, "portal");
+      tmp.put(PortalRequestHandler.ACCESS, access);
       tmp.put(PortalRequestHandler.REQUEST_SITE_NAME, requestSiteName);
       tmp.put(PortalRequestHandler.REQUEST_PATH, "/");
       portalURI = controllerContext.renderURL(tmp);
 
       //
-      if (decodedURI.indexOf("/public/") >= 0)
+      if (access.endsWith("public"))
       {
          accessPath = PUBLIC_ACCESS;
       }
-      else if (decodedURI.indexOf("/private/") >= 0)
+      else if (access.equals("private"))
       {
          accessPath = PRIVATE_ACCESS;
       }
+      else
+      {
+         accessPath = -1;
+      }
 
+      //
       urlBuilder = new PortalURLBuilder(requestURI_);
+//      urlBuilder = new PortalURLBuilder(createURL(ComponentLocator.TYPE));
    }
 
    @Override
    public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(this, locator, false);
+      return new PortalURL<R, L>(this, locator, false, portalOwner_, access);
    }
 
    public ControllerContext getControllerContext()

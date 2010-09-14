@@ -44,12 +44,18 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
    private final PortalRequestContext requestContext;
 
    /** . */
+   private final String access;
+
+   /** . */
+   private final String siteName;
+
+   /** . */
    private StringBuilder buffer;
 
    /** . */
    private SimpleRenderContext renderContext;
 
-   public PortalURL(PortalRequestContext requestContext, L locator, Boolean ajax)
+   public PortalURL(PortalRequestContext requestContext, L locator, Boolean ajax, String siteName, String access)
    {
       super(locator, ajax);
 
@@ -60,7 +66,9 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       }
 
       //
+      this.siteName = siteName;
       this.requestContext = requestContext;
+      this.access = access;
    }
 
    public String toString()
@@ -90,8 +98,9 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
 
       // julien : find out how to change the hardcoded "classic"
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, "classic");
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
+      parameters.put(PortalRequestHandler.ACCESS, access);
+      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
 
       //
       for (QualifiedName parameterName : locator.getParameterNames())

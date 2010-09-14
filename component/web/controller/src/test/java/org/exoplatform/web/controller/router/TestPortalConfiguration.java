@@ -23,6 +23,7 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,24 +44,45 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{{gtn}sitename}{{gtn}path:.*}");
-      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
-      portalRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "portal");
+      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      portalRouteMD.addParam(new QualifiedName("gtn", "sitetype"), "portal");
+      portalRouteMD.addRequestParam(new QualifiedName("gtn", "componentid"), "portal:componentId", null, false);
       routerMD.addRoute(portalRouteMD);
 
       //
+      RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{{gtn}sitename}{{gtn}path:.*}");
+      portalRouteMD2.addParam(new QualifiedName("gtn", "controller"), "site");
+      portalRouteMD2.addParam(new QualifiedName("gtn", "sitetype"), "portal");
+      routerMD.addRoute(portalRouteMD2);
+
+      //
       RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{{gtn}sitename}{{gtn}path:.*}");
-      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
-      groupRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "group");
+      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      groupRouteMD.addParam(new QualifiedName("gtn", "sitetype"), "group");
       routerMD.addRoute(groupRouteMD);
 
       //
       RouteDescriptor userRouteMD = new RouteDescriptor("/users/{{gtn}sitename}{{gtn}path:.*}");
-      portalRouteMD.addParameter(new QualifiedName("gtn", "controller"), "site");
-      userRouteMD.addParameter(new QualifiedName("gtn", "sitetype"), "user");
+      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      userRouteMD.addParam(new QualifiedName("gtn", "sitetype"), "user");
       routerMD.addRoute(userRouteMD);
 
       //
       this.router = new Router(routerMD);
+   }
+
+   public void testComponent() throws Exception
+   {
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
+      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
+      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
+      expectedParameters.put(new QualifiedName("gtn", "path"), "");
+      expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
+
+      //
+      assertEquals(expectedParameters, router.route("/private/classic", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
+      assertEquals("/private/classic", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception

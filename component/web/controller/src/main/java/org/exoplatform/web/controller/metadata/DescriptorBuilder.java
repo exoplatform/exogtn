@@ -40,7 +40,10 @@ public class DescriptorBuilder
    private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
 
    /** . */
-   private static final QName parameterQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "parameter");
+   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "param");
+
+   /** . */
+   private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
 
    public RouterDescriptor build(XMLStreamReader reader) throws Exception
    {
@@ -68,11 +71,19 @@ public class DescriptorBuilder
       SMInputCursor childC = routeC.childElementCursor();
       while (childC.getNext() != null)
       {
-         if (childC.getQName().equals(parameterQN))
+         if (childC.getQName().equals(paramQN))
          {
             String name = childC.getAttrValue("name");
             String value = childC.getAttrValue("value");
-            routeDesc.addParameter(QualifiedName.parse(name), value);
+            routeDesc.addParam(QualifiedName.parse(name), value);
+         }
+         else if (childC.getQName().equals(requestParamQN))
+         {
+            String name = childC.getAttrValue("name");
+            String matchName = childC.getAttrValue("matchName");
+            String matchValue = childC.getAttrValue("matchValue");
+            String optional = childC.getAttrValue("required");
+            routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
          }
          else if (childC.getQName().equals(routeQN))
          {

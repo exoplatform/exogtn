@@ -4,26 +4,32 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_router_1_0">
 
   <route path="/public/{{gtn}sitename}{{gtn}path:.*}">
-    <parameter name="{gtn}handler" value="portal"/>
+    <param name="{gtn}handler" value="portal"/>
   </route>
 
   <route path="/private/{{gtn}sitename}{{gtn}path:.*}">
-    <parameter name="{gtn}handler" value="portal"/>
+    <param name="{gtn}handler" value="portal"/>
   </route>
 
   <route path="/upload">
-    <parameter name="{gtn}handler" value="upload"/>
+    <param name="{gtn}handler" value="upload"/>
   </route>
 
   <route path="/download">
-    <parameter name="{gtn}handler" value="download"/>
+    <param name="{gtn}handler" value="download"/>
   </route>
 
   <route path="/a">
-    <parameter name="a" value="a_value"/>
+    <param name="a" value="a_value"/>
     <route path="/b">
-      <parameter name="b" value="b_value"/>
+      <param name="b" value="b_value"/>
     </route>
+  </route>
+
+  <route path="/b">
+    <request-param name="foo" matchName="foo"/>
+    <request-param name="bar" matchName="bar" matchValue="bar"/>
+    <request-param name="juu" matchName="juu" matchValue="juu" required="true"/>
   </route>
 
 </router>

@@ -92,6 +92,18 @@ public class QualifiedName
       return name;
    }
 
+   public String getValue()
+   {
+      if (qualifier.isEmpty())
+      {
+         return name;
+      }
+      else
+      {
+         return "{" + qualifier + "}" + name;
+      }
+   }
+
    @Override
    public int hashCode()
    {

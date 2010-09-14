@@ -37,7 +37,7 @@ public class TestRequestParam extends AbstractTestController
    public void testRoot() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/").addRequestParam("foo", "a", "a"));
+      descriptor.addRoute(new RouteDescriptor("/").addRequestParam(QualifiedName.parse("foo"), "a", "a", true));
       Router router = new Router(descriptor);
 
       //
@@ -55,7 +55,7 @@ public class TestRequestParam extends AbstractTestController
    public void testSegment() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam("foo", "a", "a"));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "a", true));
       Router router = new Router(descriptor);
 
       //
@@ -73,7 +73,7 @@ public class TestRequestParam extends AbstractTestController
    public void testValuePattern() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam("foo", "a", "{[0-9]+}"));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "{[0-9]+}", true));
       Router router = new Router(descriptor);
 
       //
@@ -93,8 +93,8 @@ public class TestRequestParam extends AbstractTestController
    public void testPrecedence() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam("foo", "a", "a"));
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam("bar", "b", "b"));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "a", true));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("bar"), "b", "b", true));
       Router router = new Router(descriptor);
 
       //
@@ -117,7 +117,7 @@ public class TestRequestParam extends AbstractTestController
    public void testInheritance() throws Exception
    {
       RouterDescriptor descriptor = new RouterDescriptor();
-      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam("foo", "a", "a").addChild(new RouteDescriptor("/b").addRequestParam("bar", "b", "b")));
+      descriptor.addRoute(new RouteDescriptor("/a").addRequestParam(QualifiedName.parse("foo"), "a", "a", true).addChild(new RouteDescriptor("/b").addRequestParam(QualifiedName.parse("bar"), "b", "b", true)));
       Router router = new Router(descriptor);
 
       //
@@ -146,6 +146,17 @@ public class TestRequestParam extends AbstractTestController
       expectedRequestParameters.put("a", "a");
       expectedRequestParameters.put("b", "b");
       assertEquals(expectedRequestParameters, renderContext2.getQueryParams());
+   }
+
+   public void testOptional() throws Exception
+   {
+      RouterDescriptor descriptor = new RouterDescriptor();
+      descriptor.addRoute(new RouteDescriptor("/").addRequestParam(QualifiedName.parse("foo"), "a", "a", false));
+      Router router = new Router(descriptor);
+
+      //
+      assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/", Collections.<String, String[]>emptyMap()));
+      assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "a"), router.route("/", Collections.singletonMap("a", new String[]{"a"})));
    }
 
 }
