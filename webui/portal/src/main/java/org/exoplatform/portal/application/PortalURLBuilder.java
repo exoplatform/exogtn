@@ -53,18 +53,6 @@ public class PortalURLBuilder extends UIComponentURLBuilder
       return url;
    }
 
-   @SuppressWarnings("unused")
-   public String createURL(String action, Parameter[] params)
-   {
-      return null;
-   }
-
-   @SuppressWarnings("unused")
-   public String createURL(String action, String objectId, Parameter[] params)
-   {
-      return null;
-   }
-
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {

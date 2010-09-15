@@ -25,6 +25,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 
 import javax.portlet.PortletURL;
+import java.net.URLEncoder;
 
 /**
  * julien todo : use PortletURL parameter instead of appending them to the url returned by the PortletURL
@@ -43,17 +44,57 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
       this.url = url;
    }
 
-   public String createURL(String action, Parameter[] params)
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return null;
+      StringBuilder builder = new StringBuilder("javascript:");
+      if (confirm != null && confirm.length() > 0)
+      {
+         builder.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
+      }
+      builder.append("ajaxGet('");
+      if (targetBeanId != null)
+      {
+         try
+         {
+            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
+         }
+         catch (Exception e)
+         {
+            System.err.println(e.toString());
+         }
+      }
+      createURL(builder, targetComponent, action, targetBeanId, params);
+      builder.append("&amp;ajaxRequest=true')");
+      return builder.toString();
    }
 
-   public String createURL(String action, String objectId, Parameter[] params)
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return null;
+      StringBuilder builder = new StringBuilder();
+      boolean hasConfirm = confirm != null && confirm.length() > 0;
+      if (hasConfirm)
+      {
+         builder.append("javascript:if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
+         builder.append("window.location=\'");
+      }
+      if (targetBeanId != null)
+      {
+         try
+         {
+            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
+         }
+         catch (Exception e)
+         {
+            System.err.println(e.toString());
+         }
+      }
+      createURL(builder, targetComponent, action, targetBeanId, params);
+      if (hasConfirm)
+         builder.append("\';");
+      return builder.toString();
    }
 
-   protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
+   private void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
       // Clear URL
