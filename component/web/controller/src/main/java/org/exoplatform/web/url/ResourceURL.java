@@ -19,6 +19,10 @@
 
 package org.exoplatform.web.url;
 
+import org.gatein.common.util.ParameterMap;
+
+import java.util.Map;
+
 /**
  * An URL for a resource.
  *
@@ -29,6 +33,9 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
 {
 
    /** . */
+   private static final ParameterMap.AccessMode ACCES_MODE = ParameterMap.AccessMode.get(false, false);
+
+   /** . */
    protected final L locator;
 
    /** . */
@@ -36,6 +43,9 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
 
    /** . */
    protected String confirm;
+
+   /** . */
+   protected ParameterMap queryParams;
 
    /**
     * Create a resource URL instance.
@@ -55,6 +65,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
       this.locator = locator;
       this.ajax = ajax;
       this.confirm = null;
+      this.queryParams = null;
    }
 
    /**
@@ -103,10 +114,12 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * Updates the confirm message.
     *
     * @param confirm the new confirm message
+    * @return this object
     */
-   public void setConfirm(String confirm)
+   public final ResourceURL setConfirm(String confirm)
    {
       this.confirm = confirm;
+      return this;
    }
 
    /**
@@ -123,11 +136,73 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * Set a new resource on this URL.
     *
     * @param resource the new resource
+    * @return this object
     */
    public final ResourceURL setResource(R resource)
    {
       locator.setResource(resource);
       return this;
+   }
+
+   public Map<String, String[]> getQueryParameters()
+   {
+      if (queryParams == null)
+      {
+         queryParams = new ParameterMap(ACCES_MODE);
+      }
+      return queryParams;
+   }
+
+   public String getQueryParameterValue(String parameterName)
+   {
+      if (parameterName == null)
+      {
+         throw new NullPointerException("");
+      }
+      else if (queryParams == null)
+      {
+         return null;
+      }
+      else
+      {
+         String[] parameterValues = queryParams.get(parameterName);
+         return parameterValues != null ? parameterValues[0] : null;
+      }
+   }
+
+   public void setQueryParameterValue(String parameterName, String parameterValue)
+   {
+      if (parameterName == null)
+      {
+         throw new NullPointerException("No null parameter name");
+      }
+      if (queryParams == null)
+      {
+         queryParams = new ParameterMap(ACCES_MODE);
+      }
+      queryParams.setValue(parameterName, parameterValue);
+   }
+
+   public String[] getQueryParameterValues(String parameterName)
+   {
+      if (parameterName == null)
+      {
+         throw new NullPointerException("No null parameter name");
+      }
+      return queryParams != null ? queryParams.getValues(parameterName) : null;
+   }
+
+   public void setQueryParameterValues(String parameterName, String[] parameterValues)
+   {
+      if (parameterName == null)
+      {
+         throw new NullPointerException("No null parameter name");
+      }
+      if (queryParams == null)
+      {
+         queryParams = new ParameterMap(ACCES_MODE);
+      }
+      queryParams.setValues(parameterName, parameterValues);
    }
 
    /**

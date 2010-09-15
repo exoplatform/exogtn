@@ -21,6 +21,7 @@ package org.exoplatform.webui.application.portlet;
 
 import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
@@ -42,6 +43,9 @@ import javax.portlet.PortletResponse;
 import javax.portlet.StateAwareResponse;
 
 /**
+ * todo (julien) : there is an issue here (small) as the PRC seems to be stored in http session
+ * and keep a pointer on request and response object.
+ *
  * The request context of a portlet
  *
  */
@@ -66,15 +70,14 @@ public class PortletRequestContext extends WebuiRequestContext
 
    private boolean hasProcessAction_ = false;
 
-   private final PortletURLBuilder urlBuilder;
+   /** . */
+   private PortletURLBuilder urlBuilder;
 
-   public PortletRequestContext(WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
+   public PortletRequestContext(RequestContext parentAppRequestContext, WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
    {
-      super(app);
+      super(parentAppRequestContext, app);
       init(writer, req, res);
       setSessionId(req.getPortletSession(true).getId());
-
-      urlBuilder = new PortletURLBuilder();
    }
 
    @Override
@@ -89,6 +92,16 @@ public class PortletRequestContext extends WebuiRequestContext
       response_ = res;
       writer_ = new WriterPrinter(writer);
       windowId_ = req.getWindowID();
+
+      //
+      if (res instanceof MimeResponse)
+      {
+         this.urlBuilder = new PortletURLBuilder(((MimeResponse)res).createActionURL());
+      }
+      else
+      {
+         this.urlBuilder = null;
+      }
    }
 
    public void setUIApplication(UIApplication uiApplication) throws Exception
@@ -211,8 +224,10 @@ public class PortletRequestContext extends WebuiRequestContext
 
    public URLBuilder<UIComponent> getURLBuilder()
    {
-      MimeResponse renderRes = (MimeResponse)response_;
-      urlBuilder.setBaseURL(renderRes.createActionURL().toString());
+      if (urlBuilder == null)
+      {
+         throw new IllegalStateException("Cannot create portlet URL during action/event phase");
+      }
       return urlBuilder;
    }
 

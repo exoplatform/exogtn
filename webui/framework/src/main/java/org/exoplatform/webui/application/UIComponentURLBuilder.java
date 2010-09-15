@@ -37,9 +37,6 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
 
    public UIComponentURLBuilder(ResourceURL<UIComponent, ComponentLocator> url)
    {
-      super("foo");
-
-      //
       this.url = url;
    }
 

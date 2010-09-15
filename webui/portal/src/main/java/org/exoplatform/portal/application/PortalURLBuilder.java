@@ -68,7 +68,7 @@ public class PortalURLBuilder extends UIComponentURLBuilder
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
-      builder.append(getBaseURL()).append("?").append(PortalRequestContext.UI_COMPONENT_ID).append('=').append(
+      builder.append("baseurl").append("?").append(PortalRequestContext.UI_COMPONENT_ID).append('=').append(
          targetComponent.getId());
       if (action != null && action.trim().length() > 0)
       {

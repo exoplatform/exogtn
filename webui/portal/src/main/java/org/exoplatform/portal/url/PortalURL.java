@@ -133,7 +133,6 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       //
       boolean questionMarkDone = false;
       Map<String, String> queryParams = renderContext.getQueryParams();
-      System.out.println("queryParams = " + queryParams);
       if (queryParams.size() > 0)
       {
          for (Map.Entry<String, String> entry : queryParams.entrySet())
@@ -142,6 +141,19 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
             buffer.append(entry.getKey());
             buffer.append('=');
             buffer.append(entry.getValue());
+            questionMarkDone = true;
+         }
+      }
+
+      // Now append generic query parameters
+      for (Map.Entry<String, String[]> entry : getQueryParameters().entrySet())
+      {
+         for (String value : entry.getValue())
+         {
+            buffer.append(questionMarkDone ? "&amp;" : "?");
+            buffer.append(entry.getKey());
+            buffer.append("=");
+            buffer.append(value);
             questionMarkDone = true;
          }
       }

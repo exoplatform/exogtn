@@ -30,25 +30,7 @@ import java.net.URLEncoder;
  */
 abstract public class URLBuilder<T>
 {
-
    private static Logger LOGGER = LoggerFactory.getLogger(URLBuilder.class);
-
-   protected String baseURL_;
-
-   public URLBuilder(String baseURL)
-   {
-      baseURL_ = baseURL;
-   }
-
-   public String getBaseURL()
-   {
-      return baseURL_;
-   }
-
-   public void setBaseURL(String url)
-   {
-      baseURL_ = url;
-   }
 
    public String createURL(String action)
    {

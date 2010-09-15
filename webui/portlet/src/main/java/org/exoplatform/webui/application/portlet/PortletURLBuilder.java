@@ -24,6 +24,8 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 
+import javax.portlet.PortletURL;
+
 /**
  * julien todo : use PortletURL parameter instead of appending them to the url returned by the PortletURL
  *
@@ -32,17 +34,13 @@ import org.exoplatform.webui.core.UIComponent;
  */
 public class PortletURLBuilder extends URLBuilder<UIComponent>
 {
-    private static final String AMP = "&amp;";
-    private static final char EQUALS = '=';
 
-    public PortletURLBuilder()
-   {
-      super(null);
-   }
+   /** . */
+   private final PortletURL url;
 
-   public PortletURLBuilder(String baseURL)
+   public PortletURLBuilder(PortletURL url)
    {
-      super(baseURL);
+      this.url = url;
    }
 
    public String createURL(String action, Parameter[] params)
@@ -58,27 +56,34 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
-      String baseUrl = getBaseURL();
-      builder.append(baseUrl).append(AMP).append(UIComponent.UICOMPONENT).append(EQUALS).append(
-         targetComponent.getId());
+      // Clear URL
+      url.getParameterMap().clear();
 
+      //
+      url.setParameter(UIComponent.UICOMPONENT, targetComponent.getId());
+
+      //
       if (action != null && action.trim().length() > 0)
       {
-         builder.append(AMP).append(WebuiRequestContext.ACTION).append(EQUALS).append(action);
+         url.setParameter(WebuiRequestContext.ACTION, action);
       }
 
+      //
       if (targetBeanId != null && targetBeanId.trim().length() > 0)
       {
-         builder.append(AMP).append(UIComponent.OBJECTID).append(EQUALS).append(targetBeanId);
+         url.setParameter(UIComponent.OBJECTID, targetBeanId);
       }
 
-      if (params == null || params.length < 1)
-         return;
-      for (Parameter param : params)
+      //
+      if (params != null && params.length > 0)
       {
-         builder.append(AMP).append(param.getName()).append(EQUALS).append(param.getValue());
+         for (Parameter param : params)
+         {
+            url.setParameter(param.getName(), param.getValue());
+         }
       }
 
+      //
+      builder.append(url.toString());
    }
-
 }

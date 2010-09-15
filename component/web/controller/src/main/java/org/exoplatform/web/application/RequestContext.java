@@ -53,13 +53,20 @@ abstract public class RequestContext
 
    private Application app_;
 
-   protected RequestContext parentAppRequestContext_;
+   protected final RequestContext parentAppRequestContext_;
 
    private Map<String, Object> attributes;
 
    public RequestContext(Application app)
    {
-      app_ = app;
+      this.app_ = app;
+      this.parentAppRequestContext_ = null;
+   }
+
+   protected RequestContext(RequestContext parentAppRequestContext, Application app_)
+   {
+      this.parentAppRequestContext_ = parentAppRequestContext;
+      this.app_ = app_;
    }
 
    public Application getApplication()
@@ -192,11 +199,6 @@ abstract public class RequestContext
    public RequestContext getParentAppRequestContext()
    {
       return parentAppRequestContext_;
-   }
-
-   public void setParentAppRequestContext(RequestContext context)
-   {
-      parentAppRequestContext_ = context;
    }
 
    @SuppressWarnings("unchecked")
