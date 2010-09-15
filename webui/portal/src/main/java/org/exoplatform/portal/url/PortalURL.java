@@ -124,7 +124,10 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L
       for (QualifiedName parameterName : locator.getParameterNames())
       {
          String parameterValue = locator.getParameterValue(parameterName);
-         parameters.put(parameterName, parameterValue);
+         if (parameterValue != null)
+         {
+            parameters.put(parameterName, parameterValue);
+         }
       }
 
       //

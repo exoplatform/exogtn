@@ -35,9 +35,12 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
    /** . */
    private final ResourceURL<UIComponent, ComponentLocator> url;
 
+   private final ComponentLocator locator;
+
    public UIComponentURLBuilder(ResourceURL<UIComponent, ComponentLocator> url)
    {
       this.url = url;
+      this.locator = url.getResourceLocator();
    }
 
    @Override
@@ -54,12 +57,12 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
 
    private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
+      url.getQueryParameters().clear();
+
+      //
       url.setAjax(ajax);
       url.setConfirm(confirm);
       url.setResource(targetComponent);
-
-      //
-      ComponentLocator locator = url.getResourceLocator();
 
       //
       locator.setAction(action);
@@ -70,7 +73,7 @@ public abstract class UIComponentURLBuilder extends URLBuilder<UIComponent>
       {
          for (Parameter param : params)
          {
-            locator.addParameter(param);
+            url.setQueryParameterValue(param.getName(), param.getValue());
          }
       }
 

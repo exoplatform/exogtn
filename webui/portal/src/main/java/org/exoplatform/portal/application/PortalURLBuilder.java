@@ -49,9 +49,13 @@ public class PortalURLBuilder extends UIComponentURLBuilder
    private static ResourceURL<UIComponent, ComponentLocator> configure(PortalRequestContext prc, ResourceURL<UIComponent, ComponentLocator> url)
    {
       String path = prc.getNodePath();
-      url.getResourceLocator().setParameterValue(PortalRequestHandler.REQUEST_PATH, path);
+      url.getResourceLocator().setPath(path);
       return url;
    }
+
+   // I keept that as reminder for the various encodings
+/*
+
 
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
@@ -84,5 +88,6 @@ public class PortalURLBuilder extends UIComponentURLBuilder
       }
 
    }
+*/
 
 }

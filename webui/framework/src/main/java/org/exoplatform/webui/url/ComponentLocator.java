@@ -19,12 +19,13 @@
 
 package org.exoplatform.webui.url;
 
-import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.core.UIComponent;
+import org.gatein.common.util.Tools;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -49,14 +50,28 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
    public static final QualifiedName TARGET = new QualifiedName("gtn", "objectid");
 
    /** . */
+   public static final QualifiedName PATH = new QualifiedName("gtn", "path");
+
+   /** . */
+   private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(COMPONENT, ACTION, TARGET, PATH));
+
+   /** . */
    private UIComponent resource;
 
    /** . */
-   private Map<QualifiedName, String> parameters;
+   private String action;
+
+   /** . */
+   private String targetBeanId;
+
+   /** . */
+   private String path;
+
+   private Map<QualifiedName, String> entries;
 
    public ComponentLocator()
    {
-      this.parameters = new HashMap<QualifiedName, String>();
+      this.entries = new HashMap<QualifiedName, String>();
    }
 
    public UIComponent getResource()
@@ -66,56 +81,65 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
 
    public void setResource(UIComponent resource)
    {
-      setParameterValue(COMPONENT, resource != null ? resource.getId() : null);
-
-      //
       this.resource = resource;
-   }
-
-   public String getAction()
-   {
-      return parameters.get(ACTION);
-   }
-
-   public void setAction(String action)
-   {
-      setParameterValue(ACTION, action);
-   }
-
-   public String getTargetBeanId()
-   {
-      return parameters.get(TARGET);
-   }
-
-   public void setTargetBeanId(String targetBeanId)
-   {
-      setParameterValue(TARGET, targetBeanId);
-   }
-
-   public void addParameter(Parameter param)
-   {
-      throw new UnsupportedOperationException("is it really used?");
    }
 
    public Set<QualifiedName> getParameterNames()
    {
-      return parameters.keySet();
+      return NAMES;
    }
 
    public String getParameterValue(QualifiedName parameterName)
    {
-      return parameters.get(parameterName);
-   }
-
-   public void setParameterValue(QualifiedName parameterName, String parameterValue)
-   {
-      if (parameterValue == null)
+      if (COMPONENT.equals(parameterName))
       {
-         parameters.remove(parameterName);
+         return resource != null ? resource.getId() : null;
+      }
+      else if (ACTION.equals(parameterName))
+      {
+         return action;
+      }
+      else if (TARGET.equals(parameterName))
+      {
+         return targetBeanId;
+      }
+      else if (PATH.equals(parameterName))
+      {
+         return path;
       }
       else
       {
-         parameters.put(parameterName, parameterValue);
+         return null;
       }
+   }
+
+   public String getAction()
+   {
+      return action;
+   }
+
+   public void setAction(String action)
+   {
+      this.action = action;
+   }
+
+   public String getTargetBeanId()
+   {
+      return targetBeanId;
+   }
+
+   public void setTargetBeanId(String targetBeanId)
+   {
+      this.targetBeanId = targetBeanId;
+   }
+
+   public String getPath()
+   {
+      return path;
+   }
+
+   public void setPath(String path)
+   {
+      this.path = path;
    }
 }

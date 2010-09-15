@@ -70,7 +70,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
       //
       org.exoplatform.web.url.ResourceURL<UIComponent,ComponentLocator> url = portalRequestContext.createURL(ComponentLocator.TYPE, portlet);
       String path = portalRequestContext.getNodePath();
-      url.getResourceLocator().setParameterValue(PortalRequestHandler.REQUEST_PATH, path);
+      url.getResourceLocator().setPath(path);
 
       //
       this.request = portalRequestContext.getRequest();
@@ -244,9 +244,6 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
       }
 
       //
-      String s = url.toString();
-
-      //
-      return s;
+      return url.toString();
    }
 }
