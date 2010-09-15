@@ -20,37 +20,70 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.web.application.Parameter;
+import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.ResourceURL;
-import org.exoplatform.webui.application.UIComponentURLBuilder;
 import org.exoplatform.webui.core.UIComponent;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 import org.exoplatform.webui.url.ComponentLocator;
-
-import java.net.URLEncoder;
 
 /**
  * Created by The eXo Platform SAS
  * Apr 3, 2007  
  */
-public class PortalURLBuilder extends UIComponentURLBuilder
+public class PortalURLBuilder extends URLBuilder<UIComponent>
 {
 
-   private static Logger LOGGER = LoggerFactory.getLogger(PortalURLBuilder.class);
+   /** . */
+   private final ResourceURL<UIComponent, ComponentLocator> url;
+
+   /** . */
+   private final ComponentLocator locator;
 
    public PortalURLBuilder(PortalRequestContext ctx, ResourceURL<UIComponent, ComponentLocator> url)
    {
-      super(configure(ctx, url));
+      String path = ctx.getNodePath();
+      url.getResourceLocator().setPath(path);
+
+      //
+      this.url = url;
+      this.locator = url.getResourceLocator();
    }
 
-   /*
-    * This is a hack.
-    */
-   private static ResourceURL<UIComponent, ComponentLocator> configure(PortalRequestContext prc, ResourceURL<UIComponent, ComponentLocator> url)
+   @Override
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      String path = prc.getNodePath();
-      url.getResourceLocator().setPath(path);
-      return url;
+      return createURL(true, targetComponent, action, confirm, targetBeanId, params);
+   }
+
+   @Override
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   {
+      return createURL(false, targetComponent, action, confirm, targetBeanId, params);
+   }
+
+   private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   {
+      url.getQueryParameters().clear();
+
+      //
+      url.setAjax(ajax);
+      url.setConfirm(confirm);
+      url.setResource(targetComponent);
+
+      //
+      locator.setAction(action);
+      locator.setTargetBeanId(targetBeanId);
+
+      //
+      if (params != null)
+      {
+         for (Parameter param : params)
+         {
+            url.setQueryParameterValue(param.getName(), param.getValue());
+         }
+      }
+
+      //
+      return url.toString();
    }
 
    // I keept that as reminder for the various encodings
