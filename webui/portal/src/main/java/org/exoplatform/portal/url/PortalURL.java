@@ -21,15 +21,12 @@ package org.exoplatform.portal.url;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortalRequestHandler;
-import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.RenderContext;
 import org.exoplatform.web.controller.router.SimpleRenderContext;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.web.url.ResourceLocator;
-import org.exoplatform.web.url.ResourceURL;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortalURL<R, L extends ResourceLocator<R>> extends ResourceURL<R, L>
+public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R, L>
 {
 
    /** . */

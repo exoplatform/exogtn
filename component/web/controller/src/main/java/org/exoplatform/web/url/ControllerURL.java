@@ -24,12 +24,12 @@ import org.gatein.common.util.ParameterMap;
 import java.util.Map;
 
 /**
- * An URL for a resource.
+ * An URL for a resource managed by the controller.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ResourceURL<R, L extends ResourceLocator<R>>
+public abstract class ControllerURL<R, L extends ResourceLocator<R>>
 {
 
    /** . */
@@ -54,7 +54,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * @param ajax the ajax mode
     * @throws NullPointerException if the resource locator is null
     */
-   public ResourceURL(L locator, Boolean ajax) throws NullPointerException
+   public ControllerURL(L locator, Boolean ajax) throws NullPointerException
    {
       if (locator == null)
       {
@@ -94,7 +94,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * @param ajax the new ajax mode
     * @return this object
     */
-   public final ResourceURL setAjax(Boolean ajax)
+   public final ControllerURL setAjax(Boolean ajax)
    {
       this.ajax = ajax;
       return this;
@@ -116,7 +116,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * @param confirm the new confirm message
     * @return this object
     */
-   public final ResourceURL setConfirm(String confirm)
+   public final ControllerURL setConfirm(String confirm)
    {
       this.confirm = confirm;
       return this;
@@ -138,7 +138,7 @@ public abstract class ResourceURL<R, L extends ResourceLocator<R>>
     * @param resource the new resource
     * @return this object
     */
-   public final ResourceURL setResource(R resource)
+   public final ControllerURL setResource(R resource)
    {
       locator.setResource(resource);
       return this;

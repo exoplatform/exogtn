@@ -45,10 +45,10 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
-import org.exoplatform.web.url.ResourceURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -263,7 +263,7 @@ public class PortalRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> ResourceURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
       return new PortalURL<R, L>(this, locator, false, portalOwner_, access);
    }
