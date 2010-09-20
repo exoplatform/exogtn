@@ -27,8 +27,6 @@ import org.exoplatform.webui.core.UIComponent;
 import javax.portlet.PortletURL;
 
 /**
- * julien todo : use PortletURL parameter instead of appending them to the url returned by the PortletURL
- *
  * Created by The eXo Platform SAS
  * Apr 3, 2007  
  */
