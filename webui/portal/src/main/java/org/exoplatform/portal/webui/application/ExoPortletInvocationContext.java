@@ -243,6 +243,12 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          }
       }
 
+      // Ajax support
+      url.setAjax("true".equals(containerURL.getProperties().get("ajax")));
+
+      // Confirm messsage
+      url.setConfirm(containerURL.getProperties().get("confirm"));
+
       //
       return url.toString();
    }

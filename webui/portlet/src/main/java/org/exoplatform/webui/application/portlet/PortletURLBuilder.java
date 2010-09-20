@@ -25,7 +25,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 
 import javax.portlet.PortletURL;
-import java.net.URLEncoder;
 
 /**
  * julien todo : use PortletURL parameter instead of appending them to the url returned by the PortletURL
@@ -46,59 +45,26 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
 
    public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      StringBuilder builder = new StringBuilder("javascript:");
-      if (confirm != null && confirm.length() > 0)
-      {
-         builder.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
-      }
-      builder.append("ajaxGet('");
-      if (targetBeanId != null)
-      {
-         try
-         {
-            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
-         }
-         catch (Exception e)
-         {
-            System.err.println(e.toString());
-         }
-      }
-      createURL(builder, targetComponent, action, targetBeanId, params);
-      builder.append("&amp;ajaxRequest=true')");
-      return builder.toString();
+      return createURL(true, confirm, targetComponent, action, targetBeanId, params);
    }
 
    public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      StringBuilder builder = new StringBuilder();
-      boolean hasConfirm = confirm != null && confirm.length() > 0;
-      if (hasConfirm)
-      {
-         builder.append("javascript:if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
-         builder.append("window.location=\'");
-      }
-      if (targetBeanId != null)
-      {
-         try
-         {
-            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
-         }
-         catch (Exception e)
-         {
-            System.err.println(e.toString());
-         }
-      }
-      createURL(builder, targetComponent, action, targetBeanId, params);
-      if (hasConfirm)
-         builder.append("\';");
-      return builder.toString();
+      return createURL(false, confirm, targetComponent, action, targetBeanId, params);
    }
 
-   private void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
+   private String createURL(
+      boolean ajax,
+      String confirm,
+      UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
       // Clear URL
       url.getParameterMap().clear();
+
+      //
+      url.setProperty("ajax", Boolean.toString(ajax));
+      url.setProperty("confirm", confirm);
 
       //
       url.setParameter(UIComponent.UICOMPONENT, targetComponent.getId());
@@ -125,6 +91,6 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
       }
 
       //
-      builder.append(url.toString());
+      return url.toString();
    }
 }
