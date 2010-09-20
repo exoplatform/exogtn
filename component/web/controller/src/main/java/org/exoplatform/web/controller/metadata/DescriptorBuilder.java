@@ -19,12 +19,10 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.codehaus.staxmate.SMInputFactory;
-import org.codehaus.staxmate.in.SMHierarchicCursor;
-import org.codehaus.staxmate.in.SMInputCursor;
 import org.exoplatform.web.controller.QualifiedName;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.List;
@@ -47,47 +45,68 @@ public class DescriptorBuilder
 
    public RouterDescriptor build(XMLStreamReader reader) throws Exception
    {
+      System.out.println("reader = " + reader);
+      System.out.println("reader = " + reader.getClass().getName());
       RouterDescriptor routerDesc = new RouterDescriptor();
-      SMHierarchicCursor routerC = SMInputFactory.rootElementCursor(reader);
-      routerC.getNext();
 
       //
-      SMInputCursor routeC = routerC.childElementCursor(routeQN);
-      while (routeC.getNext() != null)
+      while (true)
       {
-         build(routeC, routerDesc.getRoutes());
+         int event = reader.next();
+         if (event == XMLStreamConstants.END_DOCUMENT)
+         {
+            reader.close();
+            break;
+         }
+         else if (event == XMLStreamConstants.START_ELEMENT)
+         {
+            if (routeQN.equals(reader.getName()))
+            {
+               build(reader, routerDesc.getRoutes());
+            }
+         }
       }
 
       //
       return routerDesc;
    }
 
-   private void build(SMInputCursor routeC, List<RouteDescriptor> descriptors) throws XMLStreamException
+   private void build(XMLStreamReader reader, List<RouteDescriptor> descriptors) throws XMLStreamException
    {
-      String path = routeC.getAttrValue("path");
+      String path = reader.getAttributeValue(null, "path");
       RouteDescriptor routeDesc = new RouteDescriptor(path);
 
       //
-      SMInputCursor childC = routeC.childElementCursor();
-      while (childC.getNext() != null)
+      while (true)
       {
-         if (childC.getQName().equals(paramQN))
+         int event = reader.next();
+         if (event == XMLStreamConstants.END_ELEMENT)
          {
-            String name = childC.getAttrValue("name");
-            String value = childC.getAttrValue("value");
-            routeDesc.addParam(QualifiedName.parse(name), value);
+            if (routeQN.equals(reader.getName()))
+            {
+               break;
+            }
          }
-         else if (childC.getQName().equals(requestParamQN))
+         else if (event == XMLStreamConstants.START_ELEMENT)
          {
-            String name = childC.getAttrValue("name");
-            String matchName = childC.getAttrValue("matchName");
-            String matchValue = childC.getAttrValue("matchValue");
-            String optional = childC.getAttrValue("required");
-            routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
-         }
-         else if (childC.getQName().equals(routeQN))
-         {
-            build(childC, routeDesc.getChildren());
+            if (paramQN.equals(reader.getName()))
+            {
+               String name = reader.getAttributeValue(null, "name");
+               String value = reader.getAttributeValue(null, "value");
+               routeDesc.addParam(QualifiedName.parse(name), value);
+            }
+            else if (requestParamQN.equals(reader.getName()))
+            {
+               String name = reader.getAttributeValue(null, "name");
+               String matchName = reader.getAttributeValue(null, "matchName");
+               String matchValue = reader.getAttributeValue(null, "matchValue");
+               String optional = reader.getAttributeValue(null, "required");
+               routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
+            }
+            else if (routeQN.equals(reader.getName()))
+            {
+               build(reader, routeDesc.getChildren());
+            }
          }
       }
 
