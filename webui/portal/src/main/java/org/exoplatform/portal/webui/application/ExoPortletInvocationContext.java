@@ -107,7 +107,10 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
       StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append("?")
          .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
 */
-
+      
+      //Clear URL parameters
+      url.getQueryParameters().clear();
+      
       String type;
       if (containerURL instanceof RenderURL)
       {

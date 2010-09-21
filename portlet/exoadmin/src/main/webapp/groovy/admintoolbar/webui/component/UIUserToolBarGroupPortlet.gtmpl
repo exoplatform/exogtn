@@ -7,6 +7,8 @@
 	import org.exoplatform.portal.mop.user.UserNavigation;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.web.url.ControllerURL;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -16,7 +18,11 @@
 		
 	def groupNavigations = uicomponent.getGroupNavigations();
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
-	void renderGroupPageNavigation(UserNavigation navigation) {
+	
+	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
+	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	
+	void renderGroupPageNavigation(UserNavigation navigation, ControllerURL nodeURL) {
 			def nodes = uicomponent.getNavigationNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
@@ -25,13 +31,12 @@
 			print """
 						<li class="TitleBar" title="$ownerId">$navTitle</li>						
 			""" ;
-						int idx = 0;
 						for(UserNode node : nodes) {
-							renderPageNode(node, ownerId, idx++ % 2 == 0);
+							renderPageNode(node, ownerId, nodeURL);
 						}	
 	}
 	
-	void renderPageNode(UserNode node, String groupId, boolean flag) {
+	void renderPageNode(UserNode node, String groupId, ControllerURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
@@ -41,7 +46,7 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+		String actionLink = nodeURL.setResource(node).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.resolvedLabel.length() > 60);
@@ -64,7 +69,7 @@
 		   <li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
-								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
+								print """<a class="ItemIcon $icon" href="$actionLink" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
@@ -74,7 +79,7 @@
 			""" ;
 				int idx = 0;
 				for(UserNode child : node.getChildren()) {
-					renderPageNode(child, groupId, idx++ % 2 == 0);
+					renderPageNode(child, groupId, nodeURL);
 				}
 			print """				
 				</ul>
@@ -92,7 +97,7 @@
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer">
 		<% for(navigation in groupNavigations) {
-				renderGroupPageNavigation(navigation);
+				renderGroupPageNavigation(navigation, nodeURL);
 		} %>
 		</ul>
 		<% } %>
