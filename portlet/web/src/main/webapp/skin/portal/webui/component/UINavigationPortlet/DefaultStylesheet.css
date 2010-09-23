@@ -116,7 +116,6 @@
         background: none; /* orientation=lt */
         background: none; /* orientation=rt */
 	cursor: pointer;
-	border-right: 1px solid #0a4da6;
 }
 
 /*###############-Hightlight Navigation Tab	-################*/
@@ -389,6 +388,3 @@
 	background: #fff none repeat-x;
 }
 
-.UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .MiddleTab .DropDownArrowIcon {
-	border-right: 1px solid white;
-}
