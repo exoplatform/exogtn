@@ -366,10 +366,6 @@
 	background: #c7c3ad none repeat-x center bottom;
 }
 
-.UINavigationPortlet .GroupNavigation .UITab .NormalNavigationTab .MiddleTab .DropDownArrowIcon {
-	border-right: 1px solid #ffa200;
-}
-
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .LeftTab {
 	background: #fff none no-repeat left -152px;
 }
