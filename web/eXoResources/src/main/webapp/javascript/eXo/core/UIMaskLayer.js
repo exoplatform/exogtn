@@ -126,7 +126,7 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 		blockContainer.appendChild(maskLayer) ;		
 		maskLayer.className = "MaskLayer" ;
 		maskLayer.id = "MaskLayer" ;		
-		maskLayer.maxZIndex = 4; //3 ;
+		maskLayer.maxZIndex = eXo.webui.UIPopup.zIndex + 1; //3 ;
 		maskLayer.style.width = Browser.getBrowserWidth() + "px";
 		maskLayer.style.height = Browser.getBrowserHeight() + "px";
 		maskLayer.style.top = "0px" ;

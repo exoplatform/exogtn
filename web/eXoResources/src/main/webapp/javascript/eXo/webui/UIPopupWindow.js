@@ -71,7 +71,7 @@ UIPopupWindow.prototype.showMask = function(popup, isShowPopup) {
 	var mask = popup.previousSibling;
 	if(isShowPopup) {
 		//Modal if popup is portal component
-		if (popup.parentNode.id == "UIPortalApplication") {
+		if (eXo.core.DOMUtil.findAncestorByClass(popup, "PORTLET-FRAGMENT") == null) {
 			eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1) ;
 		} else {
 		//If popup is portlet's component, modal with just its parent
