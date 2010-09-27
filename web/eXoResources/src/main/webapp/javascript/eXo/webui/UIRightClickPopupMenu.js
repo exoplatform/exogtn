@@ -72,9 +72,15 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 		eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
 		return false;
 	}
-	elemt.setAttribute('href', href.replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ;
+	elemt.setAttribute('href', href += '&objectId=' + encodeURI(contextMenu.objId.replace(/'/g, "\\'"))) ;
 	return true;
 }
+
+UIRightClickPopupMenu.prototype.ajaxPost = function(url, objId) {
+  var queryString = "ajaxRequest=true&objectId=" + objId;
+  ajaxPost(url, queryString);
+}
+
 /**
  * Mouse click on element, If click is right-click, the context menu will be shown
  * @param {Object} event
