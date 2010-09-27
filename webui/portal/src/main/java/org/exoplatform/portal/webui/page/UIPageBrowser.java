@@ -19,21 +19,13 @@
 
 package org.exoplatform.portal.webui.page;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javassist.bytecode.analysis.Type;
-
-import javax.portlet.ActionResponse;
-import javax.xml.namespace.QName;
-
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -61,7 +53,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRepeater;
-import org.exoplatform.webui.core.UISearch;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -71,10 +62,15 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UISearchForm;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.portlet.ActionResponse;
+import javax.xml.namespace.QName;
 
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = {
@@ -253,25 +249,25 @@ public class UIPageBrowser extends UIContainer
       public void execute(Event<UIPageBrowser> event) throws Exception
       {
          UIPageBrowser uiPageBrowser = event.getSource();
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String id = pcontext.getRequestParameter(OBJECTID);
+         WebuiRequestContext context = event.getRequestContext();
+         String id = context.getRequestParameter(OBJECTID);
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
          DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
-         UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
+         UIApplication uiApp = context.getUIApplication();
          if (service.getPage(id) == null)
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
-         Page page = service.getPage(id, pcontext.getRemoteUser());
+         Page page = service.getPage(id, context.getRemoteUser());
 
          if (page == null || !page.isModifiable() ||
-            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(pcontext.getRemoteUser())))
+            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(context.getRemoteUser())))
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
 
@@ -304,7 +300,7 @@ public class UIPageBrowser extends UIContainer
          if (isDeleteCurrentPage)         
          {
             PageNodeEvent<UIPortalApplication> pnevent =
-               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
+               new PageNodeEvent<UIPortalApplication>(Util.getUIPortalApplication(), PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else
@@ -377,14 +373,26 @@ public class UIPageBrowser extends UIContainer
       {
          UIPageBrowser uiPageBrowser = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
-         String pageID = context.getRequestParameter(OBJECTID);
-         DataStorage service = uiPageBrowser.getApplicationComponent(DataStorage.class);
+         PortalRequestContext pcontext = (PortalRequestContext)context.getParentAppRequestContext();
+         UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
+         String id = context.getRequestParameter(OBJECTID);
+         UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
 
          //Check existence of the page
-         Page page = service.getPage(pageID);
+         Page page = service.getPage(id);
          if (page == null)
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageID}, 1));
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            return;
+         }
+
+         //Check current user 's permissions on the page
+         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(page))
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.edit.NotEditPage", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
 
