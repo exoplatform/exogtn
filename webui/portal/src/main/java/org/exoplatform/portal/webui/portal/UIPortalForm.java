@@ -124,7 +124,7 @@ public class UIPortalForm extends UIFormTabPane
       }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("PortalTemplateConfigOption");
-      List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getMapGroovyObject(context);
+      List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getFreshObject(context);
       for (SelectItemCategory itemCategory : portalTemplates)
       {
          uiTemplateInput.getItemCategories().add(itemCategory);
@@ -347,7 +347,8 @@ public class UIPortalForm extends UIFormTabPane
       {
          UIPortalForm uiForm = event.getSource();
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
+         String template = "classic";
+//         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
          String portalName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          PortalConfig config = dataService.getPortalConfig(portalName);
