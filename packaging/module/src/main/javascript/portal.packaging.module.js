@@ -275,14 +275,6 @@ function getModule(params)
 
    module.server = {}
 
-   module.server.tomcat = {}
-   module.server.tomcat.patch =
-   new Project("org.exoplatform.portal", "exo.portal.server.tomcat.patch", "jar", module.version);
-
-   module.server.jboss = {}
-   module.server.jboss.patch =
-   new Project("org.exoplatform.portal", "exo.portal.server.jboss.patch", "jar", module.version);
-
    module.server.jbossear = {}
    module.server.jbossear.patch =
    new Project("org.exoplatform.portal", "exo.portal.server.jboss.patch-ear", "jar", module.version);
