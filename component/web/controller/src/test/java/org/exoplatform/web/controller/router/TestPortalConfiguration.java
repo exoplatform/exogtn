@@ -77,12 +77,12 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
       expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
       expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "");
+      expectedParameters.put(new QualifiedName("gtn", "path"), "/");
       expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
 
       //
-      assertEquals(expectedParameters, router.route("/private/classic", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
+      assertEquals("/private/classic/", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception

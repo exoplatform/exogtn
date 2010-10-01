@@ -36,6 +36,8 @@ import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -45,6 +47,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -372,23 +375,23 @@ public class UIPageCreationWizard extends UIPageWizard
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          
          PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String uri = pcontext.getPortalURI();
 
          try
          {
             UserNode newNode = uiWizard.saveData();
-            uri += newNode.getURI();
+            ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+               pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+            nodeURL.setResource(new NavigationResource(null, newNode));
+            UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+            toolPanel.setUIComponent(null);
+            uiWizard.updateUIPortal(event);         
+            pcontext.sendRedirect(nodeURL.toString());
          }
          catch (NavigationServiceException ex)
          {
             pcontext.getUIApplication().addMessage(
                new ApplicationMessage("UIPageCreationWizard.msg." + ex.getError().name(), null));
          }
-         
-         UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         toolPanel.setUIComponent(null);
-         uiWizard.updateUIPortal(event);         
-         pcontext.getResponse().sendRedirect(uri);
       }
    }
 

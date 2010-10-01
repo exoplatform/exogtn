@@ -31,6 +31,7 @@ import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -535,9 +536,9 @@ public class UIPortalApplication extends UIApplication
             isAjaxInLastRequest = false;
             if (nodePath.equals(lastNonAjaxUri) && !nodePath.equals(lastNodePath))
             {
-               ControllerURL<UserNode, NavigationLocator> nodeURL =
+               ControllerURL<NavigationResource, NavigationLocator> nodeURL =
                   pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-               nodeURL.setResource(getShowedUIPortal().getSelectedUserNode());
+               nodeURL.setResource(new NavigationResource(null, getShowedUIPortal().getSelectedUserNode()));
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }

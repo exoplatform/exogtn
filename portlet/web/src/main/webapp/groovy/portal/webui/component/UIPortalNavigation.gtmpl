@@ -4,9 +4,9 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.gatein.common.text.EntityEncoder;
 	import javax.portlet.MimeResponse;
-	import org.exoplatform.web.url.ControllerURL;
-	import org.exoplatform.web.application.Parameter;
 	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.portal.url.navigation.NavigationResource;	
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -59,14 +59,12 @@
 		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		
-		nodeURL.setResource(node);
+		nodeURL.setResource(new NavigationResource(node));
 		String nonAjaxURL = nodeURL.setAjax(false).toString();
 	    String ajaxURL = nodeURL.setAjax(true).toString();
 		
-		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		if(node.getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
-				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
 							<a  class="ItemIcon $icon" onclick="$ajaxURL">$label</a>
@@ -122,19 +120,16 @@
 							%>
 							<span class="$arrowIcon">																
 							<%
-					 			String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 					 			String label = node.getResolvedLabel();
 					 			if(label.length() > 30) label = label.substring(0,29) + "...";
 								EntityEncoder entityEncoder = EntityEncoder.FULL;
 								label=entityEncoder.encode(label);
 					 			if(node.getPageRef() != null) {
-					 			    nodeURL.setResource(node);
+					 			    nodeURL.setResource(new NavigationResource(node));
                                     String nonAjaxURL = nodeURL.setAjax(false).toString();
                                     String ajaxURL = nodeURL.setAjax(true).toString();
                                     
 					 				if(uicomponent.isUseAjax()) {
-					 				    nodeURL.setParameters(new Parameter(PortalRequestContext.TARGET_NODE, node.getURI()));
-					 					String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;";
 					 		%>
 							 			<a class="TabIcon ${iconType}" onclick="$ajaxURL">$label</a>
 							<%

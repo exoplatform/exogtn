@@ -22,6 +22,7 @@ package org.exoplatform.toolbar.webui.component;
 import java.util.List;
 
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
@@ -71,11 +72,6 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
       return portalName;
    }
 
-   public String getCurrentPortal()
-   {
-      return Util.getPortalRequestContext().getPortalOwner();
-   }
-
    public String getPortalURI(String portalName)
    {
       String currentPortalURI = Util.getPortalRequestContext().getPortalURI();
@@ -95,6 +91,12 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
          return node;
       }
       return null;
+   }
+
+   private String getCurrentPortal()
+   {
+      // TODO return the current portal name
+      return "classic";
    }
 
    @Override

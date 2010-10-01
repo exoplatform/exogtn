@@ -19,13 +19,11 @@
 
 package org.exoplatform.portal.url.navigation;
 
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,29 +32,28 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocator implements ResourceLocator<UserNode>
+public class NavigationLocator implements ResourceLocator<NavigationResource>
 {
    public static final QualifiedName PATH = new QualifiedName("gtn", "path");
+   
+   /** . */
+   public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
 
    /** . */
-   public static final ResourceType<UserNode, NavigationLocator> TYPE = new ResourceType<UserNode, NavigationLocator>(){};
+   public static final ResourceType<NavigationResource, NavigationLocator> TYPE = new ResourceType<NavigationResource, NavigationLocator>(){};
 
    /** . */
-   private static final Set<QualifiedName> PARAMETER_NAMES = Collections.singleton(PATH);
-
-   /** . */
-   private UserNode resource;
-
-   public UserNode getResource()
+   private static final Set<QualifiedName> PARAMETER_NAMES = new HashSet<QualifiedName>();
+   
+   static 
    {
-      return resource;
+      PARAMETER_NAMES.add(PATH);
+      PARAMETER_NAMES.add(REQUEST_SITE_NAME);
    }
 
-   public void setResource(UserNode resource)
-   {
-      this.resource = resource;
-   }
-
+   /** . */
+   private NavigationResource resource;
+   
    public Set<QualifiedName> getParameterNames()
    {
       return PARAMETER_NAMES;
@@ -66,8 +63,31 @@ public class NavigationLocator implements ResourceLocator<UserNode>
    {
       if (PATH.equals(parameterName))
       {
-         return "/" + resource.getURI();
+         if (resource.getUserNode() == null) 
+         {
+            return "";
+         }
+         else
+         {
+            return "/" + resource.getUserNode().getUri();
+         }
+      }
+      else if (REQUEST_SITE_NAME.equals(parameterName))
+      {
+         return resource.getSiteName();
       }
       return null;
+   }
+
+   @Override
+   public NavigationResource getResource()
+   {
+      return resource;
+   }
+
+   @Override
+   public void setResource(NavigationResource resource)
+   {
+      this.resource = resource;
    }
 }

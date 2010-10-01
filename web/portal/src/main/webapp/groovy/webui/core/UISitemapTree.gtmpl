@@ -7,7 +7,8 @@
 	import org.exoplatform.portal.webui.navigation.TreeNode;
 	import org.exoplatform.web.url.ControllerURL;
 	import org.exoplatform.web.application.Parameter;
-  
+	import org.exoplatform.portal.url.navigation.NavigationResource;
+
 	def navigations = uicomponent.getNavigations();
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
@@ -40,7 +41,7 @@
 			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
 			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
 
-      String actionLink = nodeURL.setController(node).toString();
+      String actionLink = nodeURL.setResource(new NavigationResource(node)).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2010 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,28 +16,48 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.exoplatform.portal.url.navigation;
 
-import org.exoplatform.portal.url.ResourceLocatorPlugin;
-import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.portal.mop.user.UserNode;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * A class that contains combination of a portal name and a page node
+ * to determine the target URL
+ * 
+ * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class NavigationLocatorPlugin extends ResourceLocatorPlugin<NavigationResource, NavigationLocator>
+public class NavigationResource
 {
-
-   @Override
-   protected ResourceType<NavigationResource, NavigationLocator> getResourceType()
+   /** . */
+   private final String siteName;
+   
+   /** . */
+   private final UserNode pageNode;
+   
+   public NavigationResource(String portalName)
    {
-      return NavigationLocator.TYPE;
+      this(portalName, null);
+   }
+   
+   public NavigationResource(UserNode node)
+   {
+      this(null, node);
+   }
+   
+   public NavigationResource(String portalName, UserNode node)
+   {
+      siteName = portalName;
+      pageNode = node;
+   }
+   
+   public String getSiteName()
+   {
+      return siteName;
    }
 
-   @Override
-   protected NavigationLocator newLocator()
+   public UserNode getUserNode()
    {
-      return new NavigationLocator();
+      return pageNode;
    }
 }
