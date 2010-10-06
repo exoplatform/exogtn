@@ -265,7 +265,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(this, locator, false, portalOwner_, access);
+      return new PortalURL<R, L>(controllerContext, locator, false, portalOwner_, access);
    }
 
    public ControllerContext getControllerContext()

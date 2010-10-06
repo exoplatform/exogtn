@@ -49,7 +49,7 @@ public class ControllerContext
    /** . */
    private SimpleRenderContext renderContext;
 
-   ControllerContext(
+   public ControllerContext(
       WebAppController controller,
       HttpServletRequest request,
       HttpServletResponse response,

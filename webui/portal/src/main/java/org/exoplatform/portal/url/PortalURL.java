@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.url;
 
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortalRequestHandler;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.SimpleRenderContext;
@@ -38,7 +38,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
 {
 
    /** . */
-   private final PortalRequestContext requestContext;
+   private final ControllerContext controllerContext;
 
    /** . */
    private final String access;
@@ -52,7 +52,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    /** . */
    private SimpleRenderContext renderContext;
 
-   public PortalURL(PortalRequestContext requestContext, L locator, Boolean ajax, String siteName, String access)
+   public PortalURL(ControllerContext requestContext, L locator, Boolean ajax, String siteName, String access)
    {
       super(locator, ajax);
 
@@ -64,7 +64,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
 
       //
       this.siteName = siteName;
-      this.requestContext = requestContext;
+      this.controllerContext = requestContext;
       this.access = access;
    }
 
@@ -128,7 +128,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       }
 
       //
-      requestContext.getControllerContext().renderURL(parameters, renderContext);
+      controllerContext.renderURL(parameters, renderContext);
 
       //
       boolean questionMarkDone = false;
