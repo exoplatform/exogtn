@@ -67,9 +67,9 @@
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
-      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/portal/trunk</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/epp/portal/branches/5_1_Branch</connection>
+      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/epp/portal/branches/5_1_Branch</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/epp/portal/branches/5_1_Branch</url>
    </scm>
 
    <modules>
