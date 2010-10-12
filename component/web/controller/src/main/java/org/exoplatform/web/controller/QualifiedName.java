@@ -20,7 +20,8 @@
 package org.exoplatform.web.controller;
 
 /**
- * A qualified name that is a qualifier and a name.
+ * A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName
+ * that retains only the prefix (qualifier) and the local name (name) and leaves out the namespace.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -51,7 +52,7 @@ public class QualifiedName
    private final String name;
 
    /**
-    * Creates a qualified name with an empty qualifier.
+    * Creates a qualified name with an empty string qualifier.
     *
     * @param name the name
     */
@@ -128,6 +129,6 @@ public class QualifiedName
    @Override
    public String toString()
    {
-      return "QName[prefix=" + qualifier + ",name=" + name + "]";
+      return "QualifiedName[prefix=" + qualifier + ",name=" + name + "]";
    }
 }
