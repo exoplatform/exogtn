@@ -79,13 +79,11 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
       return null;
    }
 
-   @Override
    public NavigationResource getResource()
    {
       return resource;
    }
 
-   @Override
    public void setResource(NavigationResource resource)
    {
       this.resource = resource;
