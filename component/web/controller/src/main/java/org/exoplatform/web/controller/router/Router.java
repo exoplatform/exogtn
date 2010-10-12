@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
+ * The router takes care of mapping a request to a a map.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */

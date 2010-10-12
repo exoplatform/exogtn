@@ -20,16 +20,37 @@
 package org.exoplatform.web.controller.router;
 
 /**
+ * The render context provides callback when URL generation is performed by the {@link Router#render(java.util.Map)}
+ * method.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public interface RenderContext
 {
 
-   void appendPath(char s);
+   /**
+    * Append a char to the path.
+    *
+    * @param c the char to append
+    */
+   void appendPath(char c);
 
+   /**
+    * Append a string to the path.
+    *
+    * @param s the string to append.
+    */
    void appendPath(String s);
 
+   /**
+    * Append a query parameter to the parameter set. Note that the query parameters are ordered
+    * and the sequence of call to this method should be honoured when an URL is generated. Note also that
+    * the same parameter name can be used multiple times.
+    *
+    * @param parameterName the parameter name
+    * @param paramaterValue the parameter value
+    */
    void appendQueryParameter(String parameterName, String paramaterValue);
 
 }
