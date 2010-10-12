@@ -23,6 +23,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.configuration.ConfigurationManager;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
@@ -78,12 +80,22 @@ public class WebAppController
     * PortalController servlet (controller.register(new PortalRequestHandler())) also add the
     * CommandHandler object that will listen for the incoming /command path in the URL
     * 
-    * @throws Exception
+    * @throws Exception any exception
     */
-   public WebAppController(ConfigurationManager configurationManager) throws Exception
+   public WebAppController(InitParams params, ConfigurationManager configurationManager) throws Exception
    {
+
+      // Get router config
+      ValueParam routerConfig = params.getValueParam("router.config");
+      if (routerConfig == null)
+      {
+         throw new IllegalArgumentException("No router param defined");
+      }
+      String routerConfigPath = routerConfig.getValue();
+
+
       // Read configuration (a bit hardcoded for now)
-      URL routerURL = configurationManager.getResource("war:/conf/router.xml");
+      URL routerURL = configurationManager.getResource(routerConfigPath);
       XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
       RouterDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
 

@@ -14,11 +14,13 @@
     <request-param name="{gtn}objectid" matchName="objectId" required="false"/>
 
     <!-- Map the sitemap navigation on the /foo path -->
+<!--
     <route path="/foo">
       <param name="{gtn}access" value="public"/>
       <param name="{gtn}sitename" value="classic"/>
       <param name="{gtn}path" value="/sitemap"/>
     </route>
+-->
 
     <!-- The public access -->
     <route path="/public/{{gtn}sitename}{{gtn}path:.*}">
