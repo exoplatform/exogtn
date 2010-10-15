@@ -51,12 +51,28 @@
       <org.gatein.wsrp.version>2.0.0-GA</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.4-GA</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
+      <commons-pool.version>1.2</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.0.4</version.chromattic>
       <version.reflect>1.0.0</version.reflect>
       <jcip.version>1.0</jcip.version>
+
+      <!-- EXOGTN-106 : forced at packaging level -->
+      <antlr.version>2.7.6rc1</antlr.version>
+      <asm.version>1.5.3</asm.version>
+      <cglib.version>2.2</cglib.version>
+      <com.sun.xml.bind.version>2.1.7</com.sun.xml.bind.version>
+      <commons-digester.version>1.8.1</commons-digester.version>
+      <commons-dbcp.version>1.2.1</commons-dbcp.version>
+      <commons-httpclient.version>3.1</commons-httpclient.version>
+      <exo.tool.webunit.version>1.0.0</exo.tool.webunit.version>
+      <html-parser.version>1.6</html-parser.version>
+      <javassist.version>3.4.GA</javassist.version>
+      <jcr.version>1.0</jcr.version>
+      <org.jaxb2.version>0.1</org.jaxb2.version>
+      <stax.version>1.0</stax.version>
 
       <!-- ************** -->
       <!-- Build settings -->
