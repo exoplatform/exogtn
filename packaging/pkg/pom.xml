@@ -31,6 +31,11 @@
    <packaging>pom</packaging>
    <name>GateIn Portal Packaging Assemblies</name>
    
+   <properties>
+     <gatein.working.dir>${basedir}/target</gatein.working.dir><!-- Default value for server installation dir -->
+   </properties>
+   
+   
    <dependencies>
 
       <dependency>
@@ -81,6 +86,35 @@
          <artifactId>exo.portal.server.jboss.patch-ear</artifactId>
          <version>3.1.6-REBASED-SNAPSHOT</version>
        </dependency> 
+       
+       <!-- Missing packaging dependencies -->
+<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-exo</artifactId><version>${org.gatein.wci.version}</version></dependency>
+<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat</artifactId><version>${org.gatein.wci.version}</version></dependency>
+<dependency><groupId>commons-pool</groupId><artifactId>commons-pool</artifactId><version>${commons-pool.version}</version></dependency>
+<dependency><groupId>org.exoplatform.jcr</groupId><artifactId>exo.jcr.component.webdav</artifactId><version>${org.exoplatform.jcr.version}</version></dependency>
+<dependency><groupId>org.exoplatform.jcr</groupId><artifactId>exo.jcr.framework.web</artifactId> <version>${org.exoplatform.jcr.version}</version></dependency>
+<dependency><groupId>org.gatein.wsrp</groupId><artifactId>wsrp-producer</artifactId><version>${org.gatein.wsrp.version}</version><type>war</type></dependency><!-- 1.1.1-GA-->
+<dependency><groupId>org.exoplatform.jcr</groupId><artifactId>exo.jcr.component.ftp</artifactId><version>${org.exoplatform.jcr.version}</version><type>jar</type></dependency><!-- 1.12.6-GA-SNAPSHOT-->
+
+<dependency><groupId>commons-digester</groupId><artifactId>commons-digester</artifactId><version>${commons-digester.version}</version><type>jar</type></dependency><!-- 1.8.1-->
+<dependency><groupId>commons-dbcp</groupId><artifactId>commons-dbcp</artifactId><version>${commons-dbcp.version}</version><type>jar</type></dependency><!-- 1.2.1-->
+<dependency><groupId>asm</groupId><artifactId>asm</artifactId><version>${asm.version}</version><type>jar</type></dependency><!-- 1.5.3-->
+<dependency><groupId>jcr</groupId><artifactId>jcr</artifactId><version>${jcr.version}</version><type>jar</type></dependency><!-- 1.0-->
+<dependency><groupId>org.exoplatform.kernel</groupId><artifactId>exo.kernel.component.remote</artifactId><version>${org.exoplatform.kernel.version}</version><type>jar</type></dependency><!-- 2.2.6-GA-SNAPSHOT-->
+<dependency><groupId>stax</groupId><artifactId>stax-api</artifactId><version>${stax.version}</version><type>jar</type></dependency><!-- 1.0-->
+<dependency><groupId>html-parser</groupId><artifactId>html-parser</artifactId><version>${html-parser.version}</version><type>jar</type></dependency><!-- 1.6-->
+<dependency><groupId>com.sun.xml.bind</groupId><artifactId>jaxb-impl</artifactId><version>${com.sun.xml.bind.version}</version><type>jar</type></dependency><!-- 2.1.7-->
+<dependency><groupId>org.jvnet.jaxb2.maven2</groupId><artifactId>maven-jaxb2-plugin</artifactId><version>${org.jaxb2.version}</version><type>jar</type></dependency><!-- 0.1-->
+<dependency><groupId>org.gatein.wsrp</groupId><artifactId>wsrp-admin-gui</artifactId><version>${org.gatein.wsrp.version}</version><type>war</type></dependency><!-- 1.1.1-GA-->
+<dependency><groupId>commons-httpclient</groupId><artifactId>commons-httpclient</artifactId><version>${commons-httpclient.version}</version><type>jar</type></dependency><!-- 3.1-->
+<dependency><groupId>org.gatein.pc</groupId><artifactId>pc-controller</artifactId><version>${org.gatein.pc.version}</version><type>jar</type></dependency><!-- 2.1.1-GA-->
+
+<!-- Tomcat PKG -->
+<dependency><groupId>javassist</groupId><artifactId>javassist</artifactId><version>${javassist.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
+<dependency><groupId>antlr</groupId><artifactId>antlr</artifactId><version>${antlr.version}</version><type>jar</type></dependency><!-- 2.7.6rc1-->
+<dependency><groupId>cglib</groupId><artifactId>cglib</artifactId><version>${cglib.version}</version><type>jar</type></dependency><!-- 2.2-->
+<dependency><groupId>org.exoplatform.tool</groupId><artifactId>exo.tool.webunit</artifactId><version>${exo.tool.webunit.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
+
    </dependencies>
 
    <build>
@@ -183,7 +217,7 @@
                       <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                       <!--argument>-Dexo.src.dir=NONE</argument-->
                       <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                      <argument>-Dexo.m2.repos=file:${settings.localRepository},http://repository.exoplatform.org/public,https://repository.jboss.org</argument>
+                      <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                       <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                       <argument>-Dexo.m2.home=${maven.home}</argument>
                       <argument>-Xms128m</argument>
@@ -226,10 +260,6 @@
 
      </plugins>
    </build>
-
-   <properties>
-   		<gatein.working.dir>${basedir}/target</gatein.working.dir><!-- Default value for server installation dir -->
-   </properties>
 
    <profiles>
       <profile>
@@ -288,7 +318,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>
@@ -487,7 +517,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>
