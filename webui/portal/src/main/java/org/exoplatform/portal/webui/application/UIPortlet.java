@@ -50,6 +50,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.NoSuchPortletException;
 import org.gatein.pc.api.PortletContext;
@@ -78,6 +79,11 @@ import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,15 +94,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Map.Entry;
-
-import javax.portlet.PortletMode;
-import javax.portlet.WindowState;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
 
 /** May 19, 2006 */
 @ComponentConfig(lifecycle = UIPortletLifecycle.class, template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl", events = {
@@ -114,6 +114,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    protected static final Log log = ExoLogger.getLogger("portal:UIPortlet");
 
    static final public String DEFAULT_THEME = "Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme";
+   private static final String WSRP_URL = "wsrp-url";
+   private static final String WSRP_PREFER_OPERATION = "wsrp-preferOperation";
+   private static final String WSRP_REQUIRES_REWRITE = "wsrp-requiresRewrite";
+   private static final String WSRP_NAVIGATIONAL_VALUES = "wsrp-navigationalValues";
 
    /** . */
    private String storageId;
@@ -161,9 +165,9 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
    private StateString navigationalState;
 
-   /** A field storing localized value of javax.portlet.title **/
+   /** A field storing localized value of javax.portlet.title * */
    private String configuredTitle;
-   
+
    public UIPortlet()
    {
       // That value will be overriden when it is mapped onto a data storage
@@ -395,19 +399,17 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
       else
       {
-         String value = null;
-         if (displayName != null)
-         {
-            RequestContext i = PortalRequestContext.getCurrentInstance();
-            Locale locale = i.getLocale();
-            value = displayName.getString(locale, true);
-         }
-         if (value == null || value.length() == 0)
+         RequestContext i = PortalRequestContext.getCurrentInstance();
+         Locale locale = i.getLocale();
+         String value = displayName.getString(locale, true);
+
+         if (ParameterValidation.isNullOrEmpty(value))
          {
             org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
             PortletInfo info = portlet.getInfo();
             value = info.getName();
          }
+
          return value;
       }
    }
@@ -435,11 +437,9 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
 
       Set<ModeInfo> modes = portlet.getInfo().getCapabilities().getModes(MediaType.create("text/html"));
-      Iterator<ModeInfo> modeIter = modes.iterator();
-      while (modeIter.hasNext())
+      for (ModeInfo mode : modes)
       {
-         ModeInfo info = modeIter.next();
-         supportModes.add(info.getModeName());
+         supportModes.add(mode.getModeName());
       }
 
       if (supportModes.size() > 0)
@@ -485,16 +485,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          supportedProcessingEvents_ = new ArrayList<QName>(consumedEvents.keySet());
       }
 
-      for (Iterator<QName> iter = supportedProcessingEvents_.iterator(); iter.hasNext();)
+      for (QName eventName : supportedProcessingEvents_)
       {
-         QName eventName = iter.next();
          if (eventName.equals(name))
          {
-            log.info("The Portlet " + producerOfferedPortletContext + " supports comsuming the event : " + name);
+            if (log.isDebugEnabled())
+            {
+               log.debug("The Portlet " + producerOfferedPortletContext + " supports comsuming the event : " + name);
+            }
             return true;
          }
       }
-      log.info("The portlet " + producerOfferedPortletContext + " doesn't support consuming the event : " + name);
+      if (log.isDebugEnabled())
+      {
+         log.debug("The portlet " + producerOfferedPortletContext + " doesn't support consuming the event : " + name);
+      }
       return false;
    }
 
@@ -521,16 +526,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          supportedPublishingEvents_ = new ArrayList<QName>(producedEvents.keySet());
       }
 
-      for (Iterator<QName> iter = supportedPublishingEvents_.iterator(); iter.hasNext();)
+      for (QName eventName : supportedPublishingEvents_)
       {
-         QName eventName = iter.next();
          if (eventName.equals(name))
          {
-            log.info("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+            if (log.isDebugEnabled())
+            {
+               log.debug("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+            }
             return true;
          }
       }
-      log.info("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+      if (log.isDebugEnabled())
+      {
+         log.debug("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+      }
       return false;
    }
 
@@ -654,7 +664,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       Map<String, String[]> publicParams = uiPortal.getPublicParameters();
       Set<String> allPublicParamsNames = publicParams.keySet();
       List<String> supportedPublicParamNames = getPublicRenderParamNames();
-      
+
       for (String oneOfAllParams : allPublicParamsNames)
       {
          if (supportedPublicParamNames.contains(oneOfAllParams))
@@ -662,14 +672,14 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             publicParamsMap.put(oneOfAllParams, publicParams.get(oneOfAllParams));
          }
       }
-      
+
       // Handle exposed portal contextual properties
       ContextualPropertyManager propertyManager = this.getApplicationComponent(ContextualPropertyManager.class);
       Map<QName, String[]> exposedPortalState = propertyManager.getProperties(this);
-      for(QName prpQName : exposedPortalState.keySet())
+      for (QName prpQName : exposedPortalState.keySet())
       {
          String prpId = supportsPublicParam(prpQName);
-         if(prpId != null)
+         if (prpId != null)
          {
             publicParamsMap.put(prpId, exposedPortalState.get(prpQName));
          }
@@ -704,7 +714,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       if (type.equals(ActionInvocation.class))
       {
          ActionInvocation actionInvocation = new ActionInvocation(pic);
-         actionInvocation.setForm(allParams);
          actionInvocation.setRequestContext(new AbstractRequestContext(servletRequest));
 
          String interactionState =
@@ -712,7 +721,11 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          if (interactionState != null)
          {
             actionInvocation.setInteractionState(StateString.create(interactionState));
+            // remove the interaction state from remaining params
+            allParams.remove(ExoPortletInvocationContext.INTERACTION_STATE_PARAM_NAME);
          }
+
+         actionInvocation.setForm(allParams);
 
          invocation = type.cast(actionInvocation);
       }
@@ -722,22 +735,48 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          resourceInvocation.setRequestContext(new AbstractRequestContext(servletRequest));
 
          String resourceId = servletRequest.getParameter(Constants.RESOURCE_ID_PARAMETER);
-         if (resourceId != null)
+         if (!ParameterValidation.isNullOrEmpty(resourceId))
          {
             resourceInvocation.setResourceId(resourceId);
          }
 
          String cachability = servletRequest.getParameter(Constants.CACHELEVEL_PARAMETER);
-         if (cachability != null)
+         if (!ParameterValidation.isNullOrEmpty(cachability))
          {
-            resourceInvocation.setCacheLevel(CacheLevel.valueOf(cachability));
+            // we need to convert the given value to upper case as it might come from WSRP in lower case
+            resourceInvocation.setCacheLevel(CacheLevel.create(cachability.toUpperCase(Locale.ENGLISH)));
          }
 
          String resourceState = servletRequest.getParameter(ExoPortletInvocationContext.RESOURCE_STATE_PARAM_NAME);
-         if (resourceState != null)
+         if (!ParameterValidation.isNullOrEmpty(resourceState))
          {
             resourceInvocation.setResourceState(StateString.create(resourceState));
          }
+         // remove the resource state from remaining params
+         allParams.remove(ExoPortletInvocationContext.RESOURCE_STATE_PARAM_NAME);
+
+         // deal with WSRP-specific parameters: add them to the invocation attributes if they exist and remove them from form params
+         String url = servletRequest.getParameter(WSRP_URL);
+         if (!ParameterValidation.isNullOrEmpty(url))
+         {
+            resourceInvocation.setAttribute(WSRP_URL, url);
+         }
+         allParams.remove(WSRP_URL);
+
+         String preferOperation = servletRequest.getParameter(WSRP_PREFER_OPERATION);
+         if (!ParameterValidation.isNullOrEmpty(preferOperation))
+         {
+            resourceInvocation.setAttribute(WSRP_PREFER_OPERATION, preferOperation);
+         }
+         allParams.remove(WSRP_PREFER_OPERATION);
+
+         String requiresRewrite = servletRequest.getParameter(WSRP_REQUIRES_REWRITE);
+         if (!ParameterValidation.isNullOrEmpty(requiresRewrite))
+         {
+            resourceInvocation.setAttribute(WSRP_REQUIRES_REWRITE, requiresRewrite);
+         }
+         allParams.remove(WSRP_REQUIRES_REWRITE);
+         // End WSRP-specific parameters handling
 
          resourceInvocation.setForm(allParams);
 
@@ -759,8 +798,18 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       // Navigational state
       invocation.setNavigationalState(navigationalState);
 
-      // Public navigational state      
+      // Public navigational state
       invocation.setPublicNavigationalState(this.getPublicParameters());
+
+      // WSRP-specific public navigational state handling needed when we have a URL coming from template
+      String navigationalValues = servletRequest.getParameter(WSRP_NAVIGATIONAL_VALUES);
+      if(!ParameterValidation.isNullOrEmpty(navigationalValues))
+      {
+         // add to the invocation attributes so that it can be retrieved and used by the WSRP component
+         invocation.setAttribute(WSRP_NAVIGATIONAL_VALUES, navigationalValues);
+      }
+      allParams.remove(WSRP_NAVIGATIONAL_VALUES);
+      // End WSRP-specific public navigational state handling
 
       // Mode
       invocation.setMode(Mode.create(getCurrentPortletMode().toString()));
@@ -770,7 +819,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
       if (preferencesPortletContext == null)
-      {        
+      {
          return null;
       }
 
@@ -859,22 +908,24 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             ModelAdapter<S, C> adapter = ModelAdapter.getAdapter(state.getApplicationType());
             PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(applicationId);
             org.gatein.pc.api.Portlet producedOfferedPortlet;
-            
+
             try
             {
-            	producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
+               producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
             }
             catch (NoSuchPortletException nspe)
             {
-            	producedOfferedPortlet = null;
-            	nspe.printStackTrace();
+               producedOfferedPortlet = null;
+               nspe.printStackTrace();
             }
-            
+
             this.adapter = adapter;
             this.producerOfferedPortletContext = producerOfferedPortletContext;
             this.producedOfferedPortlet = producedOfferedPortlet;
             this.applicationId = applicationId;
-         } catch(NoSuchDataException de){
+         }
+         catch (NoSuchDataException de)
+         {
             log.error(de.getMessage());
             throw de;
          }
@@ -966,37 +1017,38 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    {
       this.navigationalState = navigationalState;
    }
-      
+
    protected void setConfiguredTitle(String _configuredTitle)
    {
-  	 this.configuredTitle = _configuredTitle;
+      this.configuredTitle = _configuredTitle;
    }
-   
+
    /**
     * Returns the title showed on the InfoBar. The title is computed in following manner.
-    * 
-    * 1. First, the method getTitle(), inherited from UIPortalComponent is called. The getTitle() returns
-    * what users set in the PortletSetting tab, the current method returns call result if it is not null.
-    * 
+    * <p/>
+    * 1. First, the method getTitle(), inherited from UIPortalComponent is called. The getTitle() returns what users set
+    * in the PortletSetting tab, the current method returns call result if it is not null.
+    * <p/>
     * 2. configuredTitle, which is the localized value of javax.portlet.title is returned if it is not null.
-    * 
-    * 3. If the method does not terminate at neither (1) nor (2), the configured display name is returned. 
+    * <p/>
+    * 3. If the method does not terminate at neither (1) nor (2), the configured display name is returned.
+    *
     * @return
     */
    public String getDisplayTitle()
    {
-  	 String displayedTitle = getTitle();
-  	 if(displayedTitle != null && displayedTitle.trim().length() > 0)
-  	 {
-  		 return displayedTitle;
-  	 }
-  	 
-  	 if(configuredTitle != null)
-  	 {
-  		 return configuredTitle;
-  	 }
-  	 
-  	 return getDisplayName();
-  	 
+      String displayedTitle = getTitle();
+      if (displayedTitle != null && displayedTitle.trim().length() > 0)
+      {
+         return displayedTitle;
+      }
+
+      if (configuredTitle != null)
+      {
+         return configuredTitle;
+      }
+
+      return getDisplayName();
+
    }
 }
