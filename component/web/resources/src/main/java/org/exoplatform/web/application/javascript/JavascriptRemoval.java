@@ -34,10 +34,13 @@ import javax.servlet.ServletContext;
 public class JavascriptRemoval implements WebAppListener, Startable
 {
 
+   private String portalContainerName;
+
    private JavascriptConfigService javascriptService;
 
-   public JavascriptRemoval(JavascriptConfigService _javascriptService)
+   public JavascriptRemoval(String _portalContainerName, JavascriptConfigService _javascriptService)
    {
+      this.portalContainerName = _portalContainerName;
       this.javascriptService = _javascriptService;
    }
 

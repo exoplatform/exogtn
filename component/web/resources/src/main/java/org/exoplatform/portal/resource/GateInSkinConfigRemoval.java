@@ -36,8 +36,11 @@ public class GateInSkinConfigRemoval extends AbstractResourceHandler
 
    private SkinService service;
 
-   public GateInSkinConfigRemoval(SkinService _service)
+   private String portalContainerName;
+
+   public GateInSkinConfigRemoval(String _portalContainerName, SkinService _service)
    {
+      this.portalContainerName = _portalContainerName;
       this.service = _service;
    }
 
