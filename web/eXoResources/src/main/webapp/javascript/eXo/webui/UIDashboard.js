@@ -233,7 +233,7 @@ function UIDashboard() {
 							{name: "objectId", value: dragObj.id}
 						];
 						var url = uiDashboardUtil.createRequest(compId, 'MoveGadget', params);
-						ajaxAsyncGetRequest(url);
+						ajaxGet(url);
 					}
 				}
 			}
