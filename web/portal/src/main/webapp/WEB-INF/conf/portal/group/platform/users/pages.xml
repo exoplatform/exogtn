@@ -51,8 +51,8 @@
   </page>
   
   <page>
-    <name>mylink-google</name>
-    <title>Google</title>
+    <name>mylink-redhat</name>
+    <title>Red Hat</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
@@ -62,12 +62,12 @@
         <preferences>
           <preference>
               <name>url</name>
-              <value>http://www.google.com</value>
+              <value>http://www.redhat.com</value>
               <read-only>false</read-only>
             </preference>
         </preferences>
       </portlet>
-      <title>Google</title>
+      <title>Red Hat</title>
       <access-permissions>*:/platform/users</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>true</show-application-state>
