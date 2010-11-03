@@ -1,6 +1,13 @@
 <%
-	//TODO: nguyenanhkien2a@gmail.com
-	String initialURI = _ctx.getRequestContext().getParentAppRequestContext().getRequestContextPath() + "/private/" + _ctx.getRequestContext().getParentAppRequestContext().getPortalOwner();
+  import org.exoplatform.portal.webui.util.Util;
+  import org.exoplatform.portal.application.PortalRequestContext;
+  import org.exoplatform.web.url.ControllerURL;
+  import org.exoplatform.portal.url.navigation.NavigationResource;
+  
+	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+  ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+  nodeURL.setResource(new NavigationResource("private", "portal", pcontext.getPortalOwner(), null));
+	String initialURI = nodeURL.toString();
 %>
 
 <div class="UIHomePagePortlet" id="$uicomponent.id">

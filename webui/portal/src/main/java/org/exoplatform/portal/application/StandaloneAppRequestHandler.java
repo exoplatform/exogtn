@@ -25,7 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
+
+import java.util.Locale;
 
 
 public class StandaloneAppRequestHandler extends PortalRequestHandler
@@ -58,13 +61,33 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       controller.addApplication(standaloneApplication);
    }
    
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   @Override
+   public void execute(ControllerContext controllerContext) throws Exception
    {
+      HttpServletRequest req = controllerContext.getRequest();
+      HttpServletResponse res = controllerContext.getResponse();
+
+
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");
 
-      StandaloneApplication app = controller.getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, req, res);
+      //
+      String requestPath = controllerContext.getParameter(REQUEST_PATH);
+      String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
+      String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
+      String access = controllerContext.getParameter(ACCESS);
+
+      //
+      if (requestSiteName == null) {
+         res.sendRedirect(req.getContextPath());
+         return;
+      }
+      StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access);
+      processRequest(context, app);
+      
+      log.debug("Session ID = " + req.getSession().getId());
+      res.setHeader("Cache-Control", "no-cache");
 
       processRequest(context, app);
    }     

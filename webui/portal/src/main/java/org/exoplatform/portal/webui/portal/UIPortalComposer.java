@@ -23,6 +23,7 @@ import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.StaleModelException;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -183,11 +184,11 @@ public class UIPortalComposer extends UIContainer
       UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
       String remoteUser = prContext.getRemoteUser();
-      String ownerUser = prContext.getPortalOwner();
+      String portalName = prContext.getPortalOwner();
 
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
-      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
       DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+      UserACL acl = getApplicationComponent(UserACL.class);
 
       if (!isPortalExist(editPortal))
       {
@@ -207,10 +208,10 @@ public class UIPortalComposer extends UIContainer
          rebuildUIPortal(uiPortalApp, editPortal, dataStorage);
       }
       uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
-      UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
-      if (userPortalConfig != null)
+      PortalConfig pConfig = dataStorage.getPortalConfig(portalName);
+      if (pConfig != null)
       {
-         editPortal.setModifiable(userPortalConfig.getPortalConfig().isModifiable());
+         editPortal.setModifiable(acl.hasEditPermission(pConfig));
       }
       else
       {
@@ -251,7 +252,7 @@ public class UIPortalComposer extends UIContainer
       UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
       userPortalConfig.setPortal(portalConfig);
       uiPortal.getChildren().clear();
-      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
+      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig.getPortalConfig());
       
       uiPortalApp.putCachedUIPortal(uiPortal);
       
@@ -474,11 +475,11 @@ public class UIPortalComposer extends UIContainer
                uiPortalApp.getUserPortalConfig().setPortal(pConfig);
             }
             uiPortal.getChildren().clear();
-            PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig());
+            PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig().getPortalConfig());
 
             //Update the cache of UIPortal from UIPortalApplication
             uiPortalApp.putCachedUIPortal(uiPortal);
-            uiPortalApp.setShowedUIPortal(uiPortal);
+            uiPortalApp.setCurrentSite(uiPortal);
             
             //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
             //temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires
@@ -658,7 +659,7 @@ public class UIPortalComposer extends UIContainer
          PortalRequestContext prContext = Util.getPortalRequestContext();
          prContext.setFullRender(true);
 
-         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
+         UIPortal uiPortal = uiPortalApp.getCurrentSite();
          uiPortal.setRenderSibling(UIPortal.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
@@ -686,7 +687,7 @@ public class UIPortalComposer extends UIContainer
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
+         UIPortal uiPortal = uiPortalApp.getCurrentSite();
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);

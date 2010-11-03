@@ -21,11 +21,15 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.PortalRequestHandler;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -47,6 +51,7 @@ import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -54,7 +59,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -372,11 +376,14 @@ public class UIPortal extends UIContainer
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);
          prContext.getResponse().addCookie(cookie);
-         // String portalName = URLEncoder.encode(Util.getUIPortal().getName(),
-         // "UTF-8") ;
-         String portalName = URLEncoder.encode(prContext.getPortalOwner(), "UTF-8");
-         String redirect = req.getContextPath() + "/public/" + portalName + "/";
-         prContext.getResponse().sendRedirect(redirect);
+
+         //TODO: this could be a good portal name
+         String portalName = "classic";
+         
+         ControllerURL<NavigationResource, NavigationLocator> createURL =
+            prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+         createURL.setResource(new NavigationResource(PortalRequestHandler.PUBLIC_ACCESS, PortalConfig.PORTAL_TYPE, portalName, null));
+         prContext.getResponse().sendRedirect(createURL.toString());
          prContext.setResponseComplete(true);
       }
       

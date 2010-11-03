@@ -3,11 +3,11 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_router_1_0 http://www.gatein.org/xml/ns/gatein_router_1_0"
     xmlns="http://www.gatein.org/xml/ns/gatein_router_1_0">
 
-  <route path="/public/{{gtn}sitename}{{gtn}path:.*}">
+  <route path="/public/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}">
     <param name="{gtn}handler" value="portal"/>
   </route>
 
-  <route path="/private/{{gtn}sitename}{{gtn}path:.*}">
+  <route path="/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}">
     <param name="{gtn}handler" value="portal"/>
   </route>
 

@@ -78,7 +78,7 @@ public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPl
    {
       try
       {
-         UIPortal currentSite = Util.getUIPortalApplication().getShowedUIPortal();
+         UIPortal currentSite = Util.getUIPortalApplication().getCurrentSite();
          UserNode currentNode = currentSite.getSelectedUserNode();
          
          // Navigation related properties

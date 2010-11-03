@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.url;
 
+import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
@@ -44,6 +45,9 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    private final String access;
 
    /** . */
+   private final String siteType;
+   
+   /** . */
    private final String siteName;
 
    /** . */
@@ -52,7 +56,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    /** . */
    private SimpleRenderContext renderContext;
 
-   public PortalURL(ControllerContext requestContext, L locator, Boolean ajax, String siteName, String access)
+   public PortalURL(ControllerContext requestContext, L locator, Boolean ajax, String siteType, String siteName, String access)
    {
       super(locator, ajax);
 
@@ -63,6 +67,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       }
 
       //
+      this.siteType = siteType;
       this.siteName = siteName;
       this.controllerContext = requestContext;
       this.access = access;
@@ -115,6 +120,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
       parameters.put(PortalRequestHandler.ACCESS, access);
+      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteType);      
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
 
       //
@@ -137,7 +143,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       {
          for (Map.Entry<String, String> entry : queryParams.entrySet())
          {
-            buffer.append(questionMarkDone ? "&amp;" : "?");
+            buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
             buffer.append(entry.getKey());
             buffer.append('=');
             buffer.append(entry.getValue());
@@ -150,7 +156,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       {
          for (String value : entry.getValue())
          {
-            buffer.append(questionMarkDone ? "&amp;" : "?");
+            buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
             buffer.append(entry.getKey());
             buffer.append("=");
             buffer.append(value);
@@ -161,7 +167,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       //
       if (ajax)
       {
-         buffer.append(questionMarkDone ? "&amp;" : "?");
+         buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
          buffer.append("ajaxRequest=true");
          buffer.append("')");
       }

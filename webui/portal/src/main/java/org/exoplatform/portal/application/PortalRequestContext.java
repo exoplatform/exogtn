@@ -98,9 +98,6 @@ public class PortalRequestContext extends WebuiRequestContext
 
    final static public String REQUEST_METADATA = "portal:requestMetadata".intern();
 
-   /** The site name decoded from the request. */
-   private final String portalOwner_;
-
    /** The path decoded from the request. */
    private final String nodePath_;
 
@@ -115,6 +112,12 @@ public class PortalRequestContext extends WebuiRequestContext
 
    /** . */
    private final int accessPath;
+
+   /** . */
+   private final String siteType;
+   
+   /** The site name decoded from the request. */
+   private final String siteName;
 
    /** . */
    private final HttpServletRequest request_;
@@ -162,6 +165,7 @@ public class PortalRequestContext extends WebuiRequestContext
    public PortalRequestContext(
       WebuiApplication app,
       ControllerContext controllerContext,
+      String requestSiteType,
       String requestSiteName,
       String requestPath,
       String access) throws Exception
@@ -232,7 +236,8 @@ public class PortalRequestContext extends WebuiRequestContext
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
 */
       //
-      this.portalOwner_ = requestSiteName;
+      this.siteType = requestSiteType;
+      this.siteName = requestSiteName.replaceAll("_", "/");
       this.nodePath_ = requestPath;
       this.access = access;
 
@@ -240,6 +245,7 @@ public class PortalRequestContext extends WebuiRequestContext
       Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
       tmp.put(WebAppController.HANDLER_PARAM, "portal");
       tmp.put(PortalRequestHandler.ACCESS, access);
+      tmp.put(PortalRequestHandler.REQUEST_SITE_TYPE, requestSiteType);
       tmp.put(PortalRequestHandler.REQUEST_SITE_NAME, requestSiteName);
       tmp.put(PortalRequestHandler.REQUEST_PATH, "/");
       portalURI = controllerContext.renderURL(tmp);
@@ -265,7 +271,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(controllerContext, locator, false, portalOwner_, access);
+      return new PortalURL<R, L>(controllerContext, locator, false, siteType, siteName.replaceAll("/", "_"), access);
    }
 
    public ControllerContext getControllerContext()
@@ -398,11 +404,26 @@ public class PortalRequestContext extends WebuiRequestContext
       return PortalRequestContext.UI_COMPONENT_ID;
    }
 
-   public String getPortalOwner()
+   public String getSiteType()
    {
-      return portalOwner_;
+      return siteType;
+   }
+   
+   public String getSiteName()
+   {
+      return siteName;
    }
 
+   /**
+    * @deprecated use {@link #getSiteName()} instead
+    * 
+    * @return the current site name
+    */
+   public String getPortalOwner()
+   {
+      return getSiteName();
+   }
+   
    public String getNodePath()
    {
       return nodePath_;
@@ -494,6 +515,12 @@ public class PortalRequestContext extends WebuiRequestContext
       this.forceFullUpdate = forceFullUpdate;
    }
 
+   final public void sendError(int sc) throws IOException
+   {
+      setResponseComplete(true);
+      response_.sendError(sc);
+   }
+   
    final public void sendRedirect(String url) throws IOException
    {
       setResponseComplete(true);

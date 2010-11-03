@@ -35,9 +35,15 @@ import java.util.Set;
 public class NavigationLocator implements ResourceLocator<NavigationResource>
 {
    public static final QualifiedName PATH = new QualifiedName("gtn", "path");
+
+   /** . */
+   public static final QualifiedName REQUEST_SITE_TYPE = new QualifiedName("gtn", "sitetype");
    
    /** . */
    public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
+   
+   /** . */
+   public static final QualifiedName ACCESS = new QualifiedName("gtn", "access");
 
    /** . */
    public static final ResourceType<NavigationResource, NavigationLocator> TYPE = new ResourceType<NavigationResource, NavigationLocator>(){};
@@ -48,7 +54,9 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
    static 
    {
       PARAMETER_NAMES.add(PATH);
+      PARAMETER_NAMES.add(REQUEST_SITE_TYPE);
       PARAMETER_NAMES.add(REQUEST_SITE_NAME);
+      PARAMETER_NAMES.add(ACCESS);
    }
 
    /** . */
@@ -69,12 +77,20 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
          }
          else
          {
-            return "/" + resource.getUserNode().getUri();
+            return "/" + resource.getUserNode().getURI();
          }
+      }
+      else if (REQUEST_SITE_TYPE.equals(parameterName))
+      {
+         return resource.getSiteType();
       }
       else if (REQUEST_SITE_NAME.equals(parameterName))
       {
          return resource.getSiteName();
+      }
+      else if (ACCESS.equals(parameterName))
+      {
+         return resource.getAccess();
       }
       return null;
    }

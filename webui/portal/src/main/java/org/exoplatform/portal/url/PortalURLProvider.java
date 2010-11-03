@@ -52,13 +52,13 @@ public class PortalURLProvider
       return currentProvider.get();
    }
 
-   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createPortalURL(String access, String siteName, ResourceType<R, L> resourceType)
+   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createPortalURL(String access, String siteType, String siteName, ResourceType<R, L> resourceType)
    {
       PortalURLProvider portalURLProvider = currentProvider.get();
       if (portalURLProvider != null)
       {
          L newLocator = locatorProvider.newLocator(resourceType);
-         return new PortalURL<R, L>(controllerContext, newLocator, false, siteName, access);
+         return new PortalURL<R, L>(controllerContext, newLocator, false, siteType, siteName, access);
       }
       return null;
    }

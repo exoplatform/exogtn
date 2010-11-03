@@ -53,13 +53,13 @@ public class TestDescriptorBuilder extends TestCase
       //
       assertTrue(i.hasNext());
       RouteDescriptor route1 = i.next();
-      assertEquals("/public/{{gtn}sitename}{{gtn}path:.*}", route1.getPath());
+      assertEquals("/public/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}", route1.getPath());
       assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route1.getParams());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route2 = i.next();
-      assertEquals("/private/{{gtn}sitename}{{gtn}path:.*}", route2.getPath());
+      assertEquals("/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}", route2.getPath());
       assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route2.getParams());
 
       //

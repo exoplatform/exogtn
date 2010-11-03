@@ -24,13 +24,14 @@
 <%@ page import="org.exoplatform.portal.url.PortalURLProvider"%>
 <%@ page import="org.exoplatform.portal.url.navigation.NavigationResource"%>
 <%@ page import="org.exoplatform.web.url.ControllerURL"%>
+<%@ page import="org.exoplatform.portal.config.model.PortalConfig"%>
 
 <%
 	PortalContainer manager = PortalContainer.getCurrentInstance(session.getServletContext()) ;
   UserPortalConfigService userPortalConfigService = (UserPortalConfigService) manager.getComponentInstanceOfType(UserPortalConfigService.class) ;
   PortalURLProvider provider = PortalURLProvider.getCurrentPortalURLProvider();
-  ControllerURL portalURL = provider.createPortalURL("public", userPortalConfigService.getDefaultPortal(), org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+  ControllerURL portalURL = provider.createPortalURL("public", PortalConfig.PORTAL_TYPE, userPortalConfigService.getDefaultPortal(), org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
   
-	response.sendRedirect(portalURL.setResource(new NavigationResource(null, null)).toString());
+	response.sendRedirect(portalURL.setResource(new NavigationResource(null, null, null)).toString());
 %>
 

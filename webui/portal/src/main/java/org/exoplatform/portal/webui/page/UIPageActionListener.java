@@ -59,7 +59,7 @@ public class UIPageActionListener
       public void execute(Event<UIPortalApplication> event) throws Exception
       {
          UIPortalApplication uiPortalApp = event.getSource();
-         UIPortal showedUIPortal = uiPortalApp.getShowedUIPortal();
+         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
          
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
          
@@ -96,9 +96,8 @@ public class UIPageActionListener
             if (showedUIPortal != null)
             {
                showedUIPortal.setNavPath(targetNode);
-               uiPortalApp.setShowedUIPortal(showedUIPortal);
+               uiPortalApp.setCurrentSite(showedUIPortal);
                
-               //Temporary solution to fix edit inline error while switching between navigations
                DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
                PortalConfig associatedPortalConfig = storageService.getPortalConfig(targetNav.getKey().getTypeName(), targetNav.getKey().getName());
                UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
@@ -114,7 +113,7 @@ public class UIPageActionListener
                   return;
                }
                showedUIPortal.setNavPath(targetNode);
-               uiPortalApp.setShowedUIPortal(showedUIPortal);
+               uiPortalApp.setCurrentSite(showedUIPortal);
                uiPortalApp.putCachedUIPortal(showedUIPortal);
             }
          }
@@ -137,11 +136,10 @@ public class UIPageActionListener
          UIPortal uiPortal = uiPortalApp.createUIComponent(UIPortal.class, null, null);
          
          //Reset selected navigation on userPortalConfig
-         PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
+         PortalDataMapper.toUIPortal(uiPortal, userPortalConfig.getPortalConfig());
          return uiPortal;
       }
    }
-
   
    static public class DeleteGadgetActionListener extends EventListener<UIPage>
    {

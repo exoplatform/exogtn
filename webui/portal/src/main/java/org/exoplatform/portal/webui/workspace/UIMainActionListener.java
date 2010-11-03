@@ -195,7 +195,7 @@ public class UIMainActionListener
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
 
-         UIPortal uiPortal = uiApp.getShowedUIPortal();
+         UIPortal uiPortal = uiApp.getCurrentSite();
 
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
          UserPortalConfig userConfig =
@@ -223,7 +223,7 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(newPortal, userConfig);
+         PortalDataMapper.toUIPortal(newPortal, userConfig.getPortalConfig());
 //         newPortal.setSelectedNode(uiPortal.getSelectedNode());
 //         newPortal.setNavigation(uiPortal.getNavigation());
 //         newPortal.setSelectedPath(uiPortal.getSelectedPath());

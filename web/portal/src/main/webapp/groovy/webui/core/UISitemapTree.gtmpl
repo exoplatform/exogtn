@@ -27,7 +27,7 @@
 	nodeURL.setAjax(true);
 							
 	public void renderNodes(TreeNode rootTree, ControllerURL nodeURL, boolean useAjax) {
-		List childrenNodes=rootTree.getChildren();
+		List childrenNodes = rootTree.getChildren();
 		int childrenSize = childrenNodes.size() ;  
 		int size = 0;	
 		for(treeNode in childrenNodes) {	
@@ -41,7 +41,7 @@
 			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
 			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
 
-      String actionLink = nodeURL.setResource(new NavigationResource(node)).toString();
+      String actionLink = nodeURL.setResource(new NavigationResource(nav.getOwnerType(), nav.getOwnerId().replaceAll("/", "_"), node)).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {
@@ -110,7 +110,7 @@
 	}  
 %>
 
-<div id="UISiteMap" class="UISitemap" >
+<div id="$uicomponent.id" class="UISitemap" >
 	<div class="ClearFix">
 		<div class="CollapseAll FloatLeft" onclick="$actionCollapseAll">
 			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>

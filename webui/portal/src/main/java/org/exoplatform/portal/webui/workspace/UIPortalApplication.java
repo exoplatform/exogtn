@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -69,6 +70,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * This extends the UIApplication and hence is a sibling of UIPortletApplication
  * (used by any eXo Portlets as the Parent class to build the portlet component
@@ -94,7 +97,7 @@ public class UIPortalApplication extends UIApplication
 
    private int modeState = NORMAL_MODE;
 
-   private String lastNodePath;
+   private String lastRequestURI;
 
    private Orientation orientation_ = Orientation.LT;
 
@@ -106,7 +109,7 @@ public class UIPortalApplication extends UIApplication
 
    final static public String UI_MASK_WS_ID = "UIMaskWorkspace";
 
-   private String skin_ = "Default";
+   private String skin_ = SkinService.DEFAULT_SKIN;
 
    private UserPortalConfig userPortalConfig_;
 
@@ -114,11 +117,11 @@ public class UIPortalApplication extends UIApplication
    
    private Map<SiteKey, UIPortal> all_UIPortals;
    
-   private UIPortal showedUIPortal;
-   
+   private UIPortal currentSite;
+
    private boolean isAjaxInLastRequest;
-   
-   private String lastNonAjaxUri;
+
+   private String lastNonAjaxRequestUri;
    
    /**
     * The constructor of this class is used to build the tree of UI components
@@ -138,7 +141,7 @@ public class UIPortalApplication extends UIApplication
    {
       log = ExoLogger.getLogger("portal:UIPortalApplication");
       PortalRequestContext context = PortalRequestContext.getCurrentInstance();
-      
+
       userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
       if (userPortalConfig_ == null)
          throw new Exception("Can't load user portal config");
@@ -150,6 +153,25 @@ public class UIPortalApplication extends UIApplication
       // default
       // ------------------------------------------------------------------------------
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
+      OrganizationService orgService = getApplicationComponent(OrganizationService.class);
+
+      String user = context.getRemoteUser();
+      String userSkin = null;
+
+      if (user != null)
+      {
+         UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
+         if (userProfile != null)
+         {
+            userSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
+         }
+         else
+         {
+            if (log.isWarnEnabled())
+               log.warn("Could not load user profile for " + user + ". Using default portal locale.");
+         }
+      }
+
       Locale locale = context.getLocale();
       if (locale == null)
       {
@@ -176,8 +198,26 @@ public class UIPortalApplication extends UIApplication
       addWorkingWorkspace();
       
       setOwner(context.getPortalOwner());
-      
-      //Minh Hoang TO: Localizes navigations, need to put this code snippet below 'setLocale' block
+
+      // use the skin from the user profile if available, otherwise use from the portal config
+      if (userSkin != null && userSkin.trim().length() > 0)
+      {
+         skin_ = userSkin;
+      }
+      else
+      {
+         String siteSkin = userPortalConfig_.getPortalConfig().getSkin();
+         if (siteSkin != null && siteSkin.trim().length() > 0)
+         {
+            skin_ = siteSkin;
+         }
+         else
+         // in the case the skin is not specified by site config, the one in default portal will be returned instead
+         {
+            DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+         }
+
+      }
    }
 
    /**
@@ -185,28 +225,28 @@ public class UIPortalApplication extends UIApplication
     * 
     * @param uiPortal
     */
-   public void setShowedUIPortal(UIPortal uiPortal)
+   public void setCurrentSite(UIPortal uiPortal)
    {
-      this.showedUIPortal = uiPortal;
+      this.currentSite = uiPortal;
       
       UISiteBody siteBody = this.findFirstComponentOfType(UISiteBody.class);
-      if(siteBody != null)
+      if (siteBody != null)
       {
          //TODO: Check this part carefully
          siteBody.setUIComponent(uiPortal);
       }
    }
-   
+
    /**
     * Returns current UIPortal which being showed in normal mode
     * 
     * @return
     */
-   public UIPortal getShowedUIPortal()
+   public UIPortal getCurrentSite()
    {
-      return showedUIPortal;
+      return currentSite;
    }
-   
+
    /**
     * Returns a cached UIPortal matching to OwnerType and OwnerId if any
     * 
@@ -216,7 +256,7 @@ public class UIPortalApplication extends UIApplication
     */
    public UIPortal getCachedUIPortal(String ownerType, String ownerId)
    {
-      if(ownerType == null || ownerId == null)
+      if (ownerType == null || ownerId == null)
       {
          return null;
       }
@@ -231,7 +271,7 @@ public class UIPortalApplication extends UIApplication
       }
       return this.all_UIPortals.get(key);
    }
-   
+
    /**
     * Associates the specified UIPortal to a cache map with specified key which bases on OwnerType and OwnerId
     * 
@@ -241,13 +281,13 @@ public class UIPortalApplication extends UIApplication
    {
       String ownerType = uiPortal.getOwnerType();
       String ownerId = uiPortal.getOwner();
-      
-      if(ownerType != null && ownerId != null)
+
+      if (ownerType != null && ownerId != null)
       {
          this.all_UIPortals.put(new SiteKey(ownerType, ownerId), uiPortal);
       }
    }
-   
+
    /**
     * Remove the UIPortal from the cache map
     * 
@@ -256,13 +296,13 @@ public class UIPortalApplication extends UIApplication
     */
    public void removeCachedUIPortal(String ownerType, String ownerId)
    {
-      if(ownerType == null || ownerId == null)
+      if (ownerType == null || ownerId == null)
       {
          return;
       }
       this.all_UIPortals.remove(new SiteKey(ownerType, ownerId));
    }
-   
+
    public boolean isSessionOpen()
    {
       return isSessionOpen;
@@ -308,16 +348,6 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public String getLastNodePath()
-   {
-      return lastNodePath;
-   }
-
-   public void setLastNodePath(String lastNodePath)
-   {
-      this.lastNodePath = lastNodePath;
-   }
-   
    public Collection<String> getJavascriptURLs()
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
@@ -449,14 +479,14 @@ public class UIPortalApplication extends UIApplication
       String portletId = portlet.getSkinId();
       if (portletId != null)
       {
-         return getSkin(portletId, "Default");
+         return getSkin(portletId, SkinService.DEFAULT_SKIN);
       }
       else
       {
          return null;
       }
    }
- 
+
    private SkinConfig getPortletSkinConfig(UIPortlet portlet)
    {
       String portletId = portlet.getSkinId();
@@ -469,7 +499,7 @@ public class UIPortalApplication extends UIApplication
          return null;
       }
    }
-   
+
    /**
     * The central area is called the WorkingWorkspace. It is composed of: 1) A
     * UIPortal child which is filled with portal data using the PortalDataMapper
@@ -487,11 +517,11 @@ public class UIPortalApplication extends UIApplication
       DataStorage dataStorage = getApplicationComponent(DataStorage.class);
       Container container = dataStorage.getSharedLayout();
       UIPortal uiPortal = createUIComponent(UIPortal.class, null, null);
-      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_);
-      
+      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_.getPortalConfig());
+
       this.putCachedUIPortal(uiPortal);
-      this.showedUIPortal = uiPortal;
-      
+      setCurrentSite(uiPortal);
+
       uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
       if (container != null)
       {
@@ -500,13 +530,13 @@ public class UIPortalApplication extends UIApplication
          uiContainer.setStorageId(container.getStorageId());
          PortalDataMapper.toUIContainer(uiContainer, container);
          UISiteBody uiSiteBody = uiContainer.findFirstComponentOfType(UISiteBody.class);
-         uiSiteBody.setUIComponent(this.showedUIPortal);
+         uiSiteBody.setUIComponent(this.currentSite);
          uiContainer.setRendered(true);
          uiViewWS.setUIComponent(uiContainer);
       }
       else
       {
-         uiViewWS.setUIComponent(this.showedUIPortal);
+         uiViewWS.setUIComponent(this.currentSite);
       }
       addChild(UIMaskWorkspace.class, UIPortalApplication.UI_MASK_WS_ID, null);
    }
@@ -526,31 +556,32 @@ public class UIPortalApplication extends UIApplication
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
-      String nodePath = pcontext.getNodePath();
+      String requestURI = pcontext.getRequestURI();
       boolean isAjax = pcontext.useAjax();
-      
+
       if (!isAjax)
       {
          if (isAjaxInLastRequest)
          {
             isAjaxInLastRequest = false;
-            if (nodePath.equals(lastNonAjaxUri) && !nodePath.equals(lastNodePath))
+            if (requestURI.equals(lastNonAjaxRequestUri) && !requestURI.equals(lastRequestURI))
             {
                ControllerURL<NavigationResource, NavigationLocator> nodeURL =
                   pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-               nodeURL.setResource(new NavigationResource(null, getShowedUIPortal().getSelectedUserNode()));
+               nodeURL.setResource(new NavigationResource(getCurrentSite().getOwnerType(), getCurrentSite()
+                  .getOwner().replaceAll("/", "_"), getCurrentSite().getSelectedUserNode()));
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }
          }
-         lastNonAjaxUri = nodePath;
+         lastNonAjaxRequestUri = requestURI;
       }
-      
+
       isAjaxInLastRequest = isAjax;
-      
-      if (!nodePath.equals(lastNodePath))
+
+      if (!requestURI.equals(lastRequestURI))
       {
-         lastNodePath = nodePath;
+         lastRequestURI = requestURI;
 
          StringBuilder baseUriInJS = new StringBuilder("eXo.env.server.portalBaseURL=\"");
          baseUriInJS.append(pcontext.getRequestURI()).append("\";");
@@ -558,18 +589,23 @@ public class UIPortalApplication extends UIApplication
          pcontext.getJavascriptManager().addCustomizedOnLoadScript(baseUriInJS.toString());
 
          PageNodeEvent<UIPortalApplication> pnevent =
-            new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, nodePath);
+            new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, requestURI);
          broadcast(pnevent, Event.Phase.PROCESS);
       }
-      
+
       if (!isAjax)
       {
-         lastNonAjaxUri = nodePath;
+         lastNonAjaxRequestUri = requestURI;
       }
 
       super.processDecode(pcontext);
+      
+      if (currentSite == null || currentSite.getSelectedUserNode() == null)
+      {
+         pcontext.sendError(HttpServletResponse.SC_NOT_FOUND);
+      }
    }
-   
+
    /**
     * The processrender() method handles the creation of the returned HTML
     * either for a full page render or in the case of an AJAX call The first

@@ -47,10 +47,6 @@ public class Util
    static public PortalRequestContext getPortalRequestContext()
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      if(context == null)
-      {
-         return null;
-      }
       if (!(context instanceof PortalRequestContext))
       {
          context = (WebuiRequestContext)context.getParentAppRequestContext();
@@ -67,7 +63,7 @@ public class Util
    {
       //return getUIPortalApplication().<UIWorkingWorkspace> getChildById(UIPortalApplication.UI_WORKING_WS_ID)
       //   .findFirstComponentOfType(UIPortal.class);
-      return getUIPortalApplication().getShowedUIPortal();
+      return getUIPortalApplication().getCurrentSite();
    }
 
    static public UIPortalToolPanel getUIPortalToolPanel()

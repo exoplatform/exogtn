@@ -20,26 +20,29 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
-import org.exoplatform.portal.webui.application.UIStandaloneGadget;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.webui.core.UIApplication;
+
 import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class StandaloneAppRequestContext extends PortalRequestContext
 {
    private String storageId;
+
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
-   public StandaloneAppRequestContext(WebuiApplication app, HttpServletRequest req, HttpServletResponse res)
+   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext,
+      String requestSiteType, String requestSiteName, String requestPath, String access)
       throws Exception
    {
-      super(app, req, res);
+      super(app, controllerContext, requestSiteType, requestSiteName, requestPath, access);
+      HttpServletRequest req = controllerContext.getRequest();
       int idx = (req.getServletPath() + req.getContextPath()).length() + 1;
       if (idx <= getRequestURI().length())
       {
@@ -65,7 +68,7 @@ public class StandaloneAppRequestContext extends PortalRequestContext
       {
          title = container.getCurrAppName();
       }
-      
+
       if (title == null)
       {
          title = "";

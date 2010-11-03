@@ -22,9 +22,9 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -46,8 +46,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -60,8 +60,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
-import org.exoplatform.webui.organization.UIPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
+import org.exoplatform.webui.organization.UIPermissionSelector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,15 +95,14 @@ public class UIPageForm extends UIFormTabPane
    {
       super("UIPageForm");
       PortalRequestContext pcontext = Util.getPortalRequestContext();
-      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
       List<SelectItemOption<String>> ownerTypes = new ArrayList<SelectItemOption<String>>();
       ownerTypes.add(new SelectItemOption<String>(PortalConfig.USER_TYPE));
 
-      UserPortalConfig userPortalConfig =
-         configService.getUserPortalConfig(pcontext.getPortalOwner(), pcontext.getRemoteUser());
+      PortalConfig pConfig = dataStorage.getPortalConfig(pcontext.getPortalOwner());
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       UserACL acl = (UserACL)container.getComponentInstanceOfType(UserACL.class);
-      if (acl.hasEditPermission(userPortalConfig.getPortalConfig()))
+      if (pConfig != null && acl.hasEditPermission(pConfig))
       {
          ownerTypes.add(new SelectItemOption<String>(PortalConfig.PORTAL_TYPE));
       }
@@ -146,7 +145,8 @@ public class UIPageForm extends UIFormTabPane
       //TODO: This following line is fixed for bug PORTAL-2127
       uiListPermissionSelector.getChild(UIFormPopupWindow.class).setId("UIPageFormPopupGroupMembershipSelector");
 
-      List<String> groups = configService.getMakableNavigations(pcontext.getRemoteUser(), true);
+      UserPortalConfigService userPortalConfigService= getApplicationComponent(UserPortalConfigService.class);
+      List<String> groups = userPortalConfigService.getMakableNavigations(pcontext.getRemoteUser(), true);
       if (groups.size() > 0)
       {
          Collections.sort(groups);

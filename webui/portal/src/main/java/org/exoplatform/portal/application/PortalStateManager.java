@@ -137,7 +137,7 @@ public class PortalStateManager extends StateManager
       ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
       UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       String remoteUser = context.getRemoteUser();
-      String ownerUser = context.getPortalOwner();
+      String ownerUser = context.getSiteName();
       return service_.getUserPortalConfig(ownerUser, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
    }
 
@@ -150,9 +150,7 @@ public class PortalStateManager extends StateManager
       }
       else
       {
-         PortalRequestContext portalRC = (PortalRequestContext)webuiRC;
-         String portalOwner = portalRC.getPortalOwner();
-         return "portal_" + portalOwner;
+         return PortalApplication.PORTAL_APPLICATION_ID;
       }
    }
 
