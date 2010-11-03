@@ -26,8 +26,10 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.SimpleRenderContext;
 import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.ResourceLocator;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,15 @@ import java.util.Map;
  */
 public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R, L>
 {
+
+   /** . */
+   private static final Map<MimeType, String> AMP_MAP = new EnumMap<MimeType, String>(MimeType.class);
+
+   static
+   {
+      AMP_MAP.put(MimeType.XHTML, "&amp;");
+      AMP_MAP.put(MimeType.PLAIN, "&");
+   }
 
    /** . */
    private final ControllerContext controllerContext;
@@ -93,8 +104,6 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       }
 
       //
-
-      //
       if (ajax)
       {
          buffer.append("javascript:");
@@ -137,13 +146,21 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       controllerContext.renderURL(parameters, renderContext);
 
       //
+      MimeType mt = mimeType;
+      if (mt == null)
+      {
+         mt = MimeType.XHTML;
+      }
+      String amp = AMP_MAP.get(mt);
+
+      //
       boolean questionMarkDone = false;
       Map<String, String> queryParams = renderContext.getQueryParams();
       if (queryParams.size() > 0)
       {
          for (Map.Entry<String, String> entry : queryParams.entrySet())
          {
-            buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
+            buffer.append(questionMarkDone ? amp : "?");
             buffer.append(entry.getKey());
             buffer.append('=');
             buffer.append(entry.getValue());
@@ -156,7 +173,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       {
          for (String value : entry.getValue())
          {
-            buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
+            buffer.append(questionMarkDone ? amp : "?");
             buffer.append(entry.getKey());
             buffer.append("=");
             buffer.append(value);
@@ -167,7 +184,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       //
       if (ajax)
       {
-         buffer.append(questionMarkDone ? Constants.AMPERSAND : org.exoplatform.portal.Constants.QMARK);
+         buffer.append(questionMarkDone ? amp : "?");
          buffer.append("ajaxRequest=true");
          buffer.append("')");
       }

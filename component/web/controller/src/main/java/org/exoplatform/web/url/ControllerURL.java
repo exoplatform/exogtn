@@ -47,6 +47,9 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
    /** . */
    protected ParameterMap queryParams;
 
+   /** . */
+   protected MimeType mimeType;
+
    /**
     * Create a resource URL instance.
     *
@@ -66,6 +69,7 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
       this.ajax = ajax;
       this.confirm = null;
       this.queryParams = null;
+      this.mimeType = null;
    }
 
    /**
@@ -142,6 +146,28 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
    {
       locator.setResource(resource);
       return this;
+   }
+
+   /**
+    * Returns the current mime type that this URL will be generated for, or null if none is set (which means
+    * there is no guarantees about the mime type that will be used as target but it's likely to be {@link MimeType#XHTML}}).
+    *
+    * @return the current mime type
+    */
+   public MimeType getMimeType()
+   {
+      return mimeType;
+   }
+
+   /**
+    * Set the mime type on this URL. The mime type will be used when URL is generated to encode the URL for the specified
+    * mime type.
+    *
+    * @param mimeType the new mime type
+    */
+   public void setMimeType(MimeType mimeType)
+   {
+      this.mimeType = mimeType;
    }
 
    public Map<String, String[]> getQueryParameters()
