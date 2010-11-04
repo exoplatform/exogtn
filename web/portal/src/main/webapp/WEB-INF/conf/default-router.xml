@@ -23,14 +23,30 @@
 -->
 
     <!-- The public access -->
-    <route path="/public/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
+    <route path="/public/{gtn:sitename}{gtn:path}">
       <route-param name="gtn:access" value="public"/>
+      <route-param name="gtn:sitetype" value="portal"/>
       <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The private access -->
-    <route path="/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
+    <route path="/private/{gtn:sitename}{gtn:path}">
       <route-param name="gtn:access" value="private"/>
+      <route-param name="gtn:sitetype" value="portal"/>
+      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+    </route>
+
+    <!-- The group access -->
+    <route path="/groups/{gtn:sitename}{gtn:path}">
+      <route-param name="gtn:access" value="private"/>
+      <route-param name="gtn:sitetype" value="group"/>
+      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+    </route>
+
+    <!-- The user access -->
+    <route path="/users/{gtn:sitename}{gtn:path}">
+      <route-param name="gtn:access" value="private"/>
+      <route-param name="gtn:sitetype" value="user"/>
       <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
