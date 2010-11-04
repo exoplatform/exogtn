@@ -33,6 +33,7 @@ public interface RenderContext
     * Append a char to the path.
     *
     * @param c the char to append
+    * @param escape when the char should be escaped
     */
    void appendPath(char c, boolean escape);
 
@@ -40,6 +41,7 @@ public interface RenderContext
     * Append a string to the path.
     *
     * @param s the string to append.
+    * @param escape when the char should be escaped
     */
    void appendPath(String s, boolean escape);
 
