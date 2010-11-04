@@ -213,12 +213,7 @@ class Route
                switch (param.encodingMode)
                {
                   case DEFAULT_FORM:
-
-                     // JULIEN
-                     // TEMPORARY WORD AROUND
-                     // FIX ME
-                     s = s.replace('/', '~');
-
+                     s = s.replace('/', slashEscape);
                      matched = param.pattern.matcher(s).matches();
                      break;
                   case PRESERVE_PATH:
