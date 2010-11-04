@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 
@@ -41,6 +42,9 @@ import java.util.regex.Pattern;
  */
 class Route
 {
+
+   /** Julien : make that configurable. */
+   private static final char slashEscape = '~';
 
    /** . */
    private Route parent;
@@ -107,28 +111,48 @@ class Route
       if (this instanceof SegmentRoute)
       {
          SegmentRoute sr = (SegmentRoute)this;
-         renderContext.appendPath('/');
-         renderContext.appendPath(sr.name);
+         renderContext.appendPath('/', false);
+         renderContext.appendPath(sr.name, true);
       }
       else if (this instanceof PatternRoute)
       {
          PatternRoute pr = (PatternRoute)this;
-         renderContext.appendPath('/');
+         renderContext.appendPath('/', false);
          int i = 0;
          while (i < pr.parameterNames.size())
          {
-            renderContext.appendPath(pr.chunks.get(i));
+            renderContext.appendPath(pr.chunks.get(i), true);
             String value = blah.get(pr.parameterNames.get(i));
-            renderContext.appendPath(value);
+            PatternParamDef def = pr.parameterPatterns.get(i);
+
+            //
+            int from = 0;
+            while (true)
+            {
+               int to = value.indexOf('/', from);
+               if (to == -1)
+               {
+                  break;
+               }
+               else
+               {
+                  renderContext.appendPath(value.substring(from, to), true);
+                  renderContext.appendPath(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : slashEscape, false);
+                  from = to +1;
+               }
+            }
+            renderContext.appendPath(value.substring(from), false);
+
+            //
             i++;
          }
-         renderContext.appendPath(pr.chunks.get(i));
+         renderContext.appendPath(pr.chunks.get(i), false);
       }
       else
       {
          if (!hasChildren)
          {
-            renderContext.appendPath("/");
+            renderContext.appendPath('/', false);
          }
       }
    }
@@ -182,8 +206,30 @@ class Route
          for (int i = 0;i < prt.parameterNames.size();i++)
          {
             QualifiedName qd = prt.parameterNames.get(i);
+            PatternParamDef ppd = prt.parameterPatterns.get(i);
             String s = blah.get(qd);
-            if (s != null && prt.parameterPatterns.get(i).matcher(s).matches())
+            boolean matched = false;
+            if (s != null)
+            {
+               switch (ppd.encodingMode)
+               {
+                  case DEFAULT_FORM:
+
+                     // JULIEN
+                     // TEMPORARY WORD AROUND
+                     // FIX ME
+                     s = s.replace('/', '~');
+
+                     matched = ppd.pattern.matcher(s).matches();
+                     break;
+                  case PRESERVE_PATH:
+                     matched = ppd.pattern.matcher(s).matches();
+                     break;
+                  default:
+                     throw new AssertionError();
+               }
+            }
+            if (matched)
             {
                abc.remove(qd);
             }
@@ -226,6 +272,7 @@ class Route
    }
 
    /**
+    *
     * @param path the path
     * @param requestParams the query parameters
     * @return null or the parameters when it matches
@@ -344,9 +391,15 @@ class Route
                   {
                      // Append parameters
                      int group = 1;
-                     for (QualifiedName parameterName : route.parameterNames)
+                     for (int i = 0;i < route.parameterNames.size();i++)
                      {
-                        response.put(parameterName, matcher.group(group++));
+                        QualifiedName parameterName = route.parameterNames.get(i);
+                        String value = matcher.group(group++);
+                        if (route.parameterPatterns.get(i).encodingMode == EncodingMode.DEFAULT_FORM)
+                        {
+                           value = value.replace(slashEscape, '/');
+                        }
+                        response.put(parameterName, value);
                      }
 
                      //
@@ -386,9 +439,6 @@ class Route
       //
       return ret;
    }
-
-   /** . */
-   private static final Pattern PARAMETER_REGEX = Pattern.compile("^(?:\\{([^\\}]*)\\})?(.*)$");
 
    final <R extends Route> R add(R route)
    {
@@ -454,7 +504,7 @@ class Route
 
    final Route append(RouteDescriptor descriptor)
    {
-      Route route = append(descriptor.getPath());
+      Route route = append(descriptor.getPathParams(), descriptor.getPath());
 
       //
       route.terminal = true;
@@ -476,10 +526,11 @@ class Route
    }
 
    final Route append(
+      Map<QualifiedName, PathParamDescriptor> pathParamDescriptors,
       String path,
       Map<QualifiedName, String> parameters)
    {
-      Route route = append(path);
+      Route route = append(pathParamDescriptors, path);
       route.terminal = true;
       route.routeParameters.putAll(parameters);
       return route;
@@ -488,10 +539,11 @@ class Route
    /**
     * Append a path, creates the necessary routes and returns the last route added.
     *
+    * @param pathParamDescriptors the path param descriptors
     * @param path the path to append
     * @return the last route added
     */
-   private Route append(String path)
+   private Route append(Map<QualifiedName, PathParamDescriptor> pathParamDescriptors, String path)
    {
       int pos = path.length();
       int level = 0;
@@ -548,48 +600,33 @@ class Route
             PatternBuilder builder = new PatternBuilder();
             builder.expr("^");
             List<String> chunks = new ArrayList<String>();
-            List<Pattern> parameterPatterns = new ArrayList<Pattern>();
+            List<PatternParamDef> parameterPatterns = new ArrayList<PatternParamDef>();
             int previous = 0;
             for (int i = 0;i < start.size();i++)
             {
                builder.litteral(path, previous, start.get(i));
                chunks.add(path.substring(previous, start.get(i)));
-               String parameterDef = path.substring(start.get(i) + 1, end.get(i));
-               int colon = parameterDef.indexOf(':');
-               String regex;
-               String parameterName;
-               if (colon == -1)
-               {
-                  regex = "[^/]+";
-                  parameterName = parameterDef;
-               }
-               else
-               {
-                  regex = parameterDef.substring(colon + 1);
-                  parameterName = parameterDef.substring(0, colon);
-               }
+               String parameterName = path.substring(start.get(i) + 1, end.get(i));
 
                //
-               QualifiedName parameterQName;
-               Matcher parameterMatcher = PARAMETER_REGEX.matcher(parameterName);
-               if (parameterMatcher.matches())
-               {
-                  String qualifier = parameterMatcher.group(1);
-                  String name = parameterMatcher.group(2);
-                  parameterQName = new QualifiedName(qualifier == null ? "" : qualifier, name);
-               }
-               else
-               {
-                  throw new AssertionError();
-               }
+               QualifiedName parameterQName = QualifiedName.parse(parameterName);
 
+               // Now get path param metadata
+               PathParamDescriptor parameterDescriptor = pathParamDescriptors.get(parameterQName);
+               String regex = "[^/]+";
+               EncodingMode encodingMode = EncodingMode.DEFAULT_FORM;
+               if (parameterDescriptor != null)
+               {
+                  regex = parameterDescriptor.getPattern();
+                  encodingMode = parameterDescriptor.getEncodingMode();
+               }
 
                //
                builder.expr("(");
                builder.expr(regex);
                builder.expr(")");
                parameterNames.add(parameterQName);
-               parameterPatterns.add(Pattern.compile("^" + regex + "$"));
+               parameterPatterns.add(new PatternParamDef(encodingMode, Pattern.compile("^" + regex + "$")));
                previous = end.get(i) + 1;
             }
             builder.litteral(path, previous, pos);
@@ -614,7 +651,7 @@ class Route
       //
       if (pos < path.length())
       {
-         return next.append(path.substring(pos + 1));
+         return next.append(pathParamDescriptors, path.substring(pos + 1));
       }
       else
       {

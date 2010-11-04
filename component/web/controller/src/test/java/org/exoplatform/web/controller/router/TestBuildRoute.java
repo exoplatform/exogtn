@@ -76,7 +76,8 @@ public class TestBuildRoute extends TestCase
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
-         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).pattern.toString());
+         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.parameterPatterns.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));
@@ -85,7 +86,7 @@ public class TestBuildRoute extends TestCase
 
    public void testQualifiedParameterSegment()
    {
-      String[] paths = {"/{{q}a}","{{q}a}"};
+      String[] paths = {"/{q:a}","{q:a}"};
       for (String path : paths)
       {
          RouterDescriptor routerMD = new RouterDescriptor();
@@ -99,7 +100,8 @@ public class TestBuildRoute extends TestCase
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("q", "a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
-         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals("^[^/]+$", patternRoute.parameterPatterns.get(0).pattern.toString());
+         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.parameterPatterns.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));
@@ -108,11 +110,11 @@ public class TestBuildRoute extends TestCase
 
    public void testPatternSegment()
    {
-      String[] paths = {"/{a:.*}","{a:.*}"};
+      String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
          RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path));
+         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.DEFAULT_FORM));
          Router router = new Router(routerMD);
 
          //
@@ -122,7 +124,8 @@ public class TestBuildRoute extends TestCase
          assertEquals("^(.*)", patternRoute.pattern.toString());
          assertEquals(Collections.singletonList(new QualifiedName("a")), patternRoute.parameterNames);
          assertEquals(1, patternRoute.parameterPatterns.size());
-         assertEquals("^.*$", patternRoute.parameterPatterns.get(0).toString());
+         assertEquals("^.*$", patternRoute.parameterPatterns.get(0).pattern.toString());
+         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.parameterPatterns.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));

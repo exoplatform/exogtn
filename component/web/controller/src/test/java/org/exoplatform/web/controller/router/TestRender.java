@@ -62,7 +62,7 @@ public class TestRender extends AbstractTestController
       assertEquals("/a/b", router.render(Collections.<QualifiedName, String>emptyMap()));
    }
 
-   public void testParameter() throws Exception
+   public void testPathParam() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/{p}"));
@@ -73,40 +73,74 @@ public class TestRender extends AbstractTestController
       assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
    }
 
-   public void testWildcardPattern() throws Exception
+   public void testSimplePatternPathParam() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p:.*}"));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
+      assertNull(router.render(Collections.singletonMap(new QualifiedName("p"), "ab")));
+   }
+
+   public void testWildcardPathParam() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
       Router router = new Router(routerMD);
 
       //
       assertEquals("/", router.render(Collections.singletonMap(new QualifiedName("p"), "")));
-
-      //
       assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
-
-      //
       assertEquals("/a/b", router.render(Collections.singletonMap(new QualifiedName("p"), "a/b")));
    }
 
-   public void testSimplePattern() throws Exception
+   public void testFoo() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p:a}"));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]*", EncodingMode.PRESERVE_PATH));
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
+      assertEquals(null, router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+   }
+
+   public void testBar() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]*", EncodingMode.DEFAULT_FORM));
+      Router router = new Router(routerMD);
 
       //
-      assertNull(router.render(Collections.singletonMap(new QualifiedName("p"), "ab")));
+      assertEquals("/~", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+   }
+
+   public void testWildcardParamPathPreservePathEncoding() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals("//", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+   }
+
+   public void testWildcardParamPathDefaultFormEncoded() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.DEFAULT_FORM));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals("/~", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
    }
 
    public void testPrecedence() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p:a}/b"));
+      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
       Router router = new Router(routerMD);
 
       //

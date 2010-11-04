@@ -17,47 +17,56 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
-
-import java.util.List;
-import java.util.regex.Pattern;
+import org.exoplatform.web.controller.router.EncodingMode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternRoute extends Route
+public class PathParamDescriptor
 {
 
    /** . */
-   final Pattern pattern;
+   private final QualifiedName name;
 
    /** . */
-   final List<QualifiedName> parameterNames;
+   private final String pattern;
 
    /** . */
-   final List<PatternParamDef> parameterPatterns;
+   private final EncodingMode encodingMode;
 
-   /** . */
-   final List<String> chunks;
-
-   PatternRoute(
-      Pattern pattern,
-      List<QualifiedName> parameterNames,
-      List<PatternParamDef> parameterPatterns,
-      List<String> chunks)
+   public PathParamDescriptor(QualifiedName name, String pattern, EncodingMode encodingMode)
    {
-      if (chunks.size() != parameterNames.size() + 1)
+      if (name == null)
       {
-         throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + parameterNames.size() + 1);
+         throw new NullPointerException("No null name accepted");
+      }
+      if (pattern == null)
+      {
+         throw new NullPointerException("No null pattern accepted");
       }
 
       //
+      this.name = name;
       this.pattern = pattern;
-      this.parameterNames = parameterNames;
-      this.parameterPatterns = parameterPatterns;
-      this.chunks = chunks;
+      this.encodingMode = encodingMode;
+   }
+
+   public QualifiedName getName()
+   {
+      return name;
+   }
+
+   public String getPattern()
+   {
+      return pattern;
+   }
+
+   public EncodingMode getEncodingMode()
+   {
+      return encodingMode;
    }
 }

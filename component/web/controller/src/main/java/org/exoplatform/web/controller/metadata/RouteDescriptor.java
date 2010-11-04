@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.EncodingMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,9 @@ public class RouteDescriptor
    private final Map<QualifiedName, String> params;
 
    /** . */
+   private final Map<QualifiedName, PathParamDescriptor> pathParams;
+
+   /** . */
    private final Map<String, RequestParamDescriptor> requestParams;
 
    /** . */
@@ -51,6 +55,7 @@ public class RouteDescriptor
    {
       this.path = path;
       this.params = new HashMap<QualifiedName, String>();
+      this.pathParams = new HashMap<QualifiedName, PathParamDescriptor>();
       this.requestParams = new HashMap<String, RequestParamDescriptor>();
       this.children = new ArrayList<RouteDescriptor>();
    }
@@ -87,9 +92,25 @@ public class RouteDescriptor
       return this;
    }
 
+   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
+   {
+      return addRequestParam(new PathParamDescriptor(name, pattern, encodingMode));
+   }
+
+   public RouteDescriptor addRequestParam(PathParamDescriptor requestParam)
+   {
+      pathParams.put(requestParam.getName(), requestParam);
+      return this;
+   }
+
    public Map<String, RequestParamDescriptor> getRequestParams()
    {
       return requestParams;
+   }
+
+   public Map<QualifiedName, PathParamDescriptor> getPathParams()
+   {
+      return pathParams;
    }
 
    public RouteDescriptor addRoute(RouteDescriptor child)

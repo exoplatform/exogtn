@@ -19,17 +19,13 @@
 
 package org.exoplatform.portal.url;
 
-import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.SimpleRenderContext;
 import org.exoplatform.web.url.ControllerURL;
-import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.ResourceLocator;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,15 +35,6 @@ import java.util.Map;
  */
 public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R, L>
 {
-
-   /** . */
-   private static final Map<MimeType, String> AMP_MAP = new EnumMap<MimeType, String>(MimeType.class);
-
-   static
-   {
-      AMP_MAP.put(MimeType.XHTML, "&amp;");
-      AMP_MAP.put(MimeType.PLAIN, "&");
-   }
 
    /** . */
    private final ControllerContext controllerContext;
@@ -62,10 +49,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    private final String siteName;
 
    /** . */
-   private StringBuilder buffer;
-
-   /** . */
-   private SimpleRenderContext renderContext;
+   private PortalURLRenderContext renderContext;
 
    public PortalURL(ControllerContext requestContext, L locator, Boolean ajax, String siteType, String siteName, String access)
    {
@@ -86,11 +70,9 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
 
    public String toString()
    {
-      //
       if (renderContext == null)
       {
-         buffer = new StringBuilder();
-         renderContext = new SimpleRenderContext(buffer);
+         renderContext = new PortalURLRenderContext(new StringBuilder());
       }
       else
       {
@@ -103,15 +85,20 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
          throw new IllegalStateException("No resource set on portal URL");
       }
 
+      // Configure mime type
+      renderContext.setMimeType(mimeType);
+
       //
       if (ajax)
       {
-         buffer.append("javascript:");
+         renderContext.append("javascript:", false);
          if (confirm != null && confirm.length() > 0)
          {
-            buffer.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
+            renderContext.append("if(confirm('", false);
+            renderContext.append(confirm.replaceAll("'", "\\\\'"), false);
+            renderContext.append("'))", false);
          }
-         buffer.append("ajaxGet('");
+         renderContext.append("ajaxGet('", false);
       }
       else
       {
@@ -142,54 +129,32 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
          }
       }
 
-      //
+      // Render url via controller
       controllerContext.renderURL(parameters, renderContext);
-
-      //
-      MimeType mt = mimeType;
-      if (mt == null)
-      {
-         mt = MimeType.XHTML;
-      }
-      String amp = AMP_MAP.get(mt);
-
-      //
-      boolean questionMarkDone = false;
-      Map<String, String> queryParams = renderContext.getQueryParams();
-      if (queryParams.size() > 0)
-      {
-         for (Map.Entry<String, String> entry : queryParams.entrySet())
-         {
-            buffer.append(questionMarkDone ? amp : "?");
-            buffer.append(entry.getKey());
-            buffer.append('=');
-            buffer.append(entry.getValue());
-            questionMarkDone = true;
-         }
-      }
 
       // Now append generic query parameters
       for (Map.Entry<String, String[]> entry : getQueryParameters().entrySet())
       {
          for (String value : entry.getValue())
          {
-            buffer.append(questionMarkDone ? amp : "?");
-            buffer.append(entry.getKey());
-            buffer.append("=");
-            buffer.append(value);
-            questionMarkDone = true;
+            renderContext.appendQueryParameter(entry.getKey(), value);
          }
       }
 
       //
       if (ajax)
       {
-         buffer.append(questionMarkDone ? amp : "?");
-         buffer.append("ajaxRequest=true");
-         buffer.append("')");
+         renderContext.appendQueryParameter("ajaxRequest", "true");
+         renderContext.flush();
+         renderContext.append("')", false);
+      }
+      else
+      {
+         renderContext.flush();
       }
 
       //
-      return buffer.toString();
+      String s = renderContext.toString();
+      return s;
    }
 }

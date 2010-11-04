@@ -33,13 +33,10 @@ public class QualifiedName
    {
       if (qname.length() > 0)
       {
-         if (qname.charAt(0) == '{')
+         int index = qname.indexOf(':');
+         if (index > -1)
          {
-            int index = qname.indexOf('}', 1);
-            if (index != -1)
-            {
-               return new QualifiedName(qname.substring(1, index), qname.substring(index + 1));
-            }
+            return new QualifiedName(qname.substring(0, index), qname.substring(index + 1));
          }
       }
       return new QualifiedName(qname);
@@ -101,7 +98,7 @@ public class QualifiedName
       }
       else
       {
-         return "{" + qualifier + "}" + name;
+         return qualifier + ":" + name;
       }
    }
 

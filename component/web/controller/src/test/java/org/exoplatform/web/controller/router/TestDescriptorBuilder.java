@@ -53,14 +53,22 @@ public class TestDescriptorBuilder extends TestCase
       //
       assertTrue(i.hasNext());
       RouteDescriptor route1 = i.next();
-      assertEquals("/public/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}", route1.getPath());
+      assertEquals("/public/{gtn:sitetype}/{gtn:sitename}{gtn:path}", route1.getPath());
       assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route1.getParams());
+      assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route1.getPathParams().keySet());
+      assertEquals(QualifiedName.parse("gtn:path"), route1.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
+      assertEquals(".*", route1.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
+      assertEquals(EncodingMode.DEFAULT_FORM, route1.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route2 = i.next();
-      assertEquals("/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}", route2.getPath());
+      assertEquals("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}", route2.getPath());
       assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route2.getParams());
+      assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route2.getPathParams().keySet());
+      assertEquals(QualifiedName.parse("gtn:path"), route2.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
+      assertEquals(".*", route2.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
+      assertEquals(EncodingMode.PRESERVE_PATH, route2.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
 
       //
       assertTrue(i.hasNext());

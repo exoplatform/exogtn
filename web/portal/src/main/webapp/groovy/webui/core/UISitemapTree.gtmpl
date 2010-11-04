@@ -41,7 +41,7 @@
 			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
 			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
 
-      String actionLink = nodeURL.setResource(new NavigationResource(nav.getOwnerType(), nav.getOwnerId().replaceAll("/", "_"), node)).toString();
+      String actionLink = nodeURL.setResource(new NavigationResource(nav.getOwnerType(), nav.getOwnerId(), node)).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {

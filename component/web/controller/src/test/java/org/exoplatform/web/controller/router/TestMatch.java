@@ -42,14 +42,8 @@ public class TestMatch extends AbstractTestController
 
       //
       assertNull(router.route(""));
-
-      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/"));
-
-      //
       assertNull(router.route("/a"));
-
-      //
       assertNull(router.route("a"));
    }
 
@@ -61,29 +55,13 @@ public class TestMatch extends AbstractTestController
 
       //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a"));
-
-      //
       assertNull(router.route("a"));
-
-      //
       assertNull(router.route("a/"));
-
-      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/"));
-
-      //
       assertNull(router.route(""));
-
-      //
       assertNull(router.route("/"));
-
-      //
       assertNull(router.route("/b"));
-
-      //
       assertNull(router.route("b"));
-
-      //
       assertNull(router.route("/a/b"));
    }
 
@@ -95,29 +73,13 @@ public class TestMatch extends AbstractTestController
 
       //
       assertNull(router.route("a/b"));
-
-      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/b"));
-
-      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/b/"));
-
-      //
       assertNull(router.route("a/b/"));
-
-      //
       assertNull(router.route(""));
-
-      //
       assertNull(router.route("/"));
-
-      //
       assertNull(router.route("/b"));
-
-      //
       assertNull(router.route("b"));
-
-      //
       assertNull(router.route("/a/b/c"));
    }
 
@@ -126,7 +88,9 @@ public class TestMatch extends AbstractTestController
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/{p}"));
       Router router = new Router(routerMD);
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route(("/a")));
+
+      //
+      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
    }
 
    public void testParameterPropagationToDescendants() throws Exception
@@ -135,44 +99,44 @@ public class TestMatch extends AbstractTestController
       routerMD.addRoute(new RouteDescriptor("/").addParam("p", "a"));
       routerMD.addRoute(new RouteDescriptor("/a"));
       Router router = new Router(routerMD);
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route(("/a")));
+
+      //
+      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
    }
 
    public void testWildcardPattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p:.*}"));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
       Router router = new Router(routerMD);
 
       //
       assertEquals(Collections.singletonMap(new QualifiedName("p"), ""), router.route("/"));
-
-      //
       assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
-
-      //
-      assertNull(router.route(("a")));
-
-      //
+      assertNull(router.route("a"));
       assertEquals(Collections.singletonMap(new QualifiedName("p"), "a/b"), router.route("/a/b"));
+   }
+
+   public void testDefaultForm() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.DEFAULT_FORM));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals(Collections.singletonMap(new QualifiedName("p"), "/"), router.route("/~"));
    }
 
    public void testSimplePattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p:a}"));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
       Router router = new Router(routerMD);
 
       //
       assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
-
-      //
       assertNull(router.route("a"));
-
-      //
       assertNull(router.route("/ab"));
-
-      //
       assertNull(router.route("ab"));
    }
 
@@ -180,19 +144,13 @@ public class TestMatch extends AbstractTestController
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p:a}/b"));
+      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
       Router router = new Router(routerMD);
 
       //
-      assertNull(router.route(("a")));
-
-      //
+      assertNull(router.route("a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a"));
-
-      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/"));
-
-      //
       assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a/b"));
    }
 

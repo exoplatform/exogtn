@@ -19,45 +19,24 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.QualifiedName;
-
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternRoute extends Route
+class PatternParamDef
 {
+
+   /** . */
+   final EncodingMode encodingMode;
 
    /** . */
    final Pattern pattern;
 
-   /** . */
-   final List<QualifiedName> parameterNames;
-
-   /** . */
-   final List<PatternParamDef> parameterPatterns;
-
-   /** . */
-   final List<String> chunks;
-
-   PatternRoute(
-      Pattern pattern,
-      List<QualifiedName> parameterNames,
-      List<PatternParamDef> parameterPatterns,
-      List<String> chunks)
+   PatternParamDef(EncodingMode encodingMode, Pattern pattern)
    {
-      if (chunks.size() != parameterNames.size() + 1)
-      {
-         throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + parameterNames.size() + 1);
-      }
-
-      //
+      this.encodingMode = encodingMode;
       this.pattern = pattern;
-      this.parameterNames = parameterNames;
-      this.parameterPatterns = parameterPatterns;
-      this.chunks = chunks;
    }
 }

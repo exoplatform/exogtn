@@ -49,6 +49,9 @@ public class ControllerContext
    /** . */
    private SimpleRenderContext renderContext;
 
+   /** . */
+   private final String contextName;
+
    public ControllerContext(
       WebAppController controller,
       HttpServletRequest request,
@@ -60,6 +63,7 @@ public class ControllerContext
       this.response = response;
       this.parameters = parameters;
       this.renderContext = null;
+      this.contextName = request.getContextPath().substring(1);
    }
 
    public WebAppController getController()
@@ -84,7 +88,10 @@ public class ControllerContext
 
    public void renderURL(Map<QualifiedName, String> parameters, RenderContext renderContext)
    {
-      renderContext.appendPath(request.getContextPath());
+      renderContext.appendPath('/', false);
+
+      //
+      renderContext.appendPath(contextName, true);
 
       //
       controller.router.render(parameters, renderContext);
@@ -102,7 +109,10 @@ public class ControllerContext
       }
 
       //
-      renderContext.appendPath(request.getContextPath());
+      renderContext.appendPath('/', false);
+
+      //
+      renderContext.appendPath(contextName, true);
 
       //
       controller.router.render(parameters, renderContext);

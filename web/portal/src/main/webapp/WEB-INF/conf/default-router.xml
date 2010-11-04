@@ -6,40 +6,42 @@
   <route path="/">
 
     <!-- Use the portal handler -->
-    <param name="{gtn}handler" value="portal"/>
+    <param name="gtn:handler" value="portal"/>
 
     <!-- Webui parameters -->
-    <request-param name="{gtn}componentid" matchName="portal:componentId" required="false"/>
-    <request-param name="{gtn}action" matchName="portal:action" required="false"/>
-    <request-param name="{gtn}objectid" matchName="objectId" required="false"/>
+    <request-param name="gtn:componentid" matchName="portal:componentId" required="false"/>
+    <request-param name="gtn:action" matchName="portal:action" required="false"/>
+    <request-param name="gtn:objectid" matchName="objectId" required="false"/>
 
     <!-- Map the sitemap navigation on the /foo path -->
 <!--
     <route path="/foo">
-      <param name="{gtn}access" value="public"/>
-      <param name="{gtn}sitename" value="classic"/>
-      <param name="{gtn}path" value="/sitemap"/>
+      <param name="gtn:access" value="public"/>
+      <param name="gtn:sitename" value="classic"/>
+      <param name="gtn:path" value="/sitemap"/>
     </route>
 -->
 
     <!-- The public access -->
-    <route path="/public/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}">
-      <param name="{gtn}access" value="public"/>
+    <route path="/public/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
+      <param name="gtn:access" value="public"/>
+      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The private access -->
-    <route path="/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}">
-      <param name="{gtn}access" value="private"/>
+    <route path="/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
+      <param name="gtn:access" value="private"/>
+      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
   </route>
 
   <route path="/upload">
-    <param name="{gtn}handler" value="upload"/>
+    <param name="gtn:handler" value="upload"/>
   </route>
 
   <route path="/download">
-    <param name="{gtn}handler" value="download"/>
+    <param name="gtn:handler" value="download"/>
   </route>
 
 </router>

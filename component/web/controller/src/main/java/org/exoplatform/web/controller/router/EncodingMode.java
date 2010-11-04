@@ -19,45 +19,25 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.QualifiedName;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
 /**
+ * Specifies how a string value should be encoded in an URL.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternRoute extends Route
+public enum EncodingMode
 {
 
-   /** . */
-   final Pattern pattern;
+   /**
+    * DEFAULT_FORM encodes the whole string with the <code>x-www-form-urlencoded</code> also known as
+    * <i>default form</i>. For instance the string /a/b is encoded to %2Fa%2Fb.
+    */
+   DEFAULT_FORM,
 
-   /** . */
-   final List<QualifiedName> parameterNames;
+   /**
+    * PRESERVE_PATH encodes the whole string like the {@link #DEFAULT_FORM} but preserve the path separators. For
+    * instance the string /a b is enocded to /a+b
+    */
+   PRESERVE_PATH
 
-   /** . */
-   final List<PatternParamDef> parameterPatterns;
-
-   /** . */
-   final List<String> chunks;
-
-   PatternRoute(
-      Pattern pattern,
-      List<QualifiedName> parameterNames,
-      List<PatternParamDef> parameterPatterns,
-      List<String> chunks)
-   {
-      if (chunks.size() != parameterNames.size() + 1)
-      {
-         throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + parameterNames.size() + 1);
-      }
-
-      //
-      this.pattern = pattern;
-      this.parameterNames = parameterNames;
-      this.parameterPatterns = parameterPatterns;
-      this.chunks = chunks;
-   }
 }

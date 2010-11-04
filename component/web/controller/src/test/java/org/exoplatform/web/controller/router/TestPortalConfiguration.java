@@ -43,24 +43,28 @@ public class TestPortalConfiguration extends AbstractTestController
       RouterDescriptor routerMD = new RouterDescriptor();
 
       //
-      RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}");
+      RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
       portalRouteMD.addRequestParam(new QualifiedName("gtn", "componentid"), "portal:componentId", null, false);
+      portalRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD);
 
       //
-      RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}");
+      RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       portalRouteMD2.addParam(new QualifiedName("gtn", "controller"), "site");
+      portalRouteMD2.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD2);
 
       //
-      RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}");
-      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
+      groupRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      groupRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(groupRouteMD);
 
       //
-      RouteDescriptor userRouteMD = new RouteDescriptor("/users/{{gtn}sitetype}/{{gtn}sitename}{{gtn}path:.*}");
-      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      RouteDescriptor userRouteMD = new RouteDescriptor("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
+      userRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
+      userRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(userRouteMD);
 
       //

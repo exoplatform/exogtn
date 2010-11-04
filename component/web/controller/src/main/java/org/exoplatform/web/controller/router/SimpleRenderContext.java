@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.router;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,24 +74,34 @@ public class SimpleRenderContext implements RenderContext
       }
    }
 
-   public void appendPath(char c)
+   public void appendPath(char c, boolean escape)
    {
+      appendPath(String.valueOf(c), escape);
+   }
+
+   public void appendPath(String s, boolean escape)
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
       if (sb == null)
       {
          sb = new StringBuilder();
       }
-      sb.append(c);
-   }
-
-   public void appendPath(String s)
-   {
-      if (sb == null)
+      if (escape)
       {
-         sb = new StringBuilder();
+         try
+         {
+            sb.append(URLEncoder.encode(s, "UTF-8"));
+         }
+         catch (UnsupportedEncodingException e)
+         {
+            throw new AssertionError(e);
+         }
       }
-      sb.append(s);
+      else
+      {
+         sb.append(s);
+      }
    }
-
    public void appendQueryParameter(String parameterName, String paramaterValue)
    {
       if (queryParams == EMPTY)
@@ -98,5 +110,4 @@ public class SimpleRenderContext implements RenderContext
       }
       queryParams.put(parameterName, paramaterValue);
    }
-
 }

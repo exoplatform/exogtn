@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.EncodingMode;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
@@ -43,10 +44,11 @@ public class DescriptorBuilder
    /** . */
    private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
 
+   /** . */
+   private static final QName pathParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "path-param");
+
    public RouterDescriptor build(XMLStreamReader reader) throws Exception
    {
-      System.out.println("reader = " + reader);
-      System.out.println("reader = " + reader.getClass().getName());
       RouterDescriptor routerDesc = new RouterDescriptor();
 
       //
@@ -102,6 +104,14 @@ public class DescriptorBuilder
                String matchValue = reader.getAttributeValue(null, "matchValue");
                String optional = reader.getAttributeValue(null, "required");
                routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
+            }
+            else if (pathParamQN.equals(reader.getName()))
+            {
+               String name = reader.getAttributeValue(null, "name");
+               String pattern = reader.getAttributeValue(null, "pattern");
+               String encoded = reader.getAttributeValue(null, "encoding");
+               EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.DEFAULT_FORM;
+               routeDesc.addPathParam(QualifiedName.parse(name), pattern, encodingMode);
             }
             else if (routeQN.equals(reader.getName()))
             {

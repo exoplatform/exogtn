@@ -237,7 +237,7 @@ public class PortalRequestContext extends WebuiRequestContext
 */
       //
       this.siteType = requestSiteType;
-      this.siteName = requestSiteName.replaceAll("_", "/");
+      this.siteName = requestSiteName;
       this.nodePath_ = requestPath;
       this.access = access;
 
@@ -271,7 +271,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(controllerContext, locator, false, siteType, siteName.replaceAll("/", "_"), access);
+      return new PortalURL<R, L>(controllerContext, locator, false, siteType, siteName, access);
    }
 
    public ControllerContext getControllerContext()

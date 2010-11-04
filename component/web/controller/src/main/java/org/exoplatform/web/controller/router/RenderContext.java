@@ -34,14 +34,14 @@ public interface RenderContext
     *
     * @param c the char to append
     */
-   void appendPath(char c);
+   void appendPath(char c, boolean escape);
 
    /**
     * Append a string to the path.
     *
     * @param s the string to append.
     */
-   void appendPath(String s);
+   void appendPath(String s, boolean escape);
 
    /**
     * Append a query parameter to the parameter set. Note that the query parameters are ordered
