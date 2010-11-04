@@ -119,11 +119,11 @@ class Route
          PatternRoute pr = (PatternRoute)this;
          renderContext.appendPath('/', false);
          int i = 0;
-         while (i < pr.parameterNames.size())
+         while (i < pr.params.size())
          {
             renderContext.appendPath(pr.chunks.get(i), true);
-            String value = blah.get(pr.parameterNames.get(i));
-            PatternParamDef def = pr.parameterPatterns.get(i);
+            PatternParam def = pr.params.get(i);
+            String value = blah.get(def.name);
 
             //
             int from = 0;
@@ -203,15 +203,14 @@ class Route
       if (this instanceof PatternRoute)
       {
          PatternRoute prt = (PatternRoute)this;
-         for (int i = 0;i < prt.parameterNames.size();i++)
+         for (int i = 0;i < prt.params.size();i++)
          {
-            QualifiedName qd = prt.parameterNames.get(i);
-            PatternParamDef ppd = prt.parameterPatterns.get(i);
-            String s = blah.get(qd);
+            PatternParam param = prt.params.get(i);
+            String s = blah.get(param.name);
             boolean matched = false;
             if (s != null)
             {
-               switch (ppd.encodingMode)
+               switch (param.encodingMode)
                {
                   case DEFAULT_FORM:
 
@@ -220,10 +219,10 @@ class Route
                      // FIX ME
                      s = s.replace('/', '~');
 
-                     matched = ppd.pattern.matcher(s).matches();
+                     matched = param.pattern.matcher(s).matches();
                      break;
                   case PRESERVE_PATH:
-                     matched = ppd.pattern.matcher(s).matches();
+                     matched = param.pattern.matcher(s).matches();
                      break;
                   default:
                      throw new AssertionError();
@@ -231,7 +230,7 @@ class Route
             }
             if (matched)
             {
-               abc.remove(qd);
+               abc.remove(param.name);
             }
             else
             {
@@ -391,15 +390,15 @@ class Route
                   {
                      // Append parameters
                      int group = 1;
-                     for (int i = 0;i < route.parameterNames.size();i++)
+                     for (int i = 0;i < route.params.size();i++)
                      {
-                        QualifiedName parameterName = route.parameterNames.get(i);
+                        PatternParam param = route.params.get(i);
                         String value = matcher.group(group++);
-                        if (route.parameterPatterns.get(i).encodingMode == EncodingMode.DEFAULT_FORM)
+                        if (param.encodingMode == EncodingMode.DEFAULT_FORM)
                         {
                            value = value.replace(slashEscape, '/');
                         }
-                        response.put(parameterName, value);
+                        response.put(param.name, value);
                      }
 
                      //
@@ -600,7 +599,7 @@ class Route
             PatternBuilder builder = new PatternBuilder();
             builder.expr("^");
             List<String> chunks = new ArrayList<String>();
-            List<PatternParamDef> parameterPatterns = new ArrayList<PatternParamDef>();
+            List<PatternParam> parameterPatterns = new ArrayList<PatternParam>();
             int previous = 0;
             for (int i = 0;i < start.size();i++)
             {
@@ -625,8 +624,7 @@ class Route
                builder.expr("(");
                builder.expr(regex);
                builder.expr(")");
-               parameterNames.add(parameterQName);
-               parameterPatterns.add(new PatternParamDef(encodingMode, Pattern.compile("^" + regex + "$")));
+               parameterPatterns.add(new PatternParam(parameterQName, encodingMode, Pattern.compile("^" + regex + "$")));
                previous = end.get(i) + 1;
             }
             builder.litteral(path, previous, pos);
@@ -634,7 +632,7 @@ class Route
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly
             Pattern pattern = builder.build();
-            PatternRoute route = new PatternRoute(pattern, parameterNames, parameterPatterns, chunks);
+            PatternRoute route = new PatternRoute(pattern, parameterPatterns, chunks);
 
             // Wire
             add(route);

@@ -19,14 +19,19 @@
 
 package org.exoplatform.web.controller.router;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternParamDef
+class PatternParam
 {
+
+   /** . */
+   final QualifiedName name;
 
    /** . */
    final EncodingMode encodingMode;
@@ -34,8 +39,9 @@ class PatternParamDef
    /** . */
    final Pattern pattern;
 
-   PatternParamDef(EncodingMode encodingMode, Pattern pattern)
+   PatternParam(QualifiedName name, EncodingMode encodingMode, Pattern pattern)
    {
+      this.name = name;
       this.encodingMode = encodingMode;
       this.pattern = pattern;
    }
