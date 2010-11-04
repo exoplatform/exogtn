@@ -62,7 +62,7 @@ class Route
    private final Map<QualifiedName, String> routeParameters;
 
    /** . */
-   private final Map<String, RequestParamDef> requestParamDefs;
+   private final Map<String, RequestParam> requestParamDefs;
 
    Route()
    {
@@ -71,7 +71,7 @@ class Route
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
-      this.requestParamDefs = new HashMap<String, RequestParamDef>();
+      this.requestParamDefs = new HashMap<String, RequestParam>();
    }
 
    /*
@@ -97,7 +97,7 @@ class Route
       //
       if (requestParamDefs.size() > 0)
       {
-         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : requestParamDefs.values())
          {
             String s = blah.get(requestParamDef.getName());
             if (s != null)
@@ -180,7 +180,7 @@ class Route
       // Match any request parameter
       if (requestParamDefs.size() > 0)
       {
-         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : requestParamDefs.values())
          {
             String a = blah.get(requestParamDef.name);
             if (a != null)
@@ -284,7 +284,7 @@ class Route
       Map<QualifiedName, String> routeRequestParams = Collections.emptyMap();
       if (requestParamDefs.size() > 0)
       {
-         for (RequestParamDef requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : requestParamDefs.values())
          {
             String value = null;
             String[] values = requestParams.get(requestParamDef.getMatchName());
@@ -510,7 +510,7 @@ class Route
       route.routeParameters.putAll(descriptor.getParams());
       for (RequestParamDescriptor requestParamDescriptor : descriptor.getRequestParams().values())
       {
-         RequestParamDef requestParamDef = new RequestParamDef(requestParamDescriptor);
+         RequestParam requestParamDef = new RequestParam(requestParamDescriptor);
          route.requestParamDefs.put(requestParamDef.getMatchName(), requestParamDef);
       }
 

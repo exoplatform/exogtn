@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class RequestParamDef
+class RequestParam
 {
 
    /** . */
@@ -43,7 +43,7 @@ class RequestParamDef
    /** . */
    final boolean required;
 
-   RequestParamDef(RequestParamDescriptor descriptor)
+   RequestParam(RequestParamDescriptor descriptor)
    {
       if (descriptor == null)
       {
@@ -97,7 +97,7 @@ class RequestParamDef
       this.required = descriptor.isRequired();
    }
 
-   RequestParamDef(QualifiedName name, String matchName, Pattern matchValue, boolean required)
+   RequestParam(QualifiedName name, String matchName, Pattern matchValue, boolean required)
    {
       if (name == null)
       {
