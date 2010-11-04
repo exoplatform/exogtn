@@ -38,15 +38,17 @@
 
   <xs:complexType name="routeType">
     <xs:sequence>
-      <xs:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="path-param" type="pathParamType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="request-param" type="requestParamType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="route-param" type="routeParamType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="path-param" type="pathParamType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="request-param" type="requestParamType" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
       <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="path" type="xs:string" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="paramType">
+  <xs:complexType name="routeParamType">
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>

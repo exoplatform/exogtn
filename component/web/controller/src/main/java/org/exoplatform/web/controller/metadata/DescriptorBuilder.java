@@ -39,7 +39,7 @@ public class DescriptorBuilder
    private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
 
    /** . */
-   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "param");
+   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route-param");
 
    /** . */
    private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
