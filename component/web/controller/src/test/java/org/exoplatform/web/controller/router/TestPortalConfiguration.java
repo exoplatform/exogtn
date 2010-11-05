@@ -44,27 +44,27 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      portalRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
-      portalRouteMD.addRequestParam(new QualifiedName("gtn", "componentid"), "portal:componentId", null, false);
-      portalRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
+      portalRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
+      portalRouteMD.addRequestParam(QualifiedName.create("gtn", "componentid"), "portal:componentId", null, false);
+      portalRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD);
 
       //
       RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      portalRouteMD2.addParam(new QualifiedName("gtn", "controller"), "site");
-      portalRouteMD2.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
+      portalRouteMD2.addParam(QualifiedName.create("gtn", "controller"), "site");
+      portalRouteMD2.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD2);
 
       //
       RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      groupRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
-      groupRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
+      groupRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
+      groupRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(groupRouteMD);
 
       //
       RouteDescriptor userRouteMD = new RouteDescriptor("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      userRouteMD.addParam(new QualifiedName("gtn", "controller"), "site");
-      userRouteMD.addPathParam(new QualifiedName("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
+      userRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
+      userRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(userRouteMD);
 
       //
@@ -74,11 +74,11 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testComponent() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/");
-      expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
+      expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/");
+      expectedParameters.put(QualifiedName.create("gtn", "componentid"), "foo");
 
       //
       assertEquals(expectedParameters, router.route("/private/portal/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
@@ -88,10 +88,10 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testPrivateClassic() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "");
+      expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "");
 
       //
       assertEquals(expectedParameters, router.route("/private/portal/classic"));
@@ -101,10 +101,10 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testPrivateClassicSlash() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/");
+      expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/");
 
       //
       assertEquals(expectedParameters, router.route("/private/portal/classic/"));
@@ -114,10 +114,10 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testPrivateClassicHome() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/home");
+      expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
 
       //
       assertEquals(expectedParameters, router.route("/private/portal/classic/home"));
@@ -127,20 +127,20 @@ public class TestPortalConfiguration extends AbstractTestController
    public void testSiteType() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters.put(new QualifiedName("gtn", "sitetype"), "group");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "platform_administrator");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/administration/registry");
+      expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "group");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "platform_administrator");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/administration/registry");
 
       //
       assertEquals(expectedParameters, router.route("/private/group/platform_administrator/administration/registry"));
       assertEquals("/private/group/platform_administrator/administration/registry", router.render(expectedParameters));
       
       Map<QualifiedName, String> expectedParameters1 = new HashMap<QualifiedName, String>();
-      expectedParameters1.put(new QualifiedName("gtn", "controller"), "site");
-      expectedParameters1.put(new QualifiedName("gtn", "sitetype"), "user");
-      expectedParameters1.put(new QualifiedName("gtn", "sitename"), "root");
-      expectedParameters1.put(new QualifiedName("gtn", "path"), "/tab_0");
+      expectedParameters1.put(QualifiedName.create("gtn", "controller"), "site");
+      expectedParameters1.put(QualifiedName.create("gtn", "sitetype"), "user");
+      expectedParameters1.put(QualifiedName.create("gtn", "sitename"), "root");
+      expectedParameters1.put(QualifiedName.create("gtn", "path"), "/tab_0");
       
       //
       assertEquals(expectedParameters1, router.route("/private/user/root/tab_0"));

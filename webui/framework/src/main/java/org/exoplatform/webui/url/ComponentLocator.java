@@ -41,16 +41,16 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
    public static final ResourceType<UIComponent, ComponentLocator> TYPE = new ResourceType<UIComponent, ComponentLocator>() {};
 
    /** . */
-   public static final QualifiedName COMPONENT = new QualifiedName("gtn", "componentid");
+   public static final QualifiedName COMPONENT = QualifiedName.create("gtn", "componentid");
 
    /** . */
-   public static final QualifiedName ACTION = new QualifiedName("gtn", "action");
+   public static final QualifiedName ACTION = QualifiedName.create("gtn", "action");
 
    /** . */
-   public static final QualifiedName TARGET = new QualifiedName("gtn", "objectid");
+   public static final QualifiedName TARGET = QualifiedName.create("gtn", "objectid");
 
    /** . */
-   public static final QualifiedName PATH = new QualifiedName("gtn", "path");
+   public static final QualifiedName PATH = QualifiedName.create("gtn", "path");
 
    /** . */
    private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(COMPONENT, ACTION, TARGET, PATH));

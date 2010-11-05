@@ -63,11 +63,11 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassicComponent() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "");
-      expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "");
+      expectedParameters.put(QualifiedName.create("gtn", "componentid"), "foo");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
@@ -77,10 +77,10 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassic() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic"));
@@ -90,10 +90,10 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassicSlash() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/"));
@@ -103,11 +103,11 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassicSlashComponent() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/");
-      expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/");
+      expectedParameters.put(QualifiedName.create("gtn", "componentid"), "foo");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
@@ -117,10 +117,10 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassicHome() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/home");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/home"));
@@ -130,11 +130,11 @@ public class TestLegacyPortal extends TestCase
    public void testPrivateClassicHomeComponent() throws Exception
    {
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("gtn", "handler"), "portal");
-      expectedParameters.put(new QualifiedName("gtn", "sitename"), "classic");
-      expectedParameters.put(new QualifiedName("gtn", "access"), "private");
-      expectedParameters.put(new QualifiedName("gtn", "path"), "/home");
-      expectedParameters.put(new QualifiedName("gtn", "componentid"), "foo");
+      expectedParameters.put(QualifiedName.create("gtn", "handler"), "portal");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "access"), "private");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
+      expectedParameters.put(QualifiedName.create("gtn", "componentid"), "foo");
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/home", Collections.singletonMap("portal:componentId", new String[]{"foo"})));

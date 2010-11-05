@@ -45,12 +45,12 @@ public class TestHierarchy extends AbstractTestController
       Router router = new Router(new RouterDescriptor().addRoute(descriptor));
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("foo"), "bar"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
 
       //
       Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(new QualifiedName("foo"), "bar");
-      expected.put(new QualifiedName("juu"), "daa");
+      expected.put(QualifiedName.create("foo"), "bar");
+      expected.put(QualifiedName.create("juu"), "daa");
       assertEquals(expected, router.route("/a/b"));
    }
 }

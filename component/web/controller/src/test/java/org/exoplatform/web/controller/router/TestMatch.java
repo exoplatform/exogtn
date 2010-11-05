@@ -90,7 +90,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
    }
 
    public void testParameterPropagationToDescendants() throws Exception
@@ -101,7 +101,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
    }
 
    public void testWildcardPattern() throws Exception
@@ -111,10 +111,10 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), ""), router.route("/"));
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), ""), router.route("/"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
       assertNull(router.route("a"));
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a/b"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a/b"), router.route("/a/b"));
    }
 
    public void testDefaultForm() throws Exception
@@ -124,7 +124,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "/"), router.route("/~"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/~"));
    }
 
    public void testSimplePattern() throws Exception
@@ -134,7 +134,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
       assertNull(router.route("a"));
       assertNull(router.route("/ab"));
       assertNull(router.route("ab"));
@@ -151,7 +151,7 @@ public class TestMatch extends AbstractTestController
       assertNull(router.route("a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/"));
-      assertEquals(Collections.singletonMap(new QualifiedName("p"), "a"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a/b"));
    }
 
    public void testTwoRules1() throws Exception
@@ -162,7 +162,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(new QualifiedName("b"), "b"), router.route("/a"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("b"), "b"), router.route("/a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/b"));
    }
 
@@ -175,9 +175,9 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(new QualifiedName("a"), "a");
-      expectedParameters.put(new QualifiedName("b"), "b");
+      expectedParameters.put(QualifiedName.create("a"), "a");
+      expectedParameters.put(QualifiedName.create("b"), "b");
       assertEquals(expectedParameters, router.route("/a"));
-      assertEquals(Collections.singletonMap(new QualifiedName("a"), "a"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("a"), "a"), router.route("/a/b"));
    }
 }

@@ -19,9 +19,14 @@
 
 package org.exoplatform.web.controller;
 
+import org.jboss.util.NullArgumentException;
+
 /**
- * A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName
- * that retains only the prefix (qualifier) and the local name (name) and leaves out the namespace.
+ * <p>A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName
+ * that retains only the prefix (qualifier) and the local name (name) and leaves out the namespace.</p>
+ *
+ * <p>Qualified names have a string representation that is equals to the concatenation of the qualifier
+ * and name separated by a colon (:) character. When the </p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -29,33 +34,29 @@ package org.exoplatform.web.controller;
 public class QualifiedName
 {
 
-   public static QualifiedName parse(String qname)
+   /**
+    * Parse the string representation of a qname and returns a qualified name.
+    *
+    * @param qname the qname to parse
+    * @return the corresponding qualified name
+    * @throws NullArgumentException if the qname argument is null
+    * @throws IllegalArgumentException if the qname argument contains more than one colon character
+    */
+   public static QualifiedName parse(String qname) throws NullArgumentException, IllegalArgumentException
    {
+      if (qname == null)
+      {
+         throw new NullPointerException("No null argument accepted");
+      }
       if (qname.length() > 0)
       {
          int index = qname.indexOf(':');
          if (index > -1)
          {
-            return new QualifiedName(qname.substring(0, index), qname.substring(index + 1));
+            return create(qname.substring(0, index), qname.substring(index + 1));
          }
       }
-      return new QualifiedName(qname);
-   }
-
-   /** . */
-   private final String qualifier;
-
-   /** . */
-   private final String name;
-
-   /**
-    * Creates a qualified name with an empty string qualifier.
-    *
-    * @param name the name
-    */
-   public QualifiedName(String name)
-   {
-      this("", name);
+      return create(qname);
    }
 
    /**
@@ -63,16 +64,56 @@ public class QualifiedName
     *
     * @param qualifier the qualifier
     * @param name the name
+    * @return the qualified name
+    * @throws NullPointerException if any argument is null
+    * @throws IllegalArgumentException if any argument contains a colon character
     */
-   public QualifiedName(String qualifier, String name)
+   public static QualifiedName create(String qualifier, String name) throws NullPointerException, IllegalArgumentException
+   {
+      return new QualifiedName(qualifier, name);
+   }
+
+   /**
+    * Creates a qualified name with an empty string qualifier.
+    *
+    * @param name the name
+    * @return the qualified name
+    * @throws NullPointerException if any argument is null
+    * @throws IllegalArgumentException if any argument contains a colon character
+    */
+   public static QualifiedName create(String name) throws NullPointerException, IllegalArgumentException
+   {
+      return new QualifiedName(name);
+   }
+
+   /** The qualifier. */
+   private final String qualifier;
+
+   /** The name. */
+   private final String name;
+
+   private QualifiedName(String name) throws NullPointerException, IllegalArgumentException
+   {
+      this("", name);
+   }
+
+   private QualifiedName(String qualifier, String name) throws NullPointerException, IllegalArgumentException
    {
       if (qualifier == null)
       {
          throw new NullPointerException("No null prefix accepted");
       }
+      if (qualifier.indexOf(':') != -1)
+      {
+         throw new IllegalArgumentException("The name '" + qualifier + "' must not contain a colon character");
+      }
       if (name == null)
       {
          throw new NullPointerException("No null prefix accepted");
+      }
+      if (name.indexOf(':') != -1)
+      {
+         throw new IllegalArgumentException("The name '" + name + "' must not contain a colon character");
       }
 
       //
@@ -80,16 +121,31 @@ public class QualifiedName
       this.name = name;
    }
 
+   /**
+    * Returns the qualifier.
+    *
+    * @return the qualifier
+    */
    public String getQualifier()
    {
       return qualifier;
    }
 
+   /**
+    * Returns the name.
+    *
+    * @return the name
+    */
    public String getName()
    {
       return name;
    }
 
+   /**
+    * Returns the string representation.
+    *
+    * @return the string representation
+    */
    public String getValue()
    {
       if (qualifier.isEmpty())

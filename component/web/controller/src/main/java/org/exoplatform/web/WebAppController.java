@@ -59,7 +59,7 @@ public class WebAppController
 {
 
    /** . */
-   public static final QualifiedName HANDLER_PARAM = new QualifiedName("gtn", "handler");
+   public static final QualifiedName HANDLER_PARAM = QualifiedName.create("gtn", "handler");
 
    /** . */
    protected static Logger log = LoggerFactory.getLogger(WebAppController.class);

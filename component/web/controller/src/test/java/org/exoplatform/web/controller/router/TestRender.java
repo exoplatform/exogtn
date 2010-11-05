@@ -69,7 +69,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
+      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
       assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
    }
 
@@ -80,8 +80,8 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
-      assertNull(router.render(Collections.singletonMap(new QualifiedName("p"), "ab")));
+      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
+      assertNull(router.render(Collections.singletonMap(QualifiedName.create("p"), "ab")));
    }
 
    public void testWildcardPathParam() throws Exception
@@ -91,9 +91,9 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/", router.render(Collections.singletonMap(new QualifiedName("p"), "")));
-      assertEquals("/a", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
-      assertEquals("/a/b", router.render(Collections.singletonMap(new QualifiedName("p"), "a/b")));
+      assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));
+      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
+      assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a/b")));
    }
 
    public void testFoo() throws Exception
@@ -103,7 +103,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(null, router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+      assertEquals(null, router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testBar() throws Exception
@@ -113,7 +113,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/~", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+      assertEquals("/~", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testWildcardParamPathPreservePathEncoding() throws Exception
@@ -123,7 +123,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("//", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+      assertEquals("//", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testWildcardParamPathDefaultFormEncoded() throws Exception
@@ -133,7 +133,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/~", router.render(Collections.singletonMap(new QualifiedName("p"), "/")));
+      assertEquals("/~", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testPrecedence() throws Exception
@@ -147,6 +147,6 @@ public class TestRender extends AbstractTestController
       assertEquals("/a", router.render(Collections.<QualifiedName, String>emptyMap()));
 
       //
-      assertEquals("/a/b", router.render(Collections.singletonMap(new QualifiedName("p"), "a")));
+      assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
    }
 }

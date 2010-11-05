@@ -59,16 +59,16 @@ public class PortalRequestHandler extends WebRequestHandler
    public static final String PRIVATE_ACCESS = "private";
 
    /** . */
-   public static final QualifiedName REQUEST_PATH = new QualifiedName("gtn", "path");
+   public static final QualifiedName REQUEST_PATH = QualifiedName.create("gtn", "path");
 
    /** . */
-   public static final QualifiedName REQUEST_SITE_TYPE = new QualifiedName("gtn", "sitetype");
+   public static final QualifiedName REQUEST_SITE_TYPE = QualifiedName.create("gtn", "sitetype");
 
    /** . */
-   public static final QualifiedName REQUEST_SITE_NAME = new QualifiedName("gtn", "sitename");
+   public static final QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
 
    /** . */
-   public static final QualifiedName ACCESS = new QualifiedName("gtn", "access");
+   public static final QualifiedName ACCESS = QualifiedName.create("gtn", "access");
 
    public String getHandlerName()
    {

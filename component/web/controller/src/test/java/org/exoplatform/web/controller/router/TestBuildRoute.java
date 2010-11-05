@@ -24,8 +24,6 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
-import java.util.Collections;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -75,7 +73,7 @@ public class TestBuildRoute extends TestCase
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
-         assertEquals(new QualifiedName("a"), patternRoute.params.get(0).name);
+         assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
          assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
@@ -99,7 +97,7 @@ public class TestBuildRoute extends TestCase
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^([^/]+)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
-         assertEquals(new QualifiedName("q", "a"), patternRoute.params.get(0).name);
+         assertEquals(QualifiedName.create("q", "a"), patternRoute.params.get(0).name);
          assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
@@ -123,7 +121,7 @@ public class TestBuildRoute extends TestCase
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^(.*)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
-         assertEquals(new QualifiedName("a"), patternRoute.params.get(0).name);
+         assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
          assertEquals("^.*$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());

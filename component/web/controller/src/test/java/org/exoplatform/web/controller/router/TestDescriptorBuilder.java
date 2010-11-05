@@ -86,11 +86,11 @@ public class TestDescriptorBuilder extends TestCase
       assertTrue(i.hasNext());
       RouteDescriptor route5 = i.next();
       assertEquals("/a", route5.getPath());
-      assertEquals(Collections.singletonMap(new QualifiedName("a"), "a_value"), route5.getParams());
+      assertEquals(Collections.singletonMap(QualifiedName.create("a"), "a_value"), route5.getParams());
       assertEquals(1, route5.getChildren().size());
       RouteDescriptor route5_1 = route5.getChildren().get(0);
       assertEquals("/b", route5_1.getPath());
-      assertEquals(Collections.singletonMap(new QualifiedName("b"), "b_value"), route5_1.getParams());
+      assertEquals(Collections.singletonMap(QualifiedName.create("b"), "b_value"), route5_1.getParams());
 
       //
       assertTrue(i.hasNext());
