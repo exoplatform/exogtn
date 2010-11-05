@@ -127,6 +127,17 @@ public class TestMatch extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/~"));
    }
 
+   public void testPreservePath() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.PRESERVE_PATH));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "~"), router.route("/~"));
+      assertNull(router.route("//"));
+   }
+
    public void testSimplePattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
