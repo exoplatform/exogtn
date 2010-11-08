@@ -39,11 +39,13 @@
     <!-- The group access -->
     <route path="/groups">
       <route-param name="gtn:access" value="private"/>
+<!--
       <route path="/">
         <route-param name="gtn:sitetype" value="portal"/>
         <route-param name="gtn:sitename" value="classic"/>
         <route-param name="gtn:path" value="/groupnavigation"/>
       </route>
+-->
       <route path="/{gtn:sitename}{gtn:path}">
         <route-param name="gtn:sitetype" value="group"/>
         <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
