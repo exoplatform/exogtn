@@ -13,15 +13,6 @@
     <request-param name="gtn:action" matchName="portal:action" required="false"/>
     <request-param name="gtn:objectid" matchName="objectId" required="false"/>
 
-    <!-- Map the sitemap navigation on the /foo path -->
-<!--
-    <route path="/foo">
-      <param name="gtn:access" value="public"/>
-      <param name="gtn:sitename" value="classic"/>
-      <param name="gtn:path" value="/sitemap"/>
-    </route>
--->
-
     <!-- The public access -->
     <route path="/public/{gtn:sitename}{gtn:path}">
       <route-param name="gtn:access" value="public"/>
@@ -39,13 +30,6 @@
     <!-- The group access -->
     <route path="/groups">
       <route-param name="gtn:access" value="private"/>
-<!--
-      <route path="/">
-        <route-param name="gtn:sitetype" value="portal"/>
-        <route-param name="gtn:sitename" value="classic"/>
-        <route-param name="gtn:path" value="/groupnavigation"/>
-      </route>
--->
       <route path="/{gtn:sitename}{gtn:path}">
         <route-param name="gtn:sitetype" value="group"/>
         <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
