@@ -36,6 +36,10 @@ class PatternBuilder
 
    public PatternBuilder expr(String s)
    {
+      if (s == null)
+      {
+         throw new NullPointerException("No null expression allowed");
+      }
       buffer.append(s);
       return this;
    }

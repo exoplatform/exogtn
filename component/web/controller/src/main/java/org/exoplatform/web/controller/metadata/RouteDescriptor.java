@@ -92,9 +92,9 @@ public class RouteDescriptor
       return this;
    }
 
-   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode, boolean required)
+   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
    {
-      return addRequestParam(new PathParamDescriptor(name, pattern, encodingMode, required));
+      return addRequestParam(new PathParamDescriptor(name, pattern, encodingMode));
    }
 
    public RouteDescriptor addRequestParam(PathParamDescriptor requestParam)

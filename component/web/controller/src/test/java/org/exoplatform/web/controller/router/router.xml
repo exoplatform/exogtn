@@ -34,8 +34,4 @@
     <request-param name="juu" matchName="juu" matchValue="juu" required="true"/>
   </route>
 
-  <route path="/{gtn:lang}">
-    <path-param name="gtn:lang" required="false"/>
-  </route>
-
 </router>

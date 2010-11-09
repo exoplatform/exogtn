@@ -64,7 +64,6 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="required" type="xs:boolean" use="optional"/>
   </xs:complexType>
 
   <xs:complexType name="requestParamType">

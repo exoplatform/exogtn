@@ -112,7 +112,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.DEFAULT_FORM, true));
+         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.DEFAULT_FORM));
          Router router = new Router(routerMD);
 
          //

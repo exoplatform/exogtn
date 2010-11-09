@@ -183,19 +183,26 @@ class Route
          for (RequestParam requestParamDef : requestParamDefs.values())
          {
             String a = blah.get(requestParamDef.name);
+            boolean matched = false;
             if (a != null)
             {
                if (requestParamDef.matchValue(a))
                {
-                  abc.remove(requestParamDef.name);
-                  continue;
+                  matched = true;
                }
+            }
+            if (matched)
+            {
+               abc.remove(requestParamDef.name);
             }
             else if (!requestParamDef.isRequired())
             {
-               continue;
+               // Do nothing
             }
-            return null;
+            else
+            {
+               return null;
+            }
          }
       }
 
@@ -590,11 +597,12 @@ class Route
       {
          if (start.size() == end.size())
          {
-            List<QualifiedName> parameterNames = new ArrayList<QualifiedName>();
             PatternBuilder builder = new PatternBuilder();
             builder.expr("^").expr('/');
             List<String> chunks = new ArrayList<String>();
             List<PatternParam> parameterPatterns = new ArrayList<PatternParam>();
+
+            //
             int previous = 0;
             for (int i = 0;i < start.size();i++)
             {
@@ -607,27 +615,33 @@ class Route
 
                // Now get path param metadata
                PathParamDescriptor parameterDescriptor = pathParamDescriptors.get(parameterQName);
-               String regex = "[^/]+";
+               String regex = null;
                EncodingMode encodingMode = EncodingMode.DEFAULT_FORM;
-               boolean required = true;
                if (parameterDescriptor != null)
                {
                   regex = parameterDescriptor.getPattern();
                   encodingMode = parameterDescriptor.getEncodingMode();
-                  required = parameterDescriptor.isRequired();
                }
 
                //
-               builder.expr("(");
-               builder.expr(regex);
-               builder.expr(")");
+               if (regex == null)
+               {
+                  regex = "[^/]+";
+               }
+
+               //
+               builder.expr("(").expr(regex).expr(")");
+
+               //
                parameterPatterns.add(new PatternParam(
                   parameterQName,
                   encodingMode,
-                  Pattern.compile("^" + regex + "$"),
-                  required));
+                  Pattern.compile("^" + regex + "$")
+               ));
                previous = end.get(i) + 1;
             }
+
+            //
             builder.litteral(path, previous, pos);
             chunks.add(path.substring(previous, pos));
             // Julien : should the pattern end with a $ ?????? I don't see that for now

@@ -46,25 +46,25 @@ public class TestPortalConfiguration extends AbstractTestController
       RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       portalRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
       portalRouteMD.addRequestParam(QualifiedName.create("gtn", "componentid"), "portal:componentId", null, false);
-      portalRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH, true);
+      portalRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD);
 
       //
       RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       portalRouteMD2.addParam(QualifiedName.create("gtn", "controller"), "site");
-      portalRouteMD2.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH, true);
+      portalRouteMD2.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(portalRouteMD2);
 
       //
       RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       groupRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
-      groupRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH, true);
+      groupRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(groupRouteMD);
 
       //
       RouteDescriptor userRouteMD = new RouteDescriptor("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
       userRouteMD.addParam(QualifiedName.create("gtn", "controller"), "site");
-      userRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH, true);
+      userRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
       routerMD.addRoute(userRouteMD);
 
       //
