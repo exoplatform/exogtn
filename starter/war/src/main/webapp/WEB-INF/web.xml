@@ -31,5 +31,8 @@
 		<listener-class>org.exoplatform.container.web.PortalContainerCreator</listener-class> 
 	</listener>
 
+	<listener>
+		<listener-class>org.gatein.portal.starter.VersionDisplayer</listener-class> 
+	</listener>
 </web-app>
 
