@@ -59,6 +59,7 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(QualifiedName.parse("gtn:path"), route1.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
       assertEquals(".*", route1.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
       assertEquals(EncodingMode.DEFAULT_FORM, route1.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
+      assertEquals(true, route1.getPathParams().get(QualifiedName.parse("gtn:path")).isRequired());
 
       //
       assertTrue(i.hasNext());
@@ -69,6 +70,7 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(QualifiedName.parse("gtn:path"), route2.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
       assertEquals(".*", route2.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
       assertEquals(EncodingMode.PRESERVE_PATH, route2.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
+      assertEquals(true, route2.getPathParams().get(QualifiedName.parse("gtn:path")).isRequired());
 
       //
       assertTrue(i.hasNext());
@@ -109,5 +111,18 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals("juu", route6.getRequestParams().get("juu").getMatchName());
       assertEquals("juu", route6.getRequestParams().get("juu").getMatchValue());
       assertEquals(true, route6.getRequestParams().get("juu").isRequired());
+
+      //
+      assertTrue(i.hasNext());
+      RouteDescriptor route7 = i.next();
+      assertEquals("/{gtn:lang}", route7.getPath());
+      assertEquals(Collections.singleton(QualifiedName.parse("gtn:lang")), route7.getPathParams().keySet());
+      assertEquals(QualifiedName.parse("gtn:lang"), route7.getPathParams().get(QualifiedName.parse("gtn:lang")).getName());
+      assertEquals(null, route7.getPathParams().get(QualifiedName.parse("gtn:lang")).getPattern());
+      assertEquals(EncodingMode.DEFAULT_FORM, route7.getPathParams().get(QualifiedName.parse("gtn:lang")).getEncodingMode());
+      assertEquals(false, route7.getPathParams().get(QualifiedName.parse("gtn:lang")).isRequired());
+
+      //
+      assertFalse(i.hasNext());
    }
 }

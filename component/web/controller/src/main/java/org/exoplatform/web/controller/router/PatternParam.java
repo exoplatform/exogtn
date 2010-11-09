@@ -39,10 +39,14 @@ class PatternParam
    /** . */
    final Pattern pattern;
 
-   PatternParam(QualifiedName name, EncodingMode encodingMode, Pattern pattern)
+   /** . */
+   final boolean required;
+
+   PatternParam(QualifiedName name, EncodingMode encodingMode, Pattern pattern, boolean required)
    {
       this.name = name;
       this.encodingMode = encodingMode;
       this.pattern = pattern;
+      this.required = required;
    }
 }

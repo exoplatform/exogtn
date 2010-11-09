@@ -107,7 +107,7 @@ public class TestMatch extends AbstractTestController
    public void testWildcardPattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH, true));
       Router router = new Router(routerMD);
 
       //
@@ -120,7 +120,7 @@ public class TestMatch extends AbstractTestController
    public void testDefaultForm() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.DEFAULT_FORM, true));
       Router router = new Router(routerMD);
 
       //
@@ -130,7 +130,7 @@ public class TestMatch extends AbstractTestController
    public void testPreservePath() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.PRESERVE_PATH));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.PRESERVE_PATH, true));
       Router router = new Router(routerMD);
 
       //
@@ -141,7 +141,7 @@ public class TestMatch extends AbstractTestController
    public void testSimplePattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM, true));
       Router router = new Router(routerMD);
 
       //
@@ -155,7 +155,7 @@ public class TestMatch extends AbstractTestController
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM, true));
       Router router = new Router(routerMD);
 
       //

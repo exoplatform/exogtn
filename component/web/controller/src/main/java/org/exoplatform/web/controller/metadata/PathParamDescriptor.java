@@ -38,21 +38,21 @@ public class PathParamDescriptor
    /** . */
    private final EncodingMode encodingMode;
 
-   public PathParamDescriptor(QualifiedName name, String pattern, EncodingMode encodingMode)
+   /** . */
+   private final boolean required;
+
+   public PathParamDescriptor(QualifiedName name, String pattern, EncodingMode encodingMode, boolean required)
    {
       if (name == null)
       {
          throw new NullPointerException("No null name accepted");
-      }
-      if (pattern == null)
-      {
-         throw new NullPointerException("No null pattern accepted");
       }
 
       //
       this.name = name;
       this.pattern = pattern;
       this.encodingMode = encodingMode;
+      this.required = required;
    }
 
    public QualifiedName getName()
@@ -68,5 +68,10 @@ public class PathParamDescriptor
    public EncodingMode getEncodingMode()
    {
       return encodingMode;
+   }
+
+   public boolean isRequired()
+   {
+      return required;
    }
 }

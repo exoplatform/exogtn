@@ -609,17 +609,23 @@ class Route
                PathParamDescriptor parameterDescriptor = pathParamDescriptors.get(parameterQName);
                String regex = "[^/]+";
                EncodingMode encodingMode = EncodingMode.DEFAULT_FORM;
+               boolean required = true;
                if (parameterDescriptor != null)
                {
                   regex = parameterDescriptor.getPattern();
                   encodingMode = parameterDescriptor.getEncodingMode();
+                  required = parameterDescriptor.isRequired();
                }
 
                //
                builder.expr("(");
                builder.expr(regex);
                builder.expr(")");
-               parameterPatterns.add(new PatternParam(parameterQName, encodingMode, Pattern.compile("^" + regex + "$")));
+               parameterPatterns.add(new PatternParam(
+                  parameterQName,
+                  encodingMode,
+                  Pattern.compile("^" + regex + "$"),
+                  required));
                previous = end.get(i) + 1;
             }
             builder.litteral(path, previous, pos);
