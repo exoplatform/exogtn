@@ -360,13 +360,13 @@ class Route
          {
             for (PatternRoute route : patterns)
             {
-               Matcher matcher = route.pattern.matcher(path.substring(1));
+               Matcher matcher = route.pattern.matcher(path);
 
                // We match
                if (matcher.find())
                {
                   // Build next controller context
-                  int nextPos = matcher.end() + 1;
+                  int nextPos = matcher.end();
                   String nextPath;
                   if (path.length() == nextPos)
                   {
@@ -592,7 +592,7 @@ class Route
          {
             List<QualifiedName> parameterNames = new ArrayList<QualifiedName>();
             PatternBuilder builder = new PatternBuilder();
-            builder.expr("^");
+            builder.expr("^").expr('/');
             List<String> chunks = new ArrayList<String>();
             List<PatternParam> parameterPatterns = new ArrayList<PatternParam>();
             int previous = 0;
