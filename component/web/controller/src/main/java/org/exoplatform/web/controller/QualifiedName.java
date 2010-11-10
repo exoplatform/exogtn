@@ -31,7 +31,7 @@ import org.jboss.util.NullArgumentException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class QualifiedName
+public class QualifiedName implements Comparable<QualifiedName>
 {
 
    /**
@@ -177,6 +177,30 @@ public class QualifiedName
          return qualifier.equals(that.qualifier) && name.equals(that.name);
       }
       return false;
+   }
+
+   public int compareTo(QualifiedName o)
+   {
+      if (o == null)
+      {
+         throw new NullPointerException("No null argument accepted");
+      }
+      else if (o == this)
+      {
+         return 0;
+      }
+      else
+      {
+         int qualifierComparison = qualifier.compareTo(o.qualifier);
+         if (qualifierComparison == 0)
+         {
+            return name.compareTo(o.name);
+         }
+         else
+         {
+            return qualifierComparison;
+         }
+      }
    }
 
    @Override

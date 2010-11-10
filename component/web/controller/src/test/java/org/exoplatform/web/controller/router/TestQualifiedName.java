@@ -29,7 +29,7 @@ import org.exoplatform.web.controller.QualifiedName;
 public class TestQualifiedName extends TestCase
 {
 
-   public void testQualifiedName()
+   public void testSame()
    {
       QualifiedName qd1 = QualifiedName.create("a", "bc");
       assertEquals("a", qd1.getQualifier());
@@ -52,7 +52,31 @@ public class TestQualifiedName extends TestCase
       assertEquals(qd1.hashCode(), qd2.hashCode());
    }
 
-   public void testEmptyQualifier()
+   public void testSameQualifierComparison()
+   {
+      QualifiedName qd1 = QualifiedName.create("a", "b");
+      QualifiedName qd2 = QualifiedName.create("a", "c");
+      assertEquals(Math.signum(qd1.compareTo(qd2)), Math.signum("b".compareTo("c")));
+      assertEquals(Math.signum(qd2.compareTo(qd1)), Math.signum("c".compareTo("b")));
+   }
+
+   public void testEmptyQualifierComparison()
+   {
+      QualifiedName qd1 = QualifiedName.create("a");
+      QualifiedName qd2 = QualifiedName.create("b");
+      assertEquals(Math.signum(qd1.compareTo(qd2)), Math.signum("a".compareTo("b")));
+      assertEquals(Math.signum(qd2.compareTo(qd1)), Math.signum("b".compareTo("a")));
+   }
+
+   public void testDifferentQualifierSameNameComparison()
+   {
+      QualifiedName qd1 = QualifiedName.create("a", "c");
+      QualifiedName qd2 = QualifiedName.create("b", "c");
+      assertEquals(Math.signum(qd1.compareTo(qd2)), Math.signum("a".compareTo("b")));
+      assertEquals(Math.signum(qd2.compareTo(qd1)), Math.signum("b".compareTo("a")));
+   }
+
+   public void testSameWithEmptyQualifier()
    {
       QualifiedName qd1 = QualifiedName.create("abc");
       assertEquals("", qd1.getQualifier());
