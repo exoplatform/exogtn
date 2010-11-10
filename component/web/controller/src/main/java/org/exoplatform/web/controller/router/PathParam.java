@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternParam
+class PathParam
 {
 
    /** . */
@@ -39,7 +39,7 @@ class PatternParam
    /** . */
    final Pattern pattern;
 
-   PatternParam(QualifiedName name, EncodingMode encodingMode, Pattern pattern)
+   PathParam(QualifiedName name, EncodingMode encodingMode, Pattern pattern)
    {
       this.name = name;
       this.encodingMode = encodingMode;

@@ -62,7 +62,7 @@ class Route
    private final Map<QualifiedName, String> routeParameters;
 
    /** . */
-   private final Map<String, RequestParam> requestParamDefs;
+   private final Map<String, RequestParam> requestParams;
 
    Route()
    {
@@ -71,7 +71,7 @@ class Route
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParameters = new HashMap<QualifiedName, String>();
-      this.requestParamDefs = new HashMap<String, RequestParam>();
+      this.requestParams = new HashMap<String, RequestParam>();
    }
 
    /*
@@ -95,9 +95,9 @@ class Route
       }
 
       //
-      if (requestParamDefs.size() > 0)
+      if (requestParams.size() > 0)
       {
-         for (RequestParam requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : requestParams.values())
          {
             String s = blah.get(requestParamDef.getName());
             if (s != null)
@@ -122,7 +122,7 @@ class Route
          while (i < pr.params.size())
          {
             renderContext.appendPath(pr.chunks.get(i), true);
-            PatternParam def = pr.params.get(i);
+            PathParam def = pr.params.get(i);
             String value = blah.get(def.name);
 
             //
@@ -178,9 +178,9 @@ class Route
       }
 
       // Match any request parameter
-      if (requestParamDefs.size() > 0)
+      if (requestParams.size() > 0)
       {
-         for (RequestParam requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : requestParams.values())
          {
             String a = blah.get(requestParamDef.name);
             boolean matched = false;
@@ -212,7 +212,7 @@ class Route
          PatternRoute prt = (PatternRoute)this;
          for (int i = 0;i < prt.params.size();i++)
          {
-            PatternParam param = prt.params.get(i);
+            PathParam param = prt.params.get(i);
             String s = blah.get(param.name);
             boolean matched = false;
             if (s != null)
@@ -284,9 +284,9 @@ class Route
 
       // Check request parameters
       Map<QualifiedName, String> routeRequestParams = Collections.emptyMap();
-      if (requestParamDefs.size() > 0)
+      if (this.requestParams.size() > 0)
       {
-         for (RequestParam requestParamDef : requestParamDefs.values())
+         for (RequestParam requestParamDef : this.requestParams.values())
          {
             String value = null;
             String[] values = requestParams.get(requestParamDef.getMatchName());
@@ -394,7 +394,7 @@ class Route
                      int group = 1;
                      for (int i = 0;i < route.params.size();i++)
                      {
-                        PatternParam param = route.params.get(i);
+                        PathParam param = route.params.get(i);
                         String value = matcher.group(group++);
                         if (param.encodingMode == EncodingMode.DEFAULT_FORM)
                         {
@@ -513,7 +513,7 @@ class Route
       for (RequestParamDescriptor requestParamDescriptor : descriptor.getRequestParams().values())
       {
          RequestParam requestParamDef = new RequestParam(requestParamDescriptor);
-         route.requestParamDefs.put(requestParamDef.getMatchName(), requestParamDef);
+         route.requestParams.put(requestParamDef.getMatchName(), requestParamDef);
       }
 
       //
@@ -600,7 +600,7 @@ class Route
             PatternBuilder builder = new PatternBuilder();
             builder.expr("^").expr('/');
             List<String> chunks = new ArrayList<String>();
-            List<PatternParam> parameterPatterns = new ArrayList<PatternParam>();
+            List<PathParam> parameterPatterns = new ArrayList<PathParam>();
 
             //
             int previous = 0;
@@ -633,7 +633,7 @@ class Route
                builder.expr("(").expr(regex).expr(")");
 
                //
-               parameterPatterns.add(new PatternParam(
+               parameterPatterns.add(new PathParam(
                   parameterQName,
                   encodingMode,
                   Pattern.compile("^" + regex + "$")

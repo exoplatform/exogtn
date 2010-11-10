@@ -33,14 +33,14 @@ class PatternRoute extends Route
    final Pattern pattern;
 
    /** . */
-   final List<PatternParam> params;
+   final List<PathParam> params;
 
    /** . */
    final List<String> chunks;
 
    PatternRoute(
       Pattern pattern,
-      List<PatternParam> params,
+      List<PathParam> params,
       List<String> chunks)
    {
       if (chunks.size() != params.size() + 1)

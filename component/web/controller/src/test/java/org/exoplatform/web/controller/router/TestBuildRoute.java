@@ -170,8 +170,8 @@ public class TestBuildRoute extends TestCase
          assertEquals(((PatternRoute)expectedRoute).params.size(), ((PatternRoute)route).params.size());
          for (int i = 0;i < ((PatternRoute)expectedRoute).params.size();i++)
          {
-            PatternParam expectedParam = ((PatternRoute)expectedRoute).params.get(i);
-            PatternParam param = ((PatternRoute)route).params.get(i);
+            PathParam expectedParam = ((PatternRoute)expectedRoute).params.get(i);
+            PathParam param = ((PatternRoute)route).params.get(i);
             assertEquals(expectedParam.name, param.name);
             assertEquals(expectedParam.pattern.toString(), param.pattern.toString());
             assertEquals(expectedParam.encodingMode, param.encodingMode);
