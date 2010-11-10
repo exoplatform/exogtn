@@ -19,15 +19,11 @@
 
 package org.exoplatform.toolbar.webui.component;
 
-import java.util.Collection;
-
-import javax.portlet.EventRequest;
-
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-<<<<<<< HEAD
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -35,27 +31,23 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
-import org.exoplatform.webui.application.WebuiRequestContext;
-=======
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.url.ControllerURL;
->>>>>>> 10fa210... - Support to specify siteType and siteName in URL
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.util.Collection;
+
+import javax.portlet.EventRequest;
 
 /**
  * Created by The eXo Platform SAS
@@ -138,22 +130,13 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
          {
             createDashboard(nodeName, toolBarPortlet);
          }
-<<<<<<< HEAD
-         else
-         {
-            PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(
-               prContext.getPortalURI() + nodes.iterator().next().getURI());
-         }
-=======
          PortalRequestContext pcontext = Util.getPortalRequestContext();
 
          ControllerURL<NavigationResource, NavigationLocator> nodeURL =
             pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-         nodeURL.setResource(new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), cachedNavigation
-            .getNodes().get(0)));
+         nodeURL.setResource(new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), nodes
+            .iterator().next()));
          pcontext.sendRedirect(nodeURL.toString());
->>>>>>> 10fa210... - Support to specify siteType and siteName in URL
       }
 
       private static void createDashboard(String _nodeName, UIUserToolBarDashboardPortlet toolBarPortlet)
@@ -182,7 +165,6 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
             page.setName(_nodeName);
             toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-<<<<<<< HEAD
             UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN, toolBarPortlet.toolbarFilterConfig, null);
             UserNode tabNode = rootNode.addChild(_nodeName);
             tabNode.setLabel(_nodeName);            
@@ -190,18 +172,6 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
 
             userPortal.saveNode(rootNode, null);
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabNode.getURI());
-=======
-            PageNode pageNode = new PageNode();
-            pageNode.setName(_nodeName);
-            pageNode.setLabel(prContext.getApplicationResourceBundle().getString("UIUserToolBarDashboard.page.ClickAndType"));
-            pageNode.setResolvedLabel(prContext.getApplicationResourceBundle());
-            pageNode.setUri(_nodeName);
-            pageNode.setPageReference(page.getPageId());
-
-            _pageNavigation.addNode(pageNode);
-            _configService.create(page);
-            _configService.update(_pageNavigation);
->>>>>>> 10fa210... - Support to specify siteType and siteName in URL
          }
          catch (Exception ex)
          {

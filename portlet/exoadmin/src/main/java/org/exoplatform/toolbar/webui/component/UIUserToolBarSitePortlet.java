@@ -32,6 +32,7 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 

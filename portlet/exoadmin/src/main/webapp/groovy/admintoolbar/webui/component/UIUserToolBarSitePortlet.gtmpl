@@ -49,7 +49,7 @@
 						<a href="$href" class="ItemIcon SiteIcon">$label</a>						
 				""";
 						if(isCurrent) {
-							renderCurrentPortal(nodeURL);
+							renderCurrentPortal(nodeURL, pcontext);
 						}
 				print """
 					</li>
@@ -61,21 +61,21 @@
 			""";
 	}
 	
-	void renderCurrentPortal(ControllerURL nodeURL) {
+	void renderCurrentPortal(ControllerURL nodeURL, PortalRequestContext pcontext) {
 	    def currentPortal = uicomponent.getCurrentPortal();
 		def nodes = uicomponent.getNavigationNodes(uicomponent.getNavigation(SiteKey.portal(currentPortal)));
 		print """
 			<ul style="position: absolute; display:none" class="MenuItemContainer">
 		""";
 		for(UserNode node : nodes) {
-			renderPageNode(nodeURL, node);
+			renderPageNode(nodeURL, node, pcontext);
 		}
 		print """
 			</ul>
 		""";
 	}
 	
-	void renderPageNode(ControllerURL nodeURL, UserNode node) {
+	void renderPageNode(ControllerURL nodeURL, UserNode node, PortalRequestContext pcontext) {
 	    UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
@@ -85,7 +85,7 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = nodeURL.setResource(new NavigationResource("portal", null, node)).toString();
+		String	href = nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, pcontext.getPortalOwner(), node)).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.resolvedLabel.length() > 60);

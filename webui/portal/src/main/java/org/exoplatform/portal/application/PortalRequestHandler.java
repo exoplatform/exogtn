@@ -136,12 +136,18 @@ public class PortalRequestHandler extends WebRequestHandler
    protected void processRequest(PortalRequestContext context, PortalApplication app) throws Exception
    {
       WebuiRequestContext.setCurrentInstance(context);
+      UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
+      
+      if (uiApp == null)
+      {
+         return;
+      }
+      
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try
       {
          for (ApplicationLifecycle lifecycle : lifecycles)
             lifecycle.onStartRequest(app, context);
-         UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
          if (context.getUIApplication() != uiApp)
             context.setUIApplication(uiApp);
          

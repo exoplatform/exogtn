@@ -414,14 +414,9 @@ public class PortalRequestContext extends WebuiRequestContext
       return siteName;
    }
 
-   /**
-    * @deprecated use {@link #getSiteName()} instead
-    * 
-    * @return the current site name
-    */
    public String getPortalOwner()
    {
-      return getSiteName();
+      return ((UIPortalApplication)uiApplication_).getPortalName();
    }
    
    public String getNodePath()
