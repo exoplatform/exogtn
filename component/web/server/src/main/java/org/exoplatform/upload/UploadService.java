@@ -40,6 +40,9 @@ import org.exoplatform.container.xml.PortalContainerInfo;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
 public class UploadService
 {
    /** . */
@@ -71,7 +74,7 @@ public class UploadService
    /**
     * Create UploadResource for HttpServletRequest
     * 
-    * @param requestow
+    * @param request
     *           the webapp's {@link javax.servlet.http.HttpServletRequest}
     * @throws FileUploadException
     */
@@ -79,10 +82,15 @@ public class UploadService
    public void createUploadResource(HttpServletRequest request) throws FileUploadException
    {
       String uploadId = request.getParameter("uploadId");
+      createUploadResource(uploadId, request);
+   }
+
+   public void createUploadResource(String uploadId, HttpServletRequest request) throws FileUploadException
+   {
       UploadResource upResource = new UploadResource(uploadId);
       upResource.setFileName("");// Avoid NPE in UploadHandler
       uploadResources.put(upResource.getUploadId(), upResource);
-      
+
       putToStackInSession(request.getSession(true), uploadId);
 
       double contentLength = request.getContentLength();
@@ -114,6 +122,53 @@ public class UploadService
       upResource.setMimeType(fileItem.getContentType());
       upResource.setStoreLocation(storeLocation);
       upResource.setStatus(UploadResource.UPLOADED_STATUS);
+   }
+
+   /**
+    * @deprecated use {@link #createUploadResource(String, javax.servlet.http.HttpServletRequest)}  instead
+    *
+    */
+   public void createUploadResource(String uploadId, String encoding, String contentType, double contentLength,
+                                    InputStream inputStream) throws Exception
+   {
+      UploadResource upResource = new UploadResource(uploadId);
+      RequestStreamReader reader = new RequestStreamReader(upResource);
+      int limitMB = uploadLimitsMB_.get(uploadId).intValue();
+      int estimatedSizeMB = (int)contentLength / 1024 / 1024;
+      if (limitMB > 0 && estimatedSizeMB > limitMB)
+      { // a limit set to 0 means unlimited
+         upResource.setStatus(UploadResource.FAILED_STATUS);
+         uploadResources.put(uploadId, upResource);
+         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
+            + limitMB + " MB");
+         return;
+      }
+      Map<String, String> headers = reader.parseHeaders(inputStream, encoding);
+
+      String fileName = reader.getFileName(headers);
+      if (fileName == null)
+         fileName = uploadId;
+      fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
+
+      upResource.setFileName(fileName);
+      upResource.setMimeType(headers.get(RequestStreamReader.CONTENT_TYPE));
+      upResource.setStoreLocation(uploadLocation_ + "/" + uploadId + "." + fileName);
+      upResource.setEstimatedSize(contentLength);
+      uploadResources.put(upResource.getUploadId(), upResource);
+      File fileStore = new File(upResource.getStoreLocation());
+      if (!fileStore.exists())
+         fileStore.createNewFile();
+      FileOutputStream output = new FileOutputStream(fileStore);
+      reader.readBodyData(inputStream, contentType, output);
+
+      if (upResource.getStatus() == UploadResource.UPLOADING_STATUS)
+      {
+         upResource.setStatus(UploadResource.UPLOADED_STATUS);
+         return;
+      }
+
+      uploadResources.remove(uploadId);
+      fileStore.delete();
    }
 
    @SuppressWarnings("unchecked")
