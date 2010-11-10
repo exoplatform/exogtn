@@ -20,37 +20,29 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestHierarchy extends AbstractTestController
+class RouteParam
 {
 
-   public void testFoo() throws Exception
+   /** . */
+   final QualifiedName name;
+
+   /** . */
+   final String value;
+
+   public RouteParam(QualifiedName name, String value)
    {
+      this.name = name;
+      this.value = value;
+   }
 
-      RouteDescriptor descriptor = new RouteDescriptor("/a").
-         addRouteParam("foo", "bar").
-         addRoute(new RouteDescriptor("/b").addRouteParam("juu", "daa"));
-
-      //
-      Router router = new Router(new RouterDescriptor().addRoute(descriptor));
-
-      //
-      assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
-
-      //
-      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(QualifiedName.create("foo"), "bar");
-      expected.put(QualifiedName.create("juu"), "daa");
-      assertEquals(expected, router.route("/a/b"));
+   @Override
+   public String toString()
+   {
+      return "RouteParam[name=" + name + ",value=" + value + "]";
    }
 }

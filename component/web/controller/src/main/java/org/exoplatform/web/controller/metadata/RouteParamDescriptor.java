@@ -17,40 +17,46 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestHierarchy extends AbstractTestController
+public class RouteParamDescriptor
 {
 
-   public void testFoo() throws Exception
+   /** . */
+   private final QualifiedName name;
+
+   /** . */
+   private final String value;
+
+   public RouteParamDescriptor(QualifiedName name, String value)
    {
-
-      RouteDescriptor descriptor = new RouteDescriptor("/a").
-         addRouteParam("foo", "bar").
-         addRoute(new RouteDescriptor("/b").addRouteParam("juu", "daa"));
-
-      //
-      Router router = new Router(new RouterDescriptor().addRoute(descriptor));
-
-      //
-      assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
+      if (name == null)
+      {
+         throw new NullPointerException("No null name accepted");
+      }
+      if (value == null)
+      {
+         throw new NullPointerException("No null value accepted");
+      }
 
       //
-      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(QualifiedName.create("foo"), "bar");
-      expected.put(QualifiedName.create("juu"), "daa");
-      assertEquals(expected, router.route("/a/b"));
+      this.name = name;
+      this.value = value;
+   }
+
+   public QualifiedName getName()
+   {
+      return name;
+   }
+
+   public String getValue()
+   {
+      return value;
    }
 }

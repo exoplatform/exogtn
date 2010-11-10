@@ -95,7 +95,7 @@ public class DescriptorBuilder
             {
                String name = reader.getAttributeValue(null, "name");
                String value = reader.getAttributeValue(null, "value");
-               routeDesc.addParam(QualifiedName.parse(name), value);
+               routeDesc.addRouteParam(QualifiedName.parse(name), value);
             }
             else if (requestParamQN.equals(reader.getName()))
             {

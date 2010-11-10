@@ -54,7 +54,9 @@ public class TestDescriptorBuilder extends TestCase
       assertTrue(i.hasNext());
       RouteDescriptor route1 = i.next();
       assertEquals("/public/{gtn:sitetype}/{gtn:sitename}{gtn:path}", route1.getPath());
-      assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route1.getParams());
+      assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route1.getRouteParamNames());
+      assertEquals(WebAppController.HANDLER_PARAM, route1.getRouteParam(WebAppController.HANDLER_PARAM).getName());
+      assertEquals("portal", route1.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
       assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route1.getPathParams().keySet());
       assertEquals(QualifiedName.parse("gtn:path"), route1.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
       assertEquals(".*", route1.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
@@ -64,7 +66,9 @@ public class TestDescriptorBuilder extends TestCase
       assertTrue(i.hasNext());
       RouteDescriptor route2 = i.next();
       assertEquals("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}", route2.getPath());
-      assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "portal"), route2.getParams());
+      assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route2.getRouteParamNames());
+      assertEquals(WebAppController.HANDLER_PARAM, route2.getRouteParam(WebAppController.HANDLER_PARAM).getName());
+      assertEquals("portal", route2.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
       assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route2.getPathParams().keySet());
       assertEquals(QualifiedName.parse("gtn:path"), route2.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
       assertEquals(".*", route2.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
@@ -74,41 +78,49 @@ public class TestDescriptorBuilder extends TestCase
       assertTrue(i.hasNext());
       RouteDescriptor route3 = i.next();
       assertEquals("/upload", route3.getPath());
-      assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "upload"), route3.getParams());
+      assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route3.getRouteParamNames());
+      assertEquals(WebAppController.HANDLER_PARAM, route3.getRouteParam(WebAppController.HANDLER_PARAM).getName());
+      assertEquals("upload", route3.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route4 = i.next();
       assertEquals("/download", route4.getPath());
-      assertEquals(Collections.singletonMap(WebAppController.HANDLER_PARAM, "download"), route4.getParams());
+      assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route4.getRouteParamNames());
+      assertEquals(WebAppController.HANDLER_PARAM, route4.getRouteParam(WebAppController.HANDLER_PARAM).getName());
+      assertEquals("download", route4.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route5 = i.next();
       assertEquals("/a", route5.getPath());
-      assertEquals(Collections.singletonMap(QualifiedName.create("a"), "a_value"), route5.getParams());
+      assertEquals(Collections.singleton(QualifiedName.create("a")), route5.getRouteParamNames());
+      assertEquals(QualifiedName.create("a"), route5.getRouteParam(QualifiedName.create("a")).getName());
+      assertEquals("a_value", route5.getRouteParam(QualifiedName.create("a")).getValue());
       assertEquals(1, route5.getChildren().size());
       RouteDescriptor route5_1 = route5.getChildren().get(0);
       assertEquals("/b", route5_1.getPath());
-      assertEquals(Collections.singletonMap(QualifiedName.create("b"), "b_value"), route5_1.getParams());
+      assertEquals(Collections.singleton(QualifiedName.create("b")), route5_1.getRouteParamNames());
+      assertEquals(QualifiedName.create("b"), route5_1.getRouteParam(QualifiedName.create("b")).getName());
+      assertEquals("b_value", route5_1.getRouteParam(QualifiedName.create("b")).getValue());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route6 = i.next();
       assertEquals("/b", route6.getPath());
-      assertEquals(new HashSet<String>(Arrays.asList("foo", "bar", "juu")), route6.getRequestParams().keySet());
-      assertEquals(QualifiedName.parse("foo"), route6.getRequestParams().get("foo").getName());
-      assertEquals("foo", route6.getRequestParams().get("foo").getMatchName());
-      assertEquals(null, route6.getRequestParams().get("foo").getMatchValue());
-      assertEquals(false, route6.getRequestParams().get("foo").isRequired());
-      assertEquals(QualifiedName.parse("bar"), route6.getRequestParams().get("bar").getName());
-      assertEquals("bar", route6.getRequestParams().get("bar").getMatchName());
-      assertEquals("bar", route6.getRequestParams().get("bar").getMatchValue());
-      assertEquals(false, route6.getRequestParams().get("bar").isRequired());
-      assertEquals(QualifiedName.parse("juu"), route6.getRequestParams().get("juu").getName());
-      assertEquals("juu", route6.getRequestParams().get("juu").getMatchName());
-      assertEquals("juu", route6.getRequestParams().get("juu").getMatchValue());
-      assertEquals(true, route6.getRequestParams().get("juu").isRequired());
+      assertEquals(new HashSet<String>(Arrays.asList("foo", "bar", "juu")), route6.getRequestParamMatchNames());
+      assertEquals(QualifiedName.parse("foo"), route6.getRequestParam("foo").getName());
+      assertEquals("foo", route6.getRequestParam("foo").getMatchName());
+      assertEquals(null, route6.getRequestParam("foo").getMatchValue());
+      assertEquals(false, route6.getRequestParam("foo").isRequired());
+      assertEquals(QualifiedName.parse("bar"), route6.getRequestParam("bar").getName());
+      assertEquals("bar", route6.getRequestParam("bar").getMatchName());
+      assertEquals("bar", route6.getRequestParam("bar").getMatchValue());
+      assertEquals(false, route6.getRequestParam("bar").isRequired());
+      assertEquals(QualifiedName.parse("juu"), route6.getRequestParam("juu").getName());
+      assertEquals("juu", route6.getRequestParam("juu").getMatchName());
+      assertEquals("juu", route6.getRequestParam("juu").getMatchValue());
+      assertEquals(true, route6.getRequestParam("juu").isRequired());
 
       //
       assertFalse(i.hasNext());

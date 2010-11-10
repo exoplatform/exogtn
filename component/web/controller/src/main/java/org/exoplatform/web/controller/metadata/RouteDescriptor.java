@@ -23,9 +23,11 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.EncodingMode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Describes a route.
@@ -40,7 +42,7 @@ public class RouteDescriptor
    private final String path;
 
    /** . */
-   private final Map<QualifiedName, String> params;
+   private final Map<QualifiedName, RouteParamDescriptor> routeParams;
 
    /** . */
    private final Map<QualifiedName, PathParamDescriptor> pathParams;
@@ -54,7 +56,7 @@ public class RouteDescriptor
    public RouteDescriptor(String path)
    {
       this.path = path;
-      this.params = new HashMap<QualifiedName, String>();
+      this.routeParams = new HashMap<QualifiedName, RouteParamDescriptor>();
       this.pathParams = new HashMap<QualifiedName, PathParamDescriptor>();
       this.requestParams = new HashMap<String, RequestParamDescriptor>();
       this.children = new ArrayList<RouteDescriptor>();
@@ -65,20 +67,30 @@ public class RouteDescriptor
       return path;
    }
 
-   public RouteDescriptor addParam(QualifiedName name, String value)
+   public RouteDescriptor addRouteParam(QualifiedName name, String value)
    {
-      params.put(name, value);
+      routeParams.put(name, new RouteParamDescriptor(name, value));
       return this;
    }
 
-   public RouteDescriptor addParam(String name, String value)
+   public RouteDescriptor addRouteParam(String name, String value)
    {
-      return addParam(QualifiedName.parse(name), value);
+      return addRouteParam(QualifiedName.parse(name), value);
    }
 
-   public Map<QualifiedName, String> getParams()
+   public Set<QualifiedName> getRouteParamNames()
    {
-      return params;
+      return routeParams.keySet();
+   }
+
+   public Collection<RouteParamDescriptor> getRouteParams()
+   {
+      return routeParams.values();
+   }
+
+   public RouteParamDescriptor getRouteParam(QualifiedName name)
+   {
+      return routeParams.get(name);
    }
 
    public RouteDescriptor addRequestParam(QualifiedName name, String matchName, String matchValue, boolean required)
@@ -103,9 +115,19 @@ public class RouteDescriptor
       return this;
    }
 
-   public Map<String, RequestParamDescriptor> getRequestParams()
+   public Collection<RequestParamDescriptor> getRequestParams()
    {
-      return requestParams;
+      return requestParams.values();
+   }
+
+   public Set<String> getRequestParamMatchNames()
+   {
+      return requestParams.keySet();
+   }
+
+   public RequestParamDescriptor getRequestParam(String matchName)
+   {
+      return requestParams.get(matchName);
    }
 
    public Map<QualifiedName, PathParamDescriptor> getPathParams()

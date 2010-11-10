@@ -44,14 +44,14 @@ public class TestLegacyPortal extends TestCase
       RouterDescriptor routerMD = new RouterDescriptor();
 
       RouteDescriptor portal = new RouteDescriptor("/").
-         addParam(QualifiedName.parse("gtn:handler"), "portal").
+         addRouteParam(QualifiedName.parse("gtn:handler"), "portal").
          addRequestParam(QualifiedName.parse("gtn:componentid"), "portal:componentId", null, false).
          addRequestParam(QualifiedName.parse("gtn:action"), "portal:action", null, false).
          addRequestParam(QualifiedName.parse("gtn:objectid"), "portal:objectId", null, false).
          addRoute(new RouteDescriptor("/public/{gtn:sitename}{gtn:path}").
-            addParam(QualifiedName.parse("gtn:access"), "public")).addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
+            addRouteParam(QualifiedName.parse("gtn:access"), "public")).addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
          addRoute(new RouteDescriptor("/private/{gtn:sitename}{gtn:path}").addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
-            addParam(QualifiedName.parse("gtn:access"), "private"));
+            addRouteParam(QualifiedName.parse("gtn:access"), "private"));
 
       //
       routerMD.addRoute(portal);

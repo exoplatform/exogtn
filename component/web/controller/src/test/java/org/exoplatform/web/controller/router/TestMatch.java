@@ -96,7 +96,7 @@ public class TestMatch extends AbstractTestController
    public void testParameterPropagationToDescendants() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/").addParam("p", "a"));
+      routerMD.addRoute(new RouteDescriptor("/").addRouteParam("p", "a"));
       routerMD.addRoute(new RouteDescriptor("/a"));
       Router router = new Router(routerMD);
 
@@ -168,7 +168,7 @@ public class TestMatch extends AbstractTestController
    public void testTwoRules1() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/a").addParam("b", "b"));
+      routerMD.addRoute(new RouteDescriptor("/a").addRouteParam("b", "b"));
       routerMD.addRoute(new RouteDescriptor("/a/b"));
       Router router = new Router(routerMD);
 
@@ -180,7 +180,7 @@ public class TestMatch extends AbstractTestController
    public void testTwoRules2() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{a}").addParam("b", "b"));
+      routerMD.addRoute(new RouteDescriptor("/{a}").addRouteParam("b", "b"));
       routerMD.addRoute(new RouteDescriptor("/{a}/b"));
       Router router = new Router(routerMD);
 

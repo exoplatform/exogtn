@@ -23,6 +23,7 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +60,7 @@ class Route
    private final List<PatternRoute> patterns;
 
    /** . */
-   private final Map<QualifiedName, String> routeParameters;
+   private final Map<QualifiedName, RouteParam> routeParams;
 
    /** . */
    private final Map<String, RequestParam> requestParams;
@@ -70,7 +71,7 @@ class Route
       this.terminal = false;
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
-      this.routeParameters = new HashMap<QualifiedName, String>();
+      this.routeParams = new HashMap<QualifiedName, RouteParam>();
       this.requestParams = new HashMap<String, RequestParam>();
    }
 
@@ -164,12 +165,12 @@ class Route
       Map<QualifiedName, String> abc = new HashMap<QualifiedName, String>(blah);
 
       // Match first the static parameteters
-      for (Map.Entry<QualifiedName, String> a : routeParameters.entrySet())
+      for (RouteParam param : routeParams.values())
       {
-         String s = blah.get(a.getKey());
-         if (a.getValue().equals(s))
+         String value = blah.get(param.name);
+         if (param.value.equals(value))
          {
-            abc.remove(a.getKey());
+            abc.remove(param.name);
          }
          else
          {
@@ -414,13 +415,13 @@ class Route
          // Update parameters if it is possible
          if (ret != null)
          {
-            if (routeParameters.size() > 0)
+            if (routeParams.size() > 0)
             {
-               for (Map.Entry<QualifiedName, String> entry : routeParameters.entrySet())
+               for (RouteParam param : routeParams.values())
                {
-                  if (!ret.containsKey(entry.getKey()))
+                  if (!ret.containsKey(param.name))
                   {
-                     ret.put(entry.getKey(), entry.getValue());
+                     ret.put(param.name, param.value);
                   }
                }
             }
@@ -508,13 +509,23 @@ class Route
       Route route = append(descriptor.getPathParams(), descriptor.getPath());
 
       //
-      route.terminal = true;
-      route.routeParameters.putAll(descriptor.getParams());
-      for (RequestParamDescriptor requestParamDescriptor : descriptor.getRequestParams().values())
+      Map<QualifiedName, RouteParam> routeParams = new HashMap<QualifiedName, RouteParam>();
+      for (RouteParamDescriptor routeParamDesc : descriptor.getRouteParams())
       {
-         RequestParam requestParamDef = new RequestParam(requestParamDescriptor);
-         route.requestParams.put(requestParamDef.getMatchName(), requestParamDef);
+         routeParams.put(routeParamDesc.getName(), new RouteParam(routeParamDesc.getName(), routeParamDesc.getValue()));
       }
+
+      //
+      Map<String, RequestParam> requestParams = new HashMap<String, RequestParam>();
+      for (RequestParamDescriptor requestParamDesc : descriptor.getRequestParams())
+      {
+         requestParams.put(requestParamDesc.getMatchName(), new RequestParam(requestParamDesc));
+      }
+
+      //
+      route.terminal = true;
+      route.routeParams.putAll(routeParams);
+      route.requestParams.putAll(requestParams);
 
       //
       for (RouteDescriptor childDescriptor : descriptor.getChildren())
@@ -523,17 +534,6 @@ class Route
       }
 
       //
-      return route;
-   }
-
-   final Route append(
-      Map<QualifiedName, PathParamDescriptor> pathParamDescriptors,
-      String path,
-      Map<QualifiedName, String> parameters)
-   {
-      Route route = append(pathParamDescriptors, path);
-      route.terminal = true;
-      route.routeParameters.putAll(parameters);
       return route;
    }
 
