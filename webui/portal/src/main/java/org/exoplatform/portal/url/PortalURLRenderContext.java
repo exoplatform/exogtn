@@ -22,7 +22,7 @@ package org.exoplatform.portal.url;
 import org.exoplatform.commons.utils.CharEncoder;
 import org.exoplatform.commons.utils.CharsetCharEncoder;
 import org.exoplatform.web.controller.router.RenderContext;
-import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.MediaType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +38,12 @@ class PortalURLRenderContext implements RenderContext
 {
 
    /** . */
-   private static final Map<MimeType, String> AMP_MAP = new EnumMap<MimeType, String>(MimeType.class);
+   private static final Map<MediaType, String> AMP_MAP = new EnumMap<MediaType, String>(MediaType.class);
 
    static
    {
-      AMP_MAP.put(MimeType.XHTML, "&amp;");
-      AMP_MAP.put(MimeType.PLAIN, "&");
+      AMP_MAP.put(MediaType.XHTML, "&amp;");
+      AMP_MAP.put(MediaType.PLAIN, "&");
    }
 
    /** . */
@@ -62,7 +62,7 @@ class PortalURLRenderContext implements RenderContext
    private List<String[]> queryParams;
 
    /** . */
-   private MimeType mimeType;
+   private MediaType mimeType;
 
 
    PortalURLRenderContext(StringBuilder buffer)
@@ -71,12 +71,12 @@ class PortalURLRenderContext implements RenderContext
       this.queryParams = EMPTY;
    }
 
-   public MimeType getMimeType()
+   public MediaType getMimeType()
    {
       return mimeType;
    }
 
-   public void setMimeType(MimeType mimeType)
+   public void setMimeType(MediaType mimeType)
    {
       this.mimeType = mimeType;
    }
@@ -128,10 +128,10 @@ class PortalURLRenderContext implements RenderContext
     */
    void flush()
    {
-      MimeType mt = mimeType;
+      MediaType mt = mimeType;
       if (mt == null)
       {
-         mt = MimeType.XHTML;
+         mt = MediaType.XHTML;
       }
       String amp = AMP_MAP.get(mt);
 
