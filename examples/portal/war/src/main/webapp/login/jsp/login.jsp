@@ -26,6 +26,7 @@
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.exoplatform.web.login.InitiateLoginServlet"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
+<%@ page import="javax.servlet.http.HttpSession"%>
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%
@@ -40,7 +41,9 @@
   ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
   
-  String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
+  HttpSession httpSession = request.getSession(true);
+  String uri = (String)httpSession.getAttribute("org.gatein.portal.login.initial_uri");
+  httpSession.removeAttribute("org.gatein.portal.login.initial_uri");
 
   Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
 	cookie.setPath(request.getContextPath());

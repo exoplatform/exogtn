@@ -73,12 +73,13 @@ public class PortalLoginController extends AbstractHttpServlet
       // otherwise compute one
       if (uri == null || uri.length() == 0)
       {
-         uri = req.getContextPath() + "/private/classic";
+         uri = req.getContextPath();
          log.debug("No initial URI found, will use default " + uri + " instead ");
       }
       else
       {
          log.debug("Found initial URI " + uri);
+         req.getSession(true).setAttribute("org.gatein.portal.login.initial_uri", uri);
       }
 
       // if we do have a remember me

@@ -139,7 +139,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       }
       finally
       {
-         req.removeAttribute("org.gatein.portal.login.initial_uri");
+         req.getSession(true).removeAttribute("org.gatein.portal.login.initial_uri");
       }
    }
 
