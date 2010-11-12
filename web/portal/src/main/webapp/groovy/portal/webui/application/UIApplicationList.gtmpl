@@ -1,4 +1,5 @@
 <%
+import org.gatein.common.text.EntityEncoder;
 def categories = uicomponent.getCategories();
 def selectedCategory = uicomponent.getSelectedCategory();
 %>
@@ -17,6 +18,8 @@ def selectedCategory = uicomponent.getSelectedCategory();
 								cName	= category.getName();
 								displayName =category.getDisplayName();
 								if(displayName == null || displayName.length() < 1 ) displayName = cName;
+								EntityEncoder encoder = EntityEncoder.FULL;
+								displayName = encoder.encode(displayName);								
 								if(selectedCategory != null && cName == selectedCategory.getName()) {
 									isSelected = true;
 									cTab = "SelectedTab";
