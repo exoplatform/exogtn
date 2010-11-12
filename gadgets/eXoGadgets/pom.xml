@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.gadgets</artifactId>
-    <version>5.1.0-epp-ER04-SNAPSHOT</version>
+    <version>5.1.0-epp-ER04</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
