@@ -1017,7 +1017,7 @@
       </repository>
       <repository>
          <id>exo-int</id>
-         <url>http://maven2.exoplatform.org/rest/maven2</url>
+         <url>http://repository.exoplatform.org/content/groups/public</url>
          <releases>
            <enabled>true</enabled>
          </releases>
