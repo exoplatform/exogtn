@@ -26,7 +26,6 @@
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.exoplatform.web.login.InitiateLoginServlet"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
-<%@ page import="javax.servlet.http.HttpSession"%>
 <%@ page language="java" %>
 <%
   String contextPath = request.getContextPath() ;
@@ -45,9 +44,8 @@
 	cookie.setMaxAge(0);
 	response.addCookie(cookie);
 
-  HttpSession httpSession = request.getSession(true);
-  String uri = (String)httpSession.getAttribute("org.gatein.portal.login.initial_uri");
-  httpSession.removeAttribute("org.gatein.portal.login.initial_uri");
+  String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
+
   response.setCharacterEncoding("UTF-8"); 
   response.setContentType("text/html; charset=UTF-8");
 %>

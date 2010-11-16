@@ -19,19 +19,19 @@
 
 package org.exoplatform.web.login;
 
-import org.exoplatform.container.web.AbstractHttpServlet;
-import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.security.AbstractTokenService;
-import org.exoplatform.web.security.security.CookieTokenService;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.exoplatform.container.web.AbstractHttpServlet;
+import org.exoplatform.web.security.Credentials;
+import org.exoplatform.web.security.security.AbstractTokenService;
+import org.exoplatform.web.security.security.CookieTokenService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:trong.tran@exoplatform.com">Tran The Trong</a>
@@ -79,7 +79,6 @@ public class PortalLoginController extends AbstractHttpServlet
       else
       {
          log.debug("Found initial URI " + uri);
-         req.getSession(true).setAttribute("org.gatein.portal.login.initial_uri", uri);
       }
 
       // if we do have a remember me
