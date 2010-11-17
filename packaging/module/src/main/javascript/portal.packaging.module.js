@@ -150,8 +150,7 @@ function getModule(params)
 
    module.component.applicationRegistry =
    new Project("org.exoplatform.portal", "exo.portal.component.application-registry", "jar", module.version).
-      addDependency(module.component.portal).
-      addDependency(new Project("com.sun.xml.stream", "sjsxp", "jar", "1.0"));
+      addDependency(module.component.portal);
 
    module.webui = {};
    module.webui.framework =
@@ -242,7 +241,6 @@ function getModule(params)
       addDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.1")).
       addDependency(new Project("commons-collections", "commons-collections", "jar", "3.2.1")).
       addDependency(new Project("net.sf.ehcache", "ehcache", "jar", "1.6.0")).
-      addDependency(new Project("xml-apis", "xml-apis", "jar", "1.3.04")).
       addDependency(new Project("com.ibm.icu", "icu4j", "jar", "3.8")).
       addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.9")).
       addDependency(new Project("xerces", "xercesImpl", "jar", "2.9.1")).
