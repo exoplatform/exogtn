@@ -19,7 +19,14 @@
 
 package org.exoplatform.webui.application;
 
-import org.exoplatform.webui.config.*;
+import org.exoplatform.webui.config.Component;
+import org.exoplatform.webui.config.ComponentHandle;
+import org.exoplatform.webui.config.Event;
+import org.exoplatform.webui.config.EventInterceptor;
+import org.exoplatform.webui.config.InitParams;
+import org.exoplatform.webui.config.Param;
+import org.exoplatform.webui.config.Validator;
+import org.exoplatform.webui.config.WebuiConfiguration;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -37,9 +44,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * May 10, 2006
@@ -55,7 +62,7 @@ public class ConfigurationManager
     * <p/>
     * The components of which we manage the configuration
     */
-   private Map<String, Component> configs_ = new HashMap<String, Component>();
+   private final Map<String, Component> configs_ = new ConcurrentHashMap<String, Component>();
 
    /** The logger. */
    private final Logger log;
