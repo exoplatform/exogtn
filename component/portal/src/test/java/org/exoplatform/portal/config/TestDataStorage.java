@@ -21,11 +21,21 @@ package org.exoplatform.portal.config;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
+import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.config.model.*;
-import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Dashboard;
+import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -35,7 +45,14 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
@@ -56,9 +73,6 @@ public class TestDataStorage extends AbstractPortalTest
    /** . */
    private POMSessionManager mgr;
 
-   /** . */
-   private POMSession session;
-
    private LinkedList<Event> events;
 
    private ListenerService listenerService;
@@ -78,17 +92,16 @@ public class TestDataStorage extends AbstractPortalTest
             events.add(event);
          }
       };
-      
+
+      //
       super.setUp();
-      begin();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      session = mgr.openSession();
-      
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
-      
+
+      //
       listenerService.addListener(DataStorage.PAGE_CREATED, listener);
       listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
       listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
@@ -98,11 +111,13 @@ public class TestDataStorage extends AbstractPortalTest
       listenerService.addListener(DataStorage.PORTAL_CONFIG_CREATED, listener);
       listenerService.addListener(DataStorage.PORTAL_CONFIG_UPDATED, listener);
       listenerService.addListener(DataStorage.PORTAL_CONFIG_REMOVED, listener);
+
+      //
+      begin();
    }
 
    protected void tearDown() throws Exception
    {
-      session.close();
       end();
       super.tearDown();
    }
@@ -867,6 +882,117 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals(1, row0.getChildren().size());
       gadgetApp = (Application<Gadget>)row0.getChildren().get(0);
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
+   }
+
+   public void testGetAllPortalNames() throws Exception
+   {
+      final List<String> names = storage_.getAllPortalNames();
+
+      // Create new portal
+      storage_.create(new PortalConfig("portal", "testGetAllPortalNames"));
+
+      // Test during tx we see the good names
+      List<String> transientNames = storage_.getAllPortalNames();
+      assertTrue(transientNames.containsAll(names));
+      transientNames.removeAll(names);
+      assertEquals(Collections.singletonList("testGetAllPortalNames"), transientNames);
+
+      // Test we have not seen anything yet outside of tx
+      final CountDownLatch addSync = new CountDownLatch(1);
+      final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
+      new Thread()
+      {
+         @Override
+         public void run()
+         {
+            begin();
+            try
+            {
+               List<String> isolatedNames = storage_.getAllPortalNames();
+               assertEquals(new HashSet<String>(names), new HashSet<String>(isolatedNames));
+            }
+            catch (Throwable t)
+            {
+               error.set(t);
+            }
+            finally
+            {
+               addSync.countDown();
+               end();
+            }
+         }
+      }.start();
+
+      //
+      addSync.await();
+      if (error.get() != null)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(error.get());
+         throw afe;
+      }
+
+      // Now commit tx
+      end(true);
+
+      // We test we observe the change
+      begin();
+      List<String> afterNames = storage_.getAllPortalNames();
+      assertTrue(afterNames.containsAll(names));
+      afterNames.removeAll(names);
+      assertEquals(Collections.singletonList("testGetAllPortalNames"), afterNames);
+
+      // Then we remove the newly created portal
+      storage_.remove(new PortalConfig("portal", "testGetAllPortalNames"));
+
+      // Test we are syeing the transient change
+      transientNames.clear();
+      transientNames = storage_.getAllPortalNames();
+      assertEquals(names, transientNames);
+
+      // Test we have not seen anything yet outside of tx
+      error.set(null);
+      final CountDownLatch removeSync = new CountDownLatch(1);
+      new Thread()
+      {
+         public void run()
+         {
+            begin();
+            try
+            {
+               List<String> isolatedNames = storage_.getAllPortalNames();
+               assertTrue(isolatedNames.containsAll(names));
+               isolatedNames.removeAll(names);
+               assertEquals(Collections.singletonList("testGetAllPortalNames"), isolatedNames);
+            }
+            catch (Throwable t)
+            {
+               error.set(t);
+            }
+            finally
+            {
+               removeSync.countDown();
+               end();
+            }
+         }
+      }.start();
+
+      //
+      removeSync.await();
+      if (error.get() != null)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(error.get());
+         throw afe;
+      }
+
+      //
+      end(true);
+
+      // Now test it is still removed
+      begin();
+      afterNames = storage_.getAllPortalNames();
+      assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
    }
 
    private Application<Portlet> create(String instanceId)
