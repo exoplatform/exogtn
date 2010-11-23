@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.application;
 
-import java.util.Date;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -31,19 +29,10 @@ class Image
    final ImageType type;
 
    final byte[] bytes;
-   
-   final long lastModified;
 
    public Image(ImageType type, byte[] bytes)
    {
       this.type = type;
       this.bytes = bytes;
-//  Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
-      lastModified = (new Date().getTime() / 1000) * 1000;
-   }
-   
-   public long getLastModified() 
-   {
-      return lastModified;
    }
 }

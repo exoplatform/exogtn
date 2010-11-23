@@ -24,7 +24,6 @@ import org.exoplatform.commons.utils.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Date;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -41,8 +40,6 @@ public class CachedStylesheet
 
    /** . */
    private final byte[] bytes;
-   
-   private long lastModified;
 
    public CachedStylesheet(String text)
    {
@@ -62,18 +59,11 @@ public class CachedStylesheet
       //
       this.text = text;
       this.bytes = bytes;
-//  Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds 
-      lastModified = (new Date().getTime() / 1000) * 1000;
    }
 
    public String getText()
    {
       return text;
-   }   
-
-   public long getLastModified()
-   {
-      return lastModified;
    }
 
    public void writeTo(BinaryOutput output) throws IOException

@@ -171,11 +171,11 @@
         <!-- The white list -->
         <name>white-list</name>
         <!-- We accept anything not black listed -->
-        <value>*</value>
+        <value>localhost</value>
       </values-param>
       <values-param>
         <name>black-list</name>
-        <value>*.evil.org</value>
+        <value>*</value>
       </values-param>
     </init-params>
   </component>
