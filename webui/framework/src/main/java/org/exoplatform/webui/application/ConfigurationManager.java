@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.application;
 
+import org.exoplatform.webui.config.Application;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.config.ComponentHandle;
 import org.exoplatform.webui.config.Event;
