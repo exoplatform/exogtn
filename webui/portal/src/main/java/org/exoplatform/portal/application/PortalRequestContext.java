@@ -159,16 +159,17 @@ public class PortalRequestContext extends WebuiRequestContext
          cacheLevel_ = cache;
       }
 
-      requestURI_ = URLDecoder.decode(req.getRequestURI(), "UTF-8");
-      
+      requestURI_ = req.getRequestURI();
+      String decodedURI = URLDecoder.decode(requestURI_, "UTF-8");
+
       // req.getPathInfo will already have the encoding set from the server.
       // We need to use the UTF-8 value since this is how we store the portal name.
       // Reconstructing the getPathInfo from the non server decoded values.
       String servletPath = URLDecoder.decode(req.getServletPath(), "UTF-8");
       String contextPath = URLDecoder.decode(req.getContextPath(), "UTF-8");
       String pathInfo = "/";
-      if (requestURI_.length() > servletPath.length() + contextPath.length())
-         pathInfo = requestURI_.substring(servletPath.length() + contextPath.length());
+      if (decodedURI.length() > servletPath.length() + contextPath.length())
+         pathInfo = decodedURI.substring(servletPath.length() + contextPath.length());
       
       int colonIndex = pathInfo.indexOf("/", 1);
       if (colonIndex < 0)
@@ -178,13 +179,13 @@ public class PortalRequestContext extends WebuiRequestContext
       portalOwner_ = pathInfo.substring(1, colonIndex);
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
 
-      portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
+      portalURI = decodedURI.substring(0, decodedURI.lastIndexOf(nodePath_)) + "/";
 
-      if (requestURI_.indexOf("/public/") >= 0)
+      if (decodedURI.indexOf("/public/") >= 0)
       {
          accessPath = PUBLIC_ACCESS;
       }
-      else if (requestURI_.indexOf("/private/") >= 0)
+      else if (decodedURI.indexOf("/private/") >= 0)
       {
          accessPath = PRIVATE_ACCESS;
       }
