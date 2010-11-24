@@ -29,9 +29,6 @@ class PatternBuilder
 {
 
    /** . */
-   private static final char[] TABLE = "0123456789ABCDEF".toCharArray();
-   
-   /** . */
    private final StringBuilder buffer = new StringBuilder();
 
    public PatternBuilder expr(String s)
@@ -72,11 +69,26 @@ class PatternBuilder
 
    public PatternBuilder litteral(char c)
    {
-      buffer.append("\\u");
-      buffer.append(TABLE[(c & 0xF000) >> 12]);
-      buffer.append(TABLE[(c & 0x0F00) >> 8]);
-      buffer.append(TABLE[(c & 0x00F0) >> 4]);
-      buffer.append(TABLE[c & 0x000F]);
+      switch (c)
+      {
+         case '*':
+         case '[':
+         case '\\':
+         case '^':
+         case '$':
+         case '.':
+         case '|':
+         case '?':
+         case '+':
+         case '(':
+         case ')':
+            buffer.append("\\");
+            buffer.append(c);
+            break;
+         default:
+            buffer.append(c);
+            break;
+      }
       return this;
    }
 
@@ -84,5 +96,4 @@ class PatternBuilder
    {
       return Pattern.compile(buffer.toString());
    }
-   
 }
