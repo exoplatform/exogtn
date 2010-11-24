@@ -28,12 +28,10 @@
     </route>
 
     <!-- The group access -->
-    <route path="/groups">
+    <route path="/groups/{gtn:sitename}{gtn:path}">
       <route-param name="gtn:access" value="private"/>
-      <route path="/{gtn:sitename}{gtn:path}">
-        <route-param name="gtn:sitetype" value="group"/>
-        <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
-      </route>
+      <route-param name="gtn:sitetype" value="group"/>
+      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The user access -->
