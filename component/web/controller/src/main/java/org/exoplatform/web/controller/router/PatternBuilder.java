@@ -49,10 +49,21 @@ class PatternBuilder
 
    public PatternBuilder litteral(String s, int from, int to)
    {
-      for (int i = from;i < to;i++)
+      if (from < 0)
       {
-         char c = s.charAt(i);
-         litteral(c);
+         throw new IllegalArgumentException("No negative from argument");
+      }
+      if (to > s.length())
+      {
+         throw new IllegalArgumentException("No to argument greater than the string length");
+      }
+      if (from > to)
+      {
+         throw new IllegalArgumentException("The to argument cannot be greater than the from argument");
+      }
+      if (from < to)
+      {
+         buffer.append(Pattern.quote(s.substring(from, to)));
       }
       return this;
    }
@@ -69,27 +80,7 @@ class PatternBuilder
 
    public PatternBuilder litteral(char c)
    {
-      switch (c)
-      {
-         case '*':
-         case '[':
-         case '\\':
-         case '^':
-         case '$':
-         case '.':
-         case '|':
-         case '?':
-         case '+':
-         case '(':
-         case ')':
-            buffer.append("\\");
-            buffer.append(c);
-            break;
-         default:
-            buffer.append(c);
-            break;
-      }
-      return this;
+      return litteral(Character.toString(c));
    }
 
    public Pattern build()
