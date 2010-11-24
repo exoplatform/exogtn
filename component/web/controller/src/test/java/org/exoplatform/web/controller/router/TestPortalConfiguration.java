@@ -129,12 +129,12 @@ public class TestPortalConfiguration extends AbstractTestController
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
       expectedParameters.put(QualifiedName.create("gtn", "controller"), "site");
       expectedParameters.put(QualifiedName.create("gtn", "sitetype"), "group");
-      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "platform_administrator");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "platform");
       expectedParameters.put(QualifiedName.create("gtn", "path"), "/administration/registry");
 
       //
-      assertEquals(expectedParameters, router.route("/private/group/platform_administrator/administration/registry"));
-      assertEquals("/private/group/platform_administrator/administration/registry", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/group/platform/administration/registry"));
+      assertEquals("/private/group/platform/administration/registry", router.render(expectedParameters));
       
       Map<QualifiedName, String> expectedParameters1 = new HashMap<QualifiedName, String>();
       expectedParameters1.put(QualifiedName.create("gtn", "controller"), "site");

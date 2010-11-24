@@ -113,7 +113,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/~", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testWildcardParamPathPreservePathEncoding() throws Exception
@@ -133,7 +133,7 @@ public class TestRender extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals("/~", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testPrecedence() throws Exception

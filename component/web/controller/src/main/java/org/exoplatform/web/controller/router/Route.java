@@ -45,7 +45,7 @@ class Route
 {
 
    /** Julien : make that configurable. */
-   private static final char slashEscape = '~';
+   private static final char slashEscape = '_';
 
    /** . */
    private Route parent;
