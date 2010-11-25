@@ -170,12 +170,11 @@
       <values-param>
         <!-- The white list -->
         <name>white-list</name>
-        <!-- We accept anything not black listed -->
-        <value>localhost</value>
+        <value></value>
       </values-param>
       <values-param>
         <name>black-list</name>
-        <value>*</value>
+        <value></value>
       </values-param>
     </init-params>
   </component>
