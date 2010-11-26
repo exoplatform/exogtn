@@ -21,6 +21,8 @@ package org.exoplatform.web.controller.regexp;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,6 +41,9 @@ public class RegExpParser extends Parser
          ESCAPABLE.add(c);
       }
    }
+
+   /** . */
+   private static final Pattern pattern = Pattern.compile("^([0-9]+)" + "(?:" + "(,)([0-9]+)?" + ")?$");
 
    /** . */
    private int index;
@@ -114,12 +119,12 @@ public class RegExpParser extends Parser
    }
 
    /**
-    * expression      -> assertion | '(' disjunction ')' | '(' '?' disjunction ')' | character | expression quantifier
-    * assertion       -> '^' | '$'
-    * character       -> '.' | escaped | character_class | literal
-    * escaped         -> '\' any char
-    * quantifier      -> '*' | '+' | '?' | '{' count '}' | '{' count ',' '}' | '{' count ',' count '}'
-    * literal         -> todo
+    * expression        -> assertion | '(' disjunction ')' | character | expression quantifier
+    * assertion         -> '^' | '$'
+    * character         -> '.' | escaped | character_class | literal
+    * escaped           -> '\' any char
+    * quantifier        -> quantifier_prefix | quantifier_prefix ?
+    * quantifier_prefix -> '*' | '+' | '?' | '{' count '}' | '{' count ',' '}' | '{' count ',' count '}'
     *
     * @return the expression
     */
@@ -215,16 +220,46 @@ public class RegExpParser extends Parser
          {
             case '*':
                index++;
-               return Quantifier.STAR;
+               return Quantifier.zeroOrMore(parseQuantifierMode());
             case '+':
                index++;
-               return Quantifier.PLUS;
+               return Quantifier.oneOrMore(parseQuantifierMode());
             case '?':
                index++;
-               return Quantifier.QUESTION_MARK;
+               return Quantifier.onceOrNotAtAll(parseQuantifierMode());
             case '{':
                index++;
-               throw new UnsupportedOperationException();
+               int closingBrace = indexOf(index, '}', to);
+               if (closingBrace == -1)
+               {
+                  throw new SyntaxException();
+               }
+               SubCharSequence sub = new SubCharSequence(s, index, closingBrace);
+               index = closingBrace + 1;
+               Matcher matcher = pattern.matcher(sub);
+               if (!matcher.matches())
+               {
+                  throw new SyntaxException();
+               }
+               if (matcher.group(2) == null)
+               {
+                  return Quantifier.exactly(
+                     parseQuantifierMode(),
+                     Integer.parseInt(matcher.group(1)));
+               }
+               else if (matcher.group(3) == null)
+               {
+                  return Quantifier.atLeast(
+                     parseQuantifierMode(),
+                     Integer.parseInt(matcher.group(1)));
+               }
+               else
+               {
+                  return Quantifier.between(
+                     parseQuantifierMode(),
+                     Integer.parseInt(matcher.group(1)),
+                     Integer.parseInt(matcher.group(3)));
+               }
             default:
                return null;
          }
@@ -233,6 +268,23 @@ public class RegExpParser extends Parser
       {
          return null;
       }
+   }
+
+   private Quantifier.Mode parseQuantifierMode()
+   {
+      if (index < to)
+      {
+         switch (s.charAt(index))
+         {
+            case '?':
+               index++;
+               return Quantifier.Mode.RELUCTANT;
+            case '+':
+               index++;
+               return Quantifier.Mode.POSSESSIVE;
+         }
+      }
+      return Quantifier.Mode.GREEDY;
    }
 
    /**

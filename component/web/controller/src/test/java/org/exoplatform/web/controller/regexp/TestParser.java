@@ -100,18 +100,18 @@ public class TestParser extends TestCase
          }
          return this;
       }
-      ParserTester assertParseEREDuplSymbol(Quantifier expectedQuantifier)
+      ParserTester assertParseQuantifier(int expectedIndex, Quantifier expectedQuantifier)
       {
          int index = parser.getIndex();
          if (expectedQuantifier != null)
          {
             assertEquals(expectedQuantifier, parser.parseQuantifierSymbol());
-            assertEquals(index + 1, parser.getIndex());
+            assertEquals(expectedIndex, parser.getIndex());
          }
          else
          {
             assertNull(parser.parseQuantifierSymbol());
-            assertEquals(index, parser.getIndex());
+            assertEquals(expectedIndex, parser.getIndex());
          }
          return this;
       }
@@ -154,19 +154,28 @@ public class TestParser extends TestCase
    }
 
    // missing stuff:
-   // ()
-   // +?
-   // {0,2}
    // escape in bracket
 
 
-   public void testEREDuplSymbol()
+   public void testQuantifier()
    {
-      new ParserTester("*").assertParseEREDuplSymbol(Quantifier.STAR);
-      new ParserTester("+").assertParseEREDuplSymbol(Quantifier.PLUS);
-      new ParserTester("?").assertParseEREDuplSymbol(Quantifier.QUESTION_MARK);
-      new ParserTester("a").assertParseEREDuplSymbol(null);
-      new ParserTester("").assertParseEREDuplSymbol(null);
+      new ParserTester("*").assertParseQuantifier(1, Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("+").assertParseQuantifier(1, Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("?").assertParseQuantifier(1, Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
+      new ParserTester("*a").assertParseQuantifier(1, Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("+a").assertParseQuantifier(1, Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("?a").assertParseQuantifier(1, Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
+      new ParserTester("*?").assertParseQuantifier(2, Quantifier.zeroOrMore(Quantifier.Mode.RELUCTANT));
+      new ParserTester("+?").assertParseQuantifier(2, Quantifier.oneOrMore(Quantifier.Mode.RELUCTANT));
+      new ParserTester("??").assertParseQuantifier(2, Quantifier.onceOrNotAtAll(Quantifier.Mode.RELUCTANT));
+      new ParserTester("*+").assertParseQuantifier(2, Quantifier.zeroOrMore(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("++").assertParseQuantifier(2, Quantifier.oneOrMore(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("?+").assertParseQuantifier(2, Quantifier.onceOrNotAtAll(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("a").assertParseQuantifier(0, null);
+      new ParserTester("").assertParseQuantifier(0, null);
+      new ParserTester("{2}").assertParseQuantifier(3, Quantifier.exactly(Quantifier.Mode.GREEDY, 2));
+      new ParserTester("{2,}").assertParseQuantifier(4, Quantifier.atLeast(Quantifier.Mode.GREEDY, 2));
+      new ParserTester("{2,4}").assertParseQuantifier(5, Quantifier.between(Quantifier.Mode.GREEDY, 2, 4));
    }
 
    public void testParseBracketExpression()

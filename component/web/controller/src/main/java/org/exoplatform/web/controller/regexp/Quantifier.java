@@ -23,41 +23,113 @@ package org.exoplatform.web.controller.regexp;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class Quantifier
+public class Quantifier
 {
 
-   private Quantifier()
+   public enum Mode
    {
+
+      GREEDY(""), RELUCTANT("?"), POSSESSIVE("+");
+
+      /** . */
+      private final String value;
+
+      Mode(String value)
+      {
+         this.value = value;
+      }
    }
 
    /** . */
-   public static final Quantifier STAR = new Quantifier()
-   {
-      @Override
-      public String toString()
-      {
-         return "*";
-      }
-   };
+   private final Mode mode;
 
    /** . */
-   public static final Quantifier PLUS = new Quantifier()
-   {
-      @Override
-      public String toString()
-      {
-         return "+";
-      }
-   };
+   private final int min;
 
    /** . */
-   public static final Quantifier QUESTION_MARK = new Quantifier()
-   {
-      @Override
-      public String toString()
-      {
-         return "?";
-      }
-   };
+   private final Integer max;
 
+   protected Quantifier(Mode mode, int min, Integer max)
+   {
+      this.mode = mode;
+      this.min = min;
+      this.max = max;
+   }
+
+   public static Quantifier onceOrNotAtAll(Mode mode)
+   {
+      return new Quantifier(mode, 0, 1);
+   }
+
+   public static Quantifier zeroOrMore(Mode mode)
+   {
+      return new Quantifier(mode, 0, null);
+   }
+
+   public static Quantifier oneOrMore(Mode mode)
+   {
+      return new Quantifier(mode, 1, null);
+   }
+
+   public static Quantifier exactly(Mode mode, int value)
+   {
+      return new Quantifier(mode, value, value);
+   }
+
+   public static Quantifier atLeast(Mode mode, int value)
+   {
+      return new Quantifier(mode, value, null);
+   }
+
+   public static Quantifier between(Mode mode, int min, int max)
+   {
+      return new Quantifier(mode, min, max);
+   }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      if (o == this)
+      {
+         return true;
+      }
+      else if (o instanceof Quantifier)
+      {
+         Quantifier that = (Quantifier)o;
+         return mode == that.mode && min == that.min && (max == null ? that.max == null : max.equals(that.max));
+      }
+      return false;
+   }
+
+   @Override
+   public String toString()
+   {
+      if (min == 0)
+      {
+         if (max == null)
+         {
+            return "*" + mode.value;
+         }
+         else if (max == 1)
+         {
+            return "?" + mode.value;
+         }
+      }
+      else if (min == 1 && max == null)
+      {
+         return "+" + mode.value;
+      }
+      if (max == null)
+      {
+         return "{" + min + ",}" + mode.value;
+      }
+      else if (min == max)
+      {
+         return "{" + min + "}" + mode.value;
+      }
+      else
+      {
+         return "{" + min + "," + max + "}" + mode.value;
+      }
+   }
 }
