@@ -181,17 +181,17 @@ public class TestParser extends TestCase
    public void testParseBracketExpression()
    {
       new ParserTester("[a]").assertParseBracketExpression("[a]");
-      new ParserTester("[^a]").assertParseBracketExpression("[^a]");
-      new ParserTester("[^a-b]").assertParseBracketExpression("[^a-b]");
+      new ParserTester("[^a]").assertParseBracketExpression("[^[a]]");
+      new ParserTester("[^a-b]").assertParseBracketExpression("[^[a-b]]");
       new ParserTester("[a-b]").assertParseBracketExpression("[a-b]");
-      new ParserTester("[ab]").assertParseBracketExpression("[ab]");
-      new ParserTester("[a&]").assertParseBracketExpression("[a&]");
-      new ParserTester("[a&&b]").assertParseBracketExpression("[a&&b]");
-      new ParserTester("[a&&[^b]]").assertParseBracketExpression("[a&&[^b]]");
-      new ParserTester("[a[^b]]").assertParseBracketExpression("[a[^b]]");
-      new ParserTester("[a[b]]").assertParseBracketExpression("[ab]");
+      new ParserTester("[ab]").assertParseBracketExpression("[[a][b]]");
+      new ParserTester("[a&]").assertParseBracketExpression("[[a][&]]");
+      new ParserTester("[a&&b]").assertParseBracketExpression("[[a]&&[b]]");
+      new ParserTester("[a&&[^b]]").assertParseBracketExpression("[[a]&&[^[b]]]");
+      new ParserTester("[a[^b]]").assertParseBracketExpression("[[a][^[b]]]");
+      new ParserTester("[a[b]]").assertParseBracketExpression("[[a][b]]");
       new ParserTester("[-]").assertParseBracketExpression("[-]");
-      new ParserTester("[a-]").assertParseBracketExpression("[a-]");
+      new ParserTester("[a-]").assertParseBracketExpression("[[a][-]]");
       new ParserTester("[---]").assertParseBracketExpression("[---]");
       new ParserTester("[#--]").assertParseBracketExpression("[#--]");
    }

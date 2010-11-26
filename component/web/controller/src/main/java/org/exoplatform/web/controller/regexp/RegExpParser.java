@@ -201,11 +201,7 @@ public class RegExpParser extends Parser
       }
 
       //
-      Quantifier quantifier = parseQuantifierSymbol();
-      if (quantifier != null)
-      {
-         exp = new RENode.QuantifiedExp(exp, quantifier);
-      }
+      exp.quantifier = parseQuantifierSymbol();
 
       //
       return exp;

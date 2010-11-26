@@ -19,14 +19,14 @@
 
 package org.exoplatform.web.controller.regexp;
 
-import org.hibernate.criterion.Disjunction;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public abstract class RENode
 {
+
+   public abstract String toString();
 
    public static class Disjunction extends RENode
    {
@@ -39,12 +39,17 @@ public abstract class RENode
 
       public Disjunction(Alternative alternative)
       {
-         this.alternative = alternative;
-         this.next = null;
+         this(alternative, null);
       }
 
       public Disjunction(Alternative alternative, Disjunction next)
       {
+         if (alternative == null)
+         {
+            throw new NullPointerException();
+         }
+
+         //
          this.alternative = alternative;
          this.next = next;
       }
@@ -74,12 +79,15 @@ public abstract class RENode
 
       public Alternative(Exp exp)
       {
-         this.exp = exp;
-         this.next = null;
+         this(exp, null);
       }
 
       public Alternative(Exp exp, Alternative next)
       {
+         if (exp == null)
+         {
+            throw new NullPointerException();
+         }
          this.exp = exp;
          this.next = next;
       }
@@ -98,24 +106,42 @@ public abstract class RENode
       }
    }
 
-   public String toString()
-   {
-      throw new UnsupportedOperationException();
-   }
-
    public static abstract class Exp extends RENode
    {
+
+      /** . */
+      Quantifier quantifier;
+
+      @Override
+      public final String toString()
+      {
+         StringBuilder sb = new StringBuilder();
+         if (quantifier != null)
+         {
+            String q = quantifier.toString();
+            sb.append('<').append(q).append('>');
+            toString(sb);
+            sb.append("</").append(q).append('>');
+         }
+         else
+         {
+            toString(sb);
+         }
+         return sb.toString();
+      }
+
+      protected abstract void toString(StringBuilder sb);
    }
 
-   public static class Assertion extends Exp
+   public static abstract class Assertion extends Exp
    {
       /** . */
       public static final Assertion BEGIN = new Assertion()
       {
          @Override
-         public String toString()
+         protected void toString(StringBuilder sb)
          {
-            return "<^/>";
+            sb.append("<^/>");
          }
       };
 
@@ -123,35 +149,14 @@ public abstract class RENode
       public static final Assertion END = new Assertion()
       {
          @Override
-         public String toString()
+         protected void toString(StringBuilder sb)
          {
-            return "<$/>";
+            sb.append("<$/>");
          }
       };
 
       private Assertion()
       {
-      }
-   }
-
-   public static final class QuantifiedExp extends Exp
-   {
-      /** . */
-      private final Exp exp;
-
-      /** . */
-      private final Quantifier quantifier;
-
-      public QuantifiedExp(Exp exp, Quantifier quantifier)
-      {
-         this.exp = exp;
-         this.quantifier = quantifier;
-      }
-
-      @Override
-      public String toString()
-      {
-         return "<" + quantifier + ">" + exp + "</" + quantifier + ">";
       }
    }
 
@@ -169,9 +174,10 @@ public abstract class RENode
       {
       }
 
-      public String toString()
+      @Override
+      protected void toString(StringBuilder sb)
       {
-         return "<./>";
+         sb.append("<./>");
       }
    }
 
@@ -183,13 +189,17 @@ public abstract class RENode
 
       public Group(Disjunction disjunction)
       {
+         if (disjunction == null)
+         {
+            throw new NullPointerException();
+         }
          this.disjunction = disjunction;
       }
 
       @Override
-      public String toString()
+      protected void toString(StringBuilder sb)
       {
-         return "<(>" + disjunction + "</)>";
+         sb.append("<(>").append(disjunction).append("</)>");
       }
    }
 
@@ -205,9 +215,9 @@ public abstract class RENode
       }
 
       @Override
-      public String toString()
+      protected void toString(StringBuilder sb)
       {
-         return "<c>" + value + "</c>";
+         sb.append("<c>").append(value).append("</c>");
       }
    }
 
@@ -224,15 +234,11 @@ public abstract class RENode
 
          public Not(CharacterClass negated)
          {
+            if (negated == null)
+            {
+               throw new NullPointerException();
+            }
             this.negated = negated;
-         }
-
-         @Override
-         public String toString()
-         {
-            StringBuilder sb = new StringBuilder();
-            toString(sb);
-            return sb.toString();
          }
 
          @Override
@@ -255,25 +261,25 @@ public abstract class RENode
 
          public Or(CharacterClass left, CharacterClass right)
          {
+            if (left == null)
+            {
+               throw new NullPointerException();
+            }
+            if (right == null)
+            {
+               throw new NullPointerException();
+            }
             this.left = left;
             this.right = right;
          }
 
          @Override
-         public String toString()
-         {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            toString(sb);
-            sb.append("]");
-            return sb.toString();
-         }
-
-         @Override
          protected void toString(StringBuilder sb)
          {
+            sb.append("[");
             left.toString(sb);
             right.toString(sb);
+            sb.append("]");
          }
       }
 
@@ -288,26 +294,26 @@ public abstract class RENode
 
          public And(CharacterClass left, CharacterClass right)
          {
+            if (left == null)
+            {
+               throw new NullPointerException();
+            }
+            if (right == null)
+            {
+               throw new NullPointerException();
+            }
             this.left = left;
             this.right = right;
          }
 
          @Override
-         public String toString()
-         {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            toString(sb);
-            sb.append("]");
-            return sb.toString();
-         }
-
-         @Override
          protected void toString(StringBuilder sb)
          {
+            sb.append("[");
             left.toString(sb);
             sb.append("&&");
             right.toString(sb);
+            sb.append("]");
          }
       }
 
@@ -323,19 +329,11 @@ public abstract class RENode
          }
 
          @Override
-         public String toString()
-         {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            toString(sb);
-            sb.append("]");
-            return sb.toString();
-         }
-
-         @Override
          protected void toString(StringBuilder sb)
          {
+            sb.append("[");
             sb.append(value);
+            sb.append("]");
          }
       }
 
@@ -355,21 +353,13 @@ public abstract class RENode
          }
 
          @Override
-         public String toString()
-         {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            toString(sb);
-            sb.append("]");
-            return sb.toString();
-         }
-
-         @Override
          protected void toString(StringBuilder sb)
          {
+            sb.append("[");
             sb.append(from);
             sb.append('-');
             sb.append(to);
+            sb.append("]");
          }
       }
    }
