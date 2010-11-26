@@ -28,6 +28,32 @@ public abstract class RENode
 
    public abstract String toString();
 
+   public abstract void accept(Visitor visitor);
+
+   /**
+    * A visitor.
+    */
+   public static abstract class Visitor
+   {
+      public void enter(Disjunction disjunction) {}
+      public void leave(Disjunction disjunction) {}
+      public void enter(Alternative alternative) {}
+      public void leave(Alternative alternative) {}
+      public void enter(Group group) {}
+      public void leave(Group group) {}
+      public void visit(Assertion assertion) {}
+      public void visit(Dot dot) {}
+      public void visit(Character character) {}
+      public void enter(CharacterClass.Not not) {}
+      public void leave(CharacterClass.Not not) {}
+      public void enter(CharacterClass.Or or) {}
+      public void leave(CharacterClass.Or or) {}
+      public void enter(CharacterClass.And and) {}
+      public void leave(CharacterClass.And and) {}
+      public void visit(CharacterClass.Simple simple) {}
+      public void visit(CharacterClass.Range range) {}
+   }
+
    public static class Disjunction extends RENode
    {
 
@@ -66,6 +92,18 @@ public abstract class RENode
             return alternative.toString();
          }
       }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.enter(this);
+         alternative.accept(visitor);
+         if (next != null)
+         {
+            next.accept(visitor);
+         }
+         visitor.leave(this);
+      }
    }
 
    public static class Alternative extends RENode
@@ -103,6 +141,18 @@ public abstract class RENode
          {
             return exp.toString();
          }
+      }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.enter(this);
+         exp.accept(visitor);
+         if (next != null)
+         {
+            next.accept(visitor);
+         }
+         visitor.leave(this);
       }
    }
 
@@ -158,6 +208,12 @@ public abstract class RENode
       private Assertion()
       {
       }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.visit(this);
+      }
    }
 
    public static abstract class Atom extends Exp
@@ -178,6 +234,12 @@ public abstract class RENode
       protected void toString(StringBuilder sb)
       {
          sb.append("<./>");
+      }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.visit(this);
       }
    }
 
@@ -201,6 +263,14 @@ public abstract class RENode
       {
          sb.append("<(>").append(disjunction).append("</)>");
       }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.enter(this);
+         disjunction.accept(visitor);
+         visitor.leave(this);
+      }
    }
 
    public static final class Character extends Atom
@@ -218,6 +288,12 @@ public abstract class RENode
       protected void toString(StringBuilder sb)
       {
          sb.append("<c>").append(value).append("</c>");
+      }
+
+      @Override
+      public void accept(Visitor visitor)
+      {
+         visitor.visit(this);
       }
    }
 
@@ -247,6 +323,14 @@ public abstract class RENode
             sb.append("[^");
             negated.toString(sb);
             sb.append("]");
+         }
+
+         @Override
+         public void accept(Visitor visitor)
+         {
+            visitor.enter(this);
+            negated.accept(visitor);
+            visitor.leave(this);
          }
       }
 
@@ -280,6 +364,15 @@ public abstract class RENode
             left.toString(sb);
             right.toString(sb);
             sb.append("]");
+         }
+
+         @Override
+         public void accept(Visitor visitor)
+         {
+            visitor.enter(this);
+            left.accept(visitor);
+            right.accept(visitor);
+            visitor.leave(this);
          }
       }
 
@@ -315,6 +408,15 @@ public abstract class RENode
             right.toString(sb);
             sb.append("]");
          }
+
+         @Override
+         public void accept(Visitor visitor)
+         {
+            visitor.enter(this);
+            left.accept(visitor);
+            right.accept(visitor);
+            visitor.leave(this);
+         }
       }
 
       public static class Simple extends CharacterClass
@@ -334,6 +436,12 @@ public abstract class RENode
             sb.append("[");
             sb.append(value);
             sb.append("]");
+         }
+
+         @Override
+         public void accept(Visitor visitor)
+         {
+            visitor.visit(this);
          }
       }
 
@@ -360,6 +468,12 @@ public abstract class RENode
             sb.append('-');
             sb.append(to);
             sb.append("]");
+         }
+
+         @Override
+         public void accept(Visitor visitor)
+         {
+            visitor.visit(this);
          }
       }
    }
