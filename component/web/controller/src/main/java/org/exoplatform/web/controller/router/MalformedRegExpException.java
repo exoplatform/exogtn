@@ -17,29 +17,29 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.regexp;
+package org.exoplatform.web.controller.router;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SyntaxException extends Exception
+public class MalformedRegExpException extends Exception
 {
-   public SyntaxException()
+   public MalformedRegExpException()
    {
    }
 
-   public SyntaxException(String s)
+   public MalformedRegExpException(String s)
    {
       super(s);
    }
 
-   public SyntaxException(String s, Throwable throwable)
+   public MalformedRegExpException(String s, Throwable throwable)
    {
       super(s, throwable);
    }
 
-   public SyntaxException(Throwable throwable)
+   public MalformedRegExpException(Throwable throwable)
    {
       super(throwable);
    }

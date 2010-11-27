@@ -47,7 +47,7 @@ public class TestPortal extends AbstractTestController
    {
       RouterDescriptor routerMD = new RouterDescriptor().addRoute(
          new RouteDescriptor("/{gtn:lang}public").addPathParam(
-         QualifiedName.parse("gtn:lang"), "([A-Za-z][A-Za-z]/)?", EncodingMode.PRESERVE_PATH)
+         QualifiedName.parse("gtn:lang"), "([A-Za-z]{2}/)?", EncodingMode.PRESERVE_PATH)
       );
       Router router = new Router(routerMD);
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
@@ -59,7 +59,7 @@ public class TestPortal extends AbstractTestController
       RouterDescriptor routerMD = new RouterDescriptor().
          addRoute(new RouteDescriptor("/public")).
          addRoute(new RouteDescriptor("/{gtn:lang}/public").
-            addPathParam(QualifiedName.parse("gtn:lang"), "([A-Za-z][A-Za-z])", EncodingMode.DEFAULT_FORM
+            addPathParam(QualifiedName.parse("gtn:lang"), "([A-Za-z]{2})", EncodingMode.DEFAULT_FORM
             )
          );
       Router router = new Router(routerMD);

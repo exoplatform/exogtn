@@ -153,7 +153,7 @@ public class TestRender extends AbstractTestController
    public void testLang() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{a}b").addPathParam(QualifiedName.parse("a"), "(?:[A-Za-z]{2}/)?", EncodingMode.PRESERVE_PATH));
+      routerMD.addRoute(new RouteDescriptor("/{a}b").addPathParam(QualifiedName.parse("a"), "(([A-Za-z]{2})/)?", EncodingMode.PRESERVE_PATH));
       Router router = new Router(routerMD);
 
       //

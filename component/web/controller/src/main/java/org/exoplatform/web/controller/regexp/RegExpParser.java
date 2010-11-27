@@ -73,10 +73,11 @@ public class RegExpParser extends Parser
     * disjunction -> alternative | alternative '|' disjunction
     *
     * @return the disjunction
+    * @throws SyntaxException any syntax exception
     */
-   public RENode.Disjunction parseDisjunction()
+   public RENode.Disjunction parseDisjunction() throws SyntaxException
    {
-      int pipe = lastIndexOf('|');
+      int pipe = indexOf('|', from);
       if (pipe == -1)
       {
          return new RENode.Disjunction(parseAlternative());
@@ -96,8 +97,9 @@ public class RegExpParser extends Parser
     * alternative -> expression | expression '|' alternative
     *
     * @return the alternative
+    * @throws SyntaxException any syntax exception
     */
-   public RENode.Alternative parseAlternative()
+   public RENode.Alternative parseAlternative() throws SyntaxException
    {
       if (index < to)
       {
@@ -119,7 +121,8 @@ public class RegExpParser extends Parser
    }
 
    /**
-    * expression        -> assertion | '(' disjunction ')' | character | expression quantifier
+    * expression        -> assertion | group | character | expression quantifier
+    * group             -> '(' disjunction ')' | '(' '?' ':' disjunction ')'
     * assertion         -> '^' | '$'
     * character         -> '.' | escaped | character_class | literal
     * escaped           -> '\' any char
@@ -127,8 +130,9 @@ public class RegExpParser extends Parser
     * quantifier_prefix -> '*' | '+' | '?' | '{' count '}' | '{' count ',' '}' | '{' count ',' count '}'
     *
     * @return the expression
+    * @throws SyntaxException any syntax exception
     */
-   public RENode.Exp parseExpression()
+   public RENode.Exp parseExpression() throws SyntaxException
    {
       if (index == to)
       {
@@ -230,13 +234,13 @@ public class RegExpParser extends Parser
       }
 
       //
-      exp.quantifier = parseQuantifierSymbol();
+      exp.quantifier = parseQuantifier();
 
       //
       return exp;
    }
 
-   Quantifier parseQuantifierSymbol()
+   Quantifier parseQuantifier() throws SyntaxException
    {
       if (index < to)
       {
@@ -320,8 +324,9 @@ public class RegExpParser extends Parser
     * @param begin the begin
     * @param end the end
     * @return a character class expression
+    * @throws SyntaxException any syntax exception
     */
-   private RENode.CharacterClassExpr parseCharacterClass(int begin, int end)
+   private RENode.CharacterClassExpr parseCharacterClass(int begin, int end) throws SyntaxException
    {
       if (begin == end)
       {

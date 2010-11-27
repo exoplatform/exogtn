@@ -22,6 +22,7 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.regexp.Quantifier;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.RegExpParser;
+import org.exoplatform.web.controller.regexp.SyntaxException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,47 +32,44 @@ public class RegExpAnalyser
 {
 
    /** . */
-   private StringBuilder sb;
-
-   /** . */
-   private boolean groupContainer;
+   private StringBuilder pattern;
 
    /** . */
    private boolean needReset;
 
    public RegExpAnalyser()
    {
-      this.sb = new StringBuilder();
-      this.groupContainer = false;
+      this.pattern = new StringBuilder();
       this.needReset = false;
-   }
-
-   public boolean isGroupContainer()
-   {
-      return groupContainer;
    }
 
    public String getPattern()
    {
-      return sb.toString();
+      return pattern.toString();
    }
 
    public RegExpAnalyser reset()
    {
-      sb.setLength(0);
-      groupContainer = false;
+      pattern.setLength(0);
       needReset = false;
       return this;
    }
 
-   public void process(CharSequence pattern)
+   public void process(CharSequence pattern) throws MalformedRegExpException
    {
-      RegExpParser parser = new RegExpParser(pattern);
-      RENode.Disjunction disjunction = parser.parseDisjunction();
-      process(disjunction);
+      try
+      {
+         RegExpParser parser = new RegExpParser(pattern);
+         RENode.Disjunction disjunction = parser.parseDisjunction();
+         process(disjunction);
+      }
+      catch (SyntaxException e)
+      {
+         throw new MalformedRegExpException(e);
+      }
    }
 
-   public void process(RENode.Disjunction disjunction)
+   public void process(RENode.Disjunction disjunction) throws MalformedRegExpException
    {
       if (needReset)
       {
@@ -83,18 +81,18 @@ public class RegExpAnalyser
       visit(disjunction);
    }
 
-   private void visit(RENode.Disjunction disjunction)
+   private void visit(RENode.Disjunction disjunction) throws MalformedRegExpException
    {
       visit(disjunction.getAlternative());
       RENode.Disjunction next = disjunction.getNext();
       if (next != null)
       {
-         sb.append('|');
+         pattern.append('|');
          visit(next);
       }
    }
 
-   private void visit(RENode.Alternative alternative)
+   private void visit(RENode.Alternative alternative) throws MalformedRegExpException
    {
       visit(alternative.getExp());
       RENode.Alternative next = alternative.getNext();
@@ -104,78 +102,84 @@ public class RegExpAnalyser
       }
    }
 
-   private void visit(RENode.Exp expression)
+   private void visit(RENode.Exp expression) throws MalformedRegExpException
    {
       Quantifier quantifier = null;
       if (expression instanceof RENode.Dot)
       {
-         sb.append('.');
+         pattern.append('.');
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.Group)
       {
          RENode.Group group = (RENode.Group)expression;
-         sb.append(groupContainer ? "(?:" : "(");
-         groupContainer = true;
+         pattern.append("(?:");
          visit(group.getDisjunction());
-         sb.append(")");
+         pattern.append(")");
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.Character)
       {
          RENode.Character character = (RENode.Character)expression;
-         sb.append(character.getValue());
+         pattern.append(character.getValue());
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.CharacterClass)
       {
          RENode.CharacterClass characterClass = (RENode.CharacterClass)expression;
-         sb.append("[");
-         visit(characterClass.getExpr());
-         sb.append("]");
+         pattern.append("[");
+         visit(characterClass.getExpr(), true);
+         pattern.append("]");
          quantifier = expression.getQuantifier();
       }
 
       //
       if (quantifier != null)
       {
-         sb.append(quantifier);
+         pattern.append(quantifier);
       }
    }
 
-   private void visit(RENode.CharacterClassExpr expr)
+   private void visit(RENode.CharacterClassExpr expr, boolean braced)
    {
       if (expr instanceof RENode.CharacterClassExpr.Simple)
       {
          RENode.CharacterClass.CharacterClassExpr.Simple simple = (RENode.CharacterClass.CharacterClassExpr.Simple)expr;
-         sb.append(simple.getValue());
+         pattern.append(simple.getValue());
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Range)
       {
          RENode.CharacterClass.CharacterClassExpr.Range range = (RENode.CharacterClass.CharacterClassExpr.Range)expr;
-         sb.append(range.getFrom());
-         sb.append('-');
-         sb.append(range.getTo());
+         pattern.append(range.getFrom());
+         pattern.append('-');
+         pattern.append(range.getTo());
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.And)
       {
          RENode.CharacterClass.CharacterClassExpr.And and = (RENode.CharacterClass.CharacterClassExpr.And)expr;
-         visit(and.getLeft());
-         sb.append("&&");
-         visit(and.getRight());
+         visit(and.getLeft(), false);
+         pattern.append("&&");
+         visit(and.getRight(), false);
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Or)
       {
          RENode.CharacterClass.CharacterClassExpr.Or or = (RENode.CharacterClass.CharacterClassExpr.Or)expr;
-         visit(or.getLeft());
-         visit(or.getRight());
+         visit(or.getLeft(), false);
+         visit(or.getRight(), false);
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Not)
       {
          RENode.CharacterClass.CharacterClassExpr.Not not = (RENode.CharacterClass.CharacterClassExpr.Not)expr;
-         sb.append("[^");
-         visit(not.getNegated());
-         sb.append(']');
+         if (!braced)
+         {
+            pattern.append("[");
+         }
+         pattern.append("^");
+         visit(not.getNegated(), false);
+         if (!braced)
+         {
+            pattern.append(']');
+         }
       }
    }
 }

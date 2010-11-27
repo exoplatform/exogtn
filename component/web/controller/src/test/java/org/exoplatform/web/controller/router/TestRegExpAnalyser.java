@@ -19,49 +19,72 @@
 
 package org.exoplatform.web.controller.router;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.BaseGateInTest;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestRegExpAnalyser extends TestCase
+public class TestRegExpAnalyser extends BaseGateInTest
 {
 
    /** . */
    private RegExpAnalyser analyser = new RegExpAnalyser();
 
-   private void assertAnalyse(String expectedPattern, boolean expectedGroupContainer, String pattern)
+   private void assertAnalyse(String expectedPattern, String pattern)
+   {
+      try
+      {
+         analyser.reset();
+         analyser.process(pattern);
+         assertEquals(expectedPattern, analyser.getPattern());
+      }
+      catch (MalformedRegExpException e)
+      {
+         fail(e);
+      }
+   }
+
+   private void assertAnalyseFails(String pattern)
    {
       analyser.reset();
-      analyser.process(pattern);
-      assertEquals(expectedPattern, analyser.getPattern());
-      assertEquals(expectedGroupContainer, analyser.isGroupContainer());
+      try
+      {
+         analyser.process(pattern);
+         fail();
+      }
+      catch (MalformedRegExpException e)
+      {
+      }
    }
 
    public void testCharacterClass()
    {
-      assertAnalyse("[a]", false, "[a]");
-      assertAnalyse("[ab]", false, "[ab]");
-      assertAnalyse("[ab]", false, "[a[b]]");
-      assertAnalyse("[abc]", false, "[abc]");
-      assertAnalyse("[abc]", false, "[[a]bc]");
-      assertAnalyse("[abc]", false, "[a[b]c]");
-      assertAnalyse("[abc]", false, "[ab[c]]");
-      assertAnalyse("[abc]", false, "[[ab]c]");
-      assertAnalyse("[abc]", false, "[a[bc]]");
-      assertAnalyse("[abc]", false, "[[abc]]");
+      assertAnalyse("[a]", "[a]");
+      assertAnalyse("[ab]", "[ab]");
+      assertAnalyse("[ab]", "[a[b]]");
+      assertAnalyse("[abc]", "[abc]");
+      assertAnalyse("[abc]", "[[a]bc]");
+      assertAnalyse("[abc]", "[a[b]c]");
+      assertAnalyse("[abc]", "[ab[c]]");
+      assertAnalyse("[abc]", "[[ab]c]");
+      assertAnalyse("[abc]", "[a[bc]]");
+      assertAnalyse("[abc]", "[[abc]]");
+      assertAnalyse("[^a]", "[^a]");
    }
 
    public void testGroupContainer()
    {
-      assertAnalyse("(abc)", true, "(abc)");
-      assertAnalyse("(a(?:bc))", true, "(a(bc))");
-      assertAnalyse("(a)(?:b)", true, "(a)(b)");
+      assertAnalyse("(?:a)", "(a)");
+      assertAnalyse("(?:a(?:b))", "(a(?:b))");
+      assertAnalyse("(?:a(?:b))", "(?:a(b))");
+      assertAnalyse("(?:a)(?:b)", "(a)(?:b)");
+      assertAnalyse("(?:a(?:b))", "(a(b))");
+      assertAnalyse("(?:a)(?:b)", "(a)(b)");
    }
 
    public void testBilto()
    {
-      assertAnalyse("[a]+", false, "[a]+");
+      assertAnalyse("[a]+", "[a]+");
    }
 }

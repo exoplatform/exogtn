@@ -396,12 +396,26 @@ class Route
                      for (int i = 0;i < route.params.size();i++)
                      {
                         PathParam param = route.params.get(i);
-                        String value = matcher.group(group++);
-                        if (param.encodingMode == EncodingMode.DEFAULT_FORM)
+
+                        //
+                        String value = matcher.group(group);
+
+                        //
+                        if (value != null)
                         {
-                           value = value.replace(slashEscape, '/');
+                           if (param.encodingMode == EncodingMode.DEFAULT_FORM)
+                           {
+                              value = value.replace(slashEscape, '/');
+                           }
+                           response.put(param.name, value);
                         }
-                        response.put(param.name, value);
+                        else
+                        {
+                           // We have an optional match
+                        }
+
+                        //
+                        group++;
                      }
 
                      //
@@ -630,20 +644,27 @@ class Route
                }
 
                // Now analyse the regexp
-//               RegExpAnalyser analyser = new RegExpAnalyser();
-//               analyser.process(regex);
-//               String regex2 = analyser.getPattern();
-//               System.out.println("" + regex + " -> " + regex2);
+               String regex2;
+               try
+               {
+                  RegExpAnalyser analyser = new RegExpAnalyser();
+                  analyser.process(regex);
+                  regex2 = analyser.getPattern();
+                  System.out.println("" + regex + " -> " + regex2);
+               }
+               catch (MalformedRegExpException e)
+               {
+                  throw new RuntimeException(e);
+               }
 
                //
-               builder.expr("(").expr(regex).expr(")");
+               builder.expr("(").expr(regex2).expr(")");
 
                //
                parameterPatterns.add(new PathParam(
                   parameterQName,
                   encodingMode,
-                  Pattern.compile("^" + regex + "$")
-               ));
+                  Pattern.compile("^" + regex + "$")));
                previous = end.get(i) + 1;
             }
 
@@ -653,6 +674,7 @@ class Route
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly
             Pattern pattern = builder.build();
+            System.out.println("pattern = " + pattern);
             PatternRoute route = new PatternRoute(pattern, parameterPatterns, chunks);
 
             // Wire

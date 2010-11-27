@@ -83,9 +83,16 @@ public abstract class Parser
       return to;
    }
 
-   protected final int lastIndexOf(char c)
+   /**
+    * Finds the first index of the occurence of the specified char from a specified index.
+    *
+    * @param c the char to match
+    * @param start the start index
+    * @return the matched char index or -1
+    */
+   protected final int indexOf(char c, int start)
    {
-      for (int i = to - 1;i >= from;i--)
+      for (int i = start;i < to;i++)
       {
          if (s.charAt(i) == c)
          {

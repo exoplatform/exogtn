@@ -19,7 +19,9 @@
 
 package org.exoplatform.web.controller.regexp;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import org.exoplatform.component.test.BaseGateInTest;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestParser extends TestCase
+public class TestParser extends BaseGateInTest
 {
 
 
@@ -52,18 +54,32 @@ public class TestParser extends TestCase
       }
       ParserTester assertParseCharacterClass(String expectedValue)
       {
-         RENode node = parser.parseExpression();
-         assertTrue(node instanceof RENode.CharacterClass);
-         assertEquals(expectedValue, node.toString());
-         return this;
+         try
+         {
+            RENode node = parser.parseExpression();
+            assertTrue(node instanceof RENode.CharacterClass);
+            assertEquals(expectedValue, node.toString());
+            return this;
+         }
+         catch (SyntaxException e)
+         {
+            return fail(e);
+         }
       }
       ParserTester assertParseDisjunction(String expectedValue)
       {
-         int expectedIndex = parser.getTo();
-         RENode.Disjunction disjunction = parser.parseDisjunction();
-         assertEquals(expectedValue, disjunction.toString());
-         assertEquals(expectedIndex, parser.getIndex());
-         return this;
+         try
+         {
+            int expectedIndex = parser.getTo();
+            RENode.Disjunction disjunction = parser.parseDisjunction();
+            assertEquals(expectedValue, disjunction.toString());
+            assertEquals(expectedIndex, parser.getIndex());
+            return this;
+         }
+         catch (SyntaxException e)
+         {
+            return fail(e);
+         }
       }
       ParserTester assertNotParseDisjunction()
       {
@@ -81,10 +97,17 @@ public class TestParser extends TestCase
       }
       ParserTester assertParseExpression(String expectedValue, int expectedIndex)
       {
-         RENode.Exp exp = parser.parseExpression();
-         assertEquals(expectedValue, exp.toString());
-         assertEquals(expectedIndex, parser.getIndex());
-         return this;
+         try
+         {
+            RENode.Exp exp = parser.parseExpression();
+            assertEquals(expectedValue, exp.toString());
+            assertEquals(expectedIndex, parser.getIndex());
+            return this;
+         }
+         catch (SyntaxException e)
+         {
+            return fail(e);
+         }
       }
       ParserTester assertNotParseExpression()
       {
@@ -103,14 +126,23 @@ public class TestParser extends TestCase
       ParserTester assertParseQuantifier(int expectedIndex, Quantifier expectedQuantifier)
       {
          int index = parser.getIndex();
+         Quantifier quantifier;
+         try
+         {
+            quantifier = parser.parseQuantifier();
+         }
+         catch (SyntaxException e)
+         {
+            return fail(e);
+         }
          if (expectedQuantifier != null)
          {
-            assertEquals(expectedQuantifier, parser.parseQuantifierSymbol());
+            assertEquals(expectedQuantifier, quantifier);
             assertEquals(expectedIndex, parser.getIndex());
          }
          else
          {
-            assertNull(parser.parseQuantifierSymbol());
+            assertNull(quantifier);
             assertEquals(expectedIndex, parser.getIndex());
          }
          return this;
@@ -128,6 +160,7 @@ public class TestParser extends TestCase
       new ParserTester("^$").assertParseDisjunction("<^/><$/>");
       new ParserTester("a").assertParseDisjunction("<c>a</c>");
       new ParserTester("a|b").assertParseDisjunction("<c>a</c>|<c>b</c>");
+      new ParserTester("a|b|c").assertParseDisjunction("<c>a</c>|<c>b</c>|<c>c</c>");
       new ParserTester("a+|b*").assertParseDisjunction("<+><c>a</c></+>|<*><c>b</c></*>");
    }
    
