@@ -28,40 +28,14 @@ public abstract class RENode
 
    public abstract String toString();
 
-   public abstract void accept(Visitor visitor);
-
-   /**
-    * A visitor.
-    */
-   public static abstract class Visitor
+   public static final class Disjunction extends RENode
    {
-      public void enter(Disjunction disjunction) {}
-      public void leave(Disjunction disjunction) {}
-      public void enter(Alternative alternative) {}
-      public void leave(Alternative alternative) {}
-      public void enter(Group group) {}
-      public void leave(Group group) {}
-      public void visit(Assertion assertion) {}
-      public void visit(Dot dot) {}
-      public void visit(Character character) {}
-      public void enter(CharacterClass.Not not) {}
-      public void leave(CharacterClass.Not not) {}
-      public void enter(CharacterClass.Or or) {}
-      public void leave(CharacterClass.Or or) {}
-      public void enter(CharacterClass.And and) {}
-      public void leave(CharacterClass.And and) {}
-      public void visit(CharacterClass.Simple simple) {}
-      public void visit(CharacterClass.Range range) {}
-   }
-
-   public static class Disjunction extends RENode
-   {
-
-      /** . */
-      private final Disjunction next;
 
       /** . */
       private final Alternative alternative;
+
+      /** . */
+      private final Disjunction next;
 
       public Disjunction(Alternative alternative)
       {
@@ -80,6 +54,16 @@ public abstract class RENode
          this.next = next;
       }
 
+      public Disjunction getNext()
+      {
+         return next;
+      }
+
+      public Alternative getAlternative()
+      {
+         return alternative;
+      }
+
       @Override
       public String toString()
       {
@@ -92,21 +76,9 @@ public abstract class RENode
             return alternative.toString();
          }
       }
-
-      @Override
-      public void accept(Visitor visitor)
-      {
-         visitor.enter(this);
-         alternative.accept(visitor);
-         if (next != null)
-         {
-            next.accept(visitor);
-         }
-         visitor.leave(this);
-      }
    }
 
-   public static class Alternative extends RENode
+   public static final class Alternative extends RENode
    {
 
       /** . */
@@ -130,6 +102,16 @@ public abstract class RENode
          this.next = next;
       }
 
+      public Exp getExp()
+      {
+         return exp;
+      }
+
+      public Alternative getNext()
+      {
+         return next;
+      }
+
       @Override
       public String toString()
       {
@@ -142,18 +124,6 @@ public abstract class RENode
             return exp.toString();
          }
       }
-
-      @Override
-      public void accept(Visitor visitor)
-      {
-         visitor.enter(this);
-         exp.accept(visitor);
-         if (next != null)
-         {
-            next.accept(visitor);
-         }
-         visitor.leave(this);
-      }
    }
 
    public static abstract class Exp extends RENode
@@ -161,6 +131,15 @@ public abstract class RENode
 
       /** . */
       Quantifier quantifier;
+
+      private Exp()
+      {
+      }
+
+      public Quantifier getQuantifier()
+      {
+         return quantifier;
+      }
 
       @Override
       public final String toString()
@@ -170,26 +149,27 @@ public abstract class RENode
          {
             String q = quantifier.toString();
             sb.append('<').append(q).append('>');
-            toString(sb);
+            writeTo(sb);
             sb.append("</").append(q).append('>');
          }
          else
          {
-            toString(sb);
+            writeTo(sb);
          }
          return sb.toString();
       }
 
-      protected abstract void toString(StringBuilder sb);
+      protected abstract void writeTo(StringBuilder sb);
    }
 
    public static abstract class Assertion extends Exp
    {
+
       /** . */
       public static final Assertion BEGIN = new Assertion()
       {
          @Override
-         protected void toString(StringBuilder sb)
+         protected void writeTo(StringBuilder sb)
          {
             sb.append("<^/>");
          }
@@ -199,7 +179,7 @@ public abstract class RENode
       public static final Assertion END = new Assertion()
       {
          @Override
-         protected void toString(StringBuilder sb)
+         protected void writeTo(StringBuilder sb)
          {
             sb.append("<$/>");
          }
@@ -208,16 +188,13 @@ public abstract class RENode
       private Assertion()
       {
       }
-
-      @Override
-      public void accept(Visitor visitor)
-      {
-         visitor.visit(this);
-      }
    }
 
    public static abstract class Atom extends Exp
    {
+      private Atom()
+      {
+      }
    }
 
    public static final class Dot extends Atom
@@ -231,15 +208,9 @@ public abstract class RENode
       }
 
       @Override
-      protected void toString(StringBuilder sb)
+      protected void writeTo(StringBuilder sb)
       {
          sb.append("<./>");
-      }
-
-      @Override
-      public void accept(Visitor visitor)
-      {
-         visitor.visit(this);
       }
    }
 
@@ -258,18 +229,15 @@ public abstract class RENode
          this.disjunction = disjunction;
       }
 
-      @Override
-      protected void toString(StringBuilder sb)
+      public Disjunction getDisjunction()
       {
-         sb.append("<(>").append(disjunction).append("</)>");
+         return disjunction;
       }
 
       @Override
-      public void accept(Visitor visitor)
+      protected void writeTo(StringBuilder sb)
       {
-         visitor.enter(this);
-         disjunction.accept(visitor);
-         visitor.leave(this);
+         sb.append("<(>").append(disjunction).append("</)>");
       }
    }
 
@@ -279,36 +247,64 @@ public abstract class RENode
       /** . */
       private final char value;
 
+      public char getValue()
+      {
+         return value;
+      }
+
       public Character(char value)
       {
          this.value = value;
       }
 
       @Override
-      protected void toString(StringBuilder sb)
+      protected void writeTo(StringBuilder sb)
       {
          sb.append("<c>").append(value).append("</c>");
       }
+   }
+
+   public static class CharacterClass extends Atom
+   {
+
+      /** . */
+      private final CharacterClassExpr expr;
+
+      protected CharacterClass(CharacterClassExpr expr)
+      {
+         if (expr == null)
+         {
+            throw new NullPointerException();
+         }
+         this.expr = expr;
+      }
+
+      public CharacterClassExpr getExpr()
+      {
+         return expr;
+      }
 
       @Override
-      public void accept(Visitor visitor)
+      protected void writeTo(StringBuilder sb)
       {
-         visitor.visit(this);
+         sb.append(expr);
       }
    }
 
-   public static abstract class CharacterClass extends Atom
+   public static abstract class CharacterClassExpr extends RENode
    {
 
-      protected abstract void toString(StringBuilder sb);
+      private CharacterClassExpr()
+      {
+      }
 
-      public static class Not extends CharacterClass
+      public static class Not extends CharacterClassExpr
       {
 
          /** . */
-         private final CharacterClass negated;
+         private final CharacterClassExpr negated;
 
-         public Not(CharacterClass negated)
+         public Not(CharacterClassExpr negated)
          {
             if (negated == null)
             {
@@ -317,33 +313,28 @@ public abstract class RENode
             this.negated = negated;
          }
 
-         @Override
-         protected void toString(StringBuilder sb)
+         public CharacterClassExpr getNegated()
          {
-            sb.append("[^");
-            negated.toString(sb);
-            sb.append("]");
+            return negated;
          }
 
          @Override
-         public void accept(Visitor visitor)
+         public String toString()
          {
-            visitor.enter(this);
-            negated.accept(visitor);
-            visitor.leave(this);
+            return "[^" + negated + "]";
          }
       }
 
-      public static class Or extends CharacterClass
+      public static class Or extends CharacterClassExpr
       {
 
          /** . */
-         private final CharacterClass left;
+         private final CharacterClassExpr left;
 
          /** . */
-         private final CharacterClass right;
+         private final CharacterClassExpr right;
 
-         public Or(CharacterClass left, CharacterClass right)
+         public Or(CharacterClassExpr left, CharacterClassExpr right)
          {
             if (left == null)
             {
@@ -357,35 +348,33 @@ public abstract class RENode
             this.right = right;
          }
 
-         @Override
-         protected void toString(StringBuilder sb)
+         public CharacterClassExpr getLeft()
          {
-            sb.append("[");
-            left.toString(sb);
-            right.toString(sb);
-            sb.append("]");
+            return left;
+         }
+
+         public CharacterClassExpr getRight()
+         {
+            return right;
          }
 
          @Override
-         public void accept(Visitor visitor)
+         public String toString()
          {
-            visitor.enter(this);
-            left.accept(visitor);
-            right.accept(visitor);
-            visitor.leave(this);
+            return "[" + left + right + "]";
          }
       }
 
-      public static class And extends CharacterClass
+      public static class And extends CharacterClassExpr
       {
 
          /** . */
-         private final CharacterClass left;
+         private final CharacterClassExpr left;
 
          /** . */
-         private final CharacterClass right;
+         private final CharacterClassExpr right;
 
-         public And(CharacterClass left, CharacterClass right)
+         public And(CharacterClassExpr left, CharacterClassExpr right)
          {
             if (left == null)
             {
@@ -399,27 +388,24 @@ public abstract class RENode
             this.right = right;
          }
 
-         @Override
-         protected void toString(StringBuilder sb)
+         public CharacterClassExpr getLeft()
          {
-            sb.append("[");
-            left.toString(sb);
-            sb.append("&&");
-            right.toString(sb);
-            sb.append("]");
+            return left;
+         }
+
+         public CharacterClassExpr getRight()
+         {
+            return right;
          }
 
          @Override
-         public void accept(Visitor visitor)
+         public String toString()
          {
-            visitor.enter(this);
-            left.accept(visitor);
-            right.accept(visitor);
-            visitor.leave(this);
+            return "[" + left + "&&" + right + "]";
          }
       }
 
-      public static class Simple extends CharacterClass
+      public static class Simple extends CharacterClassExpr
       {
 
          /** . */
@@ -430,22 +416,19 @@ public abstract class RENode
             this.value = value;
          }
 
-         @Override
-         protected void toString(StringBuilder sb)
+         public char getValue()
          {
-            sb.append("[");
-            sb.append(value);
-            sb.append("]");
+            return value;
          }
 
          @Override
-         public void accept(Visitor visitor)
+         public String toString()
          {
-            visitor.visit(this);
+            return "[" + value + "]";
          }
       }
 
-      public static class Range extends CharacterClass
+      public static class Range extends CharacterClassExpr
       {
 
          /** From inclusive. */
@@ -460,20 +443,20 @@ public abstract class RENode
             this.to = to;
          }
 
-         @Override
-         protected void toString(StringBuilder sb)
+         public char getFrom()
          {
-            sb.append("[");
-            sb.append(from);
-            sb.append('-');
-            sb.append(to);
-            sb.append("]");
+            return from;
+         }
+
+         public char getTo()
+         {
+            return to;
          }
 
          @Override
-         public void accept(Visitor visitor)
+         public String toString()
          {
-            visitor.visit(this);
+            return "[" + from + "-" + to + "]";
          }
       }
    }

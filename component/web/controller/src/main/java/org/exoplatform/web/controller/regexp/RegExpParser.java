@@ -147,7 +147,7 @@ public class RegExpParser extends Parser
             index++;
             break;
          case '(':
-            int closingParenthesis = indexOfBlah(index + 1, to, '(', ')');
+            int closingParenthesis = findClosing(index, to, '(', ')');
             if (closingParenthesis == -1)
             {
                throw new SyntaxException();
@@ -164,12 +164,12 @@ public class RegExpParser extends Parser
             throw new SyntaxException();
 
          case '[':
-            int closingBracket = indexOfBlah(index + 1, to, '[', ']');
+            int closingBracket = findClosing(index, to, '[', ']');
             if (closingBracket == -1)
             {
                throw new SyntaxException();
             }
-            exp = parseCharacterClass(index, closingBracket + 1);
+            exp = new RENode.CharacterClass(parseCharacterClass(index, closingBracket + 1));
             index = closingBracket + 1;
             break;
          case '\\':
@@ -285,84 +285,84 @@ public class RegExpParser extends Parser
 
    /**
     * character_class -> '[' bracket_list ']' | '[' '^' bracket_list ']'
-    * bracket_term    -> bracket_term | bracket_term bracket_term | bracket_term '&' '&' bracket_term
+    * bracket_list    -> bracket_term | bracket_term bracket_list | bracket_term '&' '&' bracket_list
     * bracket_term    -> character_class | single_term | range_term
     *
     * @param begin the begin
     * @param end the end
     * @return a character class expression
     */
-   private RENode.CharacterClass parseCharacterClass(int begin, int end)
+   private RENode.CharacterClassExpr parseCharacterClass(int begin, int end)
    {
       if (begin == end)
       {
          throw new SyntaxException();
       }
 
-      // Check if we do have bracket around or not
-      boolean matching = true;
-      if (s.charAt(begin) == '[')
-      {
-         if (end - begin < 3)
-         {
-            throw new SyntaxException();
-         }
-         if (s.charAt(end - 1) != ']')
-         {
-            throw new SyntaxException();
-         }
-
-         //
-         begin++;
-         end--;
-
-         //
-         if (s.charAt(begin) == '^' && begin + 1 < end)
-         {
-            begin++;
-            matching = false;
-         }
-      }
-
-      //
-      //
-      RENode.CharacterClass cc;
-      char c = s.charAt(begin);
-      begin++;
-      if (begin + 1 < end && s.charAt(begin) == '-')
-      {
-         cc = new RENode.CharacterClass.Range(c, s.charAt(begin + 1));
-         begin += 2;
-      }
-      else
-      {
-         cc = new RENode.CharacterClass.Simple(c);
-      }
-
       //
       if (begin < end)
       {
-         char n = s.charAt(begin);
-         if (n == '&' && begin + 1 < end && s.charAt(begin + 1) == '&')
+         RENode.CharacterClassExpr next;
+         if (s.charAt(begin) == '[')
          {
-            RENode.CharacterClass next = parseCharacterClass(begin + 2, end);
-            cc = new RENode.CharacterClass.And(cc, next);
+            int closing = findClosing(begin, end, '[', ']');
+            if (closing == -1)
+            {
+               throw new SyntaxException("Was expecting a closing brack");
+            }
+
+            //
+            boolean matching = true;
+            int nestedStart = begin + 1;
+            int nestedEnd = closing;
+            if (s.charAt(nestedStart) == '^' && nestedStart + 1 < nestedEnd)
+            {
+               nestedStart++;
+               matching = false;
+            }
+
+            //
+            RENode.CharacterClassExpr nested = parseCharacterClass(nestedStart, nestedEnd);
+            next = matching ? nested : new RENode.CharacterClassExpr.Not(nested);
+            begin = closing + 1;
          }
          else
          {
-            RENode.CharacterClass next = parseCharacterClass(begin, end);
-            cc = new RENode.CharacterClass.Or(cc, next);
+            char c = s.charAt(begin);
+            begin++;
+            if (begin + 1 < end && s.charAt(begin) == '-')
+            {
+               next = new RENode.CharacterClassExpr.Range(c, s.charAt(begin + 1));
+               begin += 2;
+            }
+            else
+            {
+               next = new RENode.CharacterClassExpr.Simple(c);
+            }
          }
-      }
 
-      //
-      if (matching)
-      {
-         return cc;
+         //
+         if (begin < end)
+         {
+            char n = s.charAt(begin);
+            if (n == '&' && begin + 1 < end && s.charAt(begin + 1) == '&')
+            {
+               RENode.CharacterClassExpr next2 = parseCharacterClass(begin + 2, end);
+               next = new RENode.CharacterClassExpr.And(next, next2);
+            }
+            else
+            {
+               RENode.CharacterClassExpr next2 = parseCharacterClass(begin, end);
+               next = new RENode.CharacterClassExpr.Or(next, next2);
+            }
+         }
+
+         //
+         return next;
       }
       else
       {
-         return new RENode.CharacterClass.Not(cc);
+         throw new UnsupportedOperationException();
       }
    }
 }

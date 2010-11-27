@@ -95,18 +95,31 @@ public abstract class Parser
       return -1;
    }
 
-   protected final int indexOfBlah(int from, int to, char start, char end)
+   /**
+    * Find the closing char.
+    *
+    * @param from the index to start from, the char at this index should be the opening char
+    * @param to the max exclusive value this closing char can be
+    * @param openingChar the opening char
+    * @param closingChar the closing char
+    * @return the index of the closing char or -1
+    */
+   protected final int findClosing(int from, int to, char openingChar, char closingChar)
    {
+      if (s.charAt(from) != openingChar)
+      {
+         throw new AssertionError();
+      }
       int closing = -1;
       int depth = 0;
       for (int i = from + 1;i < to;i++)
       {
          char c = s.charAt(i);
-         if (c == start)
+         if (c == openingChar)
          {
             depth++;
          }
-         else if (c == end)
+         else if (c == closingChar)
          {
             if (depth == 0)
             {

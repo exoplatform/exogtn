@@ -190,6 +190,8 @@ public class TestParser extends TestCase
       new ParserTester("[a&&[^b]]").assertParseBracketExpression("[[a]&&[^[b]]]");
       new ParserTester("[a[^b]]").assertParseBracketExpression("[[a][^[b]]]");
       new ParserTester("[a[b]]").assertParseBracketExpression("[[a][b]]");
+      new ParserTester("[a[b]c]").assertParseBracketExpression("[[a][[b][c]]]");
+      new ParserTester("[[a]bc]").assertParseBracketExpression("[[a][[b][c]]]");
       new ParserTester("[-]").assertParseBracketExpression("[-]");
       new ParserTester("[a-]").assertParseBracketExpression("[[a][-]]");
       new ParserTester("[---]").assertParseBracketExpression("[---]");
