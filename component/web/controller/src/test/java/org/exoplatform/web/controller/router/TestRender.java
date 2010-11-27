@@ -149,4 +149,15 @@ public class TestRender extends AbstractTestController
       //
       assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
    }
+
+   public void testLang() throws Exception
+   {
+      RouterDescriptor routerMD = new RouterDescriptor();
+      routerMD.addRoute(new RouteDescriptor("/{a}b").addPathParam(QualifiedName.parse("a"), "(?:[A-Za-z]{2}/)?", EncodingMode.PRESERVE_PATH));
+      Router router = new Router(routerMD);
+
+      //
+      assertEquals("/fr/b", router.render(Collections.singletonMap(QualifiedName.parse("a"), "fr/")));
+      assertEquals("/b", router.render(Collections.singletonMap(QualifiedName.parse("a"), "")));
+   }
 }
