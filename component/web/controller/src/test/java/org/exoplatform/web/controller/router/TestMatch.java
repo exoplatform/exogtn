@@ -104,40 +104,6 @@ public class TestMatch extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
    }
 
-   public void testWildcardPattern() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), ""), router.route("/"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
-      assertNull(router.route("a"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a/b"), router.route("/a/b"));
-   }
-
-   public void testDefaultForm() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.DEFAULT_FORM));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/_"));
-   }
-
-   public void testPreservePath() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
-      assertNull(router.route("//"));
-   }
-
    public void testSimplePattern() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
@@ -155,7 +121,7 @@ public class TestMatch extends AbstractTestController
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a"));
       Router router = new Router(routerMD);
 
       //

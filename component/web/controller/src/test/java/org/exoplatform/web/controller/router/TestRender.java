@@ -76,7 +76,7 @@ public class TestRender extends AbstractTestController
    public void testSimplePatternPathParam() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a"));
       Router router = new Router(routerMD);
 
       //
@@ -84,63 +84,11 @@ public class TestRender extends AbstractTestController
       assertNull(router.render(Collections.singletonMap(QualifiedName.create("p"), "ab")));
    }
 
-   public void testWildcardPathParam() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));
-      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
-      assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a/b")));
-   }
-
-   public void testFoo() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]*", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals(null, router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-   }
-
-   public void testBar() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]*", EncodingMode.DEFAULT_FORM));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-   }
-
-   public void testWildcardParamPathPreservePathEncoding() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals("//", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-   }
-
-   public void testWildcardParamPathDefaultFormEncoded() throws Exception
-   {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.DEFAULT_FORM));
-      Router router = new Router(routerMD);
-
-      //
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-   }
-
    public void testPrecedence() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
       routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a"));
       Router router = new Router(routerMD);
 
       //

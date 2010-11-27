@@ -104,14 +104,26 @@ public class RouteDescriptor
       return this;
    }
 
-   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
+   /**
+    * Add a path param with the {@link EncodingMode#DEFAULT_FORM} encoding.
+    *
+    * @param name the name
+    * @param pattern the pattern
+    * @return this object
+    */
+   public RouteDescriptor addPathParam(QualifiedName name, String pattern)
    {
-      return addRequestParam(new PathParamDescriptor(name, pattern, encodingMode));
+      return addPathParam(name, pattern, EncodingMode.DEFAULT_FORM);
    }
 
-   public RouteDescriptor addRequestParam(PathParamDescriptor requestParam)
+   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
    {
-      pathParams.put(requestParam.getName(), requestParam);
+      return addPathParam(new PathParamDescriptor(name, pattern, encodingMode));
+   }
+
+   public RouteDescriptor addPathParam(PathParamDescriptor pathParam)
+   {
+      pathParams.put(pathParam.getName(), pathParam);
       return this;
    }
 
