@@ -147,14 +147,43 @@ public class RegExpParser extends Parser
             index++;
             break;
          case '(':
-            int closingParenthesis = findClosing(index, to, '(', ')');
-            if (closingParenthesis == -1)
+            int endGroup = findClosing(index, to, '(', ')');
+            if (endGroup == -1)
             {
                throw new SyntaxException();
             }
-            RENode.Disjunction grouped = new RegExpParser(s, index + 1, closingParenthesis).parseDisjunction();
-            exp = new RENode.Group(grouped);
-            index = closingParenthesis + 1;
+
+            // Do we have a special construct ?
+            int startGroup = index + 1;
+            boolean capturing = true;
+            if (startGroup < endGroup)
+            {
+               if (s.charAt(startGroup) == '?')
+               {
+                  if (startGroup + 1 < endGroup)
+                  {
+                     if (s.charAt(startGroup + 1) == ':')
+                     {
+                        // It's a non capturing group, so it's ok
+                        startGroup += 2;
+                        capturing = false;
+                     }
+                     else
+                     {
+                        throw createSyntaxException("Only non capturing group syntax is supported", index + 1, index + 3);
+                     }
+                  }
+                  else
+                  {
+                     throw createSyntaxException("Group containing a single question mark are not allowed", index, index + 2);
+                  }
+               }
+            }
+
+            //
+            RENode.Disjunction grouped = new RegExpParser(s, startGroup, endGroup).parseDisjunction();
+            exp = new RENode.Group(grouped, capturing);
+            index = endGroup + 1;
             break;
          case '*':
          case '+':

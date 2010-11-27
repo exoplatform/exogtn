@@ -220,13 +220,17 @@ public abstract class RENode
       /** . */
       private final Disjunction disjunction;
 
-      public Group(Disjunction disjunction)
+      /** . */
+      private final boolean capturing;
+
+      public Group(Disjunction disjunction, boolean capturing)
       {
          if (disjunction == null)
          {
             throw new NullPointerException();
          }
          this.disjunction = disjunction;
+         this.capturing = capturing;
       }
 
       public Disjunction getDisjunction()
@@ -234,10 +238,15 @@ public abstract class RENode
          return disjunction;
       }
 
+      public boolean isCapturing()
+      {
+         return capturing;
+      }
+
       @Override
       protected void writeTo(StringBuilder sb)
       {
-         sb.append("<(>").append(disjunction).append("</)>");
+         sb.append("<").append(capturing ? "(" : "(?:").append('>').append(disjunction).append("</").append(capturing ? ")" : ":?)").append(">");
       }
    }
 

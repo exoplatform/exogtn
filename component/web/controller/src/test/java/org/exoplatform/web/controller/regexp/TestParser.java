@@ -50,14 +50,14 @@ public class TestParser extends TestCase
       {
          this.parser = new RegExpParser(s, from, to);
       }
-      ParserTester assertParseBracketExpression(String expectedValue)
+      ParserTester assertParseCharacterClass(String expectedValue)
       {
          RENode node = parser.parseExpression();
          assertTrue(node instanceof RENode.CharacterClass);
          assertEquals(expectedValue, node.toString());
          return this;
       }
-      ParserTester assertParseExtendedRegExp(String expectedValue)
+      ParserTester assertParseDisjunction(String expectedValue)
       {
          int expectedIndex = parser.getTo();
          RENode.Disjunction disjunction = parser.parseDisjunction();
@@ -65,7 +65,7 @@ public class TestParser extends TestCase
          assertEquals(expectedIndex, parser.getIndex());
          return this;
       }
-      ParserTester assertNotParseExtendedRegExp()
+      ParserTester assertNotParseDisjunction()
       {
          int expectedIndex = parser.getIndex();
          try
@@ -86,7 +86,7 @@ public class TestParser extends TestCase
          assertEquals(expectedIndex, parser.getIndex());
          return this;
       }
-      ParserTester assertNotParseEREExpression()
+      ParserTester assertNotParseExpression()
       {
          int index = parser.getIndex();
          try
@@ -124,16 +124,16 @@ public class TestParser extends TestCase
 
    public void testExtendedRegexp()
    {
-      new ParserTester("^").assertParseExtendedRegExp("<^/>");
-      new ParserTester("^$").assertParseExtendedRegExp("<^/><$/>");
-      new ParserTester("a").assertParseExtendedRegExp("<c>a</c>");
-      new ParserTester("a|b").assertParseExtendedRegExp("<c>a</c>|<c>b</c>");
-      new ParserTester("a+|b*").assertParseExtendedRegExp("<+><c>a</c></+>|<*><c>b</c></*>");
+      new ParserTester("^").assertParseDisjunction("<^/>");
+      new ParserTester("^$").assertParseDisjunction("<^/><$/>");
+      new ParserTester("a").assertParseDisjunction("<c>a</c>");
+      new ParserTester("a|b").assertParseDisjunction("<c>a</c>|<c>b</c>");
+      new ParserTester("a+|b*").assertParseDisjunction("<+><c>a</c></+>|<*><c>b</c></*>");
    }
    
    public void testExpression()
    {
-      new ParserTester("").assertNotParseEREExpression();
+      new ParserTester("").assertNotParseExpression();
       new ParserTester("^").assertParseExpression("<^/>", 1);
       new ParserTester("^+").assertParseExpression("<+><^/></+>", 2);
       new ParserTester("$").assertParseExpression("<$/>", 1);
@@ -144,13 +144,20 @@ public class TestParser extends TestCase
       new ParserTester(".+").assertParseExpression("<+><./></+>", 2);
       new ParserTester("\\+").assertParseExpression("<c>+</c>", 2);
       new ParserTester("\\++").assertParseExpression("<+><c>+</c></+>", 3);
-      new ParserTester("*").assertNotParseEREExpression();
-      new ParserTester("+").assertNotParseEREExpression();
-      new ParserTester("?").assertNotParseEREExpression();
-      new ParserTester("{").assertNotParseEREExpression();
-      new ParserTester("|").assertNotParseEREExpression();
+      new ParserTester("*").assertNotParseExpression();
+      new ParserTester("+").assertNotParseExpression();
+      new ParserTester("?").assertNotParseExpression();
+      new ParserTester("{").assertNotParseExpression();
+      new ParserTester("|").assertNotParseExpression();
+   }
+
+   public void testGroup()
+   {
       new ParserTester("(a)").assertParseExpression("<(><c>a</c></)>", 3);
       new ParserTester("(a(b)c)").assertParseExpression("<(><c>a</c><(><c>b</c></)><c>c</c></)>", 7);
+      new ParserTester("(?:a)").assertParseExpression("<(?:><c>a</c></:?)>", 5);
+      new ParserTester("(?)").assertNotParseExpression();
+      new ParserTester("(?a)").assertNotParseExpression();
    }
 
    // missing stuff:
@@ -180,22 +187,22 @@ public class TestParser extends TestCase
 
    public void testParseBracketExpression()
    {
-      new ParserTester("[a]").assertParseBracketExpression("[a]");
-      new ParserTester("[^a]").assertParseBracketExpression("[^[a]]");
-      new ParserTester("[^a-b]").assertParseBracketExpression("[^[a-b]]");
-      new ParserTester("[a-b]").assertParseBracketExpression("[a-b]");
-      new ParserTester("[ab]").assertParseBracketExpression("[[a][b]]");
-      new ParserTester("[a&]").assertParseBracketExpression("[[a][&]]");
-      new ParserTester("[a&&b]").assertParseBracketExpression("[[a]&&[b]]");
-      new ParserTester("[a&&[^b]]").assertParseBracketExpression("[[a]&&[^[b]]]");
-      new ParserTester("[a[^b]]").assertParseBracketExpression("[[a][^[b]]]");
-      new ParserTester("[a[b]]").assertParseBracketExpression("[[a][b]]");
-      new ParserTester("[a[b]c]").assertParseBracketExpression("[[a][[b][c]]]");
-      new ParserTester("[[a]bc]").assertParseBracketExpression("[[a][[b][c]]]");
-      new ParserTester("[-]").assertParseBracketExpression("[-]");
-      new ParserTester("[a-]").assertParseBracketExpression("[[a][-]]");
-      new ParserTester("[---]").assertParseBracketExpression("[---]");
-      new ParserTester("[#--]").assertParseBracketExpression("[#--]");
+      new ParserTester("[a]").assertParseCharacterClass("[a]");
+      new ParserTester("[^a]").assertParseCharacterClass("[^[a]]");
+      new ParserTester("[^a-b]").assertParseCharacterClass("[^[a-b]]");
+      new ParserTester("[a-b]").assertParseCharacterClass("[a-b]");
+      new ParserTester("[ab]").assertParseCharacterClass("[[a][b]]");
+      new ParserTester("[a&]").assertParseCharacterClass("[[a][&]]");
+      new ParserTester("[a&&b]").assertParseCharacterClass("[[a]&&[b]]");
+      new ParserTester("[a&&[^b]]").assertParseCharacterClass("[[a]&&[^[b]]]");
+      new ParserTester("[a[^b]]").assertParseCharacterClass("[[a][^[b]]]");
+      new ParserTester("[a[b]]").assertParseCharacterClass("[[a][b]]");
+      new ParserTester("[a[b]c]").assertParseCharacterClass("[[a][[b][c]]]");
+      new ParserTester("[[a]bc]").assertParseCharacterClass("[[a][[b][c]]]");
+      new ParserTester("[-]").assertParseCharacterClass("[-]");
+      new ParserTester("[a-]").assertParseCharacterClass("[[a][-]]");
+      new ParserTester("[---]").assertParseCharacterClass("[---]");
+      new ParserTester("[#--]").assertParseCharacterClass("[#--]");
    }
 
 }
