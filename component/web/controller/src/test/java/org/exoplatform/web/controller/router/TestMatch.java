@@ -134,7 +134,7 @@ public class TestMatch extends AbstractTestController
       Router router = new Router(routerMD);
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "~"), router.route("/~"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
       assertNull(router.route("//"));
    }
 
