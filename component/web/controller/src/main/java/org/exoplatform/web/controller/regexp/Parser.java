@@ -95,6 +95,13 @@ public abstract class Parser
       return -1;
    }
 
+   protected final SyntaxException createSyntaxException(String msg, int start, int end)
+   {
+      StringBuilder sb = new StringBuilder(msg).append(" : ");
+      sb.append(s, 0, start).append(" ->").append(s, start, end).append("<- ").append(s, end, s.length());
+      return new SyntaxException(sb.toString());
+   }
+
    /**
     * Find the closing char.
     *

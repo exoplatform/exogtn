@@ -59,4 +59,9 @@ public class TestRegExpAnalyser extends TestCase
       assertAnalyse("(a(?:bc))", true, "(a(bc))");
       assertAnalyse("(a)(?:b)", true, "(a)(b)");
    }
+
+   public void testBilto()
+   {
+      assertAnalyse("[a]+", false, "[a]+");
+   }
 }

@@ -629,6 +629,12 @@ class Route
                   regex = "[^/]+";
                }
 
+               // Now analyse the regexp
+//               RegExpAnalyser analyser = new RegExpAnalyser();
+//               analyser.process(regex);
+//               String regex2 = analyser.getPattern();
+//               System.out.println("" + regex + " -> " + regex2);
+
                //
                builder.expr("(").expr(regex).expr(")");
 

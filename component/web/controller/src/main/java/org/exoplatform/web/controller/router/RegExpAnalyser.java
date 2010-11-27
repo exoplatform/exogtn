@@ -133,6 +133,7 @@ public class RegExpAnalyser
          sb.append("[");
          visit(characterClass.getExpr());
          sb.append("]");
+         quantifier = expression.getQuantifier();
       }
 
       //

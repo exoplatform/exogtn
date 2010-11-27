@@ -161,7 +161,7 @@ public class RegExpParser extends Parser
          case '?':
          case '{':
          case '|':
-            throw new SyntaxException();
+            throw createSyntaxException("Was not expecting the char " + c, index, index + 1);
 
          case '[':
             int closingBracket = findClosing(index, to, '[', ']');
