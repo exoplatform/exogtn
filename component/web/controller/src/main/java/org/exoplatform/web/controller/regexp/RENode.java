@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.regexp;
 
+import org.hibernate.criterion.Disjunction;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -26,16 +28,19 @@ package org.exoplatform.web.controller.regexp;
 public abstract class RENode
 {
 
+   /** The owner. */
+   private Ref<?> owner;
+
    public abstract String toString();
 
    public static final class Disjunction extends RENode
    {
 
       /** . */
-      private final Alternative alternative;
+      private final NonNullableRef<Alternative> alternative;
 
       /** . */
-      private final Disjunction next;
+      private final NullableRef<Disjunction> next;
 
       public Disjunction(Alternative alternative)
       {
@@ -44,36 +49,40 @@ public abstract class RENode
 
       public Disjunction(Alternative alternative, Disjunction next)
       {
-         if (alternative == null)
-         {
-            throw new NullPointerException();
-         }
-
-         //
-         this.alternative = alternative;
-         this.next = next;
-      }
-
-      public Disjunction getNext()
-      {
-         return next;
+         this.alternative = new NonNullableRef<Alternative>(alternative);
+         this.next = new NullableRef<Disjunction>(next);
       }
 
       public Alternative getAlternative()
       {
-         return alternative;
+         return alternative.get();
+      }
+
+      public void setAlternative(Alternative alternative)
+      {
+         this.alternative.set(alternative);
+      }
+
+      public Disjunction getNext()
+      {
+         return next.get();
+      }
+
+      public void setNext(Disjunction next)
+      {
+         this.next.set(next);
       }
 
       @Override
       public String toString()
       {
-         if (next != null)
+         if (next.isNotNull())
          {
-            return alternative + "|" + next;
+            return alternative.get() + "|" + next.get();
          }
          else
          {
-            return alternative.toString();
+            return alternative.get().toString();
          }
       }
    }
@@ -82,10 +91,10 @@ public abstract class RENode
    {
 
       /** . */
-      private final Exp exp;
+      private final Ref<Exp> exp;
 
       /** . */
-      private final Alternative next;
+      private final Ref<Alternative> next;
 
       public Alternative(Exp exp)
       {
@@ -94,34 +103,40 @@ public abstract class RENode
 
       public Alternative(Exp exp, Alternative next)
       {
-         if (exp == null)
-         {
-            throw new NullPointerException();
-         }
-         this.exp = exp;
-         this.next = next;
+         this.exp = new NonNullableRef<Exp>(exp);
+         this.next = new NullableRef<Alternative>(next);
       }
 
       public Exp getExp()
       {
-         return exp;
+         return exp.get();
+      }
+
+      public void setExp(Exp exp)
+      {
+         this.exp.set(exp);
       }
 
       public Alternative getNext()
       {
-         return next;
+         return next.get();
+      }
+
+      public void setNext(Alternative next)
+      {
+         this.next.set(next);
       }
 
       @Override
       public String toString()
       {
-         if (next != null)
+         if (next.isNotNull())
          {
-            return exp.toString() + next;
+            return exp.get().toString() + next.get();
          }
          else
          {
-            return exp.toString();
+            return exp.get().toString();
          }
       }
    }
@@ -130,15 +145,20 @@ public abstract class RENode
    {
 
       /** . */
-      Quantifier quantifier;
+      private Quantifier quantifier;
 
       private Exp()
       {
       }
 
-      public Quantifier getQuantifier()
+      public final Quantifier getQuantifier()
       {
          return quantifier;
+      }
+
+      public final void setQuantifier(Quantifier quantifier)
+      {
+         this.quantifier = quantifier;
       }
 
       @Override
@@ -165,28 +185,26 @@ public abstract class RENode
    public static abstract class Assertion extends Exp
    {
 
-      /** . */
-      public static final Assertion BEGIN = new Assertion()
+      private Assertion()
+      {
+      }
+
+      public static final class Begin extends Assertion
       {
          @Override
          protected void writeTo(StringBuilder sb)
          {
             sb.append("<^/>");
          }
-      };
+      }
 
-      /** . */
-      public static final Assertion END = new Assertion()
+      public static final class End extends Assertion
       {
          @Override
          protected void writeTo(StringBuilder sb)
          {
             sb.append("<$/>");
          }
-      };
-
-      private Assertion()
-      {
       }
    }
 
@@ -199,14 +217,6 @@ public abstract class RENode
 
    public static final class Dot extends Atom
    {
-
-      /** . */
-      public static Dot INSTANCE = new Dot();
-
-      private Dot()
-      {
-      }
-
       @Override
       protected void writeTo(StringBuilder sb)
       {
@@ -218,24 +228,25 @@ public abstract class RENode
    {
 
       /** . */
-      private final Disjunction disjunction;
+      private final Ref<Disjunction> disjunction;
 
       /** . */
-      private final boolean capturing;
+      private boolean capturing;
 
       public Group(Disjunction disjunction, boolean capturing)
       {
-         if (disjunction == null)
-         {
-            throw new NullPointerException();
-         }
-         this.disjunction = disjunction;
+         this.disjunction = new NonNullableRef<Disjunction>(disjunction);
          this.capturing = capturing;
       }
 
       public Disjunction getDisjunction()
       {
-         return disjunction;
+         return disjunction.get();
+      }
+
+      public void setDisjunction(Disjunction disjunction)
+      {
+         this.disjunction.set(disjunction);
       }
 
       public boolean isCapturing()
@@ -243,10 +254,15 @@ public abstract class RENode
          return capturing;
       }
 
+      public void setCapturing(boolean capturing)
+      {
+         this.capturing = capturing;
+      }
+
       @Override
       protected void writeTo(StringBuilder sb)
       {
-         sb.append("<").append(capturing ? "(" : "(?:").append('>').append(disjunction).append("</").append(capturing ? ")" : ":?)").append(">");
+         sb.append("<").append(capturing ? "(" : "(?:").append('>').append(disjunction.get()).append("</").append(capturing ? ")" : ":?)").append(">");
       }
    }
 
@@ -254,14 +270,19 @@ public abstract class RENode
    {
 
       /** . */
-      private final char value;
+      private char value;
+
+      public Character(char value)
+      {
+         this.value = value;
+      }
 
       public char getValue()
       {
          return value;
       }
 
-      public Character(char value)
+      public void setValue(char value)
       {
          this.value = value;
       }
@@ -277,26 +298,27 @@ public abstract class RENode
    {
 
       /** . */
-      private final CharacterClassExpr expr;
+      private final Ref<CharacterClassExpr> expr;
 
       protected CharacterClass(CharacterClassExpr expr)
       {
-         if (expr == null)
-         {
-            throw new NullPointerException();
-         }
-         this.expr = expr;
+         this.expr = new NonNullableRef<CharacterClassExpr>(expr);
       }
 
       public CharacterClassExpr getExpr()
       {
-         return expr;
+         return expr.get();
+      }
+
+      public void setExpr(CharacterClassExpr expr)
+      {
+         this.expr.set(expr);
       }
 
       @Override
       protected void writeTo(StringBuilder sb)
       {
-         sb.append(expr);
+         sb.append(expr.get());
       }
    }
 
@@ -311,26 +333,27 @@ public abstract class RENode
       {
 
          /** . */
-         private final CharacterClassExpr negated;
+         private final Ref<CharacterClassExpr> negated;
 
          public Not(CharacterClassExpr negated)
          {
-            if (negated == null)
-            {
-               throw new NullPointerException();
-            }
-            this.negated = negated;
+            this.negated = new NonNullableRef<CharacterClassExpr>(negated);
          }
 
          public CharacterClassExpr getNegated()
          {
-            return negated;
+            return negated.get();
+         }
+
+         public void setNegated(CharacterClassExpr negated)
+         {
+            this.negated.set(negated);
          }
 
          @Override
          public String toString()
          {
-            return "[^" + negated + "]";
+            return "[^" + negated.get() + "]";
          }
       }
 
@@ -338,39 +361,41 @@ public abstract class RENode
       {
 
          /** . */
-         private final CharacterClassExpr left;
+         private final Ref<CharacterClassExpr> left;
 
          /** . */
-         private final CharacterClassExpr right;
+         private final Ref<CharacterClassExpr> right;
 
          public Or(CharacterClassExpr left, CharacterClassExpr right)
          {
-            if (left == null)
-            {
-               throw new NullPointerException();
-            }
-            if (right == null)
-            {
-               throw new NullPointerException();
-            }
-            this.left = left;
-            this.right = right;
+            this.left = new NonNullableRef<CharacterClassExpr>(left);
+            this.right = new NonNullableRef<CharacterClassExpr>(right);
          }
 
          public CharacterClassExpr getLeft()
          {
-            return left;
+            return left.get();
+         }
+
+         public void setLeft(CharacterClassExpr left)
+         {
+            this.left.set(left);
          }
 
          public CharacterClassExpr getRight()
          {
-            return right;
+            return right.get();
+         }
+
+         public void setRight(CharacterClassExpr right)
+         {
+            this.right.set(right);
          }
 
          @Override
          public String toString()
          {
-            return "[" + left + right + "]";
+            return "[" + left.get() + right.get() + "]";
          }
       }
 
@@ -378,39 +403,41 @@ public abstract class RENode
       {
 
          /** . */
-         private final CharacterClassExpr left;
+         private final Ref<CharacterClassExpr> left;
 
          /** . */
-         private final CharacterClassExpr right;
+         private final Ref<CharacterClassExpr> right;
 
          public And(CharacterClassExpr left, CharacterClassExpr right)
          {
-            if (left == null)
-            {
-               throw new NullPointerException();
-            }
-            if (right == null)
-            {
-               throw new NullPointerException();
-            }
-            this.left = left;
-            this.right = right;
+            this.left = new NonNullableRef<CharacterClassExpr>(left);
+            this.right = new NonNullableRef<CharacterClassExpr>(right);
          }
 
          public CharacterClassExpr getLeft()
          {
-            return left;
+            return left.get();
+         }
+
+         public void setLeft(CharacterClassExpr left)
+         {
+            this.left.set(left);
          }
 
          public CharacterClassExpr getRight()
          {
-            return right;
+            return right.get();
+         }
+
+         public void setRight(CharacterClassExpr right)
+         {
+            this.right.set(right);
          }
 
          @Override
          public String toString()
          {
-            return "[" + left + "&&" + right + "]";
+            return "[" + left.get() + "&&" + right.get() + "]";
          }
       }
 
@@ -418,7 +445,7 @@ public abstract class RENode
       {
 
          /** . */
-         private final char value;
+         private char value;
 
          public Simple(char value)
          {
@@ -428,6 +455,11 @@ public abstract class RENode
          public char getValue()
          {
             return value;
+         }
+
+         public void setValue(char value)
+         {
+            this.value = value;
          }
 
          @Override
@@ -441,10 +473,10 @@ public abstract class RENode
       {
 
          /** From inclusive. */
-         private final char from;
+         private char from;
 
          /** To inclusive. */
-         private final char to;
+         private char to;
 
          public Range(char from, char to)
          {
@@ -457,9 +489,19 @@ public abstract class RENode
             return from;
          }
 
+         public void setFrom(char from)
+         {
+            this.from = from;
+         }
+
          public char getTo()
          {
             return to;
+         }
+
+         public void setTo(char to)
+         {
+            this.to = to;
          }
 
          @Override
@@ -467,6 +509,114 @@ public abstract class RENode
          {
             return "[" + from + "-" + to + "]";
          }
+      }
+   }
+
+   protected abstract class Ref<N extends RENode>
+   {
+      protected abstract Ref<N> set(N node);
+      protected abstract N get();
+      protected final boolean isNull()
+      {
+         return get() == null;
+      }
+      protected final boolean isNotNull()
+      {
+         return get() != null;
+      }
+   }
+
+   protected class NullableRef<N extends RENode> extends Ref<N>
+   {
+
+      /** . */
+      private N node;
+
+      public NullableRef()
+      {
+         this(null);
+      }
+
+      public NullableRef(N node)
+      {
+         if (node != null && node.owner != null)
+         {
+            throw new IllegalArgumentException();
+         }
+         this.node = node;
+      }
+
+      @Override
+      protected Ref<N> set(N node)
+      {
+         if (node != null && node.owner != null)
+         {
+            throw new IllegalArgumentException();
+         }
+         if (this.node != null)
+         {
+            this.node.owner = null;
+         }
+         if (node != null)
+         {
+            node.owner = this;
+            this.node = node;
+         }
+         else
+         {
+            this.node = null;
+         }
+         return this;
+      }
+
+      @Override
+      protected N get()
+      {
+         return node;
+      }
+   }
+
+   protected class NonNullableRef<N extends RENode> extends Ref<N>
+   {
+
+      /** . */
+      private N node;
+
+      public NonNullableRef(N node)
+      {
+         if (node == null)
+         {
+            throw new NullPointerException();
+         }
+         if (node.owner != null)
+         {
+            throw new IllegalArgumentException();
+         }
+         node.owner = this;
+         this.node = node;
+      }
+
+      @Override
+      protected Ref<N> set(N node)
+      {
+         if (node == null)
+         {
+            throw new NullPointerException();
+         }
+         if (node.owner != null)
+         {
+            throw new IllegalArgumentException();
+         }
+         this.node.owner = null;
+         node.owner = this;
+         this.node = node;
+         return this;
+      }
+
+      @Override
+      protected N get()
+      {
+         return node;
       }
    }
 }

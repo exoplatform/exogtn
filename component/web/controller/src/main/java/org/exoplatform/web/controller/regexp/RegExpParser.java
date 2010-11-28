@@ -143,11 +143,11 @@ public class RegExpParser extends Parser
       switch (c)
       {
          case '^':
-            exp = RENode.Exp.Assertion.BEGIN;
+            exp = new RENode.Exp.Assertion.Begin();
             index++;
             break;
          case '$':
-            exp = RENode.Exp.Assertion.END;
+            exp = new RENode.Exp.Assertion.End();
             index++;
             break;
          case '(':
@@ -223,7 +223,7 @@ public class RegExpParser extends Parser
                throw new SyntaxException();
             }
          case '.':
-            exp = RENode.Dot.INSTANCE;
+            exp = new RENode.Dot();
             index++;
             break;
          default:
@@ -234,7 +234,7 @@ public class RegExpParser extends Parser
       }
 
       //
-      exp.quantifier = parseQuantifier();
+      exp.setQuantifier(parseQuantifier());
 
       //
       return exp;
