@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.controller.regexp;
 
-import org.hibernate.criterion.Disjunction;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
