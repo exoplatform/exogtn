@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.controller.regexp;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 import org.exoplatform.component.test.BaseGateInTest;
 
 import java.util.regex.Pattern;
@@ -99,7 +97,7 @@ public class TestParser extends BaseGateInTest
       {
          try
          {
-            RENode.Exp exp = parser.parseExpression();
+            RENode.Expr exp = parser.parseExpression();
             assertEquals(expectedValue, exp.toString());
             assertEquals(expectedIndex, parser.getIndex());
             return this;

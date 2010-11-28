@@ -89,28 +89,28 @@ public abstract class RENode
    {
 
       /** . */
-      private final Ref<Exp> exp;
+      private final Ref<Expr> exp;
 
       /** . */
       private final Ref<Alternative> next;
 
-      public Alternative(Exp exp)
+      public Alternative(Expr exp)
       {
          this(exp, null);
       }
 
-      public Alternative(Exp exp, Alternative next)
+      public Alternative(Expr exp, Alternative next)
       {
-         this.exp = new NonNullableRef<Exp>(exp);
+         this.exp = new NonNullableRef<Expr>(exp);
          this.next = new NullableRef<Alternative>(next);
       }
 
-      public Exp getExp()
+      public Expr getExp()
       {
          return exp.get();
       }
 
-      public void setExp(Exp exp)
+      public void setExp(Expr exp)
       {
          this.exp.set(exp);
       }
@@ -139,13 +139,13 @@ public abstract class RENode
       }
    }
 
-   public static abstract class Exp extends RENode
+   public static abstract class Expr extends RENode
    {
 
       /** . */
       private Quantifier quantifier;
 
-      private Exp()
+      private Expr()
       {
       }
 
@@ -180,7 +180,7 @@ public abstract class RENode
       protected abstract void writeTo(StringBuilder sb);
    }
 
-   public static abstract class Assertion extends Exp
+   public static abstract class Assertion extends Expr
    {
 
       private Assertion()
@@ -206,7 +206,7 @@ public abstract class RENode
       }
    }
 
-   public static abstract class Atom extends Exp
+   public static abstract class Atom extends Expr
    {
       private Atom()
       {

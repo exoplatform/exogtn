@@ -102,7 +102,7 @@ public class RegExpAnalyser
       }
    }
 
-   private void visit(RENode.Exp expression) throws MalformedRegExpException
+   private void visit(RENode.Expr expression) throws MalformedRegExpException
    {
       Quantifier quantifier = null;
       if (expression instanceof RENode.Dot)

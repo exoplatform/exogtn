@@ -103,7 +103,7 @@ public class RegExpParser extends Parser
    {
       if (index < to)
       {
-         RENode.Exp exp = parseExpression();
+         RENode.Expr exp = parseExpression();
          if (index < to)
          {
             RENode.Alternative next = parseAlternative();
@@ -132,22 +132,22 @@ public class RegExpParser extends Parser
     * @return the expression
     * @throws SyntaxException any syntax exception
     */
-   public RENode.Exp parseExpression() throws SyntaxException
+   public RENode.Expr parseExpression() throws SyntaxException
    {
       if (index == to)
       {
          throw new SyntaxException();
       }
-      RENode.Exp exp;
+      RENode.Expr exp;
       char c = s.charAt(index);
       switch (c)
       {
          case '^':
-            exp = new RENode.Exp.Assertion.Begin();
+            exp = new RENode.Expr.Assertion.Begin();
             index++;
             break;
          case '$':
-            exp = new RENode.Exp.Assertion.End();
+            exp = new RENode.Expr.Assertion.End();
             index++;
             break;
          case '(':
