@@ -31,7 +31,7 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>5.1.0-epp-ER05-SNAPSHOT</version>
+   <version>5.1.0-epp-CR01</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
@@ -67,9 +67,9 @@
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/epp/portal/branches/EPP_5_1_Branch</connection>
-      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/epp/portal/branches/EPP_5_1_Branch</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/epp/portal/branches/EPP_5_1_Branch</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/epp/portal/tags/EPP_5_1_0_CR01</connection>
+      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/epp/portal/tags/EPP_5_1_0_CR01</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/epp/portal/tags/EPP_5_1_0_CR01</url>
    </scm>
 
    <modules>
@@ -362,68 +362,68 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.common</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.controller</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.security</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.server</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.api</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.resources</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.pc</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.identity</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.resources</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.application-registry</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
@@ -433,90 +433,90 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.scripting</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.management</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.framework</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portlet</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portal</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.eXo</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.core</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.dashboard</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.gadgets-core</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>gatein.portal.component.wsrp</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>      
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.server.jboss.plugin</artifactId>
-          <version>5.1.0-epp-ER05-SNAPSHOT</version>
+          <version>5.1.0-epp-CR01</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
