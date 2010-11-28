@@ -35,7 +35,7 @@ public class TestPathParamEncoding extends AbstractTestController
    public void testDefaultForm() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.FORM));
       Router router = new Router(routerMD);
 
       // Route
@@ -81,7 +81,7 @@ public class TestPathParamEncoding extends AbstractTestController
    public void testWildcardParamPathWithDefaultForm() throws Exception
    {
       RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.DEFAULT_FORM));
+      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.FORM));
       Router router = new Router(routerMD);
 
       //

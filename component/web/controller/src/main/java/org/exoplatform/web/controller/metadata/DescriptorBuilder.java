@@ -110,7 +110,7 @@ public class DescriptorBuilder
                String name = reader.getAttributeValue(null, "name");
                String pattern = reader.getAttributeValue(null, "pattern");
                String encoded = reader.getAttributeValue(null, "encoding");
-               EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.DEFAULT_FORM;
+               EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
                routeDesc.addPathParam(QualifiedName.parse(name), pattern, encodingMode);
             }
             else if (routeQN.equals(reader.getName()))

@@ -60,7 +60,7 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route1.getPathParams().keySet());
       assertEquals(QualifiedName.parse("gtn:path"), route1.getPathParams().get(QualifiedName.parse("gtn:path")).getName());
       assertEquals(".*", route1.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
-      assertEquals(EncodingMode.DEFAULT_FORM, route1.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
+      assertEquals(EncodingMode.FORM, route1.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
 
       //
       assertTrue(i.hasNext());

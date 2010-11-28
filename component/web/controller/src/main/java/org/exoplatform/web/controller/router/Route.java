@@ -220,7 +220,7 @@ class Route
             {
                switch (param.encodingMode)
                {
-                  case DEFAULT_FORM:
+                  case FORM:
                      s = s.replace('/', slashEscape);
                      matched = param.pattern.matcher(s).matches();
                      break;
@@ -403,7 +403,7 @@ class Route
                         //
                         if (value != null)
                         {
-                           if (param.encodingMode == EncodingMode.DEFAULT_FORM)
+                           if (param.encodingMode == EncodingMode.FORM)
                            {
                               value = value.replace(slashEscape, '/');
                            }
@@ -630,7 +630,7 @@ class Route
                // Now get path param metadata
                PathParamDescriptor parameterDescriptor = pathParamDescriptors.get(parameterQName);
                String regex = null;
-               EncodingMode encodingMode = EncodingMode.DEFAULT_FORM;
+               EncodingMode encodingMode = EncodingMode.FORM;
                if (parameterDescriptor != null)
                {
                   regex = parameterDescriptor.getPattern();

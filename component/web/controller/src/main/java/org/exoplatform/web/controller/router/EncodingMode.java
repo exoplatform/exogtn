@@ -29,14 +29,14 @@ public enum EncodingMode
 {
 
    /**
-    * DEFAULT_FORM encodes the whole string with the <code>x-www-form-urlencoded</code> also known as
-    * <i>default form</i>. For instance the string /a/b is encoded to %2Fa%2Fb.
+    * FORM encodes the whole string with the <code>x-www-form-urlencoded</code> also known as
+    * <i>default form encoding</i>. For instance the string "/a/b" is encoded to "%2Fa%2Fb".
     */
-   DEFAULT_FORM,
+   FORM,
 
    /**
-    * PRESERVE_PATH encodes the whole string like the {@link #DEFAULT_FORM} but preserve the path separators. For
-    * instance the string /a b is enocded to /a+b
+    * PRESERVE_PATH encodes the whole string like the {@link #FORM} but preserve the path separators. For
+    * instance the string "/a b" is enocded to "/a+b".
     */
    PRESERVE_PATH
 

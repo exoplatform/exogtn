@@ -59,7 +59,7 @@ public class TestPortal extends AbstractTestController
       RouterDescriptor routerMD = new RouterDescriptor().
          addRoute(new RouteDescriptor("/public")).
          addRoute(new RouteDescriptor("/{gtn:lang}/public").
-            addPathParam(QualifiedName.parse("gtn:lang"), "([A-Za-z]{2})", EncodingMode.DEFAULT_FORM
+            addPathParam(QualifiedName.parse("gtn:lang"), "([A-Za-z]{2})", EncodingMode.FORM
             )
          );
       Router router = new Router(routerMD);

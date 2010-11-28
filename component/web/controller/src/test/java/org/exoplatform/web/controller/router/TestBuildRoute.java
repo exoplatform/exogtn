@@ -75,7 +75,7 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
          assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
-         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
+         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));
@@ -99,7 +99,7 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("q", "a"), patternRoute.params.get(0).name);
          assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
-         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
+         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));
@@ -112,7 +112,7 @@ public class TestBuildRoute extends TestCase
       for (String path : paths)
       {
          RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.DEFAULT_FORM));
+         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.FORM));
          Router router = new Router(routerMD);
 
          //
@@ -123,7 +123,7 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
          assertEquals("^.*$", patternRoute.params.get(0).pattern.toString());
-         assertEquals(EncodingMode.DEFAULT_FORM, patternRoute.params.get(0).encodingMode);
+         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
          assertEquals("", patternRoute.chunks.get(1));

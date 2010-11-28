@@ -105,7 +105,7 @@ public class RouteDescriptor
    }
 
    /**
-    * Add a path param with the {@link EncodingMode#DEFAULT_FORM} encoding.
+    * Add a path param with the {@link EncodingMode#FORM} encoding.
     *
     * @param name the name
     * @param pattern the pattern
@@ -113,7 +113,7 @@ public class RouteDescriptor
     */
    public RouteDescriptor addPathParam(QualifiedName name, String pattern)
    {
-      return addPathParam(name, pattern, EncodingMode.DEFAULT_FORM);
+      return addPathParam(name, pattern, EncodingMode.FORM);
    }
 
    public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
