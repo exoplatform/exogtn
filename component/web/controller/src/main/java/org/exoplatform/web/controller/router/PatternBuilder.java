@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.router;
 
+import org.exoplatform.web.controller.regexp.RE;
+
 import java.util.regex.Pattern;
 
 /**
@@ -63,7 +65,7 @@ class PatternBuilder
       }
       if (from < to)
       {
-         buffer.append(Pattern.quote(s.substring(from, to)));
+         RE.appendLiteral(buffer, s, from, to);
       }
       return this;
    }

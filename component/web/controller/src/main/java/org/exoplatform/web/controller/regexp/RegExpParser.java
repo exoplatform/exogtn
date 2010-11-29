@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.controller.regexp;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,17 +28,6 @@ import java.util.regex.Pattern;
  */
 public class RegExpParser extends Parser
 {
-
-   /** . */
-   private static final Set<Character> ESCAPABLE = new HashSet<Character>();
-
-   static
-   {
-      for (char c : "^.[$()|*+?{\\".toCharArray())
-      {
-         ESCAPABLE.add(c);
-      }
-   }
 
    /** . */
    private static final Pattern pattern = Pattern.compile("^([0-9]+)" + "(?:" + "(,)([0-9]+)?" + ")?$");
@@ -210,7 +197,7 @@ public class RegExpParser extends Parser
             {
                index++;
                char escaped = s.charAt(index);
-               if (!ESCAPABLE.contains(escaped))
+               if (!RE.isMeta(escaped))
                {
                   throw new SyntaxException();
                }
@@ -396,7 +383,7 @@ public class RegExpParser extends Parser
       }
       else
       {
-         throw new UnsupportedOperationException();
+         throw new UnsupportedOperationException("not yet implemented");
       }
    }
 }
