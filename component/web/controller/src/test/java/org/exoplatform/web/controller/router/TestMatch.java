@@ -20,8 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,9 +35,7 @@ public class TestMatch extends AbstractTestController
 
    public void testRoot() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/"));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/")).build();
 
       //
       assertNull(router.route(""));
@@ -49,9 +46,7 @@ public class TestMatch extends AbstractTestController
 
    public void testA() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/a"));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/a")).build();
 
       //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a"));
@@ -67,9 +62,7 @@ public class TestMatch extends AbstractTestController
 
    public void testAB() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/a/b"));
-      Router router = new Router( routerMD);
+      Router router = router().add(route("/a/b")).build();
 
       //
       assertNull(router.route("a/b"));
@@ -85,9 +78,7 @@ public class TestMatch extends AbstractTestController
 
    public void testParameter() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}"));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}")).build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
@@ -95,10 +86,9 @@ public class TestMatch extends AbstractTestController
 
    public void testParameterPropagationToDescendants() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/").addRouteParam("p", "a"));
-      routerMD.addRoute(new RouteDescriptor("/a"));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/").add(routeParam("p").withValue("a"))).
+         add(route("/a")).build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
@@ -106,9 +96,7 @@ public class TestMatch extends AbstractTestController
 
    public void testSimplePattern() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "a", EncodingMode.FORM));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}").add(pathParam("p").withPattern("a"))).build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
@@ -119,10 +107,10 @@ public class TestMatch extends AbstractTestController
 
    public void testPrecedence() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/a"));
-      routerMD.addRoute(new RouteDescriptor("/{p}/b").addPathParam(QualifiedName.parse("p"), "a"));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/a")).
+         add(route("/{p}/b").add(pathParam("p").withPattern("a"))).
+         build();
 
       //
       assertNull(router.route("a"));
@@ -133,10 +121,10 @@ public class TestMatch extends AbstractTestController
 
    public void testTwoRules1() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/a").addRouteParam("b", "b"));
-      routerMD.addRoute(new RouteDescriptor("/a/b"));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/a").add(routeParam("b").withValue("b"))).
+         add(route("/a/b")).
+         build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("b"), "b"), router.route("/a"));
@@ -145,10 +133,10 @@ public class TestMatch extends AbstractTestController
 
    public void testTwoRules2() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{a}").addRouteParam("b", "b"));
-      routerMD.addRoute(new RouteDescriptor("/{a}/b"));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/{a}").add(routeParam("b").withValue("b"))).
+         add(route("/{a}/b")).
+         build();
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
@@ -160,9 +148,9 @@ public class TestMatch extends AbstractTestController
 
    public void testLang() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{a}b").addPathParam(QualifiedName.parse("a"), "(([A-Za-z]{2})/)?", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/{a}b").add(pathParam("a").withPattern("(([A-Za-z]{2})/)?").preservingPath())).
+         build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("a"), "fr/"), router.route("/fr/b"));

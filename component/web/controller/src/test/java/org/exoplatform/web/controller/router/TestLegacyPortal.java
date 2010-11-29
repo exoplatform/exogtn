@@ -21,8 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,27 +40,19 @@ public class TestLegacyPortal extends TestCase
    @Override
    protected void setUp() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-
-      RouteDescriptor portal = new RouteDescriptor("/").
-         addRouteParam(QualifiedName.parse("gtn:handler"), "portal").
-         addRequestParam(QualifiedName.parse("gtn:componentid"), "portal:componentId", null, false).
-         addRequestParam(QualifiedName.parse("gtn:action"), "portal:action", null, false).
-         addRequestParam(QualifiedName.parse("gtn:objectid"), "portal:objectId", null, false).
-         addRoute(
-            new RouteDescriptor("/public/{gtn:sitename}{gtn:path}").
-               addRouteParam(QualifiedName.parse("gtn:access"), "public")).
-               addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
-         addRoute(
-            new RouteDescriptor("/private/{gtn:sitename}{gtn:path}").
-               addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
-               addRouteParam(QualifiedName.parse("gtn:access"), "private"));
-
-      //
-      routerMD.addRoute(portal);
-
-      //
-      this.router = new Router(routerMD);
+      this.router = router().
+         add(route("/").
+            add(routeParam("gtn:handler").withValue("portal")).
+            add(requestParam("gtn:componentid").withName("portal:componentId")).
+            add(requestParam("gtn:action").withName("portal:action")).
+            add(requestParam("gtn:objectid").withName("portal:objectId")).
+            add(route("/public/{gtn:sitename}{gtn:path}").
+               add(routeParam("gtn:access").withValue("public")).
+               add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+            add(route("/private/{gtn:sitename}{gtn:path}").
+               add(routeParam("gtn:access").withValue("private")).
+               add(pathParam("gtn:path").withPattern(".*").preservingPath()))).
+         build();
    }
 
    public void testPrivateClassicComponent() throws Exception

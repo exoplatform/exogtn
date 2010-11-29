@@ -21,8 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -36,9 +35,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/",""};
       for (String path : paths)
       {
-         RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path));
-         Router router = new Router(routerMD);
+         Router router = new Router(router().add(route(path)));
          Route expectedRoute = new Route();
          assertEquals(expectedRoute, router.root);
       }
@@ -49,9 +46,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/a","a"};
       for (String path : paths)
       {
-         RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path));
-         Router router = new Router(routerMD);
+         Router router = new Router(router().add(route(path)));
          Route expectedRoute = new Route();
          expectedRoute.add(new SegmentRoute("a"));
          assertEquals(expectedRoute, router.root);
@@ -63,9 +58,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
-         RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path));
-         Router router = new Router(routerMD);
+         Router router = new Router(router().add(route(path)));
 
          //
          assertEquals(0, router.root.getSegmentNames().size());
@@ -87,9 +80,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{q:a}","{q:a}"};
       for (String path : paths)
       {
-         RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path));
-         Router router = new Router(routerMD);
+         Router router = new Router(router().add(route(path)));
 
          //
          assertEquals(0, router.root.getSegmentNames().size());
@@ -111,9 +102,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
-         RouterDescriptor routerMD = new RouterDescriptor();
-         routerMD.addRoute(new RouteDescriptor(path).addPathParam(QualifiedName.parse("a"), ".*", EncodingMode.FORM));
-         Router router = new Router(routerMD);
+         Router router = new Router(router().add(route(path).add(pathParam("a").withPattern(".*"))));
 
          //
          assertEquals(0, router.root.getSegmentNames().size());
@@ -132,12 +121,7 @@ public class TestBuildRoute extends TestCase
 
    public void testSamePrefix()
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/public/foo"));
-      routerMD.addRoute(new RouteDescriptor("/public/bar"));
-
-      //
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/public/foo")).add(route("/public/bar")).build();
       assertEquals(2, router.root.getSegmentSize("public"));
       Route publicRoute1 = router.root.getSegment("public", 0);
       assertEquals(1, publicRoute1.getSegmentSize("foo"));

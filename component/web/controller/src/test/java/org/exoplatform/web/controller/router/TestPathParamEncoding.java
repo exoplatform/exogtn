@@ -20,8 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 
@@ -34,9 +33,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testDefaultForm() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".+", EncodingMode.FORM));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".+"))).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/_"));
@@ -47,9 +44,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testPreservePath() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), "[^/]+", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}").add(pathParam("p").withPattern("[^/]+").preservingPath())).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
@@ -61,10 +56,10 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testD() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").
-         addPathParam(QualifiedName.parse("p"), "/[a-z]+/[a-z]+/?", EncodingMode.FORM));
-      Router router = new Router(routerMD);
+      Router router = router().
+         add(route("/{p}").
+         add(pathParam("p").withPattern("/[a-z]+/[a-z]+/?"))).
+         build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator"), router.route("/_platform_administrator"));
@@ -80,9 +75,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testWildcardPathParamWithPreservePath() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.PRESERVE_PATH));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".*").preservingPath())).build();
 
       // Render
       assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));
@@ -99,9 +92,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testWildcardParamPathWithDefaultForm() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-      routerMD.addRoute(new RouteDescriptor("/{p}").addPathParam(QualifiedName.parse("p"), ".*", EncodingMode.FORM));
-      Router router = new Router(routerMD);
+      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".*"))).build();
 
       //
       assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));

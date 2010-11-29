@@ -19,7 +19,6 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.EncodingMode;
 
 import javax.xml.namespace.QName;
@@ -35,6 +34,21 @@ import java.util.List;
 public class DescriptorBuilder
 {
 
+   public static PathParamDescriptor pathParam(String qualifiedName)
+   {
+      return new PathParamDescriptor(qualifiedName);
+   }
+
+   public static RequestParamDescriptor requestParam(String qualifiedName)
+   {
+      return new RequestParamDescriptor(qualifiedName);
+   }
+
+   public static RouteParamDescriptor routeParam(String qualifiedName)
+   {
+      return new RouteParamDescriptor(qualifiedName);
+   }
+
    /** . */
    private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
 
@@ -47,9 +61,19 @@ public class DescriptorBuilder
    /** . */
    private static final QName pathParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "path-param");
 
+   public static RouteDescriptor route(String path)
+   {
+      return new RouteDescriptor(path);
+   }
+
+   public static RouterDescriptor router()
+   {
+      return new RouterDescriptor();
+   }
+
    public RouterDescriptor build(XMLStreamReader reader) throws Exception
    {
-      RouterDescriptor routerDesc = new RouterDescriptor();
+      RouterDescriptor routerDesc = router();
 
       //
       while (true)
@@ -76,7 +100,7 @@ public class DescriptorBuilder
    private void build(XMLStreamReader reader, List<RouteDescriptor> descriptors) throws XMLStreamException
    {
       String path = reader.getAttributeValue(null, "path");
-      RouteDescriptor routeDesc = new RouteDescriptor(path);
+      RouteDescriptor routeDesc = route(path);
 
       //
       while (true)
@@ -93,25 +117,25 @@ public class DescriptorBuilder
          {
             if (paramQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "qname");
+               String qualifiedName = reader.getAttributeValue(null, "qname");
                String value = reader.getAttributeValue(null, "value");
-               routeDesc.addRouteParam(QualifiedName.parse(name), value);
+               routeDesc.add(new RouteParamDescriptor(qualifiedName).withValue(value));
             }
             else if (requestParamQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "qname");
-               String matchName = reader.getAttributeValue(null, "name");
-               String matchValue = reader.getAttributeValue(null, "value");
+               String qualifiedName = reader.getAttributeValue(null, "qname");
+               String name = reader.getAttributeValue(null, "name");
+               String value = reader.getAttributeValue(null, "value");
                String optional = reader.getAttributeValue(null, "required");
-               routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
+               routeDesc.add(new RequestParamDescriptor(qualifiedName).withName(name).withValue(value).required("true".equals(optional)));
             }
             else if (pathParamQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "qname");
+               String qualifiedName = reader.getAttributeValue(null, "qname");
                String pattern = reader.getAttributeValue(null, "pattern");
                String encoded = reader.getAttributeValue(null, "encoding");
                EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-               routeDesc.addPathParam(QualifiedName.parse(name), pattern, encodingMode);
+               routeDesc.add(new PathParamDescriptor(qualifiedName).withPattern(pattern).withEncodingMode(encodingMode));
             }
             else if (routeQN.equals(reader.getName()))
             {

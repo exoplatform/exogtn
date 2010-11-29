@@ -29,30 +29,30 @@ public class RouteParamDescriptor
 {
 
    /** . */
-   private final QualifiedName name;
+   private final QualifiedName qualifiedName;
 
    /** . */
-   private final String value;
+   private String value;
 
-   public RouteParamDescriptor(QualifiedName name, String value)
+   public RouteParamDescriptor(QualifiedName qualifiedName)
    {
-      if (name == null)
-      {
-         throw new NullPointerException("No null name accepted");
-      }
-      if (value == null)
-      {
-         throw new NullPointerException("No null value accepted");
-      }
-
-      //
-      this.name = name;
-      this.value = value;
+      this.qualifiedName = qualifiedName;
    }
 
-   public QualifiedName getName()
+   public RouteParamDescriptor(String qualifiedName)
    {
-      return name;
+      this.qualifiedName = QualifiedName.parse(qualifiedName);
+   }
+
+   public RouteParamDescriptor withValue(String value)
+   {
+      this.value = value;
+      return this;
+   }
+
+   public QualifiedName getQualifiedName()
+   {
+      return qualifiedName;
    }
 
    public String getValue()

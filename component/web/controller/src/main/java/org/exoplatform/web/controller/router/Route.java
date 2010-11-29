@@ -529,14 +529,14 @@ class Route
       Map<QualifiedName, RouteParam> routeParams = new HashMap<QualifiedName, RouteParam>();
       for (RouteParamDescriptor routeParamDesc : descriptor.getRouteParams())
       {
-         routeParams.put(routeParamDesc.getName(), new RouteParam(routeParamDesc.getName(), routeParamDesc.getValue()));
+         routeParams.put(routeParamDesc.getQualifiedName(), new RouteParam(routeParamDesc.getQualifiedName(), routeParamDesc.getValue()));
       }
 
       //
       Map<String, RequestParam> requestParams = new HashMap<String, RequestParam>();
       for (RequestParamDescriptor requestParamDesc : descriptor.getRequestParams())
       {
-         requestParams.put(requestParamDesc.getMatchName(), new RequestParam(requestParamDesc));
+         requestParams.put(requestParamDesc.getName(), new RequestParam(requestParamDesc));
       }
 
       //

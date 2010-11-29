@@ -67,17 +67,6 @@ public class RouteDescriptor
       return path;
    }
 
-   public RouteDescriptor addRouteParam(QualifiedName name, String value)
-   {
-      routeParams.put(name, new RouteParamDescriptor(name, value));
-      return this;
-   }
-
-   public RouteDescriptor addRouteParam(String name, String value)
-   {
-      return addRouteParam(QualifiedName.parse(name), value);
-   }
-
    public Set<QualifiedName> getRouteParamNames()
    {
       return routeParams.keySet();
@@ -93,37 +82,21 @@ public class RouteDescriptor
       return routeParams.get(name);
    }
 
-   public RouteDescriptor addRequestParam(QualifiedName name, String matchName, String matchValue, boolean required)
+   public RouteDescriptor add(RouteParamDescriptor routeParam)
    {
-      return addRequestParam(new RequestParamDescriptor(name, matchName, matchValue, required));
-   }
-
-   public RouteDescriptor addRequestParam(RequestParamDescriptor requestParam)
-   {
-      requestParams.put(requestParam.getMatchName(), requestParam);
+      routeParams.put(routeParam.getQualifiedName(), routeParam);
       return this;
    }
 
-   /**
-    * Add a path param with the {@link EncodingMode#FORM} encoding.
-    *
-    * @param name the name
-    * @param pattern the pattern
-    * @return this object
-    */
-   public RouteDescriptor addPathParam(QualifiedName name, String pattern)
+   public RouteDescriptor add(RequestParamDescriptor requestParam)
    {
-      return addPathParam(name, pattern, EncodingMode.FORM);
+      requestParams.put(requestParam.getName(), requestParam);
+      return this;
    }
 
-   public RouteDescriptor addPathParam(QualifiedName name, String pattern, EncodingMode encodingMode)
+   public RouteDescriptor add(PathParamDescriptor pathParam)
    {
-      return addPathParam(new PathParamDescriptor(name, pattern, encodingMode));
-   }
-
-   public RouteDescriptor addPathParam(PathParamDescriptor pathParam)
-   {
-      pathParams.put(pathParam.getName(), pathParam);
+      pathParams.put(pathParam.getQualifiedName(), pathParam);
       return this;
    }
 
@@ -147,7 +120,7 @@ public class RouteDescriptor
       return pathParams;
    }
 
-   public RouteDescriptor addRoute(RouteDescriptor child)
+   public RouteDescriptor add(RouteDescriptor child)
    {
       children.add(child);
       return this;

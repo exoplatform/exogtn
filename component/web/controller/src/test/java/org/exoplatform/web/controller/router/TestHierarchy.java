@@ -20,8 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,13 +35,10 @@ public class TestHierarchy extends AbstractTestController
 
    public void testFoo() throws Exception
    {
-
-      RouteDescriptor descriptor = new RouteDescriptor("/a").
-         addRouteParam("foo", "bar").
-         addRoute(new RouteDescriptor("/b").addRouteParam("juu", "daa"));
-
-      //
-      Router router = new Router(new RouterDescriptor().addRoute(descriptor));
+      Router router = router().
+         add(route("/a").add(routeParam("foo").withValue("bar")).
+         add(route("/b").add(routeParam("juu").withValue("daa")))).
+         build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));

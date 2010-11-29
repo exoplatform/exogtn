@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.router.Router;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class RouterDescriptor
       this.routes = new ArrayList<RouteDescriptor>();
    }
 
-   public RouterDescriptor addRoute(RouteDescriptor controller)
+   public RouterDescriptor add(RouteDescriptor controller)
    {
       if (controller == null)
       {
@@ -56,5 +58,10 @@ public class RouterDescriptor
    public List<RouteDescriptor> getRoutes()
    {
       return routes;
+   }
+
+   public Router build()
+   {
+      return new Router(this);
    }
 }

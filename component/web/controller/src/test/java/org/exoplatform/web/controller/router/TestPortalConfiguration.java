@@ -20,8 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,35 +39,22 @@ public class TestPortalConfiguration extends AbstractTestController
    @Override
    protected void setUp() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor();
-
-      //
-      RouteDescriptor portalRouteMD = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      portalRouteMD.addRouteParam(QualifiedName.create("gtn", "controller"), "site");
-      portalRouteMD.addRequestParam(QualifiedName.create("gtn", "componentid"), "portal:componentId", null, false);
-      portalRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
-      routerMD.addRoute(portalRouteMD);
-
-      //
-      RouteDescriptor portalRouteMD2 = new RouteDescriptor("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      portalRouteMD2.addRouteParam(QualifiedName.create("gtn", "controller"), "site");
-      portalRouteMD2.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
-      routerMD.addRoute(portalRouteMD2);
-
-      //
-      RouteDescriptor groupRouteMD = new RouteDescriptor("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      groupRouteMD.addRouteParam(QualifiedName.create("gtn", "controller"), "site");
-      groupRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
-      routerMD.addRoute(groupRouteMD);
-
-      //
-      RouteDescriptor userRouteMD = new RouteDescriptor("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}");
-      userRouteMD.addRouteParam(QualifiedName.create("gtn", "controller"), "site");
-      userRouteMD.addPathParam(QualifiedName.create("gtn", "path"), ".*", EncodingMode.PRESERVE_PATH);
-      routerMD.addRoute(userRouteMD);
-
-      //
-      this.router = new Router(routerMD);
+      this.router = router().
+         add(route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+            add(routeParam("gtn:controller").withValue("site")).
+            add(routeParam("gtn:controller").withValue("site")).
+            add(requestParam("gtn:componentid").withName("portal:componentId")).
+            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+         add(route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+            add(routeParam("gtn:controller").withValue("site")).
+            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+         add(route("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+            add(routeParam("gtn:controller").withValue("site")).
+            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+         add(route("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+            add(routeParam("gtn:controller").withValue("site")).
+            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+         build();
    }
 
    public void testComponent() throws Exception

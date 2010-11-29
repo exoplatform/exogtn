@@ -29,48 +29,78 @@ public class RequestParamDescriptor
 {
 
    /** . */
-   private final QualifiedName name;
+   private final QualifiedName qualifiedName;
 
    /** . */
-   private final String matchName;
+   private String name;
 
    /** . */
-   private final String matchValue;
+   private String value;
 
    /** . */
-   private final boolean required;
+   private boolean required;
 
-   public RequestParamDescriptor(QualifiedName name, String matchName, String matchValue, boolean required)
+   public RequestParamDescriptor(QualifiedName qualifiedName)
    {
-      if (name == null)
+      if (qualifiedName == null)
       {
-         throw new NullPointerException("No null name accepted");
-      }
-      if (matchName == null)
-      {
-         throw new NullPointerException("No null match name accepted");
+         throw new NullPointerException("No null qualified name accepted");
       }
 
       //
-      this.name = name;
-      this.matchName = matchName;
-      this.matchValue = matchValue;
-      this.required = required;
+      this.qualifiedName = qualifiedName;
+      this.value = null;
+      this.required = false;
    }
 
-   public QualifiedName getName()
+   public RequestParamDescriptor(String qualifiedName)
+   {
+      if (qualifiedName == null)
+      {
+         throw new NullPointerException("No null qualified name accepted");
+      }
+
+      //
+      this.qualifiedName = QualifiedName.parse(qualifiedName);
+   }
+
+   public RequestParamDescriptor withName(String name)
+   {
+      this.name = name;
+      return this;
+   }
+
+   public RequestParamDescriptor withValue(String value)
+   {
+      this.value = value;
+      return this;
+   }
+
+   public RequestParamDescriptor required()
+   {
+      this.required = true;
+      return this;
+   }
+
+   public RequestParamDescriptor required(boolean required)
+   {
+      this.required = required;
+      return this;
+   }
+
+   public QualifiedName getQualifiedName()
+   {
+      return qualifiedName;
+   }
+
+   public String getName()
    {
       return name;
    }
 
-   public String getMatchName()
+   public String getValue()
    {
-      return matchName;
-   }
-
-   public String getMatchValue()
-   {
-      return matchValue;
+      return value;
    }
 
    public boolean isRequired()

@@ -20,7 +20,8 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
+
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
 
 import java.util.Collections;
@@ -34,9 +35,9 @@ public class TestPortal extends AbstractTestController
 
    public void testLanguage1() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor().addRoute(
-         new RouteDescriptor("/public{gtn:lang}").addPathParam(
-         QualifiedName.parse("gtn:lang"), "(/[A-Za-z][A-Za-z])?", EncodingMode.PRESERVE_PATH)
+      RouterDescriptor routerMD = router().add(
+         route("/public{gtn:lang}").add(
+            pathParam("gtn:lang").withPattern("(/[A-Za-z][A-Za-z])?").preservingPath())
       );
       Router router = new Router(routerMD);
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
@@ -45,9 +46,9 @@ public class TestPortal extends AbstractTestController
 
    public void testLanguage2() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor().addRoute(
-         new RouteDescriptor("/{gtn:lang}public").addPathParam(
-         QualifiedName.parse("gtn:lang"), "([A-Za-z]{2}/)?", EncodingMode.PRESERVE_PATH)
+      RouterDescriptor routerMD = router().add(
+         route("/{gtn:lang}public").add(
+            pathParam("gtn:lang").withPattern("([A-Za-z]{2}/)?").preservingPath())
       );
       Router router = new Router(routerMD);
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
@@ -56,11 +57,10 @@ public class TestPortal extends AbstractTestController
 
    public void testLanguage3() throws Exception
    {
-      RouterDescriptor routerMD = new RouterDescriptor().
-         addRoute(new RouteDescriptor("/public")).
-         addRoute(new RouteDescriptor("/{gtn:lang}/public").
-            addPathParam(QualifiedName.parse("gtn:lang"), "([A-Za-z]{2})", EncodingMode.FORM
-            )
+      RouterDescriptor routerMD = router().
+         add(route("/public")).
+         add(route("/{gtn:lang}/public").
+            add(pathParam("gtn:lang").withPattern("([A-Za-z]{2})"))
          );
       Router router = new Router(routerMD);
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/public"));

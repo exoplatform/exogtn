@@ -30,30 +30,63 @@ public class PathParamDescriptor
 {
 
    /** . */
-   private final QualifiedName name;
+   private final QualifiedName qualifiedName;
 
    /** . */
-   private final String pattern;
+   private String pattern;
 
    /** . */
-   private final EncodingMode encodingMode;
+   private EncodingMode encodingMode = EncodingMode.FORM;
 
-   public PathParamDescriptor(QualifiedName name, String pattern, EncodingMode encodingMode)
+   public PathParamDescriptor(QualifiedName qualifiedName)
    {
-      if (name == null)
+      if (qualifiedName == null)
       {
          throw new NullPointerException("No null name accepted");
       }
 
       //
-      this.name = name;
-      this.pattern = pattern;
-      this.encodingMode = encodingMode;
+      this.qualifiedName = qualifiedName;
    }
 
-   public QualifiedName getName()
+   public PathParamDescriptor(String qualifiedName)
    {
-      return name;
+      if (qualifiedName == null)
+      {
+         throw new NullPointerException("No null name accepted");
+      }
+
+      //
+      this.qualifiedName = QualifiedName.parse(qualifiedName);
+   }
+
+   public PathParamDescriptor withPattern(String pattern)
+   {
+      this.pattern = pattern;
+      return this;
+   }
+
+   public PathParamDescriptor withEncodingMode(EncodingMode encodingMode)
+   {
+      this.encodingMode = encodingMode;
+      return this;
+   }
+
+   public PathParamDescriptor preservingPath()
+   {
+      this.encodingMode = EncodingMode.PRESERVE_PATH;
+      return this;
+   }
+
+   public PathParamDescriptor form()
+   {
+      this.encodingMode = EncodingMode.FORM;
+      return this;
+   }
+
+   public QualifiedName getQualifiedName()
+   {
+      return qualifiedName;
    }
 
    public String getPattern()

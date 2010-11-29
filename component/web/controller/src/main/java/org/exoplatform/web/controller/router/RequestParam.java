@@ -52,12 +52,12 @@ class RequestParam
 
       //
       Pattern matchValue = null;
-      if (descriptor.getMatchValue() != null)
+      if (descriptor.getValue() != null)
       {
          PatternBuilder matchValueBuilder = new PatternBuilder();
          matchValueBuilder.expr("^");
          int level = 0;
-         for (char c : descriptor.getMatchValue().toCharArray())
+         for (char c : descriptor.getValue().toCharArray())
          {
             switch (c)
             {
@@ -91,8 +91,8 @@ class RequestParam
       }
 
       //
-      this.name = descriptor.getName();
-      this.matchName = descriptor.getMatchName();
+      this.name = descriptor.getQualifiedName();
+      this.matchName = descriptor.getName();
       this.matchValue = matchValue;
       this.required = descriptor.isRequired();
    }
