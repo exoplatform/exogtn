@@ -55,6 +55,12 @@ public class RouteDescriptor
 
    public RouteDescriptor(String path)
    {
+      if (path == null)
+      {
+         throw new NullPointerException("Was not expecting a null path");
+      }
+
+      //
       this.path = path;
       this.routeParams = new HashMap<QualifiedName, RouteParamDescriptor>();
       this.pathParams = new HashMap<QualifiedName, PathParamDescriptor>();
