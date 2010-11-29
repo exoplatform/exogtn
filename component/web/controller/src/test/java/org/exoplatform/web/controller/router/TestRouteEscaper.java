@@ -23,6 +23,9 @@ import org.exoplatform.component.test.BaseGateInTest;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.RegExpParser;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -30,7 +33,7 @@ import org.exoplatform.web.controller.regexp.RegExpParser;
 public class TestRouteEscaper extends BaseGateInTest
 {
 
-   private void assertFoo(String pattern) throws Exception
+   private void match(String pattern, String test, String expectedValue) throws Exception
    {
       RegExpParser parser = new RegExpParser(pattern);
       RouteEscaper escaper = new RouteEscaper('/', '_');
@@ -39,13 +42,20 @@ public class TestRouteEscaper extends BaseGateInTest
       RegExpAnalyser analyser = new RegExpAnalyser();
       analyser.process(re);
       System.out.println(pattern + " --> " + analyser.getPattern());
+      Pattern p = Pattern.compile(analyser.getPattern());
+      Matcher matcher = p.matcher(test);
+      assertTrue(matcher.find());
+      assertEquals(expectedValue, matcher.group());
    }
 
-   public void testFoo() throws Exception
+   public void testMatch() throws Exception
    {
-      assertFoo("/+");
-      assertFoo(".*");
-      assertFoo("[a/]");
-      assertFoo("[,-1]");
+      match(".*", "_", "_");
+      match(".*", "_/", "_");
+      match(".*", "_/_", "_");
+      match("/", "_/", "_");
+      match("/*", "_/_", "_");
+      match("[/a]*", "_a_/_", "_a_");
+      match("[,-1&&[^/]]*", "_/_", "");
    }
 }

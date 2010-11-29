@@ -31,8 +31,12 @@ public abstract class RENode
 
    public abstract String toString();
 
-   public final RENode replaceBy(RENode that)
+   public final RENode replaceBy(RENode that) throws IllegalStateException
    {
+      if (owner == null)
+      {
+         throw new IllegalStateException("Not attached");
+      }
       return owner.replace(that);
    }
 
@@ -779,9 +783,16 @@ public abstract class RENode
          super(type);
 
          //
-         if (node != null && node.owner != null)
+         if (node != null)
          {
-            throw new IllegalArgumentException();
+            if (node.owner != null)
+            {
+               throw new IllegalArgumentException();
+            }
+            else
+            {
+               node.owner = this;
+            }
          }
          this.node = node;
       }
