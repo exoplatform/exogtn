@@ -72,7 +72,10 @@ public class TestPathParamEncoding extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/"), router.route("/_platform_administrator_"));
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/"), router.route("/_platform_administrator_/"));
 
-      // todo : render
+      // Render
+      assertEquals("/_platform_administrator", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator")));
+      assertEquals("/_platform_administrator_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/")));
+      assertEquals(null, router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator//")));
    }
 
    public void testWildcardPathParamWithPreservePath() throws Exception
