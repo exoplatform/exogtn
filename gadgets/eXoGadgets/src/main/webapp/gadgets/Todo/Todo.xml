@@ -30,10 +30,10 @@
 -->
 <Module>
 	<ModulePrefs author="eXoPlatform"
-		title="Todo"
-		directory_title="Todo"
+		title="To-do"
+		directory_title="To-do"
 		title_url="http://www.exoplatform.org"
-		description="ToDo Gadget, easily manage and track your daily to-do list."
+		description="To-do Gadget, easily manage and track your daily to-do list."
 		thumbnail="http://localhost:8080/eXoGadgets/skin/DefaultSkin/portletIcons/Todo.png"
 		height="235">
 		<Locale messages="http://localhost:8080/eXoGadgets/locale/Todo/ALL_ALL.xml" />
