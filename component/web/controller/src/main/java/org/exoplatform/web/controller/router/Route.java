@@ -24,6 +24,9 @@ import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
+import org.exoplatform.web.controller.regexp.RENode;
+import org.exoplatform.web.controller.regexp.RegExpParser;
+import org.exoplatform.web.controller.regexp.SyntaxException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -640,17 +643,41 @@ class Route
                //
                if (regex == null)
                {
-                  regex = "[^/]+";
+                  if (encodingMode == EncodingMode.FORM)
+                  {
+                     regex = ".+";
+                  }
+                  else
+                  {
+                     regex = "[^/]+";
+                  }
                }
 
                // Now analyse the regexp
-               String regex2;
                try
                {
+                  RegExpParser parser = new RegExpParser(regex);
+                  RENode.Disjunction disjunction = parser.parseDisjunction();
+
+                  // Process for form
+                  if (encodingMode == EncodingMode.FORM)
+                  {
+                     RouteEscaper escaper = new RouteEscaper('/', '_');
+                     escaper.visit(disjunction);
+                  }
+
+                  //
                   RegExpAnalyser analyser = new RegExpAnalyser();
-                  analyser.process(regex);
-                  regex2 = analyser.getPattern();
-                  System.out.println("" + regex + " -> " + regex2);
+                  analyser.process(disjunction);
+
+                  //
+                  String tmp = analyser.getPattern();
+                  System.out.println("" + regex + " -> " + tmp);
+                  regex = tmp;
+               }
+               catch (SyntaxException e)
+               {
+                  throw new RuntimeException(e);
                }
                catch (MalformedRegExpException e)
                {
@@ -658,7 +685,7 @@ class Route
                }
 
                //
-               builder.expr("(").expr(regex2).expr(")");
+               builder.expr("(").expr(regex).expr(")");
 
                //
                parameterPatterns.add(new PathParam(

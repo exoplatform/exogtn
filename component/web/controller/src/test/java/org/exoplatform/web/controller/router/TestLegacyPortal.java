@@ -48,10 +48,14 @@ public class TestLegacyPortal extends TestCase
          addRequestParam(QualifiedName.parse("gtn:componentid"), "portal:componentId", null, false).
          addRequestParam(QualifiedName.parse("gtn:action"), "portal:action", null, false).
          addRequestParam(QualifiedName.parse("gtn:objectid"), "portal:objectId", null, false).
-         addRoute(new RouteDescriptor("/public/{gtn:sitename}{gtn:path}").
-            addRouteParam(QualifiedName.parse("gtn:access"), "public")).addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
-         addRoute(new RouteDescriptor("/private/{gtn:sitename}{gtn:path}").addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
-            addRouteParam(QualifiedName.parse("gtn:access"), "private"));
+         addRoute(
+            new RouteDescriptor("/public/{gtn:sitename}{gtn:path}").
+               addRouteParam(QualifiedName.parse("gtn:access"), "public")).
+               addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
+         addRoute(
+            new RouteDescriptor("/private/{gtn:sitename}{gtn:path}").
+               addPathParam(QualifiedName.parse("gtn:path"), ".*", EncodingMode.PRESERVE_PATH).
+               addRouteParam(QualifiedName.parse("gtn:access"), "private"));
 
       //
       routerMD.addRoute(portal);
