@@ -398,19 +398,19 @@
                                     <string>Gadgets</string>
                                  </field>
                                  <field name="applicationName">
-                                    <string>Todo</string>
+                                    <string>To-do</string>
                                  </field>
                                  <field name="displayName">
-                                    <string>Todo</string>
+                                    <string>To-do</string>
                                  </field>
                                  <field name="description">
-                                    <string>ToDo Gadget, easily manage and track your daily to-do list.</string>
+                                    <string>To-do Gadget, easily manage and track your daily to-do list.</string>
                                  </field>
                                  <field name="type">
                                     <string>gadget</string>
                                  </field>
                                  <field name="contentId">
-                                    <string>Todo</string>
+                                    <string>To-do</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
