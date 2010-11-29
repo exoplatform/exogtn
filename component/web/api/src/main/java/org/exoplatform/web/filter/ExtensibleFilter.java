@@ -99,7 +99,10 @@ public class ExtensibleFilter implements Filter
 
       public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
       {
-         String path = ((HttpServletRequest)request).getRequestURI();
+         HttpServletRequest req = (HttpServletRequest) request;
+         String regex = "[/]*" + req.getContextPath() + "[/]*";
+         String path = req.getRequestURI().replaceFirst(regex, "/"); 
+         
          while (filters.hasNext())
          {
             FilterDefinition filterDef = filters.next();
