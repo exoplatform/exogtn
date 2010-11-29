@@ -214,7 +214,7 @@ public class RegExpParser extends Parser
                {
                   throw new SyntaxException();
                }
-               exp = new RENode.Character(escaped);
+               exp = new RENode.Char(escaped);
                index++;
                break;
             }
@@ -223,11 +223,11 @@ public class RegExpParser extends Parser
                throw new SyntaxException();
             }
          case '.':
-            exp = new RENode.Dot();
+            exp = new RENode.Any();
             index++;
             break;
          default:
-            exp = new RENode.Character(c);
+            exp = new RENode.Char(c);
             index++;
             break;
             //
@@ -371,7 +371,7 @@ public class RegExpParser extends Parser
             }
             else
             {
-               next = new RENode.CharacterClassExpr.Simple(c);
+               next = new RENode.CharacterClassExpr.Char(c);
             }
          }
 

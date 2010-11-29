@@ -222,17 +222,17 @@ public class TestParser extends BaseGateInTest
       new ParserTester("[^a]").assertParseCharacterClass("[^[a]]");
       new ParserTester("[^a-b]").assertParseCharacterClass("[^[a-b]]");
       new ParserTester("[a-b]").assertParseCharacterClass("[a-b]");
-      new ParserTester("[ab]").assertParseCharacterClass("[[a][b]]");
-      new ParserTester("[a&]").assertParseCharacterClass("[[a][&]]");
+      new ParserTester("[ab]").assertParseCharacterClass("[[a]||[b]]");
+      new ParserTester("[a&]").assertParseCharacterClass("[[a]||[&]]");
       new ParserTester("[a&&b]").assertParseCharacterClass("[[a]&&[b]]");
       new ParserTester("[a&&[^b]]").assertParseCharacterClass("[[a]&&[^[b]]]");
-      new ParserTester("[a[^b]]").assertParseCharacterClass("[[a][^[b]]]");
-      new ParserTester("[a[b]]").assertParseCharacterClass("[[a][b]]");
-      new ParserTester("[a[b]c]").assertParseCharacterClass("[[a][[b][c]]]");
-      new ParserTester("[[a]bc]").assertParseCharacterClass("[[a][[b][c]]]");
+      new ParserTester("[a[^b]]").assertParseCharacterClass("[[a]||[^[b]]]");
+      new ParserTester("[a[b]]").assertParseCharacterClass("[[a]||[b]]");
+      new ParserTester("[a[b]c]").assertParseCharacterClass("[[a]||[[b]||[c]]]");
+      new ParserTester("[[a]bc]").assertParseCharacterClass("[[a]||[[b]||[c]]]");
       new ParserTester("[-]").assertParseCharacterClass("[-]");
-      new ParserTester("[a-]").assertParseCharacterClass("[[a][-]]");
-      new ParserTester("[---]").assertParseCharacterClass("[---]");
+      new ParserTester("[a-]").assertParseCharacterClass("[[a]||[-]]");
+//      new ParserTester("[---]").assertParseCharacterClass("[---]");
       new ParserTester("[#--]").assertParseCharacterClass("[#--]");
    }
 

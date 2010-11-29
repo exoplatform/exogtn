@@ -105,7 +105,7 @@ public class RegExpAnalyser
    private void visit(RENode.Expr expression) throws MalformedRegExpException
    {
       Quantifier quantifier = null;
-      if (expression instanceof RENode.Dot)
+      if (expression instanceof RENode.Any)
       {
          pattern.append('.');
          quantifier = expression.getQuantifier();
@@ -118,9 +118,9 @@ public class RegExpAnalyser
          pattern.append(")");
          quantifier = expression.getQuantifier();
       }
-      else if (expression instanceof RENode.Character)
+      else if (expression instanceof RENode.Char)
       {
-         RENode.Character character = (RENode.Character)expression;
+         RENode.Char character = (RENode.Char)expression;
          pattern.append(character.getValue());
          quantifier = expression.getQuantifier();
       }
@@ -142,9 +142,9 @@ public class RegExpAnalyser
 
    private void visit(RENode.CharacterClassExpr expr, boolean braced)
    {
-      if (expr instanceof RENode.CharacterClassExpr.Simple)
+      if (expr instanceof RENode.CharacterClassExpr.Char)
       {
-         RENode.CharacterClass.CharacterClassExpr.Simple simple = (RENode.CharacterClass.CharacterClassExpr.Simple)expr;
+         RENode.CharacterClassExpr.Char simple = (RENode.CharacterClassExpr.Char)expr;
          pattern.append(simple.getValue());
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Range)

@@ -31,6 +31,11 @@ public abstract class RENode
 
    public abstract String toString();
 
+   public final RENode replaceBy(RENode that)
+   {
+      return owner.replace(that);
+   }
+
    public static final class Disjunction extends RENode
    {
 
@@ -47,8 +52,8 @@ public abstract class RENode
 
       public Disjunction(Alternative alternative, Disjunction next)
       {
-         this.alternative = new NonNullableRef<Alternative>(alternative);
-         this.next = new NullableRef<Disjunction>(next);
+         this.alternative = new NonNullableRef<Alternative>(Alternative.class, alternative);
+         this.next = new NullableRef<Disjunction>(Disjunction.class, next);
       }
 
       public Alternative getAlternative()
@@ -101,8 +106,8 @@ public abstract class RENode
 
       public Alternative(Expr exp, Alternative next)
       {
-         this.exp = new NonNullableRef<Expr>(exp);
-         this.next = new NullableRef<Alternative>(next);
+         this.exp = new NonNullableRef<Expr>(Expr.class, exp);
+         this.next = new NullableRef<Alternative>(Alternative.class, next);
       }
 
       public Expr getExp()
@@ -213,7 +218,7 @@ public abstract class RENode
       }
    }
 
-   public static final class Dot extends Atom
+   public static final class Any extends Atom
    {
       @Override
       protected void writeTo(StringBuilder sb)
@@ -233,7 +238,7 @@ public abstract class RENode
 
       public Group(Disjunction disjunction, boolean capturing)
       {
-         this.disjunction = new NonNullableRef<Disjunction>(disjunction);
+         this.disjunction = new NonNullableRef<Disjunction>(Disjunction.class, disjunction);
          this.capturing = capturing;
       }
 
@@ -264,13 +269,13 @@ public abstract class RENode
       }
    }
 
-   public static final class Character extends Atom
+   public static final class Char extends Atom
    {
 
       /** . */
       private char value;
 
-      public Character(char value)
+      public Char(char value)
       {
          this.value = value;
       }
@@ -298,9 +303,9 @@ public abstract class RENode
       /** . */
       private final Ref<CharacterClassExpr> expr;
 
-      protected CharacterClass(CharacterClassExpr expr)
+      public CharacterClass(CharacterClassExpr expr)
       {
-         this.expr = new NonNullableRef<CharacterClassExpr>(expr);
+         this.expr = new NonNullableRef<CharacterClassExpr>(CharacterClassExpr.class, expr);
       }
 
       public CharacterClassExpr getExpr()
@@ -327,6 +332,29 @@ public abstract class RENode
       {
       }
 
+      /**
+       * Remove the specifed char from the expression.
+       *
+       * @param c the char to remove
+       * @return the replacement for this node
+       */
+      public CharacterClassExpr remove(char c)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      /**
+       * Remove the specifed char from the expression.
+       *
+       * @param src the char is substituted
+       * @param dst the char that substitutes
+       * @return the replacement for this node
+       */
+      public CharacterClassExpr replace(char src, char dst)
+      {
+         throw new UnsupportedOperationException();
+      }
+
       public static class Not extends CharacterClassExpr
       {
 
@@ -335,7 +363,7 @@ public abstract class RENode
 
          public Not(CharacterClassExpr negated)
          {
-            this.negated = new NonNullableRef<CharacterClassExpr>(negated);
+            this.negated = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, negated);
          }
 
          public CharacterClassExpr getNegated()
@@ -346,6 +374,20 @@ public abstract class RENode
          public void setNegated(CharacterClassExpr negated)
          {
             this.negated.set(negated);
+         }
+
+         @Override
+         public CharacterClassExpr remove(char c)
+         {
+            this.negated.get().remove(c);
+            return this;
+         }
+
+         @Override
+         public CharacterClassExpr replace(char src, char dst)
+         {
+            this.negated.get().replace(src, dst);
+            return this;
          }
 
          @Override
@@ -366,8 +408,8 @@ public abstract class RENode
 
          public Or(CharacterClassExpr left, CharacterClassExpr right)
          {
-            this.left = new NonNullableRef<CharacterClassExpr>(left);
-            this.right = new NonNullableRef<CharacterClassExpr>(right);
+            this.left = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, left);
+            this.right = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, right);
          }
 
          public CharacterClassExpr getLeft()
@@ -391,9 +433,39 @@ public abstract class RENode
          }
 
          @Override
+         public CharacterClassExpr remove(char c)
+         {
+            if (left.isNotNull())
+            {
+               left.get().remove(c);
+            }
+            if (right.isNotNull())
+            {
+               right.get().remove(c);
+            }
+            return this;
+         }
+
+         @Override
+         public CharacterClassExpr replace(char src, char dst)
+         {
+            if (left.isNotNull())
+            {
+               left.get().replace(src, dst);
+            }
+            if (right.isNotNull())
+            {
+               right.get().replace(src, dst);
+            }
+            return this;
+         }
+
+         @Override
          public String toString()
          {
-            return "[" + left.get() + right.get() + "]";
+            String l = left.isNotNull() ? left.get().toString() : "";
+            String r = right.isNotNull() ? right.get().toString() : "";
+            return "[" + l + "||" + r + "]";
          }
       }
 
@@ -408,8 +480,8 @@ public abstract class RENode
 
          public And(CharacterClassExpr left, CharacterClassExpr right)
          {
-            this.left = new NonNullableRef<CharacterClassExpr>(left);
-            this.right = new NonNullableRef<CharacterClassExpr>(right);
+            this.left = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, left);
+            this.right = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, right);
          }
 
          public CharacterClassExpr getLeft()
@@ -433,19 +505,49 @@ public abstract class RENode
          }
 
          @Override
+         public CharacterClassExpr remove(char c)
+         {
+            if (left.isNotNull())
+            {
+               left.get().remove(c);
+            }
+            if (right.isNotNull())
+            {
+               right.get().remove(c);
+            }
+            return this;
+         }
+
+         @Override
+         public CharacterClassExpr replace(char src, char dst)
+         {
+            if (left.isNotNull())
+            {
+               left.get().replace(src, dst);
+            }
+            if (right.isNotNull())
+            {
+               right.get().replace(src, dst);
+            }
+            return this;
+         }
+
+         @Override
          public String toString()
          {
-            return "[" + left.get() + "&&" + right.get() + "]";
+            String l = left.isNotNull() ? left.get().toString() : "";
+            String r = right.isNotNull() ? right.get().toString() : "";
+            return "[" + l + "&&" + r + "]";
          }
       }
 
-      public static class Simple extends CharacterClassExpr
+      public static class Char extends CharacterClassExpr
       {
 
          /** . */
          private char value;
 
-         public Simple(char value)
+         public Char(char value)
          {
             this.value = value;
          }
@@ -458,6 +560,30 @@ public abstract class RENode
          public void setValue(char value)
          {
             this.value = value;
+         }
+
+         @Override
+         public CharacterClassExpr remove(char c)
+         {
+            if (c == value)
+            {
+               replaceBy(null);
+               return null;
+            }
+            else
+            {
+               return this;
+            }
+         }
+
+         @Override
+         public CharacterClassExpr replace(char src, char dst)
+         {
+            if (src == value)
+            {
+               value = dst;
+            }
+            return this;
          }
 
          @Override
@@ -478,8 +604,90 @@ public abstract class RENode
 
          public Range(char from, char to)
          {
+            if (from >= to)
+            {
+               throw new IllegalArgumentException("From cannot be greater or equals than to");
+            }
             this.from = from;
             this.to = to;
+         }
+
+         public CharacterClassExpr remove(char c) throws IllegalArgumentException
+         {
+            if (from == to)
+            {
+               if (from == c)
+               {
+                  throw new UnsupportedOperationException();
+               }
+            }
+            else if (from +1 == to)
+            {
+               if (from == c)
+               {
+                  Char repl = new Char(to);
+                  replaceBy(repl);
+                  return repl;
+               }
+               else
+               {
+                  Char repl = new Char(from);
+                  replaceBy(repl);
+                  return repl;
+               }
+            }
+            else
+            {
+               if (from == c)
+               {
+                  from++;
+               }
+               else if (to == c)
+               {
+                  to--;
+               }
+               else if (from < c && c < to)
+               {
+                  CharacterClassExpr left;
+                  if (from + 1 == c)
+                  {
+                     left = new Char(from);
+                  }
+                  else
+                  {
+                     left = new Range(from, (char)(c - 1));
+                  }
+                  CharacterClassExpr right;
+                  if (c == to - 1)
+                  {
+                     right = new Char(to);
+                  }
+                  else
+                  {
+                     right = new Range((char)(c + 1), to);
+                  }
+                  Or repl = new Or(left, right);
+                  replaceBy(repl);
+                  return repl;
+               }
+            }
+
+            // We keep the same node
+            return this;
+         }
+
+         @Override
+         public CharacterClassExpr replace(char src, char dst)
+         {
+            CharacterClassExpr repl = remove(src);
+            if (repl != this)
+            {
+               Or or = new Or(null, new Char(dst));
+               repl.replaceBy(or);
+               or.setLeft(repl);
+               repl = or;
+            }
+            return repl;
          }
 
          public char getFrom()
@@ -512,16 +720,47 @@ public abstract class RENode
 
    protected abstract class Ref<N extends RENode>
    {
-      protected abstract Ref<N> set(N node);
+
+      /** . */
+      private final Class<N> type;
+
+      protected Ref(Class<N> type)
+      {
+         this.type = type;
+      }
+
+      public final Class<N> getType()
+      {
+         return type;
+      }
+
+      protected abstract N set(N node);
+
       protected abstract N get();
+
       protected final boolean isNull()
       {
          return get() == null;
       }
+
       protected final boolean isNotNull()
       {
          return get() != null;
       }
+
+      protected final N replace(RENode that)
+      {
+         if (that == null || type.isInstance(that))
+         {
+            return set(type.cast(that));
+         }
+         else
+         {
+            throw new ClassCastException("Cannot cast node with type " + that.getClass().getName() + " to type " +
+               type.getName());
+         }
+      }
+
    }
 
    protected class NullableRef<N extends RENode> extends Ref<N>
@@ -530,13 +769,16 @@ public abstract class RENode
       /** . */
       private N node;
 
-      public NullableRef()
+      public NullableRef(Class<N> type)
       {
-         this(null);
+         this(type, null);
       }
 
-      public NullableRef(N node)
+      public NullableRef(Class<N> type, N node)
       {
+         super(type);
+
+         //
          if (node != null && node.owner != null)
          {
             throw new IllegalArgumentException();
@@ -545,12 +787,13 @@ public abstract class RENode
       }
 
       @Override
-      protected Ref<N> set(N node)
+      protected N set(N node)
       {
          if (node != null && node.owner != null)
          {
             throw new IllegalArgumentException();
          }
+         N previous = this.node;
          if (this.node != null)
          {
             this.node.owner = null;
@@ -564,7 +807,7 @@ public abstract class RENode
          {
             this.node = null;
          }
-         return this;
+         return previous;
       }
 
       @Override
@@ -580,8 +823,11 @@ public abstract class RENode
       /** . */
       private N node;
 
-      public NonNullableRef(N node)
+      public NonNullableRef(Class<N> type, N node)
       {
+         super(type);
+
+         //
          if (node == null)
          {
             throw new NullPointerException();
@@ -595,20 +841,21 @@ public abstract class RENode
       }
 
       @Override
-      protected Ref<N> set(N node)
+      protected N set(N node)
       {
          if (node == null)
          {
-            throw new NullPointerException();
+            throw new NullPointerException("No null node accepted");
          }
          if (node.owner != null)
          {
             throw new IllegalArgumentException();
          }
+         N previous = this.node;
          this.node.owner = null;
          node.owner = this;
          this.node = node;
-         return this;
+         return previous;
       }
 
       @Override
