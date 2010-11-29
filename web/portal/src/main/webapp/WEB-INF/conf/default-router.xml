@@ -6,49 +6,49 @@
   <route path="/">
 
     <!-- Use the portal handler -->
-    <route-param name="gtn:handler" value="portal"/>
+    <route-param qname="gtn:handler" value="portal"/>
 
     <!-- Webui parameters -->
-    <request-param name="gtn:componentid" matchName="portal:componentId" required="false"/>
-    <request-param name="gtn:action" matchName="portal:action" required="false"/>
-    <request-param name="gtn:objectid" matchName="objectId" required="false"/>
+    <request-param qname="gtn:componentid" name="portal:componentId" required="false"/>
+    <request-param qname="gtn:action" name="portal:action" required="false"/>
+    <request-param qname="gtn:objectid" name="objectId" required="false"/>
 
     <!-- The public access -->
     <route path="/public/{gtn:sitename}{gtn:path}">
-      <route-param name="gtn:access" value="public"/>
-      <route-param name="gtn:sitetype" value="portal"/>
-      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+      <route-param qname="gtn:access" value="public"/>
+      <route-param qname="gtn:sitetype" value="portal"/>
+      <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The private access -->
     <route path="/private/{gtn:sitename}{gtn:path}">
-      <route-param name="gtn:access" value="private"/>
-      <route-param name="gtn:sitetype" value="portal"/>
-      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+      <route-param qname="gtn:access" value="private"/>
+      <route-param qname="gtn:sitetype" value="portal"/>
+      <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The group access -->
     <route path="/groups/{gtn:sitename}{gtn:path}">
-      <route-param name="gtn:access" value="private"/>
-      <route-param name="gtn:sitetype" value="group"/>
-      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+      <route-param qname="gtn:access" value="private"/>
+      <route-param qname="gtn:sitetype" value="group"/>
+      <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
     <!-- The user access -->
     <route path="/users/{gtn:sitename}{gtn:path}">
-      <route-param name="gtn:access" value="private"/>
-      <route-param name="gtn:sitetype" value="user"/>
-      <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+      <route-param qname="gtn:access" value="private"/>
+      <route-param qname="gtn:sitetype" value="user"/>
+      <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
 
   </route>
 
   <route path="/upload">
-    <route-param name="gtn:handler" value="upload"/>
+    <route-param qname="gtn:handler" value="upload"/>
   </route>
 
   <route path="/download">
-    <route-param name="gtn:handler" value="download"/>
+    <route-param qname="gtn:handler" value="download"/>
   </route>
 
 </router>

@@ -49,12 +49,12 @@
   </xs:complexType>
 
   <xs:complexType name="routeParamType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="pathParamType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="pattern" type="xs:string" use="optional"/>
     <xs:attribute name="encoding" use="optional">
       <xs:simpleType>
@@ -67,9 +67,9 @@
   </xs:complexType>
 
   <xs:complexType name="requestParamType">
+    <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="matchName" type="xs:string" use="required"/>
-    <xs:attribute name="matchValue" type="xs:string" use="optional"/>
+    <xs:attribute name="value" type="xs:string" use="optional"/>
     <xs:attribute name="required" type="xs:boolean" use="optional"/>
   </xs:complexType>
 

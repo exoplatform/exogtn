@@ -93,21 +93,21 @@ public class DescriptorBuilder
          {
             if (paramQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "name");
+               String name = reader.getAttributeValue(null, "qname");
                String value = reader.getAttributeValue(null, "value");
                routeDesc.addRouteParam(QualifiedName.parse(name), value);
             }
             else if (requestParamQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "name");
-               String matchName = reader.getAttributeValue(null, "matchName");
-               String matchValue = reader.getAttributeValue(null, "matchValue");
+               String name = reader.getAttributeValue(null, "qname");
+               String matchName = reader.getAttributeValue(null, "name");
+               String matchValue = reader.getAttributeValue(null, "value");
                String optional = reader.getAttributeValue(null, "required");
                routeDesc.addRequestParam(QualifiedName.parse(name), matchName, matchValue, "true".equals(optional));
             }
             else if (pathParamQN.equals(reader.getName()))
             {
-               String name = reader.getAttributeValue(null, "name");
+               String name = reader.getAttributeValue(null, "qname");
                String pattern = reader.getAttributeValue(null, "pattern");
                String encoded = reader.getAttributeValue(null, "encoding");
                EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;

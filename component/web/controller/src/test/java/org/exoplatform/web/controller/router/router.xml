@@ -4,34 +4,34 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_router_1_0">
 
   <route path="/public/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
-    <route-param name="gtn:handler" value="portal"/>
-    <path-param name="gtn:path" pattern=".*"/>
+    <route-param qname="gtn:handler" value="portal"/>
+    <path-param qname="gtn:path" pattern=".*"/>
   </route>
 
   <route path="/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}">
-    <route-param name="gtn:handler" value="portal"/>
-    <path-param name="gtn:path" pattern=".*" encoding="preserve-path"/>
+    <route-param qname="gtn:handler" value="portal"/>
+    <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
   </route>
 
   <route path="/upload">
-    <route-param name="gtn:handler" value="upload"/>
+    <route-param qname="gtn:handler" value="upload"/>
   </route>
 
   <route path="/download">
-    <route-param name="gtn:handler" value="download"/>
+    <route-param qname="gtn:handler" value="download"/>
   </route>
 
   <route path="/a">
-    <route-param name="a" value="a_value"/>
+    <route-param qname="a" value="a_value"/>
     <route path="/b">
-      <route-param name="b" value="b_value"/>
+      <route-param qname="b" value="b_value"/>
     </route>
   </route>
 
   <route path="/b">
-    <request-param name="foo" matchName="foo"/>
-    <request-param name="bar" matchName="bar" matchValue="bar"/>
-    <request-param name="juu" matchName="juu" matchValue="juu" required="true"/>
+    <request-param qname="foo" name="foo"/>
+    <request-param qname="bar" name="bar" value="bar"/>
+    <request-param qname="juu" name="juu" value="juu" required="true"/>
   </route>
 
 </router>
