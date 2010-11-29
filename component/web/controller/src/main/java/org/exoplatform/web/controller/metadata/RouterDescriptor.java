@@ -41,15 +41,15 @@ public class RouterDescriptor
       this.routes = new ArrayList<RouteDescriptor>();
    }
 
-   public RouterDescriptor add(RouteDescriptor controller)
+   public RouterDescriptor add(RouteDescriptor route)
    {
-      if (controller == null)
+      if (route == null)
       {
          throw new NullPointerException();
       }
 
       //
-      routes.add(controller);
+      routes.add(route);
 
       //
       return this;

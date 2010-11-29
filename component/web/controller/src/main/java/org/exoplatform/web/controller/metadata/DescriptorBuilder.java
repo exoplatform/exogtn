@@ -34,6 +34,18 @@ import java.util.List;
 public class DescriptorBuilder
 {
 
+   /** . */
+   private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
+
+   /** . */
+   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route-param");
+
+   /** . */
+   private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
+
+   /** . */
+   private static final QName pathParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "path-param");
+
    public static PathParamDescriptor pathParam(String qualifiedName)
    {
       return new PathParamDescriptor(qualifiedName);
@@ -48,18 +60,6 @@ public class DescriptorBuilder
    {
       return new RouteParamDescriptor(qualifiedName);
    }
-
-   /** . */
-   private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
-
-   /** . */
-   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route-param");
-
-   /** . */
-   private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
-
-   /** . */
-   private static final QName pathParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "path-param");
 
    public static RouteDescriptor route(String path)
    {

@@ -671,9 +671,7 @@ class Route
                   analyser.process(disjunction);
 
                   //
-                  String tmp = analyser.getPattern();
-                  System.out.println("" + regex + " -> " + tmp);
-                  regex = tmp;
+                  regex = analyser.getPattern();
                }
                catch (SyntaxException e)
                {
@@ -701,7 +699,6 @@ class Route
             // Julien : should the pattern end with a $ ?????? I don't see that for now
             // we need to figure out clearly
             Pattern pattern = builder.build();
-            System.out.println("pattern = " + pattern);
             PatternRoute route = new PatternRoute(pattern, parameterPatterns, chunks);
 
             // Wire
