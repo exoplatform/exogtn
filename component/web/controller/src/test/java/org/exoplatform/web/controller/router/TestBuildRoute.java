@@ -67,7 +67,7 @@ public class TestBuildRoute extends TestCase
          assertEquals("^/([^/]+)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
-         assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
+         assertEquals("^.+$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
@@ -89,7 +89,7 @@ public class TestBuildRoute extends TestCase
          assertEquals("^/([^/]+)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("q", "a"), patternRoute.params.get(0).name);
-         assertEquals("^[^/]+$", patternRoute.params.get(0).pattern.toString());
+         assertEquals("^.+$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));
@@ -111,7 +111,7 @@ public class TestBuildRoute extends TestCase
          assertEquals("^/([^/]*)", patternRoute.pattern.toString());
          assertEquals(1, patternRoute.params.size());
          assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
-         assertEquals("^[^/]*$", patternRoute.params.get(0).pattern.toString());
+         assertEquals("^.*$", patternRoute.params.get(0).pattern.toString());
          assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
          assertEquals(2, patternRoute.chunks.size());
          assertEquals("", patternRoute.chunks.get(0));

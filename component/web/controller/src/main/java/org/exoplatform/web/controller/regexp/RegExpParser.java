@@ -51,6 +51,11 @@ public class RegExpParser extends Parser
       this.index = from;
    }
 
+   public void reset()
+   {
+      this.index = 0;
+   }
+
    public int getIndex()
    {
       return index;

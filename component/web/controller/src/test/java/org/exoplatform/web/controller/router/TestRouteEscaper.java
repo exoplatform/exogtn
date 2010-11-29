@@ -41,7 +41,6 @@ public class TestRouteEscaper extends BaseGateInTest
       escaper.visit(re);
       RegExpAnalyser analyser = new RegExpAnalyser();
       analyser.process(re);
-      System.out.println(pattern + " --> " + analyser.getPattern());
       Pattern p = Pattern.compile(analyser.getPattern());
       Matcher matcher = p.matcher(test);
       assertTrue(matcher.find());

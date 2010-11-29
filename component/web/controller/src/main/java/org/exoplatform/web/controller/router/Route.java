@@ -224,7 +224,6 @@ class Route
                switch (param.encodingMode)
                {
                   case FORM:
-                     s = s.replace('/', slashEscape);
                      matched = param.pattern.matcher(s).matches();
                      break;
                   case PRESERVE_PATH:
@@ -653,25 +652,30 @@ class Route
                   }
                }
 
-               // Now analyse the regexp
+               // Now work on the regex
+               String renderingRegex;
+               String routingRegex;
                try
                {
                   RegExpParser parser = new RegExpParser(regex);
-                  RENode.Disjunction disjunction = parser.parseDisjunction();
 
-                  // Process for form
+                  //
+                  RENode.Disjunction routingDisjunction = parser.parseDisjunction();
                   if (encodingMode == EncodingMode.FORM)
                   {
                      RouteEscaper escaper = new RouteEscaper('/', '_');
-                     escaper.visit(disjunction);
+                     escaper.visit(routingDisjunction);
                   }
+                  RegExpAnalyser routingAnalyser = new RegExpAnalyser();
+                  routingAnalyser.process(routingDisjunction);
+                  routingRegex = routingAnalyser.getPattern();
 
                   //
-                  RegExpAnalyser analyser = new RegExpAnalyser();
-                  analyser.process(disjunction);
-
-                  //
-                  regex = analyser.getPattern();
+                  parser.reset();
+                  RENode.Disjunction renderingDisjunction = parser.parseDisjunction();
+                  RegExpAnalyser renderingAnalyser = new RegExpAnalyser();
+                  renderingAnalyser.process(renderingDisjunction);
+                  renderingRegex = renderingAnalyser.getPattern();
                }
                catch (SyntaxException e)
                {
@@ -683,13 +687,13 @@ class Route
                }
 
                //
-               builder.expr("(").expr(regex).expr(")");
+               builder.expr("(").expr(routingRegex).expr(")");
 
                //
                parameterPatterns.add(new PathParam(
                   parameterQName,
                   encodingMode,
-                  Pattern.compile("^" + regex + "$")));
+                  Pattern.compile("^" + renderingRegex + "$")));
                previous = end.get(i) + 1;
             }
 
