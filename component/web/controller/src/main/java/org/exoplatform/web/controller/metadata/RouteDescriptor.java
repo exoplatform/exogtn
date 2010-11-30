@@ -20,7 +20,6 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.EncodingMode;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,21 +87,34 @@ public class RouteDescriptor
       return routeParams.get(name);
    }
 
-   public RouteDescriptor add(RouteParamDescriptor routeParam)
+   public RouteDescriptor with(ParamDescriptor... params)
    {
-      routeParams.put(routeParam.getQualifiedName(), routeParam);
-      return this;
-   }
-
-   public RouteDescriptor add(RequestParamDescriptor requestParam)
-   {
-      requestParams.put(requestParam.getName(), requestParam);
-      return this;
-   }
-
-   public RouteDescriptor add(PathParamDescriptor pathParam)
-   {
-      pathParams.put(pathParam.getQualifiedName(), pathParam);
+      if (params == null)
+      {
+         throw new NullPointerException();
+      }
+      for (ParamDescriptor param : params)
+      {
+         if (param == null)
+         {
+            throw new IllegalArgumentException();
+         }
+         if (param instanceof RouteParamDescriptor)
+         {
+            RouteParamDescriptor routeParam = (RouteParamDescriptor)param;
+            routeParams.put(routeParam.getQualifiedName(), routeParam);
+         }
+         else if (param instanceof RequestParamDescriptor)
+         {
+            RequestParamDescriptor requestParam = (RequestParamDescriptor)param;
+            requestParams.put(requestParam.getName(), requestParam);
+         }
+         if (param instanceof PathParamDescriptor)
+         {
+            PathParamDescriptor pathParam = (PathParamDescriptor)param;
+            pathParams.put(pathParam.getQualifiedName(), pathParam);
+         }
+      }
       return this;
    }
 
@@ -126,7 +138,7 @@ public class RouteDescriptor
       return pathParams;
    }
 
-   public RouteDescriptor add(RouteDescriptor child)
+   public RouteDescriptor sub(RouteDescriptor child)
    {
       children.add(child);
       return this;

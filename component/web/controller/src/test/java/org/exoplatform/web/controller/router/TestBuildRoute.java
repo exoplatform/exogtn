@@ -35,7 +35,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/",""};
       for (String path : paths)
       {
-         Router router = new Router(router().add(route(path)));
+         Router router = router().add(route(path)).build();
          Route expectedRoute = new Route();
          assertEquals(expectedRoute, router.root);
       }
@@ -46,7 +46,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/a","a"};
       for (String path : paths)
       {
-         Router router = new Router(router().add(route(path)));
+         Router router = router().add(route(path)).build();
          Route expectedRoute = new Route();
          expectedRoute.add(new SegmentRoute("a"));
          assertEquals(expectedRoute, router.root);
@@ -58,7 +58,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
-         Router router = new Router(router().add(route(path)));
+         Router router = router().add(route(path)).build();
 
          //
          assertEquals(0, router.root.getSegmentNames().size());
@@ -80,7 +80,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{q:a}","{q:a}"};
       for (String path : paths)
       {
-         Router router = new Router(router().add(route(path)));
+         Router router = router().add(route(path)).build();
 
          //
          assertEquals(0, router.root.getSegmentNames().size());
@@ -102,7 +102,7 @@ public class TestBuildRoute extends TestCase
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
       {
-         Router router = new Router(router().add(route(path).add(pathParam("a").withPattern(".*"))));
+         Router router = router().add(route(path).with(pathParam("a").withPattern(".*"))).build();
 
          //
          assertEquals(0, router.root.getSegmentNames().size());

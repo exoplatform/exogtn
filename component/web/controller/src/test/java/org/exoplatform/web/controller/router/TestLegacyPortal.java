@@ -42,16 +42,19 @@ public class TestLegacyPortal extends TestCase
    {
       this.router = router().
          add(route("/").
-            add(routeParam("gtn:handler").withValue("portal")).
-            add(requestParam("gtn:componentid").withName("portal:componentId")).
-            add(requestParam("gtn:action").withName("portal:action")).
-            add(requestParam("gtn:objectid").withName("portal:objectId")).
-            add(route("/public/{gtn:sitename}{gtn:path}").
-               add(routeParam("gtn:access").withValue("public")).
-               add(pathParam("gtn:path").withPattern(".*").preservingPath())).
-            add(route("/private/{gtn:sitename}{gtn:path}").
-               add(routeParam("gtn:access").withValue("private")).
-               add(pathParam("gtn:path").withPattern(".*").preservingPath()))).
+            with(
+               routeParam("gtn:handler").withValue("portal"),
+               requestParam("gtn:componentid").named("portal:componentId"),
+               requestParam("gtn:action").named("portal:action"),
+               requestParam("gtn:objectid").named("portal:objectId")).
+            sub(route("/public/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:access").withValue("public"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath())).
+            sub(route("/private/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:access").withValue("private"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath()))).
          build();
    }
 

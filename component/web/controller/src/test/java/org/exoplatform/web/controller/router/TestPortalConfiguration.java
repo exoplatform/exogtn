@@ -40,20 +40,25 @@ public class TestPortalConfiguration extends AbstractTestController
    protected void setUp() throws Exception
    {
       this.router = router().
-         add(route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
-            add(routeParam("gtn:controller").withValue("site")).
-            add(routeParam("gtn:controller").withValue("site")).
-            add(requestParam("gtn:componentid").withName("portal:componentId")).
-            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
-         add(route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
-            add(routeParam("gtn:controller").withValue("site")).
-            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
-         add(route("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
-            add(routeParam("gtn:controller").withValue("site")).
-            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
-         add(route("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
-            add(routeParam("gtn:controller").withValue("site")).
-            add(pathParam("gtn:path").withPattern(".*").preservingPath())).
+         add(
+            route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:controller").withValue("site"),
+                  routeParam("gtn:controller").withValue("site"),
+                  requestParam("gtn:componentid").named("portal:componentId"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath()),
+            route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:controller").withValue("site"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath()),
+            route("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:controller").withValue("site"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath()),
+            route("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
+               with(
+                  routeParam("gtn:controller").withValue("site"),
+                  pathParam("gtn:path").withPattern(".*").preservingPath())).
          build();
    }
 

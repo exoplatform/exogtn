@@ -119,7 +119,7 @@ public class DescriptorBuilder
             {
                String qualifiedName = reader.getAttributeValue(null, "qname");
                String value = reader.getAttributeValue(null, "value");
-               routeDesc.add(new RouteParamDescriptor(qualifiedName).withValue(value));
+               routeDesc.with(new RouteParamDescriptor(qualifiedName).withValue(value));
             }
             else if (requestParamQN.equals(reader.getName()))
             {
@@ -127,7 +127,7 @@ public class DescriptorBuilder
                String name = reader.getAttributeValue(null, "name");
                String value = reader.getAttributeValue(null, "value");
                String optional = reader.getAttributeValue(null, "required");
-               routeDesc.add(new RequestParamDescriptor(qualifiedName).withName(name).withValue(value).required("true".equals(optional)));
+               routeDesc.with(new RequestParamDescriptor(qualifiedName).named(name).withValue(value).required("true".equals(optional)));
             }
             else if (pathParamQN.equals(reader.getName()))
             {
@@ -135,7 +135,7 @@ public class DescriptorBuilder
                String pattern = reader.getAttributeValue(null, "pattern");
                String encoded = reader.getAttributeValue(null, "encoding");
                EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-               routeDesc.add(new PathParamDescriptor(qualifiedName).withPattern(pattern).withEncodingMode(encodingMode));
+               routeDesc.with(new PathParamDescriptor(qualifiedName).withPattern(pattern).withEncodingMode(encodingMode));
             }
             else if (routeQN.equals(reader.getName()))
             {

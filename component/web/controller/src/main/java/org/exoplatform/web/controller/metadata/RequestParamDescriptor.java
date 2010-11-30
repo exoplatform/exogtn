@@ -25,7 +25,7 @@ import org.exoplatform.web.controller.QualifiedName;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RequestParamDescriptor
+public class RequestParamDescriptor extends ParamDescriptor
 {
 
    /** . */
@@ -64,7 +64,7 @@ public class RequestParamDescriptor
       this.qualifiedName = QualifiedName.parse(qualifiedName);
    }
 
-   public RequestParamDescriptor withName(String name)
+   public RequestParamDescriptor named(String name)
    {
       this.name = name;
       return this;

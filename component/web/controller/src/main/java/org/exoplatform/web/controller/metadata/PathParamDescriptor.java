@@ -26,7 +26,7 @@ import org.exoplatform.web.controller.router.EncodingMode;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PathParamDescriptor
+public class PathParamDescriptor extends ParamDescriptor
 {
 
    /** . */

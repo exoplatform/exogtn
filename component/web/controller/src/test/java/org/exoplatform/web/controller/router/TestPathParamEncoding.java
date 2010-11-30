@@ -33,7 +33,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testDefaultForm() throws Exception
    {
-      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".+"))).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").withPattern(".+"))).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/_"));
@@ -44,7 +44,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testPreservePath() throws Exception
    {
-      Router router = router().add(route("/{p}").add(pathParam("p").withPattern("[^/]+").preservingPath())).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").withPattern("[^/]+").preservingPath())).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
@@ -58,7 +58,7 @@ public class TestPathParamEncoding extends AbstractTestController
    {
       Router router = router().
          add(route("/{p}").
-         add(pathParam("p").withPattern("/[a-z]+/[a-z]+/?"))).
+            with(pathParam("p").withPattern("/[a-z]+/[a-z]+/?"))).
          build();
 
       // Route
@@ -75,7 +75,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testWildcardPathParamWithPreservePath() throws Exception
    {
-      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".*").preservingPath())).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").withPattern(".*").preservingPath())).build();
 
       // Render
       assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));
@@ -92,7 +92,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testWildcardParamPathWithDefaultForm() throws Exception
    {
-      Router router = router().add(route("/{p}").add(pathParam("p").withPattern(".*"))).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").withPattern(".*"))).build();
 
       //
       assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));

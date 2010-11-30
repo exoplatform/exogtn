@@ -87,7 +87,7 @@ public class TestMatch extends AbstractTestController
    public void testParameterPropagationToDescendants() throws Exception
    {
       Router router = router().
-         add(route("/").add(routeParam("p").withValue("a"))).
+         add(route("/").with(routeParam("p").withValue("a"))).
          add(route("/a")).build();
 
       //
@@ -96,7 +96,7 @@ public class TestMatch extends AbstractTestController
 
    public void testSimplePattern() throws Exception
    {
-      Router router = router().add(route("/{p}").add(pathParam("p").withPattern("a"))).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").withPattern("a"))).build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
@@ -109,7 +109,7 @@ public class TestMatch extends AbstractTestController
    {
       Router router = router().
          add(route("/a")).
-         add(route("/{p}/b").add(pathParam("p").withPattern("a"))).
+         add(route("/{p}/b").with(pathParam("p").withPattern("a"))).
          build();
 
       //
@@ -122,7 +122,7 @@ public class TestMatch extends AbstractTestController
    public void testTwoRules1() throws Exception
    {
       Router router = router().
-         add(route("/a").add(routeParam("b").withValue("b"))).
+         add(route("/a").with(routeParam("b").withValue("b"))).
          add(route("/a/b")).
          build();
 
@@ -134,7 +134,7 @@ public class TestMatch extends AbstractTestController
    public void testTwoRules2() throws Exception
    {
       Router router = router().
-         add(route("/{a}").add(routeParam("b").withValue("b"))).
+         add(route("/{a}").with(routeParam("b").withValue("b"))).
          add(route("/{a}/b")).
          build();
 
@@ -149,7 +149,7 @@ public class TestMatch extends AbstractTestController
    public void testLang() throws Exception
    {
       Router router = router().
-         add(route("/{a}b").add(pathParam("a").withPattern("(([A-Za-z]{2})/)?").preservingPath())).
+         add(route("/{a}b").with(pathParam("a").withPattern("(([A-Za-z]{2})/)?").preservingPath())).
          build();
 
       //

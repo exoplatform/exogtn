@@ -22,8 +22,6 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
-
 import java.util.Collections;
 
 /**
@@ -35,34 +33,37 @@ public class TestPortal extends AbstractTestController
 
    public void testLanguage1() throws Exception
    {
-      RouterDescriptor routerMD = router().add(
-         route("/public{gtn:lang}").add(
-            pathParam("gtn:lang").withPattern("(/[A-Za-z][A-Za-z])?").preservingPath())
-      );
-      Router router = new Router(routerMD);
+      Router router = router().add(
+         route("/public{gtn:lang}").
+            with(pathParam("gtn:lang").withPattern("(/[A-Za-z][A-Za-z])?").preservingPath())).
+         build();
+
+      //
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "/fr"), router.route("/public/fr"));
    }
 
    public void testLanguage2() throws Exception
    {
-      RouterDescriptor routerMD = router().add(
-         route("/{gtn:lang}public").add(
-            pathParam("gtn:lang").withPattern("([A-Za-z]{2}/)?").preservingPath())
-      );
-      Router router = new Router(routerMD);
+      Router router = router().add(
+         route("/{gtn:lang}public").
+            with(pathParam("gtn:lang").withPattern("([A-Za-z]{2}/)?").preservingPath())).
+         build();
+
+      //
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr/"), router.route("/fr/public"));
    }
 
    public void testLanguage3() throws Exception
    {
-      RouterDescriptor routerMD = router().
+      Router router = router().
          add(route("/public")).
          add(route("/{gtn:lang}/public").
-            add(pathParam("gtn:lang").withPattern("([A-Za-z]{2})"))
-         );
-      Router router = new Router(routerMD);
+            with(pathParam("gtn:lang").withPattern("([A-Za-z]{2})"))).
+         build();
+
+      //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/public"));
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
    }

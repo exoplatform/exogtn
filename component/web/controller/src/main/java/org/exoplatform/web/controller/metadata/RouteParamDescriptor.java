@@ -25,7 +25,7 @@ import org.exoplatform.web.controller.QualifiedName;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteParamDescriptor
+public class RouteParamDescriptor extends ParamDescriptor
 {
 
    /** . */
