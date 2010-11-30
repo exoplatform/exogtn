@@ -24,10 +24,12 @@ import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
+import org.exoplatform.web.controller.regexp.RegExpRenderer;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.RegExpParser;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -653,8 +655,8 @@ class Route
                }
 
                // Now work on the regex
-               String renderingRegex;
-               String routingRegex;
+               StringBuilder renderingRegex = new StringBuilder();
+               StringBuilder routingRegex = new StringBuilder();
                try
                {
                   RegExpParser parser = new RegExpParser(regex);
@@ -666,16 +668,16 @@ class Route
                      RouteEscaper escaper = new RouteEscaper('/', '_');
                      escaper.visit(routingDisjunction);
                   }
-                  RegExpAnalyser routingAnalyser = new RegExpAnalyser();
-                  routingAnalyser.process(routingDisjunction);
-                  routingRegex = routingAnalyser.getPattern();
+                  new RegExpRenderer().render(routingDisjunction, routingRegex);
 
                   //
                   parser.reset();
                   RENode.Disjunction renderingDisjunction = parser.parseDisjunction();
-                  RegExpAnalyser renderingAnalyser = new RegExpAnalyser();
-                  renderingAnalyser.process(renderingDisjunction);
-                  renderingRegex = renderingAnalyser.getPattern();
+                  new RegExpRenderer().render(renderingDisjunction, renderingRegex);
+               }
+               catch (IOException e)
+               {
+                  throw new RuntimeException(e);
                }
                catch (SyntaxException e)
                {
@@ -686,10 +688,10 @@ class Route
                   throw new RuntimeException(e);
                }
 
-               //
+               // Append routing regex to the route regex
                builder.expr("(").expr(routingRegex).expr(")");
 
-               //
+               // Add the path param with the rendering regex
                parameterPatterns.add(new PathParam(
                   parameterQName,
                   encodingMode,
@@ -700,10 +702,7 @@ class Route
             //
             builder.litteral(path, previous, pos);
             chunks.add(path.substring(previous, pos));
-            // Julien : should the pattern end with a $ ?????? I don't see that for now
-            // we need to figure out clearly
-            Pattern pattern = builder.build();
-            PatternRoute route = new PatternRoute(pattern, parameterPatterns, chunks);
+            PatternRoute route = new PatternRoute(builder.build(), parameterPatterns, chunks);
 
             // Wire
             add(route);

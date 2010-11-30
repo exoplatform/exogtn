@@ -17,168 +17,159 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.regexp;
 
-import org.exoplatform.web.controller.regexp.Quantifier;
-import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RegExpParser;
-import org.exoplatform.web.controller.regexp.SyntaxException;
+import java.io.IOException;
 
 /**
+ * Renders a {@link RENode} to its pattern representation.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RegExpAnalyser
+public class RegExpRenderer
 {
 
-   /** . */
-   private StringBuilder pattern;
-
-   /** . */
-   private boolean needReset;
-
-   public RegExpAnalyser()
+   public <A extends Appendable> A render(RENode re, A appendable) throws IOException, NullPointerException
    {
-      this.pattern = new StringBuilder();
-      this.needReset = false;
-   }
-
-   public String getPattern()
-   {
-      return pattern.toString();
-   }
-
-   public RegExpAnalyser reset()
-   {
-      pattern.setLength(0);
-      needReset = false;
-      return this;
-   }
-
-   public void process(CharSequence pattern) throws MalformedRegExpException
-   {
-      try
+      if (re == null)
       {
-         RegExpParser parser = new RegExpParser(pattern);
-         RENode.Disjunction disjunction = parser.parseDisjunction();
-         process(disjunction);
+         throw new NullPointerException("No null disjunction accepted");
       }
-      catch (SyntaxException e)
+      if (appendable == null)
       {
-         throw new MalformedRegExpException(e);
-      }
-   }
-
-   public void process(RENode.Disjunction disjunction) throws MalformedRegExpException
-   {
-      if (needReset)
-      {
-         throw new IllegalStateException();
+         throw new NullPointerException("No null appendable accepted");
       }
 
       //
-      needReset = true;
-      visit(disjunction);
+      if (re instanceof RENode.Disjunction)
+      {
+         render((RENode.Disjunction)re, appendable);
+      }
+      else if (re instanceof RENode.Alternative)
+      {
+         render((RENode.Alternative)re, appendable);
+      }
+      else if (re instanceof RENode.Expr)
+      {
+         render((RENode.Expr)re, appendable);
+      }
+      else if (re instanceof RENode.CharacterClassExpr)
+      {
+         render((RENode.CharacterClassExpr)re, appendable);
+      }
+      else
+      {
+         throw new AssertionError();
+      }
+
+      //
+      return appendable;
    }
 
-   private void visit(RENode.Disjunction disjunction) throws MalformedRegExpException
+   private void render(RENode.Disjunction disjunction, Appendable appendable) throws IOException, NullPointerException
    {
-      visit(disjunction.getAlternative());
+      render(disjunction.getAlternative(), appendable);
       RENode.Disjunction next = disjunction.getNext();
       if (next != null)
       {
-         pattern.append('|');
-         visit(next);
+         appendable.append('|');
+         render(next, appendable);
       }
    }
 
-   private void visit(RENode.Alternative alternative) throws MalformedRegExpException
+   private void render(RENode.Alternative alternative, Appendable appendable) throws IOException, NullPointerException
    {
-      visit(alternative.getExp());
+      render(alternative.getExp(), appendable);
       RENode.Alternative next = alternative.getNext();
       if (next != null)
       {
-         visit(next);
+         render(next, appendable);
       }
    }
 
-   private void visit(RENode.Expr expression) throws MalformedRegExpException
+   private void render(RENode.Expr expression, Appendable appendable) throws IOException, NullPointerException
    {
       Quantifier quantifier = null;
       if (expression instanceof RENode.Any)
       {
-         pattern.append('.');
+         appendable.append('.');
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.Group)
       {
          RENode.Group group = (RENode.Group)expression;
-         pattern.append("(?:");
-         visit(group.getDisjunction());
-         pattern.append(")");
+         appendable.append("(?:");
+         this.render(group.getDisjunction(), appendable);
+         appendable.append(")");
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.Char)
       {
          RENode.Char character = (RENode.Char)expression;
-         pattern.append(character.getValue());
+         appendable.append(character.getValue());
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.CharacterClass)
       {
          RENode.CharacterClass characterClass = (RENode.CharacterClass)expression;
-         pattern.append("[");
-         visit(characterClass.getExpr(), true);
-         pattern.append("]");
+         render(characterClass.getExpr(), appendable);
          quantifier = expression.getQuantifier();
       }
 
       //
       if (quantifier != null)
       {
-         pattern.append(quantifier);
+         appendable.append(quantifier.toString());
       }
    }
 
-   private void visit(RENode.CharacterClassExpr expr, boolean braced)
+   private void render(RENode.CharacterClassExpr expr, Appendable appendable) throws IOException, NullPointerException
+   {
+      appendable.append("[");
+      render(expr, true, appendable);
+      appendable.append("]");
+   }
+
+   private void render(RENode.CharacterClassExpr expr, boolean braced, Appendable appendable) throws IOException, NullPointerException
    {
       if (expr instanceof RENode.CharacterClassExpr.Char)
       {
          RENode.CharacterClassExpr.Char simple = (RENode.CharacterClassExpr.Char)expr;
-         pattern.append(simple.getValue());
+         appendable.append(simple.getValue());
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Range)
       {
          RENode.CharacterClass.CharacterClassExpr.Range range = (RENode.CharacterClass.CharacterClassExpr.Range)expr;
-         pattern.append(range.getFrom());
-         pattern.append('-');
-         pattern.append(range.getTo());
+         appendable.append(range.getFrom());
+         appendable.append('-');
+         appendable.append(range.getTo());
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.And)
       {
          RENode.CharacterClass.CharacterClassExpr.And and = (RENode.CharacterClass.CharacterClassExpr.And)expr;
-         visit(and.getLeft(), false);
-         pattern.append("&&");
-         visit(and.getRight(), false);
+         render(and.getLeft(), false, appendable);
+         appendable.append("&&");
+         render(and.getRight(), false, appendable);
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Or)
       {
          RENode.CharacterClass.CharacterClassExpr.Or or = (RENode.CharacterClass.CharacterClassExpr.Or)expr;
-         visit(or.getLeft(), false);
-         visit(or.getRight(), false);
+         render(or.getLeft(), false, appendable);
+         render(or.getRight(), false, appendable);
       }
       else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Not)
       {
          RENode.CharacterClass.CharacterClassExpr.Not not = (RENode.CharacterClass.CharacterClassExpr.Not)expr;
          if (!braced)
          {
-            pattern.append("[");
+            appendable.append("[");
          }
-         pattern.append("^");
-         visit(not.getNegated(), false);
+         appendable.append("^");
+         render(not.getNegated(), false, appendable);
          if (!braced)
          {
-            pattern.append(']');
+            appendable.append(']');
          }
       }
    }

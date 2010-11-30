@@ -20,6 +20,9 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.component.test.BaseGateInTest;
+import org.exoplatform.web.controller.regexp.RegExpRenderer;
+import org.exoplatform.web.controller.regexp.RENode;
+import org.exoplatform.web.controller.regexp.RegExpParser;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -29,32 +32,18 @@ public class TestRegExpAnalyser extends BaseGateInTest
 {
 
    /** . */
-   private RegExpAnalyser analyser = new RegExpAnalyser();
+   private RegExpRenderer analyser = new RegExpRenderer();
 
    private void assertAnalyse(String expectedPattern, String pattern)
    {
       try
       {
-         analyser.reset();
-         analyser.process(pattern);
-         assertEquals(expectedPattern, analyser.getPattern());
+         RENode.Disjunction disjunction = new RegExpParser(pattern).parseDisjunction();
+         assertEquals(expectedPattern, analyser.render(disjunction, new StringBuilder()).toString());
       }
-      catch (MalformedRegExpException e)
+      catch (Exception e)
       {
          fail(e);
-      }
-   }
-
-   private void assertAnalyseFails(String pattern)
-   {
-      analyser.reset();
-      try
-      {
-         analyser.process(pattern);
-         fail();
-      }
-      catch (MalformedRegExpException e)
-      {
       }
    }
 

@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.component.test.BaseGateInTest;
+import org.exoplatform.web.controller.regexp.RegExpRenderer;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.RegExpParser;
 
@@ -39,9 +40,7 @@ public class TestRouteEscaper extends BaseGateInTest
       RouteEscaper escaper = new RouteEscaper('/', '_');
       RENode.Disjunction re = parser.parseDisjunction();
       escaper.visit(re);
-      RegExpAnalyser analyser = new RegExpAnalyser();
-      analyser.process(re);
-      Pattern p = Pattern.compile(analyser.getPattern());
+      Pattern p = Pattern.compile(new RegExpRenderer().render(re, new StringBuilder()).toString());
       Matcher matcher = p.matcher(test);
       assertTrue(matcher.find());
       assertEquals(expectedValue, matcher.group());

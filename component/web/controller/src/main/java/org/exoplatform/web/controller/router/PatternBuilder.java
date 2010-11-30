@@ -33,7 +33,7 @@ class PatternBuilder
    /** . */
    private final StringBuilder buffer = new StringBuilder();
 
-   public PatternBuilder expr(String s)
+   public PatternBuilder expr(CharSequence s)
    {
       if (s == null)
       {
