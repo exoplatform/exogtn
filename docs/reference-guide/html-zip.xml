@@ -1,0 +1,21 @@
+<assembly>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+   <fileSet>
+    <directory>en/</directory>
+    <outputDirectory>org.gatein.doc</outputDirectory>
+    <includes>
+      <include>**/*.xml</include>
+      <include>**/*.png</include>
+      <include>**/*.ent</include>
+     </includes>
+    <!--excludes>
+      <exclude>**/*.fo</exclude>
+      <exclude>**/*.pdf</exclude>
+    </excludes-->
+   </fileSet>
+  </fileSets>
+</assembly>
