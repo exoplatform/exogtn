@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
  *          nicolas.filotto@exoplatform.com
  * 25 sept. 2009  
  */
-public class ExtensibleFilter implements Filter
+public class ExtensibleFilter
 {
 
    /**
@@ -77,10 +77,10 @@ public class ExtensibleFilter implements Filter
    /**
     * @see Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
     */
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain, String path) throws IOException,
       ServletException
    {
-      ExtensibleFilterChain efChain = new ExtensibleFilterChain(chain, filters);
+      ExtensibleFilterChain efChain = new ExtensibleFilterChain(chain, filters, path);
       efChain.doFilter(request, response);
    }
 
@@ -90,19 +90,18 @@ public class ExtensibleFilter implements Filter
       private final FilterChain parentChain;
 
       private final Iterator<FilterDefinition> filters;
+      
+      private final String path;
 
-      private ExtensibleFilterChain(FilterChain parentChain, List<FilterDefinition> filters)
+      private ExtensibleFilterChain(FilterChain parentChain, List<FilterDefinition> filters, String path_)
       {
          this.parentChain = parentChain;
          this.filters = filters.iterator();
+         this.path = path_;
       }
 
       public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
       {
-         HttpServletRequest req = (HttpServletRequest) request;
-         String regex = "[/]*" + req.getContextPath() + "[/]*";
-         String path = req.getRequestURI().replaceFirst(regex, "/"); 
-         
          while (filters.hasNext())
          {
             FilterDefinition filterDef = filters.next();
