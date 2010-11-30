@@ -24,6 +24,8 @@ import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 
+import java.util.Locale;
+
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
@@ -35,11 +37,14 @@ public class PortalURLProvider
    private ControllerContext controllerContext;
 
    private LocatorProvider locatorProvider;
+
+   private Locale requestLocale;
    
-   public PortalURLProvider(ControllerContext controllerCtx, LocatorProvider locatorService)
+   public PortalURLProvider(ControllerContext controllerCtx, LocatorProvider locatorService, Locale requestLocale)
    {
       this.controllerContext = controllerCtx;
       this.locatorProvider = locatorService;
+      this.requestLocale = requestLocale;
    }
    
    public static void setCurrentPortalURLProvider(PortalURLProvider provider)
@@ -57,9 +62,8 @@ public class PortalURLProvider
       PortalURLProvider portalURLProvider = currentProvider.get();
       if (portalURLProvider != null)
       {
-//         L newLocator = locatorProvider.newLocator(resourceType);
-//         return new PortalURL<R, L>(controllerContext, newLocator, false, siteType, siteName, access);
-         throw new UnsupportedOperationException("is it used ?");
+         L newLocator = locatorProvider.newLocator(resourceType);
+         return new PortalURL<R, L>(controllerContext, newLocator, false, requestLocale, siteType, siteName, access);
       }
       return null;
    }

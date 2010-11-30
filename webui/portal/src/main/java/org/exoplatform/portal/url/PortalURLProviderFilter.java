@@ -56,7 +56,7 @@ public class PortalURLProviderFilter extends AbstractFilter
       try
       {
          ControllerContext controllerCtx = new ControllerContext(webAppController, httpRequest, httpResponse, null);
-         PortalURLProvider urlProvider = new PortalURLProvider(controllerCtx, locatorProvider);
+         PortalURLProvider urlProvider = new PortalURLProvider(controllerCtx, locatorProvider, null);
          PortalURLProvider.setCurrentPortalURLProvider(urlProvider);
          chain.doFilter(httpRequest, httpResponse);
       }
