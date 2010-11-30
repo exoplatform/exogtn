@@ -20,12 +20,12 @@
 package org.exoplatform.web.url;
 
 /**
- * A simple media type enumeration that is used when a URL is generated.
+ * A simple mime type enumeration that is used when a URL is generated.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum MediaType
+public enum MimeType
 {
 
    XHTML, PLAIN
