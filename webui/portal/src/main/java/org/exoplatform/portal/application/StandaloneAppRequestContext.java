@@ -38,10 +38,10 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
    public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext,
-      String requestSiteType, String requestSiteName, String requestPath, String access)
+      String requestSiteType, String requestSiteName, String requestPath, String access, Locale requestLocale)
       throws Exception
    {
-      super(app, controllerContext, requestSiteType, requestSiteName, requestPath, access);
+      super(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
       HttpServletRequest req = controllerContext.getRequest();
       int idx = (req.getServletPath() + req.getContextPath()).length() + 1;
       if (idx <= getRequestURI().length())

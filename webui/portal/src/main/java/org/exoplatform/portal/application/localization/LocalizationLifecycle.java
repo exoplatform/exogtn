@@ -149,6 +149,8 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       Locale portalLocale = LocaleContextInfo.getLocale(portalLocaleName);
       localeCtx.setPortalLocale(portalLocale);
 
+      localeCtx.setRequestLocale(reqCtx.getRequestLocale());
+
       Locale locale = localePolicy.determineLocale(localeCtx);
       boolean supported = supportedLocales.contains(locale);
 

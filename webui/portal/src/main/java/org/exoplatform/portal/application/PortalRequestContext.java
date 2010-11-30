@@ -119,6 +119,9 @@ public class PortalRequestContext extends WebuiRequestContext
    /** The site name decoded from the request. */
    private final String siteName;
 
+   /** The locale from the request. */
+   private final Locale requestLocale;
+
    /** . */
    private final HttpServletRequest request_;
 
@@ -168,7 +171,8 @@ public class PortalRequestContext extends WebuiRequestContext
       String requestSiteType,
       String requestSiteName,
       String requestPath,
-      String access) throws Exception
+      String access,
+      Locale requestLocale) throws Exception
    {
       super(app);
 
@@ -240,6 +244,7 @@ public class PortalRequestContext extends WebuiRequestContext
       this.siteName = requestSiteName;
       this.nodePath_ = requestPath;
       this.access = access;
+      this.requestLocale = requestLocale;
 
 //      portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
       Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
@@ -271,7 +276,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(controllerContext, locator, false, siteType, siteName, access);
+      return new PortalURL<R, L>(controllerContext, locator, false, requestLocale, siteType, siteName, access);
    }
 
    public ControllerContext getControllerContext()
@@ -328,6 +333,11 @@ public class PortalRequestContext extends WebuiRequestContext
    public Orientation getOrientation()
    {
       return ((UIPortalApplication)uiApplication_).getOrientation();
+   }
+
+   public Locale getRequestLocale()
+   {
+      return requestLocale;
    }
 
    public void setLocale(Locale locale)

@@ -35,6 +35,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +70,9 @@ public class PortalRequestHandler extends WebRequestHandler
 
    /** . */
    public static final QualifiedName ACCESS = QualifiedName.create("gtn", "access");
+
+   /** . */
+   public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
 
    public String getHandlerName()
    {
@@ -123,12 +127,24 @@ public class PortalRequestHandler extends WebRequestHandler
       String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
       String access = controllerContext.getParameter(ACCESS);
 
+      //
+      Locale requestLocale;
+      String lang = controllerContext.getParameter(LANG);
+      if (lang.length() == 0)
+      {
+         requestLocale = null;
+      }
+      else
+      {
+         requestLocale = new Locale(lang.substring(0, 2));
+      }
+
       if (requestSiteName == null) {
          res.sendRedirect(req.getContextPath());
          return;
       }
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access);
+      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
       processRequest(context, app);
    }
 

@@ -57,8 +57,9 @@ public class PortalURLProvider
       PortalURLProvider portalURLProvider = currentProvider.get();
       if (portalURLProvider != null)
       {
-         L newLocator = locatorProvider.newLocator(resourceType);
-         return new PortalURL<R, L>(controllerContext, newLocator, false, siteType, siteName, access);
+//         L newLocator = locatorProvider.newLocator(resourceType);
+//         return new PortalURL<R, L>(controllerContext, newLocator, false, siteType, siteName, access);
+         throw new UnsupportedOperationException("is it used ?");
       }
       return null;
    }

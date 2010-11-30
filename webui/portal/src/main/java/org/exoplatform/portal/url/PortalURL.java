@@ -27,6 +27,7 @@ import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.web.url.ResourceLocator;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -51,9 +52,16 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    /** . */
    private PortalURLRenderContext renderContext;
 
-   public PortalURL(ControllerContext requestContext, L locator, Boolean ajax, String siteType, String siteName, String access)
+   public PortalURL(
+      ControllerContext requestContext,
+      L locator,
+      Boolean ajax,
+      Locale locale,
+      String siteType,
+      String siteName,
+      String access)
    {
-      super(locator, ajax);
+      super(locator, ajax, locale);
 
       //
       if (requestContext == null)
@@ -120,6 +128,19 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
 
       //
+      String lang;
+      Locale locale = getLocale();
+      if (locale != null)
+      {
+         lang = locale.getLanguage() + "/";
+      }
+      else
+      {
+         lang = "";
+      }
+      parameters.put(PortalRequestHandler.LANG, lang);
+
+      //
       for (QualifiedName parameterName : locator.getParameterNames())
       {
          String parameterValue = locator.getParameterValue(parameterName);
@@ -154,7 +175,6 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       }
 
       //
-      String s = renderContext.toString();
-      return s;
+      return renderContext.toString();
    }
 }

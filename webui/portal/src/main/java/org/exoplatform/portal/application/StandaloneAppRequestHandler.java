@@ -76,14 +76,25 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
       String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
       String access = controllerContext.getParameter(ACCESS);
-
+      
+      //
+      Locale requestLocale;
+      String lang = controllerContext.getParameter(LANG);
+      if (lang.length() == 0)
+      {
+         requestLocale = null;
+      }
+      else
+      {
+         requestLocale = new Locale(lang.substring(0, 2));
+      }
       //
       if (requestSiteName == null) {
          res.sendRedirect(req.getContextPath());
          return;
       }
       StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
       processRequest(context, app);
       
       log.debug("Session ID = " + req.getSession().getId());

@@ -21,6 +21,7 @@ package org.exoplatform.web.url;
 
 import org.gatein.common.util.ParameterMap;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -50,14 +51,18 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
    /** . */
    protected MimeType mimeType;
 
+   /** . */
+   private Locale locale;
+
    /**
     * Create a resource URL instance.
     *
     * @param locator the resource locator that can't be null
     * @param ajax the ajax mode
+    * @param locale the locale
     * @throws NullPointerException if the resource locator is null
     */
-   public ControllerURL(L locator, Boolean ajax) throws NullPointerException
+   public ControllerURL(L locator, Boolean ajax, Locale locale) throws NullPointerException
    {
       if (locator == null)
       {
@@ -67,6 +72,7 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
       //
       this.locator = locator;
       this.ajax = ajax;
+      this.locale = locale;
       this.confirm = null;
       this.queryParams = null;
       this.mimeType = null;
@@ -168,6 +174,16 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
    public void setMimeType(MimeType mimeType)
    {
       this.mimeType = mimeType;
+   }
+
+   public Locale getLocale()
+   {
+      return locale;
+   }
+
+   public void setLocale(Locale locale)
+   {
+      this.locale = locale;
    }
 
    public Map<String, String[]> getQueryParameters()
