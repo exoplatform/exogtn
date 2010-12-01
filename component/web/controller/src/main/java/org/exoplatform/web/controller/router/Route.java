@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.router;
 
+//import javanet.staxutils.IndentingXMLStreamWriter;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
@@ -29,7 +30,11 @@ import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.RegExpParser;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,6 +53,100 @@ import java.util.regex.Pattern;
  */
 class Route
 {
+
+
+   void writeTo(XMLStreamWriter writer) throws XMLStreamException
+   {
+      if (this instanceof SegmentRoute)
+      {
+         writer.writeStartElement("segment");
+         writer.writeAttribute("path", "/" + ((SegmentRoute)this).name);
+         writer.writeAttribute("terminal", "" + terminal);
+      }
+      else if (this instanceof PatternRoute)
+      {
+         PatternRoute pr = (PatternRoute)this;
+         StringBuilder path = new StringBuilder("/");
+         for (int i = 0;i < pr.params.size();i++)
+         {
+            path.append(pr.chunks.get(i)).append("{").append(pr.params.get(i).name.getValue()).append("}");
+         }
+         path.append(pr.chunks.get(pr.chunks.size() - 1));
+         writer.writeStartElement("pattern");
+         writer.writeAttribute("path", path.toString());
+         writer.writeAttribute("terminal", "" + terminal);
+         for (PathParam param : pr.params)
+         {
+            writer.writeStartElement("path-param");
+            writer.writeAttribute("qname", param.name.getValue());
+            writer.writeAttribute("encodingMode", param.encodingMode.toString());
+            writer.writeAttribute("pattern", param.pattern.toString());
+            writer.writeEndElement();
+         }
+      }
+      else
+      {
+         writer.writeStartElement("route");
+      }
+
+      //
+      for (RouteParam routeParam : routeParams.values())
+      {
+         writer.writeStartElement("route-param");
+         writer.writeAttribute("qname", routeParam.name.getValue());
+         writer.writeAttribute("value", routeParam.value);
+         writer.writeEndElement();
+      }
+
+      //
+      for (RequestParam requestParam : requestParams.values())
+      {
+         writer.writeStartElement("request-param");
+         writer.writeAttribute("qname", requestParam.name.getValue());
+         writer.writeAttribute("name", requestParam.matchName);
+         writer.writeAttribute("value", requestParam.matchValue.pattern());
+         writer.writeEndElement();
+      }
+
+      //
+      for (Map.Entry<String, List<SegmentRoute>> entry : segments.entrySet())
+      {
+         writer.writeStartElement("segment");
+         writer.writeAttribute("name", entry.getKey());
+         for (SegmentRoute segment : entry.getValue())
+         {
+            segment.writeTo(writer);
+         }
+         writer.writeEndElement();
+      }
+
+      //
+      for (PatternRoute pattern : patterns)
+      {
+         pattern.writeTo(writer);
+      }
+
+      //
+      writer.writeEndElement();
+   }
+
+   @Override
+   public String toString()
+   {
+      try
+      {
+         XMLOutputFactory factory = XMLOutputFactory.newInstance();
+         StringWriter sw = new StringWriter();
+         XMLStreamWriter xmlWriter = factory.createXMLStreamWriter(sw);
+//         xmlWriter = new IndentingXMLStreamWriter(xmlWriter);
+         writeTo(xmlWriter);
+         return sw.toString();
+      }
+      catch (XMLStreamException e)
+      {
+         throw new AssertionError(e);
+      }
+   }
 
    /** Julien : make that configurable. */
    private static final char slashEscape = '_';
@@ -93,11 +192,16 @@ class Route
       }
    }
 
-   private void _render(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
+   private boolean _render(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
    {
+      boolean endWithSlash;
       if (parent != null)
       {
-         parent._render(blah, renderContext, true);
+         endWithSlash = parent._render(blah, renderContext, true);
+      }
+      else
+      {
+         endWithSlash = false;
       }
 
       //
@@ -117,19 +221,38 @@ class Route
       if (this instanceof SegmentRoute)
       {
          SegmentRoute sr = (SegmentRoute)this;
-         renderContext.appendPath('/', false);
-         renderContext.appendPath(sr.name, true);
+         if (!endWithSlash)
+         {
+            renderContext.appendPath('/', false);
+            endWithSlash = true;
+         }
+         String name = sr.name;
+         renderContext.appendPath(name, true);
+         if (name.length() > 0)
+         {
+            endWithSlash = false;
+         }
       }
       else if (this instanceof PatternRoute)
       {
          PatternRoute pr = (PatternRoute)this;
-         renderContext.appendPath('/', false);
+         if (!endWithSlash)
+         {
+            renderContext.appendPath('/', false);
+            endWithSlash = true;
+         }
          int i = 0;
+         int count = 0;
          while (i < pr.params.size())
          {
-            renderContext.appendPath(pr.chunks.get(i), true);
+            String chunk = pr.chunks.get(i);
+            renderContext.appendPath(chunk, true);
+            count += chunk.length();
+
+            //
             PathParam def = pr.params.get(i);
             String value = blah.get(def.name);
+            count += value.length();
 
             //
             int from = 0;
@@ -152,15 +275,25 @@ class Route
             //
             i++;
          }
-         renderContext.appendPath(pr.chunks.get(i), false);
+         String lastChunk = pr.chunks.get(i);
+         renderContext.appendPath(lastChunk, false);
+         count += lastChunk.length();
+         if (count > 0)
+         {
+            endWithSlash = false;
+         }
       }
       else
       {
          if (!hasChildren)
          {
             renderContext.appendPath('/', false);
+            endWithSlash = true;
          }
       }
+
+      //
+      return endWithSlash;
    }
 
    final Route find(Map<QualifiedName, String> blah)
@@ -383,6 +516,10 @@ class Route
                   if (path.length() == nextPos)
                   {
                      nextPath = "/";
+                  }
+                  else if (nextPos == 1)
+                  {
+                     nextPath = path;
                   }
                   else
                   {

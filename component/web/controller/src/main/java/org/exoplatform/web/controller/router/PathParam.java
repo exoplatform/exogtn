@@ -45,4 +45,10 @@ class PathParam
       this.encodingMode = encodingMode;
       this.pattern = pattern;
    }
+
+   @Override
+   public String toString()
+   {
+      return "PathParam[name=" + name + ",encodingMode=" + encodingMode + ",pattern=" + pattern + "]";
+   }
 }

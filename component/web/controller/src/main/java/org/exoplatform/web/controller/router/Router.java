@@ -76,4 +76,10 @@ public class Router
    {
       return root.route(path, queryParams);
    }
+
+   @Override
+   public String toString()
+   {
+      return "Router[" + root.toString() + "]";
+   }
 }
