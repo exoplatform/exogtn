@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.regexp;
 
+import java.util.EnumMap;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -235,15 +237,15 @@ public abstract class RENode
    {
 
       /** . */
-      private final Ref<Disjunction> disjunction;
+      private GroupType type;
 
       /** . */
-      private boolean capturing;
+      private final Ref<Disjunction> disjunction;
 
-      public Group(Disjunction disjunction, boolean capturing)
+      public Group(Disjunction disjunction, GroupType type)
       {
          this.disjunction = new NonNullableRef<Disjunction>(Disjunction.class, disjunction);
-         this.capturing = capturing;
+         this.type = type;
       }
 
       public Disjunction getDisjunction()
@@ -256,20 +258,20 @@ public abstract class RENode
          this.disjunction.set(disjunction);
       }
 
-      public boolean isCapturing()
+      public GroupType getType()
       {
-         return capturing;
+         return type;
       }
 
-      public void setCapturing(boolean capturing)
+      public void setType(GroupType type)
       {
-         this.capturing = capturing;
+         this.type = type;
       }
 
       @Override
       protected void writeTo(StringBuilder sb)
       {
-         sb.append("<").append(capturing ? "(" : "(?:").append('>').append(disjunction.get()).append("</").append(capturing ? ")" : ":?)").append(">");
+         sb.append("<").append(type.getOpen()).append('>').append(disjunction.get()).append("</").append(type.getOpen()).append(">");
       }
    }
 

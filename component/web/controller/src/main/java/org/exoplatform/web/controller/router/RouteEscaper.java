@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.router;
 
+import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
 
 /**
@@ -76,7 +77,7 @@ public class RouteEscaper
       }
    }
 
-   public void visit(RENode.Expr expr)
+   public void visit(RENode.Expr expr) throws MalformedRegExpException
    {
       if (expr instanceof RENode.Char)
       {
@@ -86,7 +87,18 @@ public class RouteEscaper
             c.setValue(dst);
          }
       }
-      if (expr instanceof RENode.Any)
+      else if (expr instanceof RENode.Group)
+      {
+         RENode.Group group = (RENode.Group)expr;
+/*
+         if (group.getType() == GroupType.CAPTURING_GROUP)
+         {
+            group.setType(GroupType.NON_CAPTURING_GROUP);
+         }
+*/
+         visit(group.getDisjunction());
+      }
+      else if (expr instanceof RENode.Any)
       {
          RENode.CharacterClass repl = new RENode.CharacterClass(new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
          repl.setQuantifier(expr.getQuantifier());

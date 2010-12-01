@@ -99,9 +99,9 @@ public class RegExpRenderer
       else if (expression instanceof RENode.Group)
       {
          RENode.Group group = (RENode.Group)expression;
-         appendable.append("(?:");
+         appendable.append(group.getType().getOpen());
          this.render(group.getDisjunction(), appendable);
-         appendable.append(")");
+         appendable.append(group.getType().getClose());
          quantifier = expression.getQuantifier();
       }
       else if (expression instanceof RENode.Char)

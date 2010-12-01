@@ -191,6 +191,31 @@ public class TestMatch extends AbstractTestController
       assertNull(router.route("/abcdef"));
    }
 
+/*
+   public void testLookAhead() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}").
+            with(
+               pathParam("a").matchedBy("(.(?=/))?").preservingPath()).
+            sub(route("/{b}").
+               with(pathParam("b").matchedBy(".").preservingPath()))
+            ).build();
+
+      //
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(QualifiedName.create("a"), "");
+      expectedParameters.put(QualifiedName.create("b"), "b");
+      assertEquals(expectedParameters, router.route("/b"));
+      assertEquals("/b", router.render(expectedParameters));
+
+      //
+      expectedParameters.put(QualifiedName.create("a"), "a");
+      assertEquals(expectedParameters, router.route("/a/b"));
+      assertEquals("/a/b", router.render(expectedParameters));
+   }
+*/
+
    public void testZeroOrOneFollowedBySubRoute() throws Exception
    {
       Router router = router().

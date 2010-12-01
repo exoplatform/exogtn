@@ -151,22 +151,51 @@ public class RegExpParser extends Parser
 
             // Do we have a special construct ?
             int startGroup = index + 1;
-            boolean capturing = true;
+            GroupType type = GroupType.CAPTURING_GROUP;
             if (startGroup < endGroup)
             {
                if (s.charAt(startGroup) == '?')
                {
                   if (startGroup + 1 < endGroup)
                   {
-                     if (s.charAt(startGroup + 1) == ':')
+                     switch (s.charAt(startGroup + 1))
                      {
-                        // It's a non capturing group, so it's ok
-                        startGroup += 2;
-                        capturing = false;
-                     }
-                     else
-                     {
-                        throw createSyntaxException("Only non capturing group syntax is supported", index + 1, index + 3);
+                        case ':':
+                           startGroup += 2;
+                           type = GroupType.NON_CAPTURING_GROUP;
+                           break;
+                        case '=':
+                           startGroup += 2;
+                           type = GroupType.POSITIVE_LOOKAHEAD;
+                           break;
+                        case '!':
+                           startGroup += 2;
+                           type = GroupType.NEGATIVE_LOOKAHEAD;
+                           break;
+                        case '<':
+                           if (startGroup + 2 < endGroup)
+                           {
+                              switch (s.charAt(startGroup + 2))
+                              {
+                                 case '=':
+                                    startGroup += 3;
+                                    type = GroupType.POSITIVE_LOOKBEHIND;
+                                    break;
+                                 case '!':
+                                    startGroup += 3;
+                                    type = GroupType.NEGATIVE_LOOKBEHIND;
+                                    break;
+                                 default:
+                                    throw createSyntaxException("Syntax not supported", index + 1, index + 4);
+                              }
+                           }
+                           else
+                           {
+                              throw createSyntaxException("Syntax not supported", index + 1, index + 3);
+                           }
+                           break;
+                        default:
+                           throw createSyntaxException("Syntax not supported", index + 1, index + 3);
                      }
                   }
                   else
@@ -178,7 +207,7 @@ public class RegExpParser extends Parser
 
             //
             RENode.Disjunction grouped = new RegExpParser(s, startGroup, endGroup).parseDisjunction();
-            exp = new RENode.Group(grouped, capturing);
+            exp = new RENode.Group(grouped, type);
             index = endGroup + 1;
             break;
          case '*':

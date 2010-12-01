@@ -56,4 +56,14 @@ public class TestRouteEscaper extends BaseGateInTest
       match("[/a]*", "_a_/_", "_a_");
       match("[,-1&&[^/]]*", "_/_", "");
    }
+
+   public void testGroup() throws Exception
+   {
+      match("(/)", "_", "_");
+      match("(?:/)", "_", "_");
+      match(".(?=/)", "a_", "a");
+      match("a(?!/)", "ab", "a");
+      match(".(?<=/)a", "ba_a", "_a");
+      match(".(?<!/)a", "_aba", "ba");
+   }
 }

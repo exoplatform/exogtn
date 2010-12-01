@@ -184,11 +184,16 @@ public class TestParser extends BaseGateInTest
 
    public void testGroup()
    {
-      new ParserTester("(a)").assertParseExpression("<(><c>a</c></)>", 3);
-      new ParserTester("(a(b)c)").assertParseExpression("<(><c>a</c><(><c>b</c></)><c>c</c></)>", 7);
-      new ParserTester("(?:a)").assertParseExpression("<(?:><c>a</c></:?)>", 5);
+      new ParserTester("(a)").assertParseExpression("<(><c>a</c></(>", 3);
+      new ParserTester("(a(b)c)").assertParseExpression("<(><c>a</c><(><c>b</c></(><c>c</c></(>", 7);
+      new ParserTester("(?:a)").assertParseExpression("<(?:><c>a</c></(?:>", 5);
+      new ParserTester("(?=a)").assertParseExpression("<(?=><c>a</c></(?=>", 5);
+      new ParserTester("(?!a)").assertParseExpression("<(?!><c>a</c></(?!>", 5);
+      new ParserTester("(?<=a)").assertParseExpression("<(?<=><c>a</c></(?<=>", 6);
+      new ParserTester("(?<!a)").assertParseExpression("<(?<!><c>a</c></(?<!>", 6);
       new ParserTester("(?)").assertNotParseExpression();
-      new ParserTester("(?a)").assertNotParseExpression();
+      new ParserTester("(?_)").assertNotParseExpression();
+      new ParserTester("(?<_)").assertNotParseExpression();
    }
 
    // missing stuff:

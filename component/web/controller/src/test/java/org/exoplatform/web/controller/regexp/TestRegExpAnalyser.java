@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.regexp;
 
 import org.exoplatform.component.test.BaseGateInTest;
 import org.exoplatform.web.controller.regexp.RegExpRenderer;
@@ -32,14 +32,14 @@ public class TestRegExpAnalyser extends BaseGateInTest
 {
 
    /** . */
-   private RegExpRenderer analyser = new RegExpRenderer();
+   private RegExpRenderer renderer = new RegExpRenderer();
 
    private void assertAnalyse(String expectedPattern, String pattern)
    {
       try
       {
          RENode.Disjunction disjunction = new RegExpParser(pattern).parseDisjunction();
-         assertEquals(expectedPattern, analyser.render(disjunction, new StringBuilder()).toString());
+         assertEquals(expectedPattern, renderer.render(disjunction, new StringBuilder()).toString());
       }
       catch (Exception e)
       {
@@ -64,12 +64,18 @@ public class TestRegExpAnalyser extends BaseGateInTest
 
    public void testGroupContainer()
    {
-      assertAnalyse("(?:a)", "(a)");
-      assertAnalyse("(?:a(?:b))", "(a(?:b))");
-      assertAnalyse("(?:a(?:b))", "(?:a(b))");
-      assertAnalyse("(?:a)(?:b)", "(a)(?:b)");
-      assertAnalyse("(?:a(?:b))", "(a(b))");
-      assertAnalyse("(?:a)(?:b)", "(a)(b)");
+      assertAnalyse("(a)", "(a)");
+      assertAnalyse("(a(?:b))", "(a(?:b))");
+      assertAnalyse("(?:a(b))", "(?:a(b))");
+      assertAnalyse("(a)(?:b)", "(a)(?:b)");
+      assertAnalyse("(a(b))", "(a(b))");
+      assertAnalyse("(a)(b)", "(a)(b)");
+
+      //
+      assertAnalyse("(?=a)", "(?=a)");
+      assertAnalyse("(?!a)", "(?!a)");
+      assertAnalyse("(?<=a)", "(?<=a)");
+      assertAnalyse("(?<!a)", "(?<!a)");
    }
 
    public void testBilto()
