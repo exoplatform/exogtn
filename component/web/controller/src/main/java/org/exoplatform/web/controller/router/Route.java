@@ -104,7 +104,10 @@ class Route
          writer.writeStartElement("request-param");
          writer.writeAttribute("qname", requestParam.name.getValue());
          writer.writeAttribute("name", requestParam.matchName);
-         writer.writeAttribute("value", requestParam.matchValue.pattern());
+         if (requestParam.matchValue != null)
+         {
+            writer.writeAttribute("value", requestParam.matchValue.pattern());
+         }
          writer.writeEndElement();
       }
 

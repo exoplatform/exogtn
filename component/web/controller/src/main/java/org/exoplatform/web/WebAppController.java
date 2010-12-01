@@ -103,6 +103,9 @@ public class WebAppController
       Router router = new Router(routerDesc);
 
       //
+      System.out.println("router = " + router);
+
+      //
       this.applications_ = new HashMap<String, Application>();
       this.attributes_ = new HashMap<String, Object>();
       this.handlers = new HashMap<String, WebRequestHandler>();
