@@ -66,7 +66,7 @@ public class TestRender extends AbstractTestController
 
    public void testSimplePatternPathParam() throws Exception
    {
-      Router router = router().add(route("/{p}").with(pathParam("p").withPattern("a"))).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("a"))).build();
 
       //
       assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
@@ -78,7 +78,7 @@ public class TestRender extends AbstractTestController
       Router router = router().
          add(route("/a")).
          add(route("/{p}/b").
-            with(pathParam("p").withPattern("a"))).
+            with(pathParam("p").matchedBy("a"))).
          build();
 
       //
@@ -92,7 +92,7 @@ public class TestRender extends AbstractTestController
    {
       Router router = router().
          add(route("/{a}b").
-            with(pathParam("a").withPattern("(([A-Za-z]{2})/)?").preservingPath())).
+            with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservingPath())).
          build();
 
       //

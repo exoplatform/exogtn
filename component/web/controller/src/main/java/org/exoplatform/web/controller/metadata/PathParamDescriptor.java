@@ -60,7 +60,7 @@ public class PathParamDescriptor extends ParamDescriptor
       this.qualifiedName = QualifiedName.parse(qualifiedName);
    }
 
-   public PathParamDescriptor withPattern(String pattern)
+   public PathParamDescriptor matchedBy(String pattern)
    {
       this.pattern = pattern;
       return this;

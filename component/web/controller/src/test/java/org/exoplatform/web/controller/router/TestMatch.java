@@ -96,7 +96,7 @@ public class TestMatch extends AbstractTestController
 
    public void testSimplePattern() throws Exception
    {
-      Router router = router().add(route("/{p}").with(pathParam("p").withPattern("a"))).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("a"))).build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
@@ -109,7 +109,7 @@ public class TestMatch extends AbstractTestController
    {
       Router router = router().
          add(route("/a")).
-         add(route("/{p}/b").with(pathParam("p").withPattern("a"))).
+         add(route("/{p}/b").with(pathParam("p").matchedBy("a"))).
          build();
 
       //
@@ -149,7 +149,7 @@ public class TestMatch extends AbstractTestController
    public void testLang() throws Exception
    {
       Router router = router().
-         add(route("/{a}b").with(pathParam("a").withPattern("(([A-Za-z]{2})/)?").preservingPath())).
+         add(route("/{a}b").with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservingPath())).
          build();
 
       //

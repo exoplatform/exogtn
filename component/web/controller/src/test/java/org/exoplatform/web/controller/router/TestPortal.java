@@ -35,7 +35,7 @@ public class TestPortal extends AbstractTestController
    {
       Router router = router().add(
          route("/public{gtn:lang}").
-            with(pathParam("gtn:lang").withPattern("(/[A-Za-z][A-Za-z])?").preservingPath())).
+            with(pathParam("gtn:lang").matchedBy("(/[A-Za-z][A-Za-z])?").preservingPath())).
          build();
 
       //
@@ -47,7 +47,7 @@ public class TestPortal extends AbstractTestController
    {
       Router router = router().add(
          route("/{gtn:lang}public").
-            with(pathParam("gtn:lang").withPattern("([A-Za-z]{2}/)?").preservingPath())).
+            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2}/)?").preservingPath())).
          build();
 
       //
@@ -60,7 +60,7 @@ public class TestPortal extends AbstractTestController
       Router router = router().
          add(route("/public")).
          add(route("/{gtn:lang}/public").
-            with(pathParam("gtn:lang").withPattern("([A-Za-z]{2})"))).
+            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})"))).
          build();
 
       //
