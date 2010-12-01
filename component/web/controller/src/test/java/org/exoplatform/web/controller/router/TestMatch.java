@@ -157,6 +157,28 @@ public class TestMatch extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.create("a"), ""), router.route("/b"));
    }
 
+   public void testOptionalParameter() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}/b").
+            with(
+               pathParam("a").matchedBy("a?").preservingPath(),
+               routeParam("b").withValue("b"))
+            ).build();
+
+      //
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(QualifiedName.create("a"), "a");
+      expectedParameters.put(QualifiedName.create("b"), "b");
+      assertEquals(expectedParameters, router.route("/a/b"));
+      assertEquals("/a/b", router.render(expectedParameters));
+
+      //
+      expectedParameters.put(QualifiedName.create("a"), "");
+      assertEquals(expectedParameters, router.route("/b"));
+      assertEquals("/b", router.render(expectedParameters));
+   }
+
    public void testZeroOrOneFollowedBySubRoute() throws Exception
    {
       Router router = router().

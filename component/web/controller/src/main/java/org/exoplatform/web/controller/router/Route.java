@@ -520,12 +520,14 @@ class Route
                   {
                      nextPath = "/";
                   }
-                  else if (nextPos == 1)
-                  {
-                     nextPath = path;
-                  }
                   else
                   {
+                     if (nextPos > 0 && path.charAt(nextPos - 1) == '/')
+                     {
+                        nextPos--;
+                     }
+
+                     //
                      nextPath = path.substring(nextPos);
                   }
 
