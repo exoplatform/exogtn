@@ -179,6 +179,18 @@ public class TestMatch extends AbstractTestController
       assertEquals("/b", router.render(expectedParameters));
    }
 
+   public void testPartialMatching() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}").
+            with(
+               pathParam("a").matchedBy("abc").preservingPath())
+            ).build();
+
+      //
+      assertNull(router.route("/abcdef"));
+   }
+
    public void testZeroOrOneFollowedBySubRoute() throws Exception
    {
       Router router = router().
