@@ -167,7 +167,8 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 		ctxMenuContainer.style.width = "auto" ;
 		ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + 2 + "px" ;
 		//end fix width
-		contextMenu.style.left = intLeft + "px";
+		//need to add 1 more pixel because IE8 will dispatch onmouseout event to contextMenu.parent
+		contextMenu.style.left = (intLeft + 1) + "px";
 	}	else {
 		//move context menu to center of screen to fix width
 		contextMenu.style.right = eXo.core.Browser.getBrowserWidth() * 0.5 + "px" ;
@@ -177,7 +178,11 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 		contextMenu.style.right = intLeft + "px" ;
 	}
 	ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + "px" ;
-	contextMenu.style.top = intTop + 1 + "px";
+	//need to add 1 more pixel because IE8 will dispatch onmouseout event to contextMenu.parent
+	if((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) <= eXo.core.Browser.getBrowserHeight()) {
+		intTop += 1
+	}
+	contextMenu.style.top = intTop + "px";
 };
 
 eXo.webui.UIRightClickPopupMenu = new UIRightClickPopupMenu() ;
