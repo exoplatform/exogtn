@@ -19,16 +19,29 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.MoveChildActionListener;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
+import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * May 19, 2006
  */
-@ComponentConfig(lifecycle = UIPageLifecycle.class, template = "system:/groovy/portal/webui/page/UIPage.gtmpl", events = {@EventConfig(listeners = MoveChildActionListener.class)})
+@ComponentConfig(lifecycle = UIPageLifecycle.class, template = "system:/groovy/portal/webui/page/UIPage.gtmpl", events = {@EventConfig(listeners = MoveChildActionListener.class),
+	@EventConfig(name = "EditCurrentPage", listeners = UIPage.EditCurrentPageActionListener.class)})
 public class UIPage extends UIContainer
 {
 
@@ -103,5 +116,62 @@ public class UIPage extends UIContainer
    public void setMaximizedUIPortlet(UIPortlet maximizedUIPortlet)
    {
       this.maximizedUIPortlet = maximizedUIPortlet;
+   }
+   
+   public static class EditCurrentPageActionListener extends EventListener<UIPage>
+   {
+		@Override
+		public void execute(Event<UIPage> event) throws Exception {
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			UIWorkingWorkspace uiWorkingWS = uiApp
+					.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+
+			// check edit permission for page
+			UIPageBody pageBody = uiWorkingWS
+					.findFirstComponentOfType(UIPageBody.class);
+			UIPage uiPage = (UIPage) pageBody.getUIComponent();
+			if (uiPage == null) {
+				uiApp.addMessage(new ApplicationMessage(
+						"UIPageBrowser.msg.PageNotExist", null));
+				return;
+			}
+			Page page = PortalDataMapper.toPageModel(uiPage);
+
+			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+			if (!userACL.hasEditPermission(page)) {
+				uiApp.addMessage(new ApplicationMessage(
+						"UIPortalManagement.msg.Invalid-EditPage-Permission", null));
+				return;
+			}
+
+			uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
+
+			UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(
+					UIPortalComposer.class).setRendered(true);
+			portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
+			portalComposer.setId("UIPageEditor");
+			portalComposer.setShowControl(true);
+			portalComposer.setEditted(false);
+			portalComposer.setCollapse(false);
+
+			UIPortalToolPanel uiToolPanel = uiWorkingWS
+					.findFirstComponentOfType(UIPortalToolPanel.class);
+			uiToolPanel.setShowMaskLayer(false);
+			uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+
+			// We clone the edited UIPage object, that is required for Abort action
+			Class<? extends UIPage> clazz = Class.forName(page.getFactoryId())
+					.asSubclass(UIPage.class);
+			UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
+			PortalDataMapper.toUIPage(newUIPage, page);
+			uiToolPanel.setWorkingComponent(newUIPage);
+
+			// Remove current UIPage from UIPageBody
+			pageBody.setUIComponent(null);
+
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+			Util.getPortalRequestContext().setFullRender(true);
+
+		}
    }
 }

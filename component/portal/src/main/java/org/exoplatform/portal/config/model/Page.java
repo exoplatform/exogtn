@@ -197,4 +197,18 @@ public class Page extends Container
    {
       return "Page[ownerType=" + ownerType + ",ownerId=" + ownerId + ",name=" + name + "]";
    }
+   
+   @Override
+   public final String getFactoryId()
+   {
+      String factoryId = super.getFactoryId();
+      if (factoryId != null)
+      {
+         return factoryId;
+      }
+      else
+      {
+         return "org.exoplatform.portal.webui.page.UIPage";
+      }
+   }
 }

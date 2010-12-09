@@ -22,6 +22,12 @@
 <portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+
+   <public-render-parameter>
+      <identifier>navigation_uri</identifier>
+      <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:navigation_uri</qname>
+   </public-render-parameter>
+   
    <portlet>
       <description xml:lang="EN">Organization Portlet</description>
       <portlet-name>OrganizationPortlet</portlet-name>
@@ -253,6 +259,8 @@
          <short-title>Administration Toolbar</short-title>
          <keywords>gatein_internal</keywords>
       </portlet-info>
+      
+      <supported-public-render-parameter>navigation_uri</supported-public-render-parameter>
    </portlet>
 
    <portlet>

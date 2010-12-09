@@ -146,14 +146,9 @@ public class UIPageBody extends UIComponentDecorator
          return uiPage;
       }
       
-      if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-      {
-         uiPage = createUIComponent(context, UIDesktopPage.class, null, null);
-      }
-      else
-      {
-         uiPage = createUIComponent(context, UIPage.class, null, null);
-      }
+      Class<? extends UIPage> clazz =  Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+      uiPage = createUIComponent(context, clazz, null, null);
+      
       PortalDataMapper.toUIPage(uiPage, page);
       uiPortal.setUIPage(page.getId(), uiPage);
 

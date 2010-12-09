@@ -350,16 +350,10 @@ public class UIPageCreationWizard extends UIPageWizard
          }
 
          UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
-         UIPage uiPage;
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            uiPage = uiWizard.createUIComponent(context, UIDesktopPage.class, null, null);
-         }
-         else
-         {
-            uiPage = uiWizard.createUIComponent(context, UIPage.class, null, null);
-         }
-
+         
+         Class<? extends UIPage> clazz = Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+         UIPage uiPage = uiWizard.createUIComponent(context, clazz, null, null);
+         
          PortalDataMapper.toUIPage(uiPage, page);
          uiPagePreview.setUIComponent(uiPage);
 

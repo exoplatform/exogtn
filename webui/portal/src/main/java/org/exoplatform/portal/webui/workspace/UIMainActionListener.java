@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import java.lang.reflect.Method;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -37,6 +39,7 @@ import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -88,8 +91,8 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          // We clone the edited UIPage object, that is required for Abort action
-         //UIPage newUIPage = new UIPage();
-         UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
+         Class<? extends UIPage> clazz = Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+         UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
 
@@ -223,6 +226,23 @@ public class UIMainActionListener
          uiMaskWS.setUIComponent(uiNewPortal);
          uiMaskWS.setShow(true);
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      }
+   }
+   
+   public static class EditBackgroundActionListener extends EventListener<UIWorkingWorkspace>
+   {
+      @Override
+      public void execute(Event<UIWorkingWorkspace> event) throws Exception
+      {
+         
+         UIWorkingWorkspace workingWorkspace = event.getSource();
+         UIPage uiPage = workingWorkspace.findFirstComponentOfType(UIPage.class);
+         
+         Method showEditBackgroundPopupMethod = uiPage.getClass().getDeclaredMethod("showEditBackgroundPopup", WebuiRequestContext.class);
+         if(showEditBackgroundPopupMethod != null)
+         {
+            showEditBackgroundPopupMethod.invoke(uiPage, event.getRequestContext());
+         }
       }
    }
 

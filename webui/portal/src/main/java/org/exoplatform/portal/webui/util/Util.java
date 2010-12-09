@@ -19,13 +19,14 @@
 
 package org.exoplatform.portal.webui.util;
 
+import java.util.List;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.page.UIDesktopPage;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
@@ -37,8 +38,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.event.Event;
-
-import java.util.List;
 
 /**
  * Jun 5, 2006
@@ -226,14 +225,10 @@ public class Util
       if (uiPage != null && uiPage.getId().equals(page.getId()))
          return uiPage;
       WebuiRequestContext context = Util.getPortalRequestContext();
-      if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-      {
-         uiPage = uiParent.createUIComponent(context, UIDesktopPage.class, null, null);
-      }
-      else
-      {
-         uiPage = uiParent.createUIComponent(context, UIPage.class, null, null);
-      }
+      
+      Class<? extends UIPage> clazz = Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+      uiPage = uiParent.createUIComponent(context, clazz, null, null);
+      
       PortalDataMapper.toUIPage(uiPage, page);
       return uiPage;
    }
