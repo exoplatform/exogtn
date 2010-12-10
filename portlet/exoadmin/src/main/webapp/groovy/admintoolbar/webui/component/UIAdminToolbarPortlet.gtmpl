@@ -2,6 +2,7 @@
 	import org.exoplatform.toolbar.webui.component.UIAdminToolbarPortlet;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.config.model.PageNavigation;
+	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.services.organization.User;
 	import org.exoplatform.services.security.ConversationState;
 	import org.exoplatform.web.CacheUserProfileFilter;
@@ -9,6 +10,7 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.portal.webui.page.UIPage;
+	import org.exoplatform.portal.webui.portal.UIPortal;
 	
 	def rcontext = (PortletRequestContext)_ctx.getRequestContext();
 	
@@ -66,7 +68,16 @@
 						<% } %>
 						
 						<% if(userCouldEditPortal){ %>
-							<% if("classicWebosPage".equals(navigation_uri)){ %>
+							<% 
+							 
+							 UIPortal uiPortal = Util.getUIPortalApplication().getShowedUIPortal();
+							 PageNode currentNode = uiPortal.getSelectedNode();
+							 
+							 if(currentNode != null && "classicWebosPage".equals(currentNode.getName())){
+							 
+							%>
+								
+								
 								<div class="MenuItem">	
 									<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditBackground', true))" title="" class="ItemIcon EditSiteIcon">Edit Background</a>
 								</div>
