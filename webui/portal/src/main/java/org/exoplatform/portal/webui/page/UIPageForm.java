@@ -299,49 +299,6 @@ public class UIPageForm extends UIFormTabPane
             applications.add(PortalDataMapper.buildModelObject(uiPortlet));
          }
 
-         if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()) && !Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            page.setShowMaxWindow(false);
-            uiPage.getChildren().clear();
-            page.setChildren(applications);
-
-            PortalDataMapper.toUIPage(uiPage, page);
-            //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
-            if (page.getChildren() == null)
-               page.setChildren(new ArrayList<ModelObject>());
-
-            //        uiEditBar.setUIPage(uiPage);
-            //        Class<?> [] childrenToRender = {UIPageEditBar.class,
-            //            UIPageNodeSelector.class, UIPageNavigationControlBar.class};      
-            //        uiManagement.setRenderedChildrenOfTypes(childrenToRender);
-
-            pcontext.setFullRender(true);
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-
-            return;
-         }
-
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            uiPage.getChildren().clear();
-            page.setChildren(applications);
-
-            PortalDataMapper.toUIPage(uiPage, page);
-            //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
-            if (page.getChildren() == null)
-               page.setChildren(new ArrayList<ModelObject>());
-
-            UIPortalToolPanel toolPanel = Util.getUIPortalToolPanel();
-            toolPanel.setShowMaskLayer(true);
-            pcontext.setFullRender(true);
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            DataStorage dataService = uiPageForm.getApplicationComponent(DataStorage.class);
-            dataService.save(page);
-            return;
-         }
-
          List<UIComponent> uiChildren = uiPage.getChildren();
          if (uiChildren == null)
          {
