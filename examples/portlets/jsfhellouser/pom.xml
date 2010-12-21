@@ -8,13 +8,8 @@
    -->
    <parent>
       <groupId>org.gatein.portal.examples.portlets</groupId>
-<<<<<<< HEAD
       <artifactId>parent</artifactId>
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <artifactId>portlets-parent</artifactId>
-      <version>5.1.0-epp-CR02-SNAPSHOT</version>
->>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
    </parent>
 
    <artifactId>gatein-jsf-hellouser</artifactId>
