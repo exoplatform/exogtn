@@ -23,7 +23,11 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
+<<<<<<< HEAD
     <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+    <version>5.1.0-epp-CR02-SNAPSHOT</version>
+>>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -37,23 +41,39 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.extension.config</artifactId>
+<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+      <version>5.1.0-epp-CR02-SNAPSHOT</version>
+>>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.extension.jar</artifactId>
+<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+      <version>5.1.0-epp-CR02-SNAPSHOT</version>
+>>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.web.api</artifactId>
+<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+      <version>5.1.0-epp-CR02-SNAPSHOT</version>
+>>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.extension.war</artifactId>
+<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+      <version>5.1.0-epp-CR02-SNAPSHOT</version>
+>>>>>>> 05e0ae940cef6215123d41791b74300de703f2a7
       <type>war</type>
     </dependency>
   </dependencies>
