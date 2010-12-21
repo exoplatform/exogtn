@@ -146,7 +146,8 @@ function getModule(params)
       addDependency(new Project("org.picketlink.idm", "picketlink-idm-spi", "jar", idmVersion)).
       addDependency(new Project("org.picketlink.idm", "picketlink-idm-hibernate", "jar", idmVersion)).
       addDependency(new Project("org.picketlink.idm", "picketlink-idm-ldap", "jar", idmVersion)).
-      addDependency(new Project("org.picketlink.idm", "picketlink-idm-cache", "jar", idmVersion));
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-cache", "jar", idmVersion)).
+      addDependency(new Project("org.hibernate", "hibernate-jbosscache2", "jar", "3.3.2.GA"));;
 
    module.component.applicationRegistry =
    new Project("org.exoplatform.portal", "exo.portal.component.application-registry", "jar", module.version).

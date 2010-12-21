@@ -28,7 +28,7 @@ html {
 }
 
 body {
-	background: #dedfdf;
+	background: #fff url('../../../background/gray-dot-bg.gif') repeat-x top left;
 	margin: 0px; padding: 0px;
 	font-family: Tahoma,Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;

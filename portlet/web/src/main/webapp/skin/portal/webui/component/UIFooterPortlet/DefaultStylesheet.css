@@ -19,7 +19,7 @@
 
 .UIFooterPortlet {
   margin: 0;
-  background: #dedfdf;
+  background: transparent;
 }
 	
 .UIFooterPortlet .RepeatFooter {

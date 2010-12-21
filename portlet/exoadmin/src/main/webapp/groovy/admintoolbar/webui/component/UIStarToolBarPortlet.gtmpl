@@ -13,7 +13,7 @@
 <div class="UIStarToolBarPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
 		<div class="TabsContainer">
-			<div class="UITab" style="width: 62px">
+			<div class="UITab" style="width: 83px">
 				<div class=""></div>
 				<div class="MenuItemContainer" style="display:none;">
 					<div class="MenuItem" onclick="$changeLanguageAction">

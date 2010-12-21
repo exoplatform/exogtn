@@ -22,23 +22,26 @@
 }	
 
 .UIBannerPortlet {
-	zoom: 100%;
-	background: #B5B6B6;
+	background: url('DefaultSkin/background/banner-bg.jpg') repeat-x; /* orientation=lt */
+   background: url('DefaultSkin/background/banner-bg.jpg') repeat-x; /* orientation=rt */
+   border-left: 1px solid #b4b4b4;
+   border-right: 1px solid #b4b4b4;
 }
 
 .UIBannerPortlet .LeftBanner {
-	border-top: 1px solid #b5b6b6;
+	/*border-top: 1px solid #b5b6b6;*/
 	padding-left: 10px; /* orientation=lt */
 	padding-right: 10px; /* orientation=rt */
+   border: 0;
 }
 
 .UIBannerPortlet .RightBanner {
-	background: url('DefaultSkin/background/Logo.gif') no-repeat left 11px; /* orientation=lt */
-	background: url('DefaultSkin/background/Logo.gif') no-repeat right -39px; /* orientation=rt */
+	background: url('DefaultSkin/background/EPPLogo-trans.gif') no-repeat 13px 22px; /* orientation=lt */
+	background: url('DefaultSkin/background/EPPLogo-trans.gif') no-repeat right 22px; /* orientation=rt */
 }
 
 .UIBannerPortlet .MiddleBanner {
-	height: 43px;
+	height: 66px;
 }
 
 .UIBannerPortlet .LeftLoginContainer {
@@ -58,12 +61,12 @@
 }
 
 .UIBannerPortlet .MiddleLoginContainer a {
-	color: #0d62af;
+	color: #963c3e;
 	outline: none;
 }
 
 .UIBannerPortlet .MiddleLoginContainer a:hover {
-	color: #e7e7e7;
+	color: #176ba6;
 }
 
 .UIBannerPortlet .MiddleLoginContainer .Name {
@@ -91,7 +94,7 @@
 	font-weight: bold;
 	display: block;
 	line-height: 35px;
-	color: white;
+	color: #2c0102;
 	background: none;
 }
 
@@ -102,7 +105,7 @@
 	font-weight: bold;
 	display: block;
 	line-height: 35px;
-	color: white;
+	color: #2c0102;
 	background: none;
 }
  
@@ -111,6 +114,6 @@
 	font-weight: bold;
 	float: left;
 	display: block;
+   color: #2c0102;
 	line-height: 35px;
-	color: white;
 }
