@@ -20,7 +20,6 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<<<<<<< HEAD:server/tomcat/pom.xml
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -40,34 +39,4 @@
       <module>plugin</module>
    </modules>
 
-=======
-  <parent>
-    <groupId>org.exoplatform.portal</groupId>
-    <artifactId>exo.portal.parent</artifactId>
-    <version>5.1.0-epp-ER05-SNAPSHOT</version>
-  </parent> 
-	
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.portal.starter.jar</artifactId>
-  <packaging>jar</packaging>
-  <name>GateIn Portal Starter Jar</name>
-  <url>http://www.gatein.org</url>
-  <description>GateIn Portal Starter Jar</description>
-  
-  <build>
-    <finalName>starter</finalName>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.common</groupId>
-      <artifactId>common-logging</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
->>>>>>> 1ffc56567cf27aaeda8d3504cd44fbed1082eb9d:starter/jar/pom.xml
 </project>
