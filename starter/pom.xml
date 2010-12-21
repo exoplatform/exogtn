@@ -33,6 +33,7 @@
   <description>GateIn Portal Starter Root Pom</description>
 
   <modules>
+	<module>jar</module>
 	<module>war</module>
 	<module>ear</module>
   </modules>
