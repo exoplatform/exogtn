@@ -24,13 +24,8 @@
 
   <parent>
     <groupId>org.gatein.portal.examples.skins</groupId>
-<<<<<<< HEAD
     <artifactId>parent</artifactId>
     <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-    <artifactId>skins-parent</artifactId>
-    <version>5.1.0-epp-ER03-SNAPSHOT</version>
->>>>>>> 6eda014a50ff910cd3b8dfcec223d6c57ef74fb3
   </parent> 
 
   <artifactId>gatein-sample-skin</artifactId>
