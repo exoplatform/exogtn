@@ -20,15 +20,7 @@
 .UILogoPortlet {
 	zoom: 100%;
 	padding: 5px;
-	line-height: 44px;
-   background: url('DefaultSkin/background/red-bg2.gif') repeat-x top left;
-}
-
-.UITabContent .UILogoPortlet {
-	zoom: 100%;
-	padding: 5px;
-	line-height: 44px;
-   background: none;
+	line-height: 38px;
 }
 
 .ClearFix:after {
@@ -52,7 +44,7 @@
 .UILogoPortlet .Img,.UILogoPortlet .BannerTitle {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	color: #fff;
+	color: #3c3c3c;
 	font-size: 17px;
 }
 

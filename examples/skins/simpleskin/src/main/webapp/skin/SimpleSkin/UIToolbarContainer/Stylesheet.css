@@ -163,6 +163,6 @@
 .UIStarToolBarPortlet {
 	background: url('background/GateinLogo.jpg') no-repeat 10px 6px; /* orientation=lt */
 	background: url('background/GateinLogo.jpg') no-repeat 23px 5px; /* orientation=rt */
-	width: 83px;
+	width: 64px;
 	height: 30px;
 }

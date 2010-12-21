@@ -26,8 +26,7 @@
 
 .UIBreadcumbs {
 	line-height: 25px;
-	border-left: 1px solid #b4b4b4;
-   border-right: 1px solid #b4b4b4;
+	padding: 0 8px;
 }
 
 .UIBreadcumbs a {
@@ -49,7 +48,7 @@
 }
 
 .UIBreadcumbs .LeftBreadcumbsBar {
-	background-color: #fff;
+	background-color: #e9e9e9;
 }
 
 .UIBreadcumbs .RightBreadcumbsBar {

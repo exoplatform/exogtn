@@ -93,7 +93,7 @@
 }
 
 .UIPageBody .VIEW-PAGEBODY .UIPage {
-	padding: 0px 1px;
+	padding: 0px 8px;
 }
 
 .UIPageBody .VIEW-PAGEBODY .UIPage .UIComponentBlock {
@@ -105,7 +105,6 @@
 	background: url('background/BgPagebody.gif') no-repeat left top;
 	padding-left: 6px;
 	height: 16px;
-   display: none;
 }
 
 .UIPageBody .BRPagebody {

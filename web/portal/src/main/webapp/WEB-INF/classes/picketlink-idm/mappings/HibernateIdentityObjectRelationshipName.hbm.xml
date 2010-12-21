@@ -4,7 +4,7 @@
 <hibernate-mapping>
    <class name="org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName"
           table="jbid_io_rel_name">
-      <cache usage="transactional"/>
+      <cache usage="read-write"/>
 
       <id name="id"
           type="java.lang.Long"
@@ -25,7 +25,7 @@
            cascade="all, delete-orphan"
            lazy="extra"
            fetch="subselect">
-         <cache usage="transactional"/>
+         <cache usage="read-write"/>
          <key column="PROP_ID"/>
          <map-key type="string"
                   column="PROP_NAME"/>

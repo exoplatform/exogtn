@@ -24,8 +24,8 @@
 
 .UIHomePagePortlet {	
 	background: white;
-	padding: 0;
-	width: 976px;
+	padding: 8px 8px 0px;
+	width: 948px;
 }
 
 .UIHomePagePortlet .TRContainer .PortletDecoration {	
@@ -40,8 +40,6 @@
 	border: 1px solid #C6C6C6;	
 	text-align: center;
 	background: url('DefaultSkin/background/BgRightColumn.gif') repeat-x bottom center;
-   display: none;
-   visibility: hidden;
 }
 
 .UIHomePagePortlet .TRContainer a {
@@ -79,12 +77,10 @@
 }
 
 .UIHomePagePortlet  .TLContainer {
-	/*border-left:1px solid #B4B4B4;*/
-   /*border-right:1px solid #B4B4B4;*/
-   /*border-bottom:1px solid #B4B4B4;*/
+	border: 1px solid #ffffff;
 	float: left; /* orientation=lt */	
 	float: right; /* orientation=rt */
-	width: 100%;
+	width: 713px;
 }
 
 .UIHomePagePortlet .TLContainer .PortletDecoration {	
@@ -96,8 +92,8 @@
 }
 
 .UIHomePagePortlet .AdImageLeft {
-	background: url('DefaultSkin/background/epp/redbox-tab1-bg.jpg') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/epp/redbox-tab1-bg.jpg') no-repeat right top; /* orientation=rt */
+	background: url('DefaultSkin/background/RightHome.jpg') no-repeat left top; /* orientation=lt */
+	background: url('DefaultSkin/background/RightHome-rt.jpg') no-repeat right top; /* orientation=rt */
 }
 
 *html .UIHomePagePortlet .AdImageLeft {
@@ -106,13 +102,21 @@
 .UIHomePagePortlet .AdImageRight {
 	text-align: right; /* orientation=lt */
 	text-align: left; /* orientation=rt */
-	height: 278px; 
+	height: 255px; 
 	padding: 0px 10px 0px 200px; /* orientation=lt */
 	padding: 0px 200px 0px 10px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .AdImageLeft .EmptyBlock {
-	display: none;
+	height: 120px;
+	font-size: 21px;
+	color: #616161;
+	text-align: center;
+	font-family: arial;
+	font-weight: bold;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	padding: 50px 0 0;
 }
 
 .UIHomePagePortlet .AdImageLeft .EmptyBlock div {
@@ -134,38 +138,37 @@
 }
 
 .UIHomePagePortlet .HomePortletContent {
-	/*margin-top: 8px;*/
+	margin-top: 8px;
 }
 
 .UIHomePagePortlet .HomePortletContent .LeftAccountsContainer {
 	padding-left: 3px;
-	background: url('DefaultSkin/background/epp/username-bg.gif') repeat-x left top;
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat left -529px;
 }
 
 _html .UIHomePagePortlet .HomePortletContent .LeftAccountsContainer {
-	background: url('DefaultSkin/background/epp/username-bg.gif') repeat-x left top;
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat 4px -529px;
 }
 
 .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
-	background: url('DefaultSkin/background/epp/username-bg.gif') repeat-x left top;
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right -799px;
 	padding-right: 3px;
 	_padding-right: 0px;
 }
 
 _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
-	background: url('DefaultSkin/background/epp/username-bg.gif') repeat-x left top;
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat 114% -799px;/* orientation=rt */
 	padding-right: 8px;/* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .MiddleAccountsContainer {
-	background: url('DefaultSkin/background/epp/usernames.jpg') no-repeat left top;
-	height: 167px;
-	padding: 0;
+	background: url('DefaultSkin/background/HomePagePortlet.gif') repeat-x center -379px;
+	height: 127px;
+	padding: 0px 8px;
 }
 
 .UIHomePagePortlet .HomePortletContent .AccountsContainerDeco {
 	height: 105px;
-   padding:43px 0 0 31px;
 	overflow: hidden;
 }
 
@@ -175,33 +178,34 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 	color: #808185;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-   display: none;
 }
 
 .UIHomePagePortlet .HomePortletContent .AccountBlock {
 	height: 105px; 
-	width: 218px;
+	width: 160px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	text-align: right; /* orientation=rt */
-   cursor: pointer;
 }
 
-
 .UIHomePagePortlet .HomePortletContent .AdministratorUser {
-
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right top; /* orientation=lt */
+	background: url('DefaultSkin/background/HomePagePortlet-rt.gif') no-repeat 10px top; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .ManagerUser {
-
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right -95px; /* orientation=lt */
+	background: url('DefaultSkin/background/HomePagePortlet-rt.gif') no-repeat 10px -95px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .NormalUser {
-
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right -185px; /* orientation=lt */
+	background: url('DefaultSkin/background/HomePagePortlet-rt.gif') no-repeat 10px -185px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .DemoUser {
-
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right -275px; /* orientation=lt */
+	background: url('DefaultSkin/background/HomePagePortlet-rt.gif') no-repeat 10px -275px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .SeparatorLine {
@@ -210,13 +214,12 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	padding: 0px 4px 0px;
-	background: none; /* orientation=lt */
-	background: none; /* orientation=rt */
+	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat left -675px; /* orientation=lt */
+	background: url('DefaultSkin/background/HomePagePortlet-rt.gif') no-repeat right -675px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .AccountInfos {
 	padding-top: 8px;
-    display: none;
 }
 
 .UIHomePagePortlet .AccountInfos .Lable {
@@ -241,40 +244,6 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 	color: #454e56;
 	line-height: 40px;
 	font-weight: bold;
-   text-align:right;
-   width:61%;
-}
-
-.UIHomePagePortlet .HomePortletContent .Username div {
-   position: absolute;
-   left: 55px;
-}
-
-.UIHomePagePortlet .HomePortletContent .Passwords div {
-   position: absolute;
-   left: 55px;
-   top: 16px;
-}
-
-.UIHomePagePortlet .HomePortletContent .Username span{
-   position: absolute;
-   left: 107px;
-}
-
-.UIHomePagePortlet .HomePortletContent .Passwords span {
-   position: absolute;
-   left: 107px;
-   top: 16px;
-}
-
-.UIHomePagePortlet .HomePortletContent .Username {
-   position: relative;
-   width: 61%;
-}
-
-.UIHomePagePortlet .HomePortletContent .Passwords {
-   position: relative;
-   width: 61%;
 }
 
 .UIHomePagePortlet .ClearBoth {
