@@ -27,12 +27,15 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
+import org.gatein.pc.portlet.PortletInvokerInterceptor;
+import org.gatein.pc.portlet.aspects.EventPayloadInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
@@ -58,6 +61,7 @@ import org.gatein.wsrp.WSRPConstants;
 import org.gatein.wsrp.consumer.migration.MigrationService;
 import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
+import org.gatein.wsrp.payload.WSRPEventPayloadInterceptor;
 import org.gatein.wsrp.producer.ProducerHolder;
 import org.gatein.wsrp.producer.WSRPPortletInvoker;
 import org.gatein.wsrp.producer.WSRPProducer;
@@ -85,11 +89,12 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
    private ConsumerRegistry consumerRegistry;
    private ExoContainer container;
+   private final ExoKernelIntegration exoKernelIntegration;
    private final boolean bypass;
    private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
 
    public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-                                 org.exoplatform.portal.pc.ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
+                                 ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
    {
       // IMPORTANT: even though PC ExoKernelIntegration and NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
@@ -114,6 +119,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          container = context.getContainer();
 
+         exoKernelIntegration = pc;
+
          bypass = false;
       }
       else
@@ -124,6 +131,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          producerConfigLocation = null;
          consumersConfigLocation = null;
          configurationIS = null;
+         exoKernelIntegration = null;
          bypass = true;
       }
    }
@@ -177,6 +185,39 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       ContainerPortletInvoker containerPortletInvoker =
          (ContainerPortletInvoker)container.getComponentInstanceOfType(ContainerPortletInvoker.class);
 
+      // iterate over the container stack so that we can insert the WSRP-specific event payload interceptor
+      PortletInvokerInterceptor previous = containerPortletInvoker;
+      PortletInvokerInterceptor next = previous;
+      do
+      {
+         PortletInvoker invoker = previous.getNext();
+         if (invoker instanceof EventPayloadInterceptor)
+         {
+            // create a new WSRPEventPayloadInterceptor and make its next one the current event payload invoker
+            WSRPEventPayloadInterceptor eventPayloadInterceptor = new WSRPEventPayloadInterceptor();
+            eventPayloadInterceptor.setNext(invoker);
+
+            // replace the current event payload interceptor by the WSRP-specific one
+            previous.setNext(eventPayloadInterceptor);
+
+            // we're done
+            break;
+         }
+         else
+         {
+            previous = next;
+            if (invoker instanceof PortletInvokerInterceptor)
+            {
+               next = (PortletInvokerInterceptor)invoker;
+            }
+            else
+            {
+               next = null;
+            }
+         }
+      }
+      while (next != null);
+
       // The producer persistence manager
       PortletStatePersistenceManager producerPersistenceManager;
       try
@@ -201,17 +242,18 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
-      
+
       WSRPPortletInvoker wsrpPortletInvoker = new WSRPPortletInvoker();
       wsrpPortletInvoker.setNext(producerPortletInvoker);
       wsrpPortletInvoker.setRegistrationManager(registrationManager);
-      
+
 
       // create and wire WSRP producer
       producer = ProducerHolder.getProducer(true);
       producer.setPortletInvoker(wsrpPortletInvoker);
       producer.setRegistrationManager(registrationManager);
       producer.setConfigurationService(producerConfigurationService);
+      exoKernelIntegration.getPortletApplicationRegistry().addListener(producer);
 
       producer.start();
    }
@@ -238,7 +280,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          // migration service
          MigrationService migrationService = new JCRMigrationService(container);
-         migrationService.setStructureProvider(new MOPPortalStructureProvider(container));
+         migrationService.setStructureProvider(new MOPConsumerStructureProvider(container));
          consumerRegistry.setMigrationService(migrationService);
 
          consumerRegistry.start();

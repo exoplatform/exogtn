@@ -1,5 +1,9 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
+/*
+ * JBoss, a division of Red Hat
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -59,7 +63,6 @@ import javax.portlet.WindowState;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -97,10 +100,19 @@ public class UIPortletActionListener
          HttpServletRequest request = prcontext.getRequest();
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
 
+         // set the navigational state
+         String navState = prcontext.getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+         if (navState != null)
+         {
+            uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+         }
+
          //
          ActionInvocation actionInvocation = uiPortlet.create(ActionInvocation.class, prcontext);
          if (actionInvocation == null)
+         {
             return;
+         }
          //
          PortletInvocationResponse portletResponse = uiPortlet.invoke(actionInvocation);
 
@@ -131,7 +143,7 @@ public class UIPortletActionListener
                uiPortlet.update((C)wsrp);
             }
          }
-         
+
          if (portletResponse instanceof UpdateNavigationalStateResponse)
          {
             handleUpdateNavigationalStateResponse((UpdateNavigationalStateResponse)portletResponse, uiPortlet, prcontext);
@@ -151,17 +163,17 @@ public class UIPortletActionListener
          else
          {
             throw new Exception("Unexpected response type [" + portletResponse + "]. Expected an UpdateNavigationResponse" +
-            		", a HTTPRedirectionResponse or an ErrorResponse.");
+               ", a HTTPRedirectionResponse or an ErrorResponse.");
          }
       }
-      
-      
+
+
       private void handleRedirectionResponse(HTTPRedirectionResponse redirectionResponse, HttpServletResponse response) throws IOException
       {
          String redirectionURL = redirectionResponse.getLocation();
          response.sendRedirect(redirectionURL);
       }
-      
+
       private void handleUpdateNavigationalStateResponse(UpdateNavigationalStateResponse navStateResponse, UIPortlet<S, C> uiPortlet, PortalRequestContext prcontext) throws Exception
       {
          /*
@@ -187,7 +199,10 @@ public class UIPortletActionListener
 
          //
          StateString navigationalState = navStateResponse.getNavigationalState();
-         uiPortlet.setNavigationalState(navigationalState);
+         if (navigationalState != null)
+         {
+            uiPortlet.setNavigationalState(navigationalState);
+         }
 
          // update the public render parameters with the changes from the invocation
          setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
@@ -248,12 +263,12 @@ public class UIPortletActionListener
          }
 
       }
-      
+
       private void handleErrorResponse(ErrorResponse response) throws Exception
       {
-         throw (Exception)response.getCause();  
+         throw (Exception)response.getCause();
       }
-      
+
       private void handleSecurityResponse(SecurityResponse response) throws Exception
       {
          if (response instanceof SecurityErrorResponse)
@@ -344,13 +359,25 @@ public class UIPortletActionListener
       {
          UIPortlet<S, C> uiPortlet = event.getSource();
          log.trace("Serve Resource for portlet: " + uiPortlet.getPortletContext());
+         String resourceId = null;
+
          try
          {
             PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
             HttpServletResponse response = context.getResponse();
 
+            //Set the NavigationalState
+            String navState = context.getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+            if (navState != null)
+            {
+               uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+            }
+
             //
             ResourceInvocation resourceInvocation = uiPortlet.create(ResourceInvocation.class, context);
+
+            // set the resourceId to be used in case of a problem
+            resourceId = resourceInvocation.getResourceId();
 
             //
             PortletInvocationResponse portletResponse = uiPortlet.invoke(resourceInvocation);
@@ -408,29 +435,29 @@ public class UIPortletActionListener
                response.setContentType(contentType);
                if (piResponse.getBytes() != null)
                {
-                   OutputStream stream = response.getOutputStream();
-            	   stream.write(piResponse.getBytes());
+                  OutputStream stream = response.getOutputStream();
+                  stream.write(piResponse.getBytes());
                }
                else
                {
-            	   if (piResponse.getChars() != null)
-            	   {
-            		   log.error("Received a content type of " + contentType + " but it contains no bytes of data. Chars were unexpectantly returned instead : " + piResponse.getChars());
-            	   }
-            	   else
-            	   {
-            		   log.error("Received a content type of " + contentType + " but it contains no bytes of data.");
-            	   }
+                  if (piResponse.getChars() != null)
+                  {
+                     log.error("Received a content type of " + contentType + " but it contains no bytes of data. Chars were unexpectantly returned instead : " + piResponse.getChars());
+                  }
+                  else
+                  {
+                     log.error("Received a content type of " + contentType + " but it contains no bytes of data.");
+                  }
                }
-            	
-               
+
+
             }
             context.getResponse().flushBuffer();
 
          }
          catch (Exception e)
          {
-            log.error("Problem while serving resource for the portlet: " + uiPortlet.getPortletContext().getId(), e);
+            log.error("Problem while serving resource " + (resourceId != null ? resourceId : "") + " for the portlet: " + uiPortlet.getPortletContext().getId(), e);
          }
          finally
          {
@@ -509,7 +536,7 @@ public class UIPortletActionListener
     * ProcessEventsActionListener once again
     */
    public static <S, C extends Serializable, I> List<javax.portlet.Event> processEvent(UIPortlet<S, C> uiPortlet,
-      javax.portlet.Event event)
+                                                                                       javax.portlet.Event event)
    {
       log.trace("Process Event: " + event.getName() + " for portlet: " + uiPortlet.getState());
       try
@@ -567,8 +594,12 @@ public class UIPortletActionListener
          // update the portlet with the next mode to display
          PortletMode mode = new PortletMode(getPortletModeOrDefault(navResponse));
          setNextMode(uiPortlet, mode);
-         
-         uiPortlet.setNavigationalState(navResponse.getNavigationalState());
+
+         StateString navState = navResponse.getNavigationalState();
+         if (navState != null)
+         {
+            uiPortlet.setNavigationalState(navResponse.getNavigationalState());
+         }
          setupPublicRenderParams(uiPortlet, navResponse.getPublicNavigationalStateUpdates());
 
          //TODO: (mwringe) add this to the UpdateNavigationStateResponse.Event class instead of here
@@ -790,11 +821,11 @@ public class UIPortletActionListener
          }
          else if (portletMode.equals(PortletMode.VIEW.toString()))
          {
-        	   uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
+            uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
          }
          else
          {
-        	PortletMode customMode = new PortletMode(portletMode);
+            PortletMode customMode = new PortletMode(portletMode);
             uiPortlet.setCurrentPortletMode(customMode);
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);

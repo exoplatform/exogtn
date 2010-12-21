@@ -674,11 +674,9 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
             el.type = "checkbox";
             el.name = prefix + att;
             el.id = elID;
-            if (userPrefs[att] && userPrefs[att] == "true") {
-                el.checked = userPrefs[att];
-            } else {
-            	if(prefs[att].default == "true")
-            		el.checked = true;
+            if ((userPrefs[att] && userPrefs[att] == "true") ||
+            		prefs[att]["default"] == "true") {
+                el.checked = true;
             }
             attEl.appendChild(el);
         }
@@ -764,7 +762,16 @@ gadgets.IfrGadget.prototype.handleSaveUserPrefs = function() {
     }
   }
   this.setUserPrefs(prefs);
-  this.refresh();
+};
+
+gadgets.IfrGadget.prototype.setUserPrefs = function(newUserPrefs) {	
+	gadgets.IfrGadget.superClass_.setUserPrefs.call(this, newUserPrefs);		
+	this.refresh();
+};
+
+gadgets.IfrGadget.prototype.setUserPref = function(name, value) {	
+	gadgets.IfrGadget.superClass_.setUserPref.call(this, name, value);	
+	this.refresh();
 };
 
 gadgets.IfrGadget.prototype.handleCancelUserPrefs = function() {
@@ -773,7 +780,8 @@ gadgets.IfrGadget.prototype.handleCancelUserPrefs = function() {
 
 gadgets.IfrGadget.prototype.refresh = function() {
   var iframeId = this.getIframeId();
-  document.getElementById(iframeId).src = this.getIframeUrl();
+  if (document.getElementById(iframeId)) 
+	  document.getElementById(iframeId).src = this.getIframeUrl();
 };
 
 

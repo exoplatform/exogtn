@@ -376,12 +376,16 @@ public class UIGadget extends UIComponent
       public void execute(Event<UIGadget> event) throws Exception
       {
          UIGadget uiGadget = event.getSource();
-
+         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+         
          //
-         try{
+         try
+         {
             uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
-         } catch(Exception e){
-            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            Util.getPortalRequestContext().setResponseComplete(true);
+         } 
+         catch(Exception e)
+         {                        
             UIPortletApplication uiPortlet = uiGadget.getAncestorOfType(UIPortletApplication.class);
             context.addUIComponentToUpdateByAjax(uiPortlet);
             throw new MessageException(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null, ApplicationMessage.ERROR));
