@@ -83,6 +83,7 @@
 	<classpathentry excluding="**" kind="src" output="examples/portlets/struts-jpetstore/target/classes" path="examples/portlets/struts-jpetstore/src/main/resources"/>
 	<classpathentry kind="src" output="examples/portlets/struts-jpetstore/target/test-classes" path="examples/portlets/struts-jpetstore/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="examples/portlets/struts-jpetstore/target/test-classes" path="examples/portlets/struts-jpetstore/src/test/resources"/>
+	<classpathentry kind="src" output="starter/war/target/classes" path="starter/war/src/main/java"/>
 	<classpathentry kind="src" output="testsuite/selenium-snifftests/target/classes" path="testsuite/selenium-snifftests/src/main/java"/>
 	<classpathentry kind="src" output="testsuite/webuibasedsamples/target/classes" path="testsuite/webuibasedsamples/src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
