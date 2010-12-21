@@ -154,12 +154,15 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
    private List<QName> supportedPublishingEvents_;
 
-   private List<String> supportedPublicParams_;
+   private Map<QName, String> supportedPublicParams_;
 
    private boolean portletInPortal_ = true;
 
    private StateString navigationalState;
 
+   /** A field storing localized value of javax.portlet.title **/
+   private String configuredTitle;
+   
    public UIPortlet()
    {
       // That value will be overriden when it is mapped onto a data storage
@@ -351,24 +354,39 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       supportedProcessingEvents_ = supportedProcessingEvents;
    }
 
-   public List<String> getSupportedPublicRenderParameters()
+   public Map<QName, String> getSupportedPublicRenderParameters()
    {
+      if (supportedPublicParams_ == null)
+      {
+         if (producedOfferedPortlet == null)
+         {
+            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            return Collections.emptyMap();
+         }
+
+         //
+         Collection<ParameterInfo> parameters = (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
+         Map<QName, String> supportedPublicParams = Collections.emptyMap();
+         for (ParameterInfo parameter : parameters)
+         {
+            if (supportedPublicParams.isEmpty())
+            {
+               supportedPublicParams = new HashMap<QName, String>();
+            }
+            supportedPublicParams.put(parameter.getName(), parameter.getId());
+         }
+
+         //
+         this.supportedPublicParams_ = supportedPublicParams;
+      }
+
+      //
       return supportedPublicParams_;
    }
 
-   public void setSupportedPublicRenderParameters(List<String> supportedPublicRenderParameters)
+   public void setSupportedPublicRenderParameters(Map<QName, String> supportedPublicRenderParameters)
    {
       supportedPublicParams_ = supportedPublicRenderParameters;
-   }
-
-   public String getDisplayTitle()
-   {
-      String title = getTitle();
-      if (title == null)
-      {
-         title = getDisplayName();
-      }
-      return title;
    }
 
    public String getDisplayName()
@@ -542,46 +560,35 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
    /**
     * Tells, according to the info located in portlet.xml, wether this portlet supports the public render parameter
-    * given as a method argument
+    * qname given as method argument. If the qname is supported, the public render parameter id is returned otherwise
+    * false is returned.
+    *
+    * @param supportedPublicParam the supported public parameter qname
+    * @return the supported public parameter id
     */
-   public boolean supportsPublicParam(String supportedPublicParam)
+   public String supportsPublicParam(QName supportedPublicParam)
    {
-      if (supportedPublicParams_ == null)
+      Map<QName, String> supportedPublicParams = getSupportedPublicRenderParameters();
+      return supportedPublicParams.get(supportedPublicParam);
+   }
+
+   /**
+    * Tells, according to the info located in portlet.xml, wether this portlet supports the public render parameter
+    * id given as a method argument.
+    *
+    * @param supportedPublicParamId the supported public parameter id
+    * @return true if the supported public parameter id is supported
+    */
+   public boolean supportsPublicParam(String supportedPublicParamId)
+   {
+      Map<QName, String> supportedPublicParams = getSupportedPublicRenderParameters();
+      boolean supported = supportedPublicParams.containsValue(supportedPublicParamId);
+      if (supported && log.isDebugEnabled())
       {
-
-         //
-         if (producedOfferedPortlet == null)
-         {
-            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
-            return false;
-         }
-
-         //
-         Collection<ParameterInfo> parameters =
-            (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
-         supportedPublicParams_ = new ArrayList<String>();
-         for (ParameterInfo parameter : parameters)
-         {
-            supportedPublicParams_.add(parameter.getId());
-         }
+         log.debug("The Portlet " + producerOfferedPortletContext.getId()
+            + " supports the public render parameter : " + supportedPublicParamId);
       }
-
-      //
-      for (String publicParam : supportedPublicParams_)
-      {
-         if (publicParam.equals(supportedPublicParam))
-         {
-            if (log.isDebugEnabled())
-            {
-               log.debug("The Portlet " + producerOfferedPortletContext.getId()
-                  + " supports the public render parameter : " + supportedPublicParam);
-            }
-            return true;
-         }
-      }
-
-      //
-      return false;
+      return true;
    }
 
    /**
@@ -625,16 +632,19 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          }
       }
       
-      //Handle exposed portal contextual properties
+      // Handle exposed portal contextual properties
       ContextualPropertyManager propertyManager = this.getApplicationComponent(ContextualPropertyManager.class);
       Map<QName, String[]> exposedPortalState = propertyManager.getProperties(this);
-      for(QName qName : exposedPortalState.keySet())
+      for(QName prpQName : exposedPortalState.keySet())
       {
-         if(supportsPublicParam(qName.getLocalPart()))
+         String prpId = supportsPublicParam(prpQName);
+         if(prpId != null)
          {
-            publicParamsMap.put(qName.toString(), exposedPortalState.get(qName));
+            publicParamsMap.put(prpId, exposedPortalState.get(prpQName));
          }
       }
+
+      //
       return publicParamsMap;
    }
 
@@ -924,5 +934,38 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    void setNavigationalState(StateString navigationalState)
    {
       this.navigationalState = navigationalState;
+   }
+      
+   protected void setConfiguredTitle(String _configuredTitle)
+   {
+  	 this.configuredTitle = _configuredTitle;
+   }
+   
+   /**
+    * Returns the title showed on the InfoBar. The title is computed in following manner.
+    * 
+    * 1. First, the method getTitle(), inherited from UIPortalComponent is called. The getTitle() returns
+    * what users set in the PortletSetting tab, the current method returns call result if it is not null.
+    * 
+    * 2. configuredTitle, which is the localized value of javax.portlet.title is returned if it is not null.
+    * 
+    * 3. If the method does not terminate at neither (1) nor (2), the configured display name is returned. 
+    * @return
+    */
+   public String getDisplayTitle()
+   {
+  	 String displayedTitle = getTitle();
+  	 if(displayedTitle != null && displayedTitle.trim().length() > 0)
+  	 {
+  		 return displayedTitle;
+  	 }
+  	 
+  	 if(configuredTitle != null)
+  	 {
+  		 return configuredTitle;
+  	 }
+  	 
+  	 return getDisplayName();
+  	 
    }
 }
