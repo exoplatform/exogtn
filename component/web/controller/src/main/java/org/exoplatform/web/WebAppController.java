@@ -49,7 +49,7 @@ public class WebAppController
 
    private HashMap<String, Object> attributes_;
 
-   private HashMap<String, Application> applications_;
+   private volatile HashMap<String, Application> applications_;
 
    private HashMap<String, WebRequestHandler> handlers_;
 
@@ -89,14 +89,36 @@ public class WebAppController
       return applications;
    }
 
-   public void removeApplication(String appId)
+   public synchronized void removeApplication(String appId)
    {
       applications_.remove(appId);
    }
 
-   public void addApplication(Application app)
+   /**
+    * This methods will add the new application if and only if it hasn't yet been registered
+    * @param app the {@link Application} to add
+    * @return the given application if no application with the same id has been added
+    * otherwise the application already registered
+    */
+   @SuppressWarnings("unchecked")
+   public <T extends Application> T addApplication(T app)
    {
-      applications_.put(app.getApplicationId(), app);
+      Application result = getApplication(app.getApplicationId());
+      if (result == null)
+      {
+         synchronized (this)
+         {
+            result = getApplication(app.getApplicationId());
+            if (result == null)
+            {
+               HashMap<String, Application> applications = new HashMap<String, Application>(applications_);
+               applications.put(app.getApplicationId(), app);
+               this.applications_ = applications;
+               result = app;
+            }
+         }
+      }
+      return (T)result;
    }
 
    public void register(WebRequestHandler handler) throws Exception
