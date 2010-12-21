@@ -4,16 +4,6 @@
 %>
 
 <div class="UIHomePagePortlet" id="$uicomponent.id">
-	<div class="TRContainer">
-		<div class="PortletDecoration">					
-			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%></div>
-			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
-			<div class="DotLine"><span></span></div>
-			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
-			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank"></a>
-			
-		</div>
-	</div>
 	<div class="TLContainer">
 		<div class="PortletDecoration">
 		
@@ -97,4 +87,8 @@
 	</div>	
 	<div class="ClearBoth"><span></span></div>
 </div>
+<<<<<<< HEAD
 
+=======
+<map id="epp-main" name="epp-main"><area shape="rect" alt="" title="" coords="34,150,300,172" href="/portal/docs/gatein-3-10.pdf" target="_blank" /><area shape="rect" alt="" title="" coords="34,175,220,199" href="/portal/docs/JBoss_Portals_0310.pdf" target="_blank" /><area shape="rect" alt="" title="" coords="33,205,129,222" href="http://www.jboss.com/products/platforms/portals/" target="_blank" /><area shape="rect" alt="" title="" coords="147,5,312,31" href="http://vimeo.com/channels/gatein" target="" /></map>
+>>>>>>> 724f4fb1790eb2f21471a2a5a983666cb19bb38f
