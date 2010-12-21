@@ -68,7 +68,10 @@
             <configuration>
               <tasks>
                 <property name="jboss_output_dir" value="${project.build.directory}/jboss-tattletale" />
-                <property name="jboss_scan_dir" value="${basedir}/../pkg/target/jboss/server/default/deploy/gatein.ear/lib" />
+                <property name="tomcat_output_dir" value="${project.build.directory}/tomcat-tattletale" />
+    			<property name="jboss_scan_dir" value="${basedir}/../pkg/target/jboss/server/default/deploy/gatein.ear/lib" />
+                <property name="tomcat_scan_dir" value="${basedir}/../pkg/target/tomcat/lib" />
+					     
                 <ant antfile="build.xml">
                   <target name="generate-report" />
                 </ant>

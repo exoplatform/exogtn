@@ -38,6 +38,11 @@
         <!-- 
             <gatein.working.dir>REPLACE_WITH_SERVER_DIR</gatein.working.dir>
         -->
+
+        <!--
+             Replace with the name of the directory containing Tomcat 6
+        -->        
+        <exo.projects.app.tomcat.version>apache-tomcat-6.0.20</exo.projects.app.tomcat.version>
         <!--
              Replace with the name of the directory containing JBoss AS 5.1
         -->

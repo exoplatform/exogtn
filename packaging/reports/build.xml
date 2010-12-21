@@ -28,11 +28,19 @@
   <target name="generate-report">
   	
   	<available file="${jboss_scan_dir}" property="perform_jboss_scan"/>
+  	<available file="${tomcat_scan_dir}" property="perform_tomcat_scan"/>
  	
   	<contrib:if>
   	  <contrib:equals arg1="${perform_jboss_scan}" arg2="true"/>
   	  <contrib:then>
   	  	<antcall target="generate-report-from-jboss" />
+  	  </contrib:then>
+  	</contrib:if>
+  	
+  	<contrib:if>
+  	  <contrib:equals arg1="${perform_tomcat_scan}" arg2="true"/>
+  	  <contrib:then>
+  	  	<antcall target="generate-report-from-tomcat" />
   	  </contrib:then>
   	</contrib:if>
   </target>
@@ -44,6 +52,15 @@
 	<echo message="Generating ..." />
   	
 	<tattletale:report scanDir="${jboss_scan_dir}" outputDir="${jboss_output_dir}" />
+  </target>
+	
+  <target name="generate-report-from-tomcat">
+  	<echo message="Report based on Tomcat deploy" />
+  	<echo message="Tattletale scan dir: ${tomcat_scan_dir}" />
+    <echo message="Tattletale output dir: ${tomcat_output_dir}" />
+	<echo message="Generating ..." />
+	  	
+	<tattletale:report scanDir="${tomcat_scan_dir}" outputDir="${tomcat_output_dir}" />
   </target>
 
 </project>

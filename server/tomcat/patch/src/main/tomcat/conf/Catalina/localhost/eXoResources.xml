@@ -19,24 +19,4 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-   <modelVersion>4.0.0</modelVersion>
-
-   <parent>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.2.0-Beta01-SNAPSHOT</version>
-   </parent>
-
-   <artifactId>exo.portal.server</artifactId>
-   <packaging>pom</packaging>
-
-   <name>GateIn Portal Server</name>
-
-   <modules>
-      <module>tomcat</module>
-      <module>jboss</module>
-   </modules>
-
-</project>
+<Context path="/eXoResources" docBase="eXoResources" debug="0" reloadable="true" crossContext="true"/>

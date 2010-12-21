@@ -19,24 +19,13 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-   <modelVersion>4.0.0</modelVersion>
-
-   <parent>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.2.0-Beta01-SNAPSHOT</version>
-   </parent>
-
-   <artifactId>exo.portal.server</artifactId>
-   <packaging>pom</packaging>
-
-   <name>GateIn Portal Server</name>
-
-   <modules>
-      <module>tomcat</module>
-      <module>jboss</module>
-   </modules>
-
-</project>
+<Context path='/portal' docBase='portal' debug='0' reloadable='true' crossContext='true' privileged='true'> 
+  <Logger className='org.apache.catalina.logger.SystemOutLogger' 
+          prefix='localhost_portal_log.' suffix='.txt' timestamp='true'/> 
+  <Manager className='org.apache.catalina.session.PersistentManager' saveOnRestart='false'/> 
+  <Realm className='org.apache.catalina.realm.JAASRealm' 
+         appName='gatein-domain' 
+         userClassNames='org.exoplatform.services.security.jaas.UserPrincipal' 
+         roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal' 
+         debug='0' cache='false'/> 
+	 <Valve className='org.apache.catalina.authenticator.FormAuthenticator' characterEncoding='UTF-8'/></Context> 

@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -19,24 +20,13 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-   <modelVersion>4.0.0</modelVersion>
-
-   <parent>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.2.0-Beta01-SNAPSHOT</version>
-   </parent>
-
-   <artifactId>exo.portal.server</artifactId>
-   <packaging>pom</packaging>
-
-   <name>GateIn Portal Server</name>
-
-   <modules>
-      <module>tomcat</module>
-      <module>jboss</module>
-   </modules>
-
-</project>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <servlet>
+     <servlet-name>ContainerServlet</servlet-name>
+     <servlet-class>org.gatein.wci.tomcat.TC6ContainerServlet</servlet-class>
+     <load-on-startup>1</load-on-startup>
+  </servlet>
+</web-app>

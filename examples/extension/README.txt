@@ -22,7 +22,7 @@
 ########################################
 
 ########################################
-# On JBoss
+# On JBoss (tested on JBoss 5.1.0.GA)
 ########################################
 
 We assume that you have a clean JBoss version of GateIn: ie We assume that you have already the file gatein.ear in the deploy directory 
@@ -37,6 +37,22 @@ WARNING: This can only work if a Unified ClassLoader has been configured on your
 the load order is first the exoplatform.ear then the sample-ext.ear and finally the starter.ear
 
 ########################################
+# On Tomcat (tested on Tomcat 6.0.20)
+########################################
+
+We assume that you have a clean Tomcat version of GateIn: ie We assume that you have already all the jar files of GateIn and their dependencies 
+into tomcat/lib and you have the related relam name "gatein-domain" defined in the file tomcat/conf/jaas.conf
+
+1. Add the file sample-ext.war from sample/extension/war/target/ to the tomcat/webapps directory
+2. Add the folder starter from starter/war/target/ to the tomcat/webapps directory 
+3. Rename the directory (unzipped folder) starter to "starter.war" (for more details see the warning below)
+4. Add the jar file exo.portal.sample.extension.config-X.Y.Z.jar from sample/extension/config/target/ to the tomcat/lib directory
+5. Add the jar file exo.portal.sample.extension.jar-X.Y.Z.jar from sample/extension/jar/target/ to the tomcat/lib directory
+
+WARNING: This can only work if the starter.war is the last war file to be loaded, so don't hesitate to rename it if your war files are loaded 
+following to the alphabetic order
+
+########################################
 # HOW TO TEST
 ########################################
 
@@ -49,3 +65,13 @@ You need to:
 1. Go to the bin directory of jboss 
 2. Launch "./run.sh" or "run.bat"
 3. When jboss is ready, you can launch your web browser and access to http://localhost:8080/portal 
+
+########################################
+# On Tomcat (tested on Tomcat 6.0.20)
+########################################
+
+You need to:
+
+1. Go to the bin directory of tomcat 
+2. Launch "./gatein.sh run" or "gatein.bat run"
+3. When tomcat is ready, you can launch your web browser and access to http://localhost:8080/portal 
