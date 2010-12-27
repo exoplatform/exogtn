@@ -23,7 +23,11 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
+<<<<<<< HEAD
     <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+    <version>5.1.0-epp-GA</version>
+>>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
   </parent> 
 	
   <modelVersion>4.0.0</modelVersion>
@@ -36,4 +40,24 @@
   <build>
     <finalName>starter</finalName>
   </build>
+<<<<<<< HEAD
+=======
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-logging</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.starter.jar</artifactId>
+      <version>5.1.0-epp-GA</version>
+    </dependency>
+  </dependencies>
+>>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
 </project>

@@ -21,7 +21,11 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.component.web</artifactId>
+<<<<<<< HEAD
     <version>3.2.0-Beta01-SNAPSHOT</version>
+=======
+    <version>5.1.0-epp-GA</version>
+>>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
