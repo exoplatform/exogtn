@@ -23,11 +23,7 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-<<<<<<< HEAD
     <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-    <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -41,49 +37,29 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.portal.config</artifactId>
-<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.portal.jar</artifactId>
-<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.web.api</artifactId>
-<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.portal.war</artifactId>
-<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
       <type>war</type>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.sample.portal.rest-war</artifactId>
-<<<<<<< HEAD
       <version>3.2.0-Beta01-SNAPSHOT</version>
-=======
-      <version>5.1.0-epp-GA</version>
->>>>>>> 1b253d7d57f7c5c82ae85ae92f7380eadc99a872
       <type>war</type>
     </dependency>
   </dependencies>
