@@ -64,6 +64,12 @@
 
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
+
+      <!-- ***************** -->
+      <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
+      <!-- ***************** -->
+      <exo.releases.repo.url>http://repository.exoplatform.org/service/local/staging/deploy/maven2/</exo.releases.repo.url>
+      <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-snapshots/</exo.snapshots.repo.url>
    </properties>
 
    <scm>
