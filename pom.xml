@@ -65,6 +65,11 @@
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
 
+     <!-- maven-release-plugin -->
+     <!-- we don't distribute this version of gatein thus we don't generate
+     packages for the release - pkg-tomcat,pkg-jbossas profiles are removed -->
+     <arguments>-Prelease -DskipTests</arguments>
+
       <!-- ***************** -->
       <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
       <!-- ***************** -->
