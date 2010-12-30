@@ -77,7 +77,6 @@
                           <stylesheetResource>classpath://xslt/org/gatein/pdf.xsl</stylesheetResource>
                           <finalName>${pom.name}.pdf</finalName>
                       </format>
-                      <!--
                       <format>
                           <formatName>html</formatName>
                           <stylesheetResource>classpath:/xslt/org/gatein/xhtml.xsl</stylesheetResource>
@@ -93,7 +92,6 @@
                           <stylesheetResource>classpath:/xslt/org/gatein/eclipse.xsl</stylesheetResource>
                           <finalName>index.html</finalName>
                       </format>
-                      -->
                     </formats>
                   
                     <options>
