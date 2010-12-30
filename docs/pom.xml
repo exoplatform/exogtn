@@ -35,9 +35,26 @@
    <name>GateIn - Portal (docs-aggregator)</name>
 
    <modules>
-      <module>user-guide</module>
-      <module>reference-guide</module>
+     <!--
+        This is not the default modules declaration, instead we use the "normal" profile that is activated when
+        the development property is not set (to any value). This declaration does not build anything in development mode.
+       -->
    </modules>
+
+   <profiles>
+     <profile>
+       <id>normal</id>
+       <activation>
+         <property>
+           <name>!development</name>
+         </property>
+       </activation>
+       <modules>
+         <module>user-guide</module>
+         <module>reference-guide</module>
+       </modules>
+     </profile>
+   </profiles>
 
    <build>
         <plugins>
