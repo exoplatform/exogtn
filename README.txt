@@ -39,6 +39,13 @@ provided in profiles.xml. It will override what's in the provided file.
 ** Creates a JBossAS delivery in packaging/pkg/target/jboss/
 
 *****************
+* DOCUMENTATIONS:
+*****************
+ 
+  Per default GateIn documentations are generated in the build process. 
+  To deactivate them either add -DskipDocs or -P-docs in the command line.
+ 
+*****************
 * STARTING:
 *****************
 * On Tomcat: go to the tomcat directory (or unzip the archive in your favorite location) and execute 'bin/gatein.sh start' ('bin/gatein.bat start' on Windows)
