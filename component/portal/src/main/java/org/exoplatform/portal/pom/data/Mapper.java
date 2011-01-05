@@ -915,7 +915,7 @@ public class Mapper
       }
    }
 
-   private <S> ApplicationData<S> load(UIWindow src)
+   public <S> ApplicationData<S> load(UIWindow src)
    {
       Attributes attrs = src.getAttributes();
 

@@ -1,0 +1,27 @@
+<%	
+	import org.exoplatform.web.application.JavascriptManager;
+	import org.exoplatform.portal.webui.application.GadgetUtil;
+	def rcontext = _ctx.getRequestContext();
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	def hostName = GadgetUtil.getRelGadgetServerUrl();
+	def url = uicomponent.getUrl();
+	def metadata = uicomponent.getMetadata();
+	def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
+	def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
+	def zIndex = uicomponent.getProperties().getIntValue("zIndex");
+	def id = uicomponent.getId();
+	def isDev = uicomponent.isGadgetDeveloper();
+	def noCache = uicomponent.isNoCache();
+	def isDebug = uicomponent.isDebug();
+	def view = uicomponent.getView();
+	def userPref = uicomponent.getUserPref();
+	jsmanager.importJavascript("eXo.gadget.UIGadget");
+	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
+																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");																																						
+%>
+<div class="UIGadget" id="$id" style="left: $posX; top: $posY; z-Index: $zIndex; width: 100%" >
+	<div class="GadgetControl" style="visibility: visible; ">		
+	</div>
+ 	<div id="content-$id"></div>
+	<div class="UIMask" style="display: none; border:solid 1px red"><span></span></div>
+</div>

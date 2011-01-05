@@ -23,6 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
@@ -30,6 +32,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -45,7 +48,9 @@ import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
@@ -55,6 +60,11 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+import org.gatein.mop.api.workspace.WorkspaceObject;
+import org.gatein.mop.api.workspace.ui.UIComponent;
+import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
@@ -315,13 +325,11 @@ public class POMDataStorage implements ModelDataStorage
       });
    }
    
-   @Override
    public <A> A adapt(ModelData modelData, Class<A> type)
    {
       return adapt(modelData, type, true);
    }
    
-   @Override
    public <A> A adapt(ModelData modelData, Class<A> type, boolean create)
    {
       try
@@ -348,4 +356,58 @@ public class POMDataStorage implements ModelDataStorage
          return null;
       }
    }
+   
+	 public Map<String, String> getSiteInfo(String workspaceObjectId) throws Exception
+   {
+	
+	   POMSession session = pomMgr.getSession();
+	   
+	   WorkspaceObject workspaceObject = session.findObjectById(workspaceObjectId);
+	   
+	   if(workspaceObject instanceof UIComponent)
+	   {
+		   Site site = ((UIComponent)workspaceObject).getPage().getSite();
+		   ObjectType<? extends Site> siteType = site.getObjectType();
+		   
+		   Map<String, String> returnedMap = new HashMap<String, String>();
+		   
+		   //Put the siteType on returned map
+		   if(siteType == ObjectType.PORTAL_SITE)
+		   {
+			   returnedMap.put("siteType", "portal");
+		   }
+		   else if(siteType == ObjectType.GROUP_SITE)
+		   {
+			   returnedMap.put("siteType", "group");
+		   }else if(siteType == ObjectType.USER_SITE)
+		   {
+			   returnedMap.put("siteType", "user");
+		   }
+		   
+		   //Put the siteOwner on returned map
+		   returnedMap.put("siteOwner", site.getName());
+		   
+		   return returnedMap;
+	   }
+	   
+	   throw new Exception("The provided ID is not associated with an application");
+	}
+   
+	public <S> ApplicationData<S> getApplicationData(String applicationStorageId) throws Exception
+  {
+		// TODO Auto-generated method stub
+	   
+	   POMSession session = pomMgr.getSession();
+	   WorkspaceObject workspaceObject = session.findObjectById(applicationStorageId);
+	   
+	   if(workspaceObject instanceof UIWindow)
+	   {
+		   UIWindow application = (UIWindow)workspaceObject;
+		   Mapper mapper = new Mapper(session);
+		   
+		   ApplicationData data = mapper.load(application);
+		   return data;
+	   }
+	   throw new NoSuchDataException("Could not load the application data specified by the ID: " + applicationStorageId);
+	}
 }

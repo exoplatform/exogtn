@@ -1,0 +1,14 @@
+<div class="UIStandaloneAppContainer" id="<%=uicomponent.getId()%>">
+<%
+	if (uicomponent.isLossData())	{
+		print("Can not render this gadget</div>");
+		return;
+	}
+	if (uicomponent.currApp != null)	 {
+		uicomponent.renderChild(uicomponent.currApp);
+	} else {
+%>
+	<div class="Icon">Not have permission</div>
+	<div class="Icon"><a href="<%=uicomponent.url("Logout")%>">Login with other UserName</a> </div>
+<% 	} %>
+</div>

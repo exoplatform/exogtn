@@ -79,7 +79,6 @@ public class PortalRequestHandler extends WebRequestHandler
     *   12) Release the context from the thread
     * 
     */
-   @SuppressWarnings("unchecked")
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       log.debug("Session ID = " + req.getSession().getId());
@@ -91,6 +90,12 @@ public class PortalRequestHandler extends WebRequestHandler
          res.sendRedirect(req.getContextPath());
          return;
       }
+      processRequest(context, app);
+   }
+
+   @SuppressWarnings("unchecked")
+   protected void processRequest(PortalRequestContext context, PortalApplication app) throws Exception
+   {
       WebuiRequestContext.setCurrentInstance(context);
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try

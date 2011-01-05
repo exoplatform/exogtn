@@ -77,6 +77,11 @@ public class PortalController extends AbstractHttpServlet
          application.onInit();
          controller.addApplication(application);
          controller.register(new PortalRequestHandler());
+         
+         StandaloneApplication standaloneApplication = new StandaloneApplication(config);
+         standaloneApplication.onInit();
+         controller.addApplication(standaloneApplication);
+         controller.register(new StandaloneAppRequestHandler());
          log.info("The WebAppController has been successfully initialized for the portal '" + portalContainer.getName()
             + "'");
       }

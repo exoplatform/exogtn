@@ -199,6 +199,10 @@
 	  	<param-name>webui.configuration</param-name>
 	  	<param-value>app:/WEB-INF/webui-configuration.xml</param-value>
 	  </init-param>
+    <init-param>
+      <param-name>standalone.webui.configuration</param-name>
+      <param-value>app:/WEB-INF/standalone-webui-configuration.xml</param-value>
+    </init-param>
 	  <load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -293,6 +297,10 @@
     <servlet-name>GateInServlet</servlet-name>
     <url-pattern>/gateinservlet</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>portal</servlet-name>
+    <url-pattern>/StandaloneApplication/*</url-pattern>
+  </servlet-mapping>
 
   <!-- The Welcome File List for IBM WebSphere -->
 
@@ -326,6 +334,20 @@
 	  </auth-constraint>
 		<user-data-constraint>
 		  <transport-guarantee>NONE</transport-guarantee>
+	  </user-data-constraint>
+	</security-constraint>
+  <security-constraint>
+		<web-resource-collection>
+	  	<web-resource-name>user authentication</web-resource-name>
+	  	<url-pattern>/StandaloneApplication/*</url-pattern> 
+	  	<http-method>POST</http-method>
+	  	<http-method>GET</http-method>
+	  </web-resource-collection>
+		<auth-constraint>
+	  	<role-name>users</role-name>
+	  </auth-constraint>
+		<user-data-constraint>
+	  	<transport-guarantee>NONE</transport-guarantee>
 	  </user-data-constraint>
 	</security-constraint>
 	<login-config>

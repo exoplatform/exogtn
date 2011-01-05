@@ -19,18 +19,16 @@
 
 package org.exoplatform.portal.pom.data;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.pom.data.ModelChange;
-import org.exoplatform.portal.pom.data.PageData;
-import org.exoplatform.portal.pom.data.PortalData;
-
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -109,7 +107,11 @@ public interface ModelDataStorage
    public void saveDashboard(DashboardData dashboard) throws Exception;
 
    public void save() throws Exception;
-   
+
+   public Map<String, String> getSiteInfo(String workspaceObjectId) throws Exception;
+
+   public <S> ApplicationData<S> getApplicationData(String applicationStorageId) throws Exception;
+
    /****************************************************************
     * Proxy methods of public API to access/modify MOP mixins, 
     * 
