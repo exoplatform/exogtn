@@ -266,13 +266,20 @@ public class UIPageBrowser extends UISearch
             return;
          }
          Page page = service.getPage(id, pcontext.getRemoteUser());
+         if (page != null && page.getName().equals("webos"))
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDeleteDesktopPage", new String[]{id}, 1));
+            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            return;
+         }
+         
          if (page == null || !page.isModifiable())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
-
+         
          UIVirtualList virtualList = uiPageBrowser.getChild(UIVirtualList.class);
          UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
          PageListAccess datasource = (PageListAccess)repeater.getDataSource();
@@ -398,6 +405,13 @@ public class UIPageBrowser extends UISearch
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
+         
+         if (page.getName().equals("webos"))
+         {
+             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.edit.NotEditDesktopPage", new String[]{id}, 1));
+             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+             return;
+         }
 
          //Check current user 's permissions on the page
          UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
@@ -407,7 +421,7 @@ public class UIPageBrowser extends UISearch
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
-
+         
          //Switch portal application to edit mode
          uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
@@ -420,17 +434,6 @@ public class UIPageBrowser extends UISearch
          UIPageBody uiPageBody = uiPortalApp.findFirstComponentOfType(UIPageBody.class);
          if (uiPageBody.getUIComponent() != null)
             uiPageBody.setUIComponent(null);
-
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-            UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
-            uiPageForm.setValues(uiPage);
-            uiMaskWS.setUIComponent(uiPageForm);
-            uiMaskWS.setShow(true);
-            pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
-            return;
-         }
 
          editInlineWS.setRendered(true);
          editInlineWS.setUIComponent(uiPage);
