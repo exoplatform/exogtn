@@ -27,9 +27,11 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Application;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -133,6 +135,15 @@ public class WebAppController
          handlers_.remove(path);
    }
 
+   public void onHandlersInit(ServletConfig config) throws Exception
+   {
+      Collection<WebRequestHandler> handlers = handlers_.values();
+      for (WebRequestHandler handler : handlers)
+      {
+         handler.onInit(this, config);
+      }
+   }
+   
    /**
     * This is the first method - in the eXo web framework - reached by incoming HTTP request, it acts like a
     * servlet service() method

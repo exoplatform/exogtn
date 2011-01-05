@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +36,14 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       return PATHS;
    }
 
+   @Override
+   public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
+   {
+      StandaloneApplication standaloneApplication = new StandaloneApplication(sConfig);
+      standaloneApplication.onInit();
+      controller.addApplication(standaloneApplication);
+   }
+   
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       log.debug("Session ID = " + req.getSession().getId());

@@ -21,6 +21,7 @@ package org.exoplatform.web;
 
 import org.exoplatform.container.component.BaseComponentPlugin;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,10 +38,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 abstract public class WebRequestHandler extends BaseComponentPlugin
 {
-
-   public void onInit(WebAppController controller) throws Exception
+   public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
    {
-
+      
    }
 
    abstract public String[] getPath();

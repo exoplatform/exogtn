@@ -34,6 +34,7 @@ import org.exoplatform.webui.core.UIApplication;
 
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,6 +55,14 @@ public class PortalRequestHandler extends WebRequestHandler
    public String[] getPath()
    {
       return PATHS;
+   }
+   
+   @Override
+   public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
+   {
+      PortalApplication application = new PortalApplication(sConfig);
+      application.onInit();
+      controller.addApplication(application);
    }
 
    /**
