@@ -57,6 +57,15 @@ public class UIStandaloneAppContainer extends UIContainer
       return null;
    }
 
+   public String getCurrAppName()
+   {
+      if (currApp != null)
+      {
+         return currApp.getApplicationName();
+      }
+      return null;
+   }
+
    public void setCurrStorageId(String storageId) throws Exception
    {
       //New app, so we reset the lossData status

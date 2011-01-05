@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
 import org.exoplatform.portal.webui.application.UIStandaloneGadget;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;
 import org.exoplatform.services.log.ExoLogger;
@@ -59,10 +60,10 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    {
       String title = null;
       UIApplication uiApp = getUIApplication();
-      UIStandaloneGadget aloneGadget = uiApp.findFirstComponentOfType(UIStandaloneGadget.class);
-      if (aloneGadget != null)
+      UIStandaloneAppContainer container = uiApp.getChild(UIStandaloneAppContainer.class);
+      if (container != null)
       {
-         title = aloneGadget.getApplicationName();         
+         title = container.getCurrAppName();
       }
       
       if (title == null)

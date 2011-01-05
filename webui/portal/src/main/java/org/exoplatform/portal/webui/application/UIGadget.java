@@ -23,6 +23,7 @@ import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -44,6 +45,8 @@ import org.json.JSONObject;
 
 import java.util.Random;
 import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by The eXo Platform SAS Author : dang.tung tungcnw@gmail.com May 06,
@@ -136,6 +139,18 @@ public class UIGadget extends UIComponent
    public String getId()
    {
       return storageName;
+   }
+
+   public String getStandaloneURL()
+   {
+      PortalRequestContext portalRC = Util.getPortalRequestContext();
+      HttpServletRequest request = portalRC.getRequest();
+      StringBuilder urlBuilder = new StringBuilder(request.getScheme());
+      urlBuilder.append("://").append(request.getServerName()).append(":").append(request.getServerPort());
+      urlBuilder.append(request.getContextPath()).append("/standalone/").append(storageId);
+
+      HttpServletResponse response = portalRC.getResponse();
+      return response.encodeURL(urlBuilder.toString());
    }
 
    public ApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget> getState()
