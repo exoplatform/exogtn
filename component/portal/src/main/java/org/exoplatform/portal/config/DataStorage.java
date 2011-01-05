@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.config;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -32,10 +36,6 @@ import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS
@@ -275,13 +275,13 @@ public interface DataStorage
    public List<String> getAllPortalNames() throws Exception;
 
    /**
-    * Returns info on site holding workspace object specified by applicationStorageId
+    * Returns a String array that contains two elements. The first one is the site type and the second one is site name. <br/>
     *
     * @param applicationStorageId
     * @return
     * @throws Exception
     */
-   public Map<String, String> getSiteInfo(String applicationStorageId) throws Exception;
+   public String[] getSiteInfo(String applicationStorageId) throws Exception;
 
    public <S> Application<S> getApplicationModel(String applicationStorageId) throws Exception;
 

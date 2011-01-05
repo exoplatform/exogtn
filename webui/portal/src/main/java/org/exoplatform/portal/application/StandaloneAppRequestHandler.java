@@ -28,7 +28,7 @@ import org.exoplatform.web.WebAppController;
 public class StandaloneAppRequestHandler extends PortalRequestHandler
 {
 
-   private String[] PATHS = {"/StandaloneApplication"};
+   private String[] PATHS = {"/standalone"};
 
    public String[] getPath()
    {

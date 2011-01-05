@@ -25,8 +25,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import java.util.Map;
-
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -359,7 +357,7 @@ public class DataStorageImpl implements DataStorage
       return delegate.adapt(modelObject.build(), type, create);
    }
 
-	 public Map<String, String> getSiteInfo(String applicationStorageId) throws Exception
+   public String[] getSiteInfo(String applicationStorageId) throws Exception
    {
 		  // TODO Auto-generated method stub
 		  return delegate.getSiteInfo(applicationStorageId);

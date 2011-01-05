@@ -23,8 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
@@ -40,6 +38,7 @@ import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
@@ -357,7 +356,7 @@ public class POMDataStorage implements ModelDataStorage
       }
    }
    
-	 public Map<String, String> getSiteInfo(String workspaceObjectId) throws Exception
+	 public String[] getSiteInfo(String workspaceObjectId) throws Exception
    {
 	
 	   POMSession session = pomMgr.getSession();
@@ -369,25 +368,25 @@ public class POMDataStorage implements ModelDataStorage
 		   Site site = ((UIComponent)workspaceObject).getPage().getSite();
 		   ObjectType<? extends Site> siteType = site.getObjectType();
 		   
-		   Map<String, String> returnedMap = new HashMap<String, String>();
+		   String[] siteInfo = new String[2];
 		   
 		   //Put the siteType on returned map
 		   if(siteType == ObjectType.PORTAL_SITE)
 		   {
-			   returnedMap.put("siteType", "portal");
+		      siteInfo[0] = PortalConfig.PORTAL_TYPE;
 		   }
 		   else if(siteType == ObjectType.GROUP_SITE)
 		   {
-			   returnedMap.put("siteType", "group");
+		      siteInfo[0] = PortalConfig.GROUP_TYPE;
 		   }else if(siteType == ObjectType.USER_SITE)
 		   {
-			   returnedMap.put("siteType", "user");
+		      siteInfo[0] = PortalConfig.USER_TYPE;
 		   }
 		   
 		   //Put the siteOwner on returned map
-		   returnedMap.put("siteOwner", site.getName());
+		   siteInfo[1] = site.getName();
 		   
-		   return returnedMap;
+		   return siteInfo;
 	   }
 	   
 	   throw new Exception("The provided ID is not associated with an application");

@@ -40,7 +40,7 @@
 	def serverName = portletRequest.getServerName();
 	def port = portletRequest.getServerPort();
 	def standaloneURL = scheme + "://" + serverName + ":" + port + rcontext.getPortalContextPath();
-	standaloneURL += "/StandaloneApplication/" + uicomponent.getStorageId();
+	standaloneURL += "/standalone/" + uicomponent.getStorageId();
 
 	def portletResponse = rcontext.getResponse();
 	standaloneURL = portletResponse.encodeURL(standaloneURL);

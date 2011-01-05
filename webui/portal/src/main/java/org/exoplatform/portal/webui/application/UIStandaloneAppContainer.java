@@ -69,7 +69,7 @@ public class UIStandaloneAppContainer extends UIContainer
       }
 
       DataStorage ds = getApplicationComponent(DataStorage.class);
-      Map<String, String> siteInfo;
+      String[] siteInfo;
       try
       {
          siteInfo = ds.getSiteInfo(storageId);
@@ -84,8 +84,8 @@ public class UIStandaloneAppContainer extends UIContainer
       String siteOwner = null;
       if (siteInfo != null)
       {
-         siteType = siteInfo.get("siteType");
-         siteOwner = siteInfo.get("siteOwner");
+         siteType = siteInfo[0];
+         siteOwner = siteInfo[1];
       }
       ConversationState currentState = ConversationState.getCurrent();
       if (PortalConfig.USER_TYPE.equals(siteType) && currentState.getIdentity().getUserId().equals(siteOwner))

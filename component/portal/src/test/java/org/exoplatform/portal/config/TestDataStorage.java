@@ -1013,4 +1013,43 @@ public class TestDataStorage extends AbstractPortalTest
       portletApp.setState(state);
       return portletApp;
    }
+   
+   public void testGettingGadgetInDashboard() throws Exception
+   {
+      Page page = new Page();
+      page.setPageId("user::john::foo");
+      Application<Portlet> app = Application.createPortletApplication();
+      app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
+      page.getChildren().add(app);
+      storage_.save(page);
+      page = storage_.getPage("user::john::foo");
+      String id = page.getChildren().get(0).getStorageId();
+
+      // Load the dashboard itself
+      Dashboard dashboard = storage_.loadDashboard(id);
+
+      // Put a gadget in one container
+      Container row0 = (Container)dashboard.getChildren().get(0);
+      Application<Gadget> gadgetApp = Application.createGadgetApplication();
+      gadgetApp.setState(new TransientApplicationState<Gadget>("foo"));
+      row0.getChildren().add(gadgetApp);
+
+      // Save the dashboard
+      storage_.saveDashboard(dashboard);
+
+      // Load again the persisted version
+      dashboard = storage_.loadDashboard(id);
+
+      row0 = (Container)dashboard.getChildren().get(0);
+      Application<Gadget> gadget = (Application<Gadget>)row0.getChildren().get(0);
+      String storageId = gadget.getStorageId();
+      
+      // Now get the gadget by StorageId
+      Application<Object> applicationModel = storage_.getApplicationModel(storageId);
+      assertEquals(gadget.getId(), applicationModel.getId());
+      
+      String[] siteInfo = storage_.getSiteInfo(storageId);
+      assertEquals(PortalConfig.USER_TYPE, siteInfo[0]);
+      assertEquals("john", siteInfo[1]);
+   }
 }
