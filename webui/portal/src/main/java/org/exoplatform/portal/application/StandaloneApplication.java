@@ -23,6 +23,7 @@ import javax.servlet.ServletConfig;
 
 public class StandaloneApplication extends PortalApplication
 {
+   private String webuiConfigPath;
 
    final static public String STANDALONE_APPLICATION_ID = "StandaloneApplication";
 
@@ -31,14 +32,22 @@ public class StandaloneApplication extends PortalApplication
       super(config);
    }
 
+   public void setWebUIConfigPath(String path)
+   {
+      webuiConfigPath = path;
+   }
 
    public String getApplicationId()
    {
       return STANDALONE_APPLICATION_ID;
    }
-   
+
    public String getApplicationInitParam(String name)
    {
+      if ("webui.configuration".equals(name))
+      {
+         return webuiConfigPath;
+      }
       return getServletConfig().getInitParameter("standalone." + name);
    }
 }

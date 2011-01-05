@@ -104,25 +104,8 @@ public class UIStandaloneApplication extends UIApplication
       {
          PortalRequestContext pcontext = (PortalRequestContext)context;
 
-//         if (getUIPopupMessages().hasMessage())
-//         {
-//            pcontext.addUIComponentToUpdateByAjax(getUIPopupMessages());
-//         }         
-
          Set<UIComponent> list = context.getUIComponentToUpdateByAjax();
-//         List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>(3);
-//         List<UIComponent> uiDataComponents = new ArrayList<UIComponent>(5);
 
-//         if (list != null)
-//         {
-//            for (UIComponent uicomponent : list)
-//            {
-//               if (uicomponent instanceof UIPortlet)
-//                  uiPortlets.add((UIPortlet)uicomponent);
-//               else
-//                  uiDataComponents.add(uicomponent);
-//            }
-//         }
          w.write("<div class=\"PortalResponse\">");
          w.write("<div class=\"PortalResponseData\">");
          if (list != null)
@@ -137,31 +120,6 @@ public class UIStandaloneApplication extends UIApplication
             }
          }
          w.write("</div>");
-
-//         if (!context.getFullRender())
-//         {
-//            for (UIPortlet uiPortlet : uiPortlets)
-//            {
-//               if (log.isDebugEnabled())
-//                  log.debug("AJAX call: Need to refresh the Portlet " + uiPortlet.getId());
-//
-//               w.write("<div class=\"PortletResponse\" style=\"display: none\">");
-//               w.append("<div class=\"PortletResponsePortletId\">" + uiPortlet.getId() + "</div>");
-//               w.append("<div class=\"PortletResponseData\">");
-//
-//               /*
-//                * If the portlet is using our UI framework or supports it then
-//                * it will return a set of block to updates. If there is not
-//                * block to update the javascript client will see that as a full
-//                * refresh of the content part
-//                */
-//               uiPortlet.processRender(context);
-//
-//               w.append("</div>");
-//               w.append("<div class=\"PortletResponseScript\"></div>");
-//               w.write("</div>");
-//            }
-//         }
 
          w.write("<div class=\"PortalResponseScript\">");
          pcontext.getJavascriptManager().writeJavascript(w);
@@ -182,7 +140,6 @@ public class UIStandaloneApplication extends UIApplication
    {
       SkinService skinService = getApplicationComponent(SkinService.class);
       Collection<Skin> skins = new ArrayList<Skin>(skinService.getPortalSkins(skin_));
-//      Collection<Skin> skins = new ArrayList<Skin>();
       return skins;
    }
 

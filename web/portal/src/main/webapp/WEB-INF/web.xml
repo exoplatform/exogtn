@@ -199,10 +199,6 @@
 	  	<param-name>webui.configuration</param-name>
 	  	<param-value>app:/WEB-INF/webui-configuration.xml</param-value>
 	  </init-param>
-    <init-param>
-      <param-name>standalone.webui.configuration</param-name>
-      <param-value>app:/WEB-INF/standalone-webui-configuration.xml</param-value>
-    </init-param>
 	  <load-on-startup>1</load-on-startup>
 	</servlet>
 

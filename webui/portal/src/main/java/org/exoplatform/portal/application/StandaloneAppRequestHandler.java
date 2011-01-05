@@ -23,11 +23,24 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.web.WebAppController;
 
 
 public class StandaloneAppRequestHandler extends PortalRequestHandler
 {
+   
+   private String webuiConfigPath;
+
+   public StandaloneAppRequestHandler(InitParams params)
+   {
+      ValueParam valueParam = params.getValueParam("webui.configuration");
+      if (valueParam != null)
+      {
+         webuiConfigPath = valueParam.getValue();
+      }
+   }
 
    private String[] PATHS = {"/standalone"};
 
@@ -40,6 +53,7 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
    public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
    {
       StandaloneApplication standaloneApplication = new StandaloneApplication(sConfig);
+      standaloneApplication.setWebUIConfigPath(webuiConfigPath);
       standaloneApplication.onInit();
       controller.addApplication(standaloneApplication);
    }
@@ -51,10 +65,7 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
 
       StandaloneApplication app = controller.getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
       StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, req, res);
-//      if (context.getPortalOwner().length() == 0) {
-//         res.sendRedirect(req.getContextPath());
-//         return;
-//      }
+
       processRequest(context, app);
    }     
 }
