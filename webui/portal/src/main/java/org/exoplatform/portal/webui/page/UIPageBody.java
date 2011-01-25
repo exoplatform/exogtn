@@ -145,8 +145,8 @@ public class UIPageBody extends UIComponentDecorator
       {
          return uiPage;
       }
-      
-      Class<? extends UIPage> clazz =  Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+                                                                                                  
+      Class<? extends UIPage> clazz =  UIPage.getRealClass(page.getFactoryId());
       uiPage = createUIComponent(context, clazz, null, null);
       
       PortalDataMapper.toUIPage(uiPage, page);

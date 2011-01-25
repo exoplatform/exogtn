@@ -36,6 +36,8 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * May 19, 2006
@@ -44,7 +46,6 @@ import org.exoplatform.webui.event.EventListener;
 	@EventConfig(name = "EditCurrentPage", listeners = UIPage.EditCurrentPageActionListener.class)})
 public class UIPage extends UIContainer
 {
-
    /** . */
    private String pageId;
 
@@ -57,6 +58,28 @@ public class UIPage extends UIContainer
    private boolean showMaxWindow = false;
 
    private UIPortlet maximizedUIPortlet;
+
+   protected static Map<String, Class<? extends UIPage>> realClass;
+
+   public static String DEFAULT_FACTORY_ID = "Default";
+
+   static
+   {
+      if (realClass == null)
+      {
+         realClass = new HashMap<String, Class<? extends UIPage>>();
+         realClass.put(DEFAULT_FACTORY_ID, UIPage.class);
+      }
+   }
+
+   public static Class<? extends UIPage> getRealClass(String factoryID)
+   {
+      if (factoryID == null || factoryID.trim().equals("") || factoryID.trim().equals(DEFAULT_FACTORY_ID))
+      {
+         return UIPage.class;
+      }
+      return realClass.get(factoryID);
+   }
 
    public String getOwnerId()
    {
@@ -160,8 +183,7 @@ public class UIPage extends UIContainer
 			uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
 			// We clone the edited UIPage object, that is required for Abort action
-			Class<? extends UIPage> clazz = Class.forName(page.getFactoryId())
-					.asSubclass(UIPage.class);
+			Class<? extends UIPage> clazz = UIPage.getRealClass(uiPage.getFactoryId());
 			UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
 			PortalDataMapper.toUIPage(newUIPage, page);
 			uiToolPanel.setWorkingComponent(newUIPage);

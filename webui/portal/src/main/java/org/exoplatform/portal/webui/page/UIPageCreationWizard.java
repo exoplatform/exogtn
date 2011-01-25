@@ -351,7 +351,7 @@ public class UIPageCreationWizard extends UIPageWizard
 
          UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
          
-         Class<? extends UIPage> clazz = Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+         Class<? extends UIPage> clazz = UIPage.getRealClass(page.getFactoryId());
          UIPage uiPage = uiWizard.createUIComponent(context, clazz, null, null);
          
          PortalDataMapper.toUIPage(uiPage, page);

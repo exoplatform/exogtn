@@ -91,7 +91,7 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          // We clone the edited UIPage object, that is required for Abort action
-         Class<? extends UIPage> clazz = Class.forName(page.getFactoryId()).asSubclass(UIPage.class);
+         Class<? extends UIPage> clazz = UIPage.getRealClass(page.getFactoryId());
          UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
