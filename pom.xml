@@ -85,6 +85,8 @@
      <!-- we don't distribute this version of gatein thus we don't generate
      packages for the release - pkg-tomcat,pkg-jbossas profiles are removed -->
      <arguments>-Prelease -DskipTests</arguments>
+     <pushChanges>false</pushChanges>
+     <version.release.plugin>2.1</version.release.plugin>
 
       <!-- ***************** -->
       <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
