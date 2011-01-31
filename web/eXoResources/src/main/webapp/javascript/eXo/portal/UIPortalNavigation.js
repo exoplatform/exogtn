@@ -158,7 +158,8 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
       eXo.portal.UIPortalNavigation.toggleSubMenu(e, tab, menuItemContainer) ;
     }
   }
-  eXo.portal.UIPortalNavigation.menuVisible = true ;  
+  eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
+  eXo.portal.UIPortalNavigation.menuVisible = true ;
 } ;
 
 UIPortalNavigation.prototype.setTabStyleOnMouseOut = function(e, src) {
@@ -327,7 +328,6 @@ UIPortalNavigation.prototype.onMenuItemOver = function(e) {
         subContainer.firstTime = true;
     }
   }
-  eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
 };
 /**
  * Shows a sub menu, uses the methods from superClass (eXo.webui.UIPopupMenu)

@@ -85,7 +85,7 @@
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>exo.portal.server.jboss.patch-ear</artifactId>
          <version>3.2.0-PLF-SNAPSHOT</version>
-       </dependency> 
+       </dependency>
        
        <!-- Missing packaging dependencies -->
 <dependency><groupId>org.gatein.wci</groupId><artifactId>wci-exo</artifactId><version>${org.gatein.wci.version}</version></dependency>
