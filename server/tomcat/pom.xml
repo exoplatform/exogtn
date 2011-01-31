@@ -26,7 +26,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.server</artifactId>
-      <version>3.1.6-REBASED</version>
+      <version>3.1.7-REBASED-SNAPSHOT</version>
    </parent>
 
    <artifactId>exo.portal.server.tomcat</artifactId>

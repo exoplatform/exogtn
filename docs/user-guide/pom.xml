@@ -26,7 +26,7 @@
     <parent>
         <groupId>org.gatein.doc</groupId>
         <artifactId>docs-aggregator</artifactId>
-        <version>3.1.6-REBASED</version>
+        <version>3.1.7-REBASED-SNAPSHOT</version>
     </parent> 
     
     <artifactId>gatein-user-guide-en</artifactId>
