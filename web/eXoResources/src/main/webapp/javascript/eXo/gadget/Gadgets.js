@@ -631,7 +631,7 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
     var j = 0;
     for (var att in prefs) {
 	    	//TODO: dang.tung not append when using list
-				type = prefs[att].type;
+				type = prefs[att].dataType.toLowerCase();
 				if(type == "list"|| type == "hidden") continue;
 				// end
         var attEl = document.createElement("div");
@@ -812,7 +812,7 @@ gadgets.IfrGadget.prototype.setNoCache = function(value) {
  */
 gadgets.Container = function() {
   this.gadgets_ = {};
-  this.parentUrl_ = 'http://' + document.location.host;
+  this.parentUrl_ = document.location.href + '://' + document.location.host;
   this.country_ = 'ALL';
   this.language_ = 'ALL';
   this.view_ = 'default';

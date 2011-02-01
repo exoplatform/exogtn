@@ -43,7 +43,7 @@
       <org.exoplatform.jcr.version>1.14.0-CR4-CP01</org.exoplatform.jcr.version>
       <org.exoplatform.exopackage.version>1.1.4</org.exoplatform.exopackage.version>
       <org.jibx.version>1.2.2</org.jibx.version>
-      <org.shindig.version>1.0-r790473-Patch05</org.shindig.version>
+      <org.shindig.version>2.0.2-Beta02</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.3-GA</org.gatein.common.version>
       <org.gatein.wci.version>2.0.2-GA</org.gatein.wci.version>
@@ -633,7 +633,52 @@
             <artifactId>staxnav.core</artifactId>
             <version>${org.staxnav.version}</version>
          </dependency>
-
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${org.slf4j.version}</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-beanutils</groupId>
+           <artifactId>commons-beanutils</artifactId>
+           <version>1.8.0</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-chain</groupId>
+           <artifactId>commons-chain</artifactId>
+           <version>1.0</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-codec</groupId>
+           <artifactId>commons-codec</artifactId>
+           <version>1.4</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-fileupload</groupId>
+           <artifactId>commons-fileupload</artifactId>
+           <version>1.2.1</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-logging</groupId>
+           <artifactId>commons-logging</artifactId>
+           <version>1.0.4</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-pool</groupId>
+           <artifactId>commons-pool</artifactId>
+           <version>1.2</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>xerces</groupId>
+                 <artifactId>xerces</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
          <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
@@ -699,7 +744,7 @@
          <dependency>
             <groupId>caja</groupId>
             <artifactId>caja</artifactId>
-            <version>r3375</version>
+            <version>r4251</version>
          </dependency>
          <dependency>
             <groupId>caja</groupId>
@@ -707,17 +752,17 @@
             <version>r1</version>
          </dependency>
          <dependency>
-            <groupId>net.oauth</groupId>
-            <artifactId>core</artifactId>
-            <version>20080621</version>
+            <groupId>net.oauth.core</groupId>
+            <artifactId>oauth</artifactId>
+            <version>20100527</version>
          </dependency>
          <dependency>
-            <groupId>com.google.collections</groupId>
-            <artifactId>google-collections</artifactId>
-            <version>1.0-rc2</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r07</version>
          </dependency>
          <dependency>
-            <groupId>com.google.code.guice</groupId>
+            <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>2.0</version>
          </dependency>
@@ -725,6 +770,21 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
+         </dependency>
+         <dependency>
+           <groupId>com.google.inject.extensions</groupId>
+           <artifactId>guice-multibindings</artifactId>
+           <version>2.0</version>
+         </dependency>
+         <dependency>
+           <groupId>org.apache.httpcomponents</groupId>
+           <artifactId>httpclient</artifactId>
+           <version>4.0</version>
+         </dependency>
+         <dependency>
+           <groupId>org.apache.httpcomponents</groupId>
+           <artifactId>httpcore</artifactId>
+           <version>4.0.1</version>
          </dependency>
          <dependency>
             <groupId>rome</groupId>
@@ -776,17 +836,6 @@
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-common</artifactId>
             <version>${org.shindig.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-server</artifactId>
-            <version>${org.shindig.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-server</artifactId>
-            <version>${org.shindig.version}</version>
-            <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.gatein.shindig</groupId>

@@ -222,12 +222,17 @@ function getModule(params)
 
    module.eXoGadgetServer =
    new Project("org.exoplatform.portal", "exo.portal.gadgets-server", "war", module.version).
-      addDependency(new Project("commons-codec", "commons-codec", "jar", "1.3")).
-      addDependency(new Project("net.oauth", "core", "jar", "20080621")).
-      addDependency(new Project("com.google.collections", "google-collections", "jar", "1.0-rc2")).
-      addDependency(new Project("com.google.code.guice", "guice", "jar", "2.0")).
-      addDependency(new Project("com.google.code.guice", "guice-jmx", "jar", "2.0")).
-      addDependency(new Project("rome", "rome", "jar", "0.9")).
+      addDependency(new Project("commons-io", "commons-io", "jar", "1.4")).
+      addDependency(new Project("commons-codec", "commons-codec", "jar", "1.4")).
+      addDependency(new Project("net.oauth.core", "oauth", "jar", "20100527")).
+      addDependency(new Project("com.google.guava", "guava", "jar", "r07")).
+      addDependency(new Project("com.google.inject", "guice", "jar", "2.0")).
+      addDependency(new Project("com.google.inject.extensions", "guice-jmx", "jar", "2.0")).
+      addDependency(new Project("com.google.inject.extensions", "guice-multibindings", "jar", "2.0")).
+      addDependency(new Project("org.apache.httpcomponents", "httpclient", "jar", "4.0")).
+      addDependency(new Project("org.apache.httpcomponents", "httpcore", "jar", "4.0.1")).
+      addDependency(new Project("commons-lang", "commons-lang", "jar", "2.6")).
+      addDependency(new Project("rome", "rome", "jar", "1.0")).
       addDependency(new Project("joda-time", "joda-time", "jar", "1.6")).
       addDependency(new Project("org.json", "json", "jar", "20070829")).
       addDependency(new Project("org.gatein.shindig", "shindig-common", "jar", shindigVersion)).
@@ -241,7 +246,7 @@ function getModule(params)
       addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.12")).
       addDependency(new Project("xerces", "xercesImpl", "jar", "2.9.1")).
       addDependency(new Project("com.thoughtworks.xstream", "xstream", "jar", "1.3.1")).
-      addDependency(new Project("caja", "caja", "jar", "r3375")).
+      addDependency(new Project("caja", "caja", "jar", "r4251")).
       addDependency(new Project("caja", "json_simple", "jar", "r1")).
       addDependency(new Project("org.apache.sanselan", "sanselan", "jar", "0.97-incubator")).
       addDependency(new Project("de.odysseus.juel", "juel-api", "jar", "2.1.2")).

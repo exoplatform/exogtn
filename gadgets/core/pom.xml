@@ -91,6 +91,10 @@
          <artifactId>shindig-features</artifactId>
       </dependency>
       <dependency>
+         <groupId>org.gatein.shindig</groupId>
+         <artifactId>shindig-social-api</artifactId>
+      </dependency>
+      <dependency>
          <groupId>org.chromattic</groupId>
          <artifactId>chromattic.api</artifactId>
       </dependency>
