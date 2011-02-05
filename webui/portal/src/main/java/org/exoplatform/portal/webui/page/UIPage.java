@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -32,6 +33,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -140,60 +142,64 @@ public class UIPage extends UIContainer
    {
       this.maximizedUIPortlet = maximizedUIPortlet;
    }
+
+   public void switchToEditMode() throws Exception
+   {
+      Page page = PortalDataMapper.toPageModel(this);
+      switchToEditMode(page);
+   }
+
+   public void switchToEditMode(Page page) throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+
+      // check edit permission for page
+      UserACL userACL = getApplicationComponent(UserACL.class);
+      if (!userACL.hasEditPermission(page)) {
+         context.getUIApplication().addMessage(new ApplicationMessage(
+               "UIPortalManagement.msg.Invalid-EditPage-Permission", null));
+         return;
+      }
+
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UIWorkingWorkspace uiWorkingWS = uiApp
+         .getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+      uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
+
+      UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(
+            UIPortalComposer.class).setRendered(true);
+      portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
+      portalComposer.setId("UIPageEditor");
+      portalComposer.setShowControl(true);
+      portalComposer.setEditted(false);
+      portalComposer.setCollapse(false);
+
+      UIPortalToolPanel uiToolPanel = uiWorkingWS
+            .findFirstComponentOfType(UIPortalToolPanel.class);
+      uiToolPanel.setShowMaskLayer(false);
+      uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+
+      // We clone the edited UIPage object, that is required for Abort action
+      UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
+      PortalDataMapper.toUIPage(newUIPage, page);
+      uiToolPanel.setWorkingComponent(newUIPage);
+
+      // Remove current UIPage from UIPageBody
+      UIPageBody pageBody = uiWorkingWS
+            .findFirstComponentOfType(UIPageBody.class);
+      pageBody.setUIComponent(null);
+
+      PortalRequestContext prContext = Util.getPortalRequestContext();
+      prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+      prContext.setFullRender(true);
+   }
    
    public static class EditCurrentPageActionListener extends EventListener<UIPage>
    {
-		@Override
-		public void execute(Event<UIPage> event) throws Exception {
-			UIPortalApplication uiApp = Util.getUIPortalApplication();
-			UIWorkingWorkspace uiWorkingWS = uiApp
-					.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-
-			// check edit permission for page
-			UIPageBody pageBody = uiWorkingWS
-					.findFirstComponentOfType(UIPageBody.class);
-			UIPage uiPage = (UIPage) pageBody.getUIComponent();
-			if (uiPage == null) {
-				uiApp.addMessage(new ApplicationMessage(
-						"UIPageBrowser.msg.PageNotExist", null));
-				return;
-			}
-			Page page = PortalDataMapper.toPageModel(uiPage);
-
-			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-			if (!userACL.hasEditPermission(page)) {
-				uiApp.addMessage(new ApplicationMessage(
-						"UIPortalManagement.msg.Invalid-EditPage-Permission", null));
-				return;
-			}
-
-			uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-
-			UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(
-					UIPortalComposer.class).setRendered(true);
-			portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-			portalComposer.setId("UIPageEditor");
-			portalComposer.setShowControl(true);
-			portalComposer.setEditted(false);
-			portalComposer.setCollapse(false);
-
-			UIPortalToolPanel uiToolPanel = uiWorkingWS
-					.findFirstComponentOfType(UIPortalToolPanel.class);
-			uiToolPanel.setShowMaskLayer(false);
-			uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-
-			// We clone the edited UIPage object, that is required for Abort action
-			Class<? extends UIPage> clazz = UIPage.getRealClass(uiPage.getFactoryId());
-			UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
-			PortalDataMapper.toUIPage(newUIPage, page);
-			uiToolPanel.setWorkingComponent(newUIPage);
-
-			// Remove current UIPage from UIPageBody
-			pageBody.setUIComponent(null);
-
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-			Util.getPortalRequestContext().setFullRender(true);
-
-		}
+      @Override
+      public void execute(Event<UIPage> event) throws Exception
+      {
+         event.getSource().switchToEditMode();
+      }
    }
 }
