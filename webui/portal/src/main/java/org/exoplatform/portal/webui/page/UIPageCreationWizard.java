@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -36,7 +35,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -343,12 +341,6 @@ public class UIPageCreationWizard extends UIPageWizard
             page.setTitle(pageNode.getName());
          }
 
-         boolean isDesktopPage = Page.DESKTOP_PAGE.equals(page.getFactoryId());
-         if (isDesktopPage)
-         {
-            page.setShowMaxWindow(true);
-         }
-
          UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
          
          Class<? extends UIPage> clazz = UIPage.getRealClass(page.getFactoryId());
@@ -356,17 +348,6 @@ public class UIPageCreationWizard extends UIPageWizard
          
          PortalDataMapper.toUIPage(uiPage, page);
          uiPagePreview.setUIComponent(uiPage);
-
-         if (isDesktopPage)
-         {
-            uiWizard.saveData();
-            PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
-            UIPortal uiPortal = Util.getUIPortal();
-            PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getUri());
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-            uiWizard.updateUIPortal(event);
-            return;
-         }
 
          uiWizard.updateWizardComponent();
          uiPageTemplateOptions.setSelectedOption(null);
