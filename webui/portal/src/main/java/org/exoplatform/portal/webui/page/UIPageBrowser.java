@@ -65,6 +65,10 @@ import org.exoplatform.webui.form.UISearchForm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.xml.namespace.QName;
 
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = {
@@ -374,10 +378,9 @@ public class UIPageBrowser extends UISearch
 
             dataService.save(pageNavigation);
 
-            //Update UserToolbarGroupPortlet
-            UIWorkingWorkspace uiWorkingWS = portalApplication.getChild(UIWorkingWorkspace.class);
-            uiWorkingWS.updatePortletsByName("UserToolbarDashboardPortlet");
-
+            //Update UserToolbarDashboardPortlet
+            ActionResponse actResponse = event.getRequestContext().getResponse();
+            actResponse.setEvent(new QName("UserPageNodeDeleted"), tobeRemoved.getName());
          }
       }
    }
