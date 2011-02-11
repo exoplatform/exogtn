@@ -273,7 +273,8 @@ public class UIPageBrowser extends UISearch
             return;
          }
 
-         if (page == null || !page.isModifiable())
+         if (page == null || !page.isModifiable() ||
+            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(pcontext.getRemoteUser())))
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
