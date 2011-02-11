@@ -38,6 +38,8 @@ import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
@@ -231,14 +233,28 @@ public class UIMainActionListener
    
    public static class EditBackgroundActionListener extends EventListener<UIWorkingWorkspace>
    {
+      private Log log = ExoLogger.getExoLogger(this.getClass());
+
       @Override
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
          
          UIWorkingWorkspace workingWorkspace = event.getSource();
          UIPage uiPage = workingWorkspace.findFirstComponentOfType(UIPage.class);
-         
-         Method showEditBackgroundPopupMethod = uiPage.getClass().getDeclaredMethod("showEditBackgroundPopup", WebuiRequestContext.class);
+
+         Method showEditBackgroundPopupMethod = null;
+         try
+         {
+            if (uiPage == null)
+            {
+               return;
+            }
+            showEditBackgroundPopupMethod = uiPage.getClass().getDeclaredMethod("showEditBackgroundPopup", WebuiRequestContext.class);
+         }
+         catch (NoSuchMethodException ex)
+         {
+            log.warn(ex.getMessage(), ex);  
+         }
          if(showEditBackgroundPopupMethod != null)
          {
             showEditBackgroundPopupMethod.invoke(uiPage, event.getRequestContext());

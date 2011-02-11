@@ -266,18 +266,21 @@ public class UIPageBrowser extends UISearch
             return;
          }
          Page page = service.getPage(id, pcontext.getRemoteUser());
-         if (page != null && page.getName().equals("webos"))
-         {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDeleteDesktopPage", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
-            return;
-         }
 
          if (page == null || !page.isModifiable() ||
             (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(pcontext.getRemoteUser())))
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            return;
+         }
+
+         UIPortal uiPortal = Util.getUIPortal();
+         boolean isDeleteCurrentPage = uiPortal.getSelectedNode().getPageReference().equals(page.getPageId());
+         if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
+         {
+            ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
+            event.getRequestContext().getUIApplication().addMessage(msg);
             return;
          }
          
@@ -292,8 +295,7 @@ public class UIPageBrowser extends UISearch
          // all UIPage caches at once. Better solution is to clear UIPage on browsing to PageNode having Page
          //removed
 
-         UIPortal uiPortal = Util.getUIPortal();
-         if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
+         if (isDeleteCurrentPage)         
          {
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
