@@ -218,7 +218,7 @@ gadgets.IfrGadgetService.prototype.setUserPref = function(editToken, name,
     value) {
   var id = gadgets.container.gadgetService.getGadgetIdFromModuleId(this.f);
   var gadget = gadgets.container.getGadget(id);
-  var new_prefs = {};
+  var new_prefs = gadget.getUserPrefs() || {};
   for (var i = 1, j = arguments.length; i < j; i += 2) {
     new_prefs[arguments[i]] = arguments[i + 1];
   }
