@@ -30,7 +30,6 @@ import org.chromattic.api.annotations.Property;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
 import org.gatein.registration.RegistrationPolicy;
 import org.gatein.registration.policies.DefaultRegistrationPolicy;
-import org.gatein.registration.policies.RegistrationPolicyWrapper;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
 import org.gatein.wsrp.producer.config.impl.ProducerRegistrationRequirementsImpl;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
@@ -80,12 +79,10 @@ public abstract class RegistrationRequirementsMapping
       setRegistrationRequired(registrationRequirements.isRegistrationRequired());
       setRegistrationRequiredForFullDescription(registrationRequirements.isRegistrationRequiredForFullDescription());
       RegistrationPolicy policy = registrationRequirements.getPolicy();
-      setPolicyClassName(policy.getClassName());
-
-      RegistrationPolicy unwrap = RegistrationPolicyWrapper.unwrap(policy);
-      if (unwrap instanceof DefaultRegistrationPolicy)
+      setPolicyClassName(policy.getClass().getName());
+      if (policy instanceof DefaultRegistrationPolicy)
       {
-         DefaultRegistrationPolicy drp = (DefaultRegistrationPolicy)unwrap;
+         DefaultRegistrationPolicy drp = (DefaultRegistrationPolicy)policy;
          setValidatorClassName(drp.getValidator().getClass().getName());
       }
 
