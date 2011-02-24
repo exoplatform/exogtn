@@ -95,6 +95,17 @@
       <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-snapshots/</exo.snapshots.repo.url>
    </properties>
 
+   <distributionManagement>
+     <repository>
+       <id>repository.exoplatform.org</id>
+       <url>${exo.releases.repo.url}</url>
+     </repository>
+     <snapshotRepository>
+       <id>repository.exoplatform.org</id>
+       <url>${exo.snapshots.repo.url}</url>
+     </snapshotRepository>
+   </distributionManagement>
+
    <scm>
       <connection>scm:git:git://github.com/exoplatform/exogtn.git</connection>
       <developerConnection>scm:git:ssh://git@github.com/exoplatform/exogtn.git</developerConnection>
