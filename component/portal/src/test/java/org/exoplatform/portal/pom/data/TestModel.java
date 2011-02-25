@@ -60,5 +60,10 @@ public class TestModel extends AbstractPortalTest
       assertNotNull(a);
       assertEquals("default", a.getName());
 
+      //
+      String id = a.getStorageId();
+      NodeData b = storage.loadNode(id);
+      assertEquals("default", a.getName());
+      assertEquals(id, b.getStorageId());
    }
 }

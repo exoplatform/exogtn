@@ -162,6 +162,11 @@ public class POMDataStorage implements ModelDataStorage
       return pomMgr.execute(new NodeTask.Load<NavigationKey>(NodeTask.KeyType.NAVIGATION, key));
    }
 
+   public NodeData loadNode(String key) throws Exception
+   {
+      return pomMgr.execute(new NodeTask.Load<String>(NodeTask.KeyType.STRING, key));
+   }
+
    public void save(PortletPreferences portletPreferences) throws Exception
    {
       pomMgr.execute(new PortletPreferencesTask.Save(portletPreferences));

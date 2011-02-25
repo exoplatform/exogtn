@@ -90,6 +90,9 @@ public interface ModelDataStorage
 
    public NodeData loadNode(NavigationKey key) throws Exception;
 
+   public NodeData loadNode(String key) throws Exception;
+
+
 
    public void save(PortletPreferences portletPreferences) throws Exception;
 
