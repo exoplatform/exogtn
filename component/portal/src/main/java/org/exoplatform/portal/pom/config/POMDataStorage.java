@@ -41,6 +41,7 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
+import org.exoplatform.portal.pom.config.tasks.NodeTask;
 import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
@@ -55,6 +56,7 @@ import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationKey;
+import org.exoplatform.portal.pom.data.NodeData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
@@ -152,6 +154,12 @@ public class POMDataStorage implements ModelDataStorage
    public void remove(NavigationData navigation) throws Exception
    {
       pomMgr.execute(new PageNavigationTask.Remove(navigation));
+   }
+
+
+   public NodeData loadNode(NavigationKey key) throws Exception
+   {
+      return pomMgr.execute(new NodeTask.Load<NavigationKey>(NodeTask.KeyType.NAVIGATION, key));
    }
 
    public void save(PortletPreferences portletPreferences) throws Exception

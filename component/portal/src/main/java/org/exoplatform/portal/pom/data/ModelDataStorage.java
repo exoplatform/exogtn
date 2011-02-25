@@ -86,6 +86,11 @@ public interface ModelDataStorage
 
    public void remove(NavigationData navigation) throws Exception;
 
+
+
+   public NodeData loadNode(NavigationKey key) throws Exception;
+
+
    public void save(PortletPreferences portletPreferences) throws Exception;
 
    public <S> String getId(ApplicationState<S> state) throws Exception;
