@@ -32,7 +32,7 @@ import java.util.LinkedHashMap;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeData implements Serializable
+class NodeData implements Node.Data, Serializable
 {
 
    /** . */
@@ -60,7 +60,7 @@ class NodeData implements Serializable
    final Visibility visibility;
 
    /** . */
-   final String pageReference;
+   final String pageRef;
 
    /** . */
    final LinkedHashMap<String, String> children;
@@ -82,7 +82,7 @@ class NodeData implements Serializable
       this.startPublicationDate = null;
       this.endPublicationDate = null;
       this.visibility = null;
-      this.pageReference = null;
+      this.pageRef = null;
       this.children = children;
    }
 
@@ -97,7 +97,7 @@ class NodeData implements Serializable
       this.startPublicationDate = null;
       this.endPublicationDate = null;
       this.visibility = null;
-      this.pageReference = null;
+      this.pageRef = null;
    }
 
    public String getId()
@@ -108,5 +108,40 @@ class NodeData implements Serializable
    public String getName()
    {
       return name;
+   }
+
+   public String getURI()
+   {
+      return uri;
+   }
+
+   public String getLabel()
+   {
+      return label;
+   }
+
+   public String getIcon()
+   {
+      return icon;
+   }
+
+   public Date getStartPublicationDate()
+   {
+      return startPublicationDate;
+   }
+
+   public Date getEndPublicationDate()
+   {
+      return endPublicationDate;
+   }
+
+   public Visibility getVisibility()
+   {
+      return visibility;
+   }
+
+   public String getPageRef()
+   {
+      return pageRef;
    }
 }

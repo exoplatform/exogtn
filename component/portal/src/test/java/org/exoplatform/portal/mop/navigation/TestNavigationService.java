@@ -64,7 +64,7 @@ public class TestNavigationService extends AbstractPortalTest
    {
       String rootId = service.getRootId(SiteType.PORTAL, "classic");
       Node root = service.load(rootId, Scope.SINGLE);
-      assertTrue(root instanceof Node.Data);
+      assertFalse(root instanceof Node.Fragment);
       assertEquals(rootId, root.getId());
       assertEquals("default", root.getName());
    }
@@ -80,11 +80,11 @@ public class TestNavigationService extends AbstractPortalTest
       Iterator<? extends Node> i = fragment.getChildren().iterator();
       assertTrue(i.hasNext());
       Node home = i.next();
-      assertTrue(home instanceof Node.Data);
+      assertFalse(home instanceof Node.Fragment);
       assertEquals("home", home.getName());
       assertTrue(i.hasNext());
       Node webexplorer = i.next();
-      assertTrue(webexplorer instanceof Node.Data);
+      assertFalse(webexplorer instanceof Node.Fragment);
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
    }

@@ -19,16 +19,13 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.Visibility;
-
-import java.util.Date;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-abstract class NodeImpl implements Node
+class NodeImpl implements Node
 {
 
    /** . */
@@ -49,49 +46,11 @@ abstract class NodeImpl implements Node
       return data.getName();
    }
 
-   public String getURI()
+   public Data getData()
    {
-      return data.uri;
+      return data;
    }
 
-   public String getLabel()
-   {
-      return data.label;
-   }
-
-   public String getIcon()
-   {
-      return data.icon;
-   }
-
-   public Date getStartPublicationDate()
-   {
-      return data.startPublicationDate;
-   }
-
-   public Date getEndPublicationDate()
-   {
-      return data.endPublicationDate;
-   }
-
-   public Visibility getVisibility()
-   {
-      return data.visibility;
-   }
-
-   public String getPageRef()
-   {
-      return data.pageReference;
-   }
-
-   static class DataImpl extends NodeImpl implements Node.Data
-   {
-      DataImpl(NodeData data)
-      {
-         super(data);
-      }
-   }
-   
    static class FragmentImpl extends NodeImpl implements Fragment
    {
 

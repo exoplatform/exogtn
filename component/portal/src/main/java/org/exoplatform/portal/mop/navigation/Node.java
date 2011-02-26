@@ -34,24 +34,32 @@ public interface Node
 
    String getName();
 
-   String getURI();
+   /**
+    * Returns the node data.
+    *
+    * @return the data
+    */
+   Data getData();
 
-   String getLabel();
-
-   String getIcon();
-
-   Date getStartPublicationDate();
-
-   Date getEndPublicationDate();
-
-   Visibility getVisibility();
-
-   String getPageRef();
    /**
     * A navigation whose relationships are not determined.
     */
-   public interface Data extends Node
+   public interface Data
    {
+
+      String getURI();
+
+      String getLabel();
+
+      String getIcon();
+
+      Date getStartPublicationDate();
+
+      Date getEndPublicationDate();
+
+      Visibility getVisibility();
+
+      String getPageRef();
 
    }
 

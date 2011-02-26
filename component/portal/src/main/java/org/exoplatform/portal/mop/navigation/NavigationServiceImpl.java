@@ -108,7 +108,7 @@ public class NavigationServiceImpl implements NavigationService
       }
       else
       {
-         return new NodeImpl.DataImpl(data);
+         return new NodeImpl(data);
       }
    }
 
