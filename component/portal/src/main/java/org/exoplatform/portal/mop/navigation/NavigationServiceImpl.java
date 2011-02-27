@@ -20,7 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.chromattic.api.Chromattic;
-import org.chromattic.api.ChromatticSession;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -32,18 +31,13 @@ import org.gatein.mop.api.workspace.Workspace;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.observation.Event;
-import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.Executors;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -65,6 +59,9 @@ public class NavigationServiceImpl implements NavigationService
    private Session bridgeSession;
 
    /** . */
+   private InvalidationManager invalidationManager;
+
+   /** . */
    private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
 
    static
@@ -79,37 +76,28 @@ public class NavigationServiceImpl implements NavigationService
       this.manager = manager;
       this.idCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.pathCache = new ConcurrentHashMap<String, String>(1000);
+      this.invalidationManager = null;
    }
 
    public void start() throws Exception
    {
       Chromattic chromattic = manager.getLifeCycle().getChromattic();
       Session session = chromattic.openSession().getJCRSession();
-      final CompletionService<Void> completer = new ExecutorCompletionService<Void>(Executors.newSingleThreadExecutor());
       ObservationManager observationManager = session.getWorkspace().getObservationManager();
-      observationManager.addEventListener(
-         new EventListener()
+
+      invalidationManager = new InvalidationManager(observationManager);
+      invalidationManager.register("mop:navigationcontainer", Event.NODE_REMOVED, new Invalidator()
+      {
+         @Override
+         void invalidate(int eventType, String nodeType, String nodePath)
          {
-            public void onEvent(final EventIterator events)
+            String id = pathCache.remove(nodePath);
+            if (id != null)
             {
-               completer.submit(new Callable<Void>()
-               {
-                  public Void call() throws Exception
-                  {
-                     while (events.hasNext())
-                     {
-                        Event event = events.nextEvent();
-                        String id = pathCache.remove(event.getPath());
-                        if (id != null)
-                        {
-                           idCache.remove(id);
-                        }
-                     }
-                     return null;
-                  }
-               });
+               idCache.remove(id);
             }
-         }, Event.NODE_REMOVED, "/", true, null, null, false );
+         }
+      });
 
       //
       this.bridgeSession = session;
@@ -137,6 +125,9 @@ public class NavigationServiceImpl implements NavigationService
          {
             e.printStackTrace();
          }
+
+         //
+         session.logout();
       }
    }
 
