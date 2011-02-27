@@ -33,7 +33,6 @@ import org.gatein.mop.core.api.MOPService;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -130,11 +129,22 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               final List<String> names = Arrays.asList("default", "b", "d");
-
-               public boolean children(String nodeId, String nodeName)
+               public VisitMode visit(int depth, String nodeId, String nodeName)
                {
-                  return names.contains(nodeName);
+                  boolean use = false;
+                  switch (depth)
+                  {
+                     case 0:
+                        use = "default".equals(nodeName);
+                        break;
+                     case 1:
+                        use = "b".equals(nodeName);
+                        break;
+                     case 2:
+                        use = "d".equals(nodeName);
+                        break;
+                  }
+                  return use ? VisitMode.CHILDREN : VisitMode.NODE;
                }
             };
          }

@@ -194,10 +194,10 @@ public class NavigationServiceImpl implements NavigationService
    {
       POMSession session = manager.getSession();
       Scope.Visitor visitor = scope.get();
-      return load(session, nodeId, visitor);
+      return load(session, nodeId, visitor, 0);
    }
 
-   private NodeImpl load(POMSession session, String navigationId, Scope.Visitor visitor)
+   private NodeImpl load(POMSession session, String navigationId, Scope.Visitor visitor, int depth)
    {
       NodeData data = idCache.get(navigationId);
       if (data == null)
@@ -216,19 +216,20 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      if (visitor.children(data.id, data.name))
+      switch (visitor.visit(depth, data.id, data.name))
       {
-         LinkedHashMap<String, NodeImpl> children = new LinkedHashMap<String, NodeImpl>(data.children.size());
-         for (Map.Entry<String, String> entry : data.children.entrySet())
-         {
-            NodeImpl child = load(session, entry.getValue(), visitor);
-            children.put(child.data.name, child);
-         }
-         return new NodeImpl.FragmentImpl(data, children);
-      }
-      else
-      {
-         return new NodeImpl(data);
+         case CHILDREN:
+            LinkedHashMap<String, NodeImpl> children = new LinkedHashMap<String, NodeImpl>(data.children.size());
+            for (Map.Entry<String, String> entry : data.children.entrySet())
+            {
+               NodeImpl child = load(session, entry.getValue(), visitor, depth + 1);
+               children.put(child.data.name, child);
+            }
+            return new NodeImpl.FragmentImpl(data, children);
+         case NODE:
+            return new NodeImpl(data);
+         default:
+            throw new AssertionError();
       }
    }
 

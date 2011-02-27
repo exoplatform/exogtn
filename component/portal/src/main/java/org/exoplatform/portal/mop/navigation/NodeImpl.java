@@ -51,6 +51,12 @@ class NodeImpl implements Node
       return data;
    }
 
+   @Override
+   public String toString()
+   {
+      return "Node[" + data.getName() + "]";
+   }
+
    static class FragmentImpl extends NodeImpl implements Fragment
    {
 
