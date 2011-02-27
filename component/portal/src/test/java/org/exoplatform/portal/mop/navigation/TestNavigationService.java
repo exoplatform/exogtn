@@ -21,9 +21,16 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.data.ModelDataStorage;
+import org.exoplatform.portal.pom.data.NavigationData;
+import org.exoplatform.portal.pom.data.NavigationKey;
+import org.exoplatform.portal.pom.data.NavigationNodeData;
+import org.exoplatform.portal.pom.data.PortalData;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -37,7 +44,10 @@ public class TestNavigationService extends AbstractPortalTest
    private POMSessionManager mgr;
 
    /** . */
-   private NavigationService service;
+   private NavigationServiceImpl service;
+
+   /** . */
+   private ModelDataStorage storage;
 
    @Override
    protected void setUp() throws Exception
@@ -47,6 +57,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       PortalContainer container = PortalContainer.getInstance();
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      storage = (ModelDataStorage)container.getComponentInstanceOfType(ModelDataStorage.class);
       service = new NavigationServiceImpl(mgr);
 
       //
@@ -87,5 +98,34 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(webexplorer instanceof Node.Fragment);
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
+   }
+
+   public void testInvalidationByRemoval() throws Exception
+   {
+      // Create a navigation
+      storage.create(new PortalConfig("portal", "invalidation_by_removal").build());
+      storage.create(new NavigationData("portal", "invalidation_by_removal", 0, Collections.<NavigationNodeData>emptyList()));
+      end(true);
+      begin();
+
+      // Start invalidation
+      service.start();
+
+      // Put the navigation in the cache
+      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_removal");
+      assertNotNull(rootId);
+      Node root = service.load(rootId, Scope.SINGLE);
+      assertNotNull(root);
+
+      // Remove the navigation
+      end();
+      begin();
+      storage.remove(storage.getPageNavigation(new NavigationKey("portal", "invalidation_by_removal")));
+      end(true);
+      begin();
+
+      // Let's check cache is now empty
+      root = service.load(rootId, Scope.SINGLE);
+      assertNull(root);
    }
 }
