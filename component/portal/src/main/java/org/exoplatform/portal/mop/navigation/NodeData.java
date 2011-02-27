@@ -21,7 +21,15 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.Visible;
+import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.exoplatform.portal.pom.data.Mapper;
+import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.workspace.Navigation;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+import org.gatein.mop.api.workspace.link.Link;
+import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -52,10 +60,10 @@ class NodeData implements Node.Data, Serializable
    final String icon;
 
    /** . */
-   final Date startPublicationDate;
+   final long startPublicationTime;
 
    /** . */
-   final Date endPublicationDate;
+   final long endPublicationTime;
 
    /** . */
    final Visibility visibility;
@@ -83,15 +91,45 @@ class NodeData implements Node.Data, Serializable
       }
 
       //
+      Visibility visibility = Visibility.DISPLAYED;
+      Date startPublicationDate = null;
+      Date endPublicationDate = null;
+      if (nav.isAdapted(Visible.class))
+      {
+         Visible visible = nav.adapt(Visible.class);
+         visibility = visible.getVisibility();
+         startPublicationDate = visible.getStartPublicationDate();
+         endPublicationDate = visible.getEndPublicationDate();
+      }
+
+      //
+      String pageRef = null;
+      Link link = nav.getLink();
+      if (link instanceof PageLink)
+      {
+         PageLink pageLink = (PageLink)link;
+         org.gatein.mop.api.workspace.Page target = pageLink.getPage();
+         if (target != null)
+         {
+            Site site = target.getSite();
+            ObjectType<? extends Site> siteType = site.getObjectType();
+            pageRef = Mapper.getOwnerType(siteType) + "::" + site.getName() + "::" + target.getName();
+         }
+      }
+
+      //
+      Attributes attrs = nav.getAttributes();
+
+      //
       this.id = nav.getObjectId();
       this.name = nav.getName();
-      this.uri = null;
+      this.uri = attrs.getValue(MappedAttributes.URI);
       this.label = label;
-      this.icon = null;
-      this.startPublicationDate = null;
-      this.endPublicationDate = null;
-      this.visibility = null;
-      this.pageRef = null;
+      this.icon = attrs.getValue(MappedAttributes.ICON);
+      this.startPublicationTime = startPublicationDate != null ? startPublicationDate.getTime() : -1;
+      this.endPublicationTime = endPublicationDate != null ? endPublicationDate.getTime() : -1;
+      this.visibility = visibility;
+      this.pageRef = pageRef;
       this.children = children;
    }
 
@@ -120,14 +158,14 @@ class NodeData implements Node.Data, Serializable
       return icon;
    }
 
-   public Date getStartPublicationDate()
+   public long getStartPublicationTime()
    {
-      return startPublicationDate;
+      return startPublicationTime;
    }
 
-   public Date getEndPublicationDate()
+   public long getEndPublicationTime()
    {
-      return endPublicationDate;
+      return endPublicationTime;
    }
 
    public Visibility getVisibility()

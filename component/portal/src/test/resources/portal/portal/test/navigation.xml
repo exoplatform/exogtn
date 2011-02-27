@@ -34,13 +34,13 @@
       <start-publication-date>2000-03-21T01:33:00</start-publication-date>
       <end-publication-date>2009-03-21T01:33:00</end-publication-date>
       <visibility>TEMPORAL</visibility>
-	    <page-reference>portal::test::test</page-reference>
+	    <page-reference>portal::test::test1</page-reference>
 	  </node>    
     <node>
       <uri>node_uri2</uri>
       <name>node_name2</name>
       <label>node_label2</label>
-      <page-reference>portal::test::test</page-reference>
+      <page-reference>portal::test::test1</page-reference>
     </node>
   </page-nodes>
 </node-navigation>

@@ -24,6 +24,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -130,6 +131,7 @@ public class TestNavigationService extends AbstractPortalTest
             return new Visitor()
             {
                final List<String> names = Arrays.asList("default", "b", "d");
+
                public boolean children(String nodeId, String nodeName)
                {
                   return names.contains(nodeName);
@@ -142,6 +144,28 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(b.getChild("c") instanceof Node.Fragment);
       Node.Fragment d = (Node.Fragment)b.getChild("d");
       assertFalse(d.getChild("e") instanceof Node.Fragment);
+   }
+
+   public void testState() throws Exception
+   {
+      String rootId = service.getRootId(SiteType.PORTAL, "test");
+      Node.Fragment root = (Node.Fragment)service.load(rootId, Scope.ALL);
+      Iterator<? extends Node> rootIterator = root.getChildren().iterator();
+      Node.Fragment child1 = (Node.Fragment)rootIterator.next();
+      Node.Fragment child2 = (Node.Fragment)rootIterator.next();
+      assertFalse(rootIterator.hasNext());
+      assertEquals("node_name", child1.getName());
+      assertEquals("node_uri", child1.getData().getURI());
+      assertEquals("node_label", child1.getData().getLabel());
+      assertEquals("portal::test::test1", child1.getData().getPageRef());
+      assertEquals(Visibility.TEMPORAL, child1.getData().getVisibility());
+      assertEquals(953602380000L, child1.getData().getStartPublicationTime());
+      assertEquals(1237599180000L, child1.getData().getEndPublicationTime());
+      assertEquals("node_name2", child2.getName());
+      assertEquals("node_uri2", child2.getData().getURI());
+      assertEquals("node_label2", child2.getData().getLabel());
+      assertEquals("portal::test::test1", child2.getData().getPageRef());
+      assertEquals(Visibility.DISPLAYED, child2.getData().getVisibility());
    }
 
    public void testInvalidationByRemoval() throws Exception

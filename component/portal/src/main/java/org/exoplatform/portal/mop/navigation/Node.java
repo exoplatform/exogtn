@@ -53,9 +53,9 @@ public interface Node
 
       String getIcon();
 
-      Date getStartPublicationDate();
+      long getStartPublicationTime();
 
-      Date getEndPublicationDate();
+      long getEndPublicationTime();
 
       Visibility getVisibility();
 
