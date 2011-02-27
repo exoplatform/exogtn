@@ -89,6 +89,7 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       final String NAVIGATION_CONTAINER = "mop:navigationcontainer";
+      final String NAVIGATION = "mop:navigation";
 
       //
       invalidationManager.register(NAVIGATION_CONTAINER, Event.NODE_REMOVED + Event.NODE_ADDED, new Invalidator()
@@ -121,6 +122,21 @@ public class NavigationServiceImpl implements NavigationService
                      break;
                   }
                }
+            }
+         }
+      });
+
+      //
+      invalidationManager.register(NAVIGATION, Event.PROPERTY_ADDED + Event.PROPERTY_CHANGED + Event.PROPERTY_REMOVED, new Invalidator()
+      {
+         @Override
+         void invalidate(int eventType, String nodeType, String nodePath)
+         {
+            String parentPath = parentPath(nodePath);
+            String id = pathCache.remove(parentPath);
+            if (id != null)
+            {
+               idCache.remove(id);
             }
          }
       });

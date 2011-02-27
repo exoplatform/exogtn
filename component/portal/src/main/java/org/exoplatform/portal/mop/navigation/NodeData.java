@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.mop.api.workspace.Navigation;
 
@@ -74,30 +75,24 @@ class NodeData implements Node.Data, Serializable
       }
 
       //
+      String label = null;
+      if (nav.isAdapted(Described.class))
+      {
+         Described described = nav.adapt(Described.class);
+         label = described.getName();
+      }
+
+      //
       this.id = nav.getObjectId();
       this.name = nav.getName();
       this.uri = null;
-      this.label = null;
+      this.label = label;
       this.icon = null;
       this.startPublicationDate = null;
       this.endPublicationDate = null;
       this.visibility = null;
       this.pageRef = null;
       this.children = children;
-   }
-
-   NodeData(String id, String name, LinkedHashMap<String, String> children)
-   {
-      this.id = id;
-      this.name = name;
-      this.children = children;
-      this.uri = null;
-      this.label = null;
-      this.icon = null;
-      this.startPublicationDate = null;
-      this.endPublicationDate = null;
-      this.visibility = null;
-      this.pageRef = null;
    }
 
    public String getId()

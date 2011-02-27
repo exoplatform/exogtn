@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
@@ -109,14 +110,14 @@ public class TestNavigationService extends AbstractPortalTest
       end(true);
       begin();
 
-      // Start invalidation
-      service.start();
-
       // Put the navigation in the cache
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_removal");
       assertNotNull(rootId);
       Node root = service.load(rootId, Scope.SINGLE);
       assertNotNull(root);
+
+      // Start invalidation
+      service.start();
 
       // Remove the navigation
       end();
@@ -124,6 +125,9 @@ public class TestNavigationService extends AbstractPortalTest
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_removal").getRootNavigation().getChild("default").destroy();
       end(true);
       begin();
+
+      //
+      service.stop();
 
       // Let's check cache is now empty
       root = service.load(rootId, Scope.SINGLE);
@@ -156,10 +160,51 @@ public class TestNavigationService extends AbstractPortalTest
       end(true);
       begin();
 
+      //
+      service.stop();
+
       // Let's check cache is now empty
       root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
       iterator = root.getChildren().iterator();
       iterator.next();
       assertFalse(iterator.hasNext());
+   }
+
+   public void testInvalidationByPropertyAdd() throws Exception
+   {
+      // Create a navigation
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+      begin();
+
+      // Put the navigation in the cache
+      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_propertychange");
+      assertNotNull(rootId);
+      Node n = service.load(rootId, Scope.SINGLE);
+      assertNull(n.getData().getLabel());
+      end();
+
+      // Start invalidation
+      begin();
+      service.start();
+      end();
+
+      //
+      begin();
+      Described described = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
+      described.setName("bilto");
+      end(true);
+
+      //
+      begin();
+      service.stop();
+      end();
+
+      //
+      begin();
+      n = service.load(rootId, Scope.SINGLE);
+      assertEquals("bilto", n.getData().getLabel());
    }
 }
