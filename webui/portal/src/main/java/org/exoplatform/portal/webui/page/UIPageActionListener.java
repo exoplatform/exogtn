@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -30,6 +31,12 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
+import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.navigation.VisitMode;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -44,7 +51,10 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun
@@ -184,8 +194,71 @@ public class UIPageActionListener
        * @param pathNodes
        * @return
        */
-      private PageNavigation getBestMatchNavigation(List<PageNavigation> listNav, String[] pathNodes)
+      private PageNavigation getBestMatchNavigation(final List<PageNavigation> listNav, final String[] pathNodes)
       {
+
+         POMSessionManager mgr = (POMSessionManager)PortalContainer.getComponent(POMSessionManager.class);
+         NavigationService navigationService = new NavigationServiceImpl(mgr);
+
+         class MatchingScope implements Scope
+         {
+            ArrayList<Integer> scores = new ArrayList<Integer>(listNav.size());
+            public Visitor get()
+            {
+               scores.add(0);
+               return new Visitor()
+               {
+                  public VisitMode visit(int depth, String nodeId, String nodeName)
+                  {
+                     if (depth == 0 && "default".equals(nodeName))
+                     {
+                        return VisitMode.CHILDREN;
+                     }
+                     else if (depth <= pathNodes.length && nodeName.equals(pathNodes[depth - 1]))
+                     {
+                        int index = scores.size() - 1;
+                        scores.set(index, scores.get(index) + 1);
+                        return VisitMode.CHILDREN;
+                     }
+                     else
+                     {
+                        return VisitMode.NODE;
+                     }
+                  }
+               };
+            }
+         }
+
+         //
+         MatchingScope scope = new MatchingScope();
+         List<Node> nodes = new ArrayList<Node>();
+         for (PageNavigation nav : listNav)
+         {
+            String rootId = nav.getStorageId();
+            Node node = navigationService.load(rootId, scope);
+            nodes.add(node);
+         }
+
+         //
+         int max = -1;
+         for (int i : scope.scores)
+         {
+            if (i > max)
+            {
+               max = i;
+            }
+         }
+
+         //
+         for (int i = 0;i < scope.scores.size();i++)
+         {
+            if (scope.scores.get(i) == max)
+            {
+               System.out.println("Found for path " + Arrays.asList(pathNodes) + " candidate " + listNav.get(i));
+            }
+         }
+
+         //
          int temporalMaximalMatching = 0;
          PageNavigation temporalBestNavigation = listNav.get(0);
          
@@ -208,6 +281,37 @@ public class UIPageActionListener
          return temporalBestNavigation;
       }
       
+//      /**
+//       * Get the navigation containing longest subpath of 'pathNodes'
+//       *
+//       * @param listNav
+//       * @param pathNodes
+//       * @return
+//       */
+//      private PageNavigation getBestMatchNavigation(List<PageNavigation> listNav, String[] pathNodes)
+//      {
+//         int temporalMaximalMatching = 0;
+//         PageNavigation temporalBestNavigation = listNav.get(0);
+//
+//         for(PageNavigation nav : listNav)
+//         {
+//            int currentNumberOfMatching = countNumberOfMatchedPathNodes(nav, pathNodes);
+//
+//            //The whole pathNodes matches current navigation
+//            if(currentNumberOfMatching == pathNodes.length)
+//            {
+//               return nav;
+//            }
+//
+//            if(currentNumberOfMatching > temporalMaximalMatching)
+//            {
+//               temporalMaximalMatching = currentNumberOfMatching;
+//               temporalBestNavigation = nav;
+//            }
+//         }
+//         return temporalBestNavigation;
+//      }
+
       /**
        * Count the maximal number of nodes matching the pathNodes while descending the navigation 'nav'
        * 
