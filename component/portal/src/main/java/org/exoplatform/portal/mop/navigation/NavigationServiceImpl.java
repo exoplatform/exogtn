@@ -222,7 +222,7 @@ public class NavigationServiceImpl implements NavigationService
          for (Map.Entry<String, String> entry : data.children.entrySet())
          {
             NodeImpl child = load(session, entry.getValue(), visitor);
-            children.put(child.data.id, child);
+            children.put(child.data.name, child);
          }
          return new NodeImpl.FragmentImpl(data, children);
       }

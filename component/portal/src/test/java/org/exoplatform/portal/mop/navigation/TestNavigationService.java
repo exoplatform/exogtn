@@ -29,7 +29,10 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -88,7 +91,7 @@ public class TestNavigationService extends AbstractPortalTest
       end();
    }
 
-   public void testLoadSingle() throws Exception
+   public void testLoadSingleCustom() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "classic");
       Node root = service.load(rootId, Scope.SINGLE);
@@ -97,7 +100,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("default", root.getName());
    }
 
-   public void testLoadChildren() throws Exception
+   public void testLoadChildrenCustom() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "classic");
       Node root = service.load(rootId, Scope.CHILDREN);
@@ -115,6 +118,30 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(webexplorer instanceof Node.Fragment);
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
+   }
+
+   public void testLoadCustomScope() throws Exception
+   {
+      String rootId = service.getRootId(SiteType.PORTAL, "large");
+      Node.Fragment root = (Node.Fragment)service.load(rootId, new Scope()
+      {
+         public Visitor get()
+         {
+            return new Visitor()
+            {
+               final List<String> names = Arrays.asList("default", "b", "d");
+               public boolean children(String nodeId, String nodeName)
+               {
+                  return names.contains(nodeName);
+               }
+            };
+         }
+      });
+      assertFalse(root.getChild("a") instanceof Node.Fragment);
+      Node.Fragment b = (Node.Fragment)root.getChild("b");
+      assertFalse(b.getChild("c") instanceof Node.Fragment);
+      Node.Fragment d = (Node.Fragment)b.getChild("d");
+      assertFalse(d.getChild("e") instanceof Node.Fragment);
    }
 
    public void testInvalidationByRemoval() throws Exception
