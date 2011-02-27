@@ -186,7 +186,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(iterator.hasNext());
    }
 
-   public void testInvalidationByPropertyAdd() throws Exception
+   public void testInvalidationByProperty() throws Exception
    {
       // Create a navigation
       MOPService mop = mgr.getPOMService();
@@ -198,8 +198,8 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_propertychange");
       assertNotNull(rootId);
-      Node n = service.load(rootId, Scope.SINGLE);
-      assertNull(n.getData().getLabel());
+      Node defaultNode = service.load(rootId, Scope.SINGLE);
+      assertNull(defaultNode.getData().getLabel());
       end();
 
       // Start invalidation
@@ -207,8 +207,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      Described described = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
-      described.setName("bilto");
+      Described defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
+      defaultDescribed.setName("bilto");
       end(true);
 
       //
@@ -216,7 +216,43 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      n = service.load(rootId, Scope.SINGLE);
-      assertEquals("bilto", n.getData().getLabel());
+      defaultNode = service.load(rootId, Scope.SINGLE);
+      assertEquals("bilto", defaultNode.getData().getLabel());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
+      defaultDescribed.setName("bilta");
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      defaultNode = service.load(rootId, Scope.SINGLE);
+      assertEquals("bilta", defaultNode.getData().getLabel());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
+      defaultDescribed.setName(null);
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      defaultNode = service.load(rootId, Scope.SINGLE);
+      assertNull(defaultNode.getData().getLabel());
    }
 }
