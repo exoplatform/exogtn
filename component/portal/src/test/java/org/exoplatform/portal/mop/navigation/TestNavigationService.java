@@ -129,4 +129,37 @@ public class TestNavigationService extends AbstractPortalTest
       root = service.load(rootId, Scope.SINGLE);
       assertNull(root);
    }
+
+   public void testInvalidationByAddChild() throws Exception
+   {
+      // Create a navigation
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+      begin();
+
+      // Put the navigation in the cache
+      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_childadd");
+      assertNotNull(rootId);
+      Node.Fragment root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
+      Iterator<? extends Node> iterator = root.getChildren().iterator();
+      assertFalse(iterator.hasNext());
+      end();
+      begin();
+
+      // Start invalidation
+      service.start();
+
+      // Add a child navigation
+      mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd").getRootNavigation().getChild("default").addChild("new");
+      end(true);
+      begin();
+
+      // Let's check cache is now empty
+      root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
+      iterator = root.getChildren().iterator();
+      iterator.next();
+      assertFalse(iterator.hasNext());
+   }
 }

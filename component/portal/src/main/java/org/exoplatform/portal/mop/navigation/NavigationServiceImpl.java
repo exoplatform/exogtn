@@ -86,21 +86,53 @@ public class NavigationServiceImpl implements NavigationService
       ObservationManager observationManager = session.getWorkspace().getObservationManager();
 
       invalidationManager = new InvalidationManager(observationManager);
-      invalidationManager.register("mop:navigationcontainer", Event.NODE_REMOVED, new Invalidator()
+
+      //
+      final String NAVIGATION_CONTAINER = "mop:navigationcontainer";
+
+      //
+      invalidationManager.register(NAVIGATION_CONTAINER, Event.NODE_REMOVED + Event.NODE_ADDED, new Invalidator()
       {
          @Override
          void invalidate(int eventType, String nodeType, String nodePath)
          {
-            String id = pathCache.remove(nodePath);
-            if (id != null)
+            if (nodeType.equals(NAVIGATION_CONTAINER))
             {
-               idCache.remove(id);
+               switch (eventType)
+               {
+                  case Event.NODE_REMOVED:
+                  {
+
+                     String id = pathCache.remove(nodePath);
+                     if (id != null)
+                     {
+                        idCache.remove(id);
+                     }
+                     break;
+                  }
+                  case Event.NODE_ADDED:
+                  {
+                     String parentPath = parentPath(parentPath(nodePath));
+                     String id = pathCache.remove(parentPath);
+                     if (id != null)
+                     {
+                        idCache.remove(id);
+                     }
+                     break;
+                  }
+               }
             }
          }
       });
 
       //
       this.bridgeSession = session;
+   }
+
+   private String parentPath(String path)
+   {
+      int index = path.lastIndexOf('/');
+      return path.substring(0, index);
    }
 
    public void stop()
