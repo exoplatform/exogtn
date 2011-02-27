@@ -19,23 +19,16 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
-import org.exoplatform.portal.pom.data.NavigationNodeData;
-import org.exoplatform.portal.pom.data.PortalData;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -70,6 +63,29 @@ public class TestNavigationService extends AbstractPortalTest
    {
       end();
       super.tearDown();
+   }
+
+   private void startService()
+   {
+      try
+      {
+         begin();
+         service.start();
+         end();
+      }
+      catch (Exception e)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(e);
+         throw afe;
+      }
+   }
+
+   private void stopService()
+   {
+      begin();
+      service.stop();
+      end();
    }
 
    public void testLoadSingle() throws Exception
@@ -108,28 +124,28 @@ public class TestNavigationService extends AbstractPortalTest
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_removal");
       portal.getRootNavigation().addChild("default");
       end(true);
-      begin();
 
       // Put the navigation in the cache
+      begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_removal");
       assertNotNull(rootId);
       Node root = service.load(rootId, Scope.SINGLE);
       assertNotNull(root);
+      end();
 
       // Start invalidation
-      service.start();
+      startService();
 
       // Remove the navigation
-      end();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_removal").getRootNavigation().getChild("default").destroy();
       end(true);
-      begin();
 
       //
-      service.stop();
+      stopService();
 
       // Let's check cache is now empty
+      begin();
       root = service.load(rootId, Scope.SINGLE);
       assertNull(root);
    }
@@ -141,29 +157,29 @@ public class TestNavigationService extends AbstractPortalTest
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd");
       portal.getRootNavigation().addChild("default");
       end(true);
-      begin();
 
       // Put the navigation in the cache
+      begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_childadd");
       assertNotNull(rootId);
       Node.Fragment root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
       Iterator<? extends Node> iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
       end();
-      begin();
 
       // Start invalidation
-      service.start();
+      startService();
 
       // Add a child navigation
+      begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd").getRootNavigation().getChild("default").addChild("new");
       end(true);
-      begin();
 
       //
-      service.stop();
+      stopService();
 
       // Let's check cache is now empty
+      begin();
       root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
       iterator = root.getChildren().iterator();
       iterator.next();
@@ -177,9 +193,9 @@ public class TestNavigationService extends AbstractPortalTest
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange");
       portal.getRootNavigation().addChild("default");
       end(true);
-      begin();
 
       // Put the navigation in the cache
+      begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_propertychange");
       assertNotNull(rootId);
       Node n = service.load(rootId, Scope.SINGLE);
@@ -187,9 +203,7 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       // Start invalidation
-      begin();
-      service.start();
-      end();
+      startService();
 
       //
       begin();
@@ -198,9 +212,7 @@ public class TestNavigationService extends AbstractPortalTest
       end(true);
 
       //
-      begin();
-      service.stop();
-      end();
+      stopService();
 
       //
       begin();
