@@ -178,6 +178,13 @@ public class NavigationServiceImpl implements NavigationService
             String nodePath = parentPath(parentPath(itemPath));
 
             //
+            String id = nodePathCache.remove(nodePath);
+            if (id != null)
+            {
+               nodeIdCache.remove(id);
+            }
+
+            //
             String navPath = parentPath(parentPath(parentPath(nodePath)));
             SiteKey navigationKey = navigationPathCache.remove(navPath);
             if (navigationKey != null)

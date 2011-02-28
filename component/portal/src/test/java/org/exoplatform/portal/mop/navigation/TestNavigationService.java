@@ -452,4 +452,36 @@ public class TestNavigationService extends AbstractPortalTest
       defaultNode = service.load(rootId, Scope.SINGLE);
       assertNull(defaultNode.getData().getLabel());
    }
+
+   public void testNodeInvalidationByAttribute() throws Exception
+   {
+      // Create a navigation
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      // Put the navigation in the cache
+      begin();
+      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_attribute");
+      Node defaultNode = service.load(rootId, Scope.SINGLE);
+      assertNull(defaultNode.getData().getURI());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, "foo_uri");
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      defaultNode = service.load(rootId, Scope.SINGLE);
+      assertEquals("foo_uri", defaultNode.getData().getURI());
+   }
 }
