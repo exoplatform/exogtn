@@ -114,10 +114,12 @@ public class NavigationServiceImpl implements NavigationService
                   case Event.NODE_REMOVED:
                   {
 
-                     String id = nodePathCache.remove(itemPath);
-                     if (id != null)
+                     //
+
+                     String nodeId = nodePathCache.remove(itemPath);
+                     if (nodeId != null)
                      {
-                        nodeIdCache.remove(id);
+                        nodeIdCache.remove(nodeId);
                      }
                      break;
                   }
@@ -128,6 +130,12 @@ public class NavigationServiceImpl implements NavigationService
                      if (id != null)
                      {
                         nodeIdCache.remove(id);
+                     }
+                     String a = parentPath(parentPath(parentPath(itemPath)));
+                     SiteKey sk = navigationPathCache.remove(a);
+                     if (sk != null)
+                     {
+                        navigationKeyCache.remove(sk);
                      }
                      break;
                   }
@@ -221,7 +229,6 @@ public class NavigationServiceImpl implements NavigationService
 
    public NavigationData getNavigation(SiteKey key)
    {
-
       NavigationData data = navigationKeyCache.get(key);
       if (data == null)
       {
@@ -231,16 +238,22 @@ public class NavigationServiceImpl implements NavigationService
          Site site = workspace.getSite(objectType, key.getName());
          Navigation nav = site.getRootNavigation();
          Navigation root = nav.getChild("default");
+         String rootId;
+         int priority;
          if (root != null)
          {
-            data = new NavigationData(key, root.getAttributes().getValue(MappedAttributes.PRIORITY, 1), root.getObjectId());
-            navigationKeyCache.put(key, data);
-            navigationPathCache.put(session.pathOf(site), key);
+
+            priority = root.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
+            rootId = root.getObjectId();
          }
          else
          {
-            throw new UnsupportedOperationException("todo");
+            priority = 1;
+            rootId = null;
          }
+         data = new NavigationData(key, priority, rootId);
+         navigationKeyCache.put(key, data);
+         navigationPathCache.put(session.pathOf(site), key);
       }
 
       //

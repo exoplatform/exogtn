@@ -93,24 +93,86 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testGetNavigation() throws Exception
    {
-      SiteKey key = new SiteKey(SiteType.PORTAL, "classic");
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "get_navigation");
+      end(true);
+
+      //
+      begin();
+      SiteKey key = new SiteKey(SiteType.PORTAL, "get_navigation");
       Navigation nav = service.getNavigation(key);
       assertNotNull(nav);
       assertEquals(1, (int)nav.getPriority());
       assertEquals(key, nav.getKey());
+      assertNull(nav.getNodeId());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      nav = service.getNavigation(key);
+      assertNotNull(nav);
+      assertEquals(1, (int)nav.getPriority());
+      assertEquals(key, nav.getKey());
       assertNotNull(nav.getNodeId());
+//      end();
+//
+//      //
+//      startService();
+//
+//      //
+//      begin();
+//      mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
+//      end(true);
+//
+//      //
+//      stopService();
+//
+//      //
+//      begin();
+//      nav = service.getNavigation(key);
+//      assertNotNull(nav);
+//      assertEquals(1, (int)nav.getPriority());
+//      assertEquals(key, nav.getKey());
+//      assertNull(nav.getNodeId());
    }
 
-   public void testGetNavigationInvalidationByPriorityChange()
+   public void testGetNavigationInvalidationByPriority()
    {
-      Site site = mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
-      site.getRootNavigation().addChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change").getRootNavigation().addChild("default");
       end(true);
 
       //
       begin();
       SiteKey key = new SiteKey(SiteType.PORTAL, "invalidation_by_priority_change");
       Navigation nav = service.getNavigation(key);
+      assertEquals(1, (int)nav.getPriority());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
+      site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      nav = service.getNavigation(key);
       assertEquals(2, (int)nav.getPriority());
       end();
 
@@ -130,6 +192,24 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       nav = service.getNavigation(key);
       assertEquals(4, (int)nav.getPriority());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
+      site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, null);
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      nav = service.getNavigation(key);
+      assertEquals(1, (int)nav.getPriority());
    }
 
    public void testLoadSingleScope() throws Exception
