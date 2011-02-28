@@ -61,7 +61,7 @@ class NodeImpl implements Node
       return data;
    }
 
-   public Fragment getRelationships()
+   public Relationships getRelationships()
    {
       return relationships;
    }
@@ -72,7 +72,7 @@ class NodeImpl implements Node
       return "Node[" + data.getName() + "]";
    }
 
-   static class FragmentImpl extends LinkedHashMap<String, NodeImpl> implements Fragment
+   static class FragmentImpl extends LinkedHashMap<String, NodeImpl> implements Relationships
    {
 
       FragmentImpl()
@@ -99,7 +99,7 @@ class NodeImpl implements Node
          return get(childName);
       }
 
-      public Fragment addChild(String childName)
+      public Relationships addChild(String childName)
       {
          throw new UnsupportedOperationException();
       }

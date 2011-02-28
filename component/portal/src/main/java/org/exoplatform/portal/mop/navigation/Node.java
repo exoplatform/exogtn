@@ -21,9 +21,9 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Visibility;
 
-import java.util.Date;
-
 /**
+ * Represents a navigation node.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -41,7 +41,13 @@ public interface Node
     */
    Data getData();
 
-   Fragment getRelationships();
+   /**
+    * Returns the node relationships or return null if the relationships for this node have not
+    * been determined.
+    *
+    * @return the node relationships
+    */
+   Relationships getRelationships();
 
    /**
     * A navigation whose relationships are not determined.
@@ -68,7 +74,7 @@ public interface Node
    /**
     * A navigation whose relationships are fully determined.
     */
-   public interface Fragment
+   public interface Relationships
    {
 
       Node getParent();
@@ -77,7 +83,7 @@ public interface Node
 
       Node getChild(String childName);
 
-      Fragment addChild(String childName);
+      Relationships addChild(String childName);
 
       void removeChild(String childName);
 
