@@ -108,13 +108,9 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().addChild("default");
       end(true);
-
-      //
       stopService();
 
       //
@@ -128,13 +124,9 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
       end(true);
-
-      //
       stopService();
 
       //
@@ -160,14 +152,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
       end(true);
-
-      //
       stopService();
 
       //
@@ -178,14 +166,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 4);
       end(true);
-
-      //
       stopService();
 
       //
@@ -196,14 +180,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, null);
       end(true);
-
-      //
       stopService();
 
       //
@@ -298,13 +278,13 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testNodeInvalidationByRemoval() throws Exception
    {
-      // Create a navigation
+      //
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_removal");
       portal.getRootNavigation().addChild("default");
       end(true);
 
-      // Put the navigation in the cache
+      //
       begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_removal");
       assertNotNull(rootId);
@@ -312,18 +292,14 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(root);
       end();
 
-      // Start invalidation
+      //
       startService();
-
-      // Remove the navigation
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_removal").getRootNavigation().getChild("default").destroy();
       end(true);
-
-      //
       stopService();
 
-      // Let's check cache is now empty
+      //
       begin();
       root = service.load(rootId, Scope.SINGLE);
       assertNull(root);
@@ -348,16 +324,12 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      // Add a child navigation
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").addChild("new");
       end(true);
-
-      //
       stopService();
 
-      // Let's check cache is now empty
+      //
       begin();
       root = service.load(rootId, Scope.CHILDREN);
       iterator = root.getRelationships().getChildren().iterator();
@@ -365,18 +337,14 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(iterator.hasNext());
       end();
 
-      // Start invalidation
+      //
       startService();
-
-      // Remove a child navigation
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").getChild("new").destroy();
       end(true);
-
-      //
       stopService();
 
-      // Let's check cache is now empty
+      //
       begin();
       root = service.load(rootId, Scope.CHILDREN);
       iterator = root.getRelationships().getChildren().iterator();
@@ -391,7 +359,7 @@ public class TestNavigationService extends AbstractPortalTest
       portal.getRootNavigation().addChild("default");
       end(true);
 
-      // Put the navigation in the cache
+      //
       begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_propertychange");
       assertNotNull(rootId);
@@ -399,16 +367,12 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(defaultNode.getData().getLabel());
       end();
 
-      // Start invalidation
-      startService();
-
       //
+      startService();
       begin();
       Described defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilto");
       end(true);
-
-      //
       stopService();
 
       //
@@ -419,14 +383,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilta");
       end(true);
-
-      //
       stopService();
 
       //
@@ -437,14 +397,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       startService();
-
-      //
       begin();
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName(null);
       end(true);
-
-      //
       stopService();
 
       //
