@@ -329,29 +329,29 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(root);
    }
 
-   public void testInvalidationByAddChild() throws Exception
+   public void testNodeInvalidationByChild() throws Exception
    {
       // Create a navigation
       MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd");
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_child");
       portal.getRootNavigation().addChild("default");
       end(true);
 
       // Put the navigation in the cache
       begin();
-      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_childadd");
+      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_child");
       assertNotNull(rootId);
       Node root = service.load(rootId, Scope.CHILDREN);
       Iterator<? extends Node> iterator = root.getRelationships().getChildren().iterator();
       assertFalse(iterator.hasNext());
       end();
 
-      // Start invalidation
+      //
       startService();
 
       // Add a child navigation
       begin();
-      mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_childadd").getRootNavigation().getChild("default").addChild("new");
+      mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").addChild("new");
       end(true);
 
       //
@@ -362,6 +362,24 @@ public class TestNavigationService extends AbstractPortalTest
       root = service.load(rootId, Scope.CHILDREN);
       iterator = root.getRelationships().getChildren().iterator();
       iterator.next();
+      assertFalse(iterator.hasNext());
+      end();
+
+      // Start invalidation
+      startService();
+
+      // Remove a child navigation
+      begin();
+      mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").getChild("new").destroy();
+      end(true);
+
+      //
+      stopService();
+
+      // Let's check cache is now empty
+      begin();
+      root = service.load(rootId, Scope.CHILDREN);
+      iterator = root.getRelationships().getChildren().iterator();
       assertFalse(iterator.hasNext());
    }
 

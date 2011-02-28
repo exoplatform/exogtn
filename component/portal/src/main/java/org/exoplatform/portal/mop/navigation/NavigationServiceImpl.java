@@ -113,13 +113,16 @@ public class NavigationServiceImpl implements NavigationService
                {
                   case Event.NODE_REMOVED:
                   {
-
-                     //
-
                      String nodeId = nodePathCache.remove(itemPath);
                      if (nodeId != null)
                      {
                         nodeIdCache.remove(nodeId);
+                     }
+                     String parentPath = parentPath(parentPath(itemPath));
+                     String id = nodePathCache.remove(parentPath);
+                     if (id != null)
+                     {
+                        nodeIdCache.remove(id);
                      }
                      break;
                   }
