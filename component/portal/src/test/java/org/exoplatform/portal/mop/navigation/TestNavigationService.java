@@ -124,26 +124,26 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(1, (int)nav.getPriority());
       assertEquals(key, nav.getKey());
       assertNotNull(nav.getNodeId());
-//      end();
-//
-//      //
-//      startService();
-//
-//      //
-//      begin();
-//      mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
-//      end(true);
-//
-//      //
-//      stopService();
-//
-//      //
-//      begin();
-//      nav = service.getNavigation(key);
-//      assertNotNull(nav);
-//      assertEquals(1, (int)nav.getPriority());
-//      assertEquals(key, nav.getKey());
-//      assertNull(nav.getNodeId());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      nav = service.getNavigation(key);
+      assertNotNull(nav);
+      assertEquals(1, (int)nav.getPriority());
+      assertEquals(key, nav.getKey());
+      assertNull(nav.getNodeId());
    }
 
    public void testGetNavigationInvalidationByPriority()

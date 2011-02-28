@@ -124,6 +124,12 @@ public class NavigationServiceImpl implements NavigationService
                      {
                         nodeIdCache.remove(id);
                      }
+                     String a = parentPath(parentPath(parentPath(itemPath)));
+                     SiteKey sk = navigationPathCache.remove(a);
+                     if (sk != null)
+                     {
+                        navigationKeyCache.remove(sk);
+                     }
                      break;
                   }
                   case Event.NODE_ADDED:
