@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,9 +31,19 @@ class NodeImpl implements Node
    /** . */
    final NodeData data;
 
-   public NodeImpl(NodeData data)
+   /** . */
+   final FragmentImpl relationships;
+
+   public NodeImpl(NodeData data, FragmentImpl relationships)
    {
       this.data = data;
+      this.relationships = relationships;
+   }
+
+   NodeImpl(NodeData data)
+   {
+      this.data = data;
+      this.relationships = null;
    }
 
    public String getId()
@@ -51,24 +61,27 @@ class NodeImpl implements Node
       return data;
    }
 
+   public Fragment getRelationships()
+   {
+      return relationships;
+   }
+
    @Override
    public String toString()
    {
       return "Node[" + data.getName() + "]";
    }
 
-   static class FragmentImpl extends NodeImpl implements Fragment
+   static class FragmentImpl extends LinkedHashMap<String, NodeImpl> implements Fragment
    {
 
-      /** . */
-      private final Map<String, NodeImpl> children;
-
-      FragmentImpl(NodeData data, Map<String, NodeImpl> children)
+      FragmentImpl()
       {
-         super(data);
+      }
 
-         //
-         this.children = children;
+      FragmentImpl(int initialCapacity)
+      {
+         super(initialCapacity);
       }
 
       public Node getParent()
@@ -78,12 +91,12 @@ class NodeImpl implements Node
 
       public Iterable<? extends Node> getChildren()
       {
-         return children.values();
+         return values();
       }
 
       public Node getChild(String childName)
       {
-         return children.get(childName);
+         return get(childName);
       }
 
       public Fragment addChild(String childName)
@@ -96,5 +109,4 @@ class NodeImpl implements Node
          throw new UnsupportedOperationException();
       }
    }
-   
 }

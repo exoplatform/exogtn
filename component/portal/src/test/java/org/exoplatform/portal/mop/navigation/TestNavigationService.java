@@ -91,31 +91,29 @@ public class TestNavigationService extends AbstractPortalTest
       end();
    }
 
-   public void testLoadSingleCustom() throws Exception
+   public void testLoadSingleScope() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "classic");
       Node root = service.load(rootId, Scope.SINGLE);
-      assertFalse(root instanceof Node.Fragment);
+      assertNull(root.getRelationships());
       assertEquals(rootId, root.getId());
       assertEquals("default", root.getName());
    }
 
-   public void testLoadChildrenCustom() throws Exception
+   public void testLoadChildrenScope() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "classic");
       Node root = service.load(rootId, Scope.CHILDREN);
-      assertTrue(root instanceof Node.Fragment);
-      Node.Fragment fragment = (Node.Fragment)root;
-      assertEquals(rootId, fragment.getId());
-      assertEquals("default", fragment.getName());
-      Iterator<? extends Node> i = fragment.getChildren().iterator();
+      assertEquals(rootId, root.getId());
+      assertEquals("default", root.getName());
+      Iterator<? extends Node> i = root.getRelationships().getChildren().iterator();
       assertTrue(i.hasNext());
       Node home = i.next();
-      assertFalse(home instanceof Node.Fragment);
+      assertNull(home.getRelationships());
       assertEquals("home", home.getName());
       assertTrue(i.hasNext());
       Node webexplorer = i.next();
-      assertFalse(webexplorer instanceof Node.Fragment);
+      assertNull(webexplorer.getRelationships());
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
    }
@@ -123,7 +121,7 @@ public class TestNavigationService extends AbstractPortalTest
    public void testLoadCustomScope() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "large");
-      Node.Fragment root = (Node.Fragment)service.load(rootId, new Scope()
+      Node root = service.load(rootId, new Scope()
       {
          public Visitor get()
          {
@@ -149,20 +147,19 @@ public class TestNavigationService extends AbstractPortalTest
             };
          }
       });
-      assertFalse(root.getChild("a") instanceof Node.Fragment);
-      Node.Fragment b = (Node.Fragment)root.getChild("b");
-      assertFalse(b.getChild("c") instanceof Node.Fragment);
-      Node.Fragment d = (Node.Fragment)b.getChild("d");
-      assertFalse(d.getChild("e") instanceof Node.Fragment);
+      assertNull(root.getRelationships().getChild("a").getRelationships());
+      Node b = root.getRelationships().getChild("b");
+      Node d = b.getRelationships().getChild("d");
+      assertNull(d.getRelationships().getChild("e").getRelationships());
    }
 
    public void testState() throws Exception
    {
       String rootId = service.getRootId(SiteType.PORTAL, "test");
-      Node.Fragment root = (Node.Fragment)service.load(rootId, Scope.ALL);
-      Iterator<? extends Node> rootIterator = root.getChildren().iterator();
-      Node.Fragment child1 = (Node.Fragment)rootIterator.next();
-      Node.Fragment child2 = (Node.Fragment)rootIterator.next();
+      Node root = service.load(rootId, Scope.ALL);
+      Iterator<? extends Node> rootIterator = root.getRelationships().getChildren().iterator();
+      Node child1 = rootIterator.next();
+      Node child2 = rootIterator.next();
       assertFalse(rootIterator.hasNext());
       assertEquals("node_name", child1.getName());
       assertEquals("node_uri", child1.getData().getURI());
@@ -223,8 +220,8 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_childadd");
       assertNotNull(rootId);
-      Node.Fragment root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
-      Iterator<? extends Node> iterator = root.getChildren().iterator();
+      Node root = service.load(rootId, Scope.CHILDREN);
+      Iterator<? extends Node> iterator = root.getRelationships().getChildren().iterator();
       assertFalse(iterator.hasNext());
       end();
 
@@ -241,8 +238,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       // Let's check cache is now empty
       begin();
-      root = (Node.Fragment)service.load(rootId, Scope.CHILDREN);
-      iterator = root.getChildren().iterator();
+      root = service.load(rootId, Scope.CHILDREN);
+      iterator = root.getRelationships().getChildren().iterator();
       iterator.next();
       assertFalse(iterator.hasNext());
    }

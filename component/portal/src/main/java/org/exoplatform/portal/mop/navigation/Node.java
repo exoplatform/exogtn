@@ -41,6 +41,8 @@ public interface Node
     */
    Data getData();
 
+   Fragment getRelationships();
+
    /**
     * A navigation whose relationships are not determined.
     */
@@ -66,7 +68,7 @@ public interface Node
    /**
     * A navigation whose relationships are fully determined.
     */
-   public interface Fragment extends Node
+   public interface Fragment
    {
 
       Node getParent();

@@ -35,7 +35,6 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
 import java.util.EnumMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -219,13 +218,13 @@ public class NavigationServiceImpl implements NavigationService
       switch (visitor.visit(depth, data.id, data.name))
       {
          case CHILDREN:
-            LinkedHashMap<String, NodeImpl> children = new LinkedHashMap<String, NodeImpl>(data.children.size());
+            NodeImpl.FragmentImpl children = new NodeImpl.FragmentImpl(data.children.size());
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                NodeImpl child = load(session, entry.getValue(), visitor, depth + 1);
                children.put(child.data.name, child);
             }
-            return new NodeImpl.FragmentImpl(data, children);
+            return new NodeImpl(data, children);
          case NODE:
             return new NodeImpl(data);
          default:
