@@ -23,6 +23,7 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -30,9 +31,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -89,6 +88,16 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       service.stop();
       end();
+   }
+
+   public void testNavigation() throws Exception
+   {
+      SiteKey key = new SiteKey(SiteType.PORTAL, "classic");
+      Navigation nav = service.getNavigation(key);
+      assertNotNull(nav);
+      assertEquals(1, (int)nav.getPriority());
+      assertEquals(key, nav.getKey());
+      assertNotNull(nav.getNodeId());
    }
 
    public void testLoadSingleScope() throws Exception

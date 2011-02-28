@@ -20,9 +20,11 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.chromattic.api.Chromattic;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -45,11 +47,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NavigationServiceImpl implements NavigationService
 {
 
-   /** The cache. */
-   private Map<String, NodeData> idCache;
+   /** . */
+   private Map<SiteKey, NavigationData> navigationKeyCache;
 
-   /** The cache. */
-   private Map<String, String> pathCache;
+   /** . */
+   private Map<String, NavigationData> navigationIdCache;
+
+   /** . */
+   private Map<String, String> navigationPathCache;
+
+   /** . */
+   private Map<String, NodeData> nodeIdCache;
+
+   /** . */
+   private Map<String, String> nodePathCache;
 
    /** . */
    private final POMSessionManager manager;
@@ -73,8 +84,11 @@ public class NavigationServiceImpl implements NavigationService
    public NavigationServiceImpl(POMSessionManager manager)
    {
       this.manager = manager;
-      this.idCache = new ConcurrentHashMap<String, NodeData>(1000);
-      this.pathCache = new ConcurrentHashMap<String, String>(1000);
+      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationData>(1000);
+      this.navigationIdCache = new ConcurrentHashMap<String, NavigationData>(1000);
+      this.navigationPathCache = new ConcurrentHashMap<String, String>(1000);;
+      this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
+      this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;
    }
 
@@ -103,20 +117,20 @@ public class NavigationServiceImpl implements NavigationService
                   case Event.NODE_REMOVED:
                   {
 
-                     String id = pathCache.remove(nodePath);
+                     String id = nodePathCache.remove(nodePath);
                      if (id != null)
                      {
-                        idCache.remove(id);
+                        nodeIdCache.remove(id);
                      }
                      break;
                   }
                   case Event.NODE_ADDED:
                   {
                      String parentPath = parentPath(parentPath(nodePath));
-                     String id = pathCache.remove(parentPath);
+                     String id = nodePathCache.remove(parentPath);
                      if (id != null)
                      {
-                        idCache.remove(id);
+                        nodeIdCache.remove(id);
                      }
                      break;
                   }
@@ -132,10 +146,10 @@ public class NavigationServiceImpl implements NavigationService
          void invalidate(int eventType, String nodeType, String nodePath)
          {
             String parentPath = parentPath(nodePath);
-            String id = pathCache.remove(parentPath);
+            String id = nodePathCache.remove(parentPath);
             if (id != null)
             {
-               idCache.remove(id);
+               nodeIdCache.remove(id);
             }
          }
       });
@@ -189,6 +203,26 @@ public class NavigationServiceImpl implements NavigationService
       return root != null ? root.getObjectId() : null;
    }
 
+   public NavigationData getNavigation(SiteKey key)
+   {
+
+      NavigationData data = navigationKeyCache.get(key);
+      if (data == null)
+      {
+         POMSession session = manager.getSession();
+         ObjectType<Site> objectType = a.get(key.getType());
+         Workspace workspace = session.getWorkspace();
+         Site site = workspace.getSite(objectType, key.getName());
+         Navigation nav = site.getRootNavigation();
+         Navigation root = nav.getChild("default");
+         data = new NavigationData(key, nav.getAttributes().getValue(MappedAttributes.PRIORITY, 1), root.getObjectId());
+         navigationKeyCache.put(key, data);
+      }
+
+      //
+      return data;
+   }
+
    public Node load(String nodeId, Scope scope)
    {
       POMSession session = manager.getSession();
@@ -198,7 +232,7 @@ public class NavigationServiceImpl implements NavigationService
 
    private NodeImpl load(POMSession session, String navigationId, Scope.Visitor visitor, int depth)
    {
-      NodeData data = idCache.get(navigationId);
+      NodeData data = nodeIdCache.get(navigationId);
       if (data == null)
       {
          Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, navigationId);
@@ -209,8 +243,8 @@ public class NavigationServiceImpl implements NavigationService
          else
          {
             data = new NodeData(navigation);
-            idCache.put(navigationId, data);
-            pathCache.put(session.pathOf(navigation), navigationId);
+            nodeIdCache.put(navigationId, data);
+            nodePathCache.put(session.pathOf(navigation), navigationId);
          }
       }
 

@@ -20,27 +20,33 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NavigationService
+public interface Navigation
 {
 
    /**
-    * Find and returns a navigation. If no such navigation exist, null is returned instead.
+    * Returns the navigation key.
     *
-    * @param key the navigation key
-    * @return the matching navigation
+    * @return the navigation key
     */
-   Navigation getNavigation(SiteKey key);
+   SiteKey getKey();
 
-   String getRootId(SiteType siteType, String siteId);
+   /**
+    * Returns the navigation priority.
+    *
+    * @return the navigation priority
+    */
+   Integer getPriority();
 
-   Node load(String nodeId, Scope scope);
-
-   void save(Node node);
+   /**
+    * Returns the navigation related node id.
+    *
+    * @return the node id
+    */
+   String getNodeId();
 
 }
