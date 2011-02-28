@@ -51,10 +51,7 @@ public class NavigationServiceImpl implements NavigationService
    private Map<SiteKey, NavigationData> navigationKeyCache;
 
    /** . */
-   private Map<String, NavigationData> navigationIdCache;
-
-   /** . */
-   private Map<String, String> navigationPathCache;
+   private Map<String, SiteKey> navigationPathCache;
 
    /** . */
    private Map<String, NodeData> nodeIdCache;
@@ -85,8 +82,7 @@ public class NavigationServiceImpl implements NavigationService
    {
       this.manager = manager;
       this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationData>(1000);
-      this.navigationIdCache = new ConcurrentHashMap<String, NavigationData>(1000);
-      this.navigationPathCache = new ConcurrentHashMap<String, String>(1000);;
+      this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);;
       this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;
@@ -103,12 +99,13 @@ public class NavigationServiceImpl implements NavigationService
       //
       final String NAVIGATION_CONTAINER = "mop:navigationcontainer";
       final String NAVIGATION = "mop:navigation";
+      final String ATTRIBUTES = "mop:attributes";
 
       //
       invalidationManager.register(NAVIGATION_CONTAINER, Event.NODE_REMOVED + Event.NODE_ADDED, new Invalidator()
       {
          @Override
-         void invalidate(int eventType, String nodeType, String nodePath)
+         void invalidate(int eventType, String nodeType, String itemPath)
          {
             if (nodeType.equals(NAVIGATION_CONTAINER))
             {
@@ -117,7 +114,7 @@ public class NavigationServiceImpl implements NavigationService
                   case Event.NODE_REMOVED:
                   {
 
-                     String id = nodePathCache.remove(nodePath);
+                     String id = nodePathCache.remove(itemPath);
                      if (id != null)
                      {
                         nodeIdCache.remove(id);
@@ -126,7 +123,7 @@ public class NavigationServiceImpl implements NavigationService
                   }
                   case Event.NODE_ADDED:
                   {
-                     String parentPath = parentPath(parentPath(nodePath));
+                     String parentPath = parentPath(parentPath(itemPath));
                      String id = nodePathCache.remove(parentPath);
                      if (id != null)
                      {
@@ -143,13 +140,32 @@ public class NavigationServiceImpl implements NavigationService
       invalidationManager.register(NAVIGATION, Event.PROPERTY_ADDED + Event.PROPERTY_CHANGED + Event.PROPERTY_REMOVED, new Invalidator()
       {
          @Override
-         void invalidate(int eventType, String nodeType, String nodePath)
+         void invalidate(int eventType, String nodeType, String itemPath)
          {
-            String parentPath = parentPath(nodePath);
-            String id = nodePathCache.remove(parentPath);
+            // Look for node
+            String nodePath = parentPath(itemPath);
+            String id = nodePathCache.remove(nodePath);
             if (id != null)
             {
                nodeIdCache.remove(id);
+            }
+         }
+      });
+
+      //
+      invalidationManager.register(ATTRIBUTES, Event.NODE_ADDED + Event.NODE_REMOVED, new Invalidator()
+      {
+         @Override
+         void invalidate(int eventType, String nodeType, String itemPath)
+         {
+            String nodePath = parentPath(parentPath(itemPath));
+
+            //
+            String navPath = parentPath(parentPath(parentPath(nodePath)));
+            SiteKey navigationKey = navigationPathCache.remove(navPath);
+            if (navigationKey != null)
+            {
+               navigationKeyCache.remove(navigationKey);
             }
          }
       });
@@ -215,8 +231,16 @@ public class NavigationServiceImpl implements NavigationService
          Site site = workspace.getSite(objectType, key.getName());
          Navigation nav = site.getRootNavigation();
          Navigation root = nav.getChild("default");
-         data = new NavigationData(key, nav.getAttributes().getValue(MappedAttributes.PRIORITY, 1), root.getObjectId());
-         navigationKeyCache.put(key, data);
+         if (root != null)
+         {
+            data = new NavigationData(key, root.getAttributes().getValue(MappedAttributes.PRIORITY, 1), root.getObjectId());
+            navigationKeyCache.put(key, data);
+            navigationPathCache.put(session.pathOf(site), key);
+         }
+         else
+         {
+            throw new UnsupportedOperationException("todo");
+         }
       }
 
       //

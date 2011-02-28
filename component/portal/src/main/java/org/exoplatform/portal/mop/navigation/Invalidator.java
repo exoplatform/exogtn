@@ -26,6 +26,6 @@ package org.exoplatform.portal.mop.navigation;
 abstract class Invalidator
 {
 
-   abstract void invalidate(int eventType, String nodeType, String nodePath);
+   abstract void invalidate(int eventType, String nodeType, String itemPath);
 
 }

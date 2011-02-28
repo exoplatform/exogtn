@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
@@ -90,7 +91,7 @@ public class TestNavigationService extends AbstractPortalTest
       end();
    }
 
-   public void testNavigation() throws Exception
+   public void testGetNavigation() throws Exception
    {
       SiteKey key = new SiteKey(SiteType.PORTAL, "classic");
       Navigation nav = service.getNavigation(key);
@@ -98,6 +99,37 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(1, (int)nav.getPriority());
       assertEquals(key, nav.getKey());
       assertNotNull(nav.getNodeId());
+   }
+
+   public void testGetNavigationInvalidationByPriorityChange()
+   {
+      Site site = mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
+      site.getRootNavigation().addChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
+      end(true);
+
+      //
+      begin();
+      SiteKey key = new SiteKey(SiteType.PORTAL, "invalidation_by_priority_change");
+      Navigation nav = service.getNavigation(key);
+      assertEquals(2, (int)nav.getPriority());
+      end();
+
+      //
+      startService();
+
+      //
+      begin();
+      site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
+      site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 4);
+      end(true);
+
+      //
+      stopService();
+
+      //
+      begin();
+      nav = service.getNavigation(key);
+      assertEquals(4, (int)nav.getPriority());
    }
 
    public void testLoadSingleScope() throws Exception
