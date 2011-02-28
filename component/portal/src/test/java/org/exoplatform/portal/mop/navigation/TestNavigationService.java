@@ -228,7 +228,7 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, String nodeId, String nodeName)
+               public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
                {
                   boolean use = false;
                   switch (depth)

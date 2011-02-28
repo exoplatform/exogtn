@@ -302,7 +302,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      switch (visitor.visit(depth, data.id, data.name))
+      switch (visitor.visit(depth, data.id, data.name, data))
       {
          case CHILDREN:
             NodeImpl.FragmentImpl children = new NodeImpl.FragmentImpl(data.children.size());

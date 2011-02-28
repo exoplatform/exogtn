@@ -24,6 +24,9 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
 
 import java.lang.reflect.UndeclaredThrowableException;
@@ -107,6 +110,7 @@ public class UserPortalConfig
     * Returns an immutable sorted list of the valid navigations related to the user.
     *
     * @return the navigations
+    * @throws Exception any exception
     */
    public List<Navigation> getNavigations2() throws Exception
    {
@@ -165,6 +169,82 @@ public class UserPortalConfig
          this.navigations2 = Collections.unmodifiableList(navigations);
       }
       return navigations2;
+   }
+
+   public Node.Data resolveNavigation(String path) throws Exception
+   {
+      if (path == null)
+      {
+         throw new NullPointerException("No null path accepted");
+      }
+
+      // Get navigations
+      List<Navigation> navs = getNavigations2();
+
+      // Split into segments
+      final String[] segments = path.split("/");
+
+      //
+      class ScoringScope implements Scope
+      {
+         int score;
+         Node.Data data;
+         public Visitor get()
+         {
+            return new Visitor()
+            {
+               public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
+               {
+                  if (depth == 0 && "default".equals(nodeName))
+                  {
+                     score = 0;
+                     data = nodeData;
+                     return VisitMode.CHILDREN;
+                  }
+                  else if (depth <= segments.length && nodeName.equals(segments[depth - 1]))
+                  {
+                     score++;
+                     data = nodeData;
+                     return VisitMode.CHILDREN;
+                  }
+                  else
+                  {
+                     return VisitMode.NODE;
+                  }
+               }
+            };
+         }
+      }
+
+      //
+      ScoringScope best = null;
+      for (Navigation nav : navs)
+      {
+         ScoringScope scope = new ScoringScope();
+         service.navService.load(nav.getNodeId(), scope);
+         if (scope.score == segments.length)
+         {
+            best = scope;
+            break;
+         }
+         else
+         {
+            if (best == null)
+            {
+               best = scope;
+            }
+            else
+            {
+               if (scope.score > best.score)
+               {
+                  best = scope;
+               }
+            }
+         }
+      }
+
+      //
+      return best.data;
    }
    
    public PageNavigation getSelectedNavigation()
