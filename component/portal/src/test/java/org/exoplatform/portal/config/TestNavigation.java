@@ -291,6 +291,32 @@ public class TestNavigation extends AbstractPortalTest
       }.execute("root");
    }
 
+   public void testPathResolution()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+
+            //
+            List<Node.Data> path = userPortalCfg.resolveNavigation("/");
+            assertEquals(0, path.size());
+
+            //
+            path = userPortalCfg.resolveNavigation("/home");
+            assertEquals(1, path.size());
+            assertEquals("portal::classic::homepage", path.get(0).getPageRef());
+
+            //
+            path = userPortalCfg.resolveNavigation("/administration/communityManagement");
+            assertEquals(2, path.size());
+            assertEquals(null, path.get(0).getPageRef());
+            assertEquals("group::/platform/administrators::communityManagement", path.get(1).getPageRef());
+         }
+      }.execute("root");
+   }
+
 /*
    public void testCreateUserPortalConfig()
    {

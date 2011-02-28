@@ -171,7 +171,7 @@ public class UserPortalConfig
       return navigations2;
    }
 
-   public Node.Data resolveNavigation(String path) throws Exception
+   public List<Node.Data> resolveNavigation(String path) throws Exception
    {
       if (path == null)
       {
@@ -182,13 +182,17 @@ public class UserPortalConfig
       List<Navigation> navs = getNavigations2();
 
       // Split into segments
+      if (path.length() > 0 && path.charAt(0) == '/')
+      {
+         path = path.substring(1);
+      }
       final String[] segments = path.split("/");
 
       //
       class ScoringScope implements Scope
       {
          int score;
-         Node.Data data;
+         List<Node.Data> path;
          public Visitor get()
          {
             return new Visitor()
@@ -198,13 +202,13 @@ public class UserPortalConfig
                   if (depth == 0 && "default".equals(nodeName))
                   {
                      score = 0;
-                     data = nodeData;
+                     path = new ArrayList<Node.Data>();
                      return VisitMode.CHILDREN;
                   }
                   else if (depth <= segments.length && nodeName.equals(segments[depth - 1]))
                   {
                      score++;
-                     data = nodeData;
+                     path.add(nodeData);
                      return VisitMode.CHILDREN;
                   }
                   else
@@ -244,7 +248,7 @@ public class UserPortalConfig
       }
 
       //
-      return best.data;
+      return best.path;
    }
    
    public PageNavigation getSelectedNavigation()
