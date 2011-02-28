@@ -46,11 +46,11 @@ import java.util.*;
  */
 public class UserPortalConfigService implements Startable
 {
-   private DataStorage storage_;
+   DataStorage storage_;
 
-   private UserACL userACL_;
+   UserACL userACL_;
 
-   private OrganizationService orgService_;
+   OrganizationService orgService_;
 
    private NewPortalConfigListener newPortalConfigListener_;
    
@@ -98,65 +98,8 @@ public class UserPortalConfigService implements Startable
          return null;
       }
 
-      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      PageNavigation navigation = storage_.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
-      if (navigation != null)
-      {
-         navigation.setModifiable(userACL_.hasPermission(portal.getEditPermission()));
-         navigations.add(navigation);
-      }
 
-      if (accessUser == null)
-      {
-         // navigation = getPageNavigation(PortalConfig.GROUP_TYPE,
-         // userACL_.getGuestsGroup());
-         // if (navigation != null)
-         // navigations.add(navigation);
-      }
-      else
-      {
-         navigation = storage_.getPageNavigation(PortalConfig.USER_TYPE, accessUser);
-         if (navigation != null)
-         {
-            navigation.setModifiable(true);
-            navigations.add(navigation);
-         }
-
-         Collection<?> groups = null;
-         if (userACL_.getSuperUser().equals(accessUser))
-         {
-            groups = orgService_.getGroupHandler().getAllGroups();
-         }
-         else
-         {
-            groups = orgService_.getGroupHandler().findGroupsOfUser(accessUser);
-         }
-         for (Object group : groups)
-         {
-            Group m = (Group)group;
-            String groupId = m.getId().trim();
-            if (groupId.equals(userACL_.getGuestsGroup()))
-            {
-               continue;
-            }
-            navigation = storage_.getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
-            if (navigation == null)
-            {
-               continue;
-            }
-            navigation.setModifiable(userACL_.hasEditPermission(navigation));
-            navigations.add(navigation);
-         }
-      }
-      Collections.sort(navigations, new Comparator<PageNavigation>()
-      {
-         public int compare(PageNavigation nav1, PageNavigation nav2)
-         {
-            return nav1.getPriority() - nav2.getPriority();
-         }
-      });
-
-      return new UserPortalConfig(portal, navigations);
+      return new UserPortalConfig(portal, this, portalName, accessUser);
    }
 
    /**

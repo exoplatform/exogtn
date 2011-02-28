@@ -21,8 +21,13 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.services.organization.Group;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserPortalConfig
@@ -31,19 +36,32 @@ public class UserPortalConfig
    private PortalConfig portal;
 
    private List<PageNavigation> navigations;
-   
+
+   private final UserPortalConfigService service;
+
+   private final String portalName;
+
+   private final String accessUser;
+
    /** Added by Minh Hoang TO */
    private PageNavigation selectedNavigation;
 
    public UserPortalConfig()
    {
-
+      this.portal = null;
+      this.navigations = new ArrayList<PageNavigation>();
+      this.service = null;
+      this.portalName = null;
+      this.accessUser = null;
    }
 
-   public UserPortalConfig(PortalConfig portal, List<PageNavigation> navigations)
+   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser)
    {
       this.portal = portal;
-      this.navigations = navigations;
+      this.navigations = null;
+      this.service = service;
+      this.portalName = portalName;
+      this.accessUser = accessUser;
    }
 
    public PortalConfig getPortalConfig()
@@ -65,7 +83,7 @@ public class UserPortalConfig
    public void updateSelectedNavigation(String ownerType, String ownerId)
    {
       PageNavigation targetNavigation = null;
-      for (PageNavigation nav : navigations)
+      for (PageNavigation nav : getNavigations())
       {
          if (nav.getOwnerType().equals(ownerType) && nav.getOwnerId().equals(ownerId))
          {
@@ -86,7 +104,7 @@ public class UserPortalConfig
       {
          return this.selectedNavigation;
       }
-      return navigations.get(0);
+      return getNavigations().get(0);
    }
    
    public void setNavigations(List<PageNavigation> navs)
@@ -96,15 +114,95 @@ public class UserPortalConfig
 
    public List<PageNavigation> getNavigations()
    {
+
+      if (navigations == null)
+      {
+         try
+         {
+            List<PageNavigation> navigations = new ArrayList<PageNavigation>();
+            PageNavigation navigation = service.storage_.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+            if (navigation != null)
+            {
+               navigation.setModifiable(service.userACL_.hasPermission(portal.getEditPermission()));
+               navigations.add(navigation);
+            }
+
+            if (accessUser == null)
+            {
+               // navigation = getPageNavigation(PortalConfig.GROUP_TYPE,
+               // userACL_.getGuestsGroup());
+               // if (navigation != null)
+               // navigations.add(navigation);
+            }
+            else
+            {
+               navigation = service.storage_.getPageNavigation(PortalConfig.USER_TYPE, accessUser);
+               if (navigation != null)
+               {
+                  navigation.setModifiable(true);
+                  navigations.add(navigation);
+               }
+
+               Collection<?> groups = null;
+               if (service.userACL_.getSuperUser().equals(accessUser))
+               {
+                  groups = service.orgService_.getGroupHandler().getAllGroups();
+               }
+               else
+               {
+                  groups = service.orgService_.getGroupHandler().findGroupsOfUser(accessUser);
+               }
+               for (Object group : groups)
+               {
+                  Group m = (Group)group;
+                  String groupId = m.getId().trim();
+                  if (groupId.equals(service.userACL_.getGuestsGroup()))
+                  {
+                     continue;
+                  }
+                  navigation = service.storage_.getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
+                  if (navigation == null)
+                  {
+                     continue;
+                  }
+                  navigation.setModifiable(service.userACL_.hasEditPermission(navigation));
+                  navigations.add(navigation);
+               }
+            }
+            Collections.sort(navigations, new Comparator<PageNavigation>()
+            {
+               public int compare(PageNavigation nav1, PageNavigation nav2)
+               {
+                  return nav1.getPriority() - nav2.getPriority();
+               }
+            });
+
+            //
+            this.navigations = navigations;
+         }
+         catch (Exception e)
+         {
+            throw new UndeclaredThrowableException(e);
+         }
+      }
+
       return navigations;
    }
 
    public void addNavigation(PageNavigation nav)
    {
-      if (navigations == null)
-         navigations = new ArrayList<PageNavigation>();
-      if (nav == null)
-         return;
+      if (service == null)
+      {
+         if (navigations == null)
+            navigations = new ArrayList<PageNavigation>();
+         if (nav == null)
+            return;
+      }
+      else
+      {
+         // Ensure navs are loaded
+         getNavigations();
+      }
       navigations.add(nav);
    }
 }
