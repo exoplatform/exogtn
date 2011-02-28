@@ -91,7 +91,7 @@ public class TestNavigationService extends AbstractPortalTest
       end();
    }
 
-   public void testGetNavigation() throws Exception
+   public void testNavigationInvalidationByRootId() throws Exception
    {
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "get_navigation");
       end(true);
@@ -146,7 +146,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(nav.getNodeId());
    }
 
-   public void testGetNavigationInvalidationByPriority()
+   public void testNavigationInvalidationByPriority()
    {
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change").getRootNavigation().addChild("default");
       end(true);
@@ -296,7 +296,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(Visibility.DISPLAYED, child2.getData().getVisibility());
    }
 
-   public void testInvalidationByRemoval() throws Exception
+   public void testNodeInvalidationByRemoval() throws Exception
    {
       // Create a navigation
       MOPService mop = mgr.getPOMService();
@@ -383,7 +383,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(iterator.hasNext());
    }
 
-   public void testInvalidationByProperty() throws Exception
+   public void testNodeInvalidationByProperty() throws Exception
    {
       // Create a navigation
       MOPService mop = mgr.getPOMService();
