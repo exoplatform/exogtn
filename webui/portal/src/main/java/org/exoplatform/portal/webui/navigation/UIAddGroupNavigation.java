@@ -157,8 +157,8 @@ public class UIAddGroupNavigation extends UIContainer
          // create navigation for group
          dataService.create(pageNav);
 
-         uiPortalApp.getUserPortalConfig().getNavigations().add(0, pageNav);
-         uiPortalApp.getNavigations().add(0, pageNav);
+         uiPortalApp.getUserPortalConfig().getNavigations().add(pageNav);
+         uiPortalApp.getNavigations().add(pageNav);
          uiPortalApp.localizeNavigations();
          
          //Update group navigation list
