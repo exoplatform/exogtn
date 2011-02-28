@@ -28,6 +28,21 @@ import java.io.Serializable;
 public final class SiteKey implements Serializable
 {
 
+   public static SiteKey portal(String name)
+   {
+      return new SiteKey(SiteType.PORTAL, name);
+   }
+
+   public static SiteKey group(String name)
+   {
+      return new SiteKey(SiteType.GROUP, name);
+   }
+
+   public static SiteKey user(String name)
+   {
+      return new SiteKey(SiteType.USER, name);
+   }
+
    /** . */
    private final SiteType type;
 
@@ -83,5 +98,11 @@ public final class SiteKey implements Serializable
 
       //
       return false;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "SiteKey[type=" + type.toString() + ",name=" + name + "]";
    }
 }

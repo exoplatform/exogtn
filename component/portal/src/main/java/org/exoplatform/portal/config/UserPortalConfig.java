@@ -21,6 +21,9 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.services.organization.Group;
 
 import java.lang.reflect.UndeclaredThrowableException;
@@ -96,6 +99,72 @@ public class UserPortalConfig
       {
          this.setSelectedNavigation(targetNavigation);
       }
+   }
+
+   private List<Navigation> navigations2;
+
+   /**
+    * Returns an immutable sorted list of the valid navigations related to the user.
+    *
+    * @return the navigations
+    */
+   public List<Navigation> getNavigations2() throws Exception
+   {
+      if (navigations2 == null)
+      {
+         List<Navigation> navigations = new ArrayList<Navigation>(accessUser == null ? 1 : 10);
+         navigations.add(service.navService.getNavigation(new SiteKey(SiteType.PORTAL, portalName)));
+         if (accessUser != null)
+         {
+            // Add user nav if any
+            Navigation userNav = service.navService.getNavigation(SiteKey.user(accessUser));
+            if (userNav != null)
+            {
+//               navigation.setModifiable(true);
+               navigations.add(userNav);
+            }
+
+            //
+            Collection<?> groups;
+            if (service.userACL_.getSuperUser().equals(accessUser))
+            {
+               groups = service.orgService_.getGroupHandler().getAllGroups();
+            }
+            else
+            {
+               groups = service.orgService_.getGroupHandler().findGroupsOfUser(accessUser);
+            }
+            for (Object group : groups)
+            {
+               Group m = (Group)group;
+               String groupId = m.getId().trim();
+               if (groupId.equals(service.userACL_.getGuestsGroup()))
+               {
+                  continue;
+               }
+               Navigation navigation = service.navService.getNavigation(SiteKey.group(groupId));
+               if (navigation == null || navigation.getNodeId() == null)
+               {
+                  continue;
+               }
+//               navigation.setModifiable(service.userACL_.hasEditPermission(navigation));
+               navigations.add(navigation);
+            }
+
+            // Sort the list finally
+            Collections.sort(navigations, new Comparator<Navigation>()
+            {
+               public int compare(Navigation nav1, Navigation nav2)
+               {
+                  return nav1.getPriority() - nav2.getPriority();
+               }
+            });
+         }
+
+         //
+         this.navigations2 = Collections.unmodifiableList(navigations);
+      }
+      return navigations2;
    }
    
    public PageNavigation getSelectedNavigation()

@@ -759,6 +759,25 @@ public class UIPortalApplication extends UIApplication
       return this.all_Navigations;
    }
 
+   public void resolveNavigation(String uri)
+   {
+      if (uri == null)
+      {
+         throw new NullPointerException("No null uri argument accepted");
+      }
+
+      if(uri.length() == 0)
+      {
+         // return uiPortalApp.getNavigations().get(0);
+      }
+
+      //
+      String[] segments = uri.split("/");
+
+      // First find all related SiteKey
+
+   }
+
    private class UIPortalKey
    {
 

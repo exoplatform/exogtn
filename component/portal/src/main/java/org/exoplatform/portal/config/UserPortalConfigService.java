@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -53,16 +54,21 @@ public class UserPortalConfigService implements Startable
    OrganizationService orgService_;
 
    private NewPortalConfigListener newPortalConfigListener_;
+
+   /** . */
+   final NavigationService navService;
    
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
    public UserPortalConfigService(
       UserACL userACL, DataStorage storage,
-      OrganizationService orgService) throws Exception
+      OrganizationService orgService,
+      NavigationService navService) throws Exception
    {
       this.storage_ = storage;
       this.orgService_ = orgService;
       this.userACL_ = userACL;
+      this.navService = navService;
    }
 
    /**
