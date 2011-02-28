@@ -175,8 +175,6 @@ public class UIPortalApplication extends UIApplication
       setOwner(context.getPortalOwner());
       
       //Minh Hoang TO: Localizes navigations, need to put this code snippet below 'setLocale' block
-      this.all_Navigations = userPortalConfig_.getNavigations();
-      localizeNavigations();
    }
 
    /**
@@ -690,17 +688,6 @@ public class UIPortalApplication extends UIApplication
       return (page != null);
    }
 
-   public void localizeNavigations()
-   {
-      ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
-      Locale locale = getLocale();
-      
-      for(PageNavigation nav : this.getNavigations())
-      {
-         PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
-      }
-   }
-   
    /**
     * Get portal skin from {@link UserProfile} or from {@link UserPortalConfig}
     * 
@@ -744,14 +731,34 @@ public class UIPortalApplication extends UIApplication
    
    public void setNavigations(List<PageNavigation> navs)
    {
-      this.all_Navigations = navs;
+      // this.all_Navigations = navs;
+      throw new UnsupportedOperationException("Should it really be called");
    }
    
    public List<PageNavigation> getNavigations()
    {
+      if (all_Navigations == null)
+      {
+         System.out.println("Accessing all portal navigations from: ");
+         new Exception().printStackTrace();
+
+         //
+         List<PageNavigation> navigations = userPortalConfig_.getNavigations();
+         ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
+         Locale locale = getLocale();
+
+         //
+         for(PageNavigation nav : navigations)
+         {
+            PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
+         }
+
+         //
+         this.all_Navigations = navigations;
+      }
       return this.all_Navigations;
    }
-   
+
    private class UIPortalKey
    {
 
