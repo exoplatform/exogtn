@@ -17,53 +17,39 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config;
+package org.exoplatform.portal.mop.navigation;
 
 import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageBody;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.Navigation;
-import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.config.cache.DataCache;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
-import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNavigation extends AbstractPortalTest
+public class TestUserPortal extends AbstractPortalTest
 {
 
    /** . */
@@ -93,7 +79,7 @@ public class TestNavigation extends AbstractPortalTest
    /** . */
    private POMDataStorage mopStorage;
 
-   public TestNavigation(String name)
+   public TestUserPortal(String name)
    {
       super(name);
 
@@ -138,17 +124,17 @@ public class TestNavigation extends AbstractPortalTest
       }
    }
 
-   private static Map<SiteKey, Navigation> toMap(UserPortalConfig cfg) throws Exception
+   private static Map<SiteKey, UserNavigation> toMap(UserPortalConfig cfg) throws Exception
    {
-      return toMap(cfg.getNavigations2());
+      return toMap(cfg.getUserPortal().getNavigations());
    }
 
-   private static Map<SiteKey, Navigation> toMap(List<Navigation> navigations)
+   private static Map<SiteKey, UserNavigation> toMap(List<UserNavigation> navigations)
    {
-      Map<SiteKey, Navigation> map = new HashMap<SiteKey, Navigation>();
-      for (Navigation nav : navigations)
+      Map<SiteKey, UserNavigation> map = new HashMap<SiteKey, UserNavigation>();
+      for (UserNavigation nav : navigations)
       {
-         map.put(nav.getKey(), nav);
+         map.put(nav.getNavigation().getKey(), nav);
       }
       return map;
    }
@@ -187,7 +173,7 @@ public class TestNavigation extends AbstractPortalTest
          public void execute() throws Exception
          {
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
-            Map<SiteKey, Navigation> navigations = toMap(userPortalCfg);
+            Map<SiteKey, UserNavigation> navigations = toMap(userPortalCfg);
             assertEquals(5, navigations.size());
             assertTrue(navigations.containsKey(SiteKey.portal("classic")));
             assertTrue(navigations.containsKey(SiteKey.user("root")));
@@ -280,13 +266,14 @@ public class TestNavigation extends AbstractPortalTest
          public void execute() throws Exception
          {
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
-            List<Navigation> navigations = userPortalCfg.getNavigations2();
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            List<UserNavigation> navigations = userPortal.getNavigations();
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
-            assertEquals(SiteKey.portal("classic"), navigations.get(0).getKey()); // 1
-            assertEquals(SiteKey.group("/platform/administrators"), navigations.get(1).getKey()); // 2
-            assertEquals(SiteKey.user("root"), navigations.get(2).getKey()); // 3
-            assertEquals(SiteKey.group("/organization/management/executive-board"), navigations.get(3).getKey()); // 4
-            assertEquals(SiteKey.group("/platform/users"), navigations.get(4).getKey()); // 5
+            assertEquals(SiteKey.portal("classic"), navigations.get(0).getNavigation().getKey()); // 1
+            assertEquals(SiteKey.group("/platform/administrators"), navigations.get(1).getNavigation().getKey()); // 2
+            assertEquals(SiteKey.user("root"), navigations.get(2).getNavigation().getKey()); // 3
+            assertEquals(SiteKey.group("/organization/management/executive-board"), navigations.get(3).getNavigation().getKey()); // 4
+            assertEquals(SiteKey.group("/platform/users"), navigations.get(4).getNavigation().getKey()); // 5
          }
       }.execute("root");
    }
@@ -298,27 +285,28 @@ public class TestNavigation extends AbstractPortalTest
          public void execute() throws Exception
          {
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
-            UserNavigation nav = userPortalCfg.resolveNavigation("/");
-            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
-            List<Node.Data> path = nav.getPath();
+            NavigationPath nav = userPortal.resolveNavigation("/");
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            List<UserNode> path = nav.getSegments();
             assertEquals(0, path.size());
 
             //
-            nav = userPortalCfg.resolveNavigation("/home");
-            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
-            path = nav.getPath();
+            nav = userPortal.resolveNavigation("/home");
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            path = nav.getSegments();
             assertEquals(1, path.size());
-            assertEquals("portal::classic::homepage", path.get(0).getPageRef());
+            assertEquals("portal::classic::homepage", path.get(0).getData().getPageRef());
 
             //
-            nav = userPortalCfg.resolveNavigation("/administration/communityManagement");
-            assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getKey());
-            path = nav.getPath();
+            nav = userPortal.resolveNavigation("/administration/communityManagement");
+            assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getNavigation().getKey());
+            path = nav.getSegments();
             assertEquals(2, path.size());
-            assertEquals(null, path.get(0).getPageRef());
-            assertEquals("group::/platform/administrators::communityManagement", path.get(1).getPageRef());
+            assertEquals(null, path.get(0).getData().getPageRef());
+            assertEquals("group::/platform/administrators::communityManagement", path.get(1).getData().getPageRef());
          }
       }.execute("root");
    }

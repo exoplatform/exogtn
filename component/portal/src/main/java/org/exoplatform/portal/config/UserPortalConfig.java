@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.services.organization.Group;
 
 import java.lang.reflect.UndeclaredThrowableException;
@@ -39,18 +40,21 @@ import java.util.List;
 public class UserPortalConfig
 {
 
-   private PortalConfig portal;
+   PortalConfig portal;
 
    private List<PageNavigation> navigations;
 
-   private final UserPortalConfigService service;
+   final UserPortalConfigService service;
 
-   private final String portalName;
+   final String portalName;
 
-   private final String accessUser;
+   final String accessUser;
 
    /** Added by Minh Hoang TO */
    private PageNavigation selectedNavigation;
+
+   /** . */
+   private UserPortalImpl userPortal;
 
    public UserPortalConfig()
    {
@@ -68,6 +72,15 @@ public class UserPortalConfig
       this.service = service;
       this.portalName = portalName;
       this.accessUser = accessUser;
+   }
+
+   public UserPortal getUserPortal()
+   {
+      if (userPortal == null)
+      {
+         userPortal = new UserPortalImpl(this);
+      }
+      return userPortal;
    }
 
    public PortalConfig getPortalConfig()
@@ -104,158 +117,6 @@ public class UserPortalConfig
       }
    }
 
-   private List<Navigation> navigations2;
-
-   /**
-    * Returns an immutable sorted list of the valid navigations related to the user.
-    *
-    * @return the navigations
-    * @throws Exception any exception
-    */
-   public List<Navigation> getNavigations2() throws Exception
-   {
-      if (navigations2 == null)
-      {
-         List<Navigation> navigations = new ArrayList<Navigation>(accessUser == null ? 1 : 10);
-         navigations.add(service.navService.getNavigation(new SiteKey(SiteType.PORTAL, portalName)));
-         if (accessUser != null)
-         {
-            // Add user nav if any
-            Navigation userNav = service.navService.getNavigation(SiteKey.user(accessUser));
-            if (userNav != null)
-            {
-//               navigation.setModifiable(true);
-               navigations.add(userNav);
-            }
-
-            //
-            Collection<?> groups;
-            if (service.userACL_.getSuperUser().equals(accessUser))
-            {
-               groups = service.orgService_.getGroupHandler().getAllGroups();
-            }
-            else
-            {
-               groups = service.orgService_.getGroupHandler().findGroupsOfUser(accessUser);
-            }
-            for (Object group : groups)
-            {
-               Group m = (Group)group;
-               String groupId = m.getId().trim();
-               if (groupId.equals(service.userACL_.getGuestsGroup()))
-               {
-                  continue;
-               }
-               Navigation navigation = service.navService.getNavigation(SiteKey.group(groupId));
-               if (navigation == null || navigation.getNodeId() == null)
-               {
-                  continue;
-               }
-//               navigation.setModifiable(service.userACL_.hasEditPermission(navigation));
-               navigations.add(navigation);
-            }
-
-            // Sort the list finally
-            Collections.sort(navigations, new Comparator<Navigation>()
-            {
-               public int compare(Navigation nav1, Navigation nav2)
-               {
-                  return nav1.getPriority() - nav2.getPriority();
-               }
-            });
-         }
-
-         //
-         this.navigations2 = Collections.unmodifiableList(navigations);
-      }
-      return navigations2;
-   }
-
-   public UserNavigation resolveNavigation(String path) throws Exception
-   {
-      if (path == null)
-      {
-         throw new NullPointerException("No null path accepted");
-      }
-
-      // Get navigations
-      List<Navigation> navs = getNavigations2();
-
-      // Split into segments
-      if (path.length() > 0 && path.charAt(0) == '/')
-      {
-         path = path.substring(1);
-      }
-      final String[] segments = path.split("/");
-
-      //
-      class ScoringScope implements Scope
-      {
-         final Navigation navigation;
-         int score;
-         List<Node.Data> path;
-         ScoringScope(Navigation navigation)
-         {
-            this.navigation = navigation;
-         }
-         public Visitor get()
-         {
-            return new Visitor()
-            {
-               public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
-               {
-                  if (depth == 0 && "default".equals(nodeName))
-                  {
-                     score = 0;
-                     path = new ArrayList<Node.Data>();
-                     return VisitMode.CHILDREN;
-                  }
-                  else if (depth <= segments.length && nodeName.equals(segments[depth - 1]))
-                  {
-                     score++;
-                     path.add(nodeData);
-                     return VisitMode.CHILDREN;
-                  }
-                  else
-                  {
-                     return VisitMode.NODE;
-                  }
-               }
-            };
-         }
-      }
-
-      //
-      ScoringScope best = null;
-      for (Navigation nav : navs)
-      {
-         ScoringScope scope = new ScoringScope(nav);
-         service.navService.load(nav.getNodeId(), scope);
-         if (scope.score == segments.length)
-         {
-            best = scope;
-            break;
-         }
-         else
-         {
-            if (best == null)
-            {
-               best = scope;
-            }
-            else
-            {
-               if (scope.score > best.score)
-               {
-                  best = scope;
-               }
-            }
-         }
-      }
-
-      //
-      return new UserNavigation(best.navigation,  best.path);
-   }
-   
    public PageNavigation getSelectedNavigation()
    {
       if(this.selectedNavigation != null)
