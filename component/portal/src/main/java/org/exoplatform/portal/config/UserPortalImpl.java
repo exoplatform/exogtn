@@ -101,9 +101,9 @@ public class UserPortalImpl implements UserPortal
                {
                   continue;
                }
-//               navigations.add(new UserNavigation(navigation, config.service.userACL_.hasEditPermission(navigation)));
-               // julien : todo need to adapt user acl
-               navigations.add(new UserNavigation(navigation, false));
+               navigations.add(new UserNavigation(
+                  navigation,
+                  config.service.userACL_.hasEditPermissionOnNavigation(navigation.getKey())));
             }
 
             // Sort the list finally

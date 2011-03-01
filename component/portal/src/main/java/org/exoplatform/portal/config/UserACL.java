@@ -25,6 +25,7 @@ import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
@@ -291,6 +292,45 @@ public class UserACL
          }
       }
       return false;
+   }
+
+   // copied from @link{#hasEditPermission}
+   public boolean hasEditPermissionOnNavigation(SiteKey siteKey)
+   {
+      Identity identity = getIdentity();
+      if (superUser_.equals(identity.getUserId()))
+      {
+         return true;
+      }
+
+      //
+      switch (siteKey.getType())
+      {
+         case GROUP:
+            String temp = siteKey.getName().trim();
+            String expAdminGroup = getAdminGroups();
+            String expPerm = null;
+
+            // Check to see whether current user is member of admin group or not,
+            // if so grant
+            // edit permission for group navigation for that user.
+            if (expAdminGroup != null)
+            {
+               expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
+               expPerm = temp.startsWith("/") ? temp : "/" + temp;
+               if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
+               {
+                  return true;
+               }
+            }
+
+            expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
+            return hasPermission(identity, expPerm);
+         case USER:
+            return siteKey.getName().equals(identity.getUserId());
+         default:
+            return false;
+      }
    }
 
    public boolean hasEditPermission(PageNavigation pageNav)
