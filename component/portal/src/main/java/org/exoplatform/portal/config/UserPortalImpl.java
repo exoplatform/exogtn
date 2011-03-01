@@ -274,6 +274,13 @@ public class UserPortalImpl implements UserPortal
       config.service.navService.load(navigation.getNavigation().getNodeId(), scope);
 
       //
-      return new NavigationPath(scope.navigation,  scope.path);
+      if (scope.score > 0)
+      {
+         return new NavigationPath(scope.navigation,  scope.path);
+      }
+      else
+      {
+         return null;
+      }
    }
 }

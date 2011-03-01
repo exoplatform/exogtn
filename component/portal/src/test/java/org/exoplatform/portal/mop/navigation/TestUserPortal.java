@@ -331,6 +331,10 @@ public class TestUserPortal extends AbstractPortalTest
             assertNull(path);
 
             //
+            path = userPortal.resolvePath(navigation, "/foo");
+            assertNull(path);
+
+            //
             path = userPortal.resolvePath(navigation, "/administration");
             assertNotNull(path);
             assertEquals("administration", path.getTarget().getData().getName());
