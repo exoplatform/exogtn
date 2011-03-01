@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -111,7 +112,7 @@ public class UIPortalApplication extends UIApplication
 
    private boolean isSessionOpen = false;
    
-   private Map<UIPortalKey, UIPortal> all_UIPortals;
+   private Map<SiteKey, UIPortal> all_UIPortals;
    
    private List<PageNavigation> all_Navigations;
    
@@ -168,7 +169,7 @@ public class UIPortalApplication extends UIApplication
       // -------------------------------------------------------------------------------
       context.setUIApplication(this);
 
-      this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
+      this.all_UIPortals = new HashMap<SiteKey, UIPortal>(5);
       
       addWorkingWorkspace();
       
@@ -217,7 +218,16 @@ public class UIPortalApplication extends UIApplication
       {
          return null;
       }
-      return this.all_UIPortals.get(new UIPortalKey(ownerType, ownerId));
+      return this.all_UIPortals.get(new SiteKey(ownerType, ownerId));
+   }
+   
+   public UIPortal getCachedUIPortal(SiteKey key)
+   {
+      if(key == null)
+      {
+         return null;
+      }
+      return this.all_UIPortals.get(key);
    }
    
    /**
@@ -232,7 +242,7 @@ public class UIPortalApplication extends UIApplication
       
       if(ownerType != null && ownerId != null)
       {
-         this.all_UIPortals.put(new UIPortalKey(ownerType, ownerId), uiPortal);
+         this.all_UIPortals.put(new SiteKey(ownerType, ownerId), uiPortal);
       }
    }
    
@@ -248,7 +258,7 @@ public class UIPortalApplication extends UIApplication
       {
          return;
       }
-      this.all_UIPortals.remove(new UIPortalKey(ownerType, ownerId));
+      this.all_UIPortals.remove(new SiteKey(ownerType, ownerId));
    }
    
    public boolean isSessionOpen()
@@ -777,55 +787,9 @@ public class UIPortalApplication extends UIApplication
       // First find all related SiteKey
 
    }
-
-   private class UIPortalKey
+   
+   public void localizeNavigations()
    {
-
-      /** . */
-      private final String ownerType;
-
-      /** . */
-      private final String ownerId;
-
-      UIPortalKey(String _ownerType, String _ownerId)
-      {
-         if (_ownerType == null)
-         {
-            throw new NullPointerException();
-         }
-         if (_ownerId == null)
-         {
-            throw new NullPointerException();
-         }
-         this.ownerType = _ownerType;
-         this.ownerId = _ownerId;
-      }
-
-      @Override
-      public boolean equals(Object obj)
-      {
-         if (this == null || obj == null)
-         {
-            return this == null && obj == null;
-         }
-         if (!(obj instanceof UIPortalKey))
-         {
-            return false;
-         }
-         return this.ownerType.equals(((UIPortalKey)obj).ownerType) && this.ownerId.equals(((UIPortalKey)obj).ownerId);
-      }
-      
-      @Override
-      public int hashCode()
-      {
-         return this.ownerType.hashCode() * 2 + this.ownerId.hashCode();
-      }
-      
-      @Override
-      public String toString()
-      {
-        return "OWNERTYPE: " + ownerType + " OWNERID: " + ownerId;  
-      }
+      System.out.println("localize all navigations available");
    }
-
 }

@@ -31,11 +31,18 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
 import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.Node.Data;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
+import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -62,11 +69,32 @@ import java.util.Map;
  */
 public class UIPageActionListener
 {
-
    static public class ChangePageNodeActionListener extends EventListener<UIPortal>
    {
-      @Override
       public void execute(Event<UIPortal> event) throws Exception
+      {
+         UIPortal showedUIPortal = event.getSource();
+         UIPortalApplication uiPortalApp = showedUIPortal.getAncestorOfType(UIPortalApplication.class);
+         
+         UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
+         
+         String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
+         NavigationPath naviPath = userPortal.resolveNavigation(uri);
+         UserNavigation userNavigation = naviPath.getNavigation();
+         
+         if (naviPath.getSegments().size() > 0)
+         {
+            System.out.println("Found for path " + naviPath.getSegments().get(naviPath.getSegments().size() - 1).getData().getURI() + " candidate " + userNavigation.getNavigation().getKey());
+         }
+         
+         // Fake the selected navigation to Portal one and the selected node to Home 
+         List<PageNavigation> navigations = uiPortalApp.getUserPortalConfig().getNavigations();
+         PageNode node = navigations.get(0).getNode("home");
+         showedUIPortal.setSelectedNode(node);
+         showedUIPortal.setSelectedPath(Arrays.asList(node));
+      }
+      
+      public void execute1(Event<UIPortal> event) throws Exception
       {
          UIPortal showedUIPortal = event.getSource();
          UIPortalApplication uiPortalApp = showedUIPortal.getAncestorOfType(UIPortalApplication.class);
@@ -208,7 +236,7 @@ public class UIPageActionListener
                scores.add(0);
                return new Visitor()
                {
-                  public VisitMode visit(int depth, String nodeId, String nodeName)
+                  public VisitMode visit(int depth, String nodeId, String nodeName, Data nodeData)
                   {
                      if (depth == 0 && "default".equals(nodeName))
                      {

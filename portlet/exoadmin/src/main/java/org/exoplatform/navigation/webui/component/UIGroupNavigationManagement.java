@@ -31,7 +31,6 @@ import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
 import org.exoplatform.portal.webui.navigation.UIPageNavigationForm;
 import org.exoplatform.portal.webui.page.UIPageNodeForm;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -49,8 +48,8 @@ import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -395,7 +394,6 @@ public class UIGroupNavigationManagement extends UIContainer
          
          UIGroupNavigationManagement uiGroupNavigation =
             uiPageNodeForm.getAncestorOfType(UIGroupNavigationManagement.class);
-         PageNavigation selectedNavigation = uiGroupNavigation.getSelectedNavigation();
          UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);
          UINavigationManagement navigationManager =
             uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
