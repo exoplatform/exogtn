@@ -122,7 +122,59 @@ public class UserPortalImpl implements UserPortal
       return navigations;
    }
 
-   public NavigationPath resolveNavigation(String path) throws Exception
+   public UserNavigation getNavigation(SiteKey key) throws Exception
+   {
+      for (UserNavigation navigation : getNavigations())
+      {
+         if (navigation.getNavigation().getKey().equals(key))
+         {
+            return navigation;
+         }
+      }
+
+      //
+      return null;
+   }
+
+   private static class MatchingScope implements Scope
+   {
+      final UserNavigation navigation;
+      final String[] match;
+      int score;
+      List<UserNode> path;
+      MatchingScope(UserNavigation navigation, String[] match)
+      {
+         this.navigation = navigation;
+         this.match = match;
+      }
+      public Visitor get()
+      {
+         return new Visitor()
+         {
+            public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
+            {
+               if (depth == 0 && "default".equals(nodeName))
+               {
+                  score = 0;
+                  path = new ArrayList<UserNode>();
+                  return VisitMode.CHILDREN;
+               }
+               else if (depth <= match.length && nodeName.equals(match[depth - 1]))
+               {
+                  score++;
+                  path.add(new UserNode(nodeData));
+                  return VisitMode.CHILDREN;
+               }
+               else
+               {
+                  return VisitMode.NODE;
+               }
+            }
+         };
+      }
+   }
+
+   public NavigationPath resolvePath(String path) throws Exception
    {
       if (path == null)
       {
@@ -130,7 +182,7 @@ public class UserPortalImpl implements UserPortal
       }
 
       // Get navigations
-      List<UserNavigation> navs = getNavigations();
+      List<UserNavigation> navigations = getNavigations();
 
       // Split into segments
       if (path.length() > 0 && path.charAt(0) == '/')
@@ -140,48 +192,11 @@ public class UserPortalImpl implements UserPortal
       final String[] segments = path.split("/");
 
       //
-      class ScoringScope implements Scope
+      MatchingScope best = null;
+      for (UserNavigation navigation : navigations)
       {
-         final UserNavigation navigation;
-         int score;
-         List<Node.Data> path;
-         ScoringScope(UserNavigation navigation)
-         {
-            this.navigation = navigation;
-         }
-         public Visitor get()
-         {
-            return new Visitor()
-            {
-               public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
-               {
-                  if (depth == 0 && "default".equals(nodeName))
-                  {
-                     score = 0;
-                     path = new ArrayList<Node.Data>();
-                     return VisitMode.CHILDREN;
-                  }
-                  else if (depth <= segments.length && nodeName.equals(segments[depth - 1]))
-                  {
-                     score++;
-                     path.add(nodeData);
-                     return VisitMode.CHILDREN;
-                  }
-                  else
-                  {
-                     return VisitMode.NODE;
-                  }
-               }
-            };
-         }
-      }
-
-      //
-      ScoringScope best = null;
-      for (UserNavigation nav : navs)
-      {
-         ScoringScope scope = new ScoringScope(nav);
-         config.service.navService.load(nav.getNavigation().getNodeId(), scope);
+         MatchingScope scope = new MatchingScope(navigation, segments);
+         config.service.navService.load(navigation.getNavigation().getNodeId(), scope);
          if (scope.score == segments.length)
          {
             best = scope;
@@ -204,13 +219,34 @@ public class UserPortalImpl implements UserPortal
       }
 
       //
-      List<UserNode> nodes = new ArrayList<UserNode>(best.path.size());
-      for (Node.Data data : best.path)
+      return new NavigationPath(best.navigation,  best.path);
+   }
+
+   public NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception
+   {
+      if (path == null)
       {
-         nodes.add(new UserNode(data));
+         throw new NullPointerException("No null path accepted");
       }
 
       //
-      return new NavigationPath(best.navigation,  nodes);
+      if (path.length() > 0 && path.charAt(0) == '/')
+      {
+         path = path.substring(1);
+      }
+      if (path.length() == 0)
+      {
+         return null;
+      }
+      final String[] segments = path.split("/");
+
+      //
+
+      //
+      MatchingScope scope = new MatchingScope(navigation, segments);
+      config.service.navService.load(navigation.getNavigation().getNodeId(), scope);
+
+      //
+      return new NavigationPath(scope.navigation,  scope.path);
    }
 }

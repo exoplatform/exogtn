@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.mop.SiteKey;
+
 import java.util.List;
 
 /**
@@ -37,13 +39,31 @@ public interface UserPortal
    List<UserNavigation> getNavigations() throws Exception;
 
    /**
-    * Resolves and returns a user path for a specified path.
+    * Returns a user navigation for a specified site key, null is returned when such navigation does not exist.
     *
-    * @param path the path
-    * @return the user navigation
+    * @param key the site key
+    * @return the corresponding user navigation
     * @throws Exception any exception
     */
-   NavigationPath resolveNavigation(String path) throws Exception;
+   UserNavigation getNavigation(SiteKey key) throws Exception;
 
+   /**
+    * Resolves and returns a navigation path among all user navigations for a specified path.
+    *
+    * @param path the path
+    * @return the navigation path
+    * @throws Exception any exception
+    */
+   NavigationPath resolvePath(String path) throws Exception;
+
+   /**
+    * Resolves and returns a navigation path for the specified navigation and for a specified path.
+    *
+    * @param navigation the navigation
+    * @param path the path
+    * @return the navigation path
+    * @throws Exception any exception
+    */
+   NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception;
 
 }

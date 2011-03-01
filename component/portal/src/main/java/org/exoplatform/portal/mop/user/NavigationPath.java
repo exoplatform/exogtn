@@ -49,4 +49,9 @@ public class NavigationPath
    {
       return segments;
    }
+
+   public UserNode getTarget()
+   {
+      return segments.isEmpty() ? null : segments.get(segments.size() - 1);
+   }
 }

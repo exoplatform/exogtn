@@ -181,14 +181,14 @@ public class TestUserPortal extends AbstractPortalTest
             assertTrue(navigations.containsKey(SiteKey.group("/organization/management/executive-board")));
             assertTrue(navigations.containsKey(SiteKey.group("/organization/management/executive-board")));
             assertTrue(navigations.containsKey(SiteKey.group("/platform/users")));
+
+            // Now try with the specific api
+            UserNavigation rootNav = userPortalCfg.getUserPortal().getNavigation(SiteKey.user("root"));
+            assertNotNull(rootNav);
+            assertEquals(SiteKey.user("root"), rootNav.getNavigation().getKey());
          }
       }.execute("root");
    }
-
-
-
-
-
 
 /*
    public void testJohnGetUserPortalConfig()
@@ -288,25 +288,52 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
-            NavigationPath nav = userPortal.resolveNavigation("/");
+            NavigationPath nav = userPortal.resolvePath("/");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             List<UserNode> path = nav.getSegments();
             assertEquals(0, path.size());
 
             //
-            nav = userPortal.resolveNavigation("/home");
+            nav = userPortal.resolvePath("/home");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             path = nav.getSegments();
             assertEquals(1, path.size());
             assertEquals("portal::classic::homepage", path.get(0).getData().getPageRef());
 
             //
-            nav = userPortal.resolveNavigation("/administration/communityManagement");
+            nav = userPortal.resolvePath("/administration/communityManagement");
             assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getNavigation().getKey());
             path = nav.getSegments();
             assertEquals(2, path.size());
             assertEquals(null, path.get(0).getData().getPageRef());
             assertEquals("group::/platform/administrators::communityManagement", path.get(1).getData().getPageRef());
+         }
+      }.execute("root");
+   }
+
+   public void testPathResolutionPerNavigation()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
+
+            //
+            NavigationPath path = userPortal.resolvePath(navigation, "/");
+            assertNull(path);
+
+            //
+            path = userPortal.resolvePath(navigation, "/administration");
+            assertNotNull(path);
+            assertEquals("administration", path.getTarget().getData().getName());
+
+            //
+            path = userPortal.resolvePath(navigation, "/administration/communityManagement");
+            assertNotNull(path);
+            assertEquals("communityManagement", path.getTarget().getData().getName());
          }
       }.execute("root");
    }

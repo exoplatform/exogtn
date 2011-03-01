@@ -55,6 +55,10 @@ public interface Node
    public interface Data
    {
 
+      String getId();
+
+      String getName();
+
       String getURI();
 
       String getLabel();
