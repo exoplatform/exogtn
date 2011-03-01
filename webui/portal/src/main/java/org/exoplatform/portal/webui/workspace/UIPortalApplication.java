@@ -790,6 +790,7 @@ public class UIPortalApplication extends UIApplication
    
    public void localizeNavigations()
    {
-      System.out.println("localize all navigations available");
+      System.out.println("localize all navigations");
+      new Exception().printStackTrace();
    }
 }

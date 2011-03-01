@@ -67,6 +67,7 @@ public final class SiteKey implements Serializable
       this.name = name;
    }
    
+   // This will be used for transition in usage from PortalKey and SiteKey
    public SiteKey(String type, String name)
    {
       if (PortalConfig.PORTAL_TYPE.equals(type))
