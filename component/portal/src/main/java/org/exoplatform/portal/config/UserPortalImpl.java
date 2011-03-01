@@ -191,6 +191,26 @@ public class UserPortalImpl implements UserPortal
       }
       final String[] segments = path.split("/");
 
+      // Find the first navigation available or return null
+      if (path.length() == 0)
+      {
+         for (UserNavigation userNavigation : navigations)
+         {
+            Navigation navigation = userNavigation.getNavigation();
+            if (navigation.getNodeId() != null)
+            {
+               Node root = config.service.navService.load(navigation.getNodeId(), Scope.CHILDREN);
+               for (Node node : root.getRelationships().getChildren())
+               {
+                  return new NavigationPath(userNavigation, Collections.singletonList(new UserNode(node.getData())));
+               }
+            }
+         }
+
+         //
+         return null;
+      }
+
       //
       MatchingScope best = null;
       for (UserNavigation navigation : navigations)
@@ -219,7 +239,14 @@ public class UserPortalImpl implements UserPortal
       }
 
       //
-      return new NavigationPath(best.navigation,  best.path);
+      if (best != null && best.score > 0)
+      {
+         return new NavigationPath(best.navigation,  best.path);
+      }
+      else
+      {
+         return null;
+      }
    }
 
    public NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception

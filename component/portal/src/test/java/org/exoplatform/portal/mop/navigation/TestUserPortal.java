@@ -291,14 +291,19 @@ public class TestUserPortal extends AbstractPortalTest
             NavigationPath nav = userPortal.resolvePath("/");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             List<UserNode> path = nav.getSegments();
-            assertEquals(0, path.size());
+            assertEquals(1, path.size());
+            assertEquals("home", path.get(0).getData().getName());
+
+            //
+            nav = userPortal.resolvePath("/foo");
+            assertNull(nav);
 
             //
             nav = userPortal.resolvePath("/home");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             path = nav.getSegments();
             assertEquals(1, path.size());
-            assertEquals("portal::classic::homepage", path.get(0).getData().getPageRef());
+            assertEquals("home", path.get(0).getData().getName());
 
             //
             nav = userPortal.resolvePath("/administration/communityManagement");
@@ -306,7 +311,7 @@ public class TestUserPortal extends AbstractPortalTest
             path = nav.getSegments();
             assertEquals(2, path.size());
             assertEquals(null, path.get(0).getData().getPageRef());
-            assertEquals("group::/platform/administrators::communityManagement", path.get(1).getData().getPageRef());
+            assertEquals("communityManagement", path.get(1).getData().getName());
          }
       }.execute("root");
    }
