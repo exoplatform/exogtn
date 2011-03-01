@@ -79,7 +79,7 @@ public class UIPageActionListener
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
          
          String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
-         NavigationPath naviPath = userPortal.resolveNavigation(uri);
+         NavigationPath naviPath = userPortal.resolvePath(uri);
          UserNavigation userNavigation = naviPath.getNavigation();
          
          if (naviPath.getSegments().size() > 0)
