@@ -300,16 +300,22 @@ public class TestNavigation extends AbstractPortalTest
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
 
             //
-            List<Node.Data> path = userPortalCfg.resolveNavigation("/");
+            UserNavigation nav = userPortalCfg.resolveNavigation("/");
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
+            List<Node.Data> path = nav.getPath();
             assertEquals(0, path.size());
 
             //
-            path = userPortalCfg.resolveNavigation("/home");
+            nav = userPortalCfg.resolveNavigation("/home");
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
+            path = nav.getPath();
             assertEquals(1, path.size());
             assertEquals("portal::classic::homepage", path.get(0).getPageRef());
 
             //
-            path = userPortalCfg.resolveNavigation("/administration/communityManagement");
+            nav = userPortalCfg.resolveNavigation("/administration/communityManagement");
+            assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getKey());
+            path = nav.getPath();
             assertEquals(2, path.size());
             assertEquals(null, path.get(0).getPageRef());
             assertEquals("group::/platform/administrators::communityManagement", path.get(1).getPageRef());

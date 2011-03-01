@@ -171,7 +171,7 @@ public class UserPortalConfig
       return navigations2;
    }
 
-   public List<Node.Data> resolveNavigation(String path) throws Exception
+   public UserNavigation resolveNavigation(String path) throws Exception
    {
       if (path == null)
       {
@@ -191,8 +191,13 @@ public class UserPortalConfig
       //
       class ScoringScope implements Scope
       {
+         final Navigation navigation;
          int score;
          List<Node.Data> path;
+         ScoringScope(Navigation navigation)
+         {
+            this.navigation = navigation;
+         }
          public Visitor get()
          {
             return new Visitor()
@@ -224,7 +229,7 @@ public class UserPortalConfig
       ScoringScope best = null;
       for (Navigation nav : navs)
       {
-         ScoringScope scope = new ScoringScope();
+         ScoringScope scope = new ScoringScope(nav);
          service.navService.load(nav.getNodeId(), scope);
          if (scope.score == segments.length)
          {
@@ -248,7 +253,7 @@ public class UserPortalConfig
       }
 
       //
-      return best.path;
+      return new UserNavigation(best.navigation,  best.path);
    }
    
    public PageNavigation getSelectedNavigation()
