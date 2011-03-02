@@ -152,18 +152,19 @@ public class UserPortalImpl implements UserPortal
       {
          return new Visitor()
          {
-            public VisitMode visit(int depth, String nodeId, String nodeName, NodeData nodeData)
+            public VisitMode visit(int depth, NodeData data)
             {
-               if (depth == 0 && "default".equals(nodeName))
+               String name = data.getName();
+               if (depth == 0 && "default".equals(name))
                {
                   score = 0;
                   path = new ArrayList<UserNode>();
                   return VisitMode.CHILDREN;
                }
-               else if (depth <= match.length && nodeName.equals(match[depth - 1]))
+               else if (depth <= match.length && name.equals(match[depth - 1]))
                {
                   score++;
-                  path.add(new UserNode(nodeData));
+                  path.add(new UserNode(data));
                   return VisitMode.CHILDREN;
                }
                else

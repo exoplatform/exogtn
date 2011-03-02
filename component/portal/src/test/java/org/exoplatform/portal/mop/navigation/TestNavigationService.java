@@ -226,19 +226,20 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, String nodeId, String nodeName, NodeData nodeData)
+               public VisitMode visit(int depth, NodeData data)
                {
+                  String name = data.getName();
                   boolean use = false;
                   switch (depth)
                   {
                      case 0:
-                        use = "default".equals(nodeName);
+                        use = "default".equals(name);
                         break;
                      case 1:
-                        use = "b".equals(nodeName);
+                        use = "b".equals(name);
                         break;
                      case 2:
-                        use = "d".equals(nodeName);
+                        use = "d".equals(name);
                         break;
                   }
                   return use ? VisitMode.CHILDREN : VisitMode.NODE;

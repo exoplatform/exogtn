@@ -321,7 +321,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      switch (visitor.visit(depth, data.id, data.name, data))
+      switch (visitor.visit(depth, data))
       {
          case CHILDREN:
             List<N> children = new ArrayList<N>(data.children.size());
