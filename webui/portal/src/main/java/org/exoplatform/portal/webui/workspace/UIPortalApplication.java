@@ -749,10 +749,6 @@ public class UIPortalApplication extends UIApplication
    {
       if (all_Navigations == null)
       {
-         System.out.println("Accessing all portal navigations from: ");
-         new Exception().printStackTrace();
-
-         //
          List<PageNavigation> navigations = userPortalConfig_.getNavigations();
          ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
          Locale locale = getLocale();
@@ -790,7 +786,5 @@ public class UIPortalApplication extends UIApplication
    
    public void localizeNavigations()
    {
-      System.out.println("localize all navigations");
-      new Exception().printStackTrace();
    }
 }

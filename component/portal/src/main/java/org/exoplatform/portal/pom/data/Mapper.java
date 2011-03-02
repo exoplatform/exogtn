@@ -98,13 +98,17 @@ public class Mapper
 
    public NavigationData load(Navigation src)
    {
-      return load(src, NavigationData.class);
+      System.out.println("Accessing loading navigation " + src.getSite().getName() + "  from: ");
+      long t = System.currentTimeMillis();
+      new Exception().printStackTrace();
+      NavigationData data = load(src, NavigationData.class);
+      t = System.currentTimeMillis() - t;
+      System.out.println("Navigation loaded in " + t / 1000 + " seconds");
+      return data;
    }
 
    private <T extends NavigationNodeContainerData> T load(Navigation src, Class<T> type)
    {
-
-      //
       ArrayList<NavigationNodeData> children = new ArrayList<NavigationNodeData>(src.getChildren().size());
       for (Navigation srcChild : src.getChildren())
       {
