@@ -17,7 +17,7 @@
 
 	rootNodes = uicomponent.getNavigations();
 
-	public void renderChildrenContainer(Node nav, PageNode node) {
+	public void renderChildrenContainer(Node parentNode, Node node) {
 		print """
 			<div class="MenuItemContainer" style="display: none;">
 				<div class="MenuItemDecorator">
@@ -30,8 +30,8 @@
 						<div class="RightMiddleMenuDecorator">
 							<div class="CenterMiddleMenuDecorator">
 		""";
-								for(child in node.getChildren()) {
-							 		renderChildNode(nav, child);
+								for(child in node.getRelationships().getChildren()) {
+							 		renderChildNode(parentNode, child);
 								}
 		print """
 							</div>
@@ -46,22 +46,22 @@
 			</div>
 		""";
 	}	
-	public void renderChildNode(Node nav, PageNode node) {
+	public void renderChildNode(Node parentNode, Node node) {
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
 		Node selectedNav = uicomponent.getCurrentNavigation();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null &&	selectedNav != null &&
-			 selectedNav.getId () == nav.getId() &&
-			 node.getUri() == selectedNode.getUri()) {			 
+			 selectedNav.getId () == parentNode.getData().getId() &&
+			 node.getData().getURI() == selectedNode.getUri()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
-		String icon = node.getIcon();
+		String icon = node.getData().getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
-		if (node.getRelationships().getChildren() != null && node.getRelationships().getChildren().size() > 0) arrowIcon = "ArrowIcon";
+		if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) arrowIcon = "ArrowIcon";
 
-		String label = node.resolvedLabel;
+		String label = node.getData().getLabel();
 		String title = "";
 		if(label.length() > 40) {
 			title = label;
@@ -69,10 +69,10 @@
 		}
 		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
-		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getUri();
-		if(node.pageReference != null) {
+		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getData().getURI();
+		if(node.getData().getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
-				String onclickEvt = uicomponent.event("SelectNode",	nav.getId() + "::" + node.getUri()) + ";return false;" ;
+				String onclickEvt = uicomponent.event("SelectNode",	parentNode.getData().getId() + "::" + node.getData().getURI()) + ";return false;" ;
 				print """
 						<div class="MenuItem $tabStyleNavigation">
 							<div class="$arrowIcon" title="$title">
@@ -102,8 +102,8 @@
 			""";
 		}
 		
-		if (node.getChildren() != null && node.getChildren().size() > 0) {
-			renderChildrenContainer(nav, node);
+		if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
+			renderChildrenContainer(parentNode, node);
 		}		
 		print "</div>";					
 	}
@@ -140,7 +140,7 @@
 															<div class="TabIcon">
 																<%
 																	String arrowIcon = "";
-																	if (node.getRelationships().getChildren() != null && node.getRelationships().getChildren().size() > 0) {
+																	if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
 																		arrowIcon = "DropDownArrowIcon";
 																	}
 																	String iconType = node.getData().getIcon();
@@ -174,7 +174,7 @@
 											</div>
 											<%
 												/*Render Popup Menu*/
-												if (node.getRelationships().getChildren() != null && node.getRelationships().getChildren().size() > 0) {
+												if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
 													renderChildrenContainer(nav, node);
 												}
 											%>

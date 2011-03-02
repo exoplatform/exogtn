@@ -131,7 +131,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
             
-            Node rootNode = naviSer.load(navi, Scope.ALL);
+            Node rootNode = naviSer.load(navi, Scope.CHILDREN);
             PageNavigationUtils.filter(rootNode, null);
             nodes.add(rootNode);
          }
