@@ -20,7 +20,6 @@
 package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -31,17 +30,10 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
-import org.exoplatform.portal.mop.navigation.Node;
-import org.exoplatform.portal.mop.navigation.Node.Data;
-import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -221,69 +213,6 @@ public class UIPageActionListener
        */
       private PageNavigation getBestMatchNavigation(final List<PageNavigation> listNav, final String[] pathNodes)
       {
-
-         POMSessionManager mgr = (POMSessionManager)PortalContainer.getComponent(POMSessionManager.class);
-         NavigationService navigationService = new NavigationServiceImpl(mgr);
-
-         class MatchingScope implements Scope
-         {
-            ArrayList<Integer> scores = new ArrayList<Integer>(listNav.size());
-            public Visitor get()
-            {
-               scores.add(0);
-               return new Visitor()
-               {
-                  public VisitMode visit(int depth, String nodeId, String nodeName, Data nodeData)
-                  {
-                     if (depth == 0 && "default".equals(nodeName))
-                     {
-                        return VisitMode.CHILDREN;
-                     }
-                     else if (depth <= pathNodes.length && nodeName.equals(pathNodes[depth - 1]))
-                     {
-                        int index = scores.size() - 1;
-                        scores.set(index, scores.get(index) + 1);
-                        return VisitMode.CHILDREN;
-                     }
-                     else
-                     {
-                        return VisitMode.NODE;
-                     }
-                  }
-               };
-            }
-         }
-
-         //
-         MatchingScope scope = new MatchingScope();
-         List<Node> nodes = new ArrayList<Node>();
-         for (PageNavigation nav : listNav)
-         {
-            String rootId = nav.getStorageId();
-//            Node node = navigationService.load(nav, scope);
-//            nodes.add(node);
-         }
-
-         //
-         int max = -1;
-         for (int i : scope.scores)
-         {
-            if (i > max)
-            {
-               max = i;
-            }
-         }
-
-         //
-         for (int i = 0;i < scope.scores.size();i++)
-         {
-            if (scope.scores.get(i) == max)
-            {
-               System.out.println("Found for path " + Arrays.asList(pathNodes) + " candidate " + listNav.get(i));
-            }
-         }
-
-         //
          int temporalMaximalMatching = 0;
          PageNavigation temporalBestNavigation = listNav.get(0);
          
