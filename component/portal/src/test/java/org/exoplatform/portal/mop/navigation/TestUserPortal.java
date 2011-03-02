@@ -39,11 +39,14 @@ import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
+import org.gatein.common.i18n.MapResourceBundle;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -350,6 +353,28 @@ public class TestUserPortal extends AbstractPortalTest
             path = userPortal.resolvePath(navigation, "/administration/communityManagement");
             assertNotNull(path);
             assertEquals("communityManagement", path.getTarget().getData().getName());
+         }
+      }.execute("root");
+   }
+
+   public void testLabel()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("portal.classic.home", "foo");
+            MapResourceBundle bundle = new MapResourceBundle(map);
+
+            //
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal(bundle);
+
+            //
+            NavigationPath path = userPortal.resolvePath("/home");
+            assertEquals("#{portal.classic.home}", path.getTarget().getLabel());
+            assertEquals("foo", path.getTarget().getResolvedLabel());
          }
       }.execute("root");
    }

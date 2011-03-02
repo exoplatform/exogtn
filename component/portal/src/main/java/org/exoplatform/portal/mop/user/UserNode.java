@@ -19,14 +19,17 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.NodeModel;
+import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * A navigation node as seen by a user.
@@ -56,11 +59,11 @@ public class UserNode
       }
    };
 
-   /** Marker. */
-   private static final UserNode NO_PARENT_DETERMINED = new UserNode();
-
    /** . */
    final NodeData data;
+
+   /** . */
+   private final ResourceBundle bundle;
 
    /** . */
    private String resolvedLabel;
@@ -77,36 +80,52 @@ public class UserNode
    /** . */
    private UserNode parent;
 
-   private UserNode()
+   UserNode(NodeData data)
    {
-      this.data = null;
-      this.resolvedLabel = null;
-      this.encodedResolvedLabel = null;
-      this.childMap = null;
+      this(data, null, null);
    }
 
-   private UserNode(NodeData data)
+   UserNode(NodeData data, ResourceBundle bundle)
    {
-      this.parent = NO_PARENT_DETERMINED;
-      this.data = data;
-      this.resolvedLabel = data.getLabel();
-      this.encodedResolvedLabel = data.getLabel();
-      this.childMap = null;
+      this(data, null, bundle);
    }
 
-   private UserNode(NodeData data, Collection<UserNode> children)
+   UserNode(NodeData data, Collection<UserNode> children)
    {
-      this(data);
+      this(data, children, null);
+   }
 
-      Map<String, UserNode> childMap = new HashMap<String, UserNode>();
-      for (UserNode child : children)
+   UserNode(NodeData data, Collection<UserNode> children, ResourceBundle bundle)
+   {
+      Map<String, UserNode> childMap;
+      if (children != null)
       {
-         child.parent = this;
-         childMap.put(child.data.getName(), child);
+         if (children.isEmpty())
+         {
+            childMap = Collections.emptyMap();
+         }
+         else
+         {
+            childMap = new HashMap<String, UserNode>();
+            for (UserNode child : children)
+            {
+               child.parent = this;
+               childMap.put(child.data.getName(), child);
+            }
+         }
+      }
+      else
+      {
+         childMap = null;
       }
 
       //
       this.childMap = childMap;
+      this.parent = null;
+      this.data = data;
+      this.resolvedLabel = null;
+      this.encodedResolvedLabel = null;
+      this.bundle = bundle;
    }
 
    public String getId()
@@ -161,22 +180,37 @@ public class UserNode
 
    public String getResolvedLabel()
    {
-      return resolvedLabel;
-   }
+      if (resolvedLabel == null)
+      {
+         String resolvedLabel;
+         if (bundle != null && data.getLabel() != null)
+         {
+            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, data.getLabel());
+         }
+         else
+         {
+            resolvedLabel = null;
+         }
 
-   public void setResolvedLabel(String resolvedLabel)
-   {
-      this.resolvedLabel = resolvedLabel;
+         //
+         if (resolvedLabel == null)
+         {
+            resolvedLabel = data.getName();
+         }
+
+         //
+         this.resolvedLabel = resolvedLabel;
+      }
+      return resolvedLabel;
    }
 
    public String getEncodedResolvedLabel()
    {
+      if (encodedResolvedLabel == null)
+      {
+         encodedResolvedLabel = EntityEncoder.FULL.encode(getResolvedLabel());
+      }
       return encodedResolvedLabel;
-   }
-
-   public void setEncodedResolvedLabel(String encodedResolvedLabel)
-   {
-      this.encodedResolvedLabel = encodedResolvedLabel;
    }
 
    public boolean isModifiable()
@@ -191,7 +225,7 @@ public class UserNode
 
    public UserNode getParent()
    {
-      return parent == NO_PARENT_DETERMINED ? null : parent;
+      return parent;
    }
 
    public Collection<UserNode> getChildren()

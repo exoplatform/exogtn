@@ -26,6 +26,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeData;
+import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
@@ -36,12 +37,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class UserPortalImpl implements UserPortal
+public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
 {
 
    /** . */
@@ -57,6 +59,9 @@ public class UserPortalImpl implements UserPortal
    private final PortalConfig portal;
 
    /** . */
+   private final ResourceBundle resourceBundle;
+
+   /** . */
    private final String userName;
 
    /** . */
@@ -67,15 +72,36 @@ public class UserPortalImpl implements UserPortal
       OrganizationService organizationService,
       UserACL acl,
       PortalConfig portal,
-      String userName)
+      String userName,
+      ResourceBundle resourceBundle)
    {
       this.navigationService = navigationService;
       this.organizationService = organizationService;
       this.acl = acl;
       this.portal = portal;
       this.userName = userName;
+      this.resourceBundle = resourceBundle;
       this.navigations = null;
    }
+
+   //
+
+   public NodeData getData(UserNode node)
+   {
+      return node.data;
+   }
+
+   public UserNode create(NodeData data)
+   {
+      return new UserNode(data, resourceBundle);
+   }
+
+   public UserNode create(NodeData data, Collection<UserNode> children)
+   {
+      return new UserNode(data, children, resourceBundle);
+   }
+
+   //
 
    /**
     * Returns an immutable sorted list of the valid navigations related to the user.
@@ -175,7 +201,7 @@ public class UserPortalImpl implements UserPortal
 
       void resolve()
       {
-         UserNode node = navigationService.load(UserNode.MODEL, navigation.getNavigation(), this);
+         UserNode node = navigationService.load(UserPortalImpl.this, navigation.getNavigation(), this);
          if (score > 0)
          {
             userNode = node.find(this.node.getId());
@@ -222,7 +248,7 @@ public class UserPortalImpl implements UserPortal
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            UserNode root = navigationService.load(UserNode.MODEL, navigation, Scope.CHILDREN);
+            UserNode root = navigationService.load(this, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

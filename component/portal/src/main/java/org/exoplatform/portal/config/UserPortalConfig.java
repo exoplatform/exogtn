@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class UserPortalConfig
 {
@@ -69,17 +70,7 @@ public class UserPortalConfig
       this.accessUser = accessUser;
    }
 
-   public String getPortalName()
-   {
-      return portalName;
-   }
-
-   public String getAccessUser()
-   {
-      return accessUser;
-   }
-
-   public UserPortal getUserPortal()
+   public UserPortal getUserPortal(ResourceBundle bundle)
    {
       if (userPortal == null)
       {
@@ -88,10 +79,16 @@ public class UserPortalConfig
             service.orgService_,
             service.userACL_,
             portal,
-            accessUser
+            accessUser,
+            bundle
          );
       }
       return userPortal;
+   }
+
+   public UserPortal getUserPortal()
+   {
+      return getUserPortal(null);
    }
 
    public PortalConfig getPortalConfig()
