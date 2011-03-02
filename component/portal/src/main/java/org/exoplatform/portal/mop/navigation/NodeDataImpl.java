@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeData implements Node.Data, Serializable
+class NodeDataImpl implements Node.Data, Serializable
 {
 
    /** . */
@@ -74,7 +74,7 @@ class NodeData implements Node.Data, Serializable
    /** . */
    final LinkedHashMap<String, String> children;
 
-   NodeData(Navigation nav)
+   NodeDataImpl(Navigation nav)
    {
       LinkedHashMap<String, String> children = new LinkedHashMap<String, String>();
       for (Navigation child : nav.getChildren())

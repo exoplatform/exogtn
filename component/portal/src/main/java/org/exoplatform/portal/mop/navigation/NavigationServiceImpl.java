@@ -58,7 +58,7 @@ public class NavigationServiceImpl implements NavigationService
    private Map<String, SiteKey> navigationPathCache;
 
    /** . */
-   private Map<String, NodeData> nodeIdCache;
+   private Map<String, NodeDataImpl> nodeIdCache;
 
    /** . */
    private Map<String, String> nodePathCache;
@@ -94,7 +94,7 @@ public class NavigationServiceImpl implements NavigationService
       this.manager = manager;
       this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationData>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
-      this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
+      this.nodeIdCache = new ConcurrentHashMap<String, NodeDataImpl>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;
    }
@@ -304,7 +304,7 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> N load(NodeModel<N> model, POMSession session, String navigationId, Scope.Visitor visitor, int depth)
    {
-      NodeData data = nodeIdCache.get(navigationId);
+      NodeDataImpl data = nodeIdCache.get(navigationId);
       if (data == null)
       {
          Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, navigationId);
@@ -314,7 +314,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          else
          {
-            data = new NodeData(navigation);
+            data = new NodeDataImpl(navigation);
             nodeIdCache.put(navigationId, data);
             nodePathCache.put(session.pathOf(navigation), navigationId);
          }
