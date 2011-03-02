@@ -25,6 +25,8 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -71,6 +73,9 @@ public class NavigationServiceImpl implements NavigationService
    /** . */
    private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
 
+   /** . */
+   final Logger log = LoggerFactory.getLogger(NavigationServiceImpl.class);
+
    static
    {
       a.put(SiteType.PORTAL, ObjectType.PORTAL_SITE);
@@ -80,9 +85,13 @@ public class NavigationServiceImpl implements NavigationService
 
    public NavigationServiceImpl(POMSessionManager manager)
    {
+      if (manager == null)
+      {
+         throw new NullPointerException("No null pom session manager allowed");
+      }
       this.manager = manager;
       this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationData>(1000);
-      this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);;
+      this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
       this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;

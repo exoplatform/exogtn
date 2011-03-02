@@ -114,7 +114,7 @@
 
   <component>
     <key>org.exoplatform.portal.mop.navigation.NavigationService</key>
-    <type>org.exoplatform.portal.mop.navigation.NavigationServiceImpl</type>
+    <type>org.exoplatform.portal.mop.navigation.NavigationServiceWrapper</type>
   </component>
 
   <component>
