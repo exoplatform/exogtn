@@ -170,11 +170,12 @@
       <values-param>
         <!-- The white list -->
         <name>white-list</name>
-        <value></value>
+        <!-- We accept anything not black listed -->
+        <value>*</value>
       </values-param>
       <values-param>
         <name>black-list</name>
-        <value></value>
+        <value>*.evil.org</value>
       </values-param>
     </init-params>
   </component>
