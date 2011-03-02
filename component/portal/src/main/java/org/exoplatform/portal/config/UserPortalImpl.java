@@ -174,7 +174,7 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath getFirstAvailable() throws Exception
+   public NavigationPath getDefaultPath() throws Exception
    {
       for (UserNavigation userNavigation : navigations)
       {
@@ -213,7 +213,7 @@ public class UserPortalImpl implements UserPortal
       // Find the first navigation available or return null
       if (path.length() == 0)
       {
-         return getFirstAvailable();
+         return getDefaultPath();
       }
 
       //
@@ -250,7 +250,7 @@ public class UserPortalImpl implements UserPortal
       }
       else
       {
-         return getFirstAvailable();
+         return getDefaultPath();
       }
    }
 
