@@ -21,6 +21,7 @@ package org.exoplatform.portal.config.model;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
 import org.gatein.common.text.EntityEncoder;
 
@@ -186,6 +187,7 @@ public class PageNode extends PageNodeContainer
       children = list;
    }
 
+   // Remove this which seems to be not used
    public boolean isModifiable()
    {
       return modifiable;
@@ -383,5 +385,17 @@ public class PageNode extends PageNodeContainer
          pageReference,
          children
       );
+   }
+   
+   public static PageNode toPageNode(UserNode node)
+   {
+      PageNode pageNode = new PageNode(node.getData().getId());
+      pageNode.setName(node.getData().getName());
+      pageNode.setUri(node.getData().getURI());
+      pageNode.setLabel(node.getData().getLabel());
+      pageNode.setIcon(node.getData().getIcon());
+      pageNode.setPageReference(node.getData().getPageRef());
+      pageNode.setVisibility(node.getData().getVisibility());
+      return pageNode;
    }
 }

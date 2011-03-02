@@ -31,9 +31,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
 import org.exoplatform.portal.mop.navigation.Node;
@@ -42,6 +39,7 @@ import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.webui.application.UIGadget;
@@ -59,9 +57,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun
@@ -88,10 +84,11 @@ public class UIPageActionListener
          }
          
          // Fake the selected navigation to Portal one and the selected node to Home 
-         List<PageNavigation> navigations = uiPortalApp.getUserPortalConfig().getNavigations();
-         PageNode node = navigations.get(0).getNode("home");
-         showedUIPortal.setSelectedNode(node);
-         showedUIPortal.setSelectedPath(Arrays.asList(node));
+         UserNode userNode = naviPath.getSegments().get(0);
+         PageNode pageNode = PageNode.toPageNode(userNode);
+         showedUIPortal.setSelectedNode(PageNode.toPageNode(userNode));
+         showedUIPortal.setSelectedPath(Arrays.asList(pageNode));
+         showedUIPortal.refreshUIPage();
       }
       
       public void execute1(Event<UIPortal> event) throws Exception
@@ -263,8 +260,8 @@ public class UIPageActionListener
          for (PageNavigation nav : listNav)
          {
             String rootId = nav.getStorageId();
-            Node node = navigationService.load(rootId, scope);
-            nodes.add(node);
+//            Node node = navigationService.load(nav, scope);
+//            nodes.add(node);
          }
 
          //

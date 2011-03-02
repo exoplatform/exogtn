@@ -26,6 +26,8 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -171,7 +173,12 @@ public class UIPortal extends UIContainer
       publicParameters_ = publicParams;
    }
    
-   /** At the moment, this method ensure compatibility with legacy code */
+   /** 
+    * At the moment, this method ensure compatibility with legacy code
+    * 
+    * @deprecated use {@link #getNavigation()} instead
+    */
+   @Deprecated
    public List<PageNavigation> getNavigations() throws Exception
    {
       List<PageNavigation> listNavs = new ArrayList<PageNavigation>();
@@ -210,6 +217,18 @@ public class UIPortal extends UIContainer
          this.all_UIPages.remove(pageReference);
    }
    
+   public UserNavigation getUserNavigation() throws Exception
+   {
+      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
+      SiteKey siteKey = new SiteKey(ownerType, owner);
+      return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
+   }
+   
+   public PageNavigation getNavigation()
+   {
+      return navigation;
+   }
+   
    public void setNavigation(PageNavigation _navigation)
    {
       this.navigation = _navigation;
@@ -224,7 +243,7 @@ public class UIPortal extends UIContainer
    {
       if(selectedNode_ == null)
       {
-         selectedNode_ = navigation.getNodes().get(0);
+         selectedNode_ = getNavigation().getNodes().get(0);
       }
       
       UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
@@ -243,7 +262,7 @@ public class UIPortal extends UIContainer
       
       //Refresh locale
       Locale locale = Util.getPortalRequestContext().getLocale();
-      localizePageNavigation(navigation, locale);
+//      localizePageNavigation(navigation, locale);
    }
    
    public synchronized void setSelectedNode(PageNode node)
@@ -287,14 +306,27 @@ public class UIPortal extends UIContainer
       selectedPath = nodes;
    }
    
+   /**
+    * @deprecated use {@link #getNavigation()} instead
+    * 
+    * @return
+    * @throws Exception
+    */
+   @Deprecated
    public PageNavigation getSelectedNavigation() throws Exception
    {
-      return navigation;
+      return getNavigation();
    }
    
+   /**
+    * @deprecated use {@link #setNavigation(PageNavigation)} instead
+    * 
+    * @param _navigation
+    */
+   @Deprecated
    public void setSelectedNavigation(PageNavigation _navigation)
    {
-      this.navigation = _navigation;
+      setNavigation(_navigation);
    }
 
    /**

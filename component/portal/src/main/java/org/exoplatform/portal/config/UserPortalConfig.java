@@ -117,6 +117,8 @@ public class UserPortalConfig
       }
    }
 
+   //TODO: Remove this
+   @Deprecated
    public PageNavigation getSelectedNavigation()
    {
       if(this.selectedNavigation != null)
@@ -138,6 +140,9 @@ public class UserPortalConfig
       {
          try
          {
+            System.out.println("Accessing all portal navigations from: ");
+            new Exception().printStackTrace();
+            
             List<PageNavigation> navigations = new ArrayList<PageNavigation>();
             PageNavigation navigation = service.storage_.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
             if (navigation != null)

@@ -22,10 +22,17 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
@@ -54,12 +61,6 @@ public class UIPortalNavigation extends UIComponent
 
    private String template;
    
-   private final static String PORTAL_NAV = "portal";
-   
-   private final static String GROUP_NAV = "group";
-   
-   private final static String USER_NAV = "user";
-
    @Override
    public String getTemplate()
    {
@@ -106,25 +107,36 @@ public class UIPortalNavigation extends UIComponent
       return cssClassName;
    }
 
-   public List<PageNavigation> getNavigations() throws Exception
+   public List<Node> getNavigations() throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      List<PageNavigation> result = new ArrayList<PageNavigation>();
-
+      List<Node> nodes = new ArrayList<Node>();
       if (context.getRemoteUser() != null)
       {
-         result.add(PageNavigationUtils.filter(getSelectedNavigation(), context.getRemoteUser()));
+         nodes.add(PageNavigationUtils.filter(getCurrentNavigation(), context.getRemoteUser()));
       }
       else
       {
-         for (PageNavigation nav : Util.getUIPortalApplication().getNavigations())
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         NavigationService naviSer = getApplicationComponent(NavigationService.class);
+         
+         List<UserNavigation> navigations = userPortal.getNavigations();
+         
+         for (UserNavigation userNav : navigations)
          {
-            if (!showUserNavigation && nav.getOwnerType().equals("user"))
+            Navigation navi = userNav.getNavigation();
+            
+            if (!showUserNavigation && navi.getKey().getType().equals(SiteType.USER))
+            {
                continue;
-            result.add(PageNavigationUtils.filter(nav, null));
+            }
+            
+            Node rootNode = naviSer.load(navi, Scope.ALL);
+            PageNavigationUtils.filter(rootNode, null);
+            nodes.add(rootNode);
          }
       }
-      return result;
+      return nodes;
    }
 
    public void loadTreeNodes() throws Exception
@@ -160,15 +172,15 @@ public class UIPortalNavigation extends UIComponent
       for (PageNavigation nav : listNavigation)
       {
          String ownerType = nav.getOwnerType();
-         if (PORTAL_NAV.equals(ownerType))
+         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
          {
             portalNavs.add(nav);
          }
-         else if (GROUP_NAV.equals(ownerType))
+         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
          {
             groupNavs.add(nav);
          }
-         else if (USER_NAV.equals(ownerType))
+         else if (PortalConfig.USER_TYPE.equals(ownerType))
          {
             userNavs.add(nav);
          }
@@ -186,14 +198,25 @@ public class UIPortalNavigation extends UIComponent
       return treeNode_;
    }
 
+   public Node getCurrentNavigation() throws Exception
+   {
+      UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
+      Navigation nav = userNavigation.getNavigation();
+      
+      NavigationService naviSer = getApplicationComponent(NavigationService.class);
+      return naviSer.load(nav, Scope.ALL);
+   }
+   
+   /**
+    * @deprecated use {@link #getCurrentNavigation()} instead
+    * 
+    * @return
+    * @throws Exception
+    */
+   @Deprecated
    public PageNavigation getSelectedNavigation() throws Exception
    {
-      PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
-      if (nav != null)
-         return nav;
-      if (Util.getUIPortal().getNavigations().size() < 1)
-         return null;
-      return Util.getUIPortal().getNavigations().get(0);
+      return Util.getUIPortal().getNavigation();
    }
 
    public Object getSelectedParent()
@@ -231,25 +254,26 @@ public class UIPortalNavigation extends UIComponent
 
    private void setSelectedPageNode(PageNode selectedNode) throws Exception
    {
-      selectedNode_ = selectedNode;
-      selectedParent_ = null;
-      String seletctUri = selectedNode.getUri();
-      int index = seletctUri.lastIndexOf("/");
-      String parentUri = null;
-      if (index > 0)
-         parentUri = seletctUri.substring(0, seletctUri.lastIndexOf("/"));
-      List<PageNavigation> pageNavs = getNavigations();
-      for (PageNavigation pageNav : pageNavs)
-      {
-         if (PageNavigationUtils.searchPageNodeByUri(pageNav, selectedNode.getUri()) != null)
-         {
-            if (parentUri == null || parentUri.length() < 1)
-               selectedParent_ = pageNav;
-            else
-               selectedParent_ = PageNavigationUtils.searchPageNodeByUri(pageNav, parentUri);
-            break;
-         }
-      }
+      return;
+//      selectedNode_ = selectedNode;
+//      selectedParent_ = null;
+//      String seletctUri = selectedNode.getUri();
+//      int index = seletctUri.lastIndexOf("/");
+//      String parentUri = null;
+//      if (index > 0)
+//         parentUri = seletctUri.substring(0, seletctUri.lastIndexOf("/"));
+//      List<Node> pageNavs = getNavigations();
+//      for (Node pageNav : pageNavs)
+//      {
+//         if (PageNavigationUtils.searchPageNodeByUri(pageNav, selectedNode.getUri()) != null)
+//         {
+//            if (parentUri == null || parentUri.length() < 1)
+//               selectedParent_ = pageNav;
+//            else
+//               selectedParent_ = PageNavigationUtils.searchPageNodeByUri(pageNav, parentUri);
+//            break;
+//         }
+//      }
    }
 
    static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>
