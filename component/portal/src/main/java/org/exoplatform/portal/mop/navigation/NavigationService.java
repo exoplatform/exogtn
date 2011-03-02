@@ -36,14 +36,8 @@ public interface NavigationService
     */
    NavigationData getNavigation(SiteKey key);
 
-
    <N> N load(NodeModel<N> model, NavigationData navigation, Scope scope);
 
    <N> N load(NodeModel<N> model, N node, Scope scope);
-
-
-//   Node load(NavigationData navigation, Scope scope);
-
-//   Node load(Node node, Scope scope);
 
 }
