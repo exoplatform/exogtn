@@ -44,16 +44,20 @@ import java.util.List;
 public class UserPortalImpl implements UserPortal
 {
 
+   /** . */
    private final NavigationService navigationService;
    
+   /** . */
    private final OrganizationService organizationService;
 
+   /** . */
    private final UserACL acl;
    
+   /** . */
    private final PortalConfig portal;
 
+   /** . */
    private final String userName;
-
 
    /** . */
    private List<UserNavigation> navigations;
