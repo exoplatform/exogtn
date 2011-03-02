@@ -17,19 +17,19 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config;
+package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
-import org.exoplatform.portal.mop.user.NavigationPath;
-import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,15 +44,33 @@ import java.util.List;
 public class UserPortalImpl implements UserPortal
 {
 
-   /** . */
-   private final UserPortalConfig config;
+   private final NavigationService navigationService;
+   
+   private final OrganizationService organizationService;
+
+   private final UserACL acl;
+   
+   private final PortalConfig portal;
+
+   private final String userName;
+
 
    /** . */
    private List<UserNavigation> navigations;
 
-   public UserPortalImpl(UserPortalConfig config)
+   public UserPortalImpl(
+      NavigationService navigationService,
+      OrganizationService organizationService,
+      UserACL acl,
+      PortalConfig portal,
+      String userName)
    {
-      this.config = config;
+      this.navigationService = navigationService;
+      this.organizationService = organizationService;
+      this.acl = acl;
+      this.portal = portal;
+      this.userName = userName;
+      this.navigations = null;
    }
 
    /**
@@ -65,14 +83,14 @@ public class UserPortalImpl implements UserPortal
    {
       if (navigations == null)
       {
-         List<UserNavigation> navigations = new ArrayList<UserNavigation>(config.accessUser == null ? 1 : 10);
+         List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
          navigations.add(new UserNavigation(
-            config.service.navService.getNavigation(new SiteKey(SiteType.PORTAL, config.portalName)),
-            config.service.userACL_.hasPermission(config.portal.getEditPermission())));
-         if (config.accessUser != null)
+            navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portal.getName())),
+            acl.hasPermission(portal.getEditPermission())));
+         if (userName != null)
          {
             // Add user nav if any
-            NavigationData userNav = config.service.navService.getNavigation(SiteKey.user(config.accessUser));
+            NavigationData userNav = navigationService.getNavigation(SiteKey.user(userName));
             if (userNav != null)
             {
                navigations.add(new UserNavigation(userNav, true));
@@ -80,30 +98,30 @@ public class UserPortalImpl implements UserPortal
 
             //
             Collection<?> groups;
-            if (config.service.userACL_.getSuperUser().equals(config.accessUser))
+            if (acl.getSuperUser().equals(userName))
             {
-               groups = config.service.orgService_.getGroupHandler().getAllGroups();
+               groups = organizationService.getGroupHandler().getAllGroups();
             }
             else
             {
-               groups = config.service.orgService_.getGroupHandler().findGroupsOfUser(config.accessUser);
+               groups = organizationService.getGroupHandler().findGroupsOfUser(userName);
             }
             for (Object group : groups)
             {
                Group m = (Group)group;
                String groupId = m.getId().trim();
-               if (groupId.equals(config.service.userACL_.getGuestsGroup()))
+               if (groupId.equals(acl.getGuestsGroup()))
                {
                   continue;
                }
-               NavigationData navigation = config.service.navService.getNavigation(SiteKey.group(groupId));
+               NavigationData navigation = navigationService.getNavigation(SiteKey.group(groupId));
                if (navigation == null || navigation.getNodeId() == null)
                {
                   continue;
                }
                navigations.add(new UserNavigation(
                   navigation,
-                  config.service.userACL_.hasEditPermissionOnNavigation(navigation.getKey())));
+                  acl.hasEditPermissionOnNavigation(navigation.getKey())));
             }
 
             // Sort the list finally
@@ -153,7 +171,7 @@ public class UserPortalImpl implements UserPortal
 
       void resolve()
       {
-         UserNode node = config.service.navService.load(UserNode.MODEL, navigation.getNavigation(), this);
+         UserNode node = navigationService.load(UserNode.MODEL, navigation.getNavigation(), this);
          if (score > 0)
          {
             userNode = node.find(this.node.getId());
@@ -200,7 +218,7 @@ public class UserPortalImpl implements UserPortal
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            UserNode root = config.service.navService.load(UserNode.MODEL, navigation, Scope.CHILDREN);
+            UserNode root = navigationService.load(UserNode.MODEL, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

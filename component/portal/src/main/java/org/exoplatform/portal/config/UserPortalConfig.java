@@ -22,6 +22,7 @@ package org.exoplatform.portal.config;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.mop.user.UserPortalImpl;
 import org.exoplatform.services.organization.Group;
 
 import java.lang.reflect.UndeclaredThrowableException;
@@ -68,11 +69,27 @@ public class UserPortalConfig
       this.accessUser = accessUser;
    }
 
+   public String getPortalName()
+   {
+      return portalName;
+   }
+
+   public String getAccessUser()
+   {
+      return accessUser;
+   }
+
    public UserPortal getUserPortal()
    {
       if (userPortal == null)
       {
-         userPortal = new UserPortalImpl(this);
+         userPortal = new UserPortalImpl(
+            service.navService,
+            service.orgService_,
+            service.userACL_,
+            portal,
+            accessUser
+         );
       }
       return userPortal;
    }
