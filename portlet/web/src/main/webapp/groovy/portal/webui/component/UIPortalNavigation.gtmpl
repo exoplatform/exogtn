@@ -1,5 +1,5 @@
 <% 
-  import org.exoplatform.portal.mop.navigation.Node;
+    import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.web.application.JavascriptManager;
@@ -17,7 +17,7 @@
 
 	rootNodes = uicomponent.getNavigations();
 
-	public void renderChildrenContainer(Node parentNode, Node node) {
+	public void renderChildrenContainer(UserNode parentNode, UserNode node) {
 		print """
 			<div class="MenuItemContainer" style="display: none;">
 				<div class="MenuItemDecorator">
@@ -30,7 +30,7 @@
 						<div class="RightMiddleMenuDecorator">
 							<div class="CenterMiddleMenuDecorator">
 		""";
-								for(child in node.getRelationships().getChildren()) {
+								for(child in node.getChildren()) {
 							 		renderChildNode(parentNode, child);
 								}
 		print """
@@ -46,9 +46,9 @@
 			</div>
 		""";
 	}	
-	public void renderChildNode(Node parentNode, Node node) {
+	public void renderChildNode(UserNode parentNode, UserNode node) {
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
-		Node selectedNav = uicomponent.getCurrentNavigation();
+		UserNode selectedNav = uicomponent.getCurrentNavigation();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null &&	selectedNav != null &&
 			 selectedNav.getId () == parentNode.getData().getId() &&
@@ -59,7 +59,7 @@
 		String icon = node.getData().getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
-		if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) arrowIcon = "ArrowIcon";
+		if (node.getChildren().size() > 0) arrowIcon = "ArrowIcon";
 
 		String label = node.getData().getLabel();
 		String title = "";
@@ -102,7 +102,7 @@
 			""";
 		}
 		
-		if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
+		if (node.getChildren().size() > 0) {
 			renderChildrenContainer(parentNode, node);
 		}		
 		print "</div>";					
@@ -116,12 +116,12 @@
 				<div class="UIHorizontalTabs">
 					<div class="TabsContainer">
 						<%
-							Node selectedNav = uicomponent.getCurrentNavigation();
+							UserNode selectedNav = uicomponent.getCurrentNavigation();
 							PageNode selectedNode = uicomponent.getSelectedPageNode();
 							if(rootNodes != null) {
 								for(nav in rootNodes) {
 									
-									def pageNodes = nav.getRelationships().getChildren();
+									def pageNodes = nav.getChildren();
                   
 									for(Node node in pageNodes) {
 										String tabStyleNavigation = "NormalNavigationTab";
@@ -140,7 +140,7 @@
 															<div class="TabIcon">
 																<%
 																	String arrowIcon = "";
-																	if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
+																	if (node.getChildren().size() > 0) {
 																		arrowIcon = "DropDownArrowIcon";
 																	}
 																	String iconType = node.getData().getIcon();
@@ -174,7 +174,7 @@
 											</div>
 											<%
 												/*Render Popup Menu*/
-												if (node.getRelationships() != null && node.getRelationships().getChildren().size() > 0) {
+												if (node.getChildren().size() > 0) {
 													renderChildrenContainer(nav, node);
 												}
 											%>

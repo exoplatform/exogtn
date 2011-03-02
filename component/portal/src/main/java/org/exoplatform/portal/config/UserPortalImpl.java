@@ -22,7 +22,6 @@ package org.exoplatform.portal.config;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
-import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -137,17 +136,35 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   private static class MatchingScope implements Scope
+   private class MatchingScope implements Scope
    {
       final UserNavigation navigation;
       final String[] match;
       int score;
-      List<UserNode> path;
+      NodeData node;
+      UserNode userNode;
+      private NavigationPath path;
+
       MatchingScope(UserNavigation navigation, String[] match)
       {
          this.navigation = navigation;
          this.match = match;
       }
+
+      void resolve()
+      {
+         UserNode node = config.service.navService.load(UserNode.MODEL, navigation.getNavigation(), this);
+         if (score > 0)
+         {
+            userNode = node.find(this.node.getId());
+            path = new NavigationPath(navigation, userNode);
+         }
+         else
+         {
+            path = new NavigationPath(navigation, null);
+         }
+      }
+
       public Visitor get()
       {
          return new Visitor()
@@ -158,13 +175,13 @@ public class UserPortalImpl implements UserPortal
                if (depth == 0 && "default".equals(name))
                {
                   score = 0;
-                  path = new ArrayList<UserNode>();
+                  node = null;
                   return VisitMode.CHILDREN;
                }
                else if (depth <= match.length && name.equals(match[depth - 1]))
                {
                   score++;
-                  path.add(new UserNode(data));
+                  node = data;
                   return VisitMode.CHILDREN;
                }
                else
@@ -183,10 +200,10 @@ public class UserPortalImpl implements UserPortal
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            Node root = config.service.navService.load(navigation, Scope.CHILDREN);
-            for (Node node : root.getRelationships().getChildren())
+            UserNode root = config.service.navService.load(UserNode.MODEL, navigation, Scope.CHILDREN);
+            for (UserNode node : root.getChildren())
             {
-               return new NavigationPath(userNavigation, Collections.singletonList(new UserNode(node.getData())));
+               return new NavigationPath(userNavigation, node);
             }
          }
       }
@@ -223,7 +240,7 @@ public class UserPortalImpl implements UserPortal
       for (UserNavigation navigation : navigations)
       {
          MatchingScope scope = new MatchingScope(navigation, segments);
-         config.service.navService.load(navigation.getNavigation(), scope);
+         scope.resolve();
          if (scope.score == segments.length)
          {
             best = scope;
@@ -248,7 +265,7 @@ public class UserPortalImpl implements UserPortal
       //
       if (best != null && best.score > 0)
       {
-         return new NavigationPath(best.navigation,  best.path);
+         return new NavigationPath(best.navigation,  best.userNode);
       }
       else
       {
@@ -278,12 +295,12 @@ public class UserPortalImpl implements UserPortal
 
       //
       MatchingScope scope = new MatchingScope(navigation, segments);
-      config.service.navService.load(navigation.getNavigation(), scope);
+      scope.resolve();
 
       //
       if (scope.score > 0)
       {
-         return new NavigationPath(scope.navigation,  scope.path);
+         return scope.path;
       }
       else
       {

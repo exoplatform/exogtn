@@ -290,31 +290,35 @@ public class TestUserPortal extends AbstractPortalTest
             //
             NavigationPath nav = userPortal.resolvePath("/");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
-            List<UserNode> path = nav.getSegments();
-            assertEquals(1, path.size());
-            assertEquals("home", path.get(0).getData().getName());
+            UserNode target = nav.getTarget();
+            assertEquals("home", target.getData().getName());
+            assertEquals("default", target.getParent().getData().getName());
+            assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/foo");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
-            path = nav.getSegments();
-            assertEquals(1, path.size());
-            assertEquals("home", path.get(0).getData().getName());
+            target = nav.getTarget();
+            assertEquals("home", target.getData().getName());
+            assertEquals("default", target.getParent().getData().getName());
+            assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/home");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
-            path = nav.getSegments();
-            assertEquals(1, path.size());
-            assertEquals("home", path.get(0).getData().getName());
+            target = nav.getTarget();
+            assertEquals("home", target.getData().getName());
+            assertEquals("default", target.getParent().getData().getName());
+            assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/administration/communityManagement");
             assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getNavigation().getKey());
-            path = nav.getSegments();
-            assertEquals(2, path.size());
-            assertEquals(null, path.get(0).getData().getPageRef());
-            assertEquals("communityManagement", path.get(1).getData().getName());
+            target = nav.getTarget();
+            assertEquals("communityManagement", target.getData().getName());
+            assertEquals("administration", target.getParent().getData().getName());
+            assertEquals("default", target.getParent().getParent().getData().getName());
+            assertNull(target.getParent().getParent().getParent());
          }
       }.execute("root");
    }

@@ -19,7 +19,14 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeData;
+import org.exoplatform.portal.mop.navigation.NodeModel;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A navigation node as seen by a user.
@@ -31,7 +38,29 @@ public class UserNode
 {
 
    /** . */
-   private final NodeData data;
+   public static final NodeModel<UserNode> MODEL = new NodeModel<UserNode>()
+   {
+      public NodeData getData(UserNode node)
+      {
+         return node.data;
+      }
+
+      public UserNode create(NodeData data)
+      {
+         return new UserNode(data);
+      }
+
+      public UserNode create(NodeData data, Collection<UserNode> children)
+      {
+         return new UserNode(data, children);
+      }
+   };
+
+   /** Marker. */
+   private static final UserNode NO_PARENT_DETERMINED = new UserNode();
+
+   /** . */
+   final NodeData data;
 
    /** . */
    private String resolvedLabel;
@@ -42,11 +71,87 @@ public class UserNode
    /** . */
    private boolean modifiable;
 
-   public UserNode(NodeData data)
+   /** . */
+   private Map<String, UserNode> childMap;
+
+   /** . */
+   private UserNode parent;
+
+   private UserNode()
    {
+      this.data = null;
+      this.resolvedLabel = null;
+      this.encodedResolvedLabel = null;
+      this.childMap = null;
+   }
+
+   private UserNode(NodeData data)
+   {
+      this.parent = NO_PARENT_DETERMINED;
       this.data = data;
       this.resolvedLabel = data.getLabel();
       this.encodedResolvedLabel = data.getLabel();
+      this.childMap = null;
+   }
+
+   private UserNode(NodeData data, Collection<UserNode> children)
+   {
+      this(data);
+
+      Map<String, UserNode> childMap = new HashMap<String, UserNode>();
+      for (UserNode child : children)
+      {
+         child.parent = this;
+         childMap.put(child.data.getName(), child);
+      }
+
+      //
+      this.childMap = childMap;
+   }
+
+   public String getId()
+   {
+      return data.getId();
+   }
+
+   public String getName()
+   {
+      return data.getName();
+   }
+
+   public String getURI()
+   {
+      return data.getURI();
+   }
+
+   public String getLabel()
+   {
+      return data.getLabel();
+   }
+
+   public String getIcon()
+   {
+      return data.getIcon();
+   }
+
+   public long getStartPublicationTime()
+   {
+      return data.getStartPublicationTime();
+   }
+
+   public long getEndPublicationTime()
+   {
+      return data.getEndPublicationTime();
+   }
+
+   public Visibility getVisibility()
+   {
+      return data.getVisibility();
+   }
+
+   public String getPageRef()
+   {
+      return data.getPageRef();
    }
 
    public NodeData getData()
@@ -82,5 +187,42 @@ public class UserNode
    public void setModifiable(boolean modifiable)
    {
       this.modifiable = modifiable;
+   }
+
+   public UserNode getParent()
+   {
+      return parent == NO_PARENT_DETERMINED ? null : parent;
+   }
+
+   public Collection<UserNode> getChildren()
+   {
+      return childMap != null ? childMap.values() : Collections.<UserNode>emptyList();
+   }
+
+   public UserNode getChild(String childName)
+   {
+      return childMap != null ? childMap.get(childName) : null;
+   }
+
+   public UserNode find(String nodeId)
+   {
+      UserNode found = null;
+      if (data.getId().equals(nodeId))
+      {
+         found = this;
+      }
+      else if (childMap != null)
+      {
+         for (UserNode child : childMap.values())
+         {
+            UserNode a = child.find(nodeId);
+            if (a != null)
+            {
+               found = a;
+               break;
+            }
+         }
+      }
+      return found;
    }
 }

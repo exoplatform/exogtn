@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
@@ -477,7 +477,7 @@ public class PageNavigationUtils
       }
    }
 
-   public static Node filter(Node rootNode, String userName)
+   public static UserNode filter(UserNode rootNode, String userName)
    {
       // TODO filter nodes which are available for userName
       return rootNode;

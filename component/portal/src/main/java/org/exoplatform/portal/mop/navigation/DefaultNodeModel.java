@@ -28,6 +28,7 @@ import java.util.Collection;
 public class DefaultNodeModel implements NodeModel<Node>
 {
 
+   /** . */
    static final DefaultNodeModel INSTANCE = new DefaultNodeModel();
 
    public DefaultNodeModel()

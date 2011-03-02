@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.user;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -32,12 +30,12 @@ public class NavigationPath
    private final UserNavigation navigation;
 
    /** . */
-   private final List<UserNode> segments;
+   private final UserNode target;
 
-   public NavigationPath(UserNavigation navigation, List<UserNode> segments)
+   public NavigationPath(UserNavigation navigation, UserNode target)
    {
       this.navigation = navigation;
-      this.segments = segments;
+      this.target = target;
    }
 
    public UserNavigation getNavigation()
@@ -45,13 +43,8 @@ public class NavigationPath
       return navigation;
    }
 
-   public List<UserNode> getSegments()
-   {
-      return segments;
-   }
-
    public UserNode getTarget()
    {
-      return segments.isEmpty() ? null : segments.get(segments.size() - 1);
+      return target;
    }
 }

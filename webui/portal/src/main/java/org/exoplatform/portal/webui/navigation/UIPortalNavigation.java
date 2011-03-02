@@ -24,11 +24,11 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -107,10 +107,10 @@ public class UIPortalNavigation extends UIComponent
       return cssClassName;
    }
 
-   public List<Node> getNavigations() throws Exception
+   public List<UserNode> getNavigations() throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      List<Node> nodes = new ArrayList<Node>();
+      List<UserNode> nodes = new ArrayList<UserNode>();
       if (context.getRemoteUser() != null)
       {
          nodes.add(PageNavigationUtils.filter(getCurrentNavigation(), context.getRemoteUser()));
@@ -124,14 +124,14 @@ public class UIPortalNavigation extends UIComponent
          
          for (UserNavigation userNav : navigations)
          {
-            Navigation navi = userNav.getNavigation();
+            NavigationData navi = userNav.getNavigation();
             
             if (!showUserNavigation && navi.getKey().getType().equals(SiteType.USER))
             {
                continue;
             }
             
-            Node rootNode = naviSer.load(navi, Scope.GRANDCHILDREN);
+            UserNode rootNode = naviSer.load(UserNode.MODEL, navi, Scope.GRANDCHILDREN);
             PageNavigationUtils.filter(rootNode, null);
             nodes.add(rootNode);
          }
@@ -198,13 +198,13 @@ public class UIPortalNavigation extends UIComponent
       return treeNode_;
    }
 
-   public Node getCurrentNavigation() throws Exception
+   public UserNode getCurrentNavigation() throws Exception
    {
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      Navigation nav = userNavigation.getNavigation();
+      NavigationData nav = userNavigation.getNavigation();
       
       NavigationService naviSer = getApplicationComponent(NavigationService.class);
-      return naviSer.load(nav, Scope.SINGLE);
+      return naviSer.load(UserNode.MODEL, nav, Scope.SINGLE);
    }
    
    /**

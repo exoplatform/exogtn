@@ -42,8 +42,8 @@ public interface NavigationService
    <N> N load(NodeModel<N> model, N node, Scope scope);
 
 
-   Node load(NavigationData navigation, Scope scope);
+//   Node load(NavigationData navigation, Scope scope);
 
-   Node load(Node node, Scope scope);
+//   Node load(Node node, Scope scope);
 
 }

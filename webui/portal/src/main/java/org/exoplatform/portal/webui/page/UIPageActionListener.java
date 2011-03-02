@@ -70,13 +70,8 @@ public class UIPageActionListener
          NavigationPath naviPath = userPortal.resolvePath(uri);
          UserNavigation userNavigation = naviPath.getNavigation();
          
-         if (naviPath.getSegments().size() > 0)
-         {
-            System.out.println("Found for path " + naviPath.getSegments().get(naviPath.getSegments().size() - 1).getData().getURI() + " candidate " + userNavigation.getNavigation().getKey());
-         }
-         
-         // Fake the selected navigation to Portal one and the selected node to Home 
-         UserNode userNode = naviPath.getSegments().get(0);
+         // Fake the selected navigation to Portal one and the selected node to Home
+         UserNode userNode = naviPath.getTarget();
          PageNode pageNode = PageNode.toPageNode(userNode);
          showedUIPortal.setSelectedNode(PageNode.toPageNode(userNode));
          showedUIPortal.setSelectedPath(Arrays.asList(pageNode));
