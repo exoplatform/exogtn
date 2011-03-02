@@ -278,7 +278,7 @@ public class NavigationServiceImpl implements NavigationService
    }
 
 
-   public <N> N load(NodeModel<N> model, org.exoplatform.portal.mop.navigation.Navigation navigation, Scope scope)
+   public <N> N load(NodeModel<N> model, NavigationData navigation, Scope scope)
    {
       String nodeId = navigation.getNodeId();
       if (nodeId != null)
@@ -339,7 +339,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public Node load(org.exoplatform.portal.mop.navigation.Navigation navigation, Scope scope)
+   public Node load(NavigationData navigation, Scope scope)
    {
       return load(DefaultNodeModel.INSTANCE, navigation, scope);
    }

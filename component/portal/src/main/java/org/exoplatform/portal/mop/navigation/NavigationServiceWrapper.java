@@ -71,12 +71,12 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       }
    }
 
-   public Navigation getNavigation(SiteKey key)
+   public NavigationData getNavigation(SiteKey key)
    {
       return service.getNavigation(key);
    }
 
-   public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> N load(NodeModel<N> model, NavigationData navigation, Scope scope)
    {
       return service.load(model, navigation, scope);
    }
@@ -86,7 +86,7 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return service.load(model, node, scope);
    }
 
-   public Node load(Navigation navigation, Scope scope)
+   public Node load(NavigationData navigation, Scope scope)
    {
       return service.load(navigation, scope);
    }

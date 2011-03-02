@@ -25,7 +25,7 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NavigationDataImpl implements Navigation
+class NavigationDataImpl implements NavigationData
 {
 
    /** . */

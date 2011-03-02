@@ -21,7 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -73,7 +73,7 @@ public class UserPortalImpl implements UserPortal
          if (config.accessUser != null)
          {
             // Add user nav if any
-            Navigation userNav = config.service.navService.getNavigation(SiteKey.user(config.accessUser));
+            NavigationData userNav = config.service.navService.getNavigation(SiteKey.user(config.accessUser));
             if (userNav != null)
             {
                navigations.add(new UserNavigation(userNav, true));
@@ -97,7 +97,7 @@ public class UserPortalImpl implements UserPortal
                {
                   continue;
                }
-               Navigation navigation = config.service.navService.getNavigation(SiteKey.group(groupId));
+               NavigationData navigation = config.service.navService.getNavigation(SiteKey.group(groupId));
                if (navigation == null || navigation.getNodeId() == null)
                {
                   continue;
@@ -180,7 +180,7 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation userNavigation : navigations)
       {
-         Navigation navigation = userNavigation.getNavigation();
+         NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
             Node root = config.service.navService.load(navigation, Scope.CHILDREN);

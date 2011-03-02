@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationData;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -29,18 +29,18 @@ public class UserNavigation
 {
 
    /** . */
-   private final Navigation navigation;
+   private final NavigationData navigation;
 
    /** . */
    private final boolean modifiable;
 
-   public UserNavigation(Navigation navigation, boolean modifiable)
+   public UserNavigation(NavigationData navigation, boolean modifiable)
    {
       this.navigation = navigation;
       this.modifiable = modifiable;
    }
 
-   public Navigation getNavigation()
+   public NavigationData getNavigation()
    {
       return navigation;
    }

@@ -20,7 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -35,15 +34,15 @@ public interface NavigationService
     * @param key the navigation key
     * @return the matching navigation
     */
-   Navigation getNavigation(SiteKey key);
+   NavigationData getNavigation(SiteKey key);
 
 
-   <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
+   <N> N load(NodeModel<N> model, NavigationData navigation, Scope scope);
 
    <N> N load(NodeModel<N> model, N node, Scope scope);
 
 
-   Node load(Navigation navigation, Scope scope);
+   Node load(NavigationData navigation, Scope scope);
 
    Node load(Node node, Scope scope);
 
