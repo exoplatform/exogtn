@@ -34,9 +34,9 @@ public class DefaultNodeModel implements NodeModel<Node>
    {
    }
 
-   public String getId(Node node)
+   public NodeData getData(Node node)
    {
-      return node.data.getId();
+      return node.data;
    }
 
    public Node create(NodeData data, Collection<Node> children)

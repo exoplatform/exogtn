@@ -293,7 +293,9 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> N load(NodeModel<N> model, N node, Scope scope)
    {
-      return load(model, model.getId(node), scope);
+      NodeData data = model.getData(node);
+      String id = data.getId();
+      return load(model, id, scope);
    }
 
    private <N> N load(NodeModel<N> model, String nodeId, Scope scope)

@@ -34,7 +34,7 @@ public interface NodeModel<N>
     * @param node the node
     * @return the node id
     */
-   String getId(N node);
+   NodeData getData(N node);
 
    /**
     * Create a node whose children are not determined.
