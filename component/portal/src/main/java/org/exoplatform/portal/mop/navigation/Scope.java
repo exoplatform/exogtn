@@ -26,43 +26,34 @@ package org.exoplatform.portal.mop.navigation;
 public interface Scope
 {
 
-   Scope SINGLE = new Scope()
+   public static class Pruning implements Scope
    {
-      private Visitor instance = new Visitor()
-      {
-         public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
-         {
-            return VisitMode.NODE;
-         }
-      };
-      public Visitor get()
-      {
-         return instance;
-      }
-   };
 
-   Scope CHILDREN = new Scope()
-   {
-      public Visitor get()
+      /** . */
+      private final Visitor visitor;
+
+      public Pruning(final int height)
       {
-         return new Visitor()
+         this.visitor = new Visitor()
          {
-            boolean done = false;
             public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
             {
-               if (done)
-               {
-                  return VisitMode.NODE;
-               }
-               else
-               {
-                  done = true;
-                  return VisitMode.CHILDREN;
-               }
+               return depth < height ? VisitMode.CHILDREN : VisitMode.NODE;
             }
          };
       }
-   };
+
+      public Visitor get()
+      {
+         return visitor;
+      }
+   }
+
+   Scope SINGLE = new Pruning(0);
+
+   Scope CHILDREN = new Pruning(1);
+
+   Scope GRANDCHILDREN = new Pruning(2);
 
    Scope ALL = new Scope()
    {
