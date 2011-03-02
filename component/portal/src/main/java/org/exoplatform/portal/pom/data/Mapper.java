@@ -98,12 +98,12 @@ public class Mapper
 
    public NavigationData load(Navigation src)
    {
-      System.out.println("Accessing loading navigation " + src.getSite().getName() + "  from: ");
-      long t = System.currentTimeMillis();
-      new Exception().printStackTrace();
+//      System.out.println("Accessing loading navigation " + src.getSite().getName() + "  from: ");
+//      long t = System.currentTimeMillis();
+//      new Exception().printStackTrace();
       NavigationData data = load(src, NavigationData.class);
-      t = System.currentTimeMillis() - t;
-      System.out.println("Navigation loaded in " + t / 1000 + " seconds");
+//      t = System.currentTimeMillis() - t;
+//      System.out.println("Navigation loaded in " + t / 1000 + " seconds");
       return data;
    }
 
