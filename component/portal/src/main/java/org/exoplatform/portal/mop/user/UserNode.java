@@ -28,6 +28,7 @@ import org.gatein.common.text.EntityEncoder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -106,7 +107,7 @@ public class UserNode
          }
          else
          {
-            childMap = new HashMap<String, UserNode>();
+            childMap = new LinkedHashMap<String, UserNode>();
             for (UserNode child : children)
             {
                child.parent = this;
