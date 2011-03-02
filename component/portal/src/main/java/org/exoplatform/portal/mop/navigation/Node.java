@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
 /**
@@ -29,6 +30,30 @@ import java.util.LinkedHashMap;
  */
 public class Node
 {
+
+   /** . */
+   public static final NodeModel<Node> MODEL = new NodeModel<Node>()
+   {
+      public NodeData getData(Node node)
+      {
+         return node.data;
+      }
+
+      public Node create(NodeData data, Collection<Node> children)
+      {
+         Node.Relationships fragment = new Node.Relationships(children.size());
+         for (Node node : children)
+         {
+            fragment.put(node.data.getName(), node);
+         }
+         return new Node(data, fragment);
+      }
+
+      public Node create(NodeData data)
+      {
+         return new Node(data);
+      }
+   };
 
    /** . */
    final NodeData data;

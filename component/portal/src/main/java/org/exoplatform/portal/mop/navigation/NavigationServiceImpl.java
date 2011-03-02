@@ -343,11 +343,11 @@ public class NavigationServiceImpl implements NavigationService
 
    public Node load(NavigationData navigation, Scope scope)
    {
-      return load(DefaultNodeModel.INSTANCE, navigation, scope);
+      return load(Node.MODEL, navigation, scope);
    }
 
    public Node load(Node node, Scope scope)
    {
-      return load(DefaultNodeModel.INSTANCE, node, scope);
+      return load(Node.MODEL, node, scope);
    }
 }
