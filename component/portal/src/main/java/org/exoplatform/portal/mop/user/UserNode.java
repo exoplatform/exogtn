@@ -204,7 +204,8 @@ public class UserNode
       return childMap != null ? childMap.get(childName) : null;
    }
 
-   public UserNode find(String nodeId)
+   // Keep this internal for now
+   UserNode find(String nodeId)
    {
       UserNode found = null;
       if (data.getId().equals(nodeId))
