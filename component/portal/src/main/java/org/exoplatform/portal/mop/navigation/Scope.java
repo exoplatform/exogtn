@@ -26,14 +26,27 @@ package org.exoplatform.portal.mop.navigation;
 public interface Scope
 {
 
+   /**
+    * A scope that prunes the tree, it keeps all nodes below a specific depth.
+    */
    public static class Pruning implements Scope
    {
 
       /** . */
       private final Visitor visitor;
 
-      public Pruning(final int height)
+      /**
+       * Creates a new pruning scope.
+       *
+       * @param height the max height of the pruned tree
+       * @throws IllegalArgumentException if the height is negative
+       */
+      public Pruning(final int height) throws IllegalArgumentException
       {
+         if (height < 0)
+         {
+            throw new IllegalArgumentException("Cannot provide negative height");
+         }
          this.visitor = new Visitor()
          {
             public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
