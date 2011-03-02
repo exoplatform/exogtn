@@ -181,7 +181,7 @@ public class UserPortalImpl implements UserPortal
          Navigation navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            Node root = config.service.navService.load(navigation.getNodeId(), Scope.CHILDREN);
+            Node root = config.service.navService.load(navigation, Scope.CHILDREN);
             for (Node node : root.getRelationships().getChildren())
             {
                return new NavigationPath(userNavigation, Collections.singletonList(new UserNode(node.getData())));
@@ -221,7 +221,7 @@ public class UserPortalImpl implements UserPortal
       for (UserNavigation navigation : navigations)
       {
          MatchingScope scope = new MatchingScope(navigation, segments);
-         config.service.navService.load(navigation.getNavigation().getNodeId(), scope);
+         config.service.navService.load(navigation.getNavigation(), scope);
          if (scope.score == segments.length)
          {
             best = scope;
@@ -276,7 +276,7 @@ public class UserPortalImpl implements UserPortal
 
       //
       MatchingScope scope = new MatchingScope(navigation, segments);
-      config.service.navService.load(navigation.getNavigation().getNodeId(), scope);
+      config.service.navService.load(navigation.getNavigation(), scope);
 
       //
       if (scope.score > 0)

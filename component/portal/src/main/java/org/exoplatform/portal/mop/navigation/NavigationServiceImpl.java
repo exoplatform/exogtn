@@ -232,17 +232,6 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public String getRootId(SiteType siteType, String siteName)
-   {
-      POMSession session = manager.getSession();
-      ObjectType<Site> objectType = a.get(siteType);
-      Workspace workspace = session.getWorkspace();
-      Site site = workspace.getSite(objectType, siteName);
-      Navigation nav = site.getRootNavigation();
-      Navigation root = nav.getChild("default");
-      return root != null ? root.getObjectId() : null;
-   }
-
    public NavigationData getNavigation(SiteKey key)
    {
       NavigationData data = navigationKeyCache.get(key);
@@ -276,7 +265,25 @@ public class NavigationServiceImpl implements NavigationService
       return data;
    }
 
-   public Node load(String nodeId, Scope scope)
+   public Node load(org.exoplatform.portal.mop.navigation.Navigation nav, Scope scope)
+   {
+      String nodeId = nav.getNodeId();
+      if (nodeId != null)
+      {
+         return load(nodeId, scope);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public Node load(Node node, Scope scope)
+   {
+      return load(node.getId(), scope);
+   }
+
+   public NodeImpl load(String nodeId, Scope scope)
    {
       POMSession session = manager.getSession();
       Scope.Visitor visitor = scope.get();

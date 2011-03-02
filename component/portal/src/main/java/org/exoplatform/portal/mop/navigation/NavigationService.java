@@ -37,9 +37,9 @@ public interface NavigationService
     */
    Navigation getNavigation(SiteKey key);
 
-   String getRootId(SiteType siteType, String siteId);
+   Node load(Navigation nav, Scope scope);
 
-   Node load(String nodeId, Scope scope);
+   Node load(Node node, Scope scope);
 
    void save(Node node);
 

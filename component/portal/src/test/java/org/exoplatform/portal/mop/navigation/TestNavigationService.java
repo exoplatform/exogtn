@@ -194,18 +194,16 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testLoadSingleScope() throws Exception
    {
-      String rootId = service.getRootId(SiteType.PORTAL, "classic");
-      Node root = service.load(rootId, Scope.SINGLE);
+      Navigation nav = service.getNavigation(SiteKey.portal("classic"));
+      Node root = service.load(nav, Scope.SINGLE);
       assertNull(root.getRelationships());
-      assertEquals(rootId, root.getId());
       assertEquals("default", root.getName());
    }
 
    public void testLoadChildrenScope() throws Exception
    {
-      String rootId = service.getRootId(SiteType.PORTAL, "classic");
-      Node root = service.load(rootId, Scope.CHILDREN);
-      assertEquals(rootId, root.getId());
+      Navigation nav = service.getNavigation(SiteKey.portal("classic"));
+      Node root = service.load(nav, Scope.CHILDREN);
       assertEquals("default", root.getName());
       Iterator<? extends Node> i = root.getRelationships().getChildren().iterator();
       assertTrue(i.hasNext());
@@ -221,8 +219,8 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testLoadCustomScope() throws Exception
    {
-      String rootId = service.getRootId(SiteType.PORTAL, "large");
-      Node root = service.load(rootId, new Scope()
+      Navigation nav = service.getNavigation(SiteKey.portal("large"));
+      Node root = service.load(nav, new Scope()
       {
          public Visitor get()
          {
@@ -256,8 +254,8 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testState() throws Exception
    {
-      String rootId = service.getRootId(SiteType.PORTAL, "test");
-      Node root = service.load(rootId, Scope.ALL);
+      Navigation nav = service.getNavigation(SiteKey.portal("test"));
+      Node root = service.load(nav, Scope.ALL);
       Iterator<? extends Node> rootIterator = root.getRelationships().getChildren().iterator();
       Node child1 = rootIterator.next();
       Node child2 = rootIterator.next();
@@ -286,9 +284,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_removal");
-      assertNotNull(rootId);
-      Node root = service.load(rootId, Scope.SINGLE);
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_removal"));
+      Node root = service.load(nav, Scope.SINGLE);
       assertNotNull(root);
       end();
 
@@ -301,7 +298,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      root = service.load(rootId, Scope.SINGLE);
+      root = service.load(nav, Scope.SINGLE);
       assertNull(root);
    }
 
@@ -315,9 +312,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       // Put the navigation in the cache
       begin();
-      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_child");
-      assertNotNull(rootId);
-      Node root = service.load(rootId, Scope.CHILDREN);
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_child"));
+      Node root = service.load(nav, Scope.CHILDREN);
       Iterator<? extends Node> iterator = root.getRelationships().getChildren().iterator();
       assertFalse(iterator.hasNext());
       end();
@@ -331,7 +327,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      root = service.load(rootId, Scope.CHILDREN);
+      root = service.load(nav, Scope.CHILDREN);
       iterator = root.getRelationships().getChildren().iterator();
       iterator.next();
       assertFalse(iterator.hasNext());
@@ -346,7 +342,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      root = service.load(rootId, Scope.CHILDREN);
+      root = service.load(nav, Scope.CHILDREN);
       iterator = root.getRelationships().getChildren().iterator();
       assertFalse(iterator.hasNext());
    }
@@ -361,9 +357,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_propertychange");
-      assertNotNull(rootId);
-      Node defaultNode = service.load(rootId, Scope.SINGLE);
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_propertychange"));
+      Node defaultNode = service.load(nav, Scope.SINGLE);
       assertNull(defaultNode.getData().getLabel());
       end();
 
@@ -377,7 +372,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertEquals("bilto", defaultNode.getData().getLabel());
       end();
 
@@ -391,7 +386,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertEquals("bilta", defaultNode.getData().getLabel());
       end();
 
@@ -405,7 +400,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertNull(defaultNode.getData().getLabel());
    }
 
@@ -419,8 +414,8 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      String rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_attribute");
-      Node defaultNode = service.load(rootId, Scope.SINGLE);
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_attribute"));
+      Node defaultNode = service.load(nav, Scope.SINGLE);
       assertNull(defaultNode.getData().getURI());
       end();
 
@@ -433,7 +428,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertEquals("foo_uri", defaultNode.getData().getURI());
       end();
 
@@ -446,7 +441,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertEquals("bar_uri", defaultNode.getData().getURI());
       end();
 
@@ -459,8 +454,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      rootId = service.getRootId(SiteType.PORTAL, "invalidation_by_attribute");
-      defaultNode = service.load(rootId, Scope.SINGLE);
+      defaultNode = service.load(nav, Scope.SINGLE);
       assertNull(defaultNode.getData().getURI());
    }
 }
