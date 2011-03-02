@@ -38,7 +38,9 @@ import javax.jcr.observation.Event;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -274,12 +276,13 @@ public class NavigationServiceImpl implements NavigationService
       return data;
    }
 
-   public Node load(org.exoplatform.portal.mop.navigation.Navigation nav, Scope scope)
+
+   public <N> N load(NodeModel<N> model, org.exoplatform.portal.mop.navigation.Navigation navigation, Scope scope)
    {
-      String nodeId = nav.getNodeId();
+      String nodeId = navigation.getNodeId();
       if (nodeId != null)
       {
-         return load(nodeId, scope);
+         return load(model, nodeId, scope);
       }
       else
       {
@@ -287,19 +290,19 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public Node load(Node node, Scope scope)
+   public <N> N load(NodeModel<N> model, N node, Scope scope)
    {
-      return load(node.getId(), scope);
+      return load(model, model.getId(node), scope);
    }
 
-   public NodeImpl load(String nodeId, Scope scope)
+   private <N> N load(NodeModel<N> model, String nodeId, Scope scope)
    {
       POMSession session = manager.getSession();
       Scope.Visitor visitor = scope.get();
-      return load(session, nodeId, visitor, 0);
+      return load(model, session, nodeId, visitor, 0);
    }
 
-   private NodeImpl load(POMSession session, String navigationId, Scope.Visitor visitor, int depth)
+   private <N> N load(NodeModel<N> model, POMSession session, String navigationId, Scope.Visitor visitor, int depth)
    {
       NodeData data = nodeIdCache.get(navigationId);
       if (data == null)
@@ -321,22 +324,27 @@ public class NavigationServiceImpl implements NavigationService
       switch (visitor.visit(depth, data.id, data.name, data))
       {
          case CHILDREN:
-            NodeImpl.FragmentImpl children = new NodeImpl.FragmentImpl(data.children.size());
+            List<N> children = new ArrayList<N>(data.children.size());
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
-               NodeImpl child = load(session, entry.getValue(), visitor, depth + 1);
-               children.put(child.data.name, child);
+               N child = load(model, session, entry.getValue(), visitor, depth + 1);
+               children.add(child);
             }
-            return new NodeImpl(data, children);
+            return model.create(data, children);
          case NODE:
-            return new NodeImpl(data);
+            return model.create(data);
          default:
             throw new AssertionError();
       }
    }
 
-   public void save(Node node)
+   public Node load(org.exoplatform.portal.mop.navigation.Navigation navigation, Scope scope)
    {
-      throw new UnsupportedOperationException();
+      return load(DefaultNodeModel.INSTANCE, navigation, scope);
+   }
+
+   public Node load(Node node, Scope scope)
+   {
+      return load(DefaultNodeModel.INSTANCE, node, scope);
    }
 }

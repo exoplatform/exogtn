@@ -19,32 +19,39 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NavigationService
+public interface NodeModel<N>
 {
 
    /**
-    * Find and returns a navigation. If no such navigation exist, null is returned instead.
+    * Returns the id of a node.
     *
-    * @param key the navigation key
-    * @return the matching navigation
+    * @param node the node
+    * @return the node id
     */
-   Navigation getNavigation(SiteKey key);
+   String getId(N node);
 
+   /**
+    * Create a node whose children are not determined.
+    *
+    * @param data the node data
+    * @return the node instance
+    */
+   N create(Node.Data data);
 
-   <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
+   /**
+    * Create a node whose children are fully determined.
+    *
+    * @param data the node data
+    * @param children the children
+    * @return the node instance
+    */
+   N create(Node.Data data, Collection<N> children);
 
-   <N> N load(NodeModel<N> model, N node, Scope scope);
-
-
-   Node load(Navigation navigation, Scope scope);
-
-   Node load(Node node, Scope scope);
 
 }

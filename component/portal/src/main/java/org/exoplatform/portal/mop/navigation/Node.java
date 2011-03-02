@@ -21,33 +21,60 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Visibility;
 
+import java.util.LinkedHashMap;
+
 /**
  * Represents a navigation node.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface Node
+public class Node
 {
 
-   String getId();
+   /** . */
+   final Node.Data data;
 
-   String getName();
+   /** . */
+   final Relationships relationships;
 
-   /**
-    * Returns the node data.
-    *
-    * @return the data
-    */
-   Data getData();
+   Node(Node.Data data, Relationships relationships)
+   {
+      this.data = data;
+      this.relationships = relationships;
+   }
 
-   /**
-    * Returns the node relationships or return null if the relationships for this node have not
-    * been determined.
-    *
-    * @return the node relationships
-    */
-   Relationships getRelationships();
+   Node(Node.Data data)
+   {
+      this.data = data;
+      this.relationships = null;
+   }
+
+   public String getId()
+   {
+      return data.getId();
+   }
+
+   public String getName()
+   {
+      return data.getName();
+   }
+
+   public Data getData()
+   {
+      return data;
+   }
+
+   public Relationships getRelationships()
+   {
+      return relationships;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "Node[" + data.getName() + "]";
+   }
 
    /**
     * A navigation whose relationships are not determined.
@@ -78,19 +105,26 @@ public interface Node
    /**
     * A navigation whose relationships are fully determined.
     */
-   public interface Relationships
+   public static class Relationships extends LinkedHashMap<String, Node>
    {
 
-      Node getParent();
+      Relationships(int initialCapacity)
+      {
+         super(initialCapacity);
+      }
 
-      Iterable<? extends Node> getChildren();
+      Relationships()
+      {
+      }
 
-      Node getChild(String childName);
+      public Iterable<? extends Node> getChildren()
+      {
+         return values();
+      }
 
-      Relationships addChild(String childName);
-
-      void removeChild(String childName);
-
+      public Node getChild(String childName)
+      {
+         return get(childName);
+      }
    }
-
 }
