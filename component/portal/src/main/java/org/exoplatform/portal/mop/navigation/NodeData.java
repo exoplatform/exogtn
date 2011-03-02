@@ -19,39 +19,30 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Collection;
+import org.exoplatform.portal.mop.Visibility;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
+ * The data carried by a navigation node.
  */
-public interface NodeModel<N>
+public interface NodeData
 {
 
-   /**
-    * Returns the id of a node.
-    *
-    * @param node the node
-    * @return the node id
-    */
-   String getId(N node);
+   String getId();
 
-   /**
-    * Create a node whose children are not determined.
-    *
-    * @param data the node data
-    * @return the node instance
-    */
-   N create(NodeData data);
+   String getName();
 
-   /**
-    * Create a node whose children are fully determined.
-    *
-    * @param data the node data
-    * @param children the children
-    * @return the node instance
-    */
-   N create(NodeData data, Collection<N> children);
+   String getURI();
 
+   String getLabel();
+
+   String getIcon();
+
+   long getStartPublicationTime();
+
+   long getEndPublicationTime();
+
+   Visibility getVisibility();
+
+   String getPageRef();
 
 }

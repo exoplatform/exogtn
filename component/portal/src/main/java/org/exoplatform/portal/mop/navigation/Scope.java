@@ -49,7 +49,7 @@ public interface Scope
          }
          this.visitor = new Visitor()
          {
-            public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
+            public VisitMode visit(int depth, String nodeId, String nodeName, NodeData nodeData)
             {
                return depth < height ? VisitMode.CHILDREN : VisitMode.NODE;
             }
@@ -72,7 +72,7 @@ public interface Scope
    {
       private Visitor instance = new Visitor()
       {
-         public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
+         public VisitMode visit(int depth, String nodeId, String nodeName, NodeData nodeData)
          {
             return VisitMode.CHILDREN;
          }
@@ -91,6 +91,6 @@ public interface Scope
          int depth,
          String nodeId,
          String nodeName,
-         Node.Data nodeData);
+         NodeData nodeData);
    }
 }

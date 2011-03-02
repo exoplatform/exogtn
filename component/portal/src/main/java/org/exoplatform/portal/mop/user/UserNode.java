@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.NodeData;
 
 /**
  * A navigation node as seen by a user.
@@ -31,7 +31,7 @@ public class UserNode
 {
 
    /** . */
-   private final Node.Data data;
+   private final NodeData data;
 
    /** . */
    private String resolvedLabel;
@@ -42,14 +42,14 @@ public class UserNode
    /** . */
    private boolean modifiable;
 
-   public UserNode(Node.Data data)
+   public UserNode(NodeData data)
    {
       this.data = data;
       this.resolvedLabel = data.getLabel();
       this.encodedResolvedLabel = data.getLabel();
    }
 
-   public Node.Data getData()
+   public NodeData getData()
    {
       return data;
    }

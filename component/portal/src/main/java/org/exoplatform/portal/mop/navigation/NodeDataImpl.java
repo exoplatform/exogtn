@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeDataImpl implements Node.Data, Serializable
+class NodeDataImpl implements NodeData, Serializable
 {
 
    /** . */

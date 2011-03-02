@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.Visibility;
-
 import java.util.LinkedHashMap;
 
 /**
@@ -33,18 +31,18 @@ public class Node
 {
 
    /** . */
-   final Node.Data data;
+   final NodeData data;
 
    /** . */
    final Relationships relationships;
 
-   Node(Node.Data data, Relationships relationships)
+   Node(NodeData data, Relationships relationships)
    {
       this.data = data;
       this.relationships = relationships;
    }
 
-   Node(Node.Data data)
+   Node(NodeData data)
    {
       this.data = data;
       this.relationships = null;
@@ -60,7 +58,7 @@ public class Node
       return data.getName();
    }
 
-   public Data getData()
+   public NodeData getData()
    {
       return data;
    }
@@ -74,32 +72,6 @@ public class Node
    public String toString()
    {
       return "Node[" + data.getName() + "]";
-   }
-
-   /**
-    * A navigation whose relationships are not determined.
-    */
-   public interface Data
-   {
-
-      String getId();
-
-      String getName();
-
-      String getURI();
-
-      String getLabel();
-
-      String getIcon();
-
-      long getStartPublicationTime();
-
-      long getEndPublicationTime();
-
-      Visibility getVisibility();
-
-      String getPageRef();
-
    }
 
    /**

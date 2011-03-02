@@ -39,7 +39,7 @@ public class DefaultNodeModel implements NodeModel<Node>
       return node.data.getId();
    }
 
-   public Node create(Node.Data data, Collection<Node> children)
+   public Node create(NodeData data, Collection<Node> children)
    {
       Node.Relationships fragment = new Node.Relationships(children.size());
       for (Node node : children)
@@ -49,7 +49,7 @@ public class DefaultNodeModel implements NodeModel<Node>
       return new Node(data, fragment);
    }
 
-   public Node create(Node.Data data)
+   public Node create(NodeData data)
    {
       return new Node(data);
    }

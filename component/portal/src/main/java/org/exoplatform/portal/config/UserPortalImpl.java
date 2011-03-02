@@ -23,6 +23,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.Node;
+import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.portal.mop.user.NavigationPath;
@@ -151,7 +152,7 @@ public class UserPortalImpl implements UserPortal
       {
          return new Visitor()
          {
-            public VisitMode visit(int depth, String nodeId, String nodeName, Node.Data nodeData)
+            public VisitMode visit(int depth, String nodeId, String nodeName, NodeData nodeData)
             {
                if (depth == 0 && "default".equals(nodeName))
                {
