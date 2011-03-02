@@ -52,7 +52,7 @@ public class NavigationServiceImpl implements NavigationService
 {
 
    /** . */
-   private Map<SiteKey, NavigationData> navigationKeyCache;
+   private Map<SiteKey, NavigationDataImpl> navigationKeyCache;
 
    /** . */
    private Map<String, SiteKey> navigationPathCache;
@@ -92,7 +92,7 @@ public class NavigationServiceImpl implements NavigationService
          throw new NullPointerException("No null pom session manager allowed");
       }
       this.manager = manager;
-      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationData>(1000);
+      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationDataImpl>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
       this.nodeIdCache = new ConcurrentHashMap<String, NodeDataImpl>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
@@ -243,9 +243,9 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public NavigationData getNavigation(SiteKey key)
+   public NavigationDataImpl getNavigation(SiteKey key)
    {
-      NavigationData data = navigationKeyCache.get(key);
+      NavigationDataImpl data = navigationKeyCache.get(key);
       if (data == null)
       {
          POMSession session = manager.getSession();
@@ -267,7 +267,7 @@ public class NavigationServiceImpl implements NavigationService
             priority = 1;
             rootId = null;
          }
-         data = new NavigationData(key, priority, rootId);
+         data = new NavigationDataImpl(key, priority, rootId);
          navigationKeyCache.put(key, data);
          navigationPathCache.put(session.pathOf(site), key);
       }

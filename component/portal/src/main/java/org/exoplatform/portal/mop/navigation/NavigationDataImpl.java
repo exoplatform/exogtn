@@ -25,7 +25,7 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NavigationData implements Navigation
+class NavigationDataImpl implements Navigation
 {
 
    /** . */
@@ -37,7 +37,7 @@ class NavigationData implements Navigation
    /** . */
    private final String nodeId;
 
-   NavigationData(SiteKey key, Integer priority, String nodeId)
+   NavigationDataImpl(SiteKey key, Integer priority, String nodeId)
    {
       this.key = key;
       this.priority = priority;
