@@ -91,6 +91,11 @@ public class TestNavigationService extends AbstractPortalTest
       end();
    }
 
+   public void testNonExistingSite() throws Exception
+   {
+      assertNull(service.getNavigation(SiteKey.portal("non_existing")));
+   }
+
    public void testNavigationInvalidationByRootId() throws Exception
    {
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "get_navigation");

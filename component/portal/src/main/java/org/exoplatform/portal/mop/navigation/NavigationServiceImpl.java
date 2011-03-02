@@ -252,27 +252,28 @@ public class NavigationServiceImpl implements NavigationService
          ObjectType<Site> objectType = a.get(key.getType());
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(objectType, key.getName());
-         Navigation nav = site.getRootNavigation();
-         Navigation root = nav.getChild("default");
-         String rootId;
-         int priority;
-         if (root != null)
+         if (site != null)
          {
+            Navigation nav = site.getRootNavigation();
+            Navigation root = nav.getChild("default");
+            String rootId;
+            int priority;
+            if (root != null)
+            {
 
-            priority = root.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
-            rootId = root.getObjectId();
+               priority = root.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
+               rootId = root.getObjectId();
+            }
+            else
+            {
+               priority = 1;
+               rootId = null;
+            }
+            data = new NavigationDataImpl(key, priority, rootId);
+            navigationKeyCache.put(key, data);
+            navigationPathCache.put(session.pathOf(site), key);
          }
-         else
-         {
-            priority = 1;
-            rootId = null;
-         }
-         data = new NavigationDataImpl(key, priority, rootId);
-         navigationKeyCache.put(key, data);
-         navigationPathCache.put(session.pathOf(site), key);
       }
-
-      //
       return data;
    }
 
