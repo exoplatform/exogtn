@@ -48,6 +48,14 @@ public interface UserPortal
    UserNavigation getNavigation(SiteKey key) throws Exception;
 
    /**
+    * Returns the first available navigation path.
+    *
+    * @return the first available navigation path
+    * @throws Exception any exception
+    */
+   NavigationPath getFirstAvailable() throws Exception;
+
+   /**
     * Resolves and returns a navigation path among all user navigations for a specified path.
     *
     * @param path the path

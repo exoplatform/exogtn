@@ -296,7 +296,10 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             nav = userPortal.resolvePath("/foo");
-            assertNull(nav);
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            path = nav.getSegments();
+            assertEquals(1, path.size());
+            assertEquals("home", path.get(0).getData().getName());
 
             //
             nav = userPortal.resolvePath("/home");

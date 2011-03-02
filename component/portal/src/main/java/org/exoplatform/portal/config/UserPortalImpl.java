@@ -174,6 +174,25 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
+   public NavigationPath getFirstAvailable() throws Exception
+   {
+      for (UserNavigation userNavigation : navigations)
+      {
+         Navigation navigation = userNavigation.getNavigation();
+         if (navigation.getNodeId() != null)
+         {
+            Node root = config.service.navService.load(navigation.getNodeId(), Scope.CHILDREN);
+            for (Node node : root.getRelationships().getChildren())
+            {
+               return new NavigationPath(userNavigation, Collections.singletonList(new UserNode(node.getData())));
+            }
+         }
+      }
+
+      //
+      return null;
+   }
+
    public NavigationPath resolvePath(String path) throws Exception
    {
       if (path == null)
@@ -194,21 +213,7 @@ public class UserPortalImpl implements UserPortal
       // Find the first navigation available or return null
       if (path.length() == 0)
       {
-         for (UserNavigation userNavigation : navigations)
-         {
-            Navigation navigation = userNavigation.getNavigation();
-            if (navigation.getNodeId() != null)
-            {
-               Node root = config.service.navService.load(navigation.getNodeId(), Scope.CHILDREN);
-               for (Node node : root.getRelationships().getChildren())
-               {
-                  return new NavigationPath(userNavigation, Collections.singletonList(new UserNode(node.getData())));
-               }
-            }
-         }
-
-         //
-         return null;
+         return getFirstAvailable();
       }
 
       //
@@ -245,7 +250,7 @@ public class UserPortalImpl implements UserPortal
       }
       else
       {
-         return null;
+         return getFirstAvailable();
       }
    }
 
