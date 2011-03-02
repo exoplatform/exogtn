@@ -204,7 +204,7 @@ public class UIPortalNavigation extends UIComponent
       Navigation nav = userNavigation.getNavigation();
       
       NavigationService naviSer = getApplicationComponent(NavigationService.class);
-      return naviSer.load(nav, Scope.ALL);
+      return naviSer.load(nav, Scope.SINGLE);
    }
    
    /**
