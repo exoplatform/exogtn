@@ -89,7 +89,7 @@ public class UIPageActionListener
                
                //Temporary solution to fix edit inline error while switching between navigations
                DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
-               PortalConfig associatedPortalConfig = storageService.getPortalConfig(targetNav.getKey().getTypeInString(), targetNav.getKey().getName());
+               PortalConfig associatedPortalConfig = storageService.getPortalConfig(targetNav.getKey().getTypeName(), targetNav.getKey().getName());
                UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
                
                //Update layout-related data on UserPortalConfig
@@ -117,7 +117,7 @@ public class UIPageActionListener
          if(storage == null){
             return null;
          }
-         PortalConfig portalConfig = storage.getPortalConfig(newPageNav.getTypeInString(), newPageNav.getName());
+         PortalConfig portalConfig = storage.getPortalConfig(newPageNav.getTypeName(), newPageNav.getName());
          Container layout = portalConfig.getPortalLayout();
          if(layout != null)
          {

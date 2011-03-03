@@ -95,7 +95,7 @@ public final class SiteKey implements Serializable
       return type;
    }
    
-   public String getTypeInString()
+   public String getTypeName()
    {
       if (type.equals(SiteType.PORTAL))
       {
