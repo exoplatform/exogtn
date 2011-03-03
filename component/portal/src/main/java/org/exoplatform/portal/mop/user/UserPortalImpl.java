@@ -43,7 +43,7 @@ import java.util.ResourceBundle;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
+public class UserPortalImpl implements UserPortal
 {
 
    /** . */
@@ -59,7 +59,7 @@ public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
    private final PortalConfig portal;
 
    /** . */
-   private final ResourceBundle resourceBundle;
+   private final BundleResolver bundleResolver;
 
    /** . */
    private final String userName;
@@ -73,32 +73,22 @@ public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
       UserACL acl,
       PortalConfig portal,
       String userName,
-      ResourceBundle resourceBundle)
+      BundleResolver bundleResolver)
    {
+      // So we don't care about testing nullity
+      if (bundleResolver == null)
+      {
+         bundleResolver = BundleResolver.NULL_RESOLVER;
+      }
+
+      //
       this.navigationService = navigationService;
       this.organizationService = organizationService;
       this.acl = acl;
       this.portal = portal;
       this.userName = userName;
-      this.resourceBundle = resourceBundle;
+      this.bundleResolver = bundleResolver;
       this.navigations = null;
-   }
-
-   //
-
-   public NodeData getData(UserNode node)
-   {
-      return node.data;
-   }
-
-   public UserNode create(NodeData data)
-   {
-      return new UserNode(data, resourceBundle);
-   }
-
-   public UserNode create(NodeData data, Collection<UserNode> children)
-   {
-      return new UserNode(data, children, resourceBundle);
    }
 
    //
@@ -184,6 +174,35 @@ public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
       return null;
    }
 
+   private class UserNodeModel implements NodeModel<UserNode>
+   {
+
+      /** . */
+      private final UserNavigation navigation;
+
+      private UserNodeModel(UserNavigation navigation)
+      {
+         this.navigation = navigation;
+      }
+
+      public NodeData getData(UserNode node)
+      {
+         return node.data;
+      }
+
+      public UserNode create(NodeData data)
+      {
+         ResourceBundle bundle = bundleResolver.resolve(navigation);
+         return new UserNode(data, bundle);
+      }
+
+      public UserNode create(NodeData data, Collection<UserNode> children)
+      {
+         ResourceBundle bundle = bundleResolver.resolve(navigation);
+         return new UserNode(data, children, bundle);
+      }
+   }
+
    private class MatchingScope implements Scope
    {
       final UserNavigation navigation;
@@ -201,7 +220,7 @@ public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
 
       void resolve()
       {
-         UserNode node = navigationService.load(UserPortalImpl.this, navigation.getNavigation(), this);
+         UserNode node = navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), this);
          if (score > 0)
          {
             userNode = node.find(this.node.getId());
@@ -248,7 +267,7 @@ public class UserPortalImpl implements UserPortal, NodeModel<UserNode>
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            UserNode root = navigationService.load(this, navigation, Scope.CHILDREN);
+            UserNode root = navigationService.load(new UserNodeModel(userNavigation), navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

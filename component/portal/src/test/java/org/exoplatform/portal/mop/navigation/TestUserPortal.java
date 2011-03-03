@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -363,13 +364,20 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("portal.classic.home", "foo");
-            MapResourceBundle bundle = new MapResourceBundle(map);
-
-            //
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
-            UserPortal userPortal = userPortalCfg.getUserPortal(bundle);
+            UserPortal userPortal = userPortalCfg.getUserPortal(new BundleResolver()
+            {
+               final MapResourceBundle bundle;
+               {
+                  Map<String, Object> map = new HashMap<String, Object>();
+                  map.put("portal.classic.home", "foo");
+                  bundle = new MapResourceBundle(map);
+               }
+               public ResourceBundle resolve(UserNavigation navigation)
+               {
+                  return bundle;
+               }
+            });
 
             //
             NavigationPath path = userPortal.resolvePath("/home");

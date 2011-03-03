@@ -21,6 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalImpl;
 import org.exoplatform.services.organization.Group;
@@ -70,7 +71,7 @@ public class UserPortalConfig
       this.accessUser = accessUser;
    }
 
-   public UserPortal getUserPortal(ResourceBundle bundle)
+   public UserPortal getUserPortal(BundleResolver bundleResolver)
    {
       if (userPortal == null)
       {
@@ -80,7 +81,7 @@ public class UserPortalConfig
             service.userACL_,
             portal,
             accessUser,
-            bundle
+            bundleResolver
          );
       }
       return userPortal;
