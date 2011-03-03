@@ -1,0 +1,13 @@
+diff --git component/web/server/src/main/java/org/exoplatform/upload/UploadService.java component/web/server/src/main/java/org/exoplatform/upload/UploadService.java
+index 018f89b..6edf2bf 100644
+--- component/web/server/src/main/java/org/exoplatform/upload/UploadService.java
++++ component/web/server/src/main/java/org/exoplatform/upload/UploadService.java
+@@ -314,7 +314,7 @@ public class UploadService
+          limitMB = uploadLimitsMB_.get(upResource.getUploadId()).intValue();
+       }
+ 
+-      int estimatedSizeMB = (int)((contentLength / 1024) / 1024);
++      double estimatedSizeMB = (contentLength / 1024) / 1024;
+       if (limitMB > 0 && estimatedSizeMB > limitMB)
+       { // a limit set to 0 means unlimited         
+          if (log.isDebugEnabled())

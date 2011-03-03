@@ -314,7 +314,7 @@ public class UploadService
          limitMB = uploadLimitsMB_.get(upResource.getUploadId()).intValue();
       }
 
-      int estimatedSizeMB = (int)((contentLength / 1024) / 1024);
+      double estimatedSizeMB = (contentLength / 1024) / 1024;
       if (limitMB > 0 && estimatedSizeMB > limitMB)
       { // a limit set to 0 means unlimited         
          if (log.isDebugEnabled())
