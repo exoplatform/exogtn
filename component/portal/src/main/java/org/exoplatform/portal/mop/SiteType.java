@@ -26,6 +26,18 @@ package org.exoplatform.portal.mop;
 public enum SiteType
 {
 
-   PORTAL, GROUP, USER
+   PORTAL, GROUP, USER ;
 
+   /** ; */
+   final String name;
+
+   SiteType()
+   {
+      this.name = name().toLowerCase();
+   }
+
+   public String getName()
+   {
+      return name;
+   }
 }
