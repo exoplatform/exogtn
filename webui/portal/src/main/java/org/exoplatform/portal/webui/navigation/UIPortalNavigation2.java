@@ -72,21 +72,14 @@ public class UIPortalNavigation2 extends UIComponent
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       List<PageNavigation> result = new ArrayList<PageNavigation>();
-      for (PageNavigation nav : Util.getUIPortal().getNavigations())
-      {
-         result.add(PageNavigationUtils.filter(nav, context.getRemoteUser()));
-      }
+      PageNavigation nav = Util.getUIPortal().getNavigation();
+      result.add(PageNavigationUtils.filter(nav, context.getRemoteUser()));
       return result;
    }
 
    public PageNavigation getSelectedNavigation() throws Exception
    {
-      PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
-      if (nav != null)
-         return nav;
-      if (Util.getUIPortal().getNavigations().size() < 1)
-         return null;
-      return Util.getUIPortal().getNavigations().get(0);
+      return Util.getUIPortal().getNavigation();
    }
 
    public Object getSelectedParent()
@@ -157,15 +150,13 @@ public class UIPortalNavigation2 extends UIComponent
          PageNavigation selectNav = null;
          if (index <= 0)
          {
-            selectNav = uiPortal.getSelectedNavigation();
+            selectNav = uiPortal.getNavigation();
          }
          else
          {
-            String navId = uri.substring(0, index);
-            
             //TODO: Minh Hoang TO
             //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-            selectNav = uiPortal.getSelectedNavigation();
+            selectNav = uiPortal.getNavigation();
          }
          PageNode selectNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
          uiNavigation.selectedNode_ = selectNode;

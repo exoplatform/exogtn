@@ -783,8 +783,15 @@ public class UIPortalApplication extends UIApplication
       // First find all related SiteKey
 
    }
-   
+
    public void localizeNavigations()
    {
+      ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
+      Locale locale = getLocale();
+
+      for (PageNavigation nav : this.getNavigations())
+      {
+         PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
+      }
    }
 }

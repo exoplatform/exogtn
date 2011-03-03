@@ -389,13 +389,13 @@ public class PageNode extends PageNodeContainer
    
    public static PageNode toPageNode(UserNode node)
    {
-      PageNode pageNode = new PageNode(node.getData().getId());
-      pageNode.setName(node.getData().getName());
-      pageNode.setUri(node.getData().getURI());
-      pageNode.setLabel(node.getData().getLabel());
-      pageNode.setIcon(node.getData().getIcon());
-      pageNode.setPageReference(node.getData().getPageRef());
-      pageNode.setVisibility(node.getData().getVisibility());
+      PageNode pageNode = new PageNode(node.getId());
+      pageNode.setName(node.getName());
+      pageNode.setUri(node.getURI());
+      pageNode.setLabel(node.getLabel());
+      pageNode.setIcon(node.getIcon());
+      pageNode.setPageReference(node.getPageRef());
+      pageNode.setVisibility(node.getVisibility());
       return pageNode;
    }
 }

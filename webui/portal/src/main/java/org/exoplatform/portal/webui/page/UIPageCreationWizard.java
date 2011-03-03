@@ -73,7 +73,7 @@ public class UIPageCreationWizard extends UIPageWizard
       setNumberSteps(NUMBER_OF_STEPs);
       viewStep(FIRST_STEP);
       setShowWelcomeComponent(false);
-      boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      boolean isUserNav = Util.getUIPortal().getNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
       if (isUserNav)
       {
          uiPageInfo.getChild(UIPageNodeSelector.class).setRendered(false);
@@ -115,20 +115,6 @@ public class UIPageCreationWizard extends UIPageWizard
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       dataService.save(pageNav);
-      UIPortal uiPortal = Util.getUIPortal();
-      setNavigation(uiPortal.getNavigations(), uiNodeSelector.getSelectedNavigation());
-   }
-
-   private void setNavigation(List<PageNavigation> navs, PageNavigation nav)
-   {
-      for (int i = 0; i < navs.size(); i++)
-      {
-         if (navs.get(i).getId() == nav.getId())
-         {
-            navs.set(i, nav);
-            return;
-         }
-      }
    }
 
    /**

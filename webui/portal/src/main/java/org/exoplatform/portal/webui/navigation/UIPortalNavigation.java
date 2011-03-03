@@ -147,7 +147,7 @@ public class UIPortalNavigation extends UIComponent
       
       for (PageNavigation nav : rearrangeNavigations(listNavigations))
       {
-         if (!showUserNavigation && nav.getOwnerType().equals("user"))
+         if (!showUserNavigation && nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          {
             continue;
          }
@@ -204,7 +204,7 @@ public class UIPortalNavigation extends UIComponent
       NavigationData nav = userNavigation.getNavigation();
       
       NavigationService naviSer = getApplicationComponent(NavigationService.class);
-      return naviSer.load(UserNode.MODEL, nav, Scope.SINGLE);
+      return naviSer.load(UserNode.MODEL, nav, Scope.GRANDCHILDREN);
    }
    
    /**
@@ -288,13 +288,13 @@ public class UIPortalNavigation extends UIComponent
          PageNavigation selectNav = null;
          if (index <= 0)
          {
-            selectNav = uiPortal.getSelectedNavigation();
+            selectNav = uiPortal.getNavigation();
          }
          else
          {
             String navId = uri.substring(0, index);
             //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-            selectNav = uiPortal.getSelectedNavigation();
+            selectNav = uiPortal.getNavigation();
          }
          PageNode selectNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
          uiNavigation.selectedNode_ = selectNode;
@@ -377,7 +377,7 @@ public class UIPortalNavigation extends UIComponent
          
          //TODO: Minh Hoang TO
          //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-         selectNav = uiPortal.getSelectedNavigation();
+         selectNav = uiPortal.getNavigation();
          
          // get PageNode by uri
          PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);

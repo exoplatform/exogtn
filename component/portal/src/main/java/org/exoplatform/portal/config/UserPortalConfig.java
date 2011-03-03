@@ -101,42 +101,7 @@ public class UserPortalConfig
    {
       this.portal = portal;
    }
-   
-   public void setSelectedNavigation(PageNavigation _selectedNavigation)
-   {
-      this.selectedNavigation = _selectedNavigation;
-   }
 
-   /** Fetch navigation (specified by ownerType, ownerId) from the list of all navigations and set it as selected navigation **/
-   public void updateSelectedNavigation(String ownerType, String ownerId)
-   {
-      PageNavigation targetNavigation = null;
-      for (PageNavigation nav : getNavigations())
-      {
-         if (nav.getOwnerType().equals(ownerType) && nav.getOwnerId().equals(ownerId))
-         {
-            targetNavigation = nav;
-            break;
-         }
-      }
-
-      if (targetNavigation != null)
-      {
-         this.setSelectedNavigation(targetNavigation);
-      }
-   }
-
-   //TODO: Remove this
-   @Deprecated
-   public PageNavigation getSelectedNavigation()
-   {
-      if(this.selectedNavigation != null)
-      {
-         return this.selectedNavigation;
-      }
-      return getNavigations().get(0);
-   }
-   
    public void setNavigations(List<PageNavigation> navs)
    {
       navigations = navs;

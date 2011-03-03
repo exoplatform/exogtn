@@ -94,7 +94,7 @@ public class UITabPaneDashboard extends UIContainer
       //String remoteUser = Util.getPortalRequestContext().getRemoteUser();
       //pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
       //TODO: Check this part carefully
-      this.pageNavigation = uiPortal.getSelectedNavigation();
+      this.pageNavigation = uiPortal.getNavigation();
    }
 
    /*

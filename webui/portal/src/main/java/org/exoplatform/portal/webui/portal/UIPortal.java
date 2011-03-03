@@ -27,7 +27,9 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -107,6 +109,8 @@ public class UIPortal extends UIContainer
 
    private PageNode selectedNode_;
    
+   private NavigationPath navPath;
+
    private Map<String, UIPage> all_UIPages;
    
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
@@ -186,6 +190,16 @@ public class UIPortal extends UIContainer
       return listNavs;
    }
    
+   public NavigationPath getNavPath()
+   {
+      return navPath;
+   }
+   
+   public void setNavPatch(NavigationPath nav)
+   {
+      this.navPath = nav;
+   }
+   
    /**
     * Return cached UIPage associated to the specified pageReference
     * 
@@ -241,11 +255,6 @@ public class UIPortal extends UIContainer
     */
    public void refreshUIPage() throws Exception
    {
-      if(selectedNode_ == null)
-      {
-         selectedNode_ = getNavigation().getNodes().get(0);
-      }
-      
       UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
       if(uiPageBody == null)
       {
@@ -258,7 +267,7 @@ public class UIPortal extends UIContainer
          currentPortlet.setCurrentWindowState(WindowState.NORMAL);
          uiPageBody.setMaximizedUIComponent(null);
       }
-      uiPageBody.setPageBody(selectedNode_, this);
+      uiPageBody.setPageBody(getSelectedNode(), this);
       
       //Refresh locale
       Locale locale = Util.getPortalRequestContext().getLocale();
@@ -285,20 +294,23 @@ public class UIPortal extends UIContainer
    
    public PageNode getSelectedNode() throws Exception
    {
-      if(selectedNode_ != null)
-      {
-         return selectedNode_;
-      }
-      if(navigation == null || navigation.getNodes() == null || navigation.getNodes().size() < 1)
-      {
-         return null;
-      }
-      return navigation.getNodes().get(0);
+      UserNode target = getNavPath().getTarget();
+      return PageNode.toPageNode(target);
    }
 
    public List<PageNode> getSelectedPath()
    {
-      return selectedPath;
+      List<PageNode> nodes = new ArrayList<PageNode>();
+
+      UserNode target = getNavPath().getTarget();
+      do
+      {
+         nodes.add(PageNode.toPageNode(target));
+         target = target.getParent();
+      }
+      while (target != null && target.getParent() != null);
+
+      return nodes;
    }
 
    public void setSelectedPath(List<PageNode> nodes)

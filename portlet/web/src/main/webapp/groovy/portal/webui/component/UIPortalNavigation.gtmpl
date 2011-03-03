@@ -1,5 +1,5 @@
 <% 
-    import org.exoplatform.portal.mop.user.UserNode;
+  import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.web.application.JavascriptManager;
@@ -51,17 +51,17 @@
 		UserNode selectedNav = uicomponent.getCurrentNavigation();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null &&	selectedNav != null &&
-			 selectedNav.getId () == parentNode.getData().getId() &&
-			 node.getData().getURI() == selectedNode.getUri()) {			 
+			 selectedNav.getId () == parentNode.getId() &&
+			 node.getURI() == selectedNode.getUri()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
-		String icon = node.getData().getIcon();
+		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
 		if (node.getChildren().size() > 0) arrowIcon = "ArrowIcon";
 
-		String label = node.getData().getLabel();
+		String label = node.getResolvedLabel();
 		String title = "";
 		if(label.length() > 40) {
 			title = label;
@@ -69,10 +69,10 @@
 		}
 		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
-		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getData().getURI();
-		if(node.getData().getPageRef() != null) {
+		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+		if(node.getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
-				String onclickEvt = uicomponent.event("SelectNode",	parentNode.getData().getId() + "::" + node.getData().getURI()) + ";return false;" ;
+				String onclickEvt = uicomponent.event("SelectNode",	parentNode.getId() + "::" + node.getURI()) + ";return false;" ;
 				print """
 						<div class="MenuItem $tabStyleNavigation">
 							<div class="$arrowIcon" title="$title">
@@ -127,7 +127,7 @@
 										String tabStyleNavigation = "NormalNavigationTab";
 										if(selectedNode != null && selectedNav != null &&
 											 selectedNav.getId() == nav.getId() &&
-											 node.getData().getURI() == selectedNode.getUri()) {
+											 node.getURI() == selectedNode.getUri()) {
 												tabStyleNavigation = "SelectedNavigationTab";
 										}
 						%>			
@@ -143,19 +143,19 @@
 																	if (node.getChildren().size() > 0) {
 																		arrowIcon = "DropDownArrowIcon";
 																	}
-																	String iconType = node.getData().getIcon();
+																	String iconType = node.getIcon();
 																	if(iconType == null) iconType = "DefaultPageIcon";
 																%>
 															 	<div class="$arrowIcon">
 															 		<%
-															 			String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getData().getURI();
-															 			String label = node.getData().getLabel();//resolvedLabel;
+															 			String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+															 			String label = node.getResolvedLabel();
 															 			if(label.length() > 30) label = label.substring(0,29) + "...";
 																		EntityEncoder entityEncoder = EntityEncoder.FULL;
 																		label=entityEncoder.encode(label);
-															 			if(node.getData().getPageRef() != null) {
+															 			if(node.getPageRef() != null) {
 															 				if(uicomponent.isUseAjax()) {
-															 					String onclickEvt = uicomponent.event("SelectNode",	nav.getData().getId() + "::" + node.getData().getURI()) + ";return false;";
+															 					String onclickEvt = uicomponent.event("SelectNode",	nav.getId() + "::" + node.getURI()) + ";return false;";
 															 		%>
 																	 			<a class="TabLabel ${iconType}" onclick="$onclickEvt" href="$pageURI">$label</a>
 																	<%

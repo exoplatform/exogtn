@@ -29,7 +29,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -79,19 +78,5 @@ public class PageUtils
       
       DataStorage dataService = uiPortal.getApplicationComponent(DataStorage.class);
       dataService.save(navi);
-      setNavigation(uiPortal.getNavigations(), navi);
    }
-
-   private static void setNavigation(List<PageNavigation> navs, PageNavigation nav)
-   {
-      for (int i = 0; i < navs.size(); i++)
-      {
-         if (navs.get(i).getId() == nav.getId())
-         {
-            navs.set(i, nav);
-            return;
-         }
-      }
-   }
-
 }

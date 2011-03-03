@@ -467,8 +467,8 @@ public class UIPortalComposer extends UIContainer
          {
             DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
             PortalConfig pConfig =
-               storage.getPortalConfig(uiPortal.getSelectedNavigation().getOwnerType(), uiPortal
-                  .getSelectedNavigation().getOwnerId());
+               storage.getPortalConfig(uiPortal.getNavigation().getOwnerType(), uiPortal
+                  .getNavigation().getOwnerId());
             if (pConfig != null)
             {
                uiPortalApp.getUserPortalConfig().setPortal(pConfig);

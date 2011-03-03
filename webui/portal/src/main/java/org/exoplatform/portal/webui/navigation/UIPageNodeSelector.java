@@ -67,7 +67,7 @@ public class UIPageNodeSelector extends UIContainer
 
    private void loadNavigations() throws Exception
    {
-      PageNavigation portalSelectedNav = Util.getUIPortal().getSelectedNavigation();
+      PageNavigation portalSelectedNav = Util.getUIPortal().getNavigation();
       if (portalSelectedNav != null)
       {
          selectNavigation(portalSelectedNav);

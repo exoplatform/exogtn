@@ -144,7 +144,7 @@ public class UIMainActionListener
       {
          UIPortal currentPortal = Util.getUIPortal();
          UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-         PageNavigation selectedNavigation = currentPortal.getSelectedNavigation();
+         PageNavigation selectedNavigation = currentPortal.getNavigation();
          if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
          {
             return userACL.hasEditPermissionOnPortal(currentPortal.getOwnerType(), currentPortal.getOwner(), currentPortal.getEditPermission());
@@ -190,7 +190,7 @@ public class UIMainActionListener
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
          PortalDataMapper.toUIPortal(newPortal, userConfig);
          newPortal.setSelectedNode(uiPortal.getSelectedNode());
-         newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
+         newPortal.setNavigation(uiPortal.getNavigation());
          newPortal.setSelectedPath(uiPortal.getSelectedPath());
          newPortal.refreshUIPage();
 

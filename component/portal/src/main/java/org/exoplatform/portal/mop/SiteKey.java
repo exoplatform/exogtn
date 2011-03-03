@@ -94,6 +94,26 @@ public final class SiteKey implements Serializable
    {
       return type;
    }
+   
+   public String getTypeInString()
+   {
+      if (type.equals(SiteType.PORTAL))
+      {
+         return PortalConfig.PORTAL_TYPE;
+      }
+      else if (type.equals(SiteType.GROUP))
+      {
+         return PortalConfig.GROUP_TYPE;
+      }
+      else if (type.equals(SiteType.USER))
+      {
+         return PortalConfig.USER_TYPE;
+      }
+      else
+      {
+         throw new NullPointerException("No null name can be provided");
+      }
+   }
 
    public String getName()
    {

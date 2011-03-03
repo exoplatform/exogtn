@@ -47,7 +47,7 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
 
    public PageNavigation getSelectedNavigation() throws Exception
    {
-      return Util.getUIPortal().getSelectedNavigation();
+      return Util.getUIPortal().getNavigation();
    }
 
    @Override
