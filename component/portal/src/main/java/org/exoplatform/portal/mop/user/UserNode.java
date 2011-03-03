@@ -27,7 +27,6 @@ import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -71,9 +70,6 @@ public class UserNode
 
    /** . */
    private String encodedResolvedLabel;
-
-   /** . */
-   private boolean modifiable;
 
    /** . */
    private Map<String, UserNode> childMap;
@@ -212,16 +208,6 @@ public class UserNode
          encodedResolvedLabel = EntityEncoder.FULL.encode(getResolvedLabel());
       }
       return encodedResolvedLabel;
-   }
-
-   public boolean isModifiable()
-   {
-      return modifiable;
-   }
-
-   public void setModifiable(boolean modifiable)
-   {
-      this.modifiable = modifiable;
    }
 
    public UserNode getParent()
