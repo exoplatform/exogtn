@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.mop.Visibility;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -80,6 +82,46 @@ public interface Scope
       public Visitor get()
       {
          return instance;
+      }
+   };
+
+   Scope NAVIGATION = new Scope()
+   {
+      Scope.Visitor visitor = new Visitor()
+      {
+         public VisitMode visit(int depth, NodeData data)
+         {
+            switch (depth)
+            {
+               case 0:
+                  return VisitMode.ALL_CHILDREN;
+               case 1:
+               case 2:
+                  Visibility visibility = data.getVisibility();
+                  if (visibility == Visibility.DISPLAYED || visibility == Visibility.TEMPORAL)
+                  {
+                     // todo implement temporal
+                     if (depth == 1)
+                     {
+                        return VisitMode.ALL_CHILDREN;
+                     }
+                     else
+                     {
+                        return VisitMode.NO_CHILDREN;
+                     }
+                  }
+                  else
+                  {
+                     return VisitMode.SKIP;
+                  }
+               default:
+                  throw new AssertionError();
+            }
+         }
+      };
+      public Visitor get()
+      {
+         return visitor;
       }
    };
 

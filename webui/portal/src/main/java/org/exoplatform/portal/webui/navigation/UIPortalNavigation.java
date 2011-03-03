@@ -127,7 +127,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
             
-            UserNode rootNode = userPortal.getNode(userNav, Scope.GRANDCHILDREN);
+            UserNode rootNode = userPortal.getNode(userNav, Scope.NAVIGATION);
             PageNavigationUtils.filter(rootNode, null);
             nodes.add(rootNode);
          }
@@ -198,7 +198,7 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      return userPortal.getNode(userNavigation, Scope.GRANDCHILDREN);
+      return userPortal.getNode(userNavigation, Scope.NAVIGATION);
    }
    
    /**
