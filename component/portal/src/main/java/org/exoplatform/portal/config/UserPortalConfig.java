@@ -73,8 +73,6 @@ public class UserPortalConfig
 
    public UserPortal getUserPortal(BundleResolver bundleResolver)
    {
-      if (userPortal == null)
-      {
          userPortal = new UserPortalImpl(
             service.navService,
             service.orgService_,
@@ -83,7 +81,6 @@ public class UserPortalConfig
             accessUser,
             bundleResolver
          );
-      }
       return userPortal;
    }
 
