@@ -25,26 +25,20 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
-import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
@@ -114,7 +108,7 @@ public class UIPortalNavigation extends UIComponent
 
    public List<UserNode> getNavigations() throws Exception
    {
-      final WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       List<UserNode> nodes = new ArrayList<UserNode>();
       if (context.getRemoteUser() != null)
       {
@@ -122,19 +116,8 @@ public class UIPortalNavigation extends UIComponent
       }
       else
       {
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal(
-            new BundleResolver()
-            {
-               public ResourceBundle resolve(UserNavigation navigation)
-               {
-                  ResourceBundleManager rbMgr = getApplicationComponent(ResourceBundleManager.class);
-                  return rbMgr.getNavigationResourceBundle(context.getLocale().getLanguage(), navigation.getNavigation().getKey().getTypeName(), navigation.getNavigation().getKey().getName());
-               }
-            }
-         );
-         
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
          List<UserNavigation> navigations = userPortal.getNavigations();
-         
          for (UserNavigation userNav : navigations)
          {
             NavigationData navi = userNav.getNavigation();
@@ -213,18 +196,7 @@ public class UIPortalNavigation extends UIComponent
 
    public UserNode getCurrentNavigation() throws Exception
    {
-      final WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal(
-         new BundleResolver()
-         {
-            public ResourceBundle resolve(UserNavigation navigation)
-            {
-               ResourceBundleManager rbMgr = getApplicationComponent(ResourceBundleManager.class);
-               return rbMgr.getNavigationResourceBundle(context.getLocale().getLanguage(), navigation.getNavigation().getKey().getTypeName(), navigation.getNavigation().getKey().getName());
-            }
-         }
-      );
-      
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
       return userPortal.getNode(userNavigation, Scope.GRANDCHILDREN);
    }

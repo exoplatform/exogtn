@@ -93,6 +93,11 @@ public class UserPortalImpl implements UserPortal
 
    //
 
+   public BundleResolver getBundleResolver()
+   {
+      return bundleResolver;
+   }
+
    /**
     * Returns an immutable sorted list of the valid navigations related to the user.
     *

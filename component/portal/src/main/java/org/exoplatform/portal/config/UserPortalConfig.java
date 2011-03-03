@@ -53,6 +53,9 @@ public class UserPortalConfig
    /** . */
    private UserPortalImpl userPortal;
 
+   /** . */
+   private BundleResolver bundleResolver;
+
    public UserPortalConfig()
    {
       this.portal = null;
@@ -60,18 +63,20 @@ public class UserPortalConfig
       this.service = null;
       this.portalName = null;
       this.accessUser = null;
+      this.bundleResolver = null;
    }
 
-   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser)
+   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser, BundleResolver bundleResolver)
    {
       this.portal = portal;
       this.navigations = null;
       this.service = service;
       this.portalName = portalName;
       this.accessUser = accessUser;
+      this.bundleResolver = bundleResolver;
    }
 
-   public UserPortal getUserPortal(BundleResolver bundleResolver)
+   public UserPortal getUserPortal()
    {
          userPortal = new UserPortalImpl(
             service.navService,
@@ -82,11 +87,6 @@ public class UserPortalConfig
             bundleResolver
          );
       return userPortal;
-   }
-
-   public UserPortal getUserPortal()
-   {
-      return getUserPortal(null);
    }
 
    public PortalConfig getPortalConfig()

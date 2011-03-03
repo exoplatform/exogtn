@@ -364,20 +364,23 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
-            UserPortal userPortal = userPortalCfg.getUserPortal(new BundleResolver()
+            BundleResolver bundleResolver = new BundleResolver()
             {
                final MapResourceBundle bundle;
+
                {
                   Map<String, Object> map = new HashMap<String, Object>();
                   map.put("portal.classic.home", "foo");
                   bundle = new MapResourceBundle(map);
                }
+
                public ResourceBundle resolve(UserNavigation navigation)
                {
                   return bundle;
                }
-            });
+            };
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root", bundleResolver);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
             NavigationPath path = userPortal.resolvePath("/home");

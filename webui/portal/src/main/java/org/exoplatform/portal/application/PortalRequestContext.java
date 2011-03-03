@@ -27,12 +27,15 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.BundleResolver;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -52,6 +55,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -460,6 +464,25 @@ public class PortalRequestContext extends WebuiRequestContext
 	  }
 	  this.extraMarkupHeaders.add(element);
    }
+
+   public BundleResolver getBundleResolver()
+   {
+      return bundleResolver;
+   }
+
+   private BundleResolver bundleResolver = new BundleResolver()
+   {
+      public ResourceBundle resolve(UserNavigation navigation)
+      {
+         ExoContainer container = getApplication().getApplicationServiceContainer();
+         ResourceBundleManager rbMgr = (ResourceBundleManager)container.getComponentInstanceOfType(ResourceBundleManager.class);
+         Locale locale = getLocale();
+         return rbMgr.getNavigationResourceBundle(
+            locale.getLanguage(),
+            navigation.getNavigation().getKey().getTypeName(),
+            navigation.getNavigation().getKey().getName());
+      }
+   };
 
 
 }
