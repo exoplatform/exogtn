@@ -23,17 +23,22 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum VisitMode
+public class VisitMode
 {
 
    /**
-    * The node only.
+    * Skip the node.
     */
-   NODE,
+   public static final VisitMode SKIP = new VisitMode();
 
    /**
-    * The node and its children.
+    * Include node but its children should be left appart.
     */
-   CHILDREN,
+   public static final VisitMode NO_CHILDREN = new VisitMode();
+
+   /**
+    * Include node and its children.
+    */
+   public static final VisitMode ALL_CHILDREN = new VisitMode();
 
 }

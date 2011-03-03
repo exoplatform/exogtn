@@ -253,17 +253,17 @@ public class UserPortalImpl implements UserPortal
                {
                   score = 0;
                   node = null;
-                  return VisitMode.CHILDREN;
+                  return VisitMode.ALL_CHILDREN;
                }
                else if (depth <= match.length && name.equals(match[depth - 1]))
                {
                   score++;
                   node = data;
-                  return VisitMode.CHILDREN;
+                  return VisitMode.ALL_CHILDREN;
                }
                else
                {
-                  return VisitMode.NODE;
+                  return VisitMode.NO_CHILDREN;
                }
             }
          };

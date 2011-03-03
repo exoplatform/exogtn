@@ -197,6 +197,38 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(1, (int)nav.getPriority());
    }
 
+   public void testSkipVisitMode() throws Exception
+   {
+      NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
+      Node root = service.load(nav, new Scope()
+      {
+         public Visitor get()
+         {
+            return new Visitor()
+            {
+               public VisitMode visit(int depth, NodeData data)
+               {
+                  if (data.getName().equals("webexplorer"))
+                  {
+                     return VisitMode.SKIP;
+                  }
+                  else
+                  {
+                     return VisitMode.ALL_CHILDREN;
+                  }
+               }
+            };
+         }
+      });
+      assertEquals("default", root.getName());
+      Iterator<? extends Node> i = root.getRelationships().getChildren().iterator();
+      assertTrue(i.hasNext());
+      Node home = i.next();
+      assertNotNull(home.getRelationships());
+      assertEquals("home", home.getName());
+      assertFalse(i.hasNext());
+   }
+
    public void testLoadSingleScope() throws Exception
    {
       NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
@@ -247,7 +279,7 @@ public class TestNavigationService extends AbstractPortalTest
                         use = "d".equals(name);
                         break;
                   }
-                  return use ? VisitMode.CHILDREN : VisitMode.NODE;
+                  return use ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
                }
             };
          }

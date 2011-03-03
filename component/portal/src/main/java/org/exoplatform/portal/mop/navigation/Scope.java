@@ -51,7 +51,7 @@ public interface Scope
          {
             public VisitMode visit(int depth, NodeData data)
             {
-               return depth < height ? VisitMode.CHILDREN : VisitMode.NODE;
+               return depth < height ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
             }
          };
       }
@@ -74,7 +74,7 @@ public interface Scope
       {
          public VisitMode visit(int depth, NodeData data)
          {
-            return VisitMode.CHILDREN;
+            return VisitMode.ALL_CHILDREN;
          }
       };
       public Visitor get()

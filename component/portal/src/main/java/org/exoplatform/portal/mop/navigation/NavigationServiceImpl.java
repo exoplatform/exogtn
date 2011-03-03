@@ -305,39 +305,67 @@ public class NavigationServiceImpl implements NavigationService
       return load(model, session, nodeId, visitor, 0);
    }
 
-   private <N> N load(NodeModel<N> model, POMSession session, String navigationId, Scope.Visitor visitor, int depth)
+   private NodeDataImpl getNodeData(POMSession session, String nodeId)
    {
-      NodeDataImpl data = nodeIdCache.get(navigationId);
+      NodeDataImpl data = nodeIdCache.get(nodeId);
       if (data == null)
       {
-         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, navigationId);
-         if (navigation == null)
+         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+         if (navigation != null)
+         {
+            data = new NodeDataImpl(navigation);
+            nodeIdCache.put(nodeId, data);
+            nodePathCache.put(session.pathOf(navigation), nodeId);
+         }
+      }
+      return data;
+   }
+
+   private <N> N load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
+   {
+      NodeDataImpl data = getNodeData(session, nodeId);
+
+      //
+      if (data != null)
+      {
+         VisitMode visitMode = visitor.visit(depth, data);
+         if (visitMode == VisitMode.ALL_CHILDREN)
+         {
+            List<N> children = new ArrayList<N>(data.children.size());
+            for (Map.Entry<String, String> entry : data.children.entrySet())
+            {
+               N child = load(model, session, entry.getValue(), visitor, depth + 1);
+               if (child != null)
+               {
+                  children.add(child);
+               }
+               else
+               {
+                  // Node is either not found (for some reason that we should try to figure out)
+                  // or it was not desired
+                  // in both case we don't add it to the children and it's fine for now
+                  // however later when we add readability we will need to make a clear distinction
+                  // as we will need to know that a node exist but was not loaded on purpose
+               }
+            }
+            return model.create(data, children);
+         }
+         else if (visitMode == VisitMode.NO_CHILDREN)
+         {
+            return model.create(data);
+         }
+         else if (visitMode == VisitMode.SKIP)
          {
             return null;
          }
          else
          {
-            data = new NodeDataImpl(navigation);
-            nodeIdCache.put(navigationId, data);
-            nodePathCache.put(session.pathOf(navigation), navigationId);
+            throw new AssertionError();
          }
       }
-
-      //
-      switch (visitor.visit(depth, data))
+      else
       {
-         case CHILDREN:
-            List<N> children = new ArrayList<N>(data.children.size());
-            for (Map.Entry<String, String> entry : data.children.entrySet())
-            {
-               N child = load(model, session, entry.getValue(), visitor, depth + 1);
-               children.add(child);
-            }
-            return model.create(data, children);
-         case NODE:
-            return model.create(data);
-         default:
-            throw new AssertionError();
+         return null;
       }
    }
 
