@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Scope;
 
 import java.util.List;
 
@@ -46,6 +47,17 @@ public interface UserPortal
     * @throws Exception any exception
     */
    UserNavigation getNavigation(SiteKey key) throws Exception;
+
+   /**
+    * Load a user node from a specified user navigation with a custom scope.
+    * The returned node is the root node of the navigation.
+    *
+    * @param navigation the user navigation
+    * @param scope the scope
+    * @return the user node
+    * @throws Exception any exception
+    */
+   UserNode getNode(UserNavigation navigation, Scope scope) throws Exception;
 
    /**
     * Returns the default navigation path.

@@ -174,6 +174,11 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
+   public UserNode getNode(UserNavigation navigation, Scope scope) throws Exception
+   {
+      return navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), scope);
+   }
+
    private class UserNodeModel implements NodeModel<UserNode>
    {
 
