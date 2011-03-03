@@ -9,7 +9,7 @@
 		A gadget is a mini web application, embedded in a web page and running on an application server platform. These small applications help users perform various tasks.
 	</para>
 	<para>
-		&PRODUCT; supports gadgets such as: Todo gadget, Calendar gadget, Calculator gadget, Weather Forecasts and and RSS Reader.
+		&PRODUCT; supports gadgets, such as Todo, Calendar, Calculator, Weather Forecasts and RSS Reader.
 	</para>
 	<variablelist id="vari-Reference_Guide-Gadgets-Default_Gadgets">
 		<title>Default Gadgets:</title>
@@ -17,7 +17,7 @@
 			<term>Calendar</term>
 			<listitem>
 				<para>
-					The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal&#39;s theme.
+					The calendar gadget allows you to switch easily between daily, monthly and yearly views. Also, this gadget is customizable to match your portal&#39;s theme.
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -43,7 +43,7 @@
 			<term>Calculator</term>
 			<listitem>
 				<para>
-					This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
+					This mini-application lets you perform the most basic arithmetic operations and can be themed to match the rest of your portal.
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -56,7 +56,7 @@
 			<term>RSS Reader</term>
 			<listitem>
 				<para>
-					An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn&#39;t limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
+					An RSS reader, or aggregator collects content from various, user-specified feed sources and displays them in one location. This content can include, but is not limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
 				</para>
 				<!--   <mediaobject>
 						<imageobject>
@@ -112,7 +112,7 @@
 	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
 		<title>Gadget Importing</title>
 		<para>
-			After referencing the gadget successfully, then import it into the local repository.
+			After referencing the gadget successfully, import it into the local repository.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -124,7 +124,7 @@
 	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
 		<title>Gadget Web Editing</title>
 		<para>
-			Edit it from the Web the imported Gadget to modify it:
+			Modify it from the Web where the Gadget was imported:
 		</para>
 		<mediaobject>
 			<imageobject>

@@ -19,7 +19,7 @@
 				<term>super.user</term>
 				<listitem>
 					<para>
-						The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
+						The super-user as <emphasis>root</emphasis> has all the rights on the eXo Platform.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -27,7 +27,7 @@
 				<term>portal.administrator.groups</term>
 				<listitem>
 					<para>
-						Any member of those groups are considered administrators. Default value is <literal>/platform/administrators</literal>.
+						Any member of those groups are considered administrators. The default value is <literal>/platform/administrators</literal>.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -35,7 +35,7 @@
 				<term>portal.administrator.mstype</term>
 				<listitem>
 					<para>
-						Any user with that membership type would be considered administrator or the associated group. Default value is <literal>manager</literal>.
+						Any user with that membership type would be considered administrator or the associated group with the <literal>manager</literal> by default.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -68,7 +68,7 @@
 				<term>mandatory.groups</term>
 				<listitem>
 					<para>
-						Groups that can't be deleted.
+						Groups that cannot be deleted.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -76,7 +76,7 @@
 				<term>mandatory.mstypes</term>
 				<listitem>
 					<para>
-						Membership types that can't be deleted.
+						Membership types that cannot be deleted.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -121,7 +121,7 @@
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
 		<title>Overwrite Portal Default Permissions</title>
 
-      <para>When creating custom portals and portal extensions it's possible to override the default configuration by
+      <para>When creating the custom portals and portal extensions, it is possible to override the default configuration by
       using <literal>org.exoplatform.portal.config.PortalACLPlugin</literal>, configuring it as an external-plugin of
       <literal>org.exoplatform.portal.config.UserACL</literal> service:</para>
 

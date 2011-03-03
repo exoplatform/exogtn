@@ -20,18 +20,18 @@
    public boolean isTR() { ... }
 </programlisting>
 	<para>
-		The object defining the Orientation for the current request is the <literal>UIPortalApplication</literal>. However it should be accessed at runtime using the <literal>RequestContext</literal> that delegates to the <literal>UIPortalApplication</literal>.
+		The object defining the Orientation for the current request is the <literal>UIPortalApplication</literal>. However, it should be accessed at runtime using the <literal>RequestContext</literal> that delegates to the <literal>UIPortalApplication</literal>.
 	</para>
 	<para>
-		In the case of a <literal>PortalRequestContext</literal> it is a direct delegate as the <literal>PortalRequestContext</literal> has a reference to the current <literal>UIPortalApplication</literal>.
+		In case of <literal>PortalRequestContext</literal>, it directly delegates as the <literal>PortalRequestContext</literal> has a reference to the current <literal>UIPortalApplication</literal>.
 	</para>
 	<para>
-		In the case of a different context such as the <literal>PortletRequestContext</literal>, it delegates to the parent context given the fact that the root <literal>RequestContext</literal> is always a <literal>PortalRequestContext</literal>.
+		In case of a different context, such as the <literal>PortletRequestContext</literal>, it delegates to the parent context given the fact that the root <literal>RequestContext</literal> is always a <literal>PortalRequestContext</literal>.
 	</para>
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
 		<title>Groovy templates</title>
 		<para>
-			Orientation is defined by implicit variables in the groovy binding context:
+			Orientation is defined by implicit variables in the Groovy binding context:
 		</para>
 		<variablelist>
 			<varlistentry>
@@ -83,7 +83,7 @@
 		<formalpara id="form-Reference_Guide-Stylesheet-Example_1">
 			<title>Example 1</title>
 			<para>
-				In the example we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right: 
+				In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right: 
 <programlisting>
 float: left; /* orientation=lt */
 float: right; /* orientation=rt */
@@ -110,7 +110,7 @@ white-space: nowrap;
 		<formalpara id="form-Reference_Guide-Stylesheet-Example_2">
 			<title>Example 2</title>
 			<para>
-				In this example we need to modify the padding according to the orientation: 
+				In this example, you need to modify the padding according to the orientation: 
 <programlisting>
 color: white;
 line-height: 24px;
@@ -136,17 +136,17 @@ padding: 0px 0px 0px 5px; /* orientation=rt */
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">
 		<title>Images</title>
 		<para>
-			Sometimes it is necessary to create an RT version of an image that will be used from a template or from a stylesheet. However symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
+			Sometimes, it is necessary to create the RT version of an image that will be used from a template or from a stylesheet. However, symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
 		</para>
 		<para>
-			The web resource filter uses the same naming pattern as the skin service. When an image ends with the -rt suffix the portal will attempt to locate the original image and create a mirror of it.
+			The web resource filter uses the same naming pattern as the skin service. When an image ends with the -rt suffix, the portal will attempt to locate the original image and create a mirror of it.
 		</para>
 		<para>
 			For instance: requesting the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif</filename> returns a mirror of the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif</filename>.
 		</para>
 		<note>
 			<para>
-				It is important to consider whether the image to be mirrored is symmetrical as this will impact it&#39;s final appearance.
+				It is important to consider whether the image to be mirrored is symmetrical as this will impact its final appearance.
 			</para>
 		</note>
 		<para>
@@ -172,7 +172,7 @@ padding-left: 2px; /* orientation=rt */
 				<term>getOrientation()</term>
 				<listitem>
 					<para>
-						Returns either the string lt or rt
+						Return either the string lt or rt
 					</para>
 				</listitem>
 			</varlistentry>
@@ -180,7 +180,7 @@ padding-left: 2px; /* orientation=rt */
 				<term>getDir()</term>
 				<listitem>
 					<para>
-						Returns either the string ltr or rtl
+						Return either the string ltr or rtl
 					</para>
 				</listitem>
 			</varlistentry>
@@ -188,7 +188,7 @@ padding-left: 2px; /* orientation=rt */
 				<term>isLT()</term>
 				<listitem>
 					<para>
-						Returns true for LT
+						Return true for LT
 					</para>
 				</listitem>
 			</varlistentry>
@@ -196,7 +196,7 @@ padding-left: 2px; /* orientation=rt */
 				<term>isRT()</term>
 				<listitem>
 					<para>
-						Returns true of RT
+						Return true of RT
 					</para>
 				</listitem>
 			</varlistentry>

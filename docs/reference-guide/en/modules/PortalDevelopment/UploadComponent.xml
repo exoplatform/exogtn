@@ -60,7 +60,7 @@
 			This limit will be used by default by all applications if no application-specific limit is set. Setting a different limit for applications is discussed in a later section.
 		</para>
 		<para>
-			If the value is set at <parameter>0</parameter> the upload size is unlimited.
+			If the value is set to <parameter>0</parameter>, the upload size is unlimited.
 		</para>
 		<procedure id="proc-Reference_Guide-Upload_Service-How_to_use_the_upload_component">
 			<title>How to use the upload component</title>
@@ -81,7 +81,7 @@
 <programlisting>public UIFormUploadInput(String name, String bindingExpression, int limit)
 </programlisting>
 				<para>
-					This is an example using the second form :
+					This is an example using the second form:
 				</para>
 				
 <programlisting role="JAVA">PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
@@ -92,7 +92,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 			</step>
 			<step>
 				<para>
-					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename> :
+					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename>:
 				</para>
 				
 <programlisting role="XML">&#60;preference&#62;
@@ -102,7 +102,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 &#60;/preference&#62;
 </programlisting>
 				<para>
-					Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
+					Again, the <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
 				</para>
 			</step>
 			<step>
@@ -118,7 +118,7 @@ jcrData.setValue(inputStream);
 			</step>
 			<step>
 				<para>
-					The upload service stores a temporary file on the filesystem during the upload process. When the upload is finished, the service must be cleaned in order to:
+					The upload service stores a temporary file on the file system during the upload process. When the upload is finished, the service must be cleaned to:
 				</para>
 				<orderedlist numeration="arabic">
 					<listitem>

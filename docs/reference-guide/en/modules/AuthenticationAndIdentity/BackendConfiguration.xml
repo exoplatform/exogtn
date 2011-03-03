@@ -6,12 +6,12 @@
 <section id="sect-Reference_Guide-PicketLink_IDM_integration">
 	<title>PicketLink IDM integration</title>
 	<para>
-		&PRODUCT; uses PicketLink IDM component to keep the necessary identity information (users, groups, memberships, etc.).
+		&PRODUCT; uses the PicketLink IDM component to keep the necessary identity information, such as users, groups, memberships.
       While legacy interfaces are still used (org.exoplatform.services.organization) for identity management,
-      there is a wrapper implementation that delegates to PicketLink IDM framework.
+      there is a wrapper implementation that delegates to the PicketLink IDM framework.
 	</para>
 	<para>
-		This section doesn&#39;t provide information about PicketLink IDM and its configuration. Please, refer to the appropriate project documentation (<ulink url="http://jboss.org/picketlink/IDM.html" />) for further information.
+		This section does not provide information about PicketLink IDM and its configuration. Please refer to the appropriate project documentation (<ulink url="http://jboss.org/picketlink/IDM.html" />) for further information.
 	</para>
 	<note>
 		<para>
@@ -21,13 +21,13 @@
 	<para>
 		The identity model represented in &#39;<emphasis role="bold">org.exoplatform.services.organization</emphasis>&#39; interfaces and the one used in <emphasis role="bold">PicketLink IDM</emphasis> have some major differences.
 	</para>
-   <para>TODO: tell more about org.exoplatform.services.organization</para>
+   <para>The org.exoplatform.services.organization interface stores and manages information of users, groups or memberships, user profiles, relationships and retrieval. The management of org.exoplatform.services.organization interface is divided into many layers, such as model object, data access object and authentication.</para>
 	<para>
 		For example: <emphasis role="bold">PicketLink IDM</emphasis> provides greater abstraction. It is possible for groups in <emphasis role="bold">IDM</emphasis> framework to form memberships with many parents (which requires recursive ID translation),
-      while GateIn model allows only pure tree-like membership structures.
+      while the GateIn model allows only pure tree-like membership structures.
 	</para>
 	<para>
-		Additionally, GateIn <emphasis>membership</emphasis> concept needs to be translated into the IDM <emphasis>Role</emphasis> concept. Therefore <emphasis role="bold">PicketLink IDM</emphasis> model is used in a limited way. All these translations are applied by the integration layer.
+		Additionally, the GateIn <emphasis>membership</emphasis> concept needs to be translated into the IDM <emphasis>Role</emphasis> concept. Therefore, the <emphasis role="bold">PicketLink IDM</emphasis> model is used in a limited way. All these translations are applied by the integration layer.
 	</para>
 	<section id="sect-Reference_Guide-PicketLink_IDM_integration-Configuration_files">
 		<title>Configuration files</title>
@@ -160,7 +160,7 @@
 						<term>hibernate.mappings</term>
 						<listitem>							
 							<para>
-								A list of xml files that will be added to hibernate configuration as mapping files.
+								A list of .xml files that will be added to the hibernate configuration as mapping files.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -171,7 +171,7 @@
 								(value-param)
 							</para>
 							<para>
-								If the &#39;config&#39; parameter is not provided, this parameter will be used to perform JNDI lookup for IdentitySessionFactory
+								If the &#39;config&#39; parameter is not provided, this parameter will be used to perform the JNDI lookup for IdentitySessionFactory.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -182,7 +182,7 @@
 								(value-param)
 							</para>
 							<para>
-								The realm name that should be used to obtain proper IdentitySession. The default is &#39;PortalRealm&#39;.
+								The realm name that should be used to obtain the proper IdentitySession. The default is &#39;PortalRealm&#39;.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -220,7 +220,7 @@
 							<term>passwordAsAttribute</term>
 							<listitem>
 								<para>
-									This parameter specifies if a password should be stored using PicketLink IDM Credential object or as a plain attribute. The default is false.
+									This parameter specifies if a password should be stored using the PicketLink IDM Credential object or as a plain attribute. The default value is set to false.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -229,7 +229,7 @@
 							<listitem>
 							<para>
 								This parameter stores the parent ID path as a group type in PicketLink IDM for any IDs not mapped with a specific type in 'groupTypeMappings'.
-                        If this option is set to false, and no mappings are provided under 'groupTypeMappings', then only one group with the given name can exist in the &PRODUCT; group tree.
+                        If this option is set to false, and no mappings are provided under 'groupTypeMappings', only one group with the given name can exist in the &PRODUCT; group tree.
 							</para>
 							</listitem>
 						</varlistentry>
@@ -237,7 +237,7 @@
 							<term>pathSeparator</term>
 							<listitem>
 								<para>
-									When 'userParentIdAsGroupType is set to true, this value will be used to replace all "/" characters in IDs. The "/" character is not allowed to be used in group type name in PicketLink IDM.
+									When 'userParentIdAsGroupType' is set to true, this value will be used to replace all "/" characters in IDs. The "/" character is not allowed in the group type name in PicketLink IDM.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -245,7 +245,7 @@
 							<term>associationMembershipType</term>
 							<listitem>
 								<para>
-									If this option is used, then each Membership, created with MembrshipType that is equal to the value specified here, will be stored in PicketLink IDM as simple Group-User association.
+									If this option is used, each Membership created with MembrshipType that is equal to the value specified here, will be stored in PicketLink IDM as the simple Group-User association.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -256,10 +256,10 @@
 									This parameter maps groups added with &PRODUCT; API as children of a given group ID, and stores them with a given group type name in PicketLink IDM.
 								</para>
 								<para>
-									If the parent ID ends with "/*", then all child groups will have the mapped group type. Otherwise, only direct (first level) children will use this type. 
+									If the parent ID ends with "/*", all child groups will have the mapped group type. Otherwises, only direct (first level) children will use this type. 
 								</para>
 								<para>
-									This can be leveraged by LDAP if LDAP DN is configured in PicketLink IDM to only store a specific group type. This will then store the given branch in &PRODUCT; group tree, while all other groups will remain in the database.
+									This can be leveraged by LDAP if the LDAP DN is configured in PicketLink IDM to only store a specific group type. This will then store the given branch in the &PRODUCT; group tree, while all other groups will remain in the database.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -267,10 +267,10 @@
 							<term>forceMembershipOfMappedTypes</term>
 							<listitem>
 								<para>
-									Groups stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will automatically be members under the mapped parent. Group relationships linked by PicketLink IDM group association will not be necessary.
+									Groups stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will automatically be members under the mapped parent. The Group relationships linked by the PicketLink IDM group association will not be necessary.
 								</para>
 								<para>
-									This parameter can be set to false if all groups are added via &PRODUCT; APIs. This may be useful with LDAP configuration as, when set to true, it will make every entry added to LDAP appear in &PRODUCT;. This, however, is not true for entries added via &PRODUCT; management UI.
+									This parameter can be set to false if all groups are added via &PRODUCT; APIs. This may be useful with the LDAP configuration when being set to true, it will make every entry added to LDAP appear in &PRODUCT;. This, however, is not true for entries added via &PRODUCT; management UI.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -278,28 +278,28 @@
 							<term>ignoreMappedMembershipType</term>
 							<listitem>
 								<para>
-									If "associationMembershipType" option is used, and this option is set to true, then Membership with MembershipType configured to be stored as PicketLink IDM association will not be stored as PicketLink IDM Role.
+									If "associationMembershipType" option is used, and this option is set to true, Membership with MembershipType configured to be stored as PicketLink IDM association will not be stored as PicketLink IDM Role.
 								</para>
 							</listitem>
 						</varlistentry>
   				</variablelist>
 					<para>
-						Additionally, <emphasis role="bold">JBossIDMOrganizationServiceImpl</emphasis> uses those defaults to perform identity management operations
+						Additionally, <emphasis role="bold">JBossIDMOrganizationServiceImpl</emphasis> uses those defaults to perform identity management operations.
 					</para>
 					<itemizedlist>
 						<listitem>
 							<para>
-								&PRODUCT; User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute)
+								&PRODUCT; User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute).
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								&PRODUCT; Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description
+								&PRODUCT; Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description.
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								&PRODUCT; MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date
+								&PRODUCT; MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date.
 							</para>
 						</listitem>
 					</itemizedlist>
@@ -309,7 +309,7 @@
 		
 
 		<para>
-			A sample <emphasis role="bold">PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide
+			A sample <emphasis role="bold">PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide.
 		</para>
 		
 <programlisting role="XML">&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;

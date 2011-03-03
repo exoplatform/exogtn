@@ -11,10 +11,10 @@
 			<emphasis>Token Service</emphasis> is used in authentication.
 		</para>
 		<para>
-			The token system prevents user account information being sent in clear text mode within inbound requests. This increases authentication security.
+			The token system prevents user account information being sent in the clear text mode within inbound requests. This increases authentication security.
 		</para>
 		<para>
-			Token service allows administrators to create, delete, retrieve and clean tokens as required.
+			The token service allows administrators to create, delete, retrieve and clean tokens as required.
          The service also defines a validity period of any given token. The token becomes invalid once this period expires.
 		</para>
 	</section>
@@ -22,7 +22,7 @@
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
 		<title>Implementing the Token Service API</title>
 		<para>
-			All token services used in &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
+			All token services used in the &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
          The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
@@ -41,10 +41,10 @@
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
 		<title>Configuring token services</title>
 		<para>
-			Token services configuration includes specifying the token validity period. The token service is configured as a portal component (in portal scope, as opposed to root scope - more about that in Foundations chapter).
+			The token services configuration includes specifying the token validity period. The token service is configured as a portal component (in the portal scope, as opposed to the root scope - more about that in Foundations chapter).
 		</para>
 		<para>
-			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
+			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis>, so it has a property which specifies the validity period of the token.
 		</para>
 		<para>
 			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <emphasis role="bold">service.configuration</emphasis>.

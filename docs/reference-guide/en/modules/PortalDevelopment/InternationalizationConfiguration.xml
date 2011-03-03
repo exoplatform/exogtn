@@ -10,23 +10,23 @@
 		<note>
 			<title>Assumed Knowledge</title>
 			<para>
-				&PRODUCT; is fully configurable for internationalization, however users should have a general knowledge of Internationalization in Java products before attempting these configurations.
+				&PRODUCT; is fully configurable for internationalization; however, users should have a general knowledge of Internationalization in Java products before attempting these configurations.
 			</para>
 			<para>
-				Sun Java hosts a comprehensive guide to internationalizing java products at <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html" />.
+				Sun Java hosts a comprehensive guide to internationalize Java products at <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html" />.
 			</para>
 		</note>
 		<para>
 			All &PRODUCT; applications contain property files for various languages. They are packaged with the portlets applications in a <filename>WEB-INF/classes/locale/</filename> directory.
 		</para>
 		<para>
-			These files are located in the <literal>classes</literal> folder of the WEB-INF directory, so as to be loaded by the ClassLoader.
+			These files are located in the <literal>classes</literal> folder of the WEB-INF directory to be loaded by the ClassLoader.
 		</para>
 		<para>
 			All resource files are in a subfolder named <literal>locale</literal>.
 		</para>
 		<para>
-			For instance; the translations for the <emphasis>NavigationPortlet</emphasis> are located in <literal>web.war/WEB-INF/classes/locale/portlet/portal</literal>
+			For example, the translations for the <emphasis>NavigationPortlet</emphasis> are located in <literal>web.war/WEB-INF/classes/locale/portlet/portal.</literal>
 		</para>
 		
 <programlisting>NavigationPortlet_de.properties
@@ -39,7 +39,7 @@ NavigationPortlet_uk.properties
 NavigationPortlet_ar.xml
 </programlisting>
 		<para>
-			Inside those file are typical <literal>key=value</literal> Java EE properties. For example the French one:
+			Those files contain typical <literal>key=value</literal> Java EE properties. For example, the French one:
 		</para>
 		
 <programlisting>javax.portlet.title=Portlet Navigation
@@ -48,15 +48,15 @@ NavigationPortlet_ar.xml
 			There are also properties files in the portal itself. They form the <emphasis role="bold">portal resource bundle</emphasis>.
 		</para>
 		<para>
-			From a portlet you can then access translations from the portlet itself or shared at the portal level, both are aggregated when you need them.
+			From a portlet, you can then access translations from the portlet itself or shared at the portal level, both are aggregated when you need them.
 		</para>
 		<note>
 			<title>Translation in XML format</title>
 			<para>
-				It is also possible to use a proprietary XML format to define translations. This is a more convenient way to translate a document for some languages such as Japanese, Arabic or Russian. Property files have te be ASCII encoded, while the XML file can define its encoding. As a result it&#39;s easier for a human being to read (and fix) a translation in XML instead of having to decode and encode the property file.
+				It is also possible to use a proprietary XML format to define translations. This is a more convenient way to translate a document for some languages, such as Japanese, Arabic or Russian. Property files have to be ASCII encoded, while the XML file can define its encoding. As a result, it is easier for you to read or edit a translation in XML instead of having to decode and encode the property file.
 			</para>
 			<para>
-				For more information refer to: <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />
+				For more information, refer to <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />.
 			</para>
 		</note>
 	</section>
@@ -64,7 +64,7 @@ NavigationPortlet_ar.xml
 	<section id="sect-Reference_Guide-Internationalization_Configuration-Locales_configuration">
 		<title>Locales configuration</title>
 		<para>
-			Various languages are available in the portal package. The configuration below will define which languages are shown in the &#34;Change Language&#34; section and made available to users.
+			Various languages are available in the portal package. The configuration below will define which languages shown in the &#34;Change Language&#34; section and made available to users.
 		</para>
 		<para>
 			The <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation contains the following section:
@@ -123,17 +123,17 @@ NavigationPortlet_ar.xml
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.locale">
 					<para>
-						<emphasis>locale</emphasis> The locale has to be defined such as defined here <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />. In this example &#34;<emphasis>ar</emphasis>&#34; is Arabic.
+						<emphasis>locale</emphasis> The locale has to be defined, such as <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />. In this example, &#34;<emphasis>ar</emphasis>&#34; is Arabic.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.output-encoding">
 					<para>
-						<emphasis>output-encoding</emphasis> deals with character encoding. It is recommended that <emphasis role="bold">UTF-8</emphasis> be used.
+						<emphasis>output-encoding</emphasis> deals with the character encoding. It is recommended that <emphasis role="bold">UTF-8</emphasis> be used.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.input-encoding">
 					<para>
-						<emphasis>input-encoding</emphasis> In the java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for request setCharacterEncoding(..).
+						<emphasis>input-encoding</emphasis> In the Java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for requesting setCharacterEncoding(..).
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.description">
@@ -143,7 +143,7 @@ NavigationPortlet_ar.xml
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.orientation">
 					<para>
-						<emphasis>orientation</emphasis> The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
+						<emphasis>orientation</emphasis> The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying the text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
 					</para>
 				</callout>
 			</calloutlist>
@@ -199,20 +199,20 @@ NavigationPortlet_ar.xml
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.classpath_resources">
 					<para>
-						<emphasis>classpath.resources</emphasis> are discussed in a later section.
+						<emphasis>classpath.resources</emphasis> are discussed in the later section.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.init_resources">
 					<para>
-						<emphasis>init.resources</emphasis> TODO
+						<emphasis>init.resources</emphasis> initiates resources related to portal, group, user resource bundle.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.portal_resource_names">
 					<para>
-						<emphasis>portal.resource.names</emphasis> Defines all resources that belong to the <emphasis>Portal Resource Bundle</emphasis>.
+						<emphasis>portal.resource.names</emphasis> defines all resources that belong to the <emphasis>Portal Resource Bundle</emphasis>.
 					</para>
 					<para>
-						These resources are merged to a single resource bundle which is accessible from anywhere in &PRODUCT;. All these keys are located in the same bundle, which is separated from the navigation resource bundles.
+						These resources are merged into a single resource bundle which is accessible from anywhere in &PRODUCT;. All these keys are located in the same bundle, which is separated from the navigation resource bundles.
 					</para>
 				</callout>
 			</calloutlist>
@@ -271,7 +271,7 @@ organization.management=Management
 			</step>
 			<step>
 				<para>
-					In <filename>portlet.xml</filename>, add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> (&#39;es&#39; is the 2 letters code for Spanish), the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages :
+					In <filename>portlet.xml</filename>, add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> (&#39;es&#39; is the 2 letters code for Spanish), the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages:
 				</para>
 				
 <programlisting role="XML">&#60;supported-locale&#62;en&#60;/supported-locale&#62;
@@ -282,12 +282,12 @@ organization.management=Management
 		</procedure>
 		
 		<para>
-			See the portlet specification for more details about portlet internationalization.
+			See the portlet specification for more details about the portlet internationalization.
 		</para>
 		<section id="sect-Reference_Guide-_Portlets_-Standard_portlet_resource_keys">
 			<title>Standard portlet resource keys</title>
 			<para>
-				The portlet specifications defines three standard keys: Title, Short Title and Keywords. Keywords is formatted as a comma-separated list of tags.
+				The portlet specifications define three standard keys: Title, Short Title and Keywords. Keywords are formatted as a comma-separated list of tags.
 			</para>
 			
 <programlisting> javax.portlet.title=Breadcrumbs Portlet
@@ -299,10 +299,10 @@ organization.management=Management
 		<section id="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage">
 			<title>Debugging resource bundle usage</title>
 			<para>
-				When translating an application it can sometimes be difficult to find the right key for a given property.
+				When translating an application, it can sometimes be difficult to find the right key for a given property.
 			</para>
 			<para>
-				Execute the portal in <emphasis role="bold">debug mode</emphasis> and select, from the available languages, select the special language; <emphasis role="bold">Magic locale</emphasis>.
+				Execute the portal in the <emphasis role="bold">debug mode</emphasis> and select the special language from the available languages,; <emphasis role="bold">Magic locale</emphasis>.
 			</para>
 			<para>
 				This feature translates a key to the same key value.
