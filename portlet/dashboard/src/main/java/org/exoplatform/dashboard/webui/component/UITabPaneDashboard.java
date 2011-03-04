@@ -25,9 +25,16 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -39,9 +46,10 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,8 +81,6 @@ public class UITabPaneDashboard extends UIContainer
 
    private DataStorage dataService;
 
-   private PageNavigation pageNavigation;
-
    private UIPortal uiPortal;
 
    final private static int MAX_SHOWED_TAB_NUMBER = 6;
@@ -86,20 +92,10 @@ public class UITabPaneDashboard extends UIContainer
       configService = getApplicationComponent(UserPortalConfigService.class);
       dataService = getApplicationComponent(DataStorage.class);
       uiPortal = Util.getUIPortal();
-      initPageNavigation();
-   }
-
-   private void initPageNavigation() throws Exception
-   {
-      //String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      //pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
-      //TODO: Check this part carefully
-      this.pageNavigation = uiPortal.getNavigation();
    }
 
    public int getCurrentNumberOfTabs() throws Exception
    {
-
       return getSameSiblingsNode().size();
    }
 
@@ -120,25 +116,51 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
-   public List<PageNode> getSameSiblingsNode() throws Exception
+   public Collection<UserNode> getSameSiblingsNode() throws Exception
    {
-      List<PageNode> siblings = getPageNavigation().getNodes();
-      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPath();
-      if (selectedPath != null && selectedPath.size() > 1)
+      UserPortal userPortal = getUserPortal();
+      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.NAVIGATION);
+      if (rootNodes != null)
       {
-         PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
-         siblings = currentParent.getChildren();
+         return rootNodes.getChildren();
       }
-      return siblings;
+      return Collections.emptyList();
+      
+//      Collection<UserNode> siblings = getUserNodes();
+//      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPath();
+//      if (selectedPath != null && selectedPath.size() > 1)
+//      {
+//         PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
+//         siblings = currentParent.getChildren();
+//      }
+//      return siblings;
    }
 
+   public UserNavigation getCurrentUserNavigation() throws Exception
+   {
+      UserPortal userPortal = getUserPortal();
+      List<UserNavigation> allNavs = userPortal.getNavigations();
+
+      for (UserNavigation nav : allNavs)
+      {
+         if (SiteType.USER.equals(nav.getNavigation().getKey().getType()))
+         {
+            return nav;
+         }
+      }
+      return null;
+   }
+
+   private UserPortal getUserPortal()
+   {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      return uiApp.getUserPortalConfig().getUserPortal();
+   }
+
+   //This is only for temporary, we will remove it after finishing with NavigationService
    public PageNavigation getPageNavigation() throws Exception
    {
-      if (pageNavigation == null)
-      {
-         initPageNavigation();
-      }
-      return pageNavigation;
+      return dataService.getPageNavigation(PortalConfig.USER_TYPE, WebuiRequestContext.getCurrentInstance().getRemoteUser());
    }
 
    /**
@@ -150,6 +172,7 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          List<PageNode> nodes = pageNavigation.getNodes();
          PageNode tobeRemoved = nodes.get(nodeIndex);
          PageNode selectedNode = uiPortal.getSelectedNode();
@@ -218,6 +241,7 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          if (nodeLabel == null || nodeLabel.length() == 0)
          {
             nodeLabel = "Tab_" + getCurrentNumberOfTabs();
@@ -295,8 +319,9 @@ public class UITabPaneDashboard extends UIContainer
       return true;
    }
 
-   private boolean nameExisted(String nodeName)
-   {
+   private boolean nameExisted(String nodeName) throws Exception
+   {      
+      PageNavigation pageNavigation = getPageNavigation();
       for (PageNode node : pageNavigation.getNodes())
       {
          if (node.getName().equals(nodeName))
@@ -311,6 +336,7 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          List<PageNode> nodes = pageNavigation.getNodes();
          List<PageNode> selectedPath = uiPortal.getSelectedPath();
          PageNode parentNode = null;
@@ -360,8 +386,9 @@ public class UITabPaneDashboard extends UIContainer
     * @param secondIndex
     * @return
     */
-   public boolean permutePageNode(int firstIndex, int secondIndex)
+   public boolean permutePageNode(int firstIndex, int secondIndex) throws Exception
    {
+      PageNavigation pageNavigation = getPageNavigation();
       if (firstIndex == secondIndex)
       {
          return false;

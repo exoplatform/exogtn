@@ -5,16 +5,18 @@
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.portal.mop.user.UserNode;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation') ;
 	jsmanager.importJavascript('eXo.portal.UIAdminToolbar') ;
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
-	
+
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
+
 	void renderPortalNavigations() {
-			 
+			def nodes = uicomponent.getCurrentPortalNavigation();
 			print """
 					<div style="position: absolute; display:none" class="MenuItemContainer">
 						<div class="SubBlock">
@@ -22,9 +24,6 @@
 			boolean isCurrent = false;
 			String clazz = "";
 			String href = "#";
-			
-			def navigation = uicomponent.getCurrentPortalNavigation();
-			def nodes = navigation.getNodes();
 				
 			for(int i = 0; i < uicomponent.getAllPortalNames().size(); i++) {
 				String portal = uicomponent.getAllPortalNames().get(i);
@@ -56,16 +55,16 @@
 				</div>
 			""";
 	}
-	
+
 	void renderCurrentPortal() {
-		navigation = uicomponent.getCurrentPortalNavigation();
-		nodes = navigation.getNodes();
+		def nodes = uicomponent.getCurrentPortalNavigation();
 		print """
 			<div style="position: absolute; display:none" class="MenuItemContainer">
 				<div class="SubBlock">
 		""";
-		for(int i = 0; i < nodes.size(); i++) {
-			renderPageNode(nodes.get(i), i%2 == 0);
+		int idx = 0;
+		for(UserNode node : nodes) {
+			renderPageNode(node, idx++ % 2 == 0);
 		}
 		print """
 				</div>
@@ -73,17 +72,17 @@
 		""";
 	}
 	
-	void renderPageNode(PageNode node, boolean flag) {
+	void renderPageNode(UserNode node, boolean flag) {
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getUri() == selectedNode.getUri()) {			 
+		if(selectedNode != null && node.getURI() == selectedNode.getUri()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
 		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = Util.getPortalRequestContext().getPortalURI() + node.getUri();
+		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.resolvedLabel.length() > 60);
@@ -97,7 +96,7 @@
 			<div class="MenuItem $tabStyleNavigation">
 				<div class="$clazz">
 		""";
-						if(node.pageReference != null) {
+						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
@@ -110,8 +109,9 @@
 				<div class="MenuItemContainer" style="position: absolute; display:none">			
 					<div class="SubBlock">
 			""" ;
-				for(int j = 0; j < node.getChildren().size(); j++) {
-					renderPageNode(node.getChildren().get(j), j%2 == 0);
+				int idx = 0;
+				for(UserNode child : node.getChildren()) {
+					renderPageNode(child, idx++ % 2 == 0);
 				}
 			print """
 					</div>
@@ -122,7 +122,7 @@
 		print """
 			</div>
 		""" ;			
-	}	
+	}
 %> 
 
 <div class="UIUserToolBarSitePortlet" id="$uicomponent.id" >

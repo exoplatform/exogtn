@@ -143,14 +143,7 @@ public class UIMainActionListener
       private boolean hasPageCreationPermission() throws Exception
       {
          UIPortal currentPortal = Util.getUIPortal();
-         UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-         PageNavigation selectedNavigation = currentPortal.getNavigation();
-         if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
-         {
-            return userACL.hasEditPermissionOnPortal(currentPortal.getOwnerType(), currentPortal.getOwner(), currentPortal.getEditPermission());
-         }
-         
-         return userACL.hasEditPermission(selectedNavigation);
+         return currentPortal.getUserNavigation().isModifiable();
       }
    }
 

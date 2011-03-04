@@ -19,20 +19,26 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -51,20 +57,32 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    {
    }
 
-   public List<PageNavigation> getGroupNavigations() throws Exception
+   public List<UserNavigation> getGroupNavigations() throws Exception
    {
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getNavigations();
-      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      for (PageNavigation navigation : allNavigations)
+      UserPortal userPortal = getUserPortal();
+      List<UserNavigation> allNavs = userPortal.getNavigations();
+      
+      List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
+      for (UserNavigation nav : allNavs)
       {
-         if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE))
+         if (nav.getNavigation().getKey().getType().equals(SiteType.GROUP))
          {
-            navigations.add(PageNavigationUtils.filter(navigation, remoteUser));
+            groupNav.add(nav);
          }
       }
-      return navigations;
+      return groupNav;
+   }
+
+   public Collection<UserNode> getNodes(UserNavigation groupNav) throws Exception
+   {
+      UserPortal userPortal = getUserPortal();
+      UserNode rootNodes =  userPortal.getNode(groupNav, Scope.NAVIGATION);
+      if (rootNodes != null)
+      {
+         PageNavigationUtils.filter(rootNodes, Util.getPortalRequestContext().getRemoteUser());
+         return rootNodes.getChildren();
+      }
+      return Collections.emptyList();
    }
 
    public PageNode getSelectedPageNode() throws Exception
@@ -72,6 +90,12 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       return Util.getUIPortal().getSelectedNode();
    }
    
+   private UserPortal getUserPortal()
+   {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      return uiApp.getUserPortalConfig().getUserPortal();
+   }
+
    public static class NavigationChangeActionListener extends EventListener<UIUserToolBarGroupPortlet>
    {
       @Override
@@ -79,5 +103,5 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       {
          // This event is only a trick for updating the Toolbar group portlet
       }
-   }
+   }   
 }

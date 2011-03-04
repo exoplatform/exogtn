@@ -26,7 +26,13 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,7 +42,8 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.portlet.EventRequest;
 
@@ -58,27 +65,41 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
    {
    }
 
-   public PageNavigation getCurrentUserNavigation() throws Exception
+   public Collection<UserNode> getUserNodes() throws Exception
    {
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      return getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
-   }
-
-   private PageNavigation getPageNavigation(String owner) throws Exception
-   {
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getNavigations();
-      for (PageNavigation nav : allNavigations)
-      {
-         if (nav.getOwner().equals(owner))
-            return nav;
+      UserPortal userPortal = getUserPortal();
+      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.NAVIGATION);
+      if (rootNodes != null)
+      {                                  
+         return rootNodes.getChildren();
       }
-      return null;
+      return Collections.emptyList();
    }
 
    public PageNode getSelectedPageNode() throws Exception
    {
       return Util.getUIPortal().getSelectedNode();
+   }
+
+   public UserNavigation getCurrentUserNavigation() throws Exception
+   {
+      UserPortal userPortal = getUserPortal();
+      List<UserNavigation> allNavs = userPortal.getNavigations();
+
+      for (UserNavigation nav : allNavs)
+      {
+         if (SiteType.USER.equals(nav.getNavigation().getKey().getType()))
+         {
+            return nav;
+         }
+      }
+      return null;
+   }
+
+   private UserPortal getUserPortal()
+   {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      return uiApp.getUserPortalConfig().getUserPortal();
    }
 
    static public class NavigationChangeActionListener extends EventListener<UIUserToolBarDashboardPortlet>
@@ -104,29 +125,20 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
          UIUserToolBarDashboardPortlet toolBarPortlet = event.getSource();
          String nodeName = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
 
-         PageNavigation cachedNavigation = toolBarPortlet.getCurrentUserNavigation();
-         
-         // Update navigation for prevent create first node which already existed
-         DataStorage dataStorage = toolBarPortlet.getApplicationComponent(DataStorage.class);         
-         PageNavigation userNavigation =
-            dataStorage.getPageNavigation(cachedNavigation.getOwnerType(), cachedNavigation.getOwnerId());
-         cachedNavigation.merge(userNavigation);
-
-         UserPortalConfigService configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
-         if (cachedNavigation != null && configService != null && cachedNavigation.getNodes().size() < 1)
+         Collection<UserNode> nodes = toolBarPortlet.getUserNodes();
+         if (nodes.size() < 1)
          {
-            createDashboard(nodeName, cachedNavigation, configService);
+            createDashboard(nodeName, toolBarPortlet);
          }
          else
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.getResponse().sendRedirect(
-               prContext.getPortalURI() + cachedNavigation.getNodes().get(0).getName());
+               prContext.getPortalURI() + nodes.iterator().next());
          }
       }
 
-      private static void createDashboard(String _nodeName, PageNavigation _pageNavigation,
-         UserPortalConfigService _configService)
+      private static void createDashboard(String _nodeName, UIUserToolBarDashboardPortlet toolBarPortlet)
       {
          try
          {
@@ -136,6 +148,11 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
                logger.debug("Parsed nodeName is null, hence use Tab_0 as default name");
                _nodeName = DEFAULT_TAB_NAME;
             }
+
+            DataStorage dataStorage = toolBarPortlet.getApplicationComponent(DataStorage.class);
+            PageNavigation _pageNavigation = dataStorage.getPageNavigation(PortalConfig.USER_TYPE, prContext.getRemoteUser());
+            
+            UserPortalConfigService _configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
             Page page =
                _configService.createPageTemplate(PAGE_TEMPLATE, _pageNavigation.getOwnerType(), _pageNavigation
                   .getOwnerId());

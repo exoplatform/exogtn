@@ -5,6 +5,8 @@
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.portal.mop.user.UserNode;
+	import org.exoplatform.portal.mop.user.UserNavigation;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -14,34 +16,36 @@
 		
 	def groupNavigations = uicomponent.getGroupNavigations();
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
-	void renderGroupPageNavigation(PageNavigation navigation) {
-			nodes = navigation.getNodes() ;
+	void renderGroupPageNavigation(UserNavigation navigation) {
+			nodes = uicomponent.getNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
-			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(navigation.ownerId));
+			def ownerId = navigation.getNavigation().getKey().getName();
+			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(ownerId));
 			print """
-						<div class="TitleBar"><div style="width: 99%" title="$navigation.ownerId">$navTitle</div></div>
+						<div class="TitleBar"><div style="width: 99%" title="$ownerId">$navTitle</div></div>
 						<div class="SubBlock">
 							""" ;
-							for(int i = 0; i < nodes.size(); i++) {
-								renderPageNode(nodes.get(i), i%2 == 0 ) ;
+							int idx = 0;
+							for(UserNode node : nodes) {
+								renderPageNode(node, idx++ % 2 == 0);
 							}
 							print """
 						</div>
 			""" ;		
 	}
 	
-	void renderPageNode(PageNode node, boolean flag) {
+	void renderPageNode(UserNode node, boolean flag) {
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getUri() == selectedNode.getUri()) {			 
+		if(selectedNode != null && node.getURI() == selectedNode.getUri()) {
 				tabStyleNavigation = "SelectedItem";
 		}
 		
 		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = Util.getPortalRequestContext().getPortalURI() + node.getUri();
+		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.resolvedLabel.length() > 60);
@@ -55,7 +59,7 @@
 			<div class="MenuItem $tabStyleNavigation">
 				<div class="$clazz">
 		""";
-						if(node.pageReference != null) {
+						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
@@ -68,8 +72,9 @@
 				<div class="MenuItemContainer" style="position: absolute; display:none">			
 					<div class="SubBlock">
 			""" ;
-				for(int j = 0; j < node.getChildren().size(); j++) {
-					renderPageNode(node.getChildren().get(j), j%2 == 0);
+				int idx = 0;
+				for(UserNode child : node.getChildren()) {
+					renderPageNode(child, idx++ % 2 == 0);
 				}
 			print """
 					</div>

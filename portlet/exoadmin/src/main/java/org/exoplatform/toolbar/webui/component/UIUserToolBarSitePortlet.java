@@ -21,15 +21,21 @@ package org.exoplatform.toolbar.webui.component;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -78,23 +84,21 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       return currentPortalURI.substring(0, currentPortalURI.lastIndexOf(getCurrentPortal())) + portalName + "/";
    }
 
-   public PageNavigation getCurrentPortalNavigation() throws Exception
+   public Collection<UserNode> getCurrentPortalNavigation() throws Exception
    {
-      PageNavigation navi = getPageNavigation(PortalConfig.PORTAL_TYPE + "::" + getCurrentPortal());
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      return PageNavigationUtils.filter(navi, remoteUser);
-   }
-
-   private PageNavigation getPageNavigation(String owner) throws Exception
-   {
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getUserPortalConfig().getNavigations();
-      for (PageNavigation nav : allNavigations)
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UserPortal userPortal = uiApp.getUserPortalConfig().getUserPortal();
+      UserNavigation nav = userPortal.getNavigation(SiteKey.portal(getCurrentPortal()));
+      if (nav != null)
       {
-         if (nav.getOwner().equals(owner))
-            return nav;
+         UserNode rootNodes =  userPortal.getNode(nav, Scope.NAVIGATION);
+         if (rootNodes != null)
+         {
+            PageNavigationUtils.filter(rootNodes, Util.getPortalRequestContext().getRemoteUser());
+            return rootNodes.getChildren();
+         }
       }
-      return null;
+      return Collections.emptyList();
    }
 
    public PageNode getSelectedPageNode() throws Exception
