@@ -38,7 +38,7 @@ import javax.portlet.PortletRequest;
  * Jul 3, 2006  
  */
 @ComponentConfigs({
-   @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "system:/groovy/webui/core/UISitemap2.gtmpl"),
+   @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "system:/groovy/webui/core/UISitemap.gtmpl"),
    @ComponentConfig(type = UIPortalNavigation.class, id = "UISiteMap", events = {
       @EventConfig(listeners = UIPortalNavigation.SelectNodeActionListener.class),
       @EventConfig(listeners = UIPortalNavigation.ExpandAllNodeActionListener.class),

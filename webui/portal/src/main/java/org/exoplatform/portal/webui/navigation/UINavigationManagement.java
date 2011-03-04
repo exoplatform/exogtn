@@ -152,9 +152,6 @@ public class UINavigationManagement extends UIContainer
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          setNavigation(uiPortalApp.getNavigations(), navigation);
 
-         // Need to relocalize as it was loaded from storage
-         uiPortalApp.localizeNavigations();
-         
          //Update UIPortal corredponding to edited navigation
          UIPortal targetedUIPortal = uiPortalApp.getCachedUIPortal(editedOwnerType, editedOwnerId);
          if(targetedUIPortal != null)

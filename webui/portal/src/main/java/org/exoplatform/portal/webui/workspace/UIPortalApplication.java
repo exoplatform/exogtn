@@ -764,34 +764,4 @@ public class UIPortalApplication extends UIApplication
       }
       return this.all_Navigations;
    }
-
-   public void resolveNavigation(String uri)
-   {
-      if (uri == null)
-      {
-         throw new NullPointerException("No null uri argument accepted");
-      }
-
-      if(uri.length() == 0)
-      {
-         // return uiPortalApp.getNavigations().get(0);
-      }
-
-      //
-      String[] segments = uri.split("/");
-
-      // First find all related SiteKey
-
-   }
-
-   public void localizeNavigations()
-   {
-      ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
-      Locale locale = getLocale();
-
-      for (PageNavigation nav : this.getNavigations())
-      {
-         PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
-      }
-   }
 }

@@ -19,15 +19,19 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -45,12 +49,6 @@ import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 /*
  * Created by The eXo Platform SAS
@@ -157,9 +155,8 @@ public class UIAddGroupNavigation extends UIContainer
          // create navigation for group
          dataService.create(pageNav);
 
-         uiPortalApp.getUserPortalConfig().getNavigations().add(pageNav);
-         uiPortalApp.getNavigations().add(pageNav);
-         uiPortalApp.localizeNavigations();
+         uiPortalApp.getUserPortalConfig().getNavigations().add(0, pageNav);
+         uiPortalApp.getNavigations().add(0, pageNav);
          
          //Update group navigation list
          ctx.addUIComponentToUpdateByAjax(uicomp);

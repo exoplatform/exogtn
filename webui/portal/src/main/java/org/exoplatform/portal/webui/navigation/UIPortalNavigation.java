@@ -367,15 +367,10 @@ public class UIPortalNavigation extends UIComponent
          // get PageNavigation by uri
          PageNavigation selectNav = null;
 
-         String navId = uri.substring(0, index);
-         
          //TODO: Minh Hoang TO
          //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
          selectNav = uiPortal.getNavigation();
          
-         // get PageNode by uri
-         PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
-
          TreeNode expandTree = null;
          if (treeNode.getChildren() != null)
          {

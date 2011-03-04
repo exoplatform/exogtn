@@ -229,16 +229,6 @@ public class UIPageNodeSelector extends UIContainer
       return selectedNode.getParentNode().getUri();
    }
 
-   //  private List<PageNavigation> getExistedNavigation(List<PageNavigation> navis) throws Exception {
-   //    Iterator<PageNavigation> itr = navis.iterator() ;
-   //    UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-   //    while(itr.hasNext()) {
-   //      PageNavigation nav = itr.next() ;
-   //      if(configService.getPageNavigation(nav.getOwnerType(), nav.getOwnerId()) == null) itr.remove() ;
-   //    }
-   //    return navis ;
-   //  }
-
    static public class ChangeNodeActionListener extends EventListener<UITree>
    {
       public void execute(Event<UITree> event) throws Exception

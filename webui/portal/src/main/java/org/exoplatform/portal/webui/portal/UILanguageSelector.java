@@ -178,8 +178,6 @@ public class UILanguageSelector extends UIContainer
             localeConfig = localeConfigService.getDefaultLocaleConfig();
          PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
          prqCtx.setLocale(localeConfig.getLocale());
-         //uiApp.setOrientation(localeConfig.getOrientation());
-         uiApp.localizeNavigations();
       }
    }
 
