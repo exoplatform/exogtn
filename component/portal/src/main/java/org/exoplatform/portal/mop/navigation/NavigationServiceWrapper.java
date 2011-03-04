@@ -85,14 +85,4 @@ public class NavigationServiceWrapper implements Startable, NavigationService
    {
       return service.load(model, node, scope);
    }
-
-   public Node load(NavigationData navigation, Scope scope)
-   {
-      return service.load(navigation, scope);
-   }
-
-   public Node load(Node node, Scope scope)
-   {
-      return service.load(node, scope);
-   }
 }
