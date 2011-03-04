@@ -215,6 +215,16 @@ public class UserNode
       return parent;
    }
 
+   /**
+    * Returns true if the children relationship determined.
+    *
+    * @return ture if node has children
+    */
+   public boolean hasChildren()
+   {
+      return childMap != null;
+   }
+
    public Collection<UserNode> getChildren()
    {
       return childMap != null ? childMap.values() : Collections.<UserNode>emptyList();

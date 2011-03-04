@@ -44,6 +44,7 @@ import org.gatein.common.i18n.MapResourceBundle;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -386,6 +387,36 @@ public class TestUserPortal extends AbstractPortalTest
             NavigationPath path = userPortal.resolvePath("/home");
             assertEquals("#{portal.classic.home}", path.getTarget().getLabel());
             assertEquals("foo", path.getTarget().getResolvedLabel());
+         }
+      }.execute("root");
+   }
+
+   public void testLoadNode()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
+
+            //
+            UserNode root = userPortal.getNode(navigation, Scope.SINGLE);
+            assertEquals("default", root.getName());
+            assertEquals(0, root.getChildren().size());
+            assertFalse(root.hasChildren());
+
+            //
+            root = userPortal.getNode(navigation, Scope.CHILDREN);
+            assertEquals("default", root.getName());
+            assertEquals(1, root.getChildren().size());
+            assertTrue(root.hasChildren());
+            Iterator<UserNode> children = root.getChildren().iterator();
+            UserNode administration = children.next();
+            assertEquals("administration", administration.getName());
+            assertEquals(0, administration.getChildren().size());
+            assertFalse(administration.hasChildren());
          }
       }.execute("root");
    }
