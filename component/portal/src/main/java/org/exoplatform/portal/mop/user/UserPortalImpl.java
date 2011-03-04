@@ -189,6 +189,13 @@ public class UserPortalImpl implements UserPortal
       return navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), scope);
    }
 
+   public UserNode getNode(UserNode node, Scope scope) throws Exception
+   {
+      UserNavigation navigation = node.navigation;
+      UserNodeModel model = new UserNodeModel(navigation);
+      return navigationService.load(model, node, scope);
+   }
+
    private class UserNodeModel implements NodeModel<UserNode>
    {
 
@@ -208,13 +215,13 @@ public class UserPortalImpl implements UserPortal
       public UserNode create(NodeData data)
       {
          ResourceBundle bundle = bundleResolver.resolve(navigation);
-         return new UserNode(data, bundle);
+         return new UserNode(navigation,  data, bundle);
       }
 
       public UserNode create(NodeData data, Collection<UserNode> children)
       {
          ResourceBundle bundle = bundleResolver.resolve(navigation);
-         return new UserNode(data, children, bundle);
+         return new UserNode(navigation, data, children, bundle);
       }
    }
 

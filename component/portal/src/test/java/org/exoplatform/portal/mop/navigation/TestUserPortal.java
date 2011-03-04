@@ -417,6 +417,20 @@ public class TestUserPortal extends AbstractPortalTest
             assertEquals("administration", administration.getName());
             assertEquals(0, administration.getChildren().size());
             assertFalse(administration.hasChildren());
+
+            //
+            administration = userPortal.getNode(administration, Scope.CHILDREN);
+            assertEquals("administration", administration.getName());
+            assertEquals(5, administration.getChildren().size());
+            assertTrue(administration.hasChildren());
+
+            //
+            UserNode registry = administration.getChildren().iterator().next();
+            assertEquals("registry", registry.getName());
+            assertEquals(0, registry.getChildren().size());
+            assertFalse(registry.hasChildren());
+
+            // I'm too lazy to check the remaining nodes...
          }
       }.execute("root");
    }

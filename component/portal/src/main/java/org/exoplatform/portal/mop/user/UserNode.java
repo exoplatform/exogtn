@@ -22,7 +22,6 @@ package org.exoplatform.portal.mop.user;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeData;
-import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
@@ -41,23 +40,7 @@ public class UserNode
 {
 
    /** . */
-   public static final NodeModel<UserNode> MODEL = new NodeModel<UserNode>()
-   {
-      public NodeData getData(UserNode node)
-      {
-         return node.data;
-      }
-
-      public UserNode create(NodeData data)
-      {
-         return new UserNode(data);
-      }
-
-      public UserNode create(NodeData data, Collection<UserNode> children)
-      {
-         return new UserNode(data, children);
-      }
-   };
+   final UserNavigation navigation;
 
    /** . */
    final NodeData data;
@@ -77,22 +60,22 @@ public class UserNode
    /** . */
    private UserNode parent;
 
-   UserNode(NodeData data)
+   UserNode(UserNavigation navigation, NodeData data)
    {
-      this(data, null, null);
+      this(navigation, data, null, null);
    }
 
-   UserNode(NodeData data, ResourceBundle bundle)
+   UserNode(UserNavigation navigation, NodeData data, ResourceBundle bundle)
    {
-      this(data, null, bundle);
+      this(navigation, data, null, bundle);
    }
 
-   UserNode(NodeData data, Collection<UserNode> children)
+   UserNode(UserNavigation navigation, NodeData data, Collection<UserNode> children)
    {
-      this(data, children, null);
+      this(navigation, data, children, null);
    }
 
-   UserNode(NodeData data, Collection<UserNode> children, ResourceBundle bundle)
+   UserNode(UserNavigation navigation, NodeData data, Collection<UserNode> children, ResourceBundle bundle)
    {
       Map<String, UserNode> childMap;
       if (children != null)
@@ -117,6 +100,7 @@ public class UserNode
       }
 
       //
+      this.navigation = navigation;
       this.childMap = childMap;
       this.parent = null;
       this.data = data;

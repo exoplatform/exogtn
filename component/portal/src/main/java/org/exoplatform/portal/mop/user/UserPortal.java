@@ -63,6 +63,17 @@ public interface UserPortal
    UserNode getNode(UserNavigation navigation, Scope scope) throws Exception;
 
    /**
+    * Load a user node from a specified user node with a custom scope.
+    * The returned node is the same node of the navigation. The original node state will not be modified.
+    *
+    * @param node the user node
+    * @param scope the scope
+    * @return the user node
+    * @throws Exception any exception
+    */
+   UserNode getNode(UserNode node, Scope scope) throws Exception;
+
+   /**
     * Returns the default navigation path.
     *
     * @return the default navigation path
