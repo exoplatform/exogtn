@@ -55,53 +55,20 @@ public class UserNode
    private String encodedResolvedLabel;
 
    /** . */
-   private Map<String, UserNode> childMap;
+   Map<String, UserNode> childMap;
 
    /** . */
-   private UserNode parent;
+   UserNode parent;
 
    UserNode(UserNavigation navigation, NodeData data)
    {
-      this(navigation, data, null, null);
+      this(navigation, data, null);
    }
 
    UserNode(UserNavigation navigation, NodeData data, ResourceBundle bundle)
    {
-      this(navigation, data, null, bundle);
-   }
-
-   UserNode(UserNavigation navigation, NodeData data, Collection<UserNode> children)
-   {
-      this(navigation, data, children, null);
-   }
-
-   UserNode(UserNavigation navigation, NodeData data, Collection<UserNode> children, ResourceBundle bundle)
-   {
-      Map<String, UserNode> childMap;
-      if (children != null)
-      {
-         if (children.isEmpty())
-         {
-            childMap = Collections.emptyMap();
-         }
-         else
-         {
-            childMap = new LinkedHashMap<String, UserNode>();
-            for (UserNode child : children)
-            {
-               child.parent = this;
-               childMap.put(child.data.getName(), child);
-            }
-         }
-      }
-      else
-      {
-         childMap = null;
-      }
-
-      //
       this.navigation = navigation;
-      this.childMap = childMap;
+      this.childMap = null;
       this.parent = null;
       this.data = data;
       this.resolvedLabel = null;

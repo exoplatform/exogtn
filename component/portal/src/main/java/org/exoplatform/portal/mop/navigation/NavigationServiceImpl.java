@@ -348,7 +348,9 @@ public class NavigationServiceImpl implements NavigationService
                   // as we will need to know that a node exist but was not loaded on purpose
                }
             }
-            return model.create(data, children);
+            N node = model.create(data);
+            model.setChildren(node, children);
+            return node;
          }
          else if (visitMode == VisitMode.NO_CHILDREN)
          {

@@ -39,14 +39,14 @@ public class Node
          return node.data;
       }
 
-      public Node create(NodeData data, Collection<Node> children)
+      public void setChildren(Node node, Collection<Node> children)
       {
-         Node.Relationships fragment = new Node.Relationships(children.size());
-         for (Node node : children)
+         Node.Relationships relationships = new Node.Relationships(children.size());
+         for (Node child : children)
          {
-            fragment.put(node.data.getName(), node);
+            relationships.put(child.data.getName(), child);
          }
-         return new Node(data, fragment);
+         node.relationships = relationships;
       }
 
       public Node create(NodeData data)
@@ -59,13 +59,7 @@ public class Node
    final NodeData data;
 
    /** . */
-   final Relationships relationships;
-
-   Node(NodeData data, Relationships relationships)
-   {
-      this.data = data;
-      this.relationships = relationships;
-   }
+   Relationships relationships;
 
    Node(NodeData data)
    {

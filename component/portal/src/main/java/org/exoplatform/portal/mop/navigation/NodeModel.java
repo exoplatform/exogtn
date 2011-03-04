@@ -44,14 +44,21 @@ public interface NodeModel<N>
     */
    N create(NodeData data);
 
-   /**
-    * Create a node whose children are fully determined.
-    *
-    * @param data the node data
-    * @param children the children
-    * @return the node instance
-    */
-   N create(NodeData data, Collection<N> children);
 
+   /**
+    * Update the nodes to modify their relationships.
+    *
+    * @param node the parent
+    * @param children the children
+    */
+   void setChildren(N node, Collection<N> children);
+
+   /**
+    * Returns the children of the node, if the node does not know about its children then null should be returned.
+    *
+    * @param node the node
+    * @return the node children
+    */
+//   Collection<N> getChildren(N node);
 
 }

@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -218,10 +220,21 @@ public class UserPortalImpl implements UserPortal
          return new UserNode(navigation,  data, bundle);
       }
 
-      public UserNode create(NodeData data, Collection<UserNode> children)
+      public void setChildren(UserNode node, Collection<UserNode> children)
       {
-         ResourceBundle bundle = bundleResolver.resolve(navigation);
-         return new UserNode(navigation, data, children, bundle);
+         if (children.isEmpty())
+         {
+            node.childMap = Collections.emptyMap();
+         }
+         else
+         {
+            node.childMap = new LinkedHashMap<String, UserNode>();
+            for (UserNode child : children)
+            {
+               child.parent = node;
+               node.childMap.put(child.data.getName(), child);
+            }
+         }
       }
    }
 
