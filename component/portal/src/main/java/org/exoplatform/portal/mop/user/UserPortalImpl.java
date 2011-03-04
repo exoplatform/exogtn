@@ -67,10 +67,13 @@ public class UserPortalImpl implements UserPortal
    /** . */
    private List<UserNavigation> navigations;
 
+   private final String portalName;
+
    public UserPortalImpl(
       NavigationService navigationService,
       OrganizationService organizationService,
       UserACL acl,
+      String portalName,
       PortalConfig portal,
       String userName,
       BundleResolver bundleResolver)
@@ -85,6 +88,7 @@ public class UserPortalImpl implements UserPortal
       this.navigationService = navigationService;
       this.organizationService = organizationService;
       this.acl = acl;
+      this.portalName = portalName;
       this.portal = portal;
       this.userName = userName;
       this.bundleResolver = bundleResolver;
@@ -109,9 +113,10 @@ public class UserPortalImpl implements UserPortal
       if (navigations == null)
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
+         NavigationData portalNav = navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portalName));
          navigations.add(new UserNavigation(
-            navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portal.getName())),
-            acl.hasPermission(portal.getEditPermission())));
+            portalNav,
+            acl.hasEditPermissionOnNavigation(portalNav.getKey())));
          if (userName != null)
          {
             // Add user nav if any

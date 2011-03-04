@@ -306,6 +306,9 @@ public class UserACL
       //
       switch (siteKey.getType())
       {
+         case PORTAL:
+            //TODO: We should also take care of Portal's navigation
+            return false;
          case GROUP:
             String temp = siteKey.getName().trim();
             String expAdminGroup = getAdminGroups();
