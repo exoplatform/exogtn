@@ -189,9 +189,10 @@ public class UIMainActionListener
 
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
          PortalDataMapper.toUIPortal(newPortal, userConfig);
-         newPortal.setSelectedNode(uiPortal.getSelectedNode());
-         newPortal.setNavigation(uiPortal.getNavigation());
-         newPortal.setSelectedPath(uiPortal.getSelectedPath());
+//         newPortal.setSelectedNode(uiPortal.getSelectedNode());
+//         newPortal.setNavigation(uiPortal.getNavigation());
+//         newPortal.setSelectedPath(uiPortal.getSelectedPath());
+         newPortal.setNavPath(uiPortal.getNavPath());
          newPortal.refreshUIPage();
 
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);

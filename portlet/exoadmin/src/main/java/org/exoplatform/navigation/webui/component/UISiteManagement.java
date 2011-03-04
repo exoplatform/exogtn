@@ -312,9 +312,10 @@ public class UISiteManagement extends UIContainer
          // Check if edit current portal
          if (uiPortal.getName().equals(editPortal.getName()))
          {
-            editPortal.setSelectedNode(uiPortal.getSelectedNode());
-            editPortal.setNavigation(uiPortal.getNavigation());
-            editPortal.setSelectedPath(uiPortal.getSelectedPath());
+//            editPortal.setSelectedNode(uiPortal.getSelectedNode());
+//            editPortal.setNavigation(uiPortal.getNavigation());
+//            editPortal.setSelectedPath(uiPortal.getSelectedPath());
+            editPortal.setNavPath(uiPortal.getNavPath());
             UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
             siteBody.setUIComponent(null);
          }

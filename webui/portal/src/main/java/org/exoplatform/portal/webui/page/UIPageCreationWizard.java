@@ -73,7 +73,7 @@ public class UIPageCreationWizard extends UIPageWizard
       setNumberSteps(NUMBER_OF_STEPs);
       viewStep(FIRST_STEP);
       setShowWelcomeComponent(false);
-      boolean isUserNav = Util.getUIPortal().getNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      boolean isUserNav = Util.getUIPortal().getSiteKey().getTypeName().equals(PortalConfig.USER_TYPE);
       if (isUserNav)
       {
          uiPageInfo.getChild(UIPageNodeSelector.class).setRendered(false);

@@ -105,10 +105,6 @@ public class UIPortal extends UIContainer
 
    private PageNavigation navigation;
    
-   private List<PageNode> selectedPath;
-
-   private PageNode selectedNode_;
-   
    private NavigationPath navPath;
 
    private Map<String, UIPage> all_UIPages;
@@ -117,6 +113,11 @@ public class UIPortal extends UIContainer
 
    private UIComponent maximizedUIComponent;
 
+   public SiteKey getSiteKey()
+   {
+      return new SiteKey(ownerType, name_);
+   }
+   
    public String getOwner()
    {
       return owner;
@@ -195,7 +196,7 @@ public class UIPortal extends UIContainer
       return navPath;
    }
    
-   public void setNavPatch(NavigationPath nav)
+   public void setNavPath(NavigationPath nav)
    {
       this.navPath = nav;
    }
@@ -274,24 +275,6 @@ public class UIPortal extends UIContainer
 //      localizePageNavigation(navigation, locale);
    }
    
-   public synchronized void setSelectedNode(PageNode node)
-   {
-      selectedNode_ = node;
-   }
-
-   /*
-   public PageNode getSelectedNode() throws Exception
-   {
-      if (selectedNode_ != null)
-         return selectedNode_;
-      if (getSelectedNavigation() == null || selectedNavigation_.getNodes() == null
-         || selectedNavigation_.getNodes().size() < 1)
-         return null;
-      selectedNode_ = selectedNavigation_.getNodes().get(0);
-      return selectedNode_;
-   }
-   */
-   
    public PageNode getSelectedNode() throws Exception
    {
       UserNode target = getNavPath().getTarget();
@@ -313,11 +296,6 @@ public class UIPortal extends UIContainer
       return nodes;
    }
 
-   public void setSelectedPath(List<PageNode> nodes)
-   {
-      selectedPath = nodes;
-   }
-   
    /**
     * @deprecated use {@link #getNavigation()} instead
     * 

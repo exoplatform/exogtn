@@ -395,6 +395,8 @@ public class PageNode extends PageNodeContainer
       pageNode.setLabel(node.getLabel());
       pageNode.setIcon(node.getIcon());
       pageNode.setPageReference(node.getPageRef());
+      pageNode.setStartPublicationDate(new Date(node.getStartPublicationTime()));
+      pageNode.setEndPublicationDate(new Date(node.getEndPublicationTime()));
       pageNode.setVisibility(node.getVisibility());
       return pageNode;
    }

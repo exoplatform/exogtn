@@ -71,7 +71,7 @@ public class UIPageActionListener
             //Case 1: Both navigation type and id are not changed, but current page node is changed
             if(!currentNavPath.getTarget().getURI().equals(naviPath.getTarget().getURI()))
             {
-               showedUIPortal.setNavPatch(naviPath);
+               showedUIPortal.setNavPath(naviPath);
             }
          }
          else
@@ -84,7 +84,7 @@ public class UIPageActionListener
             showedUIPortal = uiPortalApp.getCachedUIPortal(targetNav.getKey());
             if (showedUIPortal != null)
             {
-               showedUIPortal.setNavPatch(naviPath);
+               showedUIPortal.setNavPath(naviPath);
                uiPortalApp.setShowedUIPortal(showedUIPortal);
                
                //Temporary solution to fix edit inline error while switching between navigations
@@ -102,7 +102,7 @@ public class UIPageActionListener
                {
                   return;
                }
-               showedUIPortal.setNavPatch(naviPath);
+               showedUIPortal.setNavPath(naviPath);
                uiPortalApp.setShowedUIPortal(showedUIPortal);
                uiPortalApp.putCachedUIPortal(showedUIPortal);
             }

@@ -97,20 +97,6 @@ public class UITabPaneDashboard extends UIContainer
       this.pageNavigation = uiPortal.getNavigation();
    }
 
-   /*
-   private PageNavigation getPageNavigation(String owner) throws Exception
-   {
-      List<PageNavigation> allNavigations = uiPortal.getNavigations();
-      for (PageNavigation nav : allNavigations)
-      {
-         if (nav.getOwner().equals(owner))
-            return nav;
-      }
-      return null;
-   }
-
-   */
-
    public int getCurrentNumberOfTabs() throws Exception
    {
 
