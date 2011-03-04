@@ -654,7 +654,8 @@ public class UIPortalComposer extends UIContainer
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         Util.getPortalRequestContext().setFullRender(true);
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         prContext.setFullRender(true);
 
          UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
@@ -667,6 +668,7 @@ public class UIPortalComposer extends UIContainer
             new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
                ? uiPortal.getSelectedNode().getUri() : null));
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }
@@ -687,7 +689,8 @@ public class UIPortalComposer extends UIContainer
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-
+         Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+         
          UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
          Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
          String pageId = page.getPageId();

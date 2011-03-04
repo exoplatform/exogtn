@@ -220,10 +220,7 @@ public class UIPortalNavigation extends UIComponent
 
    public PageNode getSelectedPageNode() throws Exception
    {
-      if (selectedNode_ != null)
-         return selectedNode_;
-      selectedNode_ = Util.getUIPortal().getSelectedNode();
-      return selectedNode_;
+      return  Util.getUIPortal().getSelectedNode();
    }
 
    public boolean isSelectedNode(PageNode node)
