@@ -61,6 +61,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -292,6 +293,8 @@ public class UIPortal extends UIContainer
          target = target.getParent();
       }
       while (target != null && target.getParent() != null);
+
+      Collections.reverse(nodes);
 
       return nodes;
    }
