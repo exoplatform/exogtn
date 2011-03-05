@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
@@ -213,10 +214,10 @@ public class UserPortalImpl implements UserPortal
          return node.context;
       }
 
-      public UserNode create(NodeContext data)
+      public UserNode create(NodeContext context)
       {
          ResourceBundle bundle = bundleResolver.resolve(navigation);
-         return new UserNode(navigation,  data, bundle);
+         return new UserNode(navigation, context, bundle);
       }
 
       public void setChildren(UserNode node, Collection<UserNode> children)
@@ -242,7 +243,7 @@ public class UserPortalImpl implements UserPortal
       final UserNavigation navigation;
       final String[] match;
       int score;
-      NodeContext node;
+      String id;
       UserNode userNode;
       private NavigationPath path;
 
@@ -257,7 +258,7 @@ public class UserPortalImpl implements UserPortal
          UserNode node = navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), this);
          if (score > 0)
          {
-            userNode = node.find(this.node.getId());
+            userNode = node.find(id);
             path = new NavigationPath(navigation, userNode);
          }
          else
@@ -270,19 +271,18 @@ public class UserPortalImpl implements UserPortal
       {
          return new Visitor()
          {
-            public VisitMode visit(int depth, NodeContext data)
+            public VisitMode visit(int depth, String id, String name, NodeState state)
             {
-               String name = data.getName();
                if (depth == 0 && "default".equals(name))
                {
                   score = 0;
-                  node = null;
+                  MatchingScope.this.id = null;
                   return VisitMode.ALL_CHILDREN;
                }
                else if (depth <= match.length && name.equals(match[depth - 1]))
                {
                   score++;
-                  node = data;
+                  MatchingScope.this.id = id;
                   return VisitMode.ALL_CHILDREN;
                }
                else

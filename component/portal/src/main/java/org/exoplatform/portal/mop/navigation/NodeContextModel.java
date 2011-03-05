@@ -20,19 +20,45 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
- * The context of a node.
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
  */
-public interface NodeContext
+class NodeContextModel implements NodeContext
 {
 
-   String getId();
+   /** The original node context data. */
+   final NodeContextData data;
 
-   String getName();
+   /** The new state if any. */
+   private NodeState state;
 
-   int getChildrenCount();
+   NodeContextModel(NodeContextData data)
+   {
+      this.data = data;
+   }
 
-   NodeState getState();
+   public String getId()
+   {
+      return data.getId();
+   }
 
-   void setState(NodeState state);
+   public String getName()
+   {
+      return data.getName();
+   }
 
+   public int getChildrenCount()
+   {
+      return data.getChildrenCount();
+   }
+
+   public NodeState getState()
+   {
+      return state != null ? state : data.getState();
+   }
+
+   public void setState(NodeState state)
+   {
+      this.state = state;
+   }
 }

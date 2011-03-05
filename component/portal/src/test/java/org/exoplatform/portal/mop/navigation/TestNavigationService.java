@@ -206,9 +206,9 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, NodeContext data)
+               public VisitMode visit(int depth, String id, String name, NodeState state)
                {
-                  if (data.getName().equals("webexplorer"))
+                  if (name.equals("webexplorer"))
                   {
                      return VisitMode.SKIP;
                   }
@@ -263,9 +263,8 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, NodeContext data)
+               public VisitMode visit(int depth, String id, String name, NodeState state)
                {
-                  String name = data.getName();
                   boolean use = false;
                   switch (depth)
                   {

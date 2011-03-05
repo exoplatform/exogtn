@@ -58,7 +58,7 @@ public class NavigationServiceImpl implements NavigationService
    private Map<String, SiteKey> navigationPathCache;
 
    /** . */
-   private Map<String, NodeContextImpl> nodeIdCache;
+   private Map<String, NodeContextData> nodeIdCache;
 
    /** . */
    private Map<String, String> nodePathCache;
@@ -94,7 +94,7 @@ public class NavigationServiceImpl implements NavigationService
       this.manager = manager;
       this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationDataImpl>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
-      this.nodeIdCache = new ConcurrentHashMap<String, NodeContextImpl>(1000);
+      this.nodeIdCache = new ConcurrentHashMap<String, NodeContextData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;
    }
@@ -305,15 +305,15 @@ public class NavigationServiceImpl implements NavigationService
       return load(model, session, nodeId, visitor, 0);
    }
 
-   private NodeContextImpl getNodeData(POMSession session, String nodeId)
+   private NodeContextData getNodeData(POMSession session, String nodeId)
    {
-      NodeContextImpl data = nodeIdCache.get(nodeId);
+      NodeContextData data = nodeIdCache.get(nodeId);
       if (data == null)
       {
          Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
          if (navigation != null)
          {
-            data = new NodeContextImpl(navigation);
+            data = new NodeContextData(navigation);
             nodeIdCache.put(nodeId, data);
             nodePathCache.put(session.pathOf(navigation), nodeId);
          }
@@ -323,12 +323,12 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> N load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
    {
-      NodeContextImpl data = getNodeData(session, nodeId);
+      NodeContextData data = getNodeData(session, nodeId);
 
       //
       if (data != null)
       {
-         VisitMode visitMode = visitor.visit(depth, data);
+         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data);
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
             List<N> children = new ArrayList<N>(data.children.size());
@@ -348,13 +348,13 @@ public class NavigationServiceImpl implements NavigationService
                   // as we will need to know that a node exist but was not loaded on purpose
                }
             }
-            N node = model.create(data);
+            N node = model.create(new NodeContextModel(data));
             model.setChildren(node, children);
             return node;
          }
          else if (visitMode == VisitMode.NO_CHILDREN)
          {
-            return model.create(data);
+            return model.create(new NodeContextModel(data));
          }
          else if (visitMode == VisitMode.SKIP)
          {

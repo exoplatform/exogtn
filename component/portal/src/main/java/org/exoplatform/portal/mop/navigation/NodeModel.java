@@ -29,20 +29,20 @@ public interface NodeModel<N>
 {
 
    /**
-    * Returns the id of a node.
+    * Returns the context of a node.
     *
     * @param node the node
-    * @return the node id
+    * @return the node context
     */
    NodeContext getContext(N node);
 
    /**
-    * Create a node whose children are not determined.
+    * Create a node wrapping a context.
     *
-    * @param data the node data
+    * @param context the node context
     * @return the node instance
     */
-   N create(NodeContext data);
+   N create(NodeContext context);
 
 
    /**
@@ -52,13 +52,5 @@ public interface NodeModel<N>
     * @param children the children
     */
    void setChildren(N node, Collection<N> children);
-
-   /**
-    * Returns the children of the node, if the node does not know about its children then null should be returned.
-    *
-    * @param node the node
-    * @return the node children
-    */
-//   Collection<N> getChildren(N node);
 
 }

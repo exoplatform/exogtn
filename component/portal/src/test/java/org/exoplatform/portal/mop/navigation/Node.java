@@ -49,9 +49,9 @@ public class Node
          node.relationships = relationships;
       }
 
-      public Node create(NodeContext data)
+      public Node create(NodeContext context)
       {
-         return new Node(data);
+         return new Node(context);
       }
    };
 

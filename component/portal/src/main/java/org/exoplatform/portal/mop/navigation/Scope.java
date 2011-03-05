@@ -51,7 +51,7 @@ public interface Scope
          }
          this.visitor = new Visitor()
          {
-            public VisitMode visit(int depth, NodeContext data)
+            public VisitMode visit(int depth, String id, String name, NodeState state)
             {
                return depth < height ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
             }
@@ -74,7 +74,7 @@ public interface Scope
    {
       private Visitor instance = new Visitor()
       {
-         public VisitMode visit(int depth, NodeContext data)
+         public VisitMode visit(int depth, String id, String name, NodeState state)
          {
             return VisitMode.ALL_CHILDREN;
          }
@@ -89,7 +89,7 @@ public interface Scope
    {
       Scope.Visitor visitor = new Visitor()
       {
-         public VisitMode visit(int depth, NodeContext context)
+         public VisitMode visit(int depth, String id, String name, NodeState state)
          {
             switch (depth)
             {
@@ -97,7 +97,7 @@ public interface Scope
                   return VisitMode.ALL_CHILDREN;
                case 1:
                case 2:
-                  Visibility visibility = context.getState().getVisibility();
+                  Visibility visibility = state.getVisibility();
                   if (visibility == Visibility.DISPLAYED || visibility == Visibility.TEMPORAL)
                   {
                      // todo implement temporal
@@ -129,6 +129,6 @@ public interface Scope
 
    public interface Visitor
    {
-      VisitMode visit(int depth, NodeContext data);
+      VisitMode visit(int depth, String id, String name, NodeState state);
    }
 }
