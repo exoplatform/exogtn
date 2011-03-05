@@ -62,7 +62,7 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       uiBreadCumbs.setTemplate(template);
    }
 
-   public void loadSelectedPath()
+   public void loadSelectedPath() throws Exception
    {
       List<PageNode> nodes = Util.getUIPortal().getSelectedPath();
       List<LocalPath> paths = new ArrayList<LocalPath>();

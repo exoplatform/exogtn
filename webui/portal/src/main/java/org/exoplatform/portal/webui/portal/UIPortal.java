@@ -192,8 +192,13 @@ public class UIPortal extends UIContainer
       return listNavs;
    }
    
-   public NavigationPath getNavPath()
+   public NavigationPath getNavPath() throws Exception
    {
+      if (navPath == null)
+      {
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
+         navPath = uiApp.getUserPortalConfig().getUserPortal().getDefaultPath(); 
+      }
       return navPath;
    }
    
@@ -282,7 +287,7 @@ public class UIPortal extends UIContainer
       return PageNode.toPageNode(target);
    }
 
-   public List<PageNode> getSelectedPath()
+   public List<PageNode> getSelectedPath() throws Exception
    {
       List<PageNode> nodes = new ArrayList<PageNode>();
 

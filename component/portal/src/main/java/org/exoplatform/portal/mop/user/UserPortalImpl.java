@@ -296,7 +296,7 @@ public class UserPortalImpl implements UserPortal
 
    public NavigationPath getDefaultPath() throws Exception
    {
-      for (UserNavigation userNavigation : navigations)
+      for (UserNavigation userNavigation : getNavigations())
       {
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
