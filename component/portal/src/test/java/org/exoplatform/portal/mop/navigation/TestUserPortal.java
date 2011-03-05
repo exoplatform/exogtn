@@ -42,7 +42,6 @@ import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.i18n.MapResourceBundle;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -296,33 +295,33 @@ public class TestUserPortal extends AbstractPortalTest
             NavigationPath nav = userPortal.resolvePath("/");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             UserNode target = nav.getTarget();
-            assertEquals("home", target.getData().getName());
-            assertEquals("default", target.getParent().getData().getName());
+            assertEquals("home", target.getName());
+            assertEquals("default", target.getParent().getName());
             assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/foo");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             target = nav.getTarget();
-            assertEquals("home", target.getData().getName());
-            assertEquals("default", target.getParent().getData().getName());
+            assertEquals("home", target.getName());
+            assertEquals("default", target.getParent().getName());
             assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/home");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
             target = nav.getTarget();
-            assertEquals("home", target.getData().getName());
-            assertEquals("default", target.getParent().getData().getName());
+            assertEquals("home", target.getName());
+            assertEquals("default", target.getParent().getName());
             assertNull(target.getParent().getParent());
 
             //
             nav = userPortal.resolvePath("/administration/communityManagement");
             assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getNavigation().getKey());
             target = nav.getTarget();
-            assertEquals("communityManagement", target.getData().getName());
-            assertEquals("administration", target.getParent().getData().getName());
-            assertEquals("default", target.getParent().getParent().getData().getName());
+            assertEquals("communityManagement", target.getName());
+            assertEquals("administration", target.getParent().getName());
+            assertEquals("default", target.getParent().getParent().getName());
             assertNull(target.getParent().getParent().getParent());
          }
       }.execute("root");
@@ -349,12 +348,12 @@ public class TestUserPortal extends AbstractPortalTest
             //
             path = userPortal.resolvePath(navigation, "/administration");
             assertNotNull(path);
-            assertEquals("administration", path.getTarget().getData().getName());
+            assertEquals("administration", path.getTarget().getName());
 
             //
             path = userPortal.resolvePath(navigation, "/administration/communityManagement");
             assertNotNull(path);
-            assertEquals("communityManagement", path.getTarget().getData().getName());
+            assertEquals("communityManagement", path.getTarget().getName());
          }
       }.execute("root");
    }

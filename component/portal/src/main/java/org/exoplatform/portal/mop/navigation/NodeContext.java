@@ -19,30 +19,16 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.Visibility;
-
 /**
- * The data carried by a navigation node.
+ * The context of a navigation node.
  */
-public interface NodeData
+public interface NodeContext
 {
 
    String getId();
 
    String getName();
 
-   String getURI();
-
-   String getLabel();
-
-   String getIcon();
-
-   long getStartPublicationTime();
-
-   long getEndPublicationTime();
-
-   Visibility getVisibility();
-
-   String getPageRef();
+   NodeState getState();
 
 }

@@ -20,10 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeData;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.navigation.VisitMode;
 
 import java.util.List;
 

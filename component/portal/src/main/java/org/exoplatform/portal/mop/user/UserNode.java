@@ -21,12 +21,11 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeData;
+import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -43,7 +42,7 @@ public class UserNode
    final UserNavigation navigation;
 
    /** . */
-   final NodeData data;
+   final NodeContext context;
 
    /** . */
    private final ResourceBundle bundle;
@@ -60,17 +59,17 @@ public class UserNode
    /** . */
    UserNode parent;
 
-   UserNode(UserNavigation navigation, NodeData data)
+   UserNode(UserNavigation navigation, NodeContext context)
    {
-      this(navigation, data, null);
+      this(navigation, context, null);
    }
 
-   UserNode(UserNavigation navigation, NodeData data, ResourceBundle bundle)
+   UserNode(UserNavigation navigation, NodeContext context, ResourceBundle bundle)
    {
       this.navigation = navigation;
       this.childMap = null;
       this.parent = null;
-      this.data = data;
+      this.context = context;
       this.resolvedLabel = null;
       this.encodedResolvedLabel = null;
       this.bundle = bundle;
@@ -78,52 +77,47 @@ public class UserNode
 
    public String getId()
    {
-      return data.getId();
+      return context.getId();
    }
 
    public String getName()
    {
-      return data.getName();
+      return context.getName();
    }
 
    public String getURI()
    {
-      return data.getURI();
+      return context.getState().getURI();
    }
 
    public String getLabel()
    {
-      return data.getLabel();
+      return context.getState().getLabel();
    }
 
    public String getIcon()
    {
-      return data.getIcon();
+      return context.getState().getIcon();
    }
 
    public long getStartPublicationTime()
    {
-      return data.getStartPublicationTime();
+      return context.getState().getStartPublicationTime();
    }
 
    public long getEndPublicationTime()
    {
-      return data.getEndPublicationTime();
+      return context.getState().getEndPublicationTime();
    }
 
    public Visibility getVisibility()
    {
-      return data.getVisibility();
+      return context.getState().getVisibility();
    }
 
    public String getPageRef()
    {
-      return data.getPageRef();
-   }
-
-   public NodeData getData()
-   {
-      return data;
+      return context.getState().getPageRef();
    }
 
    public String getResolvedLabel()
@@ -131,9 +125,9 @@ public class UserNode
       if (resolvedLabel == null)
       {
          String resolvedLabel;
-         if (bundle != null && data.getLabel() != null)
+         if (bundle != null && context.getState().getLabel() != null)
          {
-            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, data.getLabel());
+            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
          }
          else
          {
@@ -143,7 +137,7 @@ public class UserNode
          //
          if (resolvedLabel == null)
          {
-            resolvedLabel = data.getName();
+            resolvedLabel = context.getName();
          }
 
          //
@@ -190,7 +184,7 @@ public class UserNode
    UserNode find(String nodeId)
    {
       UserNode found = null;
-      if (data.getId().equals(nodeId))
+      if (context.getId().equals(nodeId))
       {
          found = this;
       }

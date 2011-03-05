@@ -206,7 +206,7 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, NodeData data)
+               public VisitMode visit(int depth, NodeContext data)
                {
                   if (data.getName().equals("webexplorer"))
                   {
@@ -263,7 +263,7 @@ public class TestNavigationService extends AbstractPortalTest
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, NodeData data)
+               public VisitMode visit(int depth, NodeContext data)
                {
                   String name = data.getName();
                   boolean use = false;
@@ -299,17 +299,17 @@ public class TestNavigationService extends AbstractPortalTest
       Node child2 = rootIterator.next();
       assertFalse(rootIterator.hasNext());
       assertEquals("node_name", child1.getName());
-      assertEquals("node_uri", child1.getData().getURI());
-      assertEquals("node_label", child1.getData().getLabel());
-      assertEquals("portal::test::test1", child1.getData().getPageRef());
-      assertEquals(Visibility.TEMPORAL, child1.getData().getVisibility());
-      assertEquals(953602380000L, child1.getData().getStartPublicationTime());
-      assertEquals(1237599180000L, child1.getData().getEndPublicationTime());
+      assertEquals("node_uri", child1.getContext().getState().getURI());
+      assertEquals("node_label", child1.getContext().getState().getLabel());
+      assertEquals("portal::test::test1", child1.getContext().getState().getPageRef());
+      assertEquals(Visibility.TEMPORAL, child1.getContext().getState().getVisibility());
+      assertEquals(953602380000L, child1.getContext().getState().getStartPublicationTime());
+      assertEquals(1237599180000L, child1.getContext().getState().getEndPublicationTime());
       assertEquals("node_name2", child2.getName());
-      assertEquals("node_uri2", child2.getData().getURI());
-      assertEquals("node_label2", child2.getData().getLabel());
-      assertEquals("portal::test::test1", child2.getData().getPageRef());
-      assertEquals(Visibility.DISPLAYED, child2.getData().getVisibility());
+      assertEquals("node_uri2", child2.getContext().getState().getURI());
+      assertEquals("node_label2", child2.getContext().getState().getLabel());
+      assertEquals("portal::test::test1", child2.getContext().getState().getPageRef());
+      assertEquals(Visibility.DISPLAYED, child2.getContext().getState().getVisibility());
    }
 
    public void testNodeInvalidationByRemoval() throws Exception
@@ -397,7 +397,7 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_propertychange"));
       Node defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertNull(defaultNode.getData().getLabel());
+      assertNull(defaultNode.getContext().getState().getLabel());
       end();
 
       //
@@ -411,7 +411,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertEquals("bilto", defaultNode.getData().getLabel());
+      assertEquals("bilto", defaultNode.getContext().getState().getLabel());
       end();
 
       //
@@ -425,7 +425,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertEquals("bilta", defaultNode.getData().getLabel());
+      assertEquals("bilta", defaultNode.getContext().getState().getLabel());
       end();
 
       //
@@ -439,7 +439,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertNull(defaultNode.getData().getLabel());
+      assertNull(defaultNode.getContext().getState().getLabel());
    }
 
    public void testNodeInvalidationByAttribute() throws Exception
@@ -454,7 +454,7 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_attribute"));
       Node defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertNull(defaultNode.getData().getURI());
+      assertNull(defaultNode.getContext().getState().getURI());
       end();
 
       //
@@ -467,7 +467,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertEquals("foo_uri", defaultNode.getData().getURI());
+      assertEquals("foo_uri", defaultNode.getContext().getState().getURI());
       end();
 
       //
@@ -480,7 +480,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertEquals("bar_uri", defaultNode.getData().getURI());
+      assertEquals("bar_uri", defaultNode.getContext().getState().getURI());
       end();
 
       //
@@ -493,6 +493,6 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertNull(defaultNode.getData().getURI());
+      assertNull(defaultNode.getContext().getState().getURI());
    }
 }

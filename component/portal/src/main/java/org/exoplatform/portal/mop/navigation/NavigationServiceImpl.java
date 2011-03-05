@@ -58,7 +58,7 @@ public class NavigationServiceImpl implements NavigationService
    private Map<String, SiteKey> navigationPathCache;
 
    /** . */
-   private Map<String, NodeDataImpl> nodeIdCache;
+   private Map<String, NodeContextImpl> nodeIdCache;
 
    /** . */
    private Map<String, String> nodePathCache;
@@ -94,7 +94,7 @@ public class NavigationServiceImpl implements NavigationService
       this.manager = manager;
       this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationDataImpl>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
-      this.nodeIdCache = new ConcurrentHashMap<String, NodeDataImpl>(1000);
+      this.nodeIdCache = new ConcurrentHashMap<String, NodeContextImpl>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
       this.invalidationManager = null;
    }
@@ -293,7 +293,7 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> N load(NodeModel<N> model, N node, Scope scope)
    {
-      NodeData data = model.getData(node);
+      NodeContext data = model.getContext(node);
       String id = data.getId();
       return load(model, id, scope);
    }
@@ -305,15 +305,15 @@ public class NavigationServiceImpl implements NavigationService
       return load(model, session, nodeId, visitor, 0);
    }
 
-   private NodeDataImpl getNodeData(POMSession session, String nodeId)
+   private NodeContextImpl getNodeData(POMSession session, String nodeId)
    {
-      NodeDataImpl data = nodeIdCache.get(nodeId);
+      NodeContextImpl data = nodeIdCache.get(nodeId);
       if (data == null)
       {
          Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
          if (navigation != null)
          {
-            data = new NodeDataImpl(navigation);
+            data = new NodeContextImpl(navigation);
             nodeIdCache.put(nodeId, data);
             nodePathCache.put(session.pathOf(navigation), nodeId);
          }
@@ -323,7 +323,7 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> N load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
    {
-      NodeDataImpl data = getNodeData(session, nodeId);
+      NodeContextImpl data = getNodeData(session, nodeId);
 
       //
       if (data != null)

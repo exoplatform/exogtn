@@ -25,7 +25,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeData;
+import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -38,7 +38,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -209,12 +208,12 @@ public class UserPortalImpl implements UserPortal
          this.navigation = navigation;
       }
 
-      public NodeData getData(UserNode node)
+      public NodeContext getContext(UserNode node)
       {
-         return node.data;
+         return node.context;
       }
 
-      public UserNode create(NodeData data)
+      public UserNode create(NodeContext data)
       {
          ResourceBundle bundle = bundleResolver.resolve(navigation);
          return new UserNode(navigation,  data, bundle);
@@ -232,7 +231,7 @@ public class UserPortalImpl implements UserPortal
             for (UserNode child : children)
             {
                child.parent = node;
-               node.childMap.put(child.data.getName(), child);
+               node.childMap.put(child.context.getName(), child);
             }
          }
       }
@@ -243,7 +242,7 @@ public class UserPortalImpl implements UserPortal
       final UserNavigation navigation;
       final String[] match;
       int score;
-      NodeData node;
+      NodeContext node;
       UserNode userNode;
       private NavigationPath path;
 
@@ -271,7 +270,7 @@ public class UserPortalImpl implements UserPortal
       {
          return new Visitor()
          {
-            public VisitMode visit(int depth, NodeData data)
+            public VisitMode visit(int depth, NodeContext data)
             {
                String name = data.getName();
                if (depth == 0 && "default".equals(name))

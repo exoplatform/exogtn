@@ -19,46 +19,27 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Collection;
+import org.exoplatform.portal.mop.Visibility;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NodeModel<N>
+public interface NodeState
 {
 
-   /**
-    * Returns the id of a node.
-    *
-    * @param node the node
-    * @return the node id
-    */
-   NodeContext getContext(N node);
+   String getURI();
 
-   /**
-    * Create a node whose children are not determined.
-    *
-    * @param data the node data
-    * @return the node instance
-    */
-   N create(NodeContext data);
+   String getLabel();
 
+   String getIcon();
 
-   /**
-    * Update the nodes to modify their relationships.
-    *
-    * @param node the parent
-    * @param children the children
-    */
-   void setChildren(N node, Collection<N> children);
+   long getStartPublicationTime();
 
-   /**
-    * Returns the children of the node, if the node does not know about its children then null should be returned.
-    *
-    * @param node the node
-    * @return the node children
-    */
-//   Collection<N> getChildren(N node);
+   long getEndPublicationTime();
+
+   Visibility getVisibility();
+
+   String getPageRef();
 
 }

@@ -34,9 +34,9 @@ public class Node
    /** . */
    public static final NodeModel<Node> MODEL = new NodeModel<Node>()
    {
-      public NodeData getData(Node node)
+      public NodeContext getContext(Node node)
       {
-         return node.data;
+         return node.context;
       }
 
       public void setChildren(Node node, Collection<Node> children)
@@ -44,42 +44,42 @@ public class Node
          Node.Relationships relationships = new Node.Relationships(children.size());
          for (Node child : children)
          {
-            relationships.put(child.data.getName(), child);
+            relationships.put(child.context.getName(), child);
          }
          node.relationships = relationships;
       }
 
-      public Node create(NodeData data)
+      public Node create(NodeContext data)
       {
          return new Node(data);
       }
    };
 
    /** . */
-   final NodeData data;
+   final NodeContext context;
 
    /** . */
    Relationships relationships;
 
-   Node(NodeData data)
+   Node(NodeContext context)
    {
-      this.data = data;
+      this.context = context;
       this.relationships = null;
    }
 
    public String getId()
    {
-      return data.getId();
+      return context.getId();
    }
 
    public String getName()
    {
-      return data.getName();
+      return context.getName();
    }
 
-   public NodeData getData()
+   public NodeContext getContext()
    {
-      return data;
+      return context;
    }
 
    public Relationships getRelationships()
@@ -90,7 +90,7 @@ public class Node
    @Override
    public String toString()
    {
-      return "Node[" + data.getName() + "]";
+      return "Node[" + context.getName() + "]";
    }
 
    /**
