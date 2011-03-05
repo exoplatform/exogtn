@@ -143,6 +143,11 @@ class NodeContextImpl implements NodeContext, NodeState, Serializable
       return name;
    }
 
+   public int getChildrenCount()
+   {
+      return children.size();
+   }
+
    public NodeState getState()
    {
       return this;

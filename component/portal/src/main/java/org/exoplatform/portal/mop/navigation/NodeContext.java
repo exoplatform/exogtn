@@ -29,6 +29,8 @@ public interface NodeContext
 
    String getName();
 
+   int getChildrenCount();
+
    NodeState getState();
 
 }

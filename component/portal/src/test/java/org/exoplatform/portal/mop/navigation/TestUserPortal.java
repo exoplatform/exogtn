@@ -403,31 +403,36 @@ public class TestUserPortal extends AbstractPortalTest
             //
             UserNode root = userPortal.getNode(navigation, Scope.SINGLE);
             assertEquals("default", root.getName());
+            assertEquals(1, root.getChildrenCount());
             assertEquals(0, root.getChildren().size());
-            assertFalse(root.hasChildren());
+            assertFalse(root.hasChildrenRelationship());
 
             //
             root = userPortal.getNode(navigation, Scope.CHILDREN);
             assertEquals("default", root.getName());
+            assertEquals(1, root.getChildrenCount());
             assertEquals(1, root.getChildren().size());
-            assertTrue(root.hasChildren());
+            assertTrue(root.hasChildrenRelationship());
             Iterator<UserNode> children = root.getChildren().iterator();
             UserNode administration = children.next();
             assertEquals("administration", administration.getName());
+            assertEquals(5, administration.getChildrenCount());
             assertEquals(0, administration.getChildren().size());
-            assertFalse(administration.hasChildren());
+            assertFalse(administration.hasChildrenRelationship());
 
             //
             administration = userPortal.getNode(administration, Scope.CHILDREN);
             assertEquals("administration", administration.getName());
+            assertEquals(5, administration.getChildrenCount());
             assertEquals(5, administration.getChildren().size());
-            assertTrue(administration.hasChildren());
+            assertTrue(administration.hasChildrenRelationship());
 
             //
             UserNode registry = administration.getChildren().iterator().next();
             assertEquals("registry", registry.getName());
+            assertEquals(0, registry.getChildrenCount());
             assertEquals(0, registry.getChildren().size());
-            assertFalse(registry.hasChildren());
+            assertFalse(registry.hasChildrenRelationship());
 
             // I'm too lazy to check the remaining nodes...
          }

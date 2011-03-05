@@ -165,9 +165,20 @@ public class UserNode
     *
     * @return ture if node has children
     */
-   public boolean hasChildren()
+   public boolean hasChildrenRelationship()
    {
       return childMap != null;
+   }
+
+   /**
+    * Returns the number of children, note that this does not guarantee that the children are effectively loaded, i.e
+    * we have <code>getChildrenCount() != getChildren().size()</code>.
+    *
+    * @return the number of children
+    */
+   public int getChildrenCount()
+   {
+      return context.getChildrenCount();
    }
 
    public Collection<UserNode> getChildren()
