@@ -57,7 +57,6 @@ public class UISitemapPortlet extends UIPortletApplication
       String template = prefers.getValue("template", "system:/groovy/webui/core/UISitemapTree.gtmpl");
 
       UIPortalNavigation uiPortalNavigation = addChild(UIPortalNavigation.class, "UISiteMap", null);
-      uiPortalNavigation.loadTreeNodes();
       uiPortalNavigation.setTemplate(template);
    }
 
