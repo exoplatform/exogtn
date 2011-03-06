@@ -43,5 +43,6 @@ public interface NodeContext<N>
 
    Collection<N> getChildren();
 
+   N addChild(NodeModel<N> model, String name);
 
 }

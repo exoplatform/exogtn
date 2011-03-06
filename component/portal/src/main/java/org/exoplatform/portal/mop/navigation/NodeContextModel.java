@@ -35,6 +35,9 @@ class NodeContextModel<N> implements NodeContext<N>
    /** The original node context data. */
    final NodeData data;
 
+   /** ; */
+   final String name;
+
    /** The new state if any. */
    private NodeState state;
 
@@ -48,17 +51,28 @@ class NodeContextModel<N> implements NodeContext<N>
    {
       this.node = model.create(this);
       this.data = data;
+      this.name = data.getName();
+      this.state = data.getState();
       this.children = null;
+   }
+
+   NodeContextModel(NodeModel<N> model, String name, NodeState state)
+   {
+      this.node = model.create(this);
+      this.data = null;
+      this.name = name;
+      this.state = state;
+      this.children = new LinkedHashMap<String, N>();
    }
 
    public String getId()
    {
-      return data.getId();
+      return data != null ? data.getId() : null;
    }
 
    public String getName()
    {
-      return data.getName();
+      return name;
    }
 
    public int getChildrenCount()
@@ -68,7 +82,7 @@ class NodeContextModel<N> implements NodeContext<N>
 
    public NodeState getState()
    {
-      return state != null ? state : data.getState();
+      return state;
    }
 
    public void setState(NodeState state)
@@ -96,5 +110,34 @@ class NodeContextModel<N> implements NodeContext<N>
    public Collection<N> getChildren()
    {
       return children != null ? children.values() : null;
+   }
+
+   public N addChild(NodeModel<N> model, String name)
+   {
+      if (model == null)
+      {
+         throw new NullPointerException();
+      }
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (children == null)
+      {
+         throw new IllegalStateException();
+      }
+      else if (children.containsKey(name))
+      {
+         throw new IllegalArgumentException();
+      }
+
+
+      //
+      NodeContextModel<N> childCtx = new NodeContextModel<N>(model, name, new NodeState.Builder().capture());
+      children.put(name, childCtx.node);
+      childCtx.parent = node;
+
+      //
+      return childCtx.node;
    }
 }

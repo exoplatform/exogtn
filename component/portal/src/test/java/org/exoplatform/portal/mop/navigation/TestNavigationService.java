@@ -494,4 +494,22 @@ public class TestNavigationService extends AbstractPortalTest
       defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
       assertNull(defaultNode.getContext().getState().getURI());
    }
+
+   public void testAddChild() throws Exception
+   {
+
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("add_child"));
+      Node defaultNode = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      Node foo = defaultNode.addChild("foo");
+      assertNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, defaultNode.getChild("foo"));
+   }
 }

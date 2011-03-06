@@ -77,6 +77,11 @@ public class Node
       return context.getChild(childName);
    }
 
+   public Node addChild(String childName)
+   {
+      return context.addChild(MODEL, childName);
+   }
+
    @Override
    public String toString()
    {
