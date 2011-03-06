@@ -330,16 +330,15 @@ public class NavigationServiceImpl implements NavigationService
          VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
-            NodeContextModel<N> blah = new NodeContextModel<N>(data);
-            blah.children = new LinkedHashMap<String, N>(data.children.size());
-            N n = model.create(blah);
+            NodeContextModel<N> context = new NodeContextModel<N>(model, data);
+            context.children = new LinkedHashMap<String, N>(data.children.size());
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  blah.children.put(entry.getKey(), child);
-                  ((NodeContextModel)model.getContext(child)).parent = n;
+                  context.children.put(entry.getKey(), child);
+                  ((NodeContextModel)model.getContext(child)).parent = context.node;
                }
                else
                {
@@ -350,11 +349,11 @@ public class NavigationServiceImpl implements NavigationService
                   // as we will need to know that a node exist but was not loaded on purpose
                }
             }
-            return n;
+            return context.node;
          }
          else if (visitMode == VisitMode.NO_CHILDREN)
          {
-            return model.create(new NodeContextModel<N>(data));
+            return new NodeContextModel<N>(model, data).node;
          }
          else if (visitMode == VisitMode.SKIP)
          {

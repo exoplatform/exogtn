@@ -29,6 +29,9 @@ import java.util.LinkedHashMap;
 class NodeContextModel<N> implements NodeContext<N>
 {
 
+   /** . */
+   final N node;
+
    /** The original node context data. */
    final NodeData data;
 
@@ -41,8 +44,9 @@ class NodeContextModel<N> implements NodeContext<N>
    /** . */
    LinkedHashMap<String, N> children;
 
-   NodeContextModel(NodeData data)
+   NodeContextModel(NodeModel<N> model, NodeData data)
    {
+      this.node = model.create(this);
       this.data = data;
       this.children = null;
    }
