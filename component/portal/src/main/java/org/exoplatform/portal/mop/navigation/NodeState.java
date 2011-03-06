@@ -27,21 +27,220 @@ import org.exoplatform.portal.mop.Visibility;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NodeState
+public class NodeState
 {
 
-   String getURI();
+   public static class Builder
+   {
 
-   String getLabel();
+      /** . */
+      private String uri;
 
-   String getIcon();
+      /** . */
+      private String label;
 
-   long getStartPublicationTime();
+      /** . */
+      private String icon;
 
-   long getEndPublicationTime();
+      /** . */
+      private long startPublicationTime;
 
-   Visibility getVisibility();
+      /** . */
+      private long endPublicationTime;
 
-   String getPageRef();
+      /** . */
+      private Visibility visibility;
 
+      /** . */
+      private String pageRef;
+
+      public Builder()
+      {
+      }
+
+      /**
+       * Creates a builder from a specified state.
+       *
+       * @param state the state to copy
+       * @throws NullPointerException if the stateis null
+       */
+      public Builder(NodeState state) throws NullPointerException
+      {
+         if (state == null)
+         {
+            throw new NullPointerException();
+         }
+         this.uri = state.uri;
+         this.label = state.label;
+         this.icon = state.icon;
+         this.startPublicationTime = state.startPublicationTime;
+         this.endPublicationTime = state.endPublicationTime;
+         this.visibility = state.visibility;
+         this.pageRef = state.pageRef;
+      }
+
+      public String getURI()
+      {
+         return uri;
+      }
+
+      public Builder setURI(String uri)
+      {
+         this.uri = uri;
+         return this;
+      }
+
+      public String getLabel()
+      {
+         return label;
+      }
+
+      public Builder setLabel(String label)
+      {
+         this.label = label;
+         return this;
+      }
+
+      public String getIcon()
+      {
+         return icon;
+      }
+
+      public Builder setIcon(String icon)
+      {
+         this.icon = icon;
+         return this;
+      }
+
+      public long getStartPublicationTime()
+      {
+         return startPublicationTime;
+      }
+
+      public Builder setStartPublicationTime(long startPublicationTime)
+      {
+         this.startPublicationTime = startPublicationTime;
+         return this;
+      }
+
+      public long getEndPublicationTime()
+      {
+         return endPublicationTime;
+      }
+
+      public Builder setEndPublicationTime(long endPublicationTime)
+      {
+         this.endPublicationTime = endPublicationTime;
+         return this;
+      }
+
+      public Visibility getVisibility()
+      {
+         return visibility;
+      }
+
+      public Builder setVisibility(Visibility visibility)
+      {
+         this.visibility = visibility;
+         return this;
+      }
+
+      public String getPageRef()
+      {
+         return pageRef;
+      }
+
+      public Builder setPageRef(String pageRef)
+      {
+         this.pageRef = pageRef;
+         return this;
+      }
+
+      public NodeState capture()
+      {
+         return new NodeState(
+            uri,
+            label,
+            icon,
+            startPublicationTime,
+            endPublicationTime,
+            visibility,
+            pageRef
+         );
+      }
+   }
+
+   /** . */
+   private final String uri;
+
+   /** . */
+   private final String label;
+
+   /** . */
+   private final String icon;
+
+   /** . */
+   private final long startPublicationTime;
+
+   /** . */
+   private final long endPublicationTime;
+
+   /** . */
+   private final Visibility visibility;
+
+   /** . */
+   private final String pageRef;
+
+   public NodeState(
+      String uri,
+      String label,
+      String icon,
+      long startPublicationTime,
+      long endPublicationTime,
+      Visibility visibility,
+      String pageRef)
+   {
+      this.uri = uri;
+      this.label = label;
+      this.icon = icon;
+      this.startPublicationTime = startPublicationTime;
+      this.endPublicationTime = endPublicationTime;
+      this.visibility = visibility;
+      this.pageRef = pageRef;
+   }
+
+   public String getURI()
+   {
+      return uri;
+   }
+
+   public String getLabel()
+   {
+      return label;
+   }
+
+   public String getIcon()
+   {
+      return icon;
+   }
+
+   public long getStartPublicationTime()
+   {
+      return startPublicationTime;
+   }
+
+   public long getEndPublicationTime()
+   {
+      return endPublicationTime;
+   }
+
+   public Visibility getVisibility()
+   {
+      return visibility;
+   }
+
+   public String getPageRef()
+   {
+      return pageRef;
+   }
 }

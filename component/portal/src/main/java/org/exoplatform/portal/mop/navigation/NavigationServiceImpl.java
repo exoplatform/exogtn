@@ -328,7 +328,7 @@ public class NavigationServiceImpl implements NavigationService
       //
       if (data != null)
       {
-         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data);
+         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
             List<N> children = new ArrayList<N>(data.children.size());

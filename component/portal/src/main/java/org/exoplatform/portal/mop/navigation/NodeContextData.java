@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeContextData implements NodeState, Serializable
+class NodeContextData implements Serializable
 {
 
    /** . */
@@ -51,25 +51,7 @@ class NodeContextData implements NodeState, Serializable
    final String name;
 
    /** . */
-   final String uri;
-
-   /** . */
-   final String label;
-
-   /** . */
-   final String icon;
-
-   /** . */
-   final long startPublicationTime;
-
-   /** . */
-   final long endPublicationTime;
-
-   /** . */
-   final Visibility visibility;
-
-   /** . */
-   final String pageRef;
+   final NodeState state;
 
    /** . */
    final LinkedHashMap<String, String> children;
@@ -110,6 +92,7 @@ class NodeContextData implements NodeState, Serializable
          PageLink pageLink = (PageLink)link;
          org.gatein.mop.api.workspace.Page target = pageLink.getPage();
          if (target != null)
+         if (target != null)
          {
             Site site = target.getSite();
             ObjectType<? extends Site> siteType = site.getObjectType();
@@ -121,15 +104,20 @@ class NodeContextData implements NodeState, Serializable
       Attributes attrs = nav.getAttributes();
 
       //
+      NodeState state = new NodeState(
+         attrs.getValue(MappedAttributes.URI),
+         label,
+         attrs.getValue(MappedAttributes.ICON),
+         startPublicationDate != null ? startPublicationDate.getTime() : -1,
+         endPublicationDate != null ? endPublicationDate.getTime() : -1,
+         visibility,
+         pageRef
+      );
+
+      //
       this.id = nav.getObjectId();
       this.name = nav.getName();
-      this.uri = attrs.getValue(MappedAttributes.URI);
-      this.label = label;
-      this.icon = attrs.getValue(MappedAttributes.ICON);
-      this.startPublicationTime = startPublicationDate != null ? startPublicationDate.getTime() : -1;
-      this.endPublicationTime = endPublicationDate != null ? endPublicationDate.getTime() : -1;
-      this.visibility = visibility;
-      this.pageRef = pageRef;
+      this.state = state;
       this.children = children;
    }
 
@@ -150,41 +138,6 @@ class NodeContextData implements NodeState, Serializable
 
    public NodeState getState()
    {
-      return this;
-   }
-
-   public String getURI()
-   {
-      return uri;
-   }
-
-   public String getLabel()
-   {
-      return label;
-   }
-
-   public String getIcon()
-   {
-      return icon;
-   }
-
-   public long getStartPublicationTime()
-   {
-      return startPublicationTime;
-   }
-
-   public long getEndPublicationTime()
-   {
-      return endPublicationTime;
-   }
-
-   public Visibility getVisibility()
-   {
-      return visibility;
-   }
-
-   public String getPageRef()
-   {
-      return pageRef;
+      return state;
    }
 }
