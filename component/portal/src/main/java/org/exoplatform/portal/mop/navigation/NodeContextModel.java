@@ -30,7 +30,7 @@ class NodeContextModel<N> implements NodeContext<N>
 {
 
    /** The original node context data. */
-   final NodeContextData data;
+   final NodeData data;
 
    /** The new state if any. */
    private NodeState state;
@@ -41,7 +41,7 @@ class NodeContextModel<N> implements NodeContext<N>
    /** . */
    LinkedHashMap<String, N> children;
 
-   NodeContextModel(NodeContextData data)
+   NodeContextModel(NodeData data)
    {
       this.data = data;
       this.children = null;
