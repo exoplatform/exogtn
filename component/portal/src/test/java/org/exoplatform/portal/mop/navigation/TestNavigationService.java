@@ -221,10 +221,10 @@ public class TestNavigationService extends AbstractPortalTest
          }
       });
       assertEquals("default", root.getName());
-      Iterator<? extends Node> i = root.getRelationships().getChildren().iterator();
+      Iterator<? extends Node> i = root.getChildren().iterator();
       assertTrue(i.hasNext());
       Node home = i.next();
-      assertNotNull(home.getRelationships());
+      assertNotNull(home.getChildren());
       assertEquals("home", home.getName());
       assertFalse(i.hasNext());
    }
@@ -233,7 +233,7 @@ public class TestNavigationService extends AbstractPortalTest
    {
       NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
       Node root = service.load(Node.MODEL, nav, Scope.SINGLE);
-      assertNull(root.getRelationships());
+      assertNull(root.getChildren());
       assertEquals("default", root.getName());
    }
 
@@ -242,14 +242,14 @@ public class TestNavigationService extends AbstractPortalTest
       NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       assertEquals("default", root.getName());
-      Iterator<? extends Node> i = root.getRelationships().getChildren().iterator();
+      Iterator<? extends Node> i = root.getChildren().iterator();
       assertTrue(i.hasNext());
       Node home = i.next();
-      assertNull(home.getRelationships());
+      assertNull(home.getChildren());
       assertEquals("home", home.getName());
       assertTrue(i.hasNext());
       Node webexplorer = i.next();
-      assertNull(webexplorer.getRelationships());
+      assertNull(webexplorer.getChildren());
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
    }
@@ -283,17 +283,17 @@ public class TestNavigationService extends AbstractPortalTest
             };
          }
       });
-      assertNull(root.getRelationships().getChild("a").getRelationships());
-      Node b = root.getRelationships().getChild("b");
-      Node d = b.getRelationships().getChild("d");
-      assertNull(d.getRelationships().getChild("e").getRelationships());
+      assertNull(root.getChild("a").getChildren());
+      Node b = root.getChild("b");
+      Node d = b.getChild("d");
+      assertNull(d.getChild("e").getChildren());
    }
 
    public void testState() throws Exception
    {
       NavigationData nav = service.getNavigation(SiteKey.portal("test"));
       Node root = service.load(Node.MODEL, nav, Scope.ALL);
-      Iterator<? extends Node> rootIterator = root.getRelationships().getChildren().iterator();
+      Iterator<? extends Node> rootIterator = root.getChildren().iterator();
       Node child1 = rootIterator.next();
       Node child2 = rootIterator.next();
       assertFalse(rootIterator.hasNext());
@@ -351,7 +351,7 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_child"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
-      Iterator<? extends Node> iterator = root.getRelationships().getChildren().iterator();
+      Iterator<? extends Node> iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
       end();
 
@@ -365,7 +365,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       root = service.load(Node.MODEL, nav, Scope.CHILDREN);
-      iterator = root.getRelationships().getChildren().iterator();
+      iterator = root.getChildren().iterator();
       iterator.next();
       assertFalse(iterator.hasNext());
       end();
@@ -380,7 +380,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       root = service.load(Node.MODEL, nav, Scope.CHILDREN);
-      iterator = root.getRelationships().getChildren().iterator();
+      iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
    }
 

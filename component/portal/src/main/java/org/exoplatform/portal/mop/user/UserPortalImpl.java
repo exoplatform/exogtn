@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -209,32 +208,15 @@ public class UserPortalImpl implements UserPortal
          this.navigation = navigation;
       }
 
-      public NodeContext getContext(UserNode node)
+      public NodeContext<UserNode> getContext(UserNode node)
       {
          return node.context;
       }
 
-      public UserNode create(NodeContext context)
+      public UserNode create(NodeContext<UserNode> context)
       {
          ResourceBundle bundle = bundleResolver.resolve(navigation);
          return new UserNode(navigation, context, bundle);
-      }
-
-      public void setChildren(UserNode node, Collection<UserNode> children)
-      {
-         if (children.isEmpty())
-         {
-            node.childMap = Collections.emptyMap();
-         }
-         else
-         {
-            node.childMap = new LinkedHashMap<String, UserNode>();
-            for (UserNode child : children)
-            {
-               child.parent = node;
-               node.childMap.put(child.context.getName(), child);
-            }
-         }
       }
    }
 

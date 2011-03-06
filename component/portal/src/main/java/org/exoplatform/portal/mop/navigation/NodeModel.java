@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Collection;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -34,7 +32,7 @@ public interface NodeModel<N>
     * @param node the node
     * @return the node context
     */
-   NodeContext getContext(N node);
+   NodeContext<N> getContext(N node);
 
    /**
     * Create a node wrapping a context.
@@ -42,15 +40,6 @@ public interface NodeModel<N>
     * @param context the node context
     * @return the node instance
     */
-   N create(NodeContext context);
-
-
-   /**
-    * Update the nodes to modify their relationships.
-    *
-    * @param node the parent
-    * @param children the children
-    */
-   void setChildren(N node, Collection<N> children);
+   N create(NodeContext<N> context);
 
 }

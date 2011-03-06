@@ -20,7 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 
 /**
  * Represents a navigation node.
@@ -34,37 +33,23 @@ public class Node
    /** . */
    public static final NodeModel<Node> MODEL = new NodeModel<Node>()
    {
-      public NodeContext getContext(Node node)
+      public NodeContext<Node> getContext(Node node)
       {
          return node.context;
       }
 
-      public void setChildren(Node node, Collection<Node> children)
-      {
-         Node.Relationships relationships = new Node.Relationships(children.size());
-         for (Node child : children)
-         {
-            relationships.put(child.context.getName(), child);
-         }
-         node.relationships = relationships;
-      }
-
-      public Node create(NodeContext context)
+      public Node create(NodeContext<Node> context)
       {
          return new Node(context);
       }
    };
 
    /** . */
-   final NodeContext context;
+   final NodeContext<Node> context;
 
-   /** . */
-   Relationships relationships;
-
-   Node(NodeContext context)
+   Node(NodeContext<Node> context)
    {
       this.context = context;
-      this.relationships = null;
    }
 
    public String getId()
@@ -82,40 +67,19 @@ public class Node
       return context;
    }
 
-   public Relationships getRelationships()
+   public Collection<Node> getChildren()
    {
-      return relationships;
+      return context.getChildren();
+   }
+
+   public Node getChild(String childName)
+   {
+      return context.getChild(childName);
    }
 
    @Override
    public String toString()
    {
       return "Node[" + context.getName() + "]";
-   }
-
-   /**
-    * A navigation whose relationships are fully determined.
-    */
-   public static class Relationships extends LinkedHashMap<String, Node>
-   {
-
-      Relationships(int initialCapacity)
-      {
-         super(initialCapacity);
-      }
-
-      Relationships()
-      {
-      }
-
-      public Iterable<? extends Node> getChildren()
-      {
-         return values();
-      }
-
-      public Node getChild(String childName)
-      {
-         return get(childName);
-      }
    }
 }

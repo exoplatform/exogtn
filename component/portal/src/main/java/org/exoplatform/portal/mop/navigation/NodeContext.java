@@ -19,20 +19,29 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Collection;
+
 /**
  * The context of a node.
  */
-public interface NodeContext
+public interface NodeContext<N>
 {
 
    String getId();
 
    String getName();
 
-   int getChildrenCount();
-
    NodeState getState();
 
    void setState(NodeState state);
+
+   int getChildrenCount();
+
+   N getParent();
+
+   N getChild(String childName);
+
+   Collection<N> getChildren();
+
 
 }

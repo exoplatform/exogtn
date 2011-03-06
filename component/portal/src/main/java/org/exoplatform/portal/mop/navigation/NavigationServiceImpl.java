@@ -38,9 +38,8 @@ import javax.jcr.observation.Event;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -331,13 +330,16 @@ public class NavigationServiceImpl implements NavigationService
          VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
-            List<N> children = new ArrayList<N>(data.children.size());
+            NodeContextModel<N> blah = new NodeContextModel<N>(data);
+            blah.children = new LinkedHashMap<String, N>(data.children.size());
+            N n = model.create(blah);
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  children.add(child);
+                  blah.children.put(entry.getKey(), child);
+                  ((NodeContextModel)model.getContext(child)).parent = n;
                }
                else
                {
@@ -348,13 +350,11 @@ public class NavigationServiceImpl implements NavigationService
                   // as we will need to know that a node exist but was not loaded on purpose
                }
             }
-            N node = model.create(new NodeContextModel(data));
-            model.setChildren(node, children);
-            return node;
+            return n;
          }
          else if (visitMode == VisitMode.NO_CHILDREN)
          {
-            return model.create(new NodeContextModel(data));
+            return model.create(new NodeContextModel<N>(data));
          }
          else if (visitMode == VisitMode.SKIP)
          {

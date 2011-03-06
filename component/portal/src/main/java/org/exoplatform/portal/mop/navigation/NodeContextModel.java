@@ -19,11 +19,14 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeContextModel implements NodeContext
+class NodeContextModel<N> implements NodeContext<N>
 {
 
    /** The original node context data. */
@@ -32,9 +35,16 @@ class NodeContextModel implements NodeContext
    /** The new state if any. */
    private NodeState state;
 
+   /** . */
+   N parent;
+
+   /** . */
+   LinkedHashMap<String, N> children;
+
    NodeContextModel(NodeContextData data)
    {
       this.data = data;
+      this.children = null;
    }
 
    public String getId()
@@ -60,5 +70,27 @@ class NodeContextModel implements NodeContext
    public void setState(NodeState state)
    {
       this.state = state;
+   }
+
+   public N getParent()
+   {
+      return parent;
+   }
+
+   public N getChild(String childName)
+   {
+      if (children != null)
+      {
+         return children.get(childName);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public Collection<N> getChildren()
+   {
+      return children != null ? children.values() : null;
    }
 }

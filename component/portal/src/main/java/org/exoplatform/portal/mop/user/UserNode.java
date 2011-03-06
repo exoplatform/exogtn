@@ -26,7 +26,6 @@ import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -42,7 +41,7 @@ public class UserNode
    final UserNavigation navigation;
 
    /** . */
-   final NodeContext context;
+   final NodeContext<UserNode> context;
 
    /** . */
    private final ResourceBundle bundle;
@@ -53,22 +52,14 @@ public class UserNode
    /** . */
    private String encodedResolvedLabel;
 
-   /** . */
-   Map<String, UserNode> childMap;
-
-   /** . */
-   UserNode parent;
-
-   UserNode(UserNavigation navigation, NodeContext context)
+   UserNode(UserNavigation navigation, NodeContext<UserNode> context)
    {
       this(navigation, context, null);
    }
 
-   UserNode(UserNavigation navigation, NodeContext context, ResourceBundle bundle)
+   UserNode(UserNavigation navigation, NodeContext<UserNode> context, ResourceBundle bundle)
    {
       this.navigation = navigation;
-      this.childMap = null;
-      this.parent = null;
       this.context = context;
       this.resolvedLabel = null;
       this.encodedResolvedLabel = null;
@@ -157,7 +148,7 @@ public class UserNode
 
    public UserNode getParent()
    {
-      return parent;
+      return context.getParent();
    }
 
    /**
@@ -167,7 +158,7 @@ public class UserNode
     */
    public boolean hasChildrenRelationship()
    {
-      return childMap != null;
+      return context.getChildren() != null;
    }
 
    /**
@@ -183,12 +174,13 @@ public class UserNode
 
    public Collection<UserNode> getChildren()
    {
-      return childMap != null ? childMap.values() : Collections.<UserNode>emptyList();
+      Collection<UserNode> children = context.getChildren();
+      return children != null ? children : Collections.<UserNode>emptyList();
    }
 
    public UserNode getChild(String childName)
    {
-      return childMap != null ? childMap.get(childName) : null;
+      return context.getChild(childName);
    }
 
    // Keep this internal for now
@@ -199,15 +191,19 @@ public class UserNode
       {
          found = this;
       }
-      else if (childMap != null)
+      else
       {
-         for (UserNode child : childMap.values())
+         Collection<UserNode> children = context.getChildren();
+         if (children != null)
          {
-            UserNode a = child.find(nodeId);
-            if (a != null)
+            for (UserNode child : children)
             {
-               found = a;
-               break;
+               UserNode a = child.find(nodeId);
+               if (a != null)
+               {
+                  found = a;
+                  break;
+               }
             }
          }
       }
