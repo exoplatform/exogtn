@@ -40,11 +40,8 @@ import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -335,14 +332,13 @@ public class NavigationServiceImpl implements NavigationService
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
             NodeContextModel<N> context = new NodeContextModel<N>(model, data);
-            context.children = new NodeContextModel.Children<N>();
+            context.createChildren();
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  context.children.values.put(entry.getKey(), (NodeContextModel<N>)model.getContext(child));
-                  ((NodeContextModel)model.getContext(child)).parent = context.node;
+                  context.children.put((NodeContextModel<N>)model.getContext(child));
                }
                else
                {
@@ -485,7 +481,7 @@ public class NavigationServiceImpl implements NavigationService
          {
             // The source children
             ArrayList<NodeContextModel<N>> srcContexts = new ArrayList<NodeContextModel<N>>(context.children.size());
-            for (NodeContextModel<N> srcContext : context.children.values.values())
+            for (NodeContextModel<N> srcContext : context.children.values)
             {
                srcContexts.add(srcContext);
             }

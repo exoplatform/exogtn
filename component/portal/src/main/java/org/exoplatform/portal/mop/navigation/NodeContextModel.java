@@ -20,9 +20,9 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -47,7 +47,7 @@ class NodeContextModel<N> implements NodeContext<N>
    N parent;
 
    /** . */
-   Children<N> children;
+   Children children;
 
 
    NodeContextModel(NodeModel<N> model, NodeData data)
@@ -65,7 +65,7 @@ class NodeContextModel<N> implements NodeContext<N>
       this.data = null;
       this.name = name;
       this.state = state;
-      this.children = new Children<N>();
+      this.children = new Children();
    }
 
    public String getId()
@@ -102,7 +102,7 @@ class NodeContextModel<N> implements NodeContext<N>
    {
       if (children != null)
       {
-         NodeContextModel<N> childCtx = children.values.get(childName);
+         NodeContextModel<N> childCtx = children.get(childName);
          return childCtx != null ? childCtx.node : null;
       }
       else
@@ -130,7 +130,7 @@ class NodeContextModel<N> implements NodeContext<N>
       {
          throw new IllegalStateException();
       }
-      else if (children.values.containsKey(name))
+      else if (children.contains(name))
       {
          throw new IllegalArgumentException();
       }
@@ -138,7 +138,7 @@ class NodeContextModel<N> implements NodeContext<N>
 
       //
       NodeContextModel<N> childCtx = new NodeContextModel<N>(model, name, new NodeState.Builder().capture());
-      children.values.put(name, childCtx);
+      children.put(childCtx);
       childCtx.parent = node;
 
       //
@@ -159,27 +159,9 @@ class NodeContextModel<N> implements NodeContext<N>
       {
          throw new IllegalStateException();
       }
-      else if (children.values.containsKey(name))
-      {
-         throw new IllegalArgumentException();
-      }
 
       //
-      NodeContextModel<N> childCtx = (NodeContextModel<N>)model.getContext(child);
-      if (childCtx.parent != null)
-      {
-         if (childCtx.parent != node)
-         {
-            throw new UnsupportedOperationException("not supported");
-         }
-         children.values.remove(childCtx.name);
-         children.values.put(childCtx.name, childCtx);
-      }
-      else
-      {
-         childCtx.parent = node;
-         children.values.put(childCtx.name, childCtx);
-      }
+      children.put((NodeContextModel<N>)model.getContext(child));
    }
 
    public boolean removeChild(NodeModel<N> model, String name)
@@ -198,28 +180,89 @@ class NodeContextModel<N> implements NodeContext<N>
       }
 
       //
-      NodeContextModel<N> childCtx = children.values.remove(name);
-      if (childCtx != null)
+      return children.remove(name) != null;
+   }
+
+   void createChildren()
+   {
+      if (children == null)
       {
-         childCtx.parent = null;
-         return true;
+         children = new Children();
       }
       else
       {
-         return false;
+         throw new IllegalStateException();
       }
    }
 
-   static class Children<N> extends AbstractCollection<N>
+   class Children extends AbstractCollection<N>
    {
 
       /** . */
-      final LinkedHashMap<String, NodeContextModel<N>> values = new LinkedHashMap<String, NodeContextModel<N>>();
+      final ArrayList<NodeContextModel<N>> values = new ArrayList<NodeContextModel<N>>();
+
+      NodeContextModel<N> get(String name)
+      {
+         int size = values.size();
+         for (int i = 0;i < size;i++)
+         {
+            NodeContextModel<N> ctx = values.get(i);
+            if (ctx.name.equals(name))
+            {
+               return ctx;
+            }
+         }
+         return null;
+      }
+
+      void put(NodeContextModel<N> childCtx)
+      {
+
+         if (childCtx.parent != null)
+         {
+            if (childCtx.parent != node)
+            {
+               throw new UnsupportedOperationException("not supported");
+            }
+            remove(childCtx.name);
+            values.add(childCtx);
+
+         }
+         else
+         {
+            if (contains(childCtx.name))
+            {
+               throw new IllegalArgumentException();
+            }
+            childCtx.parent = node;
+            values.add(childCtx);
+         }
+      }
+
+      NodeContextModel<N> remove(String name)
+      {
+         int size = values.size();
+         for (int i = 0;i < size;i++)
+         {
+            NodeContextModel<N> ctx = values.get(i);
+            if (ctx.name.equals(name))
+            {
+               values.remove(i);
+               return ctx;
+            }
+         }
+         return null;
+      }
+
+      boolean contains(String name)
+      {
+         return get(name) != null;
+      }
 
       @Override
       public Iterator<N> iterator()
       {
-         final Iterator<NodeContextModel<N>> iterator = values.values().iterator();
+         final Iterator<NodeContextModel<N>> iterator = values.iterator();
          return new Iterator<N>()
          {
             public boolean hasNext()
