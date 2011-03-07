@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;

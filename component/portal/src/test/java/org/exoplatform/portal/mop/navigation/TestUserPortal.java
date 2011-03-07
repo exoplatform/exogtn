@@ -26,6 +26,8 @@ import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.NavigationPath;
@@ -35,6 +37,7 @@ import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -42,6 +45,10 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.i18n.MapResourceBundle;
+import org.gatein.mop.api.workspace.Navigation;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+import org.gatein.mop.core.api.MOPService;
 
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -470,6 +477,52 @@ public class TestUserPortal extends AbstractPortalTest
             assertEquals("node_name2", node2.getName());
             assertEquals(-1, node2.getStartPublicationTime());
             assertEquals(-1, node2.getEndPublicationTime());
+         }
+      }.execute("root");
+   }
+
+   public void testSave()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            storage_.create(new PortalConfig("portal", "usernode_recursive"));
+            end(true);
+
+            //
+            begin();
+            Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "usernode_recursive");
+            site.getRootNavigation().addChild("default");
+            end(true);
+
+            //
+            begin();
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            root.addChild("foo");
+            root.save();
+            end(true);
+
+            //
+            begin();
+            root = userPortal.getNode(navigation, Scope.ALL);
+            root.addChild("bar");
+            root.getChild("foo").addChild("juu");
+            root.save();
+            end(true);
+
+            //
+            begin();
+            userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", "root");
+            userPortal = userPortalCfg.getUserPortal();
+            navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
+            root = userPortal.getNode(navigation, Scope.ALL);
+            assertNotNull(root.getChild("bar"));
+            UserNode foo = root.getChild("foo");
+            assertNotNull(foo.getChild("juu"));
          }
       }.execute("root");
    }
@@ -1103,9 +1156,6 @@ public class TestUserPortal extends AbstractPortalTest
    private abstract class UnitTest
    {
 
-
-      private POMSession mopSession;
-
       protected final void execute(String userId)
       {
          Throwable failure = null;
@@ -1134,9 +1184,6 @@ public class TestUserPortal extends AbstractPortalTest
             mgr.clearCache();
 
             //
-            mopSession = mgr.openSession();
-
-            //
             ConversationState.setCurrent(conversationState);
             try
             {
@@ -1145,11 +1192,11 @@ public class TestUserPortal extends AbstractPortalTest
             catch (Exception e)
             {
                failure = e;
+               log.error("Test failed", e);
             }
             finally
             {
                ConversationState.setCurrent(null);
-               mopSession.close(false);
                end();
             }
          }
@@ -1161,11 +1208,6 @@ public class TestUserPortal extends AbstractPortalTest
             err.initCause(failure);
             throw err;
          }
-      }
-
-      protected final void saveMOP()
-      {
-         mopSession.save();
       }
 
       protected abstract void execute() throws Exception;

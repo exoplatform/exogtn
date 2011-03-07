@@ -23,7 +23,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.NavigationData;
+import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -111,7 +111,7 @@ public class UserPortalImpl implements UserPortal
       if (navigations == null)
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
-         NavigationData portalNav = navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portalName));
+         Navigation portalNav = navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portalName));
          navigations.add(new UserNavigation(
             this,
             portalNav,
@@ -119,7 +119,7 @@ public class UserPortalImpl implements UserPortal
          if (userName != null)
          {
             // Add user nav if any
-            NavigationData userNav = navigationService.getNavigation(SiteKey.user(userName));
+            Navigation userNav = navigationService.getNavigation(SiteKey.user(userName));
             if (userNav != null)
             {
                navigations.add(new UserNavigation(this, userNav, true));
@@ -143,8 +143,8 @@ public class UserPortalImpl implements UserPortal
                {
                   continue;
                }
-               NavigationData navigation = navigationService.getNavigation(SiteKey.group(groupId));
-               if (navigation == null || navigation.getNodeId() == null)
+               Navigation navigation = navigationService.getNavigation(SiteKey.group(groupId));
+               if (navigation == null || navigation.getState().getNodeId() == null)
                {
                   continue;
                }
@@ -159,7 +159,7 @@ public class UserPortalImpl implements UserPortal
             {
                public int compare(UserNavigation nav1, UserNavigation nav2)
                {
-                  return nav1.getNavigation().getPriority() - nav2.getNavigation().getPriority();
+                  return nav1.getNavigation().getState().getPriority() - nav2.getNavigation().getState().getPriority();
                }
             });
          }
@@ -255,8 +255,8 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation userNavigation : getNavigations())
       {
-         NavigationData navigation = userNavigation.getNavigation();
-         if (navigation.getNodeId() != null)
+         Navigation navigation = userNavigation.getNavigation();
+         if (navigation.getState().getNodeId() != null)
          {
             UserNode root = navigationService.load(userNavigation.model, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())

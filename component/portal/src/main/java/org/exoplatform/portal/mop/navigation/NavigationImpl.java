@@ -25,23 +25,19 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NavigationDataImpl implements NavigationData
+class NavigationImpl implements Navigation
 {
 
    /** . */
    private final SiteKey key;
 
    /** . */
-   private final Integer priority;
+   private final NavigationState state;
 
-   /** . */
-   private final String nodeId;
-
-   NavigationDataImpl(SiteKey key, Integer priority, String nodeId)
+   NavigationImpl(SiteKey key, NavigationState state)
    {
       this.key = key;
-      this.priority = priority;
-      this.nodeId = nodeId;
+      this.state = state;
    }
 
    public SiteKey getKey()
@@ -49,13 +45,8 @@ class NavigationDataImpl implements NavigationData
       return key;
    }
 
-   public Integer getPriority()
+   public NavigationState getState()
    {
-      return priority;
-   }
-
-   public String getNodeId()
-   {
-      return nodeId;
+      return state;
    }
 }

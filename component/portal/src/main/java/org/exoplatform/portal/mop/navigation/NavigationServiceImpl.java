@@ -31,7 +31,6 @@ import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
@@ -61,7 +60,7 @@ public class NavigationServiceImpl implements NavigationService
 {
 
    /** . */
-   private Map<SiteKey, NavigationDataImpl> navigationKeyCache;
+   private Map<SiteKey, NavigationImpl> navigationKeyCache;
 
    /** . */
    private Map<String, SiteKey> navigationPathCache;
@@ -101,7 +100,7 @@ public class NavigationServiceImpl implements NavigationService
          throw new NullPointerException("No null pom session manager allowed");
       }
       this.manager = manager;
-      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationDataImpl>(1000);
+      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationImpl>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
       this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
@@ -252,9 +251,9 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public NavigationDataImpl getNavigation(SiteKey key)
+   public NavigationImpl getNavigation(SiteKey key)
    {
-      NavigationDataImpl data = navigationKeyCache.get(key);
+      NavigationImpl data = navigationKeyCache.get(key);
       if (data == null)
       {
          POMSession session = manager.getSession();
@@ -263,8 +262,8 @@ public class NavigationServiceImpl implements NavigationService
          Site site = workspace.getSite(objectType, key.getName());
          if (site != null)
          {
-            Navigation nav = site.getRootNavigation();
-            Navigation root = nav.getChild("default");
+            org.gatein.mop.api.workspace.Navigation nav = site.getRootNavigation();
+            org.gatein.mop.api.workspace.Navigation root = nav.getChild("default");
             String rootId;
             int priority;
             if (root != null)
@@ -278,7 +277,7 @@ public class NavigationServiceImpl implements NavigationService
                priority = 1;
                rootId = null;
             }
-            data = new NavigationDataImpl(key, priority, rootId);
+            data = new NavigationImpl(key, new NavigationState(priority, rootId));
             navigationKeyCache.put(key, data);
             navigationPathCache.put(session.pathOf(site), key);
          }
@@ -287,9 +286,9 @@ public class NavigationServiceImpl implements NavigationService
    }
 
 
-   public <N> N load(NodeModel<N> model, NavigationData navigation, Scope scope)
+   public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
    {
-      String nodeId = navigation.getNodeId();
+      String nodeId = navigation.getState().getNodeId();
       if (nodeId != null)
       {
          return load(model, nodeId, scope);
@@ -319,7 +318,7 @@ public class NavigationServiceImpl implements NavigationService
       NodeData data = nodeIdCache.get(nodeId);
       if (data == null)
       {
-         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+         org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
          if (navigation != null)
          {
             data = new NodeData(navigation);
@@ -395,7 +394,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      Navigation navigation = (Navigation)session.findObjectById(context.getId());
+      org.gatein.mop.api.workspace.Navigation navigation = (org.gatein.mop.api.workspace.Navigation)session.findObjectById(context.getId());
 
       // Save state
       NodeState state = context.state;
@@ -464,7 +463,7 @@ public class NavigationServiceImpl implements NavigationService
                NodeContext<N> srcContext = srcContexts.get(srcIndex);
                if (srcContext.data == null)
                {
-                  Navigation added = navigation.addChild(srcContext.name);
+                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(srcContext.name);
                   srcContext.data = new NodeData(added);
                   orders.add(added.getObjectId());
                   srcIndex++;
@@ -512,7 +511,7 @@ public class NavigationServiceImpl implements NavigationService
             while (dstIndex < dstIdList.size())
             {
                String dstId = dstIdList.get(dstIndex);
-               Navigation removed = session.findObjectById(ObjectType.NAVIGATION, dstId);
+               org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, dstId);
                if (removed == null)
                {
                   throw new UnsupportedOperationException("Not consistent, need a custom exception");
@@ -527,10 +526,10 @@ public class NavigationServiceImpl implements NavigationService
 
             // Now sort children according to the order provided by the container
             // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
-            Navigation[] a = navigation.getChildren().toArray(new Navigation[navigation.getChildren().size()]);
-            Arrays.sort(a, new Comparator<Navigation>()
+            org.gatein.mop.api.workspace.Navigation[] a = navigation.getChildren().toArray(new org.gatein.mop.api.workspace.Navigation[navigation.getChildren().size()]);
+            Arrays.sort(a, new Comparator<org.gatein.mop.api.workspace.Navigation>()
             {
-               public int compare(Navigation o1, Navigation o2)
+               public int compare(org.gatein.mop.api.workspace.Navigation o1, org.gatein.mop.api.workspace.Navigation o2)
                {
                   int i1 = orders.indexOf(o1.getObjectId());
                   int i2 = orders.indexOf(o2.getObjectId());

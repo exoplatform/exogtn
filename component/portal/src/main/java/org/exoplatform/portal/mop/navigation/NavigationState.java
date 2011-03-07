@@ -19,34 +19,43 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.SiteKey;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NavigationData
+public class NavigationState
 {
 
-   /**
-    * Returns the navigation key.
-    *
-    * @return the navigation key
-    */
-   SiteKey getKey();
+   /** . */
+   private final Integer priority;
+
+   /** . */
+   private final String nodeId;
+
+   public NavigationState(Integer priority, String nodeId)
+   {
+      this.priority = priority;
+      this.nodeId = nodeId;
+   }
 
    /**
     * Returns the navigation priority.
     *
     * @return the navigation priority
     */
-   Integer getPriority();
+   public Integer getPriority()
+   {
+      return priority;
+   }
 
    /**
     * Returns the navigation related node id.
     *
     * @return the node id
     */
-   String getNodeId();
+   public String getNodeId()
+   {
+      return nodeId;
+   }
 
 }

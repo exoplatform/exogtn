@@ -25,21 +25,21 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NavigationService
+public interface Navigation
 {
 
    /**
-    * Find and returns a navigation. If no such navigation exist, null is returned instead.
+    * Returns the navigation key.
     *
-    * @param key the navigation key
-    * @return the matching navigation
+    * @return the navigation key
     */
-   Navigation getNavigation(SiteKey key);
+   SiteKey getKey();
 
-   <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
-
-   <N> N load(NodeModel<N> model, N node, Scope scope);
-
-   <N> void save(NodeModel<N> model, N node);
+   /**
+    * Returns the navigation state.
+    *
+    * @return the navigation state
+    */
+   NavigationState getState();
 
 }

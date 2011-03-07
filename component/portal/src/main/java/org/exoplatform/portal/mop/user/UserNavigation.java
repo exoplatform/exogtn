@@ -20,7 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationData;
+import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.gatein.common.util.EmptyResourceBundle;
@@ -38,7 +38,7 @@ public class UserNavigation
    final UserPortalImpl portal;
 
    /** . */
-   private final NavigationData navigation;
+   private final Navigation navigation;
 
    /** . */
    private final boolean modifiable;
@@ -67,7 +67,7 @@ public class UserNavigation
       }
    };
 
-   UserNavigation(UserPortalImpl portal, NavigationData navigation, boolean modifiable)
+   UserNavigation(UserPortalImpl portal, Navigation navigation, boolean modifiable)
    {
       this.portal = portal;
       this.navigation = navigation;
@@ -79,7 +79,7 @@ public class UserNavigation
       return navigation.getKey();
    }
    
-   public NavigationData getNavigation()
+   public Navigation getNavigation()
    {
       return navigation;
    }

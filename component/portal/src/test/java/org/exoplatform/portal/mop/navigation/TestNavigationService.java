@@ -28,7 +28,6 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
@@ -105,11 +104,11 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       SiteKey key = new SiteKey(SiteType.PORTAL, "get_navigation");
-      NavigationData nav = service.getNavigation(key);
+      Navigation nav = service.getNavigation(key);
       assertNotNull(nav);
-      assertEquals(1, (int)nav.getPriority());
+      assertEquals(1, (int)nav.getState().getPriority());
       assertEquals(key, nav.getKey());
-      assertNull(nav.getNodeId());
+      assertNull(nav.getState().getNodeId());
       end();
 
       //
@@ -123,9 +122,9 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       nav = service.getNavigation(key);
       assertNotNull(nav);
-      assertEquals(1, (int)nav.getPriority());
+      assertEquals(1, (int)nav.getState().getPriority());
       assertEquals(key, nav.getKey());
-      assertNotNull(nav.getNodeId());
+      assertNotNull(nav.getState().getNodeId());
       end();
 
       //
@@ -139,9 +138,9 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       nav = service.getNavigation(key);
       assertNotNull(nav);
-      assertEquals(1, (int)nav.getPriority());
+      assertEquals(1, (int)nav.getState().getPriority());
       assertEquals(key, nav.getKey());
-      assertNull(nav.getNodeId());
+      assertNull(nav.getState().getNodeId());
    }
 
    public void testNavigationInvalidationByPriority()
@@ -152,8 +151,8 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       SiteKey key = new SiteKey(SiteType.PORTAL, "invalidation_by_priority_change");
-      NavigationData nav = service.getNavigation(key);
-      assertEquals(1, (int)nav.getPriority());
+      Navigation nav = service.getNavigation(key);
+      assertEquals(1, (int)nav.getState().getPriority());
       end();
 
       //
@@ -167,7 +166,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.getNavigation(key);
-      assertEquals(2, (int)nav.getPriority());
+      assertEquals(2, (int)nav.getState().getPriority());
       end();
 
       //
@@ -181,7 +180,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.getNavigation(key);
-      assertEquals(4, (int)nav.getPriority());
+      assertEquals(4, (int)nav.getState().getPriority());
       end();
 
       //
@@ -195,12 +194,12 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.getNavigation(key);
-      assertEquals(1, (int)nav.getPriority());
+      assertEquals(1, (int)nav.getState().getPriority());
    }
 
    public void testSkipVisitMode() throws Exception
    {
-      NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
+      Navigation nav = service.getNavigation(SiteKey.portal("classic"));
       Node root = service.load(Node.MODEL, nav, new Scope()
       {
          public Visitor get()
@@ -232,7 +231,7 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testLoadSingleScope() throws Exception
    {
-      NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
+      Navigation nav = service.getNavigation(SiteKey.portal("classic"));
       Node root = service.load(Node.MODEL, nav, Scope.SINGLE);
       assertNull(root.getChildren());
       assertEquals("default", root.getName());
@@ -240,7 +239,7 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testLoadChildrenScope() throws Exception
    {
-      NavigationData nav = service.getNavigation(SiteKey.portal("classic"));
+      Navigation nav = service.getNavigation(SiteKey.portal("classic"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       assertEquals("default", root.getName());
       Iterator<? extends Node> i = root.getChildren().iterator();
@@ -257,7 +256,7 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testLoadCustomScope() throws Exception
    {
-      NavigationData nav = service.getNavigation(SiteKey.portal("large"));
+      Navigation nav = service.getNavigation(SiteKey.portal("large"));
       Node root = service.load(Node.MODEL, nav, new Scope()
       {
          public Visitor get()
@@ -292,7 +291,7 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testState() throws Exception
    {
-      NavigationData nav = service.getNavigation(SiteKey.portal("test"));
+      Navigation nav = service.getNavigation(SiteKey.portal("test"));
       Node root = service.load(Node.MODEL, nav, Scope.ALL);
       Iterator<? extends Node> rootIterator = root.getChildren().iterator();
       Node child1 = rootIterator.next();
@@ -322,7 +321,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_removal"));
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_removal"));
       Node root = service.load(Node.MODEL, nav, Scope.SINGLE);
       assertNotNull(root);
       end();
@@ -350,7 +349,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       // Put the navigation in the cache
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_child"));
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_child"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       Iterator<? extends Node> iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
@@ -395,7 +394,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_propertychange"));
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_propertychange"));
       Node defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
       assertNull(defaultNode.getContext().getState().getLabel());
       end();
@@ -452,7 +451,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("invalidation_by_attribute"));
+      Navigation nav = service.getNavigation(SiteKey.portal("invalidation_by_attribute"));
       Node defaultNode = service.load(Node.MODEL, nav, Scope.SINGLE);
       assertNull(defaultNode.getContext().getState().getURI());
       end();
@@ -505,7 +504,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("add_child"));
+      Navigation nav = service.getNavigation(SiteKey.portal("add_child"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
 
       //
@@ -535,7 +534,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("remove_child"));
+      Navigation nav = service.getNavigation(SiteKey.portal("remove_child"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       Node foo = root.getChild("foo");
       assertNotNull(foo.getId());
@@ -561,14 +560,14 @@ public class TestNavigationService extends AbstractPortalTest
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child");
-      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
       end(true);
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("reorder_child"));
+      Navigation nav = service.getNavigation(SiteKey.portal("reorder_child"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       Iterator<Node> i = root.getChildren().iterator();
       Node foo = i.next();
@@ -607,7 +606,7 @@ public class TestNavigationService extends AbstractPortalTest
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_children");
-      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("1");
       rootNavigation.addChild("2");
       rootNavigation.addChild("3");
@@ -617,7 +616,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("save_children"));
+      Navigation nav = service.getNavigation(SiteKey.portal("save_children"));
       Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       root.removeChild("5");
       root.removeChild("2");
@@ -649,13 +648,13 @@ public class TestNavigationService extends AbstractPortalTest
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive");
-      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo");
       end(true);
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("save_recursive"));
+      Navigation nav = service.getNavigation(SiteKey.portal("save_recursive"));
       Node root = service.load(Node.MODEL, nav, Scope.ALL);
       Node foo = root.getChild("foo");
       Node bar = foo.addChild("bar");
@@ -684,7 +683,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      NavigationData nav = service.getNavigation(SiteKey.portal("save_recursive"));
+      Navigation nav = service.getNavigation(SiteKey.portal("save_recursive"));
       Node root = service.load(Node.MODEL, nav, Scope.SINGLE);
       NodeState state = root.getState();
       assertNull(state.getURI());
