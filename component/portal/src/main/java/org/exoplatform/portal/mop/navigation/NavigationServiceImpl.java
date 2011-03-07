@@ -38,9 +38,12 @@ import javax.jcr.observation.Event;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -367,6 +370,199 @@ public class NavigationServiceImpl implements NavigationService
       else
       {
          return null;
+      }
+   }
+
+   public <N> void save(NodeModel<N> model, N node)
+   {
+      POMSession session = manager.getSession();
+      save(session, model, node);
+   }
+
+   private static abstract class Action
+   {
+
+      protected Action()
+      {
+      }
+
+      private static class NoOp extends Action
+      {
+
+         /** . */
+         final String dstId;
+
+         private NoOp(String dstId)
+         {
+            this.dstId = dstId;
+         }
+
+         @Override
+         public String toString()
+         {
+            return "NoOp[dstId=" + dstId + "]";
+         }
+      }
+
+      private static class Create extends Action
+      {
+
+         /** . */
+         private final String name;
+
+         /** . */
+         private final NodeState state;
+
+         private Create(String name, NodeState state)
+         {
+            this.name = name;
+            this.state = state;
+         }
+
+         @Override
+         public String toString()
+         {
+            return "Create[name=" + name + "]";
+         }
+      }
+
+      private static class Order extends Action
+      {
+
+         /** . */
+         private final String dstId;
+
+         private Order(String dstId)
+         {
+            this.dstId = dstId;
+         }
+
+         @Override
+         public String toString()
+         {
+            return "Order[dstId=" + dstId + "]";
+         }
+      }
+
+      private static class Remove extends Action
+      {
+
+         /** . */
+         private final String dstId;
+
+         private Remove(String dstId)
+         {
+            this.dstId = dstId;
+         }
+
+         @Override
+         public String toString()
+         {
+            return "Remove[dstId=" + dstId + "]";
+         }
+      }
+   }
+
+   public <N> void save(POMSession session, NodeModel<N> model, N node)
+   {
+      NodeContextModel<N> context = (NodeContextModel<N>)model.getContext(node);
+
+      // Get the navigation node
+      if (context.data == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+//      Navigation navigation = (Navigation)session.findObjectById(context.getId());
+
+      //
+      if (context.children != null)
+      {
+         if (context.data == null)
+         {
+            throw new UnsupportedOperationException();
+         }
+         else
+         {
+            // The source children
+            ArrayList<NodeContextModel<N>> srcContexts = new ArrayList<NodeContextModel<N>>(context.children.size());
+            Set<String> srcIds = new HashSet<String>();
+            for (N child : context.children.values())
+            {
+               NodeContextModel<N> srcContext = (NodeContextModel<N>)model.getContext(child);
+               srcContexts.add(srcContext);
+               if (srcContext.data != null)
+               {
+                  srcIds.add(srcContext.data.getName());
+               }
+
+            }
+
+            // The destination children
+            ArrayList<String> dstIdList = new ArrayList<String>(context.data.children.values());
+
+            //
+            int srcIndex = 0;
+            int dstIndex = 0;
+            ArrayList<Action> actions = new ArrayList<Action>(context.data.children.size());
+            while (srcIndex < srcContexts.size())
+            {
+               NodeContextModel<N> srcContext = srcContexts.get(srcIndex);
+               if (srcContext.data == null)
+               {
+                  actions.add(new Action.Create(srcContext.name, srcContext.getState()));
+                  srcIndex++;
+               }
+               else
+               {
+                  String srcId = srcContext.data.getId();
+                  if (dstIndex < dstIdList.size())
+                  {
+                     String dstId = dstIdList.get(dstIndex);
+                     if (srcId.equals(dstId))
+                     {
+                        actions.add(new Action.NoOp(dstId));
+                        srcIndex++;
+                        dstIndex++;
+                     }
+                     else
+                     {
+                        int index = dstIdList.lastIndexOf(srcId);
+                        if (index > dstIndex)
+                        {
+                           actions.add(new Action.Order(srcId));
+                           dstIdList.remove(index); // Need to find a way to avoid this remove that is expensive
+                           srcIndex++;
+                        }
+                        else
+                        {
+                           throw new UnsupportedOperationException("Move operation not supported");
+                        }
+                     }
+                  }
+                  else
+                  {
+                     // It's a move that we don't support for now
+                     throw new UnsupportedOperationException("Move operation not supported");
+                  }
+               }
+            }
+
+            //
+            while (dstIndex < dstIdList.size())
+            {
+               String dstId = dstIdList.get(dstIndex);
+               actions.add(new Action.Remove(dstId));
+               dstIndex++;
+            }
+
+            //
+            for (Action action : actions)
+            {
+               System.out.println("action = " + action);
+            }
+         }
       }
    }
 }

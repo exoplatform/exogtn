@@ -28,6 +28,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
@@ -497,7 +498,6 @@ public class TestNavigationService extends AbstractPortalTest
 
    public void testAddChild() throws Exception
    {
-
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child");
       portal.getRootNavigation().addChild("default");
@@ -506,10 +506,73 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       NavigationData nav = service.getNavigation(SiteKey.portal("add_child"));
-      Node defaultNode = service.load(Node.MODEL, nav, Scope.CHILDREN);
-      Node foo = defaultNode.addChild("foo");
+      Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+
+      //
+      Node foo = root.addChild("foo");
       assertNull(foo.getId());
       assertEquals("foo", foo.getName());
-      assertSame(foo, defaultNode.getChild("foo"));
+      assertSame(foo, root.getChild("foo"));
+
+      //
+      System.out.println("Add child");
+      service.save(Node.MODEL, root);
+   }
+
+   public void testRemoveChild() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child");
+      portal.getRootNavigation().addChild("default").addChild("foo");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("remove_child"));
+      Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      Node foo = root.getChild("foo");
+      assertNotNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+
+      //
+      assertTrue(root.removeChild("foo"));
+      assertNull(root.getChild("foo"));
+
+      //
+      System.out.println("Remove child");
+      service.save(Node.MODEL, root);
+   }
+
+   public void testReorderChild() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child");
+      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      rootNavigation.addChild("bar");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("reorder_child"));
+      Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      Iterator<Node> i = root.getChildren().iterator();
+      Node foo = i.next();
+      assertNotNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+      Node bar = i.next();
+      assertNotNull(bar.getId());
+      assertEquals("bar", bar.getName());
+      assertSame(bar, root.getChild("bar"));
+      assertFalse(i.hasNext());
+
+      //
+      root.addChild(foo);
+
+      //
+      System.out.println("Order child");
+      service.save(Node.MODEL, root);
    }
 }

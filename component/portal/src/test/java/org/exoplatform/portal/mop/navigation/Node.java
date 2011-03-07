@@ -77,9 +77,19 @@ public class Node
       return context.getChild(childName);
    }
 
+   public void addChild(Node child)
+   {
+      context.addChild(MODEL, child);
+   }
+
    public Node addChild(String childName)
    {
       return context.addChild(MODEL, childName);
+   }
+
+   public boolean removeChild(String childName)
+   {
+      return context.removeChild(MODEL, childName);
    }
 
    @Override

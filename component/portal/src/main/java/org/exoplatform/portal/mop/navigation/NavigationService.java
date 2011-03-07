@@ -40,4 +40,6 @@ public interface NavigationService
 
    <N> N load(NodeModel<N> model, N node, Scope scope);
 
+   <N> void save(NodeModel<N> model, N node);
+
 }

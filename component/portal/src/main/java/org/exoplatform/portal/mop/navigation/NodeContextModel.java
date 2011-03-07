@@ -140,4 +140,70 @@ class NodeContextModel<N> implements NodeContext<N>
       //
       return childCtx.node;
    }
+
+   public void addChild(NodeModel<N> model, N child)
+   {
+      if (model == null)
+      {
+         throw new NullPointerException();
+      }
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (children == null)
+      {
+         throw new IllegalStateException();
+      }
+      else if (children.containsKey(name))
+      {
+         throw new IllegalArgumentException();
+      }
+
+      //
+      NodeContextModel<N> childCtx = (NodeContextModel<N>)model.getContext(child);
+      if (childCtx.parent != null)
+      {
+         if (childCtx.parent != node)
+         {
+            throw new UnsupportedOperationException("not supported");
+         }
+         children.remove(childCtx.name);
+         children.put(childCtx.name, child);
+      }
+      else
+      {
+         childCtx.parent = node;
+         children.put(childCtx.name, child);
+      }
+   }
+
+   public boolean removeChild(NodeModel<N> model, String name)
+   {
+      if (model == null)
+      {
+         throw new NullPointerException();
+      }
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (children == null)
+      {
+         throw new IllegalStateException();
+      }
+
+      //
+      N child = children.remove(name);
+      if (child != null)
+      {
+         NodeContextModel<N> childCtx = (NodeContextModel<N>)model.getContext(child);
+         childCtx.parent = null;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
 }

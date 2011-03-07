@@ -45,4 +45,8 @@ public interface NodeContext<N>
 
    N addChild(NodeModel<N> model, String name);
 
+   void addChild(NodeModel<N> model, N child);
+
+   boolean removeChild(NodeModel<N> model, String name);
+
 }
