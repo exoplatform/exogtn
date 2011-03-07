@@ -376,13 +376,12 @@ public class NavigationServiceImpl implements NavigationService
    public <N> void save(NodeModel<N> model, N node)
    {
       POMSession session = manager.getSession();
-      save(session, model, node);
+      NodeContextModel<N> context = (NodeContextModel<N>)model.getContext(node);
+      save(session, model, context);
    }
 
-   public <N> void save(POMSession session, NodeModel<N> model, N node)
+   public <N> void save(POMSession session, NodeModel<N> model, NodeContextModel<N> context)
    {
-      NodeContextModel<N> context = (NodeContextModel<N>)model.getContext(node);
-
       // Get the navigation node
       if (context.data == null)
       {
@@ -419,6 +418,7 @@ public class NavigationServiceImpl implements NavigationService
                if (srcContext.data == null)
                {
                   Navigation added = navigation.addChild(srcContext.name);
+                  srcContext.data = new NodeData(added);
                   orders.add(added.getObjectId());
                   srcIndex++;
                }
@@ -454,6 +454,9 @@ public class NavigationServiceImpl implements NavigationService
                      throw new UnsupportedOperationException("Move operation not supported");
                   }
                }
+
+               // Recurse
+               save(session, model, srcContext);
             }
 
             // Need to make some more consistency check (for phantoms)
@@ -491,6 +494,9 @@ public class NavigationServiceImpl implements NavigationService
             {
                navigation.getChildren().add(j, a[j]);
             }
+
+            // Finally update context data
+            context.data = new NodeData(navigation);
          }
       }
    }

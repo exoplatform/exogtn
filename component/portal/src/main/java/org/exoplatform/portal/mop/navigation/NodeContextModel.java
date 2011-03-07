@@ -34,8 +34,8 @@ class NodeContextModel<N> implements NodeContext<N>
    /** . */
    final N node;
 
-   /** The original node context data. */
-   final NodeData data;
+   /** node data representing persistent state. */
+   NodeData data;
 
    /** ; */
    final String name;

@@ -644,4 +644,34 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("4", i.next().getName());
       assertFalse(i.hasNext());
    }
+
+   public void testSaveRecursive() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive");
+      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("save_recursive"));
+      Node root = service.load(Node.MODEL, nav, Scope.ALL);
+      Node foo = root.getChild("foo");
+      Node bar = foo.addChild("bar");
+      bar.addChild("juu");
+      service.save(Node.MODEL, root);
+      startService();
+      end(true);
+      stopService();
+
+      //
+      begin();
+      root = service.load(Node.MODEL, nav, Scope.ALL);
+      foo = root.getChild("foo");
+      bar = foo.getChild("bar");
+      assertNotNull(bar.getId());
+      Node juu = bar.getChild("juu");
+      assertNotNull(juu.getId());
+   }
 }
