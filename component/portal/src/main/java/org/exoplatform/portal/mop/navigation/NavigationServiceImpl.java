@@ -340,14 +340,14 @@ public class NavigationServiceImpl implements NavigationService
          VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
-            NodeContextModel<N> context = new NodeContextModel<N>(model, data);
+            NodeContext<N> context = new NodeContext<N>(model, data);
             context.createChildren();
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  context.children.put(null, (NodeContextModel<N>)model.getContext(child));
+                  context.children.put(null, (NodeContext<N>)model.getContext(child));
                }
                else
                {
@@ -362,7 +362,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          else if (visitMode == VisitMode.NO_CHILDREN)
          {
-            return new NodeContextModel<N>(model, data).node;
+            return new NodeContext<N>(model, data).node;
          }
          else if (visitMode == VisitMode.SKIP)
          {
@@ -382,11 +382,11 @@ public class NavigationServiceImpl implements NavigationService
    public <N> void save(NodeModel<N> model, N node)
    {
       POMSession session = manager.getSession();
-      NodeContextModel<N> context = (NodeContextModel<N>)model.getContext(node);
+      NodeContext<N> context = (NodeContext<N>)model.getContext(node);
       save(session, model, context);
    }
 
-   public <N> void save(POMSession session, NodeModel<N> model, NodeContextModel<N> context)
+   public <N> void save(POMSession session, NodeModel<N> model, NodeContext<N> context)
    {
       // Get the navigation node
       if (context.data == null)
@@ -446,8 +446,8 @@ public class NavigationServiceImpl implements NavigationService
          else
          {
             // The source children
-            ArrayList<NodeContextModel<N>> srcContexts = new ArrayList<NodeContextModel<N>>(context.children.size());
-            for (NodeContextModel<N> srcContext : context.children.values)
+            ArrayList<NodeContext<N>> srcContexts = new ArrayList<NodeContext<N>>(context.children.size());
+            for (NodeContext<N> srcContext : context.children.values)
             {
                srcContexts.add(srcContext);
             }
@@ -461,7 +461,7 @@ public class NavigationServiceImpl implements NavigationService
             final List<String> orders = new ArrayList<String>();
             while (srcIndex < srcContexts.size())
             {
-               NodeContextModel<N> srcContext = srcContexts.get(srcIndex);
+               NodeContext<N> srcContext = srcContexts.get(srcIndex);
                if (srcContext.data == null)
                {
                   Navigation added = navigation.addChild(srcContext.name);
