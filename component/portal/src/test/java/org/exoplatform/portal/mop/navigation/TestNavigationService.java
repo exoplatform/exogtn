@@ -513,10 +513,11 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(foo.getId());
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
+      service.save(Node.MODEL, root);
+      end(true);
 
       //
-      System.out.println("Add child");
-      service.save(Node.MODEL, root);
+      begin();
    }
 
    public void testRemoveChild() throws Exception
@@ -538,10 +539,11 @@ public class TestNavigationService extends AbstractPortalTest
       //
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
+      service.save(Node.MODEL, root);
+      end(true);
 
       //
-      System.out.println("Remove child");
-      service.save(Node.MODEL, root);
+      begin();
    }
 
    public void testReorderChild() throws Exception
@@ -570,9 +572,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       root.addChild(foo);
+      service.save(Node.MODEL, root);
+      end(true);
 
       //
-      System.out.println("Order child");
-      service.save(Node.MODEL, root);
+      begin();
    }
 }

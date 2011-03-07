@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -474,9 +475,6 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-//      Navigation navigation = (Navigation)session.findObjectById(context.getId());
-
-      //
       if (context.children != null)
       {
          if (context.data == null)
@@ -558,9 +556,40 @@ public class NavigationServiceImpl implements NavigationService
             }
 
             //
+            Navigation navigation = (Navigation)session.findObjectById(context.getId());
+            ListIterator<Navigation> target = navigation.getChildren().listIterator();
             for (Action action : actions)
             {
-               System.out.println("action = " + action);
+               if (action instanceof Action.Create)
+               {
+                  Action.Create create = (Action.Create)action;
+                  Navigation n = navigation.addChild(create.name);
+                  target.add(n);
+               }
+               else if (action instanceof Action.Remove)
+               {
+                  if (!target.hasNext())
+                  {
+                     throw new IllegalStateException();
+                  }
+                  Action.Remove remove = (Action.Remove)action;
+                  Navigation next = target.next();
+                  if (!next.getObjectId().equals(remove.dstId))
+                  {
+                     throw new IllegalStateException();
+                  }
+                  target.remove();
+               }
+               else if (action instanceof Action.Order)
+               {
+                  Action.Order order = (Action.Order)action;
+                  Navigation n = session.findObjectById(ObjectType.NAVIGATION, order.dstId);
+                  target.add(n);
+               }
+               else
+               {
+                  // No op
+               }
             }
          }
       }
