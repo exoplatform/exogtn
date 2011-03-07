@@ -674,4 +674,38 @@ public class TestNavigationService extends AbstractPortalTest
       Node juu = bar.getChild("juu");
       assertNotNull(juu.getId());
    }
+
+   public void testSaveState() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("save_recursive"));
+      Node root = service.load(Node.MODEL, nav, Scope.SINGLE);
+      NodeState state = root.getState();
+      assertNull(state.getURI());
+      assertNull(state.getLabel());
+      assertEquals(-1, state.getStartPublicationTime());
+      assertEquals(-1, state.getEndPublicationTime());
+      long now = System.currentTimeMillis();
+      root.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
+      service.save(Node.MODEL, root);
+      startService();
+      end(true);
+      stopService();
+
+      //
+      begin();
+      root = service.load(Node.MODEL, nav, Scope.ALL);
+      state = root.getState();
+      assertEquals("foo", state.getURI());
+      assertEquals("bar", state.getLabel());
+      assertEquals(-1, state.getStartPublicationTime());
+      assertEquals(now, state.getEndPublicationTime());
+      assertNull(state.getVisibility());
+   }
 }

@@ -20,17 +20,22 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.chromattic.api.Chromattic;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
+import org.gatein.mop.api.workspace.link.PageLink;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -43,9 +48,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -389,6 +395,48 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
+      Navigation navigation = (Navigation)session.findObjectById(context.getId());
+
+      // Save state
+      NodeState state = context.state;
+      if (state != null)
+      {
+         Workspace workspace = navigation.getSite().getWorkspace();
+         String reference = state.getPageRef();
+         if (reference != null)
+         {
+            String[] pageChunks = split("::", reference);
+            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+            Site site = workspace.getSite(siteType, pageChunks[1]);
+            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(target);
+         }
+         else
+         {
+            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(null);
+         }
+
+         //
+         Described described = navigation.adapt(Described.class);
+         described.setName(state.getLabel());
+
+         //
+         Visible visible = navigation.adapt(Visible.class);
+         visible.setVisibility(state.getVisibility());
+
+         //
+         visible.setStartPublicationDate(state.getStartPublicationDate());
+         visible.setEndPublicationDate(state.getEndPublicationDate());
+
+         //
+         Attributes attrs = navigation.getAttributes();
+         attrs.setValue(MappedAttributes.URI, state.getURI());
+         attrs.setValue(MappedAttributes.ICON, state.getIcon());
+      }
+
+      //
       if (context.children != null)
       {
          if (context.data == null)
@@ -410,7 +458,6 @@ public class NavigationServiceImpl implements NavigationService
             //
             int srcIndex = 0;
             int dstIndex = 0;
-            Navigation navigation = (Navigation)session.findObjectById(context.getId());
             final List<String> orders = new ArrayList<String>();
             while (srcIndex < srcContexts.size())
             {
@@ -497,6 +544,7 @@ public class NavigationServiceImpl implements NavigationService
 
             // Finally update context data
             context.data = new NodeData(navigation);
+            context.state = null;
          }
       }
    }

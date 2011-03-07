@@ -41,7 +41,7 @@ class NodeContextModel<N> implements NodeContext<N>
    final String name;
 
    /** The new state if any. */
-   private NodeState state;
+   NodeState state;
 
    /** . */
    N parent;

@@ -21,6 +21,8 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Visibility;
 
+import java.util.Date;
+
 /**
  * The state of a node.
  *
@@ -56,6 +58,13 @@ public class NodeState
 
       public Builder()
       {
+         this.uri = null;
+         this.icon = null;
+         this.label = null;
+         this.startPublicationTime = -1;
+         this.endPublicationTime = -1;
+         this.visibility = null;
+         this.pageRef = null;
       }
 
       /**
@@ -229,9 +238,19 @@ public class NodeState
       return startPublicationTime;
    }
 
+   Date getStartPublicationDate()
+   {
+      return startPublicationTime != -1 ? new Date(startPublicationTime) : null;
+   }
+
    public long getEndPublicationTime()
    {
       return endPublicationTime;
+   }
+
+   Date getEndPublicationDate()
+   {
+      return endPublicationTime != -1 ? new Date(endPublicationTime) : null;
    }
 
    public Visibility getVisibility()

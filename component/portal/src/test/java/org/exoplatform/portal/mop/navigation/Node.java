@@ -67,6 +67,16 @@ public class Node
       return context;
    }
 
+   public NodeState getState()
+   {
+      return context.getState();
+   }
+
+   public void setState(NodeState state)
+   {
+      context.setState(state);
+   }
+
    public Collection<Node> getChildren()
    {
       return context.getChildren();
