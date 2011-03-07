@@ -602,4 +602,46 @@ public class TestNavigationService extends AbstractPortalTest
       assertSame(foo, root.getChild("foo"));
       assertFalse(i.hasNext());
    }
+
+   public void testSaveChildren() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_children");
+      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("1");
+      rootNavigation.addChild("2");
+      rootNavigation.addChild("3");
+      rootNavigation.addChild("4");
+      rootNavigation.addChild("5");
+      end(true);
+
+      //
+      begin();
+      NavigationData nav = service.getNavigation(SiteKey.portal("save_children"));
+      Node root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      root.removeChild("5");
+      root.removeChild("2");
+      root.addChild(0, root.getChild("3"));
+      root.addChild(1, root.addChild("."));
+      service.save(Node.MODEL, root);
+      Iterator<Node> i = root.getChildren().iterator();
+      assertEquals("3", i.next().getName());
+      assertEquals(".", i.next().getName());
+      assertEquals("1", i.next().getName());
+      assertEquals("4", i.next().getName());
+      assertFalse(i.hasNext());
+      startService();
+      end(true);
+      stopService();
+
+      //
+      begin();
+      root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      i = root.getChildren().iterator();
+      assertEquals("3", i.next().getName());
+      assertEquals(".", i.next().getName());
+      assertEquals("1", i.next().getName());
+      assertEquals("4", i.next().getName());
+      assertFalse(i.hasNext());
+   }
 }

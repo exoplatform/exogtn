@@ -45,7 +45,7 @@ public interface NodeContext<N>
 
    N addChild(NodeModel<N> model, String name);
 
-   void addChild(NodeModel<N> model, N child);
+   void addChild(NodeModel<N> model, Integer index, N child) throws IndexOutOfBoundsException;
 
    boolean removeChild(NodeModel<N> model, String name);
 

@@ -138,14 +138,14 @@ class NodeContextModel<N> implements NodeContext<N>
 
       //
       NodeContextModel<N> childCtx = new NodeContextModel<N>(model, name, new NodeState.Builder().capture());
-      children.put(childCtx);
+      children.put(null, childCtx);
       childCtx.parent = node;
 
       //
       return childCtx.node;
    }
 
-   public void addChild(NodeModel<N> model, N child)
+   public void addChild(NodeModel<N> model, Integer index, N child)
    {
       if (model == null)
       {
@@ -161,7 +161,7 @@ class NodeContextModel<N> implements NodeContext<N>
       }
 
       //
-      children.put((NodeContextModel<N>)model.getContext(child));
+      children.put(index, (NodeContextModel<N>)model.getContext(child));
    }
 
    public boolean removeChild(NodeModel<N> model, String name)
@@ -215,18 +215,24 @@ class NodeContextModel<N> implements NodeContext<N>
          return null;
       }
 
-      void put(NodeContextModel<N> childCtx)
+      void put(Integer index, NodeContextModel<N> childCtx)
       {
-
+         if (index == null)
+         {
+            index = values.size();
+         }
          if (childCtx.parent != null)
          {
             if (childCtx.parent != node)
             {
                throw new UnsupportedOperationException("not supported");
             }
-            remove(childCtx.name);
-            values.add(childCtx);
-
+            int removedIndex = remove(childCtx.name);
+            if (removedIndex < index)
+            {
+               index--;
+            }
+            values.add(index, childCtx);
          }
          else
          {
@@ -235,11 +241,11 @@ class NodeContextModel<N> implements NodeContext<N>
                throw new IllegalArgumentException();
             }
             childCtx.parent = node;
-            values.add(childCtx);
+            values.add(index, childCtx);
          }
       }
 
-      NodeContextModel<N> remove(String name)
+      Integer remove(String name)
       {
          int size = values.size();
          for (int i = 0;i < size;i++)
@@ -248,7 +254,7 @@ class NodeContextModel<N> implements NodeContext<N>
             if (ctx.name.equals(name))
             {
                values.remove(i);
-               return ctx;
+               return i;
             }
          }
          return null;

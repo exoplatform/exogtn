@@ -39,7 +39,10 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -338,7 +341,7 @@ public class NavigationServiceImpl implements NavigationService
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  context.children.put((NodeContextModel<N>)model.getContext(child));
+                  context.children.put(null, (NodeContextModel<N>)model.getContext(child));
                }
                else
                {
@@ -376,90 +379,6 @@ public class NavigationServiceImpl implements NavigationService
       save(session, model, node);
    }
 
-   private static abstract class Action
-   {
-
-      protected Action()
-      {
-      }
-
-      private static class NoOp extends Action
-      {
-
-         /** . */
-         final String dstId;
-
-         private NoOp(String dstId)
-         {
-            this.dstId = dstId;
-         }
-
-         @Override
-         public String toString()
-         {
-            return "NoOp[dstId=" + dstId + "]";
-         }
-      }
-
-      private static class Create extends Action
-      {
-
-         /** . */
-         private final String name;
-
-         /** . */
-         private final NodeState state;
-
-         private Create(String name, NodeState state)
-         {
-            this.name = name;
-            this.state = state;
-         }
-
-         @Override
-         public String toString()
-         {
-            return "Create[name=" + name + "]";
-         }
-      }
-
-      private static class Order extends Action
-      {
-
-         /** . */
-         private final String dstId;
-
-         private Order(String dstId)
-         {
-            this.dstId = dstId;
-         }
-
-         @Override
-         public String toString()
-         {
-            return "Order[dstId=" + dstId + "]";
-         }
-      }
-
-      private static class Remove extends Action
-      {
-
-         /** . */
-         private final String dstId;
-
-         private Remove(String dstId)
-         {
-            this.dstId = dstId;
-         }
-
-         @Override
-         public String toString()
-         {
-            return "Remove[dstId=" + dstId + "]";
-         }
-      }
-   }
-
    public <N> void save(POMSession session, NodeModel<N> model, N node)
    {
       NodeContextModel<N> context = (NodeContextModel<N>)model.getContext(node);
@@ -492,24 +411,26 @@ public class NavigationServiceImpl implements NavigationService
             //
             int srcIndex = 0;
             int dstIndex = 0;
-            ArrayList<Action> actions = new ArrayList<Action>(context.data.children.size());
+            Navigation navigation = (Navigation)session.findObjectById(context.getId());
+            final List<String> orders = new ArrayList<String>();
             while (srcIndex < srcContexts.size())
             {
                NodeContextModel<N> srcContext = srcContexts.get(srcIndex);
                if (srcContext.data == null)
                {
-                  actions.add(new Action.Create(srcContext.name, srcContext.getState()));
+                  Navigation added = navigation.addChild(srcContext.name);
+                  orders.add(added.getObjectId());
                   srcIndex++;
                }
                else
                {
                   String srcId = srcContext.data.getId();
+                  orders.add(srcId);
                   if (dstIndex < dstIdList.size())
                   {
                      String dstId = dstIdList.get(dstIndex);
                      if (srcId.equals(dstId))
                      {
-                        actions.add(new Action.NoOp(dstId));
                         srcIndex++;
                         dstIndex++;
                      }
@@ -518,8 +439,7 @@ public class NavigationServiceImpl implements NavigationService
                         int index = dstIdList.lastIndexOf(srcId);
                         if (index > dstIndex)
                         {
-                           actions.add(new Action.Order(srcId));
-                           dstIdList.remove(index); // Need to find a way to avoid this remove that is expensive
+                           dstIdList.remove(index); // Need to find a way to avoid this remove that is under efficient (but still very cheap)
                            srcIndex++;
                         }
                         else
@@ -536,49 +456,40 @@ public class NavigationServiceImpl implements NavigationService
                }
             }
 
-            //
+            // Need to make some more consistency check (for phantoms)
+
+            // Remove the orphans
             while (dstIndex < dstIdList.size())
             {
                String dstId = dstIdList.get(dstIndex);
-               actions.add(new Action.Remove(dstId));
+               Navigation removed = session.findObjectById(ObjectType.NAVIGATION, dstId);
+               if (removed == null)
+               {
+                  throw new UnsupportedOperationException("Not consistent, need a custom exception");
+               }
+               else if (removed.getParent() != navigation)
+               {
+                  throw new UnsupportedOperationException("Not consistent, need a custom exception");
+               }
+               removed.destroy();
                dstIndex++;
             }
 
-            //
-            Navigation navigation = (Navigation)session.findObjectById(context.getId());
-            ListIterator<Navigation> target = navigation.getChildren().listIterator();
-            for (Action action : actions)
+            // Now sort children according to the order provided by the container
+            // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
+            Navigation[] a = navigation.getChildren().toArray(new Navigation[navigation.getChildren().size()]);
+            Arrays.sort(a, new Comparator<Navigation>()
             {
-               if (action instanceof Action.Create)
+               public int compare(Navigation o1, Navigation o2)
                {
-                  Action.Create create = (Action.Create)action;
-                  Navigation n = navigation.addChild(create.name);
-                  target.add(n);
+                  int i1 = orders.indexOf(o1.getObjectId());
+                  int i2 = orders.indexOf(o2.getObjectId());
+                  return i1 - i2;
                }
-               else if (action instanceof Action.Remove)
-               {
-                  if (!target.hasNext())
-                  {
-                     throw new IllegalStateException();
-                  }
-                  Action.Remove remove = (Action.Remove)action;
-                  Navigation next = target.next();
-                  if (!next.getObjectId().equals(remove.dstId))
-                  {
-                     throw new IllegalStateException();
-                  }
-                  target.remove();
-               }
-               else if (action instanceof Action.Order)
-               {
-                  Action.Order order = (Action.Order)action;
-                  Navigation n = session.findObjectById(ObjectType.NAVIGATION, order.dstId);
-                  target.add(n);
-               }
-               else
-               {
-                  // No op
-               }
+            });
+            for (int j = 0; j < a.length; j++)
+            {
+               navigation.getChildren().add(j, a[j]);
             }
          }
       }

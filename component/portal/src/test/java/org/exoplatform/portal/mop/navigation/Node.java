@@ -79,7 +79,12 @@ public class Node
 
    public void addChild(Node child)
    {
-      context.addChild(MODEL, child);
+      context.addChild(MODEL, null, child);
+   }
+
+   public void addChild(int index, Node child)
+   {
+      context.addChild(MODEL, index, child);
    }
 
    public Node addChild(String childName)
