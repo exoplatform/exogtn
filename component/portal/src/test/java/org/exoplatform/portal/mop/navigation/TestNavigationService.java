@@ -514,10 +514,16 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
       service.save(Node.MODEL, root);
+      startService();
       end(true);
+      stopService();
 
       //
       begin();
+      root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      foo = root.getChild("foo");
+      assertNotNull(foo);
+      assertEquals("foo", foo.getName());
    }
 
    public void testRemoveChild() throws Exception
@@ -540,10 +546,15 @@ public class TestNavigationService extends AbstractPortalTest
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
       service.save(Node.MODEL, root);
+      startService();
       end(true);
+      stopService();
 
       //
       begin();
+      root = service.load(Node.MODEL, nav, Scope.CHILDREN);
+      foo = root.getChild("foo");
+      assertNull(foo);
    }
 
    public void testReorderChild() throws Exception
@@ -573,9 +584,21 @@ public class TestNavigationService extends AbstractPortalTest
       //
       root.addChild(foo);
       service.save(Node.MODEL, root);
+      startService();
       end(true);
+      stopService();
 
       //
       begin();
+      i = root.getChildren().iterator();
+      bar = i.next();
+      assertNotNull(bar.getId());
+      assertEquals("bar", bar.getName());
+      assertSame(bar, root.getChild("bar"));
+      foo = i.next();
+      assertNotNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+      assertFalse(i.hasNext());
    }
 }
