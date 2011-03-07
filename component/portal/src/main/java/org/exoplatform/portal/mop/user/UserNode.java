@@ -26,7 +26,6 @@ import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ResourceBundle;
 
 /**
  * A navigation node as seen by a user.
@@ -44,9 +43,6 @@ public class UserNode
    final NodeContext<UserNode> context;
 
    /** . */
-   private final ResourceBundle bundle;
-
-   /** . */
    private String resolvedLabel;
 
    /** . */
@@ -54,16 +50,10 @@ public class UserNode
 
    UserNode(UserNavigation navigation, NodeContext<UserNode> context)
    {
-      this(navigation, context, null);
-   }
-
-   UserNode(UserNavigation navigation, NodeContext<UserNode> context, ResourceBundle bundle)
-   {
       this.navigation = navigation;
       this.context = context;
       this.resolvedLabel = null;
       this.encodedResolvedLabel = null;
-      this.bundle = bundle;
    }
 
    public String getId()
@@ -116,9 +106,9 @@ public class UserNode
       if (resolvedLabel == null)
       {
          String resolvedLabel;
-         if (bundle != null && context.getState().getLabel() != null)
+         if (navigation.bundle != null && context.getState().getLabel() != null)
          {
-            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
+            resolvedLabel = ExpressionUtil.getExpressionValue(navigation.bundle, context.getState().getLabel());
          }
          else
          {
@@ -181,6 +171,26 @@ public class UserNode
    public UserNode getChild(String childName)
    {
       return context.getChild(childName);
+   }
+
+   public void addChild(UserNode child)
+   {
+      context.addChild(navigation.model, null, child);
+   }
+
+   public void addChild(int index, UserNode child)
+   {
+      context.addChild(navigation.model, index, child);
+   }
+
+   public UserNode addChild(String childName)
+   {
+      return context.addChild(navigation.model, childName);
+   }
+
+   public boolean removeChild(String childName)
+   {
+      return context.removeChild(navigation.model, childName);
    }
 
    // Keep this internal for now

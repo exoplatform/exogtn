@@ -25,8 +25,6 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -38,7 +36,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -60,7 +57,7 @@ public class UserPortalImpl implements UserPortal
    private final PortalConfig portal;
 
    /** . */
-   private final BundleResolver bundleResolver;
+   final BundleResolver bundleResolver;
 
    /** . */
    private final String userName;
@@ -116,6 +113,7 @@ public class UserPortalImpl implements UserPortal
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
          NavigationData portalNav = navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portalName));
          navigations.add(new UserNavigation(
+            this,
             portalNav,
             acl.hasEditPermissionOnNavigation(portalNav.getKey())));
          if (userName != null)
@@ -124,7 +122,7 @@ public class UserPortalImpl implements UserPortal
             NavigationData userNav = navigationService.getNavigation(SiteKey.user(userName));
             if (userNav != null)
             {
-               navigations.add(new UserNavigation(userNav, true));
+               navigations.add(new UserNavigation(this, userNav, true));
             }
 
             //
@@ -151,6 +149,7 @@ public class UserPortalImpl implements UserPortal
                   continue;
                }
                navigations.add(new UserNavigation(
+                  this,
                   navigation,
                   acl.hasEditPermissionOnNavigation(navigation.getKey())));
             }
@@ -187,37 +186,13 @@ public class UserPortalImpl implements UserPortal
 
    public UserNode getNode(UserNavigation navigation, Scope scope) throws Exception
    {
-      return navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), scope);
+      return navigationService.load(navigation.model, navigation.getNavigation(), scope);
    }
 
    public UserNode getNode(UserNode node, Scope scope) throws Exception
    {
       UserNavigation navigation = node.navigation;
-      UserNodeModel model = new UserNodeModel(navigation);
-      return navigationService.load(model, node, scope);
-   }
-
-   private class UserNodeModel implements NodeModel<UserNode>
-   {
-
-      /** . */
-      private final UserNavigation navigation;
-
-      private UserNodeModel(UserNavigation navigation)
-      {
-         this.navigation = navigation;
-      }
-
-      public NodeContext<UserNode> getContext(UserNode node)
-      {
-         return node.context;
-      }
-
-      public UserNode create(NodeContext<UserNode> context)
-      {
-         ResourceBundle bundle = bundleResolver.resolve(navigation);
-         return new UserNode(navigation, context, bundle);
-      }
+      return navigationService.load(navigation.model, node, scope);
    }
 
    private class MatchingScope implements Scope
@@ -237,7 +212,7 @@ public class UserPortalImpl implements UserPortal
 
       void resolve()
       {
-         UserNode node = navigationService.load(new UserNodeModel(navigation), navigation.getNavigation(), this);
+         UserNode node = navigationService.load(navigation.model, navigation.getNavigation(), this);
          if (score > 0)
          {
             userNode = node.find(id);
@@ -283,7 +258,7 @@ public class UserPortalImpl implements UserPortal
          NavigationData navigation = userNavigation.getNavigation();
          if (navigation.getNodeId() != null)
          {
-            UserNode root = navigationService.load(new UserNodeModel(userNavigation), navigation, Scope.CHILDREN);
+            UserNode root = navigationService.load(userNavigation.model, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);
