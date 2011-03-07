@@ -45,7 +45,7 @@ public class UserPortalImpl implements UserPortal
 {
 
    /** . */
-   private final NavigationService navigationService;
+   final NavigationService navigationService;
    
    /** . */
    private final OrganizationService organizationService;

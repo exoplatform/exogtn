@@ -229,6 +229,11 @@ public class UserNode
       return context.removeChild(navigation.model, childName);
    }
 
+   public void save()
+   {
+      navigation.portal.navigationService.save(navigation.model, this);
+   }
+
    // Keep this internal for now
    UserNode find(String nodeId)
    {
