@@ -335,13 +335,13 @@ public class NavigationServiceImpl implements NavigationService
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
             NodeContextModel<N> context = new NodeContextModel<N>(model, data);
-            context.children = new LinkedHashMap<String, N>(data.children.size());
+            context.children = new NodeContextModel.Children<N>();
             for (Map.Entry<String, String> entry : data.children.entrySet())
             {
                N child = load(model, session, entry.getValue(), visitor, depth + 1);
                if (child != null)
                {
-                  context.children.put(entry.getKey(), child);
+                  context.children.values.put(entry.getKey(), (NodeContextModel<N>)model.getContext(child));
                   ((NodeContextModel)model.getContext(child)).parent = context.node;
                }
                else
@@ -485,16 +485,9 @@ public class NavigationServiceImpl implements NavigationService
          {
             // The source children
             ArrayList<NodeContextModel<N>> srcContexts = new ArrayList<NodeContextModel<N>>(context.children.size());
-            Set<String> srcIds = new HashSet<String>();
-            for (N child : context.children.values())
+            for (NodeContextModel<N> srcContext : context.children.values.values())
             {
-               NodeContextModel<N> srcContext = (NodeContextModel<N>)model.getContext(child);
                srcContexts.add(srcContext);
-               if (srcContext.data != null)
-               {
-                  srcIds.add(srcContext.data.getName());
-               }
-
             }
 
             // The destination children

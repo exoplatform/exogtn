@@ -590,6 +590,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
+      root = service.load(Node.MODEL, nav, Scope.CHILDREN);
       i = root.getChildren().iterator();
       bar = i.next();
       assertNotNull(bar.getId());

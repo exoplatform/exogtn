@@ -19,7 +19,9 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.AbstractCollection;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 /**
@@ -45,7 +47,8 @@ class NodeContextModel<N> implements NodeContext<N>
    N parent;
 
    /** . */
-   LinkedHashMap<String, N> children;
+   Children<N> children;
+
 
    NodeContextModel(NodeModel<N> model, NodeData data)
    {
@@ -62,7 +65,7 @@ class NodeContextModel<N> implements NodeContext<N>
       this.data = null;
       this.name = name;
       this.state = state;
-      this.children = new LinkedHashMap<String, N>();
+      this.children = new Children<N>();
    }
 
    public String getId()
@@ -99,7 +102,8 @@ class NodeContextModel<N> implements NodeContext<N>
    {
       if (children != null)
       {
-         return children.get(childName);
+         NodeContextModel<N> childCtx = children.values.get(childName);
+         return childCtx != null ? childCtx.node : null;
       }
       else
       {
@@ -109,7 +113,7 @@ class NodeContextModel<N> implements NodeContext<N>
 
    public Collection<N> getChildren()
    {
-      return children != null ? children.values() : null;
+      return children;
    }
 
    public N addChild(NodeModel<N> model, String name)
@@ -126,7 +130,7 @@ class NodeContextModel<N> implements NodeContext<N>
       {
          throw new IllegalStateException();
       }
-      else if (children.containsKey(name))
+      else if (children.values.containsKey(name))
       {
          throw new IllegalArgumentException();
       }
@@ -134,7 +138,7 @@ class NodeContextModel<N> implements NodeContext<N>
 
       //
       NodeContextModel<N> childCtx = new NodeContextModel<N>(model, name, new NodeState.Builder().capture());
-      children.put(name, childCtx.node);
+      children.values.put(name, childCtx);
       childCtx.parent = node;
 
       //
@@ -155,7 +159,7 @@ class NodeContextModel<N> implements NodeContext<N>
       {
          throw new IllegalStateException();
       }
-      else if (children.containsKey(name))
+      else if (children.values.containsKey(name))
       {
          throw new IllegalArgumentException();
       }
@@ -168,13 +172,13 @@ class NodeContextModel<N> implements NodeContext<N>
          {
             throw new UnsupportedOperationException("not supported");
          }
-         children.remove(childCtx.name);
-         children.put(childCtx.name, child);
+         children.values.remove(childCtx.name);
+         children.values.put(childCtx.name, childCtx);
       }
       else
       {
          childCtx.parent = node;
-         children.put(childCtx.name, child);
+         children.values.put(childCtx.name, childCtx);
       }
    }
 
@@ -194,16 +198,49 @@ class NodeContextModel<N> implements NodeContext<N>
       }
 
       //
-      N child = children.remove(name);
-      if (child != null)
+      NodeContextModel<N> childCtx = children.values.remove(name);
+      if (childCtx != null)
       {
-         NodeContextModel<N> childCtx = (NodeContextModel<N>)model.getContext(child);
          childCtx.parent = null;
          return true;
       }
       else
       {
          return false;
+      }
+   }
+
+   static class Children<N> extends AbstractCollection<N>
+   {
+
+      /** . */
+      final LinkedHashMap<String, NodeContextModel<N>> values = new LinkedHashMap<String, NodeContextModel<N>>();
+
+      @Override
+      public Iterator<N> iterator()
+      {
+         final Iterator<NodeContextModel<N>> iterator = values.values().iterator();
+         return new Iterator<N>()
+         {
+            public boolean hasNext()
+            {
+               return iterator.hasNext();
+            }
+            public N next()
+            {
+               return iterator.next().node;
+            }
+            public void remove()
+            {
+               throw new UnsupportedOperationException();
+            }
+         };
+      }
+
+      @Override
+      public int size()
+      {
+         return values.size();
       }
    }
 }
