@@ -34,6 +34,8 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -98,12 +100,12 @@ public class Mapper
 
    public NavigationData load(Navigation src)
    {
-//      System.out.println("Accessing loading navigation " + src.getSite().getName() + "  from: ");
-//      long t = System.currentTimeMillis();
-//      new Exception().printStackTrace();
+      long t = System.currentTimeMillis();
       NavigationData data = load(src, NavigationData.class);
-//      t = System.currentTimeMillis() - t;
-//      System.out.println("Navigation loaded in " + t / 1000 + " seconds");
+      t = System.currentTimeMillis() - t;
+      Logger log = LoggerFactory.getLogger(Mapper.class);
+      log.warn("Accessed legacy navigation service (loading took " + t / 1000 + " seconds)");
+      log.debug("Accessed legacy navigation service (loading took " + t / 1000 + " seconds)", new Exception());
       return data;
    }
 
