@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.user;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
@@ -71,9 +72,19 @@ public class UserNode
       return context.getState().getURI();
    }
 
+   public void setURI(String uri)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setURI(uri).capture());
+   }
+
    public String getLabel()
    {
       return context.getState().getLabel();
+   }
+
+   public void setLabel(String label)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setLabel(label).capture());
    }
 
    public String getIcon()
@@ -81,9 +92,19 @@ public class UserNode
       return context.getState().getIcon();
    }
 
+   public void setIcon(String icon)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setIcon(icon).capture());
+   }
+
    public long getStartPublicationTime()
    {
       return context.getState().getStartPublicationTime();
+   }
+
+   public void setStartPublicationTime(long startPublicationTime)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setStartPublicationTime(startPublicationTime).capture());
    }
 
    public long getEndPublicationTime()
@@ -91,14 +112,29 @@ public class UserNode
       return context.getState().getEndPublicationTime();
    }
 
+   public void setEndPublicationTime(long endPublicationTime)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setEndPublicationTime(endPublicationTime).capture());
+   }
+
    public Visibility getVisibility()
    {
       return context.getState().getVisibility();
    }
 
+   public void setVisibility(Visibility visibility)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setVisibility(visibility).capture());
+   }
+
    public String getPageRef()
    {
       return context.getState().getPageRef();
+   }
+
+   public void setPageRef(String pageRef)
+   {
+      context.setState(new NodeState.Builder(context.getState()).setPageRef(pageRef).capture());
    }
 
    public String getResolvedLabel()
