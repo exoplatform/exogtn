@@ -19,12 +19,9 @@
 
 package org.exoplatform.portal.webui.component;
 
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
@@ -59,7 +56,7 @@ public class UILogoPortlet extends UIPortletApplication
    public String getNavigationTitle() throws Exception
    {
       NavigationPath navPath = Util.getUIPortal().getNavPath();
-      NavigationData nav = navPath.getNavigation().getNavigation();
+      UserNavigation nav = navPath.getNavigation();
       if (nav.getKey().getType().equals(SiteType.GROUP))
       {
          return OrganizationUtils.getGroupLabel(nav.getKey().getName());

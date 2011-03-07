@@ -24,7 +24,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -39,6 +38,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,9 +121,7 @@ public class UIPortalNavigation extends UIComponent
          List<UserNavigation> navigations = userPortal.getNavigations();
          for (UserNavigation userNav : navigations)
          {
-            NavigationData navi = userNav.getNavigation();
-            
-            if (!showUserNavigation && navi.getKey().getType().equals(SiteType.USER))
+            if (!showUserNavigation && userNav.getKey().getType().equals(SiteType.USER))
             {
                continue;
             }
@@ -147,7 +145,7 @@ public class UIPortalNavigation extends UIComponent
       List<UserNode> childNodes = new LinkedList<UserNode>();
       for (UserNavigation nav : rearrangeNavigations(listNavigations))
       {
-         if (!showUserNavigation && nav.getNavigation().getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (!showUserNavigation && nav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
          {
             continue;
          }
@@ -172,7 +170,7 @@ public class UIPortalNavigation extends UIComponent
 
       for (UserNavigation nav : listNavigation)
       {
-         String ownerType = nav.getNavigation().getKey().getTypeName();
+         String ownerType = nav.getKey().getTypeName();
          if (PortalConfig.PORTAL_TYPE.equals(ownerType))
          {
             portalNavs.add(nav);

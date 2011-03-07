@@ -65,7 +65,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
       for (UserNavigation nav : allNavs)
       {
-         if (nav.getNavigation().getKey().getType().equals(SiteType.GROUP))
+         if (nav.getKey().getType().equals(SiteType.GROUP))
          {
             groupNav.add(nav);
          }

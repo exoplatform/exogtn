@@ -42,6 +42,7 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -88,7 +89,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
 
       for (UserNavigation nav : allNavs)
       {
-         if (SiteType.USER.equals(nav.getNavigation().getKey().getType()))
+         if (SiteType.USER.equals(nav.getKey().getType()))
          {
             return nav;
          }

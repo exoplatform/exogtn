@@ -479,8 +479,8 @@ public class PortalRequestContext extends WebuiRequestContext
          Locale locale = getLocale();
          return rbMgr.getNavigationResourceBundle(
             locale.getLanguage(),
-            navigation.getNavigation().getKey().getTypeName(),
-            navigation.getNavigation().getKey().getName());
+            navigation.getKey().getTypeName(),
+            navigation.getKey().getName());
       }
    };
 

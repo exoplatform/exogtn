@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationData;
 
 /**
@@ -40,6 +41,11 @@ public class UserNavigation
       this.modifiable = modifiable;
    }
 
+   public SiteKey getKey()
+   {
+      return navigation.getKey();
+   }
+   
    public NavigationData getNavigation()
    {
       return navigation;

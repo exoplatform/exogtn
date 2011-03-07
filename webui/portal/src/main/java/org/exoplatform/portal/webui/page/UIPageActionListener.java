@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationData;
 import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -62,11 +63,11 @@ public class UIPageActionListener
          
          String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
          NavigationPath naviPath = userPortal.resolvePath(uri);
-         NavigationData targetNav = naviPath.getNavigation().getNavigation();
+         UserNavigation targetNav = naviPath.getNavigation();
          
          NavigationPath currentNavPath = showedUIPortal.getNavPath();
          
-         if(currentNavPath != null && currentNavPath.getNavigation().getNavigation().getKey().equals(targetNav.getKey()))
+         if(currentNavPath != null && currentNavPath.getNavigation().getKey().equals(targetNav.getKey()))
          {
             //Case 1: Both navigation type and id are not changed, but current page node is changed
             if(!currentNavPath.getTarget().getURI().equals(naviPath.getTarget().getURI()))

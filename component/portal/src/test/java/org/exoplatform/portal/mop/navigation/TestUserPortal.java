@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import junit.framework.AssertionFailedError;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
@@ -42,12 +43,14 @@ import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.i18n.MapResourceBundle;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -439,6 +442,37 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
 
+   public void testPublicationTime()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("test", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("test"));
+            
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            assertEquals("default", root.getName());
+            assertEquals(2, root.getChildrenCount());
+            assertEquals(2, root.getChildren().size());
+            assertTrue(root.hasChildrenRelationship());
+            
+            Iterator<UserNode> children = root.getChildren().iterator();
+            UserNode node1 = children.next();
+            assertEquals("node_name", node1.getName());
+            GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
+            start.setTimeZone(TimeZone.getTimeZone("UTC"));
+            assertEquals(start.getTimeInMillis(), node1.getStartPublicationTime());
+            assertEquals(1237599180000L, node1.getEndPublicationTime());
+
+            UserNode node2 = children.next();
+            assertEquals("node_name2", node2.getName());
+            assertEquals(-1, node2.getStartPublicationTime());
+            assertEquals(-1, node2.getEndPublicationTime());
+         }
+      }.execute("root");
+   }
 /*
    public void testCreateUserPortalConfig()
    {

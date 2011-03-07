@@ -143,7 +143,7 @@ public class UITabPaneDashboard extends UIContainer
 
       for (UserNavigation nav : allNavs)
       {
-         if (SiteType.USER.equals(nav.getNavigation().getKey().getType()))
+         if (SiteType.USER.equals(nav.getKey().getType()))
          {
             return nav;
          }

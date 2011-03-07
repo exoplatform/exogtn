@@ -1,10 +1,8 @@
 <%	
 	import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
-	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.webui.core.UIComponent;
-%>
-<%	
-	PageNode pageNode = uicomponent.getSelectedPageNode();
+
+	def pageNode = uicomponent.getSelectedPageNode();
 	String nodeName = ""; 	
 	if(pageNode!=null ) nodeName = "/"+pageNode.getResolvedLabel();
 	boolean isNoSelecter = !uicomponent.getChild(UIPageNodeSelector.class).isRendered();
