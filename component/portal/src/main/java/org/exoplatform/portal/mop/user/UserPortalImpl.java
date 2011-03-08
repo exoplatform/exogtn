@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -186,13 +187,13 @@ public class UserPortalImpl implements UserPortal
 
    public UserNode getNode(UserNavigation userNavigation, Scope scope) throws Exception
    {
-      return navigationService.load(userNavigation.model, userNavigation.navigation, scope);
+      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope);
    }
 
    public UserNode getNode(UserNode node, Scope scope) throws Exception
    {
       UserNavigation navigation = node.navigation;
-      return navigationService.load(navigation.model, node, scope);
+      return navigationService.loadNode(navigation.model, node, scope);
    }
 
    private class MatchingScope implements Scope
@@ -210,9 +211,9 @@ public class UserPortalImpl implements UserPortal
          this.match = match;
       }
 
-      void resolve()
+      void resolve() throws NavigationException
       {
-         UserNode node = navigationService.load(userNavigation.model, userNavigation.navigation, this);
+         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this);
          if (score > 0)
          {
             userNode = node.find(id);
@@ -258,7 +259,7 @@ public class UserPortalImpl implements UserPortal
          Navigation navigation = userNavigation.navigation;
          if (navigation.getState() != null)
          {
-            UserNode root = navigationService.load(userNavigation.model, navigation, Scope.CHILDREN);
+            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

@@ -51,10 +51,10 @@ public interface NavigationService
     */
    boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationException;
 
-   <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
+   <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationException;
 
-   <N> N load(NodeModel<N> model, N node, Scope scope);
+   <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationException;
 
-   <N> void save(NodeModel<N> model, N node);
+   <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationException;
 
 }

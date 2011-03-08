@@ -331,7 +331,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
    {
       String nodeId = navigation.rootId;
       if (navigation.rootId != null)
@@ -344,7 +344,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> N load(NodeModel<N> model, N node, Scope scope)
+   public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
    {
       NodeContext data = model.getContext(node);
       String id = data.getId();
@@ -423,7 +423,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void save(NodeModel<N> model, N node)
+   public <N> void saveNode(NodeModel<N> model, N node)
    {
       POMSession session = manager.getSession();
       NodeContext<N> context = (NodeContext<N>)model.getContext(node);

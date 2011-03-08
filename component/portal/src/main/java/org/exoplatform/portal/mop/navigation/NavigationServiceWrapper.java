@@ -81,18 +81,18 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return service.saveNavigation(key, state);
    }
 
-   public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
    {
-      return service.load(model, navigation, scope);
+      return service.loadNode(model, navigation, scope);
    }
 
-   public <N> N load(NodeModel<N> model, N node, Scope scope)
+   public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
    {
-      return service.load(model, node, scope);
+      return service.loadNode(model, node, scope);
    }
 
-   public <N> void save(NodeModel<N> model, N node)
+   public <N> void saveNode(NodeModel<N> model, N node)
    {
-      service.save(model, node);
+      service.saveNode(model, node);
    }
 }

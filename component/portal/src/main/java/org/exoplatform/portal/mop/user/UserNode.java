@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationException;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.common.text.EntityEncoder;
@@ -229,9 +230,9 @@ public class UserNode
       return context.removeChild(navigation.model, childName);
    }
 
-   public void save()
+   public void save() throws NavigationException
    {
-      navigation.portal.navigationService.save(navigation.model, this);
+      navigation.portal.navigationService.saveNode(navigation.model, this);
    }
 
    // Keep this internal for now
