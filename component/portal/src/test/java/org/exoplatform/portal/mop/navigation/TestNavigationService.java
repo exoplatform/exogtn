@@ -665,6 +665,46 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(juu);
    }
 
+   public void testRenameNode() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename_node");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("rename_node"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node foo = root.getChild("foo");
+      foo.setName("bar");
+      assertEquals("bar", foo.getName());
+      assertSame(foo, root.getChild("bar"));
+      service.saveNode(Node.MODEL, root);
+      assertEquals("bar", foo.getName());
+      assertSame(foo, root.getChild("bar"));
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node bar = root.getChild("bar");
+      assertNotNull(bar);
+      assertSame(bar, root.getChild("bar"));
+
+      //
+      root.addChild("foo");
+      try
+      {
+         bar.setName("foo");
+         fail();
+      }
+      catch (IllegalArgumentException ignore)
+      {
+      }
+   }
+
    public void testSaveChildren() throws Exception
    {
       MOPService mop = mgr.getPOMService();

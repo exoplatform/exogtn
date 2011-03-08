@@ -68,6 +68,11 @@ public class UserNode
       return context.getName();
    }
 
+   public void setName(String name)
+   {
+      context.setName(name);
+   }
+
    public String getURI()
    {
       return context.getState().getURI();

@@ -446,7 +446,10 @@ public class NavigationServiceImpl implements NavigationService
       //
       SaveContext<N> save = new SaveContext<N>(context);
 
-      // Phase 1 : add new nodes
+      // Phase 0 : add new nodes
+      save.phase0(session);
+
+      // Phase 1 : rename nodes
       save.phase1(session);
 
       // Phase 2 : update state
@@ -557,11 +560,10 @@ public class NavigationServiceImpl implements NavigationService
          abstract boolean accept(SaveContext<N> context);
       }
 
-      // Phase 1 : create new nodes and associates with navigation object
-      void phase1(POMSession session)
+      // Phase 0 : create new nodes and associates with navigation object
+      void phase0(POMSession session)
       {
-         NodeState state = context.state;
-         if (state == null)
+         if (context.data == null)
          {
             throw new IllegalArgumentException();
          }
@@ -579,6 +581,21 @@ public class NavigationServiceImpl implements NavigationService
                   childrenIds.add(added.getObjectId());
                }
             }
+         }
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase0(session);
+         }
+      }
+
+      // Phase 1 : create new nodes and associates with navigation object
+      void phase1(POMSession session)
+      {
+         if (!context.data.name.equals(context.name))
+         {
+            navigation.setName(context.name);
          }
 
          //
@@ -772,8 +789,8 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         String id = context.getId();
-         String name = context.getName();
+         String id = context.data.id;
+         String name = context.name;
          NodeState state = context.getState();
 
          //

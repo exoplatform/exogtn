@@ -37,7 +37,7 @@ public final class NodeContext<N>
    NodeData data;
 
    /** ; */
-   final String name;
+   String name;
 
    /** The new state if any. */
    NodeState state;
@@ -74,6 +74,28 @@ public final class NodeContext<N>
    public String getName()
    {
       return name;
+   }
+
+   public void setName(String name)
+   {
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (parent == null)
+      {
+         throw new IllegalStateException("Cannot rename a node when its parent is not visible");
+      }
+      else
+      {
+         if (!name.equals(this.name))
+         {
+            if (!parent.children.rename(this.name, name))
+            {
+               throw new IllegalArgumentException("Was not able to rename " + this.name + " to " + name);
+            }
+         }
+      }
    }
 
    public int getChildrenCount()
@@ -232,6 +254,27 @@ public final class NodeContext<N>
             }
          }
          return null;
+      }
+
+      boolean rename(String from, String to)
+      {
+         if (contains(to))
+         {
+            return false;
+         }
+         else
+         {
+            NodeContext<N> child = get(from);
+            if (child == null)
+            {
+               return false;
+            }
+            else
+            {
+               child.name = to;
+               return true;
+            }
+         }
       }
 
       void put(Integer index, NodeContext<N> childCtx)

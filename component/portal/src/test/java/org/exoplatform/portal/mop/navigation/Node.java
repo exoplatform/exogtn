@@ -62,6 +62,11 @@ public class Node
       return context.getName();
    }
 
+   public void setName(String name)
+   {
+      context.setName(name);
+   }
+
    public NodeContext getContext()
    {
       return context;
