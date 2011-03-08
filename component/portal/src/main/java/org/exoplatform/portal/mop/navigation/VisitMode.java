@@ -20,6 +20,8 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
+ * Describes how a node should be loaded by a loading operation.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */

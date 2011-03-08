@@ -22,6 +22,16 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.mop.SiteKey;
 
 /**
+ * <p>The navigation service takes care of managing the various portal navigations and their nodes.</p>
+ *
+ * <p>In order to manage an efficient loading of the nodes, a {@link Scope} is used to describe the set of nodes
+ * that should be retrieved when a loading operation is performed.</p>
+ *
+ * <p>The node operations does not provide a model per se, but instead use the {@link NodeModel} interface to plug
+ * an API model. Various node operations are quite complex and any API in front of this service would need to perform
+ * a manual, error prone and tedious synchronization. Instead the model interface allows the navigation service to
+ * operate directly on an existing model.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -45,12 +55,24 @@ public interface NavigationService
     *
     * @param key they navigation key
     * @param state the navigation state
-    * @return true if the navigation was created
+    * @return true if the intent succeeded
     * @throws NullPointerException if the key is null
-    * @throws NavigationException if the intent succeeded
+    * @throws NavigationException if the navigation could not be saved
     */
    boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationException;
 
+   /**
+    * Load a navigation node from a specified navigation. The returned node will be the root node of the navigation.
+    * The root node
+    *
+    * @param model the node model
+    * @param navigation the navigation
+    * @param scope the scope
+    * @param <N> the node model generic type
+    * @return the loaded node
+    * @throws NullPointerException if any argument is null
+    * @throws NavigationException if the loading operation could not be performed
+    */
    <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationException;
 
    <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationException;

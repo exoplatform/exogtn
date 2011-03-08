@@ -333,6 +333,18 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
    {
+      if (model == null)
+      {
+         throw new NullPointerException();
+      }
+      if (navigation == null)
+      {
+         throw new NullPointerException();
+      }
+      if (scope == null)
+      {
+         throw new NullPointerException();
+      }
       String nodeId = navigation.rootId;
       if (navigation.rootId != null)
       {

@@ -22,6 +22,14 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.mop.Visibility;
 
 /**
+ * <p>The scope describes a set of nodes, the scope implementation should be stateless and should be shared
+ * between many threads.</p>
+ *
+ * <p>A scope is responsible for provided a {@link Visitor} object that is used to determine which node should
+ * be loaded when a node loading operation occurs. Visitors are not thread safe, as a consequence
+ * the {@link #get()} operation should create a new visitor instance on each call, unless the visitor itself is stateless
+ * by nature.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -127,8 +135,20 @@ public interface Scope
 
    Visitor get();
 
+   /**
+    * A scope visitor responsible for determining the loading of a node.
+    */
    public interface Visitor
    {
+      /**
+       * Returns the visit mode for the specified node.
+       *
+       * @param depth the relative depth to the root of the loading
+       * @param id the node persistent id
+       * @param name the node name
+       * @param state the node state
+       * @return the visit mode
+       */
       VisitMode visit(int depth, String id, String name, NodeState state);
    }
 }
