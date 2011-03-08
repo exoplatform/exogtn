@@ -32,6 +32,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -633,6 +634,37 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(i.hasNext());
    }
 
+   public void testMoveChild() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_child");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo").addChild("juu");
+      rootNavigation.addChild("bar");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("move_child"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node foo = root.getChild("foo");
+      Node bar = root.getChild("bar");
+      Node juu = foo.getChild("juu");
+      bar.addChild(juu);
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      foo = root.getChild("foo");
+      juu = foo.getChild("juu");
+      assertNull(juu);
+      bar = root.getChild("bar");
+      juu = bar.getChild("juu");
+      assertNotNull(juu);
+   }
+
    public void testSaveChildren() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -710,7 +742,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("save_recursive"));
+      Navigation nav = service.loadNavigation(SiteKey.portal("save_state"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE);
       NodeState state = root.getState();
       assertNull(state.getURI());

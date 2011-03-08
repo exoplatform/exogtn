@@ -27,7 +27,7 @@ import java.util.Iterator;
 /**
  * The context of a node.
  */
-public class NodeContext<N>
+public final class NodeContext<N>
 {
 
    /** . */
@@ -83,7 +83,18 @@ public class NodeContext<N>
 
    public NodeState getState()
    {
-      return state;
+      if (state != null)
+      {
+         return state;
+      }
+      else if (data != null)
+      {
+         return data.getState();
+      }
+      else
+      {
+         return null;
+      }
    }
 
    public void setState(NodeState state)
@@ -159,7 +170,7 @@ public class NodeContext<N>
       }
 
       //
-      children.put(index, (NodeContext<N>)model.getContext(child));
+      children.put(index, model.getContext(child));
    }
 
    public boolean removeChild(NodeModel<N> model, String name)
@@ -179,6 +190,16 @@ public class NodeContext<N>
 
       //
       return children.remove(name) != null;
+   }
+
+   NodeContext<N> getRoot()
+   {
+      NodeContext<N> root = this;
+      while (root.parent != null)
+      {
+         root = root.parent;
+      }
+      return root;
    }
 
    void createChildren()
@@ -221,16 +242,32 @@ public class NodeContext<N>
          }
          if (childCtx.parent != null)
          {
-            if (childCtx.parent != NodeContext.this)
+            if (childCtx.getRoot() == getRoot())
             {
-               throw new UnsupportedOperationException("not supported");
+               NodeContext<N> previous;
+               if (index == 0)
+               {
+                  previous = null;
+               }
+               else
+               {
+                  previous = values.get(index - 1);
+               }
+               childCtx.parent.children.remove(childCtx.name);
+               if (previous == null)
+               {
+                  values.add(0, childCtx);
+               }
+               else
+               {
+                  int i = values.indexOf(previous);
+                  values.add(i + 1, childCtx);
+               }
             }
-            int removedIndex = remove(childCtx.name);
-            if (removedIndex < index)
+            else
             {
-               index--;
+               throw new IllegalArgumentException("Cannot move node that don't share a common ancestor");
             }
-            values.add(index, childCtx);
          }
          else
          {

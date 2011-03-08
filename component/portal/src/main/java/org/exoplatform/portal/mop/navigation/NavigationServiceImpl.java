@@ -44,8 +44,10 @@ import javax.jcr.observation.EventListenerIterator;
 import javax.jcr.observation.ObservationManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -439,168 +441,348 @@ public class NavigationServiceImpl implements NavigationService
    {
       POMSession session = manager.getSession();
       NodeContext<N> context = (NodeContext<N>)model.getContext(node);
-      save(session, model, context);
+//      save(session, model, context);
+
+      //
+      SaveContext<N> save = new SaveContext<N>(context);
+
+      // Phase 1 : add new nodes
+      save.phase1(session);
+
+      // Phase 2 : update state
+      save.phase2(session);
+
+      // Phase 3 : move nodes
+      save.phase3(session);
+
+      // Phase 4 : remove nodes
+      save.phase4(session);
+
+      // Phase 5 : reorder data
+      save.phase5(session);
+
+      // Phase 6 : update data
+      save.phase6(session);
    }
 
-   public <N> void save(POMSession session, NodeModel<N> model, NodeContext<N> context)
+   private static class SaveContext<N>
    {
-      // Get the navigation node
-      if (context.data == null)
+
+      /** . */
+      private final NodeContext<N> context;
+
+      /** . */
+      private final List<SaveContext<N>> children;
+
+      /** The list of actual children ids, maintained during the phases. */
+      private List<String> childrenIds;
+
+      /** . */
+      private SaveContext<N> parent;
+
+      /** The related navigation object. */
+      private org.gatein.mop.api.workspace.Navigation  navigation;
+
+      private SaveContext(NodeContext<N> context)
       {
-         throw new NullPointerException();
-      }
-
-      //
-      org.gatein.mop.api.workspace.Navigation navigation = (org.gatein.mop.api.workspace.Navigation)session.findObjectById(context.getId());
-
-      // Save state
-      NodeState state = context.state;
-      if (state != null)
-      {
-         Workspace workspace = navigation.getSite().getWorkspace();
-         String reference = state.getPageRef();
-         if (reference != null)
+         List<SaveContext<N>> children;
+         if (context.children != null)
          {
-            String[] pageChunks = split("::", reference);
-            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-            Site site = workspace.getSite(siteType, pageChunks[1]);
-            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
-            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-            link.setPage(target);
-         }
-         else
-         {
-            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-            link.setPage(null);
-         }
-
-         //
-         Described described = navigation.adapt(Described.class);
-         described.setName(state.getLabel());
-
-         //
-         Visible visible = navigation.adapt(Visible.class);
-         visible.setVisibility(state.getVisibility());
-
-         //
-         visible.setStartPublicationDate(state.getStartPublicationDate());
-         visible.setEndPublicationDate(state.getEndPublicationDate());
-
-         //
-         Attributes attrs = navigation.getAttributes();
-         attrs.setValue(MappedAttributes.URI, state.getURI());
-         attrs.setValue(MappedAttributes.ICON, state.getIcon());
-      }
-
-      //
-      if (context.children != null)
-      {
-         if (context.data == null)
-         {
-            throw new UnsupportedOperationException();
-         }
-         else
-         {
-            // The source children
-            ArrayList<NodeContext<N>> srcContexts = new ArrayList<NodeContext<N>>(context.children.size());
-            for (NodeContext<N> srcContext : context.children.values)
+            children = new ArrayList<SaveContext<N>>(context.children.values.size());
+            for (NodeContext<N> childCtx : context.children.values)
             {
-               srcContexts.add(srcContext);
+               SaveContext<N> child = new SaveContext<N>(childCtx);
+               children.add(child);
+               child.parent = this;
             }
+         }
+         else
+         {
+            children = Collections.emptyList();
+         }
 
-            // The destination children
-            ArrayList<String> dstIdList = new ArrayList<String>(context.data.children.values());
+         //
+         ArrayList<String> bilto;
+         if (context.data != null)
+         {
+            bilto = new ArrayList<String>(context.data.children.values());
+         }
+         else
+         {
+            bilto = new ArrayList<String>(context.children.size());
+         }
+
+         //
+         this.context = context;
+         this.children = children;
+         this.childrenIds = bilto;
+         this.navigation = null;
+      }
+
+      static abstract class Finder<N>
+      {
+
+         final SaveContext<N> any(SaveContext<N> context)
+         {
+            SaveContext<N> root = context;
+            while (root.parent != null)
+            {
+               root = root.parent;
+            }
+            return descendants(root);
+         }
+
+         final SaveContext<N> descendants(SaveContext<N> context)
+         {
+            SaveContext<N> found = null;
+            if (accept(context))
+            {
+               found = context;
+            }
+            else
+            {
+               int size = context.children.size();
+               for (int i = 0;i < size;i++)
+               {
+                  found = descendants(context.children.get(i));
+                  if (found != null)
+                  {
+                     break;
+                  }
+               }
+            }
+            return found;
+         }
+
+         abstract boolean accept(SaveContext<N> context);
+      }
+
+      // Phase 1 : create new nodes and associates with navigation object
+      void phase1(POMSession session)
+      {
+         NodeState state = context.state;
+         if (state == null)
+         {
+            throw new IllegalArgumentException();
+         }
+         else
+         {
+            navigation = session.findObjectById(ObjectType.NAVIGATION, context.getId());
 
             //
-            int srcIndex = 0;
-            int dstIndex = 0;
-            final List<String> orders = new ArrayList<String>();
-            while (srcIndex < srcContexts.size())
+            for (SaveContext<N> child : children)
             {
-               NodeContext<N> srcContext = srcContexts.get(srcIndex);
-               if (srcContext.data == null)
+               if (child.context.data == null)
                {
-                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(srcContext.name);
-                  srcContext.data = new NodeData(added);
-                  orders.add(added.getObjectId());
-                  srcIndex++;
+                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(child.context.name);
+                  child.context.data = new NodeData(added);
+                  childrenIds.add(added.getObjectId());
                }
-               else
+            }
+         }
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase1(session);
+         }
+      }
+
+      void phase2(POMSession session)
+      {
+         NodeState state = context.state;
+         if (state != null)
+         {
+            Workspace workspace = navigation.getSite().getWorkspace();
+            String reference = state.getPageRef();
+            if (reference != null)
+            {
+               String[] pageChunks = split("::", reference);
+               ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+               Site site = workspace.getSite(siteType, pageChunks[1]);
+               org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+               link.setPage(target);
+            }
+            else
+            {
+               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+               link.setPage(null);
+            }
+
+            //
+            Described described = navigation.adapt(Described.class);
+            described.setName(state.getLabel());
+
+            //
+            Visible visible = navigation.adapt(Visible.class);
+            visible.setVisibility(state.getVisibility());
+
+            //
+            visible.setStartPublicationDate(state.getStartPublicationDate());
+            visible.setEndPublicationDate(state.getEndPublicationDate());
+
+            //
+            Attributes attrs = navigation.getAttributes();
+            attrs.setValue(MappedAttributes.URI, state.getURI());
+            attrs.setValue(MappedAttributes.ICON, state.getIcon());
+         }
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase2(session);
+         }
+      }
+
+      void phase3(POMSession session)
+      {
+
+         if (context.children != null)
+         {
+            for (NodeContext<N> childCtx : context.children.values)
+            {
+               final String childId = childCtx.data.id;
+               if (!context.data.children.containsValue(childId))
                {
-                  String srcId = srcContext.data.getId();
-                  orders.add(srcId);
-                  if (dstIndex < dstIdList.size())
+                  if (!childrenIds.contains(childId))
                   {
-                     String dstId = dstIdList.get(dstIndex);
-                     if (srcId.equals(dstId))
+                     Finder<N> finder = new Finder<N>()
                      {
-                        srcIndex++;
-                        dstIndex++;
-                     }
-                     else
+                        boolean accept(SaveContext<N> context)
+                        {
+                           return context.context.data.getId().equals(childId);
+                        }
+                     };
+                     SaveContext<N> movedCtx = finder.any(this);
+                     org.gatein.mop.api.workspace.Navigation moved = movedCtx.navigation;
+                     navigation.getChildren().add(moved);
+                     childrenIds.add(childId);
+                  }
+               }
+            }
+         }
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase3(session);
+         }
+      }
+
+      void phase4(POMSession session)
+      {
+         if (context.children != null)
+         {
+            for (Map.Entry<String, String> entry : context.data.children.entrySet())
+            {
+               final String id = entry.getValue();
+
+               // Is it still here ?
+               boolean found = false;
+               for (int i = 0;i < context.children.size();i++)
+               {
+                  NodeContext<N> childCtx = context.children.values.get(i);
+                  if (childCtx.data.id.equals(id))
+                  {
+                     found = true;
+                  }
+               }
+
+               //
+               if (!found)
+               {
+                  Finder<N> finder = new Finder<N>()
+                  {
+                     boolean accept(SaveContext<N> context)
                      {
-                        int index = dstIdList.lastIndexOf(srcId);
-                        if (index > dstIndex)
-                        {
-                           dstIdList.remove(index); // Need to find a way to avoid this remove that is under efficient (but still very cheap)
-                           srcIndex++;
-                        }
-                        else
-                        {
-                           throw new UnsupportedOperationException("Move operation not supported");
-                        }
+                        return context.context.data.getId().equals(id);
                      }
+                  };
+                  if (finder.any(this) == null)
+                  {
+                     org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, id);
+                     navigation.destroy();
                   }
                   else
                   {
-                     // It's a move that we don't support for now
-                     throw new UnsupportedOperationException("Move operation not supported");
+                     // It's a move operation
                   }
+                  childrenIds.remove(id);
                }
+            }
+         }
 
-               // Recurse
-               save(session, model, srcContext);
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase4(session);
+         }
+      }
+
+      void phase5(POMSession session)
+      {
+         if (context.children != null)
+         {
+            final ArrayList<String> orders = new ArrayList<String>(context.children.values.size());
+            for (NodeContext<N> foo : context.children.values)
+            {
+               orders.add(foo.data.id);
             }
 
-            // Need to make some more consistency check (for phantoms)
-
-            // Remove the orphans
-            while (dstIndex < dstIdList.size())
+            //
+            if (!childrenIds.equals(orders))
             {
-               String dstId = dstIdList.get(dstIndex);
-               org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, dstId);
-               if (removed == null)
+               // Now sort children according to the order provided by the container
+               // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
+               org.gatein.mop.api.workspace.Navigation[] a = navigation.getChildren().toArray(new org.gatein.mop.api.workspace.Navigation[navigation.getChildren().size()]);
+               Arrays.sort(a, new Comparator<org.gatein.mop.api.workspace.Navigation>()
                {
-                  throw new UnsupportedOperationException("Not consistent, need a custom exception");
-               }
-               else if (removed.getParent() != navigation)
+                  public int compare(org.gatein.mop.api.workspace.Navigation o1, org.gatein.mop.api.workspace.Navigation o2)
+                  {
+                     int i1 = orders.indexOf(o1.getObjectId());
+                     int i2 = orders.indexOf(o2.getObjectId());
+                     return i1 - i2;
+                  }
+               });
+               for (int j = 0; j < a.length; j++)
                {
-                  throw new UnsupportedOperationException("Not consistent, need a custom exception");
+                  navigation.getChildren().add(j, a[j]);
                }
-               removed.destroy();
-               dstIndex++;
             }
+         }
 
-            // Now sort children according to the order provided by the container
-            // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
-            org.gatein.mop.api.workspace.Navigation[] a = navigation.getChildren().toArray(new org.gatein.mop.api.workspace.Navigation[navigation.getChildren().size()]);
-            Arrays.sort(a, new Comparator<org.gatein.mop.api.workspace.Navigation>()
-            {
-               public int compare(org.gatein.mop.api.workspace.Navigation o1, org.gatein.mop.api.workspace.Navigation o2)
-               {
-                  int i1 = orders.indexOf(o1.getObjectId());
-                  int i2 = orders.indexOf(o2.getObjectId());
-                  return i1 - i2;
-               }
-            });
-            for (int j = 0; j < a.length; j++)
-            {
-               navigation.getChildren().add(j, a[j]);
-            }
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase5(session);
+         }
+      }
 
-            // Finally update context data
-            context.data = new NodeData(navigation);
-            context.state = null;
+      void phase6(POMSession session)
+      {
+         LinkedHashMap<String, String> childMap;
+         if (context.children != null)
+         {
+            childMap = new LinkedHashMap<String, String>(context.children.size());
+         }
+         else
+         {
+            childMap = context.data.children;
+         }
+
+         //
+         String id = context.getId();
+         String name = context.getName();
+         NodeState state = context.getState();
+
+         //
+         context.data = new NodeData(id, name, state, childMap);
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase6(session);
          }
       }
    }

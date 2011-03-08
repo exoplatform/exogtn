@@ -56,6 +56,14 @@ class NodeData implements Serializable
    /** . */
    final LinkedHashMap<String, String> children;
 
+   NodeData(String id, String name, NodeState state, LinkedHashMap<String, String> children)
+   {
+      this.id = id;
+      this.name = name;
+      this.state = state;
+      this.children = children;
+   }
+
    NodeData(Navigation nav)
    {
       LinkedHashMap<String, String> children = new LinkedHashMap<String, String>();
