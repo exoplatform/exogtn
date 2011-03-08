@@ -48,14 +48,24 @@ public interface Scope
       private final Visitor visitor;
 
       /**
-       * Creates a new navigation scope.
+       * Creates a new navigation scope with no filtering
        *
        * @param height the max height of the pruned tree
        * @throws IllegalArgumentException if the height is negative
        */
       public Navigation(int height)
       {
-         this(height, null);
+         this(height, (EnumSet<Visibility>)null);
+      }
+
+      public Navigation(int height, Visibility first)
+      {
+         this(height, EnumSet.of(first));
+      }
+
+      public Navigation(int height, Visibility first, Visibility... other)
+      {
+         this(height, EnumSet.of(first, other));
       }
 
       /**
