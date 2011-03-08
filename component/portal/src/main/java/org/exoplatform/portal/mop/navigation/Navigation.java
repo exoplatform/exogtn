@@ -25,21 +25,53 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface Navigation
+public class Navigation
 {
+
+   /** . */
+   final SiteKey key;
+
+   /** . */
+   final NavigationState state;
+
+   /** . */
+   final String rootId;
+
+   public Navigation(SiteKey key, NavigationState state, String rootId)
+   {
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      this.key = key;
+      this.state = state;
+      this.rootId = rootId;
+   }
 
    /**
     * Returns the navigation key.
     *
     * @return the navigation key
     */
-   SiteKey getKey();
+   public SiteKey getKey()
+   {
+      return key;
+   }
 
    /**
     * Returns the navigation state or null if the navigation is not entirely created yet.
     *
     * @return the navigation state
     */
-   NavigationState getState();
+   public NavigationState getState()
+   {
+      return state;
+   }
 
+   String getRootId()
+   {
+      return rootId;
+   }
 }

@@ -60,7 +60,7 @@ public class NavigationServiceImpl implements NavigationService
 {
 
    /** . */
-   private Map<SiteKey, NavigationImpl> navigationKeyCache;
+   private Map<SiteKey, Navigation> navigationKeyCache;
 
    /** . */
    private Map<String, SiteKey> navigationPathCache;
@@ -100,7 +100,7 @@ public class NavigationServiceImpl implements NavigationService
          throw new NullPointerException("No null pom session manager allowed");
       }
       this.manager = manager;
-      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationImpl>(1000);
+      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, Navigation>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
       this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
@@ -251,9 +251,15 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public NavigationImpl loadNavigation(SiteKey key)
+   public Navigation loadNavigation(SiteKey key)
    {
-      NavigationImpl data = navigationKeyCache.get(key);
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      Navigation data = navigationKeyCache.get(key);
       if (data == null)
       {
          POMSession session = manager.getSession();
@@ -269,11 +275,11 @@ public class NavigationServiceImpl implements NavigationService
 
                Integer priority = rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
                String rootId = rootNode.getObjectId();
-               data = new NavigationImpl(key, new NavigationState(priority, rootId));
+               data = new Navigation(key, new NavigationState(priority), rootId);
             }
             else
             {
-               data = new NavigationImpl(key);
+               data = new Navigation(key, null, null);
             }
             navigationKeyCache.put(key, data);
             navigationPathCache.put(session.pathOf(site), key);
@@ -284,11 +290,23 @@ public class NavigationServiceImpl implements NavigationService
 
    public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException
    {
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
       POMSession session = manager.getSession();
       ObjectType<Site> objectType = a.get(key.getType());
       Workspace workspace = session.getWorkspace();
       Site site = workspace.getSite(objectType, key.getName());
-      if (site != null)
+      if (site == null)
+      {
+         throw new NavigationException("The site " + key + " does not exist");
+      }
+
+      //
+      if (state != null)
       {
          org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
          org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
@@ -297,19 +315,26 @@ public class NavigationServiceImpl implements NavigationService
          {
             rootNode = root.addChild("default");
          }
-         rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, state.getPriority());
+         rootNode.getAttributes().setValue(MappedAttributes.PRIORITY, state.getPriority());
          return created;
       }
       else
       {
-         throw new NavigationException("The site " + key + " does not exist");
+         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
+         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+         boolean destroyed = rootNode != null;
+         if (destroyed)
+         {
+            rootNode.destroy();
+         }
+         return destroyed;
       }
    }
 
    public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
    {
-      String nodeId = navigation.getState().getNodeId();
-      if (nodeId != null)
+      String nodeId = navigation.rootId;
+      if (navigation.rootId != null)
       {
          return load(model, nodeId, scope);
       }

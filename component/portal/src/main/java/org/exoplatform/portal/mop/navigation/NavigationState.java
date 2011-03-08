@@ -29,13 +29,9 @@ public class NavigationState
    /** . */
    private final Integer priority;
 
-   /** . */
-   private final String nodeId;
-
-   public NavigationState(Integer priority, String nodeId)
+   public NavigationState(Integer priority)
    {
       this.priority = priority;
-      this.nodeId = nodeId;
    }
 
    /**
@@ -47,15 +43,4 @@ public class NavigationState
    {
       return priority;
    }
-
-   /**
-    * Returns the navigation related node id.
-    *
-    * @return the node id
-    */
-   public String getNodeId()
-   {
-      return nodeId;
-   }
-
 }

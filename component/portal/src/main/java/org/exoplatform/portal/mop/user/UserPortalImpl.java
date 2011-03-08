@@ -256,7 +256,7 @@ public class UserPortalImpl implements UserPortal
       for (UserNavigation userNavigation : getNavigations())
       {
          Navigation navigation = userNavigation.navigation;
-         if (navigation.getState().getNodeId() != null)
+         if (navigation.getState() != null)
          {
             UserNode root = navigationService.load(userNavigation.model, navigation, Scope.CHILDREN);
             for (UserNode node : root.getChildren())

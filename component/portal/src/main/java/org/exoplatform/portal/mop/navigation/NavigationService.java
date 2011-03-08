@@ -33,22 +33,23 @@ public interface NavigationService
     *
     * @param key the navigation key
     * @return the matching navigation
+    * @throws NullPointerException if the key is null
     * @throws NavigationException if the navigation could not be loaded
     */
-   Navigation loadNavigation(SiteKey key) throws NavigationException;
+   Navigation loadNavigation(SiteKey key) throws NullPointerException, NavigationException;
 
    /**
-    * Save a navigation. If the navigation already exist, then this navigation is updated
-    * with the specified state, otherwise the navigation is created.
+    * Create, update or destroy a navigation. When the navigation state is not null, the navigation
+    * will be created or updated depending on whether or not the navigation already exists. When
+    * the navigation state is null, the navigation will be destroyed.
     *
     * @param key they navigation key
     * @param state the navigation state
     * @return true if the navigation was created
-    * @throws NavigationException if the navigation could not be saved
+    * @throws NullPointerException if the key is null
+    * @throws NavigationException if the intent succeeded
     */
-   boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException;
-
-//   void destroyNavigation(SiteKey key);
+   boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationException;
 
    <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
 

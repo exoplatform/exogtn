@@ -61,6 +61,28 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
    }
 
+
+   @Override
+   protected void end(boolean save)
+   {
+      if (save)
+      {
+         try
+         {
+            startService();
+            super.end(save);
+         }
+         finally
+         {
+            stopService();
+         }
+      }
+      else
+      {
+         super.end(save);
+      }
+   }
+
    @Override
    protected void tearDown() throws Exception
    {
@@ -111,11 +133,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().addChild("default");
       end(true);
-      stopService();
 
       //
       begin();
@@ -123,15 +143,13 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(nav);
       assertEquals(1, (int)nav.getState().getPriority());
       assertEquals(key, nav.getKey());
-      assertNotNull(nav.getState().getNodeId());
+      assertNotNull(nav.getRootId());
       end();
 
       //
-      startService();
       begin();
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
       end(true);
-      stopService();
 
       //
       begin();
@@ -154,12 +172,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
       end(true);
-      stopService();
 
       //
       begin();
@@ -168,12 +184,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 4);
       end(true);
-      stopService();
 
       //
       begin();
@@ -182,12 +196,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, null);
       end(true);
-      stopService();
 
       //
       begin();
@@ -210,6 +222,33 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
       assertNull(nav.getState());
+      assertNull(nav.getRootId());
+
+      //
+      assertTrue(service.saveNavigation(nav.getKey(), new NavigationState(5)));
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      assertNotNull(nav);
+      assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
+      assertEquals(5, (int)nav.getState().getPriority());
+      assertNotNull(nav.getRootId());
+
+      //
+      assertTrue(service.saveNavigation(nav.getKey(), null));
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      assertNotNull(nav);
+      assertNull(nav.getState());
+      assertNull(nav.getRootId());
+
+      //
+      assertFalse(service.saveNavigation(nav.getKey(), null));
    }
 
 
@@ -343,11 +382,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_removal").getRootNavigation().getChild("default").destroy();
       end(true);
-      stopService();
 
       //
       begin();
@@ -372,11 +409,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").addChild("new");
       end(true);
-      stopService();
 
       //
       begin();
@@ -387,11 +422,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").getChild("new").destroy();
       end(true);
-      stopService();
 
       //
       begin();
@@ -416,12 +449,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       Described defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilto");
       end(true);
-      stopService();
 
       //
       begin();
@@ -430,12 +461,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilta");
       end(true);
-      stopService();
 
       //
       begin();
@@ -444,12 +473,10 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName(null);
       end(true);
-      stopService();
 
       //
       begin();
@@ -473,11 +500,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, "foo_uri");
       end(true);
-      stopService();
 
       //
       begin();
@@ -486,11 +511,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, "bar_uri");
       end(true);
-      stopService();
 
       //
       begin();
@@ -499,11 +522,9 @@ public class TestNavigationService extends AbstractPortalTest
       end();
 
       //
-      startService();
       begin();
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, null);
       end(true);
-      stopService();
 
       //
       begin();
@@ -529,9 +550,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
       service.save(Node.MODEL, root);
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
@@ -561,9 +580,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
       service.save(Node.MODEL, root);
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
@@ -599,9 +616,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       root.addChild(foo);
       service.save(Node.MODEL, root);
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
@@ -645,9 +660,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("1", i.next().getName());
       assertEquals("4", i.next().getName());
       assertFalse(i.hasNext());
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
@@ -676,9 +689,7 @@ public class TestNavigationService extends AbstractPortalTest
       Node bar = foo.addChild("bar");
       bar.addChild("juu");
       service.save(Node.MODEL, root);
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
@@ -709,9 +720,7 @@ public class TestNavigationService extends AbstractPortalTest
       long now = System.currentTimeMillis();
       root.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
       service.save(Node.MODEL, root);
-      startService();
       end(true);
-      stopService();
 
       //
       begin();
