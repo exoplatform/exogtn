@@ -24,7 +24,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Navigation;
-import org.exoplatform.portal.mop.navigation.NavigationException;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -211,7 +211,7 @@ public class UserPortalImpl implements UserPortal
          this.match = match;
       }
 
-      void resolve() throws NavigationException
+      void resolve() throws NavigationServiceException
       {
          UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this);
          if (score > 0)

@@ -23,24 +23,6 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationException extends Exception
+public class NavigationServiceEvent
 {
-   public NavigationException()
-   {
-   }
-
-   public NavigationException(String message)
-   {
-      super(message);
-   }
-
-   public NavigationException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
-
-   public NavigationException(Throwable cause)
-   {
-      super(cause);
-   }
 }

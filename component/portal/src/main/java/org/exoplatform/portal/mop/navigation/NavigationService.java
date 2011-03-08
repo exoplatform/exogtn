@@ -44,9 +44,9 @@ public interface NavigationService
     * @param key the navigation key
     * @return the matching navigation
     * @throws NullPointerException if the key is null
-    * @throws NavigationException if the navigation could not be loaded
+    * @throws NavigationServiceException if the navigation could not be loaded
     */
-   Navigation loadNavigation(SiteKey key) throws NullPointerException, NavigationException;
+   Navigation loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
 
    /**
     * Create, update or destroy a navigation. When the navigation state is not null, the navigation
@@ -57,9 +57,9 @@ public interface NavigationService
     * @param state the navigation state
     * @return true if the intent succeeded
     * @throws NullPointerException if the key is null
-    * @throws NavigationException if the navigation could not be saved
+    * @throws NavigationServiceException if the navigation could not be saved
     */
-   boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationException;
+   boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationServiceException;
 
    /**
     * Load a navigation node from a specified navigation. The returned node will be the root node of the navigation.
@@ -71,12 +71,12 @@ public interface NavigationService
     * @param <N> the node model generic type
     * @return the loaded node
     * @throws NullPointerException if any argument is null
-    * @throws NavigationException if the loading operation could not be performed
+    * @throws NavigationServiceException if the loading operation could not be performed
     */
-   <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationException;
+   <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationServiceException;
 
-   <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationException;
+   <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException;
 
-   <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationException;
+   <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException;
 
 }

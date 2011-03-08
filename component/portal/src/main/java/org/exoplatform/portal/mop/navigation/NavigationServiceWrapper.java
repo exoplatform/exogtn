@@ -76,7 +76,7 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return service.loadNavigation(key);
    }
 
-   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException
+   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
    {
       return service.saveNavigation(key, state);
    }

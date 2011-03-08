@@ -288,7 +288,7 @@ public class NavigationServiceImpl implements NavigationService
       return data;
    }
 
-   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException
+   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
    {
       if (key == null)
       {
@@ -302,7 +302,7 @@ public class NavigationServiceImpl implements NavigationService
       Site site = workspace.getSite(objectType, key.getName());
       if (site == null)
       {
-         throw new NavigationException("The site " + key + " does not exist");
+         throw new NavigationServiceException("The site " + key + " does not exist");
       }
 
       //
