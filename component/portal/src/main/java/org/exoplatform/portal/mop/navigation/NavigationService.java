@@ -29,12 +29,26 @@ public interface NavigationService
 {
 
    /**
-    * Find and returns a navigation. If no such navigation exist, null is returned instead.
+    * Find and returns a navigation, if no such site exist, null is returned instead.
     *
     * @param key the navigation key
     * @return the matching navigation
+    * @throws NavigationException if the navigation could not be loaded
     */
-   Navigation getNavigation(SiteKey key);
+   Navigation loadNavigation(SiteKey key) throws NavigationException;
+
+   /**
+    * Save a navigation. If the navigation already exist, then this navigation is updated
+    * with the specified state, otherwise the navigation is created.
+    *
+    * @param key they navigation key
+    * @param state the navigation state
+    * @return true if the navigation was created
+    * @throws NavigationException if the navigation could not be saved
+    */
+   boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException;
+
+//   void destroyNavigation(SiteKey key);
 
    <N> N load(NodeModel<N> model, Navigation navigation, Scope scope);
 

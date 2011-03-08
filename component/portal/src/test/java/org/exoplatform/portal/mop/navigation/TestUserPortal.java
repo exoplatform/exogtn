@@ -26,7 +26,6 @@ import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.BundleResolver;
@@ -35,9 +34,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
-import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -45,10 +42,8 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.i18n.MapResourceBundle;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.core.api.MOPService;
 
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -148,7 +143,7 @@ public class TestUserPortal extends AbstractPortalTest
       Map<SiteKey, UserNavigation> map = new HashMap<SiteKey, UserNavigation>();
       for (UserNavigation nav : navigations)
       {
-         map.put(nav.getNavigation().getKey(), nav);
+         map.put(nav.getKey(), nav);
       }
       return map;
    }
@@ -199,7 +194,7 @@ public class TestUserPortal extends AbstractPortalTest
             // Now try with the specific api
             UserNavigation rootNav = userPortalCfg.getUserPortal().getNavigation(SiteKey.user("root"));
             assertNotNull(rootNav);
-            assertEquals(SiteKey.user("root"), rootNav.getNavigation().getKey());
+            assertEquals(SiteKey.user("root"), rootNav.getKey());
          }
       }.execute("root");
    }
@@ -283,11 +278,11 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             List<UserNavigation> navigations = userPortal.getNavigations();
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
-            assertEquals(SiteKey.portal("classic"), navigations.get(0).getNavigation().getKey()); // 1
-            assertEquals(SiteKey.group("/platform/administrators"), navigations.get(1).getNavigation().getKey()); // 2
-            assertEquals(SiteKey.user("root"), navigations.get(2).getNavigation().getKey()); // 3
-            assertEquals(SiteKey.group("/organization/management/executive-board"), navigations.get(3).getNavigation().getKey()); // 4
-            assertEquals(SiteKey.group("/platform/users"), navigations.get(4).getNavigation().getKey()); // 5
+            assertEquals(SiteKey.portal("classic"), navigations.get(0).getKey()); // 1
+            assertEquals(SiteKey.group("/platform/administrators"), navigations.get(1).getKey()); // 2
+            assertEquals(SiteKey.user("root"), navigations.get(2).getKey()); // 3
+            assertEquals(SiteKey.group("/organization/management/executive-board"), navigations.get(3).getKey()); // 4
+            assertEquals(SiteKey.group("/platform/users"), navigations.get(4).getKey()); // 5
          }
       }.execute("root");
    }
@@ -303,7 +298,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             NavigationPath nav = userPortal.resolvePath("/");
-            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
             UserNode target = nav.getTarget();
             assertEquals("home", target.getName());
             assertEquals("default", target.getParent().getName());
@@ -311,7 +306,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             nav = userPortal.resolvePath("/foo");
-            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
             target = nav.getTarget();
             assertEquals("home", target.getName());
             assertEquals("default", target.getParent().getName());
@@ -319,7 +314,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             nav = userPortal.resolvePath("/home");
-            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getNavigation().getKey());
+            assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
             target = nav.getTarget();
             assertEquals("home", target.getName());
             assertEquals("default", target.getParent().getName());
@@ -327,7 +322,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             nav = userPortal.resolvePath("/administration/communityManagement");
-            assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getNavigation().getKey());
+            assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getKey());
             target = nav.getTarget();
             assertEquals("communityManagement", target.getName());
             assertEquals("administration", target.getParent().getName());

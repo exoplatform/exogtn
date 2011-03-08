@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.gatein.common.util.EmptyResourceBundle;
@@ -38,7 +39,7 @@ public class UserNavigation
    final UserPortalImpl portal;
 
    /** . */
-   private final Navigation navigation;
+   final Navigation navigation;
 
    /** . */
    private final boolean modifiable;
@@ -69,6 +70,16 @@ public class UserNavigation
 
    UserNavigation(UserPortalImpl portal, Navigation navigation, boolean modifiable)
    {
+      if (navigation == null)
+      {
+         throw new NullPointerException();
+      }
+      if (navigation.getState() == null)
+      {
+         throw new IllegalArgumentException("No state for navigation " + navigation.getKey());
+      }
+
+      //
       this.portal = portal;
       this.navigation = navigation;
       this.modifiable = modifiable;
@@ -78,10 +89,16 @@ public class UserNavigation
    {
       return navigation.getKey();
    }
-   
-   public Navigation getNavigation()
+
+   public int getPriority()
    {
-      return navigation;
+      Integer priority = navigation.getState().getPriority();
+      return priority != null ? priority : 1;
+   }
+   
+   public NavigationState getState()
+   {
+      return navigation.getState();
    }
 
    public boolean isModifiable()

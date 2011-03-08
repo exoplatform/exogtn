@@ -111,18 +111,20 @@ public class UserPortalImpl implements UserPortal
       if (navigations == null)
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
-         Navigation portalNav = navigationService.getNavigation(new SiteKey(SiteType.PORTAL, portalName));
+         Navigation portalNav = navigationService.loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
          navigations.add(new UserNavigation(
             this,
             portalNav,
             acl.hasEditPermissionOnNavigation(portalNav.getKey())));
+
+         //
          if (userName != null)
          {
             // Add user nav if any
-            Navigation userNav = navigationService.getNavigation(SiteKey.user(userName));
-            if (userNav != null)
+            Navigation userNavigation = navigationService.loadNavigation(SiteKey.user(userName));
+            if (userNavigation != null && userNavigation.getState() != null)
             {
-               navigations.add(new UserNavigation(this, userNav, true));
+               navigations.add(new UserNavigation(this, userNavigation, true));
             }
 
             //
@@ -139,19 +141,17 @@ public class UserPortalImpl implements UserPortal
             {
                Group m = (Group)group;
                String groupId = m.getId().trim();
-               if (groupId.equals(acl.getGuestsGroup()))
+               if (!groupId.equals(acl.getGuestsGroup()))
                {
-                  continue;
+                  Navigation groupNavigation = navigationService.loadNavigation(SiteKey.group(groupId));
+                  if (groupNavigation != null && groupNavigation.getState() != null)
+                  {
+                     navigations.add(new UserNavigation(
+                        this,
+                        groupNavigation,
+                        acl.hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                  }
                }
-               Navigation navigation = navigationService.getNavigation(SiteKey.group(groupId));
-               if (navigation == null || navigation.getState().getNodeId() == null)
-               {
-                  continue;
-               }
-               navigations.add(new UserNavigation(
-                  this,
-                  navigation,
-                  acl.hasEditPermissionOnNavigation(navigation.getKey())));
             }
 
             // Sort the list finally
@@ -159,7 +159,7 @@ public class UserPortalImpl implements UserPortal
             {
                public int compare(UserNavigation nav1, UserNavigation nav2)
                {
-                  return nav1.getNavigation().getState().getPriority() - nav2.getNavigation().getState().getPriority();
+                  return nav1.getPriority() - nav2.getPriority();
                }
             });
          }
@@ -174,7 +174,7 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation navigation : getNavigations())
       {
-         if (navigation.getNavigation().getKey().equals(key))
+         if (navigation.getKey().equals(key))
          {
             return navigation;
          }
@@ -184,9 +184,9 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public UserNode getNode(UserNavigation navigation, Scope scope) throws Exception
+   public UserNode getNode(UserNavigation userNavigation, Scope scope) throws Exception
    {
-      return navigationService.load(navigation.model, navigation.getNavigation(), scope);
+      return navigationService.load(userNavigation.model, userNavigation.navigation, scope);
    }
 
    public UserNode getNode(UserNode node, Scope scope) throws Exception
@@ -197,30 +197,30 @@ public class UserPortalImpl implements UserPortal
 
    private class MatchingScope implements Scope
    {
-      final UserNavigation navigation;
+      final UserNavigation userNavigation;
       final String[] match;
       int score;
       String id;
       UserNode userNode;
       private NavigationPath path;
 
-      MatchingScope(UserNavigation navigation, String[] match)
+      MatchingScope(UserNavigation userNavigation, String[] match)
       {
-         this.navigation = navigation;
+         this.userNavigation = userNavigation;
          this.match = match;
       }
 
       void resolve()
       {
-         UserNode node = navigationService.load(navigation.model, navigation.getNavigation(), this);
+         UserNode node = navigationService.load(userNavigation.model, userNavigation.navigation, this);
          if (score > 0)
          {
             userNode = node.find(id);
-            path = new NavigationPath(navigation, userNode);
+            path = new NavigationPath(userNavigation, userNode);
          }
          else
          {
-            path = new NavigationPath(navigation, null);
+            path = new NavigationPath(userNavigation, null);
          }
       }
 
@@ -255,7 +255,7 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation userNavigation : getNavigations())
       {
-         Navigation navigation = userNavigation.getNavigation();
+         Navigation navigation = userNavigation.navigation;
          if (navigation.getState().getNodeId() != null)
          {
             UserNode root = navigationService.load(userNavigation.model, navigation, Scope.CHILDREN);
@@ -323,7 +323,7 @@ public class UserPortalImpl implements UserPortal
       //
       if (best != null && best.score > 0)
       {
-         return new NavigationPath(best.navigation,  best.userNode);
+         return new NavigationPath(best.userNavigation,  best.userNode);
       }
       else
       {

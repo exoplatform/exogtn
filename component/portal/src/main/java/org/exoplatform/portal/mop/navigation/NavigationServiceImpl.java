@@ -251,7 +251,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public NavigationImpl getNavigation(SiteKey key)
+   public NavigationImpl loadNavigation(SiteKey key)
    {
       NavigationImpl data = navigationKeyCache.get(key);
       if (data == null)
@@ -262,22 +262,19 @@ public class NavigationServiceImpl implements NavigationService
          Site site = workspace.getSite(objectType, key.getName());
          if (site != null)
          {
-            org.gatein.mop.api.workspace.Navigation nav = site.getRootNavigation();
-            org.gatein.mop.api.workspace.Navigation root = nav.getChild("default");
-            String rootId;
-            int priority;
-            if (root != null)
+            org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
+            org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+            if (rootNode != null)
             {
 
-               priority = root.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
-               rootId = root.getObjectId();
+               Integer priority = rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
+               String rootId = rootNode.getObjectId();
+               data = new NavigationImpl(key, new NavigationState(priority, rootId));
             }
             else
             {
-               priority = 1;
-               rootId = null;
+               data = new NavigationImpl(key);
             }
-            data = new NavigationImpl(key, new NavigationState(priority, rootId));
             navigationKeyCache.put(key, data);
             navigationPathCache.put(session.pathOf(site), key);
          }
@@ -285,6 +282,29 @@ public class NavigationServiceImpl implements NavigationService
       return data;
    }
 
+   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException
+   {
+      POMSession session = manager.getSession();
+      ObjectType<Site> objectType = a.get(key.getType());
+      Workspace workspace = session.getWorkspace();
+      Site site = workspace.getSite(objectType, key.getName());
+      if (site != null)
+      {
+         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
+         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+         boolean created = rootNode == null;
+         if (created)
+         {
+            rootNode = root.addChild("default");
+         }
+         rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, state.getPriority());
+         return created;
+      }
+      else
+      {
+         throw new NavigationException("The site " + key + " does not exist");
+      }
+   }
 
    public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)
    {

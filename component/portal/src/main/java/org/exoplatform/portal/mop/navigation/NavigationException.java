@@ -19,27 +19,28 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.SiteKey;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface Navigation
+public class NavigationException extends Exception
 {
+   public NavigationException()
+   {
+   }
 
-   /**
-    * Returns the navigation key.
-    *
-    * @return the navigation key
-    */
-   SiteKey getKey();
+   public NavigationException(String message)
+   {
+      super(message);
+   }
 
-   /**
-    * Returns the navigation state or null if the navigation is not entirely created yet.
-    *
-    * @return the navigation state
-    */
-   NavigationState getState();
+   public NavigationException(String message, Throwable cause)
+   {
+      super(message, cause);
+   }
 
+   public NavigationException(Throwable cause)
+   {
+      super(cause);
+   }
 }

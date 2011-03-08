@@ -71,9 +71,14 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       }
    }
 
-   public Navigation getNavigation(SiteKey key)
+   public Navigation loadNavigation(SiteKey key)
    {
-      return service.getNavigation(key);
+      return service.loadNavigation(key);
+   }
+
+   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationException
+   {
+      return service.saveNavigation(key, state);
    }
 
    public <N> N load(NodeModel<N> model, Navigation navigation, Scope scope)

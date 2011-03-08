@@ -34,8 +34,19 @@ class NavigationImpl implements Navigation
    /** . */
    private final NavigationState state;
 
+   NavigationImpl(SiteKey key)
+   {
+      this(key, null);
+   }
+
    NavigationImpl(SiteKey key, NavigationState state)
    {
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
       this.key = key;
       this.state = state;
    }
