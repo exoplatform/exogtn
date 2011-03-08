@@ -50,12 +50,16 @@ public class UserNode
    /** . */
    private String encodedResolvedLabel;
 
+   /** . */
+   private String uri;
+
    UserNode(UserNavigation navigation, NodeContext<UserNode> context)
    {
       this.navigation = navigation;
       this.context = context;
       this.resolvedLabel = null;
       this.encodedResolvedLabel = null;
+      this.uri = null;
    }
 
    public String getId()
@@ -75,12 +79,29 @@ public class UserNode
 
    public String getURI()
    {
-      return context.getState().getURI();
+      if (uri == null)
+      {
+         uri = buildURI().toString();
+      }
+      return uri;
    }
 
-   public void setURI(String uri)
+   private StringBuilder buildURI()
    {
-      context.setState(new NodeState.Builder(context.getState()).setURI(uri).capture());
+      UserNode parent = context.getParent();
+      if (parent != null)
+      {
+         StringBuilder builder = parent.buildURI();
+         if (builder.length() > 0)
+         {
+            builder.append('/');
+         }
+         return builder.append(context.getName());
+      }
+      else
+      {
+         return new StringBuilder();
+      }
    }
 
    public String getLabel()
