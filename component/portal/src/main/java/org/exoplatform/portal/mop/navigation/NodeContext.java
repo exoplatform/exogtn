@@ -43,7 +43,7 @@ public class NodeContext<N>
    NodeState state;
 
    /** . */
-   N parent;
+   NodeContext<N> parent;
 
    /** . */
    Children children;
@@ -93,7 +93,7 @@ public class NodeContext<N>
 
    public N getParent()
    {
-      return parent;
+      return parent != null ? parent.node : null;
    }
 
    public N getChild(String childName)
@@ -137,7 +137,7 @@ public class NodeContext<N>
       //
       NodeContext<N> childCtx = new NodeContext<N>(model, name, new NodeState.Builder().capture());
       children.put(null, childCtx);
-      childCtx.parent = node;
+      childCtx.parent = this;
 
       //
       return childCtx.node;
@@ -221,7 +221,7 @@ public class NodeContext<N>
          }
          if (childCtx.parent != null)
          {
-            if (childCtx.parent != node)
+            if (childCtx.parent != NodeContext.this)
             {
                throw new UnsupportedOperationException("not supported");
             }
@@ -238,7 +238,7 @@ public class NodeContext<N>
             {
                throw new IllegalArgumentException();
             }
-            childCtx.parent = node;
+            childCtx.parent = NodeContext.this;
             values.add(index, childCtx);
          }
       }
