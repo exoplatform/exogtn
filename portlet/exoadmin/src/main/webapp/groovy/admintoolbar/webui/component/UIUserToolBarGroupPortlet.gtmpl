@@ -20,7 +20,7 @@
 			nodes = uicomponent.getNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
-			def ownerId = navigation.getNavigation().getKey().getName();
+			def ownerId = navigation.getKey().getName();
 			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(ownerId));
 			print """
 						<div class="TitleBar"><div style="width: 99%" title="$ownerId">$navTitle</div></div>

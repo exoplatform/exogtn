@@ -31,7 +31,7 @@
 	
 	UserNavigation selectedNav = uicomponent.getSelectedNavigation();
 	if (selectedNav != null) {
-		editorLabel = _ctx.appRes("UIAdminToolbarPortlet.action." + selectedNav.getNavigation().getKey().getTypeName() + ".Editor");
+		editorLabel = _ctx.appRes("UIAdminToolbarPortlet.action." + selectedNav.getKey().getTypeName() + ".Editor");
 	}
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>

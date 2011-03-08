@@ -21,6 +21,8 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Visibility;
 
+import java.util.EnumSet;
+
 /**
  * <p>The scope describes a set of nodes, the scope implementation should be stateless and should be shared
  * between many threads.</p>
@@ -37,32 +39,85 @@ public interface Scope
 {
 
    /**
-    * A scope that prunes the tree, it keeps all nodes below a specific depth.
+    * A flexible filter implementation.
     */
-   public static class Pruning implements Scope
+   public static class Navigation implements Scope
    {
 
       /** . */
       private final Visitor visitor;
 
       /**
-       * Creates a new pruning scope.
+       * Creates a new navigation scope.
        *
        * @param height the max height of the pruned tree
        * @throws IllegalArgumentException if the height is negative
        */
-      public Pruning(final int height) throws IllegalArgumentException
+      public Navigation(int height)
       {
-         if (height < 0)
-         {
-            throw new IllegalArgumentException("Cannot provide negative height");
-         }
+         this(height, null);
+      }
+
+      /**
+       * Creates a new navigation scope.
+       *
+       * @param height the max height of the pruned tree
+       * @param filter the filter
+       * @throws IllegalArgumentException if the height is negative
+       */
+      public Navigation(final int height, final EnumSet<Visibility> filter) throws IllegalArgumentException
+      {
          this.visitor = new Visitor()
          {
             public VisitMode visit(int depth, String id, String name, NodeState state)
             {
-               return depth < height ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
+               if (isShown(state))
+               {
+                  if (height < 0 || depth < height)
+                  {
+                     return VisitMode.ALL_CHILDREN;
+                  }
+                  else if (depth == height)
+                  {
+                     return VisitMode.NO_CHILDREN;
+                  }
+                  else
+                  {
+                     return VisitMode.SKIP;
+                  }
+               }
+               else
+               {
+                  return VisitMode.SKIP;
+               }
             }
+
+            private boolean isShown(NodeState state)
+            {
+               if (filter == null)
+               {
+                  return true;
+               }
+               else
+               {
+                  Visibility visibility = state.getVisibility() != null ? state.getVisibility() : Visibility.DISPLAYED;
+                  boolean shown = filter.contains(visibility);
+                  if (shown && visibility == Visibility.TEMPORAL)
+                  {
+                     long now = System.currentTimeMillis();
+                     shown = false;
+                     if (state.getStartPublicationTime() == -1 || now < state.getStartPublicationTime())
+                     {
+                        if (state.getEndPublicationTime() == -1 && now > state.getEndPublicationTime())
+                        {
+                           shown = true;
+                        }
+                     }
+                  }
+                  return shown;
+               }
+            }
+
          };
       }
 
@@ -72,66 +127,15 @@ public interface Scope
       }
    }
 
-   Scope SINGLE = new Pruning(0);
+   Scope SINGLE = new Navigation(0);
 
-   Scope CHILDREN = new Pruning(1);
+   Scope CHILDREN = new Navigation(1);
 
-   Scope GRANDCHILDREN = new Pruning(2);
+   Scope GRANDCHILDREN = new Navigation(2);
 
-   Scope ALL = new Scope()
-   {
-      private Visitor instance = new Visitor()
-      {
-         public VisitMode visit(int depth, String id, String name, NodeState state)
-         {
-            return VisitMode.ALL_CHILDREN;
-         }
-      };
-      public Visitor get()
-      {
-         return instance;
-      }
-   };
+   Scope ALL = new Navigation(-1);
 
-   Scope NAVIGATION = new Scope()
-   {
-      Scope.Visitor visitor = new Visitor()
-      {
-         public VisitMode visit(int depth, String id, String name, NodeState state)
-         {
-            switch (depth)
-            {
-               case 0:
-                  return VisitMode.ALL_CHILDREN;
-               case 1:
-               case 2:
-                  Visibility visibility = state.getVisibility();
-                  if (visibility == Visibility.DISPLAYED || visibility == Visibility.TEMPORAL)
-                  {
-                     // todo implement temporal
-                     if (depth == 1)
-                     {
-                        return VisitMode.ALL_CHILDREN;
-                     }
-                     else
-                     {
-                        return VisitMode.NO_CHILDREN;
-                     }
-                  }
-                  else
-                  {
-                     return VisitMode.SKIP;
-                  }
-               default:
-                  throw new AssertionError();
-            }
-         }
-      };
-      public Visitor get()
-      {
-         return visitor;
-      }
-   };
+   Scope NAVIGATION = new Navigation(2, EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL));
 
    Visitor get();
 
