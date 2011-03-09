@@ -19,14 +19,16 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.portlet.EventRequest;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -35,6 +37,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -42,11 +45,6 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.portlet.EventRequest;
 
 /**
  * Created by The eXo Platform SAS
@@ -69,7 +67,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
    public Collection<UserNode> getUserNodes() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.NAVIGATION);
+      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.CHILDREN);       
       if (rootNodes != null)
       {                                  
          return rootNodes.getChildren();
@@ -77,24 +75,16 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
       return Collections.emptyList();
    }
 
-   public PageNode getSelectedPageNode() throws Exception
+   public UserNode getSelectedNode() throws Exception
    {
-      return Util.getUIPortal().getSelectedNode();
+      return Util.getUIPortal().getNavPath().getTarget();
    }
 
    public UserNavigation getCurrentUserNavigation() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      List<UserNavigation> allNavs = userPortal.getNavigations();
-
-      for (UserNavigation nav : allNavs)
-      {
-         if (SiteType.USER.equals(nav.getKey().getType()))
-         {
-            return nav;
-         }
-      }
-      return null;
+      WebuiRequestContext rcontext = WebuiRequestContext.getCurrentInstance();
+      return userPortal.getNavigation(SiteKey.user(rcontext.getRemoteUser()));
    }
 
    private UserPortal getUserPortal()
@@ -150,27 +140,24 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
                _nodeName = DEFAULT_TAB_NAME;
             }
 
-            DataStorage dataStorage = toolBarPortlet.getApplicationComponent(DataStorage.class);
-            PageNavigation _pageNavigation = dataStorage.getPageNavigation(PortalConfig.USER_TYPE, prContext.getRemoteUser());
-            
+            UserPortal userPortal = toolBarPortlet.getUserPortal();
+            UserNavigation userNav = toolBarPortlet.getCurrentUserNavigation();
+            SiteKey siteKey = userNav.getKey();
+
             UserPortalConfigService _configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
             Page page =
-               _configService.createPageTemplate(PAGE_TEMPLATE, _pageNavigation.getOwnerType(), _pageNavigation
-                  .getOwnerId());
+               _configService.createPageTemplate(PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
             page.setTitle(_nodeName);
             page.setName(_nodeName);
+            toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-            PageNode pageNode = new PageNode();
-            pageNode.setName(_nodeName);
-            pageNode.setLabel(_nodeName);
-            pageNode.setUri(_nodeName);
-            pageNode.setPageReference(page.getPageId());
+            UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN);          
+            UserNode tabNode = rootNode.addChild(_nodeName);
+            tabNode.setLabel(_nodeName);            
+            tabNode.setPageRef(page.getPageId());
 
-            _pageNavigation.addNode(pageNode);
-            _configService.create(page);
-            _configService.update(_pageNavigation);
-
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + _nodeName);
+            rootNode.save();            
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabNode.getURI());
          }
          catch (Exception ex)
          {

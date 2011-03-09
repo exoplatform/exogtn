@@ -1,6 +1,4 @@
 <%
-	import java.util.ArrayList; 
-	import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.portal.UIPortal;
@@ -14,7 +12,7 @@
 	def tabNbs = nodes.size();
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-	def String portalURI = pcontext.getPortalURI();
+	def portalURI = pcontext.getPortalURI();
 
 	PageNode selectedNode = Util.getUIPortal().getSelectedNode();
 	
@@ -28,15 +26,16 @@
 			<div class="CtTabDashboard">
 				<div class="UIHorizontalTabs">
 					<div class="TabsContainer ClearFix">
-						<% for(int i = 0;i < tabNbs;i++){ 
-							 		node = nodes.get(i);
-									def tabLabel = node.getLabel();
-									if ("Tab_Default".equals(node.getName()))
-									{
-										tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
-									}
-									String param = "" + i;
-									if(node.getUri().equals(selectedNode.getUri())){ 
+						<%
+									int 	i = 	0;
+									for(UserNode node : nodes){
+									   def tabLabel = node.getLabel();
+										if ("Tab_Default".equals(node.getName()))
+										{
+											tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
+										}
+									    String param = node.getName();
+									    if(node.getURI().equals(selectedNode.getUri())){ 
 		  						%>
 								<div class="UITab GrayTabStyle">
 										<div class="SelectedTab">
@@ -44,7 +43,7 @@
 														<div class="RightTab">
 																<div class="MiddleTab">
 																		<% 
-																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + tabLabel + "\")"; 
+																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",\"" + tabLabel + "\")"; 
 																		%>
 																		<span ondblclick='$ondblclick'>$tabLabel</span>
 																		<a  href="<%= uicomponent.url("DeleteTab",param); %>">

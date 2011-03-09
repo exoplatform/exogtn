@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -85,9 +84,9 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       return Collections.emptyList();
    }
 
-   public PageNode getSelectedPageNode() throws Exception
+   public UserNode getSelectedNode() throws Exception
    {
-      return Util.getUIPortal().getSelectedNode();
+      return Util.getUIPortal().getNavPath().getTarget();
    }
    
    private UserPortal getUserPortal()

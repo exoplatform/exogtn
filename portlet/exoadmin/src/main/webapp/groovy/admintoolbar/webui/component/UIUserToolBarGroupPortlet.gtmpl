@@ -36,9 +36,9 @@
 	}
 	
 	void renderPageNode(UserNode node, boolean flag) {
-		PageNode selectedNode = uicomponent.getSelectedPageNode();
+		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getURI() == selectedNode.getUri()) {
+		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
 				tabStyleNavigation = "SelectedItem";
 		}
 		

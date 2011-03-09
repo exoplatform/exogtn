@@ -181,7 +181,7 @@ public class UserNode
          //
          if (resolvedLabel == null)
          {
-            resolvedLabel = context.getName();
+            resolvedLabel = getLabel();
          }
 
          //

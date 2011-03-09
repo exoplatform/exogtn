@@ -23,10 +23,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -116,39 +113,29 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
-   public Collection<UserNode> getSameSiblingsNode() throws Exception
+   public UserNode getParentTab() throws Exception
    {
-      UserPortal userPortal = getUserPortal();
-      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.NAVIGATION);
-      if (rootNodes != null)
-      {
-         return rootNodes.getChildren();
-      }
-      return Collections.emptyList();
-      
-//      Collection<UserNode> siblings = getUserNodes();
-//      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPath();
-//      if (selectedPath != null && selectedPath.size() > 1)
-//      {
-//         PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
-//         siblings = currentParent.getChildren();
-//      }
-//      return siblings;
+      UserNode selectedNode =  uiPortal.getNavPath().getTarget();
+
+      return getUserPortal().getNode(selectedNode.getParent(), Scope.CHILDREN);
    }
+
+   public Collection<UserNode> getSameSiblingsNode() throws Exception
+   {                                                                 
+      UserNode parentTab =  getParentTab();
+
+      if (parentTab == null)
+      {
+         return Collections.emptyList();
+      }
+      return parentTab.getChildren();
+   }   
 
    public UserNavigation getCurrentUserNavigation() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      List<UserNavigation> allNavs = userPortal.getNavigations();
-
-      for (UserNavigation nav : allNavs)
-      {
-         if (SiteType.USER.equals(nav.getKey().getType()))
-         {
-            return nav;
-         }
-      }
-      return null;
+      WebuiRequestContext rcontext = WebuiRequestContext.getCurrentInstance();
+      return userPortal.getNavigation(SiteKey.user(rcontext.getRemoteUser()));
    }
 
    private UserPortal getUserPortal()
@@ -157,70 +144,57 @@ public class UITabPaneDashboard extends UIContainer
       return uiApp.getUserPortalConfig().getUserPortal();
    }
 
-   //This is only for temporary, we will remove it after finishing with NavigationService
-   public PageNavigation getPageNavigation() throws Exception
-   {
-      return dataService.getPageNavigation(PortalConfig.USER_TYPE, WebuiRequestContext.getCurrentInstance().getRemoteUser());
-   }
-
    /**
-    * Remove node specified by nodeIndex and returns the node to switch to
-    * @param nodeIndex
-    * @return
+    * Remove node specified by nodeName and returns the node to switch to
+    * @param nodeName - name of the Node that will be remove
+    * @return return the node that should be selected after remove node
     */
-   public PageNode removePageNode(int nodeIndex)
+   public UserNode removePageNode(String nodeName)
    {
       try
-      {
-         PageNavigation pageNavigation = getPageNavigation();
-         List<PageNode> nodes = pageNavigation.getNodes();
-         PageNode tobeRemoved = nodes.get(nodeIndex);
-         PageNode selectedNode = uiPortal.getSelectedNode();
-
-         boolean isRemoved = true; // To check 
-         PageNavigation updateNav =
-            dataService.getPageNavigation(pageNavigation.getOwnerType(), pageNavigation.getOwnerId());
-         for (PageNode pageNode : updateNav.getNodes())
+      {         
+         UserNode parentNode = getParentTab();
+         if (parentNode == null || parentNode.getChild(nodeName) == null)
          {
-            if (pageNode.getUri().equals(tobeRemoved.getUri()))
-            {
-               isRemoved = false;
-               break;
-            }
+            return null;
          }
 
-         if (nodes.size() >= 2)
+         UserNode tobeRemoved = parentNode.getChild(nodeName);
+         UserNode selectedNode = uiPortal.getNavPath().getTarget();
+
+         if (parentNode.getChildrenCount() >= 2)
          {
+            List<UserNode> childs = new ArrayList<UserNode>(parentNode.getChildren());
+            int idx;
+            for (idx = 0; idx < childs.size(); idx++)
+            {
+               if (childs.get(idx).getName().equals(nodeName))
+               {
+                  childs.remove(idx);
+                  break;
+               }
+            }
+
             // Remove node
-            nodes.remove(tobeRemoved);
+            parentNode.removeChild(nodeName);
 
             // Choose selected Node
-            if (tobeRemoved.getUri().equals(selectedNode.getUri()))
+            if (tobeRemoved.getURI().equals(selectedNode.getURI()))
             {
-               selectedNode = nodes.get(Math.max(0, nodeIndex - 1));
-
-            }
-            else if (!nodes.contains(selectedNode))
-            {
-               selectedNode = nodes.get(0);
+               selectedNode = childs.get(Math.max(0, idx - 1));
             }
 
-            // Update
-            if (!isRemoved)
+            String pageRef = tobeRemoved.getPageRef();
+            if (pageRef != null && pageRef.length() > 0)
             {
-               String pageRef = tobeRemoved.getPageReference();
-               if (pageRef != null && pageRef.length() > 0)
-               {
-                  Page page = configService.getPage(pageRef);
-                  if (page != null)
-                     dataService.remove(page);
-                  UIPortal uiPortal = Util.getUIPortal();
-                  // Remove from cache
-                  uiPortal.setUIPage(pageRef, null);
-               }
-               //uiPortal.setSelectedNode(selectedNode);
-               dataService.save(pageNavigation);
+               Page page = configService.getPage(pageRef);
+               if (page != null)
+                  dataService.remove(page);
+               UIPortal uiPortal = Util.getUIPortal();
+               // Remove from cache
+               uiPortal.setUIPage(pageRef, null);
             }
+            parentNode.save();
          }
          else
          {
@@ -241,53 +215,39 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
-         PageNavigation pageNavigation = getPageNavigation();
+         UserNavigation userNav = getCurrentUserNavigation();
          if (nodeLabel == null || nodeLabel.length() == 0)
          {
             nodeLabel = "Tab_" + getCurrentNumberOfTabs();
          }
-         Page page =
-            configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, pageNavigation.getOwnerType(),
-               pageNavigation.getOwnerId());
-         page.setTitle(nodeLabel);
 
-         List<PageNode> selectedPath = uiPortal.getSelectedPath();
-         PageNode parentNode = null;
-         if (selectedPath != null && selectedPath.size() > 1)
+         UserNode parentNode = getParentTab();
+         if (parentNode == null)
          {
-            parentNode = selectedPath.get(selectedPath.size() - 2);
+            return null;
          }
 
-         PageNode pageNode = new PageNode();
-         pageNode.setLabel(nodeLabel);
          String uniqueNodeName = nodeLabel.toLowerCase().replace(' ', '_');
-         if (nameExisted(uniqueNodeName))
+         if (parentNode.getChild(uniqueNodeName) != null)
          {
             uniqueNodeName = uniqueNodeName + "_" + System.currentTimeMillis();
          }
 
-         String fullName = (parentNode != null) ? parentNode.getUri() + "/" + uniqueNodeName : uniqueNodeName;
-
+         SiteKey siteKey = userNav.getKey();
+         Page page =
+            configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
+         page.setTitle(nodeLabel);
          page.setName(uniqueNodeName);
-         pageNode.setName(uniqueNodeName);
-         pageNode.setUri(fullName);
-         pageNode.setPageReference(page.getPageId());
-
-         if (parentNode == null)
-         {
-            pageNavigation.addNode(pageNode);
-         }
-         else if (parentNode.getChildren() != null)
-         {
-            parentNode.getChildren().add(pageNode);
-         }
-
-         //uiPortal.setSelectedNode(pageNode);
-
          dataService.create(page);
-         dataService.save(pageNavigation);
 
-         return fullName;
+         UserNode tabNode = parentNode.addChild(uniqueNodeName);
+         tabNode.setLabel(nodeLabel);
+         tabNode.setName(uniqueNodeName);
+         tabNode.setPageRef(page.getPageId());
+
+         parentNode.save();
+
+         return tabNode.getURI();
       }
       catch (Exception ex)
       {
@@ -319,59 +279,34 @@ public class UITabPaneDashboard extends UIContainer
       return true;
    }
 
-   private boolean nameExisted(String nodeName) throws Exception
-   {      
-      PageNavigation pageNavigation = getPageNavigation();
-      for (PageNode node : pageNavigation.getNodes())
-      {
-         if (node.getName().equals(nodeName))
-         {
-            return true;
-         }
-      }
-      return false;
-   }
-
-   public String renamePageNode(int nodeIndex, String newNodeLabel)
+   public String renamePageNode(String nodeName, String newNodeLabel)
    {
       try
       {
-         PageNavigation pageNavigation = getPageNavigation();
-         List<PageNode> nodes = pageNavigation.getNodes();
-         List<PageNode> selectedPath = uiPortal.getSelectedPath();
-         PageNode parentNode = null;
-         if (selectedPath != null && selectedPath.size() > 1)
-         {
-            parentNode = selectedPath.get(selectedPath.size() - 2);
-            nodes = parentNode.getChildren();
-         }
-
-         PageNode renamedNode = nodes.get(nodeIndex);
-         if (renamedNode == null || newNodeLabel.length() == 0)
+         UserNode parentNode = getParentTab();
+         if (parentNode == null || parentNode.getChild(nodeName) == null)
          {
             return null;
          }
-
+         UserNode renamedNode = parentNode.getChild(nodeName);
          renamedNode.setLabel(newNodeLabel);
 
          String newNodeName = newNodeLabel.toLowerCase().replace(' ', '_');
-         if (nameExisted(newNodeName))
+         if (parentNode.getChild(newNodeName) != null)
          {
             newNodeName = newNodeName + "_" + System.currentTimeMillis();
          }
          renamedNode.setName(newNodeName);
 
-         String newUri = (parentNode != null) ? parentNode.getUri() + "/" + newNodeName : newNodeName;
-
-         renamedNode.setUri(newUri);
-
-         Page page = configService.getPage(renamedNode.getPageReference());
-         page.setTitle(newNodeLabel);
+         Page page = configService.getPage(renamedNode.getPageRef());
          if (page != null)
+         {
+            page.setTitle(newNodeLabel);
             dataService.save(page);
-         
-         dataService.save(pageNavigation);
-         return newUri;
+         }
+
+         parentNode.save();
+         return renamedNode.getURI();
       }
       catch (Exception ex)
       {
@@ -384,11 +319,11 @@ public class UITabPaneDashboard extends UIContainer
     * 
     * @param firstIndex
     * @param secondIndex
-    * @return
     */
    public boolean permutePageNode(int firstIndex, int secondIndex) throws Exception
    {
-      PageNavigation pageNavigation = getPageNavigation();
+      UserNode parentNode = getParentTab();
+      List<UserNode> siblings = new ArrayList<UserNode>(getSameSiblingsNode());
       if (firstIndex == secondIndex)
       {
          return false;
@@ -396,13 +331,10 @@ public class UITabPaneDashboard extends UIContainer
 
       try
       {
-         ArrayList<PageNode> nodes = pageNavigation.getNodes();
-         PageNode firstNode = nodes.get(firstIndex);
-         PageNode secondNode = nodes.get(secondIndex);
-         nodes.set(firstIndex, secondNode);
-         nodes.set(secondIndex, firstNode);
+         UserNode firstNode = siblings.get(firstIndex);
+         parentNode.addChild(secondIndex, firstNode);
 
-         dataService.save(pageNavigation);
+         parentNode.save();
          return true;
       }
       catch (Exception ex)
@@ -417,8 +349,8 @@ public class UITabPaneDashboard extends UIContainer
       {
          UITabPaneDashboard source = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
-         int removedNodeIndex = Integer.parseInt(context.getRequestParameter(UIComponent.OBJECTID));
-         PageNode selectedNode = source.removePageNode(removedNodeIndex);
+         String nodeName = context.getRequestParameter(UIComponent.OBJECTID);
+         UserNode selectedNode = source.removePageNode(nodeName);
 
          //If the node is removed successfully, then redirect to the node specified by tab on the left
          if (selectedNode != null)
@@ -433,7 +365,7 @@ public class UITabPaneDashboard extends UIContainer
 
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(selectedNode.getUri(), "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(selectedNode.getURI(), "UTF-8"));
          }
       }
    }
@@ -449,9 +381,9 @@ public class UITabPaneDashboard extends UIContainer
          {
             //TODO nguyenanhkien2a@gmail.com
             //We should redirect to current node while adding new tab fails
-            PageNode currentNode = tabPane.uiPortal.getSelectedNode();
+            UserNode currentNode = tabPane.uiPortal.getNavPath().getTarget();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getUri(), "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getURI(), "UTF-8"));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
@@ -485,20 +417,20 @@ public class UITabPaneDashboard extends UIContainer
       {
          UITabPaneDashboard tabPane = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
-         int nodeIndex = Integer.parseInt(context.getRequestParameter(UIComponent.OBJECTID));
+         String nodeName = context.getRequestParameter(UIComponent.OBJECTID);
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
          if (!tabPane.validateName(newTabLabel))
          {
             //We should redirect to current node while renaming fails
-            PageNode currentNode = tabPane.uiPortal.getSelectedNode();
+            UserNode currentNode = tabPane.uiPortal.getNavPath().getTarget();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getUri(), "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getURI(), "UTF-8"));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
             return;
          }
-         String newUri = tabPane.renamePageNode(nodeIndex, newTabLabel);
+         String newUri = tabPane.renamePageNode(nodeName, newTabLabel);
 
          //If page node is renamed with success, then redirect to new URL
          if (newUri != null)
