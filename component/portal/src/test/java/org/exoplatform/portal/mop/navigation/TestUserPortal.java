@@ -31,9 +31,9 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodeFilter;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -212,7 +212,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("classic"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodeFilter.get());
+            Scope scope = portal.createScope(-1, UserNodePredicate.builder().build());
             UserNode root = portal.getNode(nav, scope);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("webexplorer"));
@@ -235,14 +235,14 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("system"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodeFilter.get().withVisibility(Visibility.DISPLAYED));
+            Scope scope = portal.createScope(-1, UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED).build());
             UserNode root = portal.getNode(nav, scope);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("sitemap"));
             assertNull(root.getChild("groupnavigation"));
 
             //
-            scope = portal.createScope(-1, UserNodeFilter.get().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM));
+            scope = portal.createScope(-1, UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM).build());
             root = portal.getNode(nav, scope);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("sitemap"));
@@ -270,7 +270,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodeFilter.get().withAuthorizationChek());
+            Scope scope = portal.createScope(-1, UserNodePredicate.builder().withAuthorizationCheck().build());
             UserNode root = portal.getNode(nav, scope);
             pass &= root.getChild("administration") != null;
             pass &= root.getChild("administration").getChild("communityManagement") != null;

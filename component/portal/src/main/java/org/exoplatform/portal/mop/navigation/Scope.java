@@ -21,8 +21,6 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Visibility;
 
-import java.util.EnumSet;
-
 /**
  * <p>The scope describes a set of nodes, the scope implementation should be stateless and should be shared
  * between many threads.</p>
@@ -46,7 +44,30 @@ public interface Scope
 
    Scope ALL = new GenericScope(-1);
 
-   Scope NAVIGATION = new ScopeImpl(2, EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL));
+   Scope NAVIGATION = new GenericScope(2, new NodeFilter()
+   {
+      public boolean accept(int depth, String id, String name, NodeState state)
+      {
+         Visibility visibility = state.getVisibility() != null ? state.getVisibility() : Visibility.DISPLAYED;
+         switch (visibility)
+         {
+            case DISPLAYED:
+               return true;
+            case TEMPORAL:
+               long now = System.currentTimeMillis();
+               if (state.getStartPublicationTime() == -1 || now < state.getStartPublicationTime())
+               {
+                  if (state.getEndPublicationTime() == -1 && now > state.getEndPublicationTime())
+                  {
+                     return false;
+                  }
+               }
+               return true;
+            default:
+               return false;
+         }
+      }
+   });
 
    Visitor get();
 
@@ -66,5 +87,4 @@ public interface Scope
        */
       VisitMode visit(int depth, String id, String name, NodeState state);
    }
-
 }

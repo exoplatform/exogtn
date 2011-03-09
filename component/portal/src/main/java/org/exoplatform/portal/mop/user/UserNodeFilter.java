@@ -19,71 +19,113 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.Visibility;
-
-import java.util.EnumSet;
-import java.util.Set;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
-* @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
-* @version $Revision$
-*/
-public class UserNodeFilter
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+class UserNodeFilter implements NodeFilter
 {
 
-   public static UserNodeFilter get()
-   {
-      return new UserNodeFilter();
-   }
+   /** . */
+   private final UserPortalImpl userPortal;
 
    /** . */
-   Set<Visibility> withVisibility = null;
+   private final UserNodePredicate predicate;
 
-   /** . */
-   boolean withAuthorizationCheck = false;
-
-   /** . */
-   boolean withTemporalCheck = false;
-
-   public UserNodeFilter withVisibility(Visibility first, Visibility... rest)
+   public UserNodeFilter(UserPortalImpl userPortal, UserNodePredicate predicate)
    {
-      withVisibility = EnumSet.of(first, rest);
-      return this;
+      if (userPortal == null)
+      {
+         throw new NullPointerException();
+      }
+      if (predicate == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      this.userPortal = userPortal;
+      this.predicate = predicate;
    }
 
-   public UserNodeFilter withVisibility(Visibility first)
+   public boolean accept(int depth, String id, String name, NodeState state)
    {
-      withVisibility = EnumSet.of(first);
-      return this;
-   }
+      Visibility visibility = state.getVisibility();
 
-   public UserNodeFilter withoutVisibility()
-   {
-      withVisibility = null;
-      return this;
-   }
+      // Correct null -> displayed
+      if (visibility == null)
+      {
+         visibility = Visibility.DISPLAYED;
+      }
 
-   public UserNodeFilter withTemporalCheck()
-   {
-      this.withTemporalCheck = true;
-      return this;
-   }
+      // If a visibility is specified then we use it
+      if (predicate.visibility != null && !predicate.visibility.contains(visibility))
+      {
+         return false;
+      }
 
-   public UserNodeFilter withoutTemporalCheck()
-   {
-      this.withTemporalCheck = false;
-      return this;
-   }
+      //
+      if (predicate.authorizationCheck)
+      {
+         if (visibility == Visibility.SYSTEM)
+         {
+            UserACL acl = userPortal.acl;
+            String userName = userPortal.userName;
+            if (!acl.getSuperUser().equals(userName))
+            {
+               return false;
+            }
+         }
+         else
+         {
+            String pageRef = state.getPageRef();
+            if (pageRef != null)
+            {
+               UserPortalConfigService upcs = userPortal.service;
+               try
+               {
+                  if (upcs.getPage(pageRef, userPortal.userName) == null)
+                  {
+                     return false;
+                  }
+               }
+               catch (Exception e)
+               {
+                  // Log me
+                  return false;
+               }
+            }
+         }
+      }
 
-   public UserNodeFilter withAuthorizationChek()
-   {
-      this.withAuthorizationCheck = true;
-      return this;
-   }
+      // Now make the custom checks
+      switch (visibility)
+      {
+         case SYSTEM:
+            break;
+         case TEMPORAL:
+            if (predicate.temporalCheck)
+            {
+               long now = System.currentTimeMillis();
+               if (state.getStartPublicationTime() != -1 && now < state.getStartPublicationTime())
+               {
+                  return false;
+               }
+               if (state.getEndPublicationTime() != -1 && now > state.getEndPublicationTime())
+               {
+                  return false;
+               }
+            }
+            break;
+      }
 
-   public UserNodeFilter withoutAuthorizationChek()
-   {
-      this.withAuthorizationCheck = false;
-      return this;
+      //
+      return true;
    }
 }

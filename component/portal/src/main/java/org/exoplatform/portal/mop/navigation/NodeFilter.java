@@ -20,9 +20,11 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
-* @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
-* @version $Revision$
-*/
+ * A filter for nodes.
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
 public interface NodeFilter
 {
 

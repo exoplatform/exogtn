@@ -375,8 +375,8 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public Scope createScope(int height, UserNodeFilter filter)
+   public Scope createScope(int height, UserNodePredicate predicate)
    {
-      return new GenericScope(height, new UserNodeFilterImpl(this, filter));
+      return new GenericScope(height, new UserNodeFilter(this, predicate));
    }
 }
