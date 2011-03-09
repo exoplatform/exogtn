@@ -215,8 +215,7 @@ public class UserNode
    }
 
    /**
-    * Returns the number of children, note that this does not guarantee that the children are effectively loaded, i.e
-    * we have <code>getChildrenCount() != getChildren().size()</code>.
+    * Returns the number of children.
     *
     * @return the number of children
     */

@@ -554,12 +554,14 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       Navigation nav = service.loadNavigation(SiteKey.portal("add_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertEquals(0, root.getChildrenCount());
 
       //
       Node foo = root.addChild("foo");
       assertNull(foo.getId());
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
+      assertEquals(1, root.getChildrenCount());
       service.saveNode(Node.MODEL, root);
       end(true);
 
@@ -568,6 +570,7 @@ public class TestNavigationService extends AbstractPortalTest
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
       foo = root.getChild("foo");
       assertNotNull(foo);
+      assertEquals(1, root.getChildrenCount());
       assertEquals("foo", foo.getName());
    }
 

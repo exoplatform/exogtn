@@ -118,6 +118,11 @@ public class Node
       return context.removeChild(MODEL, childName);
    }
 
+   public int getChildrenCount()
+   {
+      return context.getChildrenCount();
+   }
+
    @Override
    public String toString()
    {

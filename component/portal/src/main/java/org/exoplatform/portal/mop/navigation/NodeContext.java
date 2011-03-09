@@ -99,7 +99,7 @@ public final class NodeContext<N>
 
    public int getChildrenCount()
    {
-      return data.getChildrenCount();
+      return children != null ? children.values.size() : data.getChildrenCount();
    }
 
    public NodeState getState()
