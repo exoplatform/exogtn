@@ -21,7 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.user.BundleResolver;
+import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalImpl;
 import org.exoplatform.services.organization.Group;
@@ -53,7 +53,7 @@ public class UserPortalConfig
    private UserPortalImpl userPortal;
 
    /** . */
-   private BundleResolver bundleResolver;
+   private UserPortalContext bundleResolver;
 
    public UserPortalConfig()
    {
@@ -65,7 +65,7 @@ public class UserPortalConfig
       this.bundleResolver = null;
    }
 
-   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser, BundleResolver bundleResolver)
+   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser, UserPortalContext bundleResolver)
    {
       this.portal = portal;
       this.navigations = null;

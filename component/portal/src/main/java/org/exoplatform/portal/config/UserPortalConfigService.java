@@ -32,7 +32,7 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.user.BundleResolver;
+import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -102,7 +102,7 @@ public class UserPortalConfigService implements Startable
       return getUserPortalConfig(portalName, accessUser, null);
    }
 
-   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, BundleResolver bundleResolver) throws Exception
+   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, UserPortalContext bundleResolver) throws Exception
    {
       PortalConfig portal = storage_.getPortalConfig(portalName);
       if (portal == null || !userACL_.hasPermission(portal))

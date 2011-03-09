@@ -29,7 +29,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.user.BundleResolver;
+import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -458,7 +458,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            BundleResolver bundleResolver = new BundleResolver()
+            UserPortalContext userPortalContext = new UserPortalContext()
             {
                final MapResourceBundle bundle;
 
@@ -468,12 +468,12 @@ public class TestUserPortal extends AbstractPortalTest
                   bundle = new MapResourceBundle(map);
                }
 
-               public ResourceBundle resolve(UserNavigation navigation)
+               public ResourceBundle getBundle(UserNavigation navigation)
                {
                   return bundle;
                }
             };
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId(), bundleResolver);
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId(), userPortalContext);
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //

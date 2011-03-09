@@ -22,30 +22,32 @@ package org.exoplatform.portal.mop.user;
 import java.util.ResourceBundle;
 
 /**
+ * The context of a user within its portal.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface BundleResolver<K>
+public interface UserPortalContext
 {
 
    /**
-    * A resolver that always return null.
+    * A context that always return null.
     */
-   BundleResolver NULL_RESOLVER = new BundleResolver()
+   UserPortalContext NULL_CONTEXT = new UserPortalContext()
    {
-      public ResourceBundle resolve(UserNavigation navigation)
+      public ResourceBundle getBundle(UserNavigation navigation)
       {
          return null;
       }
    };
 
    /**
-    * Provide an opportunity to use a resource bundle per navigation. It no such bundle can be found then null
+    * Provide an opportunity to use a resource bundle for a specified navigation. It no such bundle can be found then null
     * can be returned.
     *
     * @param navigation the navigation that will be localized
     * @return the resource bundle to use
     */
-   ResourceBundle resolve(UserNavigation navigation);
+   ResourceBundle getBundle(UserNavigation navigation);
 
 }

@@ -63,7 +63,7 @@ public class UserPortalImpl implements UserPortal
    private final PortalConfig portal;
 
    /** . */
-   final BundleResolver bundleResolver;
+   final UserPortalContext bundleResolver;
 
    /** . */
    final String userName;
@@ -82,12 +82,12 @@ public class UserPortalImpl implements UserPortal
       String portalName,
       PortalConfig portal,
       String userName,
-      BundleResolver bundleResolver)
+      UserPortalContext bundleResolver)
    {
       // So we don't care about testing nullity
       if (bundleResolver == null)
       {
-         bundleResolver = BundleResolver.NULL_RESOLVER;
+         bundleResolver = UserPortalContext.NULL_CONTEXT;
       }
 
       //
@@ -104,7 +104,7 @@ public class UserPortalImpl implements UserPortal
 
    //
 
-   public BundleResolver getBundleResolver()
+   public UserPortalContext getBundleResolver()
    {
       return bundleResolver;
    }
