@@ -231,10 +231,44 @@ public class UserNode
       return children != null ? children : Collections.<UserNode>emptyList();
    }
 
-   public UserNode getChild(String childName)
+   /**
+    * Returns a child by its name or null if the child does not exist or the children relationship has not been loaded.
+    *
+    * @param childName the child name
+    * @return the corresponding user node
+    * @throws NullPointerException if the child name is null
+    */
+   public UserNode getChild(String childName) throws NullPointerException
    {
-      return context.getChild(childName);
+      if (context.getChildren() != null)
+      {
+         return context.getChild(childName);
+      }
+      else
+      {
+         return null;
+      }
    }
+
+   /**
+    * Returns a child by its index or null if the children relationship has not been loaded.
+    *
+    * @param childIndex the child index
+    * @return the corresponding user node
+    * @throws IndexOutOfBoundsException if the children relationship is loaded and the index is outside of its bounds
+    */
+   public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
+   {
+      if (context.getChildren() != null)
+      {
+         return context.getChild(childIndex);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
 
    public void addChild(UserNode child)
    {

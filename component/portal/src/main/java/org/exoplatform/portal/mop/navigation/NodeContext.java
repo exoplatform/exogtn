@@ -19,10 +19,9 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.AbstractCollection;
+import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * The context of a node.
@@ -129,8 +128,12 @@ public final class NodeContext<N>
       return parent != null ? parent.node : null;
    }
 
-   public N getChild(String childName)
+   public N getChild(String childName) throws NullPointerException
    {
+      if (childName == null)
+      {
+         throw new NullPointerException();
+      }
       if (children != null)
       {
          NodeContext<N> childCtx = children.get(childName);
@@ -138,11 +141,23 @@ public final class NodeContext<N>
       }
       else
       {
-         return null;
+         throw new IllegalStateException("Children are not loaded");
       }
    }
 
-   public Collection<N> getChildren()
+   public N getChild(int childIndex)
+   {
+      if (children != null)
+      {
+         return children.get(childIndex);
+      }
+      else
+      {
+         throw new IllegalStateException();
+      }
+   }
+
+   public List<N> getChildren()
    {
       return children;
    }
@@ -236,7 +251,7 @@ public final class NodeContext<N>
       }
    }
 
-   class Children extends AbstractCollection<N>
+   class Children extends AbstractList<N>
    {
 
       /** . */
@@ -344,24 +359,9 @@ public final class NodeContext<N>
       }
 
       @Override
-      public Iterator<N> iterator()
+      public N get(int index)
       {
-         final Iterator<NodeContext<N>> iterator = values.iterator();
-         return new Iterator<N>()
-         {
-            public boolean hasNext()
-            {
-               return iterator.hasNext();
-            }
-            public N next()
-            {
-               return iterator.next().node;
-            }
-            public void remove()
-            {
-               throw new UnsupportedOperationException();
-            }
-         };
+         return values.get(index).node;
       }
 
       @Override

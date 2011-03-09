@@ -291,6 +291,14 @@ public class TestNavigationService extends AbstractPortalTest
       Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE);
       assertNull(root.getChildren());
       assertEquals("default", root.getName());
+      try
+      {
+         root.getChild(0);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
    }
 
    public void testLoadChildrenScope() throws Exception
@@ -301,11 +309,13 @@ public class TestNavigationService extends AbstractPortalTest
       Iterator<? extends Node> i = root.getChildren().iterator();
       assertTrue(i.hasNext());
       Node home = i.next();
+      assertSame(home, root.getChild(0));
       assertNull(home.getChildren());
       assertEquals("home", home.getName());
       assertTrue(i.hasNext());
       Node webexplorer = i.next();
       assertNull(webexplorer.getChildren());
+      assertSame(webexplorer, root.getChild(1));
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());
    }

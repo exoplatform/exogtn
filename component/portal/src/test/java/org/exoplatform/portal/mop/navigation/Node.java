@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a navigation node.
@@ -90,6 +91,11 @@ public class Node
    public Node getChild(String childName)
    {
       return context.getChild(childName);
+   }
+
+   public Node getChild(int childIndex)
+   {
+      return context.getChild(childIndex);
    }
 
    public void addChild(Node child)
