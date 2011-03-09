@@ -32,6 +32,8 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -645,6 +647,125 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
       assertFalse(i.hasNext());
+   }
+
+   public void _testReorderChild2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child_2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      rootNavigation.addChild("bar");
+      rootNavigation.addChild("juu");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("reorder_child_2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertEquals("bar", root.getChild(1).getName());
+      assertTrue(root.removeChild("bar"));
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      root.addChild("daa");
+      Node tab3 = root.getChild(2);
+      assertEquals("daa", tab3.getName());
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = new NavigationServiceImpl(mgr).loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      for (Node child : root.getChildren())
+      {
+         System.out.println("child : " + child.getId());
+      }
+      tab3 = root.getChild(2);
+      assertEquals("daa", tab3.getName());
+
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      for (Node child : root.getChildren())
+      {
+         System.out.println("child : " + child.getId());
+      }
+      tab3 = root.getChild(2);
+      assertEquals("daa", tab3.getName());
+   }
+
+   public void _testWeirdBug() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child_2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      rootNavigation.addChild("bar");
+      rootNavigation.addChild("juu");
+      end(true);
+
+      //
+      begin();
+      portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
+      rootNavigation = portal.getRootNavigation().getChild("default");
+      rootNavigation.getChild("bar").destroy();
+      end(true);
+
+      //
+      begin();
+      portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
+      rootNavigation = portal.getRootNavigation().getChild("default");
+      rootNavigation.addChild("daa");
+      end(true);
+
+      //
+      begin();
+      portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
+      rootNavigation = portal.getRootNavigation().getChild("default");
+      org.gatein.mop.api.workspace.Navigation daa = rootNavigation.getChildren().get(2);
+      assertEquals("daa", daa.getName());
+   }
+
+   public void _testWeirdBug2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Session session = mop.getModel().getSession().getJCRSession();
+      javax.jcr.Node container = session.getRootNode().
+         getNode("mop:workspace/mop:portalsites").
+         addNode("mop:reorder_child_2").
+         getNode("mop:rootnavigation/mop:children").
+         addNode("mop:default").
+         getNode("mop:children");
+      container.addNode("mop:foo");
+      container.addNode("mop:bar");
+      container.addNode("mop:juu");
+      end(true);
+
+      //
+      begin();
+      session = mop.getModel().getSession().getJCRSession();
+      container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
+      container.getNode("mop:bar").remove();
+      end(true);
+
+      //
+      begin();
+      session = mop.getModel().getSession().getJCRSession();
+      container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
+      container.addNode("mop:daa");
+      container.orderBefore("mop:daa", null);
+      end(true);
+
+      //
+      begin();
+      container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
+      NodeIterator it = container.getNodes();
+      assertEquals("mop:foo", it.nextNode().getName());
+      assertEquals("mop:juu", it.nextNode().getName());
+      assertEquals("mop:daa", it.nextNode().getName());
+      assertFalse(it.hasNext());
    }
 
    public void testMoveChild() throws Exception
