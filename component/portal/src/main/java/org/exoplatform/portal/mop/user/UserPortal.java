@@ -97,4 +97,13 @@ public interface UserPortal
     */
    NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception;
 
+   /**
+    * Create a filter for the current user with the specified filter.
+    *
+    * @param depth the scope depth
+    * @param filter the filter to use
+    * @return the scope
+    */
+   Scope createScope(int depth, UserNodeFilter filter);
+
 }

@@ -78,6 +78,7 @@ public class UserPortalConfig
    public UserPortal getUserPortal()
    {
          userPortal = new UserPortalImpl(
+            service,
             service.navService,
             service.orgService_,
             service.userACL_,

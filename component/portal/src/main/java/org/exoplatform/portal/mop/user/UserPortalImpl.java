@@ -20,9 +20,11 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
@@ -46,13 +48,16 @@ public class UserPortalImpl implements UserPortal
 {
 
    /** . */
+   final UserPortalConfigService service;
+
+   /** . */
    final NavigationService navigationService;
    
    /** . */
    private final OrganizationService organizationService;
 
    /** . */
-   private final UserACL acl;
+   final UserACL acl;
    
    /** . */
    private final PortalConfig portal;
@@ -61,14 +66,16 @@ public class UserPortalImpl implements UserPortal
    final BundleResolver bundleResolver;
 
    /** . */
-   private final String userName;
+   final String userName;
 
    /** . */
    private List<UserNavigation> navigations;
 
+   /** . */
    private final String portalName;
 
    public UserPortalImpl(
+      UserPortalConfigService service,
       NavigationService navigationService,
       OrganizationService organizationService,
       UserACL acl,
@@ -84,6 +91,7 @@ public class UserPortalImpl implements UserPortal
       }
 
       //
+      this.service = service;
       this.navigationService = navigationService;
       this.organizationService = organizationService;
       this.acl = acl;
@@ -365,5 +373,10 @@ public class UserPortalImpl implements UserPortal
       {
          return null;
       }
+   }
+
+   public Scope createScope(int height, UserNodeFilter filter)
+   {
+      return new GenericScope(height, new UserNodeFilterImpl(this, filter));
    }
 }

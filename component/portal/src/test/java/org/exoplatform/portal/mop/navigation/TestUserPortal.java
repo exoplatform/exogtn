@@ -28,10 +28,12 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilter;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -181,7 +183,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
             Map<SiteKey, UserNavigation> navigations = toMap(userPortalCfg);
             assertEquals(5, navigations.size());
             assertTrue(navigations.containsKey(SiteKey.portal("classic")));
@@ -197,6 +199,93 @@ public class TestUserPortal extends AbstractPortalTest
             assertEquals(SiteKey.user("root"), rootNav.getKey());
          }
       }.execute("root");
+   }
+
+   public void testFilter()
+   {
+      UnitTest test = new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal portal = userPortalCfg.getUserPortal();
+            UserNavigation nav = portal.getNavigation(SiteKey.portal("classic"));
+
+            //
+            Scope scope = portal.createScope(-1, UserNodeFilter.get());
+            UserNode root = portal.getNode(nav, scope);
+            assertNotNull(root.getChild("home"));
+            assertNotNull(root.getChild("webexplorer"));
+         }
+      };
+
+      //
+      test.execute("root");
+      test.execute(null);
+   }
+
+   public void testFilterWithVisibility()
+   {
+      UnitTest test = new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("system", getUserId());
+            UserPortal portal = userPortalCfg.getUserPortal();
+            UserNavigation nav = portal.getNavigation(SiteKey.portal("system"));
+
+            //
+            Scope scope = portal.createScope(-1, UserNodeFilter.get().withVisibility(Visibility.DISPLAYED));
+            UserNode root = portal.getNode(nav, scope);
+            assertNotNull(root.getChild("home"));
+            assertNotNull(root.getChild("sitemap"));
+            assertNull(root.getChild("groupnavigation"));
+
+            //
+            scope = portal.createScope(-1, UserNodeFilter.get().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM));
+            root = portal.getNode(nav, scope);
+            assertNotNull(root.getChild("home"));
+            assertNotNull(root.getChild("sitemap"));
+            assertNotNull(root.getChild("groupnavigation"));
+         }
+      };
+
+      //
+      test.execute("root");
+   }
+
+   public void testFilterWithAuthorizationCheck()
+   {
+      class Check extends UnitTest
+      {
+
+         /** . */
+         boolean pass = true;
+
+         @Override
+         protected void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal portal = userPortalCfg.getUserPortal();
+            UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
+
+            //
+            Scope scope = portal.createScope(-1, UserNodeFilter.get().withAuthorizationChek());
+            UserNode root = portal.getNode(nav, scope);
+            pass &= root.getChild("administration") != null;
+            pass &= root.getChild("administration").getChild("communityManagement") != null;
+         }
+      }
+
+      //
+      Check root = new Check();
+      root.execute("root");
+      assertTrue(root.pass);
+
+      //
+      Check anon = new Check();
+      anon.execute("john");
+      assertFalse(anon.pass);
    }
 
 /*
@@ -274,7 +363,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             List<UserNavigation> navigations = userPortal.getNavigations();
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
@@ -293,7 +382,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
@@ -338,7 +427,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
 
@@ -384,7 +473,7 @@ public class TestUserPortal extends AbstractPortalTest
                   return bundle;
                }
             };
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root", bundleResolver);
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId(), bundleResolver);
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
@@ -401,7 +490,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
 
@@ -450,7 +539,7 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("test", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("test", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("test"));
             
@@ -493,7 +582,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             begin();
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", "root");
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
             UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
@@ -511,7 +600,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             begin();
-            userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", "root");
+            userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", getUserId());
             userPortal = userPortalCfg.getUserPortal();
             navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
             root = userPortal.getNode(navigation, Scope.ALL);
@@ -1151,6 +1240,9 @@ public class TestUserPortal extends AbstractPortalTest
    private abstract class UnitTest
    {
 
+      /** . */
+      private String userId;
+
       protected final void execute(String userId)
       {
          Throwable failure = null;
@@ -1179,6 +1271,7 @@ public class TestUserPortal extends AbstractPortalTest
             mgr.clearCache();
 
             //
+            this.userId = userId;
             ConversationState.setCurrent(conversationState);
             try
             {
@@ -1191,6 +1284,7 @@ public class TestUserPortal extends AbstractPortalTest
             }
             finally
             {
+               this.userId = null;
                ConversationState.setCurrent(null);
                end();
             }
@@ -1203,6 +1297,11 @@ public class TestUserPortal extends AbstractPortalTest
             err.initCause(failure);
             throw err;
          }
+      }
+
+      public final String getUserId()
+      {
+         return userId;
       }
 
       protected abstract void execute() throws Exception;

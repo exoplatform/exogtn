@@ -38,114 +38,15 @@ import java.util.EnumSet;
 public interface Scope
 {
 
-   /**
-    * A flexible filter implementation.
-    */
-   public static class Navigation implements Scope
-   {
+   Scope SINGLE = new GenericScope(0);
 
-      /** . */
-      private final Visitor visitor;
+   Scope CHILDREN = new GenericScope(1);
 
-      /**
-       * Creates a new navigation scope with no filtering
-       *
-       * @param height the max height of the pruned tree
-       * @throws IllegalArgumentException if the height is negative
-       */
-      public Navigation(int height)
-      {
-         this(height, (EnumSet<Visibility>)null);
-      }
+   Scope GRANDCHILDREN = new GenericScope(2);
 
-      public Navigation(int height, Visibility first)
-      {
-         this(height, EnumSet.of(first));
-      }
+   Scope ALL = new GenericScope(-1);
 
-      public Navigation(int height, Visibility first, Visibility... other)
-      {
-         this(height, EnumSet.of(first, other));
-      }
-
-      /**
-       * Creates a new navigation scope.
-       *
-       * @param height the max height of the pruned tree
-       * @param filter the filter
-       * @throws IllegalArgumentException if the height is negative
-       */
-      public Navigation(final int height, final EnumSet<Visibility> filter) throws IllegalArgumentException
-      {
-         this.visitor = new Visitor()
-         {
-            public VisitMode visit(int depth, String id, String name, NodeState state)
-            {
-               if (isShown(state))
-               {
-                  if (height < 0 || depth < height)
-                  {
-                     return VisitMode.ALL_CHILDREN;
-                  }
-                  else if (depth == height)
-                  {
-                     return VisitMode.NO_CHILDREN;
-                  }
-                  else
-                  {
-                     return VisitMode.SKIP;
-                  }
-               }
-               else
-               {
-                  return VisitMode.SKIP;
-               }
-            }
-
-            private boolean isShown(NodeState state)
-            {
-               if (filter == null)
-               {
-                  return true;
-               }
-               else
-               {
-                  Visibility visibility = state.getVisibility() != null ? state.getVisibility() : Visibility.DISPLAYED;
-                  boolean shown = filter.contains(visibility);
-                  if (shown && visibility == Visibility.TEMPORAL)
-                  {
-                     long now = System.currentTimeMillis();
-                     shown = false;
-                     if (state.getStartPublicationTime() == -1 || now < state.getStartPublicationTime())
-                     {
-                        if (state.getEndPublicationTime() == -1 && now > state.getEndPublicationTime())
-                        {
-                           shown = true;
-                        }
-                     }
-                  }
-                  return shown;
-               }
-            }
-
-         };
-      }
-
-      public Visitor get()
-      {
-         return visitor;
-      }
-   }
-
-   Scope SINGLE = new Navigation(0);
-
-   Scope CHILDREN = new Navigation(1);
-
-   Scope GRANDCHILDREN = new Navigation(2);
-
-   Scope ALL = new Navigation(-1);
-
-   Scope NAVIGATION = new Navigation(2, EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL));
+   Scope NAVIGATION = new ScopeImpl(2, EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL));
 
    Visitor get();
 
@@ -165,4 +66,5 @@ public interface Scope
        */
       VisitMode visit(int depth, String id, String name, NodeState state);
    }
+
 }
