@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NodeState;
@@ -216,9 +215,9 @@ public class UIPortalNavigation extends UIComponent
       return Util.getUIPortal().getNavigation();
    }
 
-   public PageNode getSelectedPageNode() throws Exception
+   public UserNode getSelectedPageNode() throws Exception
    {
-      return  Util.getUIPortal().getSelectedNode();
+      return  Util.getUIPortal().getSelectedUserNode();
    }
 
    static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>

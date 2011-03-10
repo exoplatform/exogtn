@@ -47,12 +47,12 @@
 		""";
 	}	
 	public void renderChildNode(UserNode parentNode, UserNode node) {
-		PageNode selectedNode = uicomponent.getSelectedPageNode();
+		UserNode selectedNode = uicomponent.getSelectedPageNode();
 		UserNode selectedNav = uicomponent.getCurrentNavigation();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null &&	selectedNav != null &&
 			 selectedNav.getId () == parentNode.getId() &&
-			 node.getURI() == selectedNode.getUri()) {			 
+			 node.getURI() == selectedNode.getURI()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
@@ -117,7 +117,7 @@
 					<div class="TabsContainer">
 						<%
 							UserNode selectedNav = uicomponent.getCurrentNavigation();
-							PageNode selectedNode = uicomponent.getSelectedPageNode();
+							UserNode selectedNode = uicomponent.getSelectedPageNode();
 							if(rootNodes != null) {
 								for(nav in rootNodes) {
 									
@@ -127,7 +127,7 @@
 										String tabStyleNavigation = "NormalNavigationTab";
 										if(selectedNode != null && selectedNav != null &&
 											 selectedNav.getId() == nav.getId() &&
-											 node.getURI() == selectedNode.getUri()) {
+											 node.getURI() == selectedNode.getURI()) {
 												tabStyleNavigation = "SelectedNavigationTab";
 										}
 						%>			

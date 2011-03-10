@@ -278,7 +278,8 @@ public class UIPageBrowser extends UISearch
          }
 
          UIPortal uiPortal = Util.getUIPortal();
-         boolean isDeleteCurrentPage = uiPortal.getSelectedNode().getPageReference().equals(page.getPageId());
+         UserNode userNode = uiPortal.getSelectedUserNode();
+         boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getPageId());
          if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
@@ -305,8 +306,7 @@ public class UIPageBrowser extends UISearch
          if (isDeleteCurrentPage)         
          {
             PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
-                  .getUri());
+               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else

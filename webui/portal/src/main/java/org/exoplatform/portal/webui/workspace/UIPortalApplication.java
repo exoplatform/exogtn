@@ -29,8 +29,8 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -680,14 +680,14 @@ public class UIPortalApplication extends UIApplication
       UserPortalConfigService userPortalConfigService =
          (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       Page page = null;
-      PageNode pageNode = Util.getUIPortal().getSelectedNode();
+      UserNode pageNode = Util.getUIPortal().getSelectedUserNode();
       if (pageNode != null)
       {
          try
          {
-            if (pageNode.getPageReference() != null)
+            if (pageNode.getPageRef() != null)
             {
-               page = userPortalConfigService.getPage(pageNode.getPageReference(), context.getRemoteUser());
+               page = userPortalConfigService.getPage(pageNode.getPageRef(), context.getRemoteUser());
             }
          }
          catch (NoSuchDataException nsde)

@@ -274,7 +274,7 @@ public class UIPortal extends UIContainer
          currentPortlet.setCurrentWindowState(WindowState.NORMAL);
          uiPageBody.setMaximizedUIComponent(null);
       }
-      uiPageBody.setPageBody(getSelectedNode(), this);
+      uiPageBody.setPageBody(getSelectedUserNode(), this);
    }
    
    public UserNode getSelectedUserNode() throws Exception

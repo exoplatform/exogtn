@@ -72,7 +72,7 @@ public class UIPageNodeSelector extends UIContainer
    {
       this.navigation = nav;
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      rootNode = userPortal.getNode(navigation, Scope.ALL);
+      rootNode = userPortal.getNode(navigation, Scope.GRANDCHILDREN);
 
       if (navigation != null)
       {
