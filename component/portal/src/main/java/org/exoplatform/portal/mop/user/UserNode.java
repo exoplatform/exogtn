@@ -268,7 +268,6 @@ public class UserNode
       }
    }
 
-
    public void addChild(UserNode child)
    {
       context.addChild(navigation.model, null, child);

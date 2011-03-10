@@ -275,12 +275,17 @@ public class UIPortal extends UIContainer
          uiPageBody.setMaximizedUIComponent(null);
       }
       uiPageBody.setPageBody(getSelectedNode(), this);
-      
-      //Refresh locale
-      Locale locale = Util.getPortalRequestContext().getLocale();
-//      localizePageNavigation(navigation, locale);
    }
    
+   public UserNode getSelectedUserNode() throws Exception
+   {
+      return getNavPath().getTarget();
+   }
+   
+   /**
+    * @deprecated use {@link #getSelectedUserNode()}
+    */
+   @Deprecated
    public PageNode getSelectedNode() throws Exception
    {
       UserNode target = getNavPath().getTarget();

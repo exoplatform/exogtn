@@ -387,6 +387,9 @@ public class PageNode extends PageNodeContainer
       );
    }
    
+   /**
+    * This is used for legacy usage of PageNode
+    */
    public static PageNode toPageNode(UserNode node)
    {
       PageNode pageNode = new PageNode(node.getId());

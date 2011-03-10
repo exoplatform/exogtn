@@ -22,8 +22,6 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -48,12 +46,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-/** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM */
-@ComponentConfig(template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl", events = {@EventConfig(listeners = UIPageNodeSelector.ChangeNodeActionListener.class)})
+@ComponentConfig(
+   template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl",
+   events = {@EventConfig(listeners = UIPageNodeSelector.ChangeNodeActionListener.class)}
+)
 public class UIPageNodeSelector extends UIContainer
 {
    private UserNavigation navigation;
-   
+
    private UserNode rootNode;
 
    private SelectedNode selectedNode;
@@ -74,22 +74,16 @@ public class UIPageNodeSelector extends UIContainer
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       rootNode = userPortal.getNode(navigation, Scope.ALL);
 
-      loadNavigations();
-   }
-   
-   private void loadNavigations() throws Exception
-   {
       if (navigation != null)
       {
          selectNavigation(navigation);
-         PageNode selectedNode = Util.getUIPortal().getSelectedNode();
+         UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
          if (selectedNode != null)
          {
-            selectPageNodeByUri(selectedNode.getUri());
+            selectPageNodeByUri(selectedNode.getURI());
          }
          return;
       }
-      
       selectNavigation();
    }
 
@@ -101,10 +95,10 @@ public class UIPageNodeSelector extends UIContainer
       }
       if (selectedNode == null || !navigation.getKey().equals(selectedNode.getNavigation().getKey()))
       {
-         selectedNode = new SelectedNode(navigation, null);
-         
+         selectedNode = new SelectedNode(navigation, rootNode);
+
          Iterator<UserNode> iterator = rootNode.getChildren().iterator();
-         
+
          if (iterator.hasNext())
          {
             selectedNode.setNode(iterator.next());
@@ -120,7 +114,7 @@ public class UIPageNodeSelector extends UIContainer
    public void selectNavigation(UserNavigation pageNav)
    {
       navigation = pageNav;
-      selectedNode = new SelectedNode(pageNav, null);
+      selectedNode = new SelectedNode(pageNav, rootNode);
       selectPageNodeByUri(null);
       UITree uiTree = getChild(UITree.class);
       uiTree.setSibbling(new ArrayList(rootNode.getChildren()));
@@ -154,6 +148,10 @@ public class UIPageNodeSelector extends UIContainer
       {
          return null;
       }
+      if (rootNode.getURI().equals(uri))
+      {
+         return rootNode;
+      }
       Collection<UserNode> pageNodes = rootNode.getChildren();
       Iterator<UserNode> iterator = pageNodes.iterator();
       UITree uiTree = getChild(UITree.class);
@@ -174,13 +172,13 @@ public class UIPageNodeSelector extends UIContainer
       return null;
    }
 
-   private UserNode searchPageNodeByUri(UserNode pageNode, String uri, UITree tree)
+   private UserNode searchPageNodeByUri(UserNode userNode, String uri, UITree tree)
    {
-      if (pageNode.getURI().equals(uri))
+      if (userNode.getURI().equals(uri))
       {
-         return pageNode;
+         return userNode;
       }
-      Collection<UserNode> children = pageNode.getChildren();
+      Collection<UserNode> children = userNode.getChildren();
       if (children == null)
       {
          return null;
@@ -200,9 +198,9 @@ public class UIPageNodeSelector extends UIContainer
          }
          if (tree.getParentSelected() == null)
          {
-            tree.setParentSelected(pageNode);
+            tree.setParentSelected(userNode);
          }
-//         selectedNode.setParentNode(pageNode);
+         //         selectedNode.setParentNode(pageNode);
          return returnPageNode;
       }
       return null;
@@ -227,7 +225,7 @@ public class UIPageNodeSelector extends UIContainer
    {
       return navigation;
    }
-   
+
    public UserNode getSelectedPageNode()
    {
       return selectedNode == null ? null : selectedNode.getNode();
@@ -235,7 +233,7 @@ public class UIPageNodeSelector extends UIContainer
 
    public String getUpLevelUri()
    {
-      return selectedNode.getParentNode().getUri();
+      return selectedNode.getParentNode().getURI();
    }
 
    static public class ChangeNodeActionListener extends EventListener<UITree>
@@ -300,22 +298,12 @@ public class UIPageNodeSelector extends UIContainer
 
       private UserNavigation nav;
 
-      private PageNode parentNode;
-
       private UserNode node;
-
-      private boolean deleteNode = false;
-
-      private boolean cloneNode = false;
 
       public SelectedNode(UserNavigation navigation, UserNode userNode)
       {
          this.nav = navigation;
          this.node = userNode;
-      }
-      
-      public SelectedNode(PageNavigation nav)
-      {
       }
 
       public UserNavigation getNavigation()
@@ -328,14 +316,9 @@ public class UIPageNodeSelector extends UIContainer
          this.nav = nav;
       }
 
-      public PageNode getParentNode()
+      private UserNode getParentNode()
       {
-         return parentNode;
-      }
-
-      public void setParentNode(PageNode parentNode)
-      {
-         this.parentNode = parentNode;
+         return node.getParent();
       }
 
       public UserNode getNode()
@@ -346,26 +329,6 @@ public class UIPageNodeSelector extends UIContainer
       public void setNode(UserNode node)
       {
          this.node = node;
-      }
-
-      public boolean isDeleteNode()
-      {
-         return deleteNode;
-      }
-
-      public void setDeleteNode(boolean deleteNode)
-      {
-         this.deleteNode = deleteNode;
-      }
-
-      public boolean isCloneNode()
-      {
-         return cloneNode;
-      }
-
-      public void setCloneNode(boolean b)
-      {
-         cloneNode = b;
       }
    }
 
