@@ -111,6 +111,10 @@ public class UserNode
 
    public void setLabel(String label)
    {
+      this.resolvedLabel = null;
+      this.encodedResolvedLabel = null;
+
+      //
       context.setState(new NodeState.Builder(context.getState()).setLabel(label).capture());
    }
 

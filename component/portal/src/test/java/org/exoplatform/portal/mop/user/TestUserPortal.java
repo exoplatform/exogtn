@@ -466,6 +466,7 @@ public class TestUserPortal extends AbstractPortalTest
                {
                   Map<String, Object> map = new HashMap<String, Object>();
                   map.put("portal.classic.home", "foo");
+                  map.put("portal.classic.emoh", "bar");
                   bundle = new MapResourceBundle(map);
                }
 
@@ -481,6 +482,11 @@ public class TestUserPortal extends AbstractPortalTest
             NavigationPath path = userPortal.resolvePath("/home");
             assertEquals("#{portal.classic.home}", path.getTarget().getLabel());
             assertEquals("foo", path.getTarget().getResolvedLabel());
+
+            // Note that we don't save otherwise that may affect other tests
+            // this is fine for this test I think
+            path.getTarget().setLabel("#{portal.classic.emoh}");
+            assertEquals("bar", path.getTarget().getResolvedLabel());
          }
       }.execute("root");
    }
