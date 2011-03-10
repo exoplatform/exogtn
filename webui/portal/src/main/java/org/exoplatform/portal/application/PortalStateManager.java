@@ -147,7 +147,7 @@ public class PortalStateManager extends StateManager
       UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       String remoteUser = context.getRemoteUser();
       String ownerUser = context.getPortalOwner();
-      return service_.getUserPortalConfig(ownerUser, remoteUser, context.getBundleResolver());
+      return service_.getUserPortalConfig(ownerUser, remoteUser, context.getUserPortalContext());
    }
 
    private String getKey(WebuiRequestContext webuiRC)

@@ -27,8 +27,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.mop.user.BundleResolver;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -43,7 +43,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -57,7 +56,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -465,14 +463,14 @@ public class PortalRequestContext extends WebuiRequestContext
 	  this.extraMarkupHeaders.add(element);
    }
 
-   public BundleResolver getBundleResolver()
+   public UserPortalContext getUserPortalContext()
    {
-      return bundleResolver;
+      return userPortalContext;
    }
 
-   private BundleResolver bundleResolver = new BundleResolver()
+   private UserPortalContext userPortalContext = new UserPortalContext()
    {
-      public ResourceBundle resolve(UserNavigation navigation)
+      public ResourceBundle getBundle(UserNavigation navigation)
       {
          ExoContainer container = getApplication().getApplicationServiceContainer();
          ResourceBundleManager rbMgr = (ResourceBundleManager)container.getComponentInstanceOfType(ResourceBundleManager.class);
