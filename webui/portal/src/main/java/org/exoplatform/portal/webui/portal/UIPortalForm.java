@@ -313,7 +313,7 @@ public class UIPortalForm extends UIFormTabPane
             {
                PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
                dataService.save(portalConfig);
-               prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), prContext.getUserPortalContext()));
+               prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
                uiPortalApp.reloadSkinPortal(prContext);
                
                // We should use IPC to update some portlets in the future instead of

@@ -24,6 +24,7 @@ import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -465,18 +466,13 @@ public class PortalRequestContext extends WebuiRequestContext
 	  this.extraMarkupHeaders.add(element);
    }
 
-   public UserPortalContext getUserPortalContext()
-   {
-      return userPortalContext;
-   }
-
-   private UserPortalContext userPortalContext = new UserPortalContext()
+   final public static UserPortalContext USER_PORTAL_CONTEXT = new UserPortalContext()
    {
       public ResourceBundle getBundle(UserNavigation navigation)
       {
-         ExoContainer container = getApplication().getApplicationServiceContainer();
+         ExoContainer container = ExoContainerContext.getCurrentContainer();
          ResourceBundleManager rbMgr = (ResourceBundleManager)container.getComponentInstanceOfType(ResourceBundleManager.class);
-         Locale locale = getLocale();
+         Locale locale = Util.getPortalRequestContext().getLocale();
          return rbMgr.getNavigationResourceBundle(
             locale.getLanguage(),
             navigation.getKey().getTypeName(),
