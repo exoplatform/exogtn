@@ -401,6 +401,54 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(Visibility.DISPLAYED, child2.getContext().getState().getVisibility());
    }
 
+   public void testHiddenNode() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "hidden_node");
+      org.gatein.mop.api.workspace.Navigation defaultNav = portal.getRootNavigation().addChild("default");
+      defaultNav.addChild("a");
+      defaultNav.addChild("b");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("hidden_node"));
+      Node root = service.loadNode(Node.MODEL, nav, new Scope()
+      {
+         public Visitor get()
+         {
+            return new Visitor()
+            {
+               public VisitMode visit(int depth, String id, String name, NodeState state)
+               {
+                  switch (depth)
+                  {
+                     case 0:
+                        return VisitMode.ALL_CHILDREN;
+                     case 1:
+                        return "a".equals(name) ? VisitMode.SKIP : VisitMode.NO_CHILDREN;
+                     default:
+                        throw new AssertionError();
+                  }
+               }
+            };
+         }
+      });
+
+      //
+      assertEquals(1, root.getChildren().size());
+      assertNull(root.getChild("a"));
+      assertEquals("b", root.getChild(0).getName());
+      try
+      {
+         root.getChild(1);
+         fail();
+      }
+      catch (IndexOutOfBoundsException ignore)
+      {
+      }
+   }
+
    public void testNodeInvalidationByRemoval() throws Exception
    {
       //

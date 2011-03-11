@@ -88,7 +88,7 @@ public class UserNode
 
    private StringBuilder buildURI()
    {
-      UserNode parent = context.getParent();
+      UserNode parent = context.getParentNode();
       if (parent != null)
       {
          StringBuilder builder = parent.buildURI();
@@ -205,7 +205,7 @@ public class UserNode
 
    public UserNode getParent()
    {
-      return context.getParent();
+      return context.getParentNode();
    }
 
    /**
@@ -215,7 +215,7 @@ public class UserNode
     */
    public boolean hasChildrenRelationship()
    {
-      return context.getChildren() != null;
+      return context.getNodes() != null;
    }
 
    /**
@@ -225,12 +225,12 @@ public class UserNode
     */
    public int getChildrenCount()
    {
-      return context.getChildrenCount();
+      return context.getNodeCount();
    }
 
    public Collection<UserNode> getChildren()
    {
-      Collection<UserNode> children = context.getChildren();
+      Collection<UserNode> children = context.getNodes();
       return children != null ? children : Collections.<UserNode>emptyList();
    }
 
@@ -243,9 +243,9 @@ public class UserNode
     */
    public UserNode getChild(String childName) throws NullPointerException
    {
-      if (context.getChildren() != null)
+      if (context.getNodes() != null)
       {
-         return context.getChild(childName);
+         return context.getNode(childName);
       }
       else
       {
@@ -262,9 +262,9 @@ public class UserNode
     */
    public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
    {
-      if (context.getChildren() != null)
+      if (context.getNodes() != null)
       {
-         return context.getChild(childIndex);
+         return context.getNode(childIndex);
       }
       else
       {
@@ -274,22 +274,22 @@ public class UserNode
 
    public void addChild(UserNode child)
    {
-      context.addChild(navigation.model, null, child);
+      context.addNode(navigation.model, null, child);
    }
 
    public void addChild(int index, UserNode child)
    {
-      context.addChild(navigation.model, index, child);
+      context.addNode(navigation.model, index, child);
    }
 
    public UserNode addChild(String childName)
    {
-      return context.addChild(navigation.model, childName);
+      return context.addNode(navigation.model, childName);
    }
 
    public boolean removeChild(String childName)
    {
-      return context.removeChild(navigation.model, childName);
+      return context.removeNode(navigation.model, childName);
    }
 
    public void save() throws NavigationServiceException
@@ -307,7 +307,7 @@ public class UserNode
       }
       else
       {
-         Collection<UserNode> children = context.getChildren();
+         Collection<UserNode> children = context.getNodes();
          if (children != null)
          {
             for (UserNode child : children)

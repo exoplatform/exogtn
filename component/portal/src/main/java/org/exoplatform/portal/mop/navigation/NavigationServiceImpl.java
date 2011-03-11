@@ -352,7 +352,8 @@ public class NavigationServiceImpl implements NavigationService
       {
          POMSession session = manager.getSession();
          Scope.Visitor visitor = scope.get();
-         return load(model, session, nodeId, visitor, 0);
+         NodeContext<N> context = load(model, session, nodeId, visitor, 0);
+         return context == null || context.isHidden() ? null : context.node;
       }
       else
       {
@@ -393,7 +394,8 @@ public class NavigationServiceImpl implements NavigationService
       if (data != null)
       {
          context.data = data;
-         if (visit(model, session, context, visitor, depth))
+         visit(model, session, context, visitor, depth);
+         if (!context.isHidden())
          {
             return context.node;
          }
@@ -402,22 +404,16 @@ public class NavigationServiceImpl implements NavigationService
       return null;
    }
    
-   private <N> N load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
+   private <N> NodeContext<N> load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
    {
       NodeData data = getNodeData(session, nodeId);
 
       //
       if (data != null)
       {
-         NodeContext<N> context = new NodeContext<N>(model, data);
-         if (visit(model, session, context, visitor, depth))
-         {
-            return context.node;
-         }
-         else
-         {
-            return null;
-         }
+         NodeContext<N> context = new NodeContext<N>(model, data, false);
+         visit(model, session, context, visitor, depth);
+         return context;
       }
       else
       {
@@ -425,7 +421,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private <N> boolean visit(
+   private <N> void visit(
       NodeModel<N> model,
       POMSession session,
       NodeContext<N> context,
@@ -440,21 +436,19 @@ public class NavigationServiceImpl implements NavigationService
       //
       if (visitMode == VisitMode.ALL_CHILDREN)
       {
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            context.destroyChildren();
+            context.setContexts(null);
          }
 
          //
-         context.createChildren();
-
-         //
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
          for (Map.Entry<String, String> entry : data.children.entrySet())
          {
-            N child = load(model, session, entry.getValue(), visitor, depth + 1);
-            if (child != null)
+            NodeContext<N> childContext = load(model, session, entry.getValue(), visitor, depth + 1);
+            if (childContext != null)
             {
-               context.children.put(null, (NodeContext<N>)model.getContext(child));
+               children.add(childContext);
             }
             else
             {
@@ -463,33 +457,36 @@ public class NavigationServiceImpl implements NavigationService
                // in both case we don't add it to the children and it's fine for now
                // however later when we add readability we will need to make a clear distinction
                // as we will need to know that a node exist but was not loaded on purpose
+               throw new AssertionError();
             }
          }
 
          //
-         return true;
+         context.setContexts(children);
+
+         //
+         context.setHidden(false);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            context.destroyChildren();
+            context.setContexts(null);
          }
 
          //
-         return true;
+         context.setHidden(false);
       }
-      else // VisitMode.SKIP
+      else
       {
-         return false;
+         context.setHidden(true);
       }
    }
 
    public <N> void saveNode(NodeModel<N> model, N node)
    {
       POMSession session = manager.getSession();
-      NodeContext<N> context = (NodeContext<N>)model.getContext(node);
-//      save(session, model, context);
+      NodeContext<N> context = model.getContext(node);
 
       //
       SaveContext<N> save = new SaveContext<N>(context);
@@ -537,10 +534,10 @@ public class NavigationServiceImpl implements NavigationService
       private SaveContext(NodeContext<N> context)
       {
          List<SaveContext<N>> children;
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            children = new ArrayList<SaveContext<N>>(context.children.values.size());
-            for (NodeContext<N> childCtx : context.children.values)
+            children = new ArrayList<SaveContext<N>>();
+            for (NodeContext<N> childCtx : context.getContexts())
             {
                SaveContext<N> child = new SaveContext<N>(childCtx);
                children.add(child);
@@ -560,7 +557,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          else
          {
-            bilto = new ArrayList<String>(context.children.size());
+            bilto = new ArrayList<String>();
          }
 
          //
@@ -624,7 +621,7 @@ public class NavigationServiceImpl implements NavigationService
             {
                if (child.context.data == null)
                {
-                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(child.context.name);
+                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(child.context.getName());
                   child.context.data = new NodeData(added);
                   childrenIds.add(added.getObjectId());
                }
@@ -641,9 +638,9 @@ public class NavigationServiceImpl implements NavigationService
       // Phase 1 : create new nodes and associates with navigation object
       void phase1(POMSession session)
       {
-         if (!context.data.name.equals(context.name))
+         if (!context.data.name.equals(context.getName()))
          {
-            navigation.setName(context.name);
+            navigation.setName(context.getName());
          }
 
          //
@@ -703,9 +700,9 @@ public class NavigationServiceImpl implements NavigationService
       void phase3(POMSession session)
       {
 
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            for (NodeContext<N> childCtx : context.children.values)
+            for (NodeContext<N> childCtx : context.getContexts())
             {
                final String childId = childCtx.data.id;
                if (!context.data.children.containsValue(childId))
@@ -737,7 +734,7 @@ public class NavigationServiceImpl implements NavigationService
 
       void phase4(POMSession session)
       {
-         if (context.children != null)
+         if (context.hasTrees())
          {
             for (Map.Entry<String, String> entry : context.data.children.entrySet())
             {
@@ -745,10 +742,9 @@ public class NavigationServiceImpl implements NavigationService
 
                // Is it still here ?
                boolean found = false;
-               for (int i = 0;i < context.children.size();i++)
+               for (NodeContext<N> childContext : context.getContexts())
                {
-                  NodeContext<N> childCtx = context.children.values.get(i);
-                  if (childCtx.data.id.equals(id))
+                  if (childContext.data.id.equals(id))
                   {
                      found = true;
                   }
@@ -787,10 +783,10 @@ public class NavigationServiceImpl implements NavigationService
 
       void phase5(POMSession session)
       {
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            final ArrayList<String> orders = new ArrayList<String>(context.children.values.size());
-            for (NodeContext<N> foo : context.children.values)
+            final ArrayList<String> orders = new ArrayList<String>();
+            for (NodeContext<N> foo : context.getContexts())
             {
                orders.add(foo.data.id);
             }
@@ -827,9 +823,9 @@ public class NavigationServiceImpl implements NavigationService
       void phase6(POMSession session)
       {
          LinkedHashMap<String, String> childMap;
-         if (context.children != null)
+         if (context.hasTrees())
          {
-            childMap = new LinkedHashMap<String, String>(context.children.size());
+            childMap = new LinkedHashMap<String, String>();
          }
          else
          {
@@ -838,7 +834,7 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          String id = context.data.id;
-         String name = context.name;
+         String name = context.getName();
          NodeState state = context.getState();
 
          //

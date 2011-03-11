@@ -19,14 +19,17 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
+import org.exoplatform.portal.mop.navigation2.ListTree;
+
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * The context of a node.
  */
-public final class NodeContext<N>
+public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
 {
 
    /** . */
@@ -35,34 +38,32 @@ public final class NodeContext<N>
    /** node data representing persistent state. */
    NodeData data;
 
-   /** ; */
-   String name;
-
    /** The new state if any. */
    NodeState state;
 
-   /** . */
-   NodeContext<N> parent;
-
-   /** . */
-   Children children;
-
-   NodeContext(NodeModel<N> model, NodeData data)
+   NodeContext(NodeModel<N> model, NodeData data, boolean hidden)
    {
+      super(data.getName(), hidden);
+
+      //
       this.node = model.create(this);
       this.data = data;
-      this.name = data.getName();
       this.state = data.getState();
-      this.children = null;
    }
 
-   NodeContext(NodeModel<N> model, String name, NodeState state)
+   NodeContext(NodeModel<N> model, String name, NodeState state, boolean hidden)
    {
+      super(name, hidden);
+
+      //
       this.node = model.create(this);
       this.data = null;
-      this.name = name;
       this.state = state;
-      this.children = new Children();
+   }
+
+   public N getElement()
+   {
+      return node;
    }
 
    public String getId()
@@ -70,36 +71,34 @@ public final class NodeContext<N>
       return data != null ? data.getId() : null;
    }
 
-   public String getName()
-   {
-      return name;
-   }
-
    public void setName(String name)
    {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
+      NodeContext<N> parent = getParent();
       if (parent == null)
       {
          throw new IllegalStateException("Cannot rename a node when its parent is not visible");
       }
       else
       {
-         if (!name.equals(this.name))
-         {
-            if (!parent.children.rename(this.name, name))
-            {
-               throw new IllegalArgumentException("Was not able to rename " + this.name + " to " + name);
-            }
-         }
+         parent.rename(getName(), name);
       }
    }
 
-   public int getChildrenCount()
+   public int getNodeCount()
    {
-      return children != null ? children.values.size() : data.getChildrenCount();
+      if (hasTrees())
+      {
+         int count = 0;
+         for (N node : this)
+         {
+            count++;
+         }
+         return count;
+      }
+      else
+      {
+         return data.getChildrenCount();
+      }
    }
 
    public NodeState getState()
@@ -123,267 +122,108 @@ public final class NodeContext<N>
       this.state = state;
    }
 
-   public N getParent()
+   public N getParentNode()
    {
+      NodeContext<N> parent = getParent();
       return parent != null ? parent.node : null;
    }
 
-   public N getChild(String childName) throws NullPointerException
+   public N getNode(String name) throws NullPointerException
    {
-      if (childName == null)
+      NodeContext<N> child = get(name);
+      return child != null ? child.node: null;
+   }
+
+   public N getNode(int index)
+   {
+      NodeContext<N> child = get(index);
+      return child != null ? child.node: null;
+   }
+
+   /** . */
+   private Collection<N> nodes;
+
+   public Collection<N> getNodes()
+   {
+      if (hasTrees())
       {
-         throw new NullPointerException();
-      }
-      if (children != null)
-      {
-         NodeContext<N> childCtx = children.get(childName);
-         return childCtx != null ? childCtx.node : null;
+         if (nodes == null)
+         {
+            nodes = new AbstractCollection<N>()
+            {
+               public Iterator<N> iterator()
+               {
+                  return NodeContext.this.iterator();
+               }
+               public int size()
+               {
+                  return getNodeCount();
+               }
+            };
+         }
+         return nodes;
       }
       else
       {
-         throw new IllegalStateException("Children are not loaded");
+         return null;
       }
    }
 
-   public N getChild(int childIndex)
-   {
-      if (children != null)
-      {
-         return children.get(childIndex);
-      }
-      else
-      {
-         throw new IllegalStateException();
-      }
-   }
-
-   public List<N> getChildren()
-   {
-      return children;
-   }
-
-   public N addChild(NodeModel<N> model, String name)
+   public N addNode(NodeModel<N> model, String name)
    {
       if (model == null)
       {
          throw new NullPointerException();
       }
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      if (children == null)
-      {
-         throw new IllegalStateException();
-      }
-      else if (children.contains(name))
-      {
-         throw new IllegalArgumentException();
-      }
-
 
       //
-      NodeContext<N> childCtx = new NodeContext<N>(model, name, new NodeState.Builder().capture());
-      children.put(null, childCtx);
-      childCtx.parent = this;
-
-      //
-      return childCtx.node;
+      NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture(), false);
+      nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
+      insert(null, nodeContext);
+      return nodeContext.node;
    }
 
-   public void addChild(NodeModel<N> model, Integer index, N child)
+   public void addNode(NodeModel<N> model, Integer index, N child)
    {
       if (model == null)
       {
          throw new NullPointerException();
       }
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      if (children == null)
-      {
-         throw new IllegalStateException();
-      }
 
       //
-      children.put(index, model.getContext(child));
+      NodeContext<N> nodeContext = model.getContext(child);
+      insert(index, nodeContext);
    }
 
-   public boolean removeChild(NodeModel<N> model, String name)
+   public boolean removeNode(NodeModel<N> model, String name)
    {
       if (model == null)
       {
          throw new NullPointerException();
       }
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      if (children == null)
-      {
-         throw new IllegalStateException();
-      }
 
       //
-      return children.remove(name) != null;
+      return remove(name) != null;
    }
 
    NodeContext<N> getRoot()
    {
       NodeContext<N> root = this;
-      while (root.parent != null)
+      while (root.getParent() != null)
       {
-         root = root.parent;
+         root = root.getParent();
       }
       return root;
    }
 
-   void createChildren()
+   Iterable<NodeContext<N>> getContexts()
    {
-      if (children == null)
-      {
-         children = new Children();
-      }
-      else
-      {
-         throw new AssertionError("illegal state");
-      }
+      return getTrees();
    }
 
-   void destroyChildren()
+   void setContexts(Iterable<NodeContext<N>> contexts)
    {
-      if (children != null)
-      {
-         for (NodeContext<N> child : children.values)
-         {
-            child.parent = null;
-         }
-         children = null;
-      }
-      else
-      {
-         throw new AssertionError("illegal state");
-      }
+      setTrees(contexts);
    }
 
-   class Children extends AbstractList<N>
-   {
-
-      /** . */
-      final ArrayList<NodeContext<N>> values = new ArrayList<NodeContext<N>>();
-
-      NodeContext<N> get(String name)
-      {
-         int size = values.size();
-         for (int i = 0;i < size;i++)
-         {
-            NodeContext<N> ctx = values.get(i);
-            if (ctx.name.equals(name))
-            {
-               return ctx;
-            }
-         }
-         return null;
-      }
-
-      boolean rename(String from, String to)
-      {
-         if (contains(to))
-         {
-            return false;
-         }
-         else
-         {
-            NodeContext<N> child = get(from);
-            if (child == null)
-            {
-               return false;
-            }
-            else
-            {
-               child.name = to;
-               return true;
-            }
-         }
-      }
-
-      void put(Integer index, NodeContext<N> childCtx)
-      {
-         if (index == null)
-         {
-            index = values.size();
-         }
-         if (childCtx.parent != null)
-         {
-            if (childCtx.getRoot() == getRoot())
-            {
-               NodeContext<N> previous;
-               if (index == 0)
-               {
-                  previous = null;
-               }
-               else
-               {
-                  previous = values.get(index - 1);
-               }
-               childCtx.parent.children.remove(childCtx.name);
-               if (previous == null)
-               {
-                  values.add(0, childCtx);
-               }
-               else
-               {
-                  int i = values.indexOf(previous);
-                  values.add(i + 1, childCtx);
-               }
-            }
-            else
-            {
-               throw new IllegalArgumentException("Cannot move node that don't share a common ancestor");
-            }
-         }
-         else
-         {
-            if (contains(childCtx.name))
-            {
-               throw new IllegalArgumentException();
-            }
-            childCtx.parent = NodeContext.this;
-            values.add(index, childCtx);
-         }
-      }
-
-      Integer remove(String name)
-      {
-         int size = values.size();
-         for (int i = 0;i < size;i++)
-         {
-            NodeContext<N> ctx = values.get(i);
-            if (ctx.name.equals(name))
-            {
-               values.remove(i);
-               return i;
-            }
-         }
-         return null;
-      }
-
-      boolean contains(String name)
-      {
-         return get(name) != null;
-      }
-
-      @Override
-      public N get(int index)
-      {
-         return values.get(index).node;
-      }
-
-      @Override
-      public int size()
-      {
-         return values.size();
-      }
-   }
 }

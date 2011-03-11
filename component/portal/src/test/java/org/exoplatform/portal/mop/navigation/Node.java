@@ -20,7 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Represents a navigation node.
@@ -85,47 +84,47 @@ public class Node
 
    public Node getParent()
    {
-      return context.getParent();
+      return context.getParentNode();
    }
 
    public Collection<Node> getChildren()
    {
-      return context.getChildren();
+      return context.getNodes();
    }
 
    public Node getChild(String childName)
    {
-      return context.getChild(childName);
+      return context.getNode(childName);
    }
 
    public Node getChild(int childIndex)
    {
-      return context.getChild(childIndex);
+      return context.getNode(childIndex);
    }
 
    public void addChild(Node child)
    {
-      context.addChild(MODEL, null, child);
+      context.addNode(MODEL, null, child);
    }
 
    public void addChild(int index, Node child)
    {
-      context.addChild(MODEL, index, child);
+      context.addNode(MODEL, index, child);
    }
 
    public Node addChild(String childName)
    {
-      return context.addChild(MODEL, childName);
+      return context.addNode(MODEL, childName);
    }
 
    public boolean removeChild(String childName)
    {
-      return context.removeChild(MODEL, childName);
+      return context.removeNode(MODEL, childName);
    }
 
    public int getChildrenCount()
    {
-      return context.getChildrenCount();
+      return context.getNodeCount();
    }
 
    @Override
