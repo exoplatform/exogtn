@@ -83,6 +83,11 @@ public class Node
       context.setState(state);
    }
 
+   public Node getParent()
+   {
+      return context.getParent();
+   }
+
    public Collection<Node> getChildren()
    {
       return context.getChildren();

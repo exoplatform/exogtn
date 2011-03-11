@@ -362,6 +362,24 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(d.getChild("e").getChildren());
    }
 
+   public void testLoadNode() throws Exception
+   {
+      Navigation nav = service.loadNavigation(SiteKey.portal("large"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Node a = root.getChild("a");
+      assertNotNull(a);
+      assertNull(a.getChildren());
+      assertSame(a, service.loadNode(Node.MODEL, a, Scope.CHILDREN));
+      assertNotNull(a.getChildren());
+      assertEquals(1, a.getChildren().size());
+      Node c = a.getChild("c");
+      assertEquals("c", c.getName());
+      assertSame(a, c.getParent());
+      assertSame(a, service.loadNode(Node.MODEL, a, Scope.SINGLE));
+      assertNull(a.getChildren());
+      assertNull(c.getParent());
+   }
+
    public void testState() throws Exception
    {
       Navigation nav = service.loadNavigation(SiteKey.portal("test"));

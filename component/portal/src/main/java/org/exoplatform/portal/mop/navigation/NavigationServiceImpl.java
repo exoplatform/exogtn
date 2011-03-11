@@ -350,7 +350,9 @@ public class NavigationServiceImpl implements NavigationService
       String nodeId = navigation.rootId;
       if (navigation.rootId != null)
       {
-         return load(model, nodeId, scope);
+         POMSession session = manager.getSession();
+         Scope.Visitor visitor = scope.get();
+         return load(model, session, nodeId, visitor, 0);
       }
       else
       {
@@ -360,16 +362,17 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
    {
-      NodeContext data = model.getContext(node);
-      String id = data.getId();
-      return load(model, id, scope);
-   }
-
-   private <N> N load(NodeModel<N> model, String nodeId, Scope scope)
-   {
       POMSession session = manager.getSession();
+      NodeContext<N> context = model.getContext(node);
       Scope.Visitor visitor = scope.get();
-      return load(model, session, nodeId, visitor, 0);
+      if (visit(model, session, context, visitor, 0))
+      {
+         return node;
+      }
+      else
+      {
+         return null;
+      }
    }
 
    private NodeData getNodeData(POMSession session, String nodeId)
@@ -395,45 +398,79 @@ public class NavigationServiceImpl implements NavigationService
       //
       if (data != null)
       {
-         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
-         if (visitMode == VisitMode.ALL_CHILDREN)
+         NodeContext<N> context = new NodeContext<N>(model, data);
+         if (visit(model, session, context, visitor, depth))
          {
-            NodeContext<N> context = new NodeContext<N>(model, data);
-            context.createChildren();
-            for (Map.Entry<String, String> entry : data.children.entrySet())
-            {
-               N child = load(model, session, entry.getValue(), visitor, depth + 1);
-               if (child != null)
-               {
-                  context.children.put(null, (NodeContext<N>)model.getContext(child));
-               }
-               else
-               {
-                  // Node is either not found (for some reason that we should try to figure out)
-                  // or it was not desired
-                  // in both case we don't add it to the children and it's fine for now
-                  // however later when we add readability we will need to make a clear distinction
-                  // as we will need to know that a node exist but was not loaded on purpose
-               }
-            }
             return context.node;
-         }
-         else if (visitMode == VisitMode.NO_CHILDREN)
-         {
-            return new NodeContext<N>(model, data).node;
-         }
-         else if (visitMode == VisitMode.SKIP)
-         {
-            return null;
          }
          else
          {
-            throw new AssertionError();
+            return null;
          }
       }
       else
       {
          return null;
+      }
+   }
+
+   private <N> boolean visit(
+      NodeModel<N> model,
+      POMSession session,
+      NodeContext<N> context,
+      Scope.Visitor visitor,
+      int depth)
+   {
+      NodeData data = context.data;
+
+      //
+      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+
+      //
+      if (visitMode == VisitMode.ALL_CHILDREN)
+      {
+         if (context.children != null)
+         {
+            context.destroyChildren();
+         }
+
+         //
+         context.createChildren();
+
+         //
+         for (Map.Entry<String, String> entry : data.children.entrySet())
+         {
+            N child = load(model, session, entry.getValue(), visitor, depth + 1);
+            if (child != null)
+            {
+               context.children.put(null, (NodeContext<N>)model.getContext(child));
+            }
+            else
+            {
+               // Node is either not found (for some reason that we should try to figure out)
+               // or it was not desired
+               // in both case we don't add it to the children and it's fine for now
+               // however later when we add readability we will need to make a clear distinction
+               // as we will need to know that a node exist but was not loaded on purpose
+            }
+         }
+
+         //
+         return true;
+      }
+      else if (visitMode == VisitMode.NO_CHILDREN)
+      {
+         if (context.children != null)
+         {
+            context.destroyChildren();
+         }
+
+         //
+         return true;
+      }
+      else // VisitMode.SKIP
+      {
+         return false;
       }
    }
 

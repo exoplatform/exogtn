@@ -247,7 +247,23 @@ public final class NodeContext<N>
       }
       else
       {
-         throw new IllegalStateException();
+         throw new AssertionError("illegal state");
+      }
+   }
+
+   void destroyChildren()
+   {
+      if (children != null)
+      {
+         for (NodeContext<N> child : children.values)
+         {
+            child.parent = null;
+         }
+         children = null;
+      }
+      else
+      {
+         throw new AssertionError("illegal state");
       }
    }
 
