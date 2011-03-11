@@ -19,11 +19,106 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
 * A flexible scope implementation.
 */
 public class GenericScope implements Scope
 {
+
+   public static Scope branchShape(String[] path)
+   {
+      return branchShape(Arrays.asList(path), Scope.CHILDREN);
+   }
+
+   public static Scope branchShape(List<String> path)
+   {
+      return branchShape(path, Scope.CHILDREN);
+   }
+
+   public static Scope branchShape(String[] path, Scope federated)
+   {
+      return branchShape(Arrays.asList(path), federated);
+   }
+
+   /**
+    * <p>A scope with the shape of a tree branch following the rules:
+    * <ul>
+    *    <li>the first node with depth 0 will have all of its children visited</li>
+    *    <li>any node above the root node that fits in the <code>path</code> array will be matched
+    *    only if the node name matches the corresponding value in the <code>path</code> array. The last
+    *    node whose depth is equals to the <code>path</code> list size will have its visit mode value delegated
+    *    to the <code>federated</code> scope argument with a depth of 0 and the same other arguments, any other node
+    *    will have all of its children visited.</li>
+    *    <li>any other node will have its visit mode delegated to the <code>federated</code> scope argument
+    *    with the same arguments except the depth that will be subtracted the <code>path</code> list argument size.</li>
+    * </ul></p>
+    *
+    * @param path the names that describing the tree path
+    * @param federated the federated scope
+    * @return the branch shape scope
+    * @throws NullPointerException if any argument is null
+    */
+   public static Scope branchShape(final List<String> path, final Scope federated) throws NullPointerException
+   {
+      if (path == null)
+      {
+         throw new NullPointerException("no null path accepted");
+      }
+      if (federated == null)
+      {
+         throw new NullPointerException("no null federated scope accepted");
+      }
+      return new Scope()
+      {
+         public Visitor get()
+         {
+            return new Visitor()
+            {
+               public VisitMode visit(int depth, String id, String name, NodeState state)
+               {
+                  if (depth == 0)
+                  {
+                     return VisitMode.ALL_CHILDREN;
+                  }
+                  else if (depth > 0)
+                  {
+                     if (depth < path.size())
+                     {
+                        if ((name.equals(path.get(depth - 1))))
+                        {
+                           return VisitMode.ALL_CHILDREN;
+                        }
+                        else
+                        {
+                           return VisitMode.NO_CHILDREN;
+                        }
+                     }
+                     else if (depth == path.size())
+                     {
+                        if ((name.equals(path.get(path.size() - 1))))
+                        {
+                           return federated.get().visit(0, id, name, state);
+                        }
+                        else
+                        {
+                           return VisitMode.NO_CHILDREN;
+                        }
+                     }
+                     else
+                     {
+                        return federated.get().visit(depth - path.size(), id, name, state);
+                     }
+                  }
+                  throw new AssertionError();
+               }
+            };
+         }
+      };
+   }
+
 
    /** . */
    private final Visitor visitor;
