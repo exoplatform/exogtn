@@ -31,16 +31,29 @@ public class VisitMode
    /**
     * Skip the node.
     */
-   public static final VisitMode SKIP = new VisitMode();
+   public static final VisitMode SKIP = new VisitMode("SKIP");
 
    /**
     * Include node but its children should be left appart.
     */
-   public static final VisitMode NO_CHILDREN = new VisitMode();
+   public static final VisitMode NO_CHILDREN = new VisitMode("NO_CHILDREN");
 
    /**
     * Include node and its children.
     */
-   public static final VisitMode ALL_CHILDREN = new VisitMode();
+   public static final VisitMode ALL_CHILDREN = new VisitMode("ALL_CHILDREN");
 
+   /** . */
+   private final String name;
+
+   private VisitMode(String name)
+   {
+      this.name = name;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "VisitMode[" + name + "]";
+   }
 }
