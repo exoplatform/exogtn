@@ -23,15 +23,16 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -106,9 +107,18 @@ public class UIAddGroupNavigation extends UIContainer
          listGroup = new ArrayList<String>();
       }
 
-      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-      Set<String> groupIdsHavingNavigation = configService.findGroupHavingNavigation();
-      listGroup.removeAll(groupIdsHavingNavigation);
+      //Filter all groups having navigation
+      NavigationService navigationService = getApplicationComponent(NavigationService.class);
+      List<String> groupsHavingNavigation = new ArrayList<String>();
+      for(String groupName : listGroup)
+      {
+         Navigation navigation = navigationService.loadNavigation(SiteKey.group(groupName));
+         if(navigation != null && navigation.getState() != null)
+         {
+            groupsHavingNavigation.add(groupName);
+         }
+      }
+      listGroup.removeAll(groupsHavingNavigation);
 
       UIVirtualList virtualList = getChild(UIVirtualList.class);
       virtualList.dataBind(new ObjectPageList<String>(listGroup, listGroup.size()));
@@ -125,27 +135,20 @@ public class UIAddGroupNavigation extends UIContainer
          String ownerId = event.getRequestContext().getRequestParameter(OBJECTID);
          ownerId = URLDecoder.decode(ownerId);
 
-         //Add navigation
-         PageNavigation pageNav = new PageNavigation();
-
-         // set properties for navigation
-         pageNav.setPriority(1);
-         pageNav.setModifiable(true);
-         pageNav.setOwnerId(ownerId);
-         pageNav.setOwnerType(PortalConfig.GROUP_TYPE);
-         //UIPortalApplication uiPortalApp = uiForm.getAncestorOfType(UIPortalApplication.class);      
          UIPortalApplication uiPortalApp = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class);
 
-         // ensure this navigation is not exist
-         DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
-         if (dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId()) != null)
+         // ensure this navigation does not exist
+         NavigationService navigationService = uicomp.getApplicationComponent(NavigationService.class);
+         Navigation navigation = navigationService.loadNavigation(SiteKey.group(ownerId));
+         if (navigation != null && navigation.getState() != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
-               new String[]{pageNav.getOwnerId()}));
+               new String[]{ownerId}));
             return;
          }
 
-         // Create group when it does not exist
+         // Create portal config of the group when it does not exist
+         DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
          if (dataService.getPortalConfig("group", ownerId) == null)
          {
             UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
@@ -153,11 +156,8 @@ public class UIAddGroupNavigation extends UIContainer
          }
 
          // create navigation for group
-         dataService.create(pageNav);
+         navigationService.saveNavigation(SiteKey.group(ownerId), new NavigationState(0));
 
-         uiPortalApp.getUserPortalConfig().getNavigations().add(0, pageNav);
-         uiPortalApp.getNavigations().add(0, pageNav);
-         
          //Update group navigation list
          ctx.addUIComponentToUpdateByAjax(uicomp);
 

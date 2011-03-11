@@ -22,6 +22,9 @@ package org.exoplatform.portal.mop.navigation;
 import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -50,6 +53,8 @@ public class TestNavigationService extends AbstractPortalTest
    /** . */
    private NavigationServiceImpl service;
 
+   private DataStorage dataStorage;
+
    @Override
    protected void setUp() throws Exception
    {
@@ -59,7 +64,7 @@ public class TestNavigationService extends AbstractPortalTest
       PortalContainer container = PortalContainer.getInstance();
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       service = new NavigationServiceImpl(mgr);
-
+      dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       //
       begin();
    }
@@ -937,5 +942,29 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(now, state.getEndPublicationTime());
       assertNull(state.getVisibility());
+   }
+
+   public void testDelayBetweenServices() throws Exception
+   {
+      PortalConfig portalConfig = new PortalConfig();
+      portalConfig.setName("testPortalNavigation");
+      dataStorage.create(portalConfig);
+
+      PageNavigation pageNav = new PageNavigation();
+      pageNav.setOwnerType("portal");
+      pageNav.setOwnerId("testPortalNavigation");
+
+      dataStorage.create(pageNav);
+
+      pageNav = dataStorage.getPageNavigation("portal", "testPortalNavigation");
+      assertNotNull(pageNav);
+      assertEquals("portal", pageNav.getOwnerType());
+      assertEquals("testPortalNavigation", pageNav.getOwnerId());
+
+      Navigation navigation = service.loadNavigation(SiteKey.portal("testPortalNavigation"));
+
+      assertNotNull(navigation);
+      assertEquals(SiteType.PORTAL, navigation.getKey().getType());
+      assertEquals("testPortalNavigation", navigation.getKey().getName());
    }
 }
