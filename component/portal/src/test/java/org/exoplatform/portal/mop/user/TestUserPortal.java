@@ -544,24 +544,29 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("test"));
             
-            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
-            assertEquals("default", root.getName());
-            assertEquals(2, root.getChildrenCount());
-            assertEquals(2, root.getChildren().size());
-            assertTrue(root.hasChildrenRelationship());
-            
-            Iterator<UserNode> children = root.getChildren().iterator();
-            UserNode node1 = children.next();
-            assertEquals("node_name", node1.getName());
+            Scope scope = userPortal.createScope(-1, UserNodePredicate.builder().withTemporalCheck().build());
+            UserNode root = userPortal.getNode(navigation, scope);
             GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
             start.setTimeZone(TimeZone.getTimeZone("UTC"));
-            assertEquals(start.getTimeInMillis(), node1.getStartPublicationTime());
-            assertEquals(1237599180000L, node1.getEndPublicationTime());
+            GregorianCalendar end = new GregorianCalendar(2050, 2, 21, 1, 33, 0);
+            end.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            UserNode node2 = children.next();
-            assertEquals("node_name2", node2.getName());
+            assertEquals(3, root.getChildrenCount());
+            
+            UserNode node1 = root.getChild("node_name1");
+            assertNotNull(node1);
+            assertEquals(start.getTimeInMillis(), node1.getStartPublicationTime());
+            assertEquals(end.getTimeInMillis(), node1.getEndPublicationTime());
+
+            UserNode node2 = root.getChild("node_name3");
+            assertNotNull(node2);
             assertEquals(-1, node2.getStartPublicationTime());
-            assertEquals(-1, node2.getEndPublicationTime());
+            assertEquals(end.getTimeInMillis(), node2.getEndPublicationTime());
+            
+            UserNode node3 = root.getChild("node_name4");
+            assertNotNull(node3);
+            assertEquals(-1, node3.getStartPublicationTime());
+            assertEquals(-1, node3.getEndPublicationTime());
          }
       }.execute("root");
    }

@@ -130,7 +130,7 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals(1, nav.getPriority());
 
       //
-      assertEquals(2, nav.getNodes().size());
+      assertEquals(5, nav.getNodes().size());
 
       //
       PageNode nodeNavigation = nav.getNodes().get(0);

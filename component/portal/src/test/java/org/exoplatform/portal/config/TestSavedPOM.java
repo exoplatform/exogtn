@@ -97,7 +97,7 @@ public class TestSavedPOM extends AbstractPortalTest
       //
       Collection<? extends Navigation> childrenNavigations = defaultNav.getChildren();
       assertNotNull(childrenNavigations);
-      assertEquals(2, childrenNavigations.size());
+      assertEquals(5, childrenNavigations.size());
       Iterator<? extends Navigation> i = childrenNavigations.iterator();
 
       //
