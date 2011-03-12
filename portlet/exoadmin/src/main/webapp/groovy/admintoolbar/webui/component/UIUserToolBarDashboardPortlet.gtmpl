@@ -3,6 +3,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.portal.mop.user.UserNode;
+	import java.util.Collection;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -11,8 +12,7 @@
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
 
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
-	void renderDashboards(){
-		def nodes = uicomponent.getUserNodes();
+	void renderDashboards(Collection nodes) {
 		String clazz = "";
 		
 		print """
@@ -114,7 +114,7 @@
 						<div class="">
 								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>">Dashboard</a>
 						</div>
-						<% renderDashboards(); %>
+						<% renderDashboards(userNodes); %>
 				</div>
 			</div>
 		</div>	

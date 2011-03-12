@@ -24,12 +24,9 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
-import org.exoplatform.portal.webui.navigation.ParentChildPair;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -39,8 +36,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
@@ -54,11 +51,13 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
+
+import static org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
 
 /**
  * Author : Dang Van Minh, Pham Tuan minhdv81@yahoo.com Jun 14, 2006
@@ -66,19 +65,14 @@ import java.util.List;
 public class UIPageNodeForm extends UIFormTabPane
 {
 
-   private PageNode pageNode_;
+   private TreeNodeData pageNode_;
 
    private Object selectedParent;
-
-   /**
-    * Wrapper of editted PageNode and its parent
-    */
-   private ParentChildPair contextParentChildPair;
    
    /**
     * PageNavigation to which editted PageNode belongs
     */
-   private PageNavigation contextPageNavigation;
+   private UserNavigation contextPageNavigation;
    
    final private static String SHOW_PUBLICATION_DATE = "showPublicationDate";
 
@@ -94,12 +88,12 @@ public class UIPageNodeForm extends UIFormTabPane
 
       UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");
       UIFormCheckBoxInput<Boolean> uiDateInputCheck =
-         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, SHOW_PUBLICATION_DATE, false);
-      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, VISIBLE, true);
+         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, null, false);
+      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, null, true);
       
       uiDateInputCheck.setOnChange("SwitchPublicationDate");
       uiVisibleCheck.setOnChange("SwitchVisible");
-      uiSettingSet.addUIFormInput(new UIFormStringInput("uri", "uri", null).setEditable(false))
+      uiSettingSet.addUIFormInput(new UIFormStringInput("URI", "URI", null).setEditable(false))
       				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class))
       				.addUIFormInput(new UIFormStringInput("label", "label", null).addValidator(StringLengthValidator.class, 3, 120))
       				.addUIFormInput(uiVisibleCheck.setChecked(true))
@@ -111,7 +105,7 @@ public class UIPageNodeForm extends UIFormTabPane
       setSelectedTab(uiSettingSet.getId());
 
       UIPageSelector2 uiPageSelector = createUIComponent(UIPageSelector2.class, null, null);
-      uiPageSelector.configure("UIPageSelector2", "pageReference");
+      uiPageSelector.configure("UIPageSelector2", "pageRef");
       addUIFormInput(uiPageSelector);
 
       UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "icon");
@@ -119,12 +113,12 @@ public class UIPageNodeForm extends UIFormTabPane
       setActions(new String[]{"Save", "Back"});
    }
 
-   public PageNode getPageNode()
+   public TreeNodeData getPageNode()
    {
       return pageNode_;
    }
 
-   public void setValues(PageNode pageNode) throws Exception
+   public void setValues(TreeNodeData pageNode) throws Exception
    {
       pageNode_ = pageNode;
       if (pageNode == null)
@@ -141,12 +135,13 @@ public class UIPageNodeForm extends UIFormTabPane
    public void invokeGetBindingBean(Object bean) throws Exception
    {
       super.invokeGetBindingBean(bean);
-      PageNode pageNode = (PageNode)bean;
-      String icon = pageNode_.getIcon();
+      TreeNodeData pageNode = (TreeNodeData)bean;
+
+      String icon = pageNode.getIcon();
       if (icon == null || icon.length() < 0)
          icon = "Default";
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
-      getUIStringInput("label").setValue(pageNode_.getLabel());
+      getUIStringInput("label").setValue(pageNode.getLabel());
       if(pageNode.getVisibility() == Visibility.SYSTEM)
       {
          UIFormInputSet uiSettingSet = getChildById("PageNodeSetting");
@@ -157,20 +152,22 @@ public class UIPageNodeForm extends UIFormTabPane
       }
       else
       {
-         getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode_.isVisible());
-         getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(pageNode.isShowPublicationDate());
-         setShowCheckPublicationDate(pageNode_.isVisible());
+         Visibility visibility = pageNode.getVisibility();
+         boolean isVisible = EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL).contains(visibility);
+         getUIFormCheckBoxInput(VISIBLE).setChecked(isVisible);
+         getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(Visibility.TEMPORAL.equals(visibility));
+         setShowCheckPublicationDate(isVisible);
          Calendar cal = Calendar.getInstance();
-         if (pageNode.getStartPublicationDate() != null)
+         if (pageNode.getStartPublicationTime() != -1)
          {
-            cal.setTime(pageNode.getStartPublicationDate());
+            cal.setTime(new Date(pageNode.getStartPublicationTime()));
             getUIFormDateTimeInput(START_PUBLICATION_DATE).setCalendar(cal);
          }
          else
             getUIFormDateTimeInput(START_PUBLICATION_DATE).setValue(null);
-         if (pageNode.getEndPublicationDate() != null)
+         if (pageNode.getEndPublicationTime() != -1)
          {
-            cal.setTime(pageNode.getEndPublicationDate());
+            cal.setTime(new Date(pageNode.getEndPublicationTime()));
             getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
          }
          else
@@ -182,15 +179,23 @@ public class UIPageNodeForm extends UIFormTabPane
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       super.invokeSetBindingBean(bean);
-      PageNode node = (PageNode) bean;
+      TreeNodeData node = (TreeNodeData) bean;
+
+      node.setVisibility(getUIFormCheckBoxInput(VISIBLE).isChecked() ? Visibility.DISPLAYED : Visibility.HIDDEN);      
+      if (getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked() &&
+          !Visibility.HIDDEN.equals(node.getVisibility()))
+      {
+         node.setVisibility(Visibility.TEMPORAL);
+      }
+
       if (node.getVisibility() != Visibility.SYSTEM)
       {
          Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
          Date date = (cal != null) ? cal.getTime() : null;
-         node.setStartPublicationDate(date);
+         node.setStartPublicationTime(date == null ? -1 : date.getTime());
          cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
          date = (cal != null) ? cal.getTime() : null;
-         node.setEndPublicationDate(date);
+         node.setEndPublicationTime(date == null ? -1 : date.getTime());
       }
    }
 
@@ -217,16 +222,6 @@ public class UIPageNodeForm extends UIFormTabPane
    {
       this.selectedParent = obj;
    }
-
-   public void setContextParentChildPair(ParentChildPair _contextParentChildPair)
-   {
-      this.contextParentChildPair = _contextParentChildPair;
-   }
-   
-   public ParentChildPair getContextParentChildPair()
-   {
-      return this.contextParentChildPair;
-   }
    
    public void processRender(WebuiRequestContext context) throws Exception
    {
@@ -243,20 +238,20 @@ public class UIPageNodeForm extends UIFormTabPane
 
    public String getOwner()
    {
-      return contextPageNavigation.getOwnerId();
+      return contextPageNavigation.getKey().getName();
    }
 
    public String getOwnerType()
    {
-      return contextPageNavigation.getOwnerType();
+      return contextPageNavigation.getKey().getTypeName();
    }
    
-   public void setContextPageNavigation(PageNavigation _contextPageNav)
+   public void setContextPageNavigation(UserNavigation _contextPageNav)
    {
       this.contextPageNavigation = _contextPageNav;
    }
    
-   public PageNavigation getContextPageNavigation()
+   public UserNavigation getContextPageNavigation()
    {
       return this.contextPageNavigation;
    }
@@ -268,11 +263,10 @@ public class UIPageNodeForm extends UIFormTabPane
          WebuiRequestContext ctx = event.getRequestContext();
          UIPageNodeForm uiPageNodeForm = event.getSource();
          UIApplication uiPortalApp = ctx.getUIApplication();
-         PageNode pageNode = uiPageNodeForm.getPageNode();
-         if (pageNode == null)
-            pageNode = new PageNode();
+         TreeNodeData pageNode = uiPageNodeForm.getPageNode();
          
-         if (pageNode.getVisibility() != Visibility.SYSTEM && uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
+         if (pageNode == null || (pageNode.getVisibility() != Visibility.SYSTEM &&
+            uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked()))
          {
             Calendar currentCalendar = Calendar.getInstance();
             currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -308,6 +302,21 @@ public class UIPageNodeForm extends UIFormTabPane
             }
             
          }
+
+         UIFormStringInput nameInput = uiPageNodeForm.getUIStringInput("name");
+         String nodeName = nameInput.getValue();
+
+         TreeNodeData selectedParent = (TreeNodeData)uiPageNodeForm.getSelectedParent();
+         if (pageNode == null && selectedParent.getChild(nodeName) != null)
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));
+            return;
+         }
+
+         if (pageNode == null)
+         {
+            pageNode = selectedParent.addChild(nodeName);
+         }
          
          UIPageSelector2 pageSelector = uiPageNodeForm.getChild(UIPageSelector2.class);
          if (pageSelector.getPage() == null)
@@ -334,43 +343,6 @@ public class UIPageNodeForm extends UIFormTabPane
          if (pageNode.getLabel() == null)
             pageNode.setLabel(pageNode.getName());
 
-         Object selectedParent = uiPageNodeForm.getSelectedParent();
-         PageNavigation pageNav = null;
-
-         if (selectedParent instanceof PageNavigation)
-         {
-            pageNav = (PageNavigation)selectedParent;
-            pageNode.setUri(pageNode.getName());
-            if (!pageNav.getNodes().contains(pageNode))
-            {
-               if (PageNavigationUtils.searchPageNodeByUri(pageNav, pageNode.getUri()) != null)
-               {
-                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));
-                  return;
-               }
-               pageNav.addNode(pageNode);
-            }
-         }
-         else if (selectedParent instanceof PageNode)
-         {
-            PageNode parentNode = (PageNode)selectedParent;
-            List<PageNode> children = parentNode.getChildren();
-            if (children == null)
-            {
-               children = new ArrayList<PageNode>();
-               parentNode.setChildren((ArrayList<PageNode>)children);
-            }
-            pageNode.setUri(parentNode.getUri() + "/" + pageNode.getName());
-            if (!children.contains(pageNode))
-            {
-               if (PageNavigationUtils.searchPageNodeByUri(parentNode, pageNode.getUri()) != null)
-               {
-                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));
-                  return;
-               }
-               children.add(pageNode);
-            }
-         }
          uiPageNodeForm.createEvent("Back", Phase.DECODE, ctx).broadcast();
       }
    }
@@ -482,7 +454,7 @@ public class UIPageNodeForm extends UIFormTabPane
          page.setOwnerType(uiForm.getOwnerType());
          page.setOwnerId(ownerId);
          page.setName(uiPageName.getValue());
-         String title = uiPageTitle.getValue();;
+         String title = uiPageTitle.getValue();
          if (title == null || title.trim().length() < 1)
             title = page.getName();
          page.setTitle(title);
