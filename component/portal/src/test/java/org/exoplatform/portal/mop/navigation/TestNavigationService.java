@@ -1048,5 +1048,12 @@ public class TestNavigationService extends AbstractPortalTest
       assertTrue(root.removeChild("foo"));
       assertNull(root.addChild("foo").getId());
       service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertNotNull(root.getChild("foo").getId());
+      assertNotSame(fooId, root.getChild("foo").getId());
    }
 }
