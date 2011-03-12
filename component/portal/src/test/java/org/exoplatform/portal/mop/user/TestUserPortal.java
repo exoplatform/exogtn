@@ -671,6 +671,35 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
    
+   public void testCacheInvalidation()
+   {
+
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            storage_.create(new PortalConfig("portal", "cache_invalidation"));
+            end(true);
+
+            //
+            begin();
+            Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "cache_invalidation");
+            site.getRootNavigation().addChild("default");
+            end(true);
+
+            begin();
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("cache_invalidation", "root");
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("cache_invalidation"));
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            root.addChild("foo");
+
+            root.save();
+            root = userPortal.getNode(navigation, Scope.CHILDREN);
+            assertNotNull(root.getChild("foo")); // should Cache be invalidated right after save()
+         }
+      }.execute("root");
+   }
 /*
    public void testCreateUserPortalConfig()
    {
