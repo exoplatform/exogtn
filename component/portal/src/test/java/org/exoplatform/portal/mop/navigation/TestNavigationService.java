@@ -37,7 +37,6 @@ import org.gatein.mop.core.api.MOPService;
 
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -613,6 +612,25 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE);
       assertNull(defaultNode.getContext().getState().getURI());
+   }
+
+   public void testPendingChangesBypassCache() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("pending_changes_bypass_cache"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      root.addChild("foo");
+      service.saveNode(Node.MODEL, root);
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertNotNull(root.getChild("foo"));
    }
 
    public void testAddChild() throws Exception

@@ -371,15 +371,31 @@ public class NavigationServiceImpl implements NavigationService
 
    private NodeData getNodeData(POMSession session, String nodeId)
    {
-      NodeData data = nodeIdCache.get(nodeId);
-      if (data == null)
+      NodeData data;
+      if (session.isModified())
       {
          org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
          if (navigation != null)
          {
             data = new NodeData(navigation);
-            nodeIdCache.put(nodeId, data);
-            nodePathCache.put(session.pathOf(navigation), nodeId);
+         }
+         else
+         {
+            data = null;
+         }
+      }
+      else
+      {
+         data = nodeIdCache.get(nodeId);
+         if (data == null)
+         {
+            org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+            if (navigation != null)
+            {
+               data = new NodeData(navigation);
+               nodeIdCache.put(nodeId, data);
+               nodePathCache.put(session.pathOf(navigation), nodeId);
+            }
          }
       }
       return data;
