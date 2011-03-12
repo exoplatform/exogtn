@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.navigation2;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -56,6 +57,9 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
    /** . */
    private boolean hidden;
 
+   /** . */
+   private int count;
+
    public ListTree(String name, boolean hidden)
    {
       if (name == null)
@@ -70,16 +74,41 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       this.head = null;
       this.tail = null;
       this.hidden = hidden;
+      this.count = -1;
    }
 
-   public boolean isHidden()
+   public final int getSize()
+   {
+      return map == null ? -1 : map.size();
+   }
+
+   public final int getCount()
+   {
+      return count;
+   }
+
+   public final boolean isHidden()
    {
       return hidden;
    }
 
-   public void setHidden(boolean hidden)
+   public final void setHidden(boolean hidden)
    {
-      this.hidden = hidden;
+      if (this.hidden != hidden)
+      {
+         if (parent != null)
+         {
+            if (hidden)
+            {
+               parent.count--;
+            }
+            else
+            {
+               parent.count++;
+            }
+         }
+         this.hidden = hidden;
+      }
    }
 
    public abstract E getElement();
@@ -266,10 +295,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          T a = head;
          if (index == 0)
          {
-            if (tree.parent != null)
-            {
-               tree.remove();
-            }
             insertFirst(tree);
          }
          else
@@ -291,18 +316,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
             //
             if (a == null)
             {
-               if (tree.parent != null)
-               {
-                  tree.remove();
-               }
                insertLast(tree);
             }
             else if (a != tree)
             {
-               if (tree.parent != null)
-               {
-                  tree.remove();
-               }
                a.insertBefore(tree);
             }
          }
@@ -316,18 +333,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          }
          if (a == null)
          {
-            if (tree.parent != null)
-            {
-               tree.remove();
-            }
             insertFirst(tree);
          }
          else if (a != tree)
          {
-            if (tree.parent != null)
-            {
-               tree.remove();
-            }
             a.insertAfter(tree);
          }
       }
@@ -372,6 +381,113 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       };
    }
 
+   public final ListIterator<T> listIterator()
+   {
+      if (map == null)
+      {
+         return null;
+      }
+      return new ListIterator<T>()
+      {
+         T next = head;
+         T current = null;
+         T previous = null;
+         int index = 0;
+
+         public boolean hasNext()
+         {
+            return next != null;
+         }
+
+         public T next()
+         {
+            if (next != null)
+            {
+               current = next;
+
+               //
+               previous = next;
+               next = next.next;
+               index++;
+               return current;
+            }
+            else
+            {
+               throw new NoSuchElementException();
+            }
+         }
+
+         public boolean hasPrevious()
+         {
+            return previous != null;
+         }
+
+         public T previous()
+         {
+            if (previous != null)
+            {
+               current = previous;
+
+               //
+               next = previous;
+               previous = previous.previous;
+               index--;
+               return current;
+            }
+            else
+            {
+               throw new NoSuchElementException();
+            }
+         }
+
+         public int nextIndex()
+         {
+            return index;
+         }
+
+         public int previousIndex()
+         {
+            return index - 1;
+         }
+
+         public void remove()
+         {
+            if (current == null)
+            {
+               throw new IllegalStateException("no element to remove");
+            }
+            if (current == previous)
+            {
+               index--;
+            }
+            next = current.next;
+            previous = current.previous;
+            current.remove();
+            current = null;
+         }
+
+         public void set(T tree)
+         {
+            throw new UnsupportedOperationException();
+         }
+
+         public void add(T tree)
+         {
+            if (previous == null)
+            {
+               insertFirst(tree);
+            }
+            else
+            {
+               previous.insertAfter(tree);
+            }
+            index++;
+            previous = tree;
+            next = tree.next;
+         }
+      };
+   }
+
    protected final Iterable<T> getTrees()
    {
       if (map != null)
@@ -380,31 +496,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             public Iterator<T> iterator()
             {
-               return new Iterator<T>()
-               {
-                  T next = head;
-                  public boolean hasNext()
-                  {
-                     return next != null;
-                  }
-                  public T next()
-                  {
-                     if (next != null)
-                     {
-                        T tmp = next;
-                        next = next.next;
-                        return tmp;
-                     }
-                     else
-                     {
-                        throw new UnsupportedOperationException();
-                     }
-                  }
-                  public void remove()
-                  {
-                     throw new UnsupportedOperationException();
-                  }
-               };
+               return listIterator();
             }
          };
       }
@@ -429,6 +521,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
                head.remove();
             }
             this.map = null;
+            this.count = -1;
          }
       }
       else
@@ -437,6 +530,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             @SuppressWarnings("unchecked") Map<String, T> map = Collections.EMPTY_MAP;
             this.map = map;
+            this.count = 0;
             for (T child : children)
             {
                insertLast(child);
@@ -449,68 +543,101 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       }
    }
 
-   private void insertAfter(T context)
+   private void insertAfter(T tree)
    {
-      context.previous = (T)this;
-      context.next = next;
-      if (next == null)
+      if (this != tree)
       {
-         parent.tail = context;
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         tree.previous = (T)this;
+         tree.next = next;
+         if (next == null)
+         {
+            parent.tail = tree;
+         }
+         else
+         {
+            next.previous = tree;
+         }
+         next = tree;
+         if (parent.map == Collections.EMPTY_MAP)
+         {
+            parent.map = new HashMap<String, T>();
+            parent.count = 0;
+         }
+         if (!tree.hidden)
+         {
+            parent.count++;
+         }
+         parent.map.put(tree.name, tree);
+         tree.parent = parent;
       }
-      else
-      {
-         next.previous = context;
-      }
-      next = context;
-      if (parent.map == Collections.EMPTY_MAP)
-      {
-         parent.map = new HashMap<String, T>();
-      }
-      parent.map.put(context.name, context);
-      context.parent = parent;
    }
 
-   private void insertBefore(T context)
+   private void insertBefore(T tree)
    {
-      context.previous = previous;
-      context.next = (T)this;
-      if (previous == null)
+      if (this != tree)
       {
-         parent.head = context;
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         tree.previous = previous;
+         tree.next = (T)this;
+         if (previous == null)
+         {
+            parent.head = tree;
+         }
+         else
+         {
+            previous.next = tree;
+         }
+         previous = tree;
+         if (parent.map == Collections.EMPTY_MAP)
+         {
+            parent.map = new HashMap<String, T>();
+            parent.count = 0;
+         }
+         if (!tree.hidden)
+         {
+            parent.count++;
+         }
+         parent.map.put(tree.name, tree);
+         tree.parent = parent;
       }
-      else
-      {
-         previous.next = context;
-      }
-      previous = context;
-      if (parent.map == Collections.EMPTY_MAP)
-      {
-         parent.map = new HashMap<String, T>();
-      }
-      parent.map.put(context.name, context);
-      context.parent = parent;
    }
 
    /**
     * Insert the specified context at the first position among the children of this context.
     *
-    * @param context the content to insert
+    * @param tree the content to insert
     */
-   private void insertFirst(T context)
+   private void insertFirst(T tree)
    {
       if (head == null)
       {
-         head = tail = context;
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         head = tail = tree;
          if (map == Collections.EMPTY_MAP)
          {
             map = new HashMap<String, T>();
+            count = 0;
          }
-         map.put(context.name, context);
-         context.parent = (T)this;
+         if (!tree.hidden)
+         {
+            count++;
+         }
+         map.put(tree.name, tree);
+         tree.parent = (T)this;
       }
       else
       {
-         head.insertBefore(context);
+         head.insertBefore(tree);
       }
    }
 
@@ -544,7 +671,17 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       {
          next.previous = previous;
       }
+      if (!hidden)
+      {
+         parent.count--;
+      }
       parent.map.remove(name);
       parent = null;
    }
+
+   public String toString()
+   {
+      return getClass().getSimpleName() + "[name=" + getName() + ",element=" + getElement() + "]";
+   }
 }
+

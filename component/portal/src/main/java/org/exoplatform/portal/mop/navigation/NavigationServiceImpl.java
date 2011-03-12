@@ -47,9 +47,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
@@ -253,6 +255,38 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
+   private NodeData getNodeData(POMSession session, String nodeId)
+   {
+      NodeData data;
+      if (session.isModified())
+      {
+         org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+         if (navigation != null)
+         {
+            data = new NodeData(navigation);
+         }
+         else
+         {
+            data = null;
+         }
+      }
+      else
+      {
+         data = nodeIdCache.get(nodeId);
+         if (data == null)
+         {
+            org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+            if (navigation != null)
+            {
+               data = new NodeData(navigation);
+               nodeIdCache.put(nodeId, data);
+               nodePathCache.put(session.pathOf(navigation), nodeId);
+            }
+         }
+      }
+      return data;
+   }
+
    public Navigation loadNavigation(SiteKey key)
    {
       if (key == null)
@@ -352,13 +386,66 @@ public class NavigationServiceImpl implements NavigationService
       {
          POMSession session = manager.getSession();
          Scope.Visitor visitor = scope.get();
-         NodeContext<N> context = load(model, session, nodeId, visitor, 0);
-         return context == null || context.isHidden() ? null : context.node;
+         NodeData data = getNodeData(session, nodeId);
+         if (data != null)
+         {
+            NodeContext<N> context = load(model, session, data, visitor, 0);
+            return context.isHidden() ? null : context.node;
+         }
+         else
+         {
+            return null;
+         }
       }
       else
       {
          return null;
       }
+   }
+
+   private <N> NodeContext<N> load(
+      NodeModel<N> model,
+      POMSession session,
+      NodeData data,
+      Scope.Visitor visitor,
+      int depth)
+   {
+      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+
+      //
+      NodeContext<N> context;
+      if (visitMode == VisitMode.ALL_CHILDREN)
+      {
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
+         for (String childId : data.children)
+         {
+            NodeData childData = getNodeData(session, childId);
+            if (childData != null)
+            {
+               NodeContext<N> childContext = load(model, session, childData, visitor, depth + 1);
+               children.add(childContext);
+            }
+            else
+            {
+               throw new UnsupportedOperationException("Handle me gracefully");
+            }
+         }
+
+         //
+         context = new NodeContext<N>(model, data, false);
+         context.setContexts(children);
+      }
+      else if (visitMode == VisitMode.NO_CHILDREN)
+      {
+         context = new NodeContext<N>(model, data, false);
+      }
+      else
+      {
+         context = new NodeContext<N>(model, data, true);
+      }
+
+      //
+      return context;
    }
 
    public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
@@ -367,38 +454,6 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<N> context = model.getContext(node);
       Scope.Visitor visitor = scope.get();
       return load(model, session, context, visitor, 0);
-   }
-
-   private NodeData getNodeData(POMSession session, String nodeId)
-   {
-      NodeData data;
-      if (session.isModified())
-      {
-         org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-         if (navigation != null)
-         {
-            data = new NodeData(navigation);
-         }
-         else
-         {
-            data = null;
-         }
-      }
-      else
-      {
-         data = nodeIdCache.get(nodeId);
-         if (data == null)
-         {
-            org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-            if (navigation != null)
-            {
-               data = new NodeData(navigation);
-               nodeIdCache.put(nodeId, data);
-               nodePathCache.put(session.pathOf(navigation), nodeId);
-            }
-         }
-      }
-      return data;
    }
 
    private <N> N load(NodeModel<N> model, POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
@@ -418,23 +473,6 @@ public class NavigationServiceImpl implements NavigationService
       }
       
       return null;
-   }
-   
-   private <N> NodeContext<N> load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
-   {
-      NodeData data = getNodeData(session, nodeId);
-
-      //
-      if (data != null)
-      {
-         NodeContext<N> context = new NodeContext<N>(model, data, false);
-         visit(model, session, context, visitor, depth);
-         return context;
-      }
-      else
-      {
-         return null;
-      }
    }
 
    private <N> void visit(
@@ -459,21 +497,17 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
-         for (Map.Entry<String, String> entry : data.children.entrySet())
+         for (String childId : data.children)
          {
-            NodeContext<N> childContext = load(model, session, entry.getValue(), visitor, depth + 1);
-            if (childContext != null)
+            NodeData childData = getNodeData(session, childId);
+            if (childData != null)
             {
+               NodeContext<N> childContext = load(model, session, childData, visitor, depth + 1);
                children.add(childContext);
             }
             else
             {
-               // Node is either not found (for some reason that we should try to figure out)
-               // or it was not desired
-               // in both case we don't add it to the children and it's fine for now
-               // however later when we add readability we will need to make a clear distinction
-               // as we will need to know that a node exist but was not loaded on purpose
-               throw new AssertionError();
+               throw new UnsupportedOperationException("Handle me gracefully");
             }
          }
 
@@ -497,6 +531,61 @@ public class NavigationServiceImpl implements NavigationService
       {
          context.setHidden(true);
       }
+   }
+
+
+   public <N> void refresh(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException
+   {
+      POMSession session = manager.getSession();
+      NodeContext<N> context = model.getContext(node);
+      refresh(model, session, context, scope.get(), 0);
+   }
+
+   private <N> void refresh(
+      NodeModel<N> model,
+      POMSession session,
+      NodeContext<N> context,
+      Scope.Visitor visitor,
+      int depth)
+   {
+
+      String id = context.data.getId();
+
+      NodeData from = context.data;
+
+      NodeData to = getNodeData(session, id);
+
+      if (to == null)
+      {
+         throw new UnsupportedOperationException("Handle me gracefully");
+      }
+
+      //
+      if (context.hasTrees())
+      {
+         Iterable<NodeContext<N>> children = context.getContexts();
+
+         // Remove what we need
+         for (Iterator<NodeContext<N>> it = children.iterator();it.hasNext();)
+         {
+            NodeContext<N> child = it.next();
+            if (child.data == null || !to.children.contains(child.data.getId()))
+            {
+               it.remove();
+            }
+            else
+            {
+               // We do nothing for now
+            }
+         }
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Handle me gracefully");
+      }
+
+      // Update data now
+      context.data = to;
    }
 
    public <N> void saveNode(NodeModel<N> model, N node)
@@ -569,7 +658,7 @@ public class NavigationServiceImpl implements NavigationService
          ArrayList<String> bilto;
          if (context.data != null)
          {
-            bilto = new ArrayList<String>(context.data.children.values());
+            bilto = new ArrayList<String>(context.data.children);
          }
          else
          {
@@ -628,15 +717,13 @@ public class NavigationServiceImpl implements NavigationService
          {
             if (context.data != null)
             {
-               for (Map.Entry<String, String> entry : context.data.children.entrySet())
+               for (final String childId : context.data.children)
                {
-                  final String id = entry.getValue();
-
                   // Is it still here ?
                   boolean found = false;
                   for (NodeContext<N> childContext : context.getContexts())
                   {
-                     if (childContext.data != null && childContext.data.id.equals(id))
+                     if (childContext.data != null && childContext.data.id.equals(childId))
                      {
                         found = true;
                      }
@@ -649,19 +736,19 @@ public class NavigationServiceImpl implements NavigationService
                      {
                         boolean accept(SaveContext<N> context)
                         {
-                           return context.context.data != null && context.context.data.getId().equals(id);
+                           return context.context.data != null && context.context.data.getId().equals(childId);
                         }
                      };
                      if (finder.any(this) == null)
                      {
-                        org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, id);
+                        org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, childId);
                         navigation.destroy();
                      }
                      else
                      {
                         // It's a move operation
                      }
-                     childrenIds.remove(id);
+                     childrenIds.remove(childId);
                   }
                }
             }
@@ -776,7 +863,7 @@ public class NavigationServiceImpl implements NavigationService
             for (NodeContext<N> childCtx : context.getContexts())
             {
                final String childId = childCtx.data.id;
-               if (!context.data.children.containsValue(childId))
+               if (!context.data.children.contains(childId))
                {
                   if (!childrenIds.contains(childId))
                   {
@@ -846,10 +933,11 @@ public class NavigationServiceImpl implements NavigationService
       // Update model
       void phase6(POMSession session)
       {
-         LinkedHashMap<String, String> childMap;
+         Set<String> childMap;
          if (context.hasTrees())
          {
-            childMap = new LinkedHashMap<String, String>();
+            // todo : I think we have a bug here :-)
+            childMap = new LinkedHashSet<String>();
          }
          else
          {

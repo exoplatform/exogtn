@@ -91,6 +91,11 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return service.loadNode(model, node, scope);
    }
 
+   public <N> void refresh(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException
+   {
+      service.refresh(model, node, scope);
+   }
+
    public <N> void saveNode(NodeModel<N> model, N node)
    {
       service.saveNode(model, node);

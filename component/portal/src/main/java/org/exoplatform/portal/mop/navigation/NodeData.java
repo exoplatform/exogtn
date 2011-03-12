@@ -32,8 +32,11 @@ import org.gatein.mop.api.workspace.link.Link;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * An immutable node data class.
@@ -54,22 +57,22 @@ class NodeData implements Serializable
    final NodeState state;
 
    /** . */
-   final LinkedHashMap<String, String> children;
+   final Set<String> children;
 
-   NodeData(String id, String name, NodeState state, LinkedHashMap<String, String> children)
+   NodeData(String id, String name, NodeState state, Set<String> children)
    {
       this.id = id;
       this.name = name;
       this.state = state;
-      this.children = children;
+      this.children = Collections.unmodifiableSet(children);
    }
 
    NodeData(Navigation nav)
    {
-      LinkedHashMap<String, String> children = new LinkedHashMap<String, String>();
+      LinkedHashSet<String> children = new LinkedHashSet<String>();
       for (Navigation child : nav.getChildren())
       {
-         children.put(child.getName(), child.getObjectId());
+         children.add(child.getObjectId());
       }
 
       //
@@ -100,7 +103,6 @@ class NodeData implements Serializable
          PageLink pageLink = (PageLink)link;
          org.gatein.mop.api.workspace.Page target = pageLink.getPage();
          if (target != null)
-         if (target != null)
          {
             Site site = target.getSite();
             ObjectType<? extends Site> siteType = site.getObjectType();
@@ -126,7 +128,7 @@ class NodeData implements Serializable
       this.id = nav.getObjectId();
       this.name = nav.getName();
       this.state = state;
-      this.children = children;
+      this.children = Collections.unmodifiableSet(children);
    }
 
    public String getId()
@@ -137,11 +139,6 @@ class NodeData implements Serializable
    public String getName()
    {
       return name;
-   }
-
-   public int getChildrenCount()
-   {
-      return children.size();
    }
 
    public NodeState getState()

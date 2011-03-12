@@ -228,6 +228,11 @@ public class UserNode
       return context.getNodeCount();
    }
 
+   public int getChildrenSize()
+   {
+      return context.getNodeSize();
+   }
+
    public Collection<UserNode> getChildren()
    {
       Collection<UserNode> children = context.getNodes();

@@ -84,20 +84,41 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
    }
 
+   /**
+    * Returns the total number of nodes.
+    *
+    * @return the total number of nodes
+    */
+   public int getNodeSize()
+   {
+      if (hasTrees())
+      {
+         return getSize();
+      }
+      else
+      {
+         return data.children.size();
+      }
+   }
+
+   /**
+    * Returns the node count defined by:
+    * <ul>
+    *    <li>when the node has a children relationship, the number of non hidden nodes</li>
+    *    <li>when the node has not a children relationship, the total number of nodes</li>
+    * </ul>
+    *
+    * @return the node count
+    */
    public int getNodeCount()
    {
       if (hasTrees())
       {
-         int count = 0;
-         for (N node : this)
-         {
-            count++;
-         }
-         return count;
+         return getCount();
       }
       else
       {
-         return data.getChildrenCount();
+         return data.children.size();
       }
    }
 
