@@ -608,6 +608,16 @@ public class TestUserPortal extends AbstractPortalTest
             assertNotNull(root.getChild("bar"));
             UserNode foo = root.getChild("foo");
             assertNotNull(foo.getChild("juu"));
+            
+            root.removeChild("foo");
+            root.addChild("foo");
+            root.save();
+            end(true);
+            
+            begin();
+            root = userPortal.getNode(navigation, Scope.ALL);
+            foo = root.getChild("foo");
+            assertNull(foo.getChild("juu"));
          }
       }.execute("root");
    }
@@ -660,6 +670,7 @@ public class TestUserPortal extends AbstractPortalTest
          }
       }.execute("root");
    }
+   
 /*
    public void testCreateUserPortalConfig()
    {
