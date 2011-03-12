@@ -365,14 +365,7 @@ public class NavigationServiceImpl implements NavigationService
       POMSession session = manager.getSession();
       NodeContext<N> context = model.getContext(node);
       Scope.Visitor visitor = scope.get();
-      if (visit(model, session, context, visitor, 0))
-      {
-         return node;
-      }
-      else
-      {
-         return null;
-      }
+      return load(model, session, context, visitor, 0);
    }
 
    private NodeData getNodeData(POMSession session, String nodeId)
@@ -391,6 +384,24 @@ public class NavigationServiceImpl implements NavigationService
       return data;
    }
 
+   private <N> N load(NodeModel<N> model, POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
+   {
+      String nodeId = context.getId();
+      NodeData data = getNodeData(session, nodeId);
+
+      //
+      if (data != null)
+      {
+         context.data = data;
+         if (visit(model, session, context, visitor, depth))
+         {
+            return context.node;
+         }
+      }
+      
+      return null;
+   }
+   
    private <N> N load(NodeModel<N> model, POMSession session, String nodeId, Scope.Visitor visitor, int depth)
    {
       NodeData data = getNodeData(session, nodeId);

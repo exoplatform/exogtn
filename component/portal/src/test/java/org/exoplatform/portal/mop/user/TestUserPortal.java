@@ -30,12 +30,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.portal.mop.user.NavigationPath;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
-import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
@@ -614,6 +608,55 @@ public class TestUserPortal extends AbstractPortalTest
             assertNotNull(root.getChild("bar"));
             UserNode foo = root.getChild("foo");
             assertNotNull(foo.getChild("juu"));
+         }
+      }.execute("root");
+   }
+   
+   public void testNodeExtension()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            storage_.create(new PortalConfig("portal", "node_extension"));
+            end(true);
+
+            //
+            begin();
+            Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "node_extension");
+            site.getRootNavigation().addChild("default");
+            end(true);
+
+            begin();
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("node_extension", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("node_extension"));
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            root.addChild("foo");
+            root.save();
+            end(true);
+
+            begin();
+            assertSame(root, userPortal.getNode(root, Scope.GRANDCHILDREN));
+            UserNode foo = root.getChild("foo");
+            assertNotNull(foo);
+            foo.addChild("foo1");
+            root.save();
+            end(true);
+            
+            begin();
+            assertSame(foo, userPortal.getNode(foo, Scope.GRANDCHILDREN));
+            UserNode foo1 = foo.getChild("foo1");
+            assertNotNull(foo1);
+            foo1.addChild("foo2");
+            root.save();
+            end(true);
+            
+            begin();
+            root = userPortal.getNode(navigation, Scope.ALL);
+            foo1 = root.getChild("foo").getChild("foo1");
+            assertNotNull(foo1);
+            assertNotNull(foo1.getChild("foo2"));
          }
       }.execute("root");
    }
