@@ -491,25 +491,25 @@ public class NavigationServiceImpl implements NavigationService
       //
       SaveContext<N> save = new SaveContext<N>(context);
 
-      // Phase 0 : add new nodes
+      //
       save.phase0(session);
 
-      // Phase 1 : rename nodes
+      //
       save.phase1(session);
 
-      // Phase 2 : update state
+      //
       save.phase2(session);
 
-      // Phase 3 : move nodes
+      //
       save.phase3(session);
 
-      // Phase 4 : remove nodes
+      //
       save.phase4(session);
 
-      // Phase 5 : reorder data
+      //
       save.phase5(session);
 
-      // Phase 6 : update data
+      //
       save.phase6(session);
    }
 
@@ -605,8 +605,61 @@ public class NavigationServiceImpl implements NavigationService
          abstract boolean accept(SaveContext<N> context);
       }
 
-      // Phase 0 : create new nodes and associates with navigation object
+      // Remove orphans
       void phase0(POMSession session)
+      {
+         if (context.hasTrees())
+         {
+            if (context.data != null)
+            {
+               for (Map.Entry<String, String> entry : context.data.children.entrySet())
+               {
+                  final String id = entry.getValue();
+
+                  // Is it still here ?
+                  boolean found = false;
+                  for (NodeContext<N> childContext : context.getContexts())
+                  {
+                     if (childContext.data != null && childContext.data.id.equals(id))
+                     {
+                        found = true;
+                     }
+                  }
+
+                  //
+                  if (!found)
+                  {
+                     Finder<N> finder = new Finder<N>()
+                     {
+                        boolean accept(SaveContext<N> context)
+                        {
+                           return context.context.data != null && context.context.data.getId().equals(id);
+                        }
+                     };
+                     if (finder.any(this) == null)
+                     {
+                        org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, id);
+                        navigation.destroy();
+                     }
+                     else
+                     {
+                        // It's a move operation
+                     }
+                     childrenIds.remove(id);
+                  }
+               }
+            }
+         }
+
+         //
+         for (SaveContext<N> child : children)
+         {
+            child.phase0(session);
+         }
+      }
+
+      // Create new nodes and associates with navigation object
+      void phase1(POMSession session)
       {
          if (context.data == null)
          {
@@ -631,12 +684,12 @@ public class NavigationServiceImpl implements NavigationService
          //
          for (SaveContext<N> child : children)
          {
-            child.phase0(session);
+            child.phase1(session);
          }
       }
 
-      // Phase 1 : create new nodes and associates with navigation object
-      void phase1(POMSession session)
+      // Rename nodes
+      void phase2(POMSession session)
       {
          if (!context.data.name.equals(context.getName()))
          {
@@ -646,11 +699,12 @@ public class NavigationServiceImpl implements NavigationService
          //
          for (SaveContext<N> child : children)
          {
-            child.phase1(session);
+            child.phase2(session);
          }
       }
 
-      void phase2(POMSession session)
+      // Update state
+      void phase3(POMSession session)
       {
          NodeState state = context.state;
          if (state != null)
@@ -693,11 +747,12 @@ public class NavigationServiceImpl implements NavigationService
          //
          for (SaveContext<N> child : children)
          {
-            child.phase2(session);
+            child.phase3(session);
          }
       }
 
-      void phase3(POMSession session)
+      // Move nodes
+      void phase4(POMSession session)
       {
 
          if (context.hasTrees())
@@ -728,59 +783,11 @@ public class NavigationServiceImpl implements NavigationService
          //
          for (SaveContext<N> child : children)
          {
-            child.phase3(session);
-         }
-      }
-
-      void phase4(POMSession session)
-      {
-         if (context.hasTrees())
-         {
-            for (Map.Entry<String, String> entry : context.data.children.entrySet())
-            {
-               final String id = entry.getValue();
-
-               // Is it still here ?
-               boolean found = false;
-               for (NodeContext<N> childContext : context.getContexts())
-               {
-                  if (childContext.data.id.equals(id))
-                  {
-                     found = true;
-                  }
-               }
-
-               //
-               if (!found)
-               {
-                  Finder<N> finder = new Finder<N>()
-                  {
-                     boolean accept(SaveContext<N> context)
-                     {
-                        return context.context.data.getId().equals(id);
-                     }
-                  };
-                  if (finder.any(this) == null)
-                  {
-                     org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, id);
-                     navigation.destroy();
-                  }
-                  else
-                  {
-                     // It's a move operation
-                  }
-                  childrenIds.remove(id);
-               }
-            }
-         }
-
-         //
-         for (SaveContext<N> child : children)
-         {
             child.phase4(session);
          }
       }
 
+      // Reorder nodes
       void phase5(POMSession session)
       {
          if (context.hasTrees())
@@ -820,6 +827,7 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
 
+      // Update model
       void phase6(POMSession session)
       {
          LinkedHashMap<String, String> childMap;
