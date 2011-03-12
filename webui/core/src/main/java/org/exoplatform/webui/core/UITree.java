@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -271,7 +272,7 @@ public class UITree extends UIComponent
          iconGroup = selectedIcon;
          note = " NodeSelected";
       }
-      if(obj instanceof PageNode && ((PageNode)obj).getChildren().size() == 0) {
+      if(obj instanceof UserNode && ((UserNode)obj).getChildren().size() == 0) {
          nodeIcon = nullItemIcon;
       }
       if (beanIconField_ != null && beanIconField_.length() > 0)

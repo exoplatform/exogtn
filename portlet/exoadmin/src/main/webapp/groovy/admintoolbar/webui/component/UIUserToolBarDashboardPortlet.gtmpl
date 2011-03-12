@@ -1,5 +1,4 @@
 <%
-	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.portal.mop.user.UserNode;

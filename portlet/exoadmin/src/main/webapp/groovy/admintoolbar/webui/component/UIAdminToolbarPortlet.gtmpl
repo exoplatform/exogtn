@@ -1,17 +1,11 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
-	import org.exoplatform.webui.application.portlet.PortletRequestContext;	
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.portal.webui.page.UIPage;
-	import org.exoplatform.portal.webui.portal.UIPortal;
 	import org.exoplatform.portal.mop.user.UserNavigation;
 
-	def rcontext = (PortletRequestContext)_ctx.getRequestContext();
-	java.util.Map<String, String[]> publicRenderParams = rcontext.getRequest().getPublicParameterMap();
-	String[] navigation_uri_properties = publicRenderParams.get("navigation_uri");
-	
-	String navigation_uri = (navigation_uri_properties == null)? null : navigation_uri_properties[0];
+	def rcontext = _ctx.getRequestContext();
 	 
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
@@ -62,24 +56,9 @@
 						<% } %>
 						
 						<% if(userCouldEditPortal){ %>
-							<% 
-							 
-							 UIPortal uiPortal = Util.getUIPortalApplication().getShowedUIPortal();
-							 def currentNode = uiPortal.getSelectedNode();
-							 
-							 if(currentNode != null && "classicWebosPage".equals(currentNode.getName())){
-							 
-							%>
-								
-								
-								<div class="MenuItem">	
-									<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditBackground', true))" title="" class="ItemIcon EditSiteIcon">Edit Background</a>
-								</div>
-							<% }else{ %>
-								<div class="MenuItem">	
-									<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
-								</div>
-							<% } %>
+							 <div class="MenuItem">	
+								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
+							</div>
 						<% } %>
 					</div>
 				</div>

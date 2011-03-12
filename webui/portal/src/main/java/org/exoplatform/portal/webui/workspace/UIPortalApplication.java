@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.Skin;
@@ -36,7 +35,6 @@ import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -49,7 +47,6 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -113,8 +110,6 @@ public class UIPortalApplication extends UIApplication
    private boolean isSessionOpen = false;
    
    private Map<SiteKey, UIPortal> all_UIPortals;
-   
-   private List<PageNavigation> all_Navigations;
    
    private UIPortal showedUIPortal;
    
@@ -737,31 +732,5 @@ public class UIPortalApplication extends UIApplication
          if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
             skin_ = userPortalConfigSkin;
       }
-   }
-   
-   public void setNavigations(List<PageNavigation> navs)
-   {
-      // this.all_Navigations = navs;
-      throw new UnsupportedOperationException("Should it really be called");
-   }
-   
-   public List<PageNavigation> getNavigations()
-   {
-      if (all_Navigations == null)
-      {
-         List<PageNavigation> navigations = userPortalConfig_.getNavigations();
-         ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
-         Locale locale = getLocale();
-
-         //
-         for(PageNavigation nav : navigations)
-         {
-            PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
-         }
-
-         //
-         this.all_Navigations = navigations;
-      }
-      return this.all_Navigations;
    }
 }

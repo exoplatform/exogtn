@@ -21,7 +21,6 @@ package org.exoplatform.portal.config.model;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
 import org.gatein.common.text.EntityEncoder;
 
@@ -385,23 +384,5 @@ public class PageNode extends PageNodeContainer
          pageReference,
          children
       );
-   }
-   
-   /**
-    * This is used for legacy usage of PageNode
-    */
-   public static PageNode toPageNode(UserNode node)
-   {
-      PageNode pageNode = new PageNode(node.getId());
-      pageNode.setName(node.getName());
-      pageNode.setUri(node.getURI());
-      pageNode.setLabel(node.getLabel());
-      pageNode.setResolvedLabel(node.getResolvedLabel());
-      pageNode.setIcon(node.getIcon());
-      pageNode.setPageReference(node.getPageRef());
-      pageNode.setStartPublicationDate(new Date(node.getStartPublicationTime()));
-      pageNode.setEndPublicationDate(new Date(node.getEndPublicationTime()));
-      pageNode.setVisibility(node.getVisibility());
-      return pageNode;
    }
 }

@@ -21,9 +21,6 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
@@ -47,7 +44,6 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.AbstractTokenService;
@@ -60,13 +56,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
@@ -104,8 +95,6 @@ public class UIPortal extends UIContainer
 
    private Properties properties;
 
-   private PageNavigation navigation;
-   
    private NavigationPath navPath;
 
    private Map<String, UIPage> all_UIPages;
@@ -178,20 +167,7 @@ public class UIPortal extends UIContainer
    {
       publicParameters_ = publicParams;
    }
-   
-   /** 
-    * At the moment, this method ensure compatibility with legacy code
-    * 
-    * @deprecated use {@link #getNavigation()} instead
-    */
-   @Deprecated
-   public List<PageNavigation> getNavigations() throws Exception
-   {
-      List<PageNavigation> listNavs = new ArrayList<PageNavigation>();
-      listNavs.add(navigation);
-      return listNavs;
-   }
-   
+
    public NavigationPath getNavPath() throws Exception
    {
       if (navPath == null)
@@ -245,16 +221,6 @@ public class UIPortal extends UIContainer
       return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
    }
    
-   public PageNavigation getNavigation()
-   {
-      return navigation;
-   }
-   
-   public void setNavigation(PageNavigation _navigation)
-   {
-      this.navigation = _navigation;
-   }
-   
    /**
     * Refresh the UIPage under UIPortal 
     * 
@@ -281,77 +247,7 @@ public class UIPortal extends UIContainer
    {
       return getNavPath().getTarget();
    }
-   
-   /**
-    * @deprecated use {@link #getSelectedUserNode()}
-    */
-   @Deprecated
-   public PageNode getSelectedNode() throws Exception
-   {
-      UserNode target = getNavPath().getTarget();
-      return PageNode.toPageNode(target);
-   }
 
-   public List<PageNode> getSelectedPath() throws Exception
-   {
-      List<PageNode> nodes = new ArrayList<PageNode>();
-
-      UserNode target = getNavPath().getTarget();
-      do
-      {
-         nodes.add(PageNode.toPageNode(target));
-         target = target.getParent();
-      }
-      while (target != null && target.getParent() != null);
-
-      Collections.reverse(nodes);
-
-      return nodes;
-   }
-
-   /**
-    * @deprecated use {@link #getNavigation()} instead
-    * 
-    * @return
-    * @throws Exception
-    */
-   @Deprecated
-   public PageNavigation getSelectedNavigation() throws Exception
-   {
-      return getNavigation();
-   }
-   
-   /**
-    * @deprecated use {@link #setNavigation(PageNavigation)} instead
-    * 
-    * @param _navigation
-    */
-   @Deprecated
-   public void setSelectedNavigation(PageNavigation _navigation)
-   {
-      setNavigation(_navigation);
-   }
-
-   /**
-   public PageNavigation getPageNavigation(int id)
-   {
-      for (PageNavigation nav : navigations)
-      {
-         if (nav.getId() == id)
-            return nav;
-      }
-      return null;
-   }
-
-*/
-   /*
-   public void setSelectedNavigation(PageNavigation selectedNavigation)
-   {
-      selectedNavigation_ = selectedNavigation;
-   }
-
-   */
-   
    public UIComponent getMaximizedUIComponent()
    {
       return maximizedUIComponent;
@@ -434,29 +330,6 @@ public class UIPortal extends UIContainer
    public void setDescription(String description)
    {
       this.description = description;
-   }
-
-   private void localizePageNavigation(PageNavigation nav,Locale locale)
-   {
-      ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
-      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-         return;
-      ResourceBundle res = mgr.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
-      for (PageNode node : nav.getNodes())
-      {
-         resolveLabel(res, node);
-      }
-   }
-
-   private void resolveLabel(ResourceBundle res, PageNode node)
-   {
-      node.setResolvedLabel(res);
-      if (node.getChildren() == null)
-         return;
-      for (PageNode childNode : node.getChildren())
-      {
-         resolveLabel(res, childNode);
-      }
    }
 
    static public class LogoutActionListener extends EventListener<UIComponent>

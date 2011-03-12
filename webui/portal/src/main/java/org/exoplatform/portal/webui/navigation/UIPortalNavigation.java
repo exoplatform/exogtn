@@ -20,7 +20,6 @@
 package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
@@ -215,18 +214,6 @@ public class UIPortalNavigation extends UIComponent
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
       return userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE);
-   }
-   
-   /**
-    * @deprecated use {@link #getCurrentNavigation()} instead
-    * 
-    * @return
-    * @throws Exception
-    */
-   @Deprecated
-   public PageNavigation getSelectedNavigation() throws Exception
-   {
-      return Util.getUIPortal().getNavigation();
    }
 
    public UserNode getSelectedPageNode() throws Exception

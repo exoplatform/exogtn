@@ -1,11 +1,10 @@
 <%	
 	import java.util.List;
-	import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.exoplatform.portal.mop.SiteKey;
 	
 	def parent = uicomponent.getParent();
-	def navigations = (List<PageNavigation>) uicomponent.getBeans();
+	def navigations = uicomponent.getBeans();
 %>
 
 <div id="$uicomponent.id" class="FeedBox">
