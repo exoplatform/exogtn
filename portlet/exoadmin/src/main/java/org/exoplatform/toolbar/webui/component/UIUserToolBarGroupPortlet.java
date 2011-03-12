@@ -25,11 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,8 +53,15 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIUserToolBarGroupPortlet extends UIPortletApplication
 {
+
+   private final Scope TOOLBAR_GROUP_SCOPE;
+
    public UIUserToolBarGroupPortlet() throws Exception
-   {
+   {                  
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withTemporalCheck();
+      TOOLBAR_GROUP_SCOPE = getUserPortal().createScope(2, scopeBuilder.build());
    }
 
    public List<UserNavigation> getGroupNavigations() throws Exception
@@ -75,10 +83,9 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    public Collection<UserNode> getNodes(UserNavigation groupNav) throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode rootNodes =  userPortal.getNode(groupNav, Scope.NAVIGATION);
+      UserNode rootNodes =  userPortal.getNode(groupNav, TOOLBAR_GROUP_SCOPE);
       if (rootNodes != null)
       {
-         PageNavigationUtils.filter(rootNodes, Util.getPortalRequestContext().getRemoteUser());
          return rootNodes.getChildren();
       }
       return Collections.emptyList();

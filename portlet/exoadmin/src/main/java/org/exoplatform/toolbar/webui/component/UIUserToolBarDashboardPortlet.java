@@ -29,9 +29,11 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -59,15 +61,21 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
 {
 
    public static String DEFAULT_TAB_NAME = "Tab_Default";
+   private final Scope TOOLBAR_DASHBOARD_SCOPE;
 
    public UIUserToolBarDashboardPortlet() throws Exception
    {
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withTemporalCheck();
+      TOOLBAR_DASHBOARD_SCOPE = getUserPortal().createScope(1, scopeBuilder.build());      
    }
 
    public Collection<UserNode> getUserNodes() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode rootNodes =  userPortal.getNode(getCurrentUserNavigation(), Scope.CHILDREN);       
+      UserNode rootNodes = userPortal.getNode(getCurrentUserNavigation(), TOOLBAR_DASHBOARD_SCOPE);
+
       if (rootNodes != null)
       {                                  
          return rootNodes.getChildren();
@@ -151,7 +159,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
             page.setName(_nodeName);
             toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-            UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN);          
+            UserNode rootNode = userPortal.getNode(userNav, toolBarPortlet.TOOLBAR_DASHBOARD_SCOPE);          
             UserNode tabNode = rootNode.addChild(_nodeName);
             tabNode.setLabel(_nodeName);            
             tabNode.setPageRef(page.getPageId());

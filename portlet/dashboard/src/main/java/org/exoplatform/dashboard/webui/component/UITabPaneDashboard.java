@@ -24,9 +24,12 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -84,11 +87,18 @@ public class UITabPaneDashboard extends UIContainer
 
    final public static String PAGE_TEMPLATE = "dashboard";
 
+   final private Scope TAB_PANE_DASHBOARD_SCOPE;
+
    public UITabPaneDashboard() throws Exception
    {
       configService = getApplicationComponent(UserPortalConfigService.class);
       dataService = getApplicationComponent(DataStorage.class);
       uiPortal = Util.getUIPortal();
+
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withTemporalCheck();
+      TAB_PANE_DASHBOARD_SCOPE = getUserPortal().createScope(1, scopeBuilder.build());
    }
 
    public int getCurrentNumberOfTabs() throws Exception
@@ -115,9 +125,16 @@ public class UITabPaneDashboard extends UIContainer
 
    public UserNode getParentTab() throws Exception
    {
-      UserNode selectedNode =  uiPortal.getNavPath().getTarget();
+      NavigationPath navPath = uiPortal.getNavPath();
+      UserNode selectedNode =  navPath.getTarget();
 
-      return getUserPortal().getNode(selectedNode.getParent(), Scope.CHILDREN);
+      UserPortal userPortal = getUserPortal();
+      //Temporary use this util bug with userPortal.getNode(node, scope) is fixed
+//      UserNode parent = userPortal.getNode(selectedNode.getParent(), TAB_PANE_DASHBOARD_SCOPE);
+      UserNode parent = userPortal.getNode(getCurrentUserNavigation(), TAB_PANE_DASHBOARD_SCOPE);
+      uiPortal.setNavPath(new NavigationPath(navPath.getNavigation(), parent.getChild(selectedNode.getName())));
+
+      return parent;
    }
 
    public Collection<UserNode> getSameSiblingsNode() throws Exception
@@ -437,6 +454,7 @@ public class UITabPaneDashboard extends UIContainer
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(newUri, "UTF-8"));
+            prContext.setResponseComplete(true);
          }
       }
    }

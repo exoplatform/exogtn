@@ -22,9 +22,11 @@ package org.exoplatform.toolbar.webui.component;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
@@ -48,8 +50,16 @@ import java.util.List;
 public class UIUserToolBarSitePortlet extends UIPortletApplication
 {
 
+   private final Scope TOOLBAR_SITE_SCOPE;   
+
    public UIUserToolBarSitePortlet() throws Exception
    {
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withTemporalCheck();
+      TOOLBAR_SITE_SCOPE = userPortal.createScope(2, scopeBuilder.build());
    }
 
    public List<String> getAllPortalNames() throws Exception
@@ -89,10 +99,9 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       UserNavigation nav = userPortal.getNavigation(SiteKey.portal(getCurrentPortal()));
       if (nav != null)
       {
-         UserNode rootNodes =  userPortal.getNode(nav, Scope.NAVIGATION);
+         UserNode rootNodes =  userPortal.getNode(nav, TOOLBAR_SITE_SCOPE);
          if (rootNodes != null)
          {
-            PageNavigationUtils.filter(rootNodes, Util.getPortalRequestContext().getRemoteUser());
             return rootNodes.getChildren();
          }
       }

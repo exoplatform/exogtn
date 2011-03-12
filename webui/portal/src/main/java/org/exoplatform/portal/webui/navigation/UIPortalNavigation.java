@@ -23,11 +23,11 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -58,8 +58,24 @@ public class UIPortalNavigation extends UIComponent
 
    private String template;
 
-   private static Scope SITEMAP_SCOPE = new SiteMapScope();
-   
+   private final Scope PORTAL_NAVIGATION_SCOPE;
+
+   private final Scope SITEMAP_SCOPE;
+
+   public UIPortalNavigation()
+   {
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withTemporalCheck();
+      PORTAL_NAVIGATION_SCOPE = userPortal.createScope(2, scopeBuilder.build());
+
+      UserNodePredicate.Builder sitemapScopeBuilder = UserNodePredicate.builder();
+      sitemapScopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL, Visibility.SYSTEM);
+      sitemapScopeBuilder.withTemporalCheck();
+      SITEMAP_SCOPE = userPortal.createScope(1, scopeBuilder.build());
+   }
+
    @Override
    public String getTemplate()
    {
@@ -111,8 +127,8 @@ public class UIPortalNavigation extends UIComponent
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       List<UserNode> nodes = new ArrayList<UserNode>();
       if (context.getRemoteUser() != null)
-      {
-         nodes.add(PageNavigationUtils.filter(getCurrentNavigation(), context.getRemoteUser()));
+      {                                      
+         nodes.add(getCurrentNavigation());
       }
       else
       {
@@ -124,9 +140,8 @@ public class UIPortalNavigation extends UIComponent
             {
                continue;
             }
-            
-            UserNode rootNode = userPortal.getNode(userNav, Scope.NAVIGATION);
-            PageNavigationUtils.filter(rootNode, null);
+
+            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE);
             nodes.add(rootNode);
          }
       }
@@ -135,7 +150,6 @@ public class UIPortalNavigation extends UIComponent
 
    public void loadTreeNodes() throws Exception
    {
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       treeNode_ = new TreeNode();
 
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
@@ -149,7 +163,7 @@ public class UIPortalNavigation extends UIComponent
             continue;
          }
          UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE);
-         childNodes.addAll(PageNavigationUtils.filter(rootNode, context.getRemoteUser()).getChildren());         
+         childNodes.addAll(rootNode.getChildren());         
       }
       treeNode_.setChildren(childNodes);
    }
@@ -200,7 +214,7 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      return userPortal.getNode(userNavigation, Scope.NAVIGATION);
+      return userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE);
    }
    
    /**
@@ -258,7 +272,7 @@ public class UIPortalNavigation extends UIComponent
 
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-         UserNode expandNode = userPortal.getNode(expandTree.getNode(), SITEMAP_SCOPE);
+         UserNode expandNode = userPortal.getNode(expandTree.getNode(),  event.getSource().SITEMAP_SCOPE);
          if (expandNode == null)
          {
             event.getSource().loadTreeNodes();
@@ -342,21 +356,5 @@ public class UIPortalNavigation extends UIComponent
             }
          }
       }
-   }
-
-   static private class SiteMapScope implements Scope
-   {
-      private Visitor visitor = new Visitor()
-      {
-         public VisitMode visit(int depth, String id, String name, NodeState state)
-         {
-            if (depth == 2) return VisitMode.SKIP;
-            return Scope.NAVIGATION.get().visit(depth, id, name, state);
-         }
-      };
-      public Visitor get()
-      {
-         return visitor;
-      }
-   }
+   }   
 }

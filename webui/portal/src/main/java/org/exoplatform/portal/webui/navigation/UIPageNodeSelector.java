@@ -22,9 +22,11 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
@@ -58,6 +60,8 @@ public class UIPageNodeSelector extends UIContainer
 
    private SelectedNode selectedNode;
 
+   private final Scope NODE_SELECTOR_SCOPE;
+
    public UIPageNodeSelector() throws Exception
    {
       UITree uiTree = addChild(UITree.class, null, "TreePageSelector");
@@ -66,13 +70,18 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanIdField("URI");
       uiTree.setBeanLabelField("encodedResolvedLabel");
       uiTree.setBeanIconField("icon");
+
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      scopeBuilder.withAuthorizationCheck();
+      NODE_SELECTOR_SCOPE = userPortal.createScope(2, scopeBuilder.build());
    }
 
    public void setNavigation(UserNavigation nav) throws Exception
    {
       this.navigation = nav;
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      rootNode = userPortal.getNode(navigation, Scope.GRANDCHILDREN);
+      rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE);
 
       if (navigation != null)
       {
