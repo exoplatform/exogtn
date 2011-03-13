@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation2;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -434,7 +435,8 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       {
          if (map == null)
          {
-            this.map = new HashMap<String, T>();
+            @SuppressWarnings("unchecked") Map<String, T> map = Collections.EMPTY_MAP;
+            this.map = map;
             for (T child : children)
             {
                insertLast(child);
@@ -460,6 +462,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          next.previous = context;
       }
       next = context;
+      if (parent.map == Collections.EMPTY_MAP)
+      {
+         parent.map = new HashMap<String, T>();
+      }
       parent.map.put(context.name, context);
       context.parent = parent;
    }
@@ -477,6 +483,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          previous.next = context;
       }
       previous = context;
+      if (parent.map == Collections.EMPTY_MAP)
+      {
+         parent.map = new HashMap<String, T>();
+      }
       parent.map.put(context.name, context);
       context.parent = parent;
    }
@@ -491,6 +501,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       if (head == null)
       {
          head = tail = context;
+         if (map == Collections.EMPTY_MAP)
+         {
+            map = new HashMap<String, T>();
+         }
          map.put(context.name, context);
          context.parent = (T)this;
       }
