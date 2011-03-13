@@ -259,7 +259,6 @@ public class UITabPaneDashboard extends UIContainer
 
          UserNode tabNode = parentNode.addChild(uniqueNodeName);
          tabNode.setLabel(nodeLabel);
-         tabNode.setName(uniqueNodeName);
          tabNode.setPageRef(page.getPageId());
 
          parentNode.save();

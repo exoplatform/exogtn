@@ -317,7 +317,8 @@ public class UIPageNodeForm extends UIFormTabPane
          {
             pageNode = selectedParent.addChild(nodeName);
          }
-         
+
+
          UIPageSelector2 pageSelector = uiPageNodeForm.getChild(UIPageSelector2.class);
          if (pageSelector.getPage() == null)
          {
@@ -334,7 +335,6 @@ public class UIPageNodeForm extends UIFormTabPane
             }
          }
          
-         uiPageNodeForm.invokeSetBindingBean(pageNode);
          UIFormInputIconSelector uiIconSelector = uiPageNodeForm.getChild(UIFormInputIconSelector.class);
          if (uiIconSelector.getSelectedIcon().equals("Default"))
             pageNode.setIcon(null);
@@ -342,6 +342,8 @@ public class UIPageNodeForm extends UIFormTabPane
             pageNode.setIcon(uiIconSelector.getSelectedIcon());
          if (pageNode.getLabel() == null)
             pageNode.setLabel(pageNode.getName());
+         
+         uiPageNodeForm.invokeSetBindingBean(pageNode);
 
          uiPageNodeForm.createEvent("Back", Phase.DECODE, ctx).broadcast();
       }
