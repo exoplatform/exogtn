@@ -109,21 +109,24 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       }
 
       //
-      if (map.containsKey(to))
+      if (!from.equals(to))
       {
-         throw new IllegalArgumentException("the node " + to + " already exist");
+         if (map.containsKey(to))
+         {
+            throw new IllegalArgumentException("the node " + to + " already exist");
+         }
+         T child = map.remove(from);
+         if (child == null)
+         {
+            throw new IllegalArgumentException("the node " + from + " + does not exist");
+         }
+         if (child.hidden)
+         {
+            throw new IllegalArgumentException("the node " + from + " + is hidden");
+         }
+         child.name = to;
+         map.put(to, child);
       }
-      T child = map.remove(from);
-      if (child == null)
-      {
-         throw new IllegalArgumentException("the node " + from + " + does not exist");
-      }
-      if (child.hidden)
-      {
-         throw new IllegalArgumentException("the node " + from + " + is hidden");
-      }
-      child.name = to;
-      map.put(to, child);
    }
 
    public final T remove(String name) throws NullPointerException, IllegalStateException

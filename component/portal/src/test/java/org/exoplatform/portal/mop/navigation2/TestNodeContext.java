@@ -378,6 +378,11 @@ public class TestNodeContext extends TestCase
       assertAllChildren(root, "a", "b", "c");
 
       //
+      root.rename("a", "a");
+      assertAllChildren(root, 1, 2, 3);
+      assertAllChildren(root, "a", "b", "c");
+
+      //
       root.rename("a", "d");
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "d", "b", "c");

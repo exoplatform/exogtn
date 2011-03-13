@@ -900,6 +900,15 @@ public class TestNavigationService extends AbstractPortalTest
       Navigation nav = service.loadNavigation(SiteKey.portal("rename_node"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
       Node foo = root.getChild("foo");
+      foo.setName("foo");
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("rename_node"));
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      foo = root.getChild("foo");
       foo.setName("bar");
       assertEquals("bar", foo.getName());
       assertSame(foo, root.getChild("bar"));
