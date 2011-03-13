@@ -24,10 +24,10 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Navigation;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -375,8 +375,8 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public Scope createScope(int height, UserNodePredicate predicate)
+   public NodeFilter createFilter(UserNodePredicate predicate)
    {
-      return new GenericScope(height, new UserNodeFilter(this, predicate));
+      return new UserNodeFilter(this, predicate);
    }
 }

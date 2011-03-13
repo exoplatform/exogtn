@@ -41,9 +41,9 @@ public class TestNodeContext extends TestCase
       /** . */
       private final int value;
 
-      public IntegerTree(int value, String name, boolean hidden)
+      public IntegerTree(int value, String name)
       {
-         super(name, hidden);
+         super(name);
 
          //
          this.value = value;
@@ -58,17 +58,14 @@ public class TestNodeContext extends TestCase
 
    private static IntegerTree hidden(String name, int value, IntegerTree... trees)
    {
-      IntegerTree tree = new IntegerTree(value, name, true);
-      if (trees != null)
-      {
-         tree.setTrees(Arrays.asList(trees));
-      }
+      IntegerTree tree = shown(name, value, trees);
+      tree.setHidden(true);
       return tree;
    }
 
    private static IntegerTree shown(String name, int value, IntegerTree... trees)
    {
-      IntegerTree tree = new IntegerTree(value, name, false);
+      IntegerTree tree = new IntegerTree(value, name);
       if (trees != null)
       {
          tree.setTrees(Arrays.asList(trees));

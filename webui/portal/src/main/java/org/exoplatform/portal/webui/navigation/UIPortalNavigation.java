@@ -23,6 +23,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -57,9 +58,11 @@ public class UIPortalNavigation extends UIComponent
 
    private String template;
 
-   private final Scope PORTAL_NAVIGATION_SCOPE;
+   private final NodeFilter PORTAL_NAVIGATION_FILTER;
+   private static final Scope PORTAL_NAVIGATION_SCOPE = Scope.GRANDCHILDREN;
 
-   private final Scope SITEMAP_SCOPE;
+   private final NodeFilter SITEMAP_FILTER;
+   private static final Scope SITEMAP_SCOPE = Scope.CHILDREN;
 
    public UIPortalNavigation()
    {
@@ -67,12 +70,12 @@ public class UIPortalNavigation extends UIComponent
       UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
-      PORTAL_NAVIGATION_SCOPE = userPortal.createScope(2, scopeBuilder.build());
+      PORTAL_NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
 
       UserNodePredicate.Builder sitemapScopeBuilder = UserNodePredicate.builder();
       sitemapScopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL, Visibility.SYSTEM);
       sitemapScopeBuilder.withTemporalCheck();
-      SITEMAP_SCOPE = userPortal.createScope(1, scopeBuilder.build());
+      SITEMAP_FILTER = userPortal.createFilter(scopeBuilder.build());
    }
 
    @Override
@@ -140,7 +143,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE);
+            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE).filter(PORTAL_NAVIGATION_FILTER);
             nodes.add(rootNode);
          }
       }
@@ -161,7 +164,7 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE);
+         UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE).filter(SITEMAP_FILTER);
          childNodes.addAll(rootNode.getChildren());         
       }
       treeNode_.setChildren(childNodes);
@@ -213,7 +216,7 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      return userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE);
+      return userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE).filter(PORTAL_NAVIGATION_FILTER);
    }
 
    public UserNode getSelectedPageNode() throws Exception
@@ -259,7 +262,7 @@ public class UIPortalNavigation extends UIComponent
 
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-         UserNode expandNode = userPortal.getNode(expandTree.getNode(),  event.getSource().SITEMAP_SCOPE);
+         UserNode expandNode = userPortal.getNode(expandTree.getNode(), SITEMAP_SCOPE).filter(event.getSource().SITEMAP_FILTER);
          if (expandNode == null)
          {
             event.getSource().loadTreeNodes();

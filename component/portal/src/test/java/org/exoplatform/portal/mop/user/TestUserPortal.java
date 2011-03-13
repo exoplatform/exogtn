@@ -29,6 +29,8 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -207,8 +209,9 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("classic"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodePredicate.builder().build());
-            UserNode root = portal.getNode(nav, scope);
+            UserNode root = portal.getNode(nav, Scope.ALL);
+            NodeFilter filter = portal.createFilter(UserNodePredicate.builder().build());
+            root.filter(filter);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("webexplorer"));
          }
@@ -230,15 +233,17 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("system"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED).build());
-            UserNode root = portal.getNode(nav, scope);
+            UserNode root = portal.getNode(nav, Scope.ALL);
+            NodeFilter filter = portal.createFilter(UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED).build());
+            root.filter(filter);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("sitemap"));
             assertNull(root.getChild("groupnavigation"));
 
             //
-            scope = portal.createScope(-1, UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM).build());
-            root = portal.getNode(nav, scope);
+            root = portal.getNode(nav, Scope.ALL);
+            filter = portal.createFilter(UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM).build());
+            root.filter(filter);
             assertNotNull(root.getChild("home"));
             assertNotNull(root.getChild("sitemap"));
             assertNotNull(root.getChild("groupnavigation"));
@@ -265,8 +270,9 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            Scope scope = portal.createScope(-1, UserNodePredicate.builder().withAuthorizationCheck().build());
-            UserNode root = portal.getNode(nav, scope);
+            UserNode root = portal.getNode(nav, Scope.ALL);
+            NodeFilter filter = portal.createFilter(UserNodePredicate.builder().withAuthorizationCheck().build());
+            root.filter(filter);
             pass &= root.getChild("administration") != null;
             pass &= root.getChild("administration").getChild("communityManagement") != null;
          }
@@ -544,8 +550,9 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("test"));
             
-            Scope scope = userPortal.createScope(-1, UserNodePredicate.builder().withTemporalCheck().build());
-            UserNode root = userPortal.getNode(navigation, scope);
+            UserNode root = userPortal.getNode(navigation, Scope.ALL);
+            NodeFilter filter = userPortal.createFilter(UserNodePredicate.builder().withTemporalCheck().build());
+            root.filter(filter);
             GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
             start.setTimeZone(TimeZone.getTimeZone("UTC"));
             GregorianCalendar end = new GregorianCalendar(2050, 2, 21, 1, 33, 0);

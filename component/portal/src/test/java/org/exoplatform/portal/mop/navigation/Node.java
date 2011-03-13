@@ -127,6 +127,11 @@ public class Node
       return context.getNodeCount();
    }
 
+   public void filter(NodeFilter filter)
+   {
+      context.filter(filter);
+   }
+
    @Override
    public String toString()
    {

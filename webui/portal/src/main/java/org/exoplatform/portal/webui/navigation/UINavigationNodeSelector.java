@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -89,7 +90,9 @@ public class UINavigationNodeSelector extends UIContainer
    
    private UserPortal userPortal;
 
-   private Scope nodeScope;
+   private NodeFilter nodeFilter;
+
+   private static final Scope NODE_SCOPE = Scope.CHILDREN;
 
    private Map<String, TreeNodeData> cachedNodes;
 
@@ -170,7 +173,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private TreeNodeData initRootNode() throws Exception
    {
-      this.rootNode = new TreeNodeData(edittedNavigation, userPortal.getNode(edittedNavigation, nodeScope), this);
+      this.rootNode = new TreeNodeData(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE).filter(nodeFilter), this);
       rootNode.setLoaded(true);      
       return addToCached(rootNode);
    }
@@ -217,7 +220,7 @@ public class UINavigationNodeSelector extends UIContainer
          return treeNode;
       }
 
-      userPortal.getNode(node, nodeScope);
+      userPortal.getNode(node, NODE_SCOPE).filter(nodeFilter);
       treeNode.setLoaded(true);
       return addToCached(treeNode);
    }
@@ -266,12 +269,12 @@ public class UINavigationNodeSelector extends UIContainer
       }
       this.userPortal = userPortal;
 
-      setNodeScope(userPortal.createScope(1, UserNodePredicate.builder().withAuthorizationCheck().build()));
+      setNodeFilter(userPortal.createFilter(UserNodePredicate.builder().withAuthorizationCheck().build()));
    }
 
-   private void setNodeScope(Scope nodeScope)
+   private void setNodeFilter(NodeFilter nodeFilter)
    {
-      this.nodeScope = nodeScope;
+      this.nodeFilter = nodeFilter;
    }
 
    /**

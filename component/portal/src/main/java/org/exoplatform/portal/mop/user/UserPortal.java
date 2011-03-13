@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
 import java.util.List;
@@ -108,12 +109,11 @@ public interface UserPortal
    NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception;
 
    /**
-    * Create a scope for the current user with the specified predicate.
+    * Create a filter for the current user with the specified predicate.
     *
-    * @param depth the scope depth
     * @param predicate the predicate to use
     * @return the scope
     */
-   Scope createScope(int depth, UserNodePredicate predicate);
+   NodeFilter createFilter(UserNodePredicate predicate);
 
 }

@@ -29,11 +29,6 @@ public class VisitMode
 {
 
    /**
-    * Skip the node.
-    */
-   public static final VisitMode SKIP = new VisitMode("SKIP");
-
-   /**
     * Include node but its children should be left appart.
     */
    public static final VisitMode NO_CHILDREN = new VisitMode("NO_CHILDREN");

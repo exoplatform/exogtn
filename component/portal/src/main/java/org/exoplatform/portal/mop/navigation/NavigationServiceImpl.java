@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -390,7 +391,7 @@ public class NavigationServiceImpl implements NavigationService
          if (data != null)
          {
             NodeContext<N> context = load(model, session, data, visitor, 0);
-            return context.isHidden() ? null : context.node;
+            return context.node;
          }
          else
          {
@@ -432,16 +433,16 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         context = new NodeContext<N>(model, data, false);
+         context = new NodeContext<N>(model, data);
          context.setContexts(children);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         context = new NodeContext<N>(model, data, false);
+         context = new NodeContext<N>(model, data);
       }
       else
       {
-         context = new NodeContext<N>(model, data, true);
+         context = new NodeContext<N>(model, data);
       }
 
       //
@@ -466,10 +467,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          context.data = data;
          visit(model, session, context, visitor, depth);
-         if (!context.isHidden())
-         {
-            return context.node;
-         }
+         return context.node;
       }
       
       return null;
@@ -485,13 +483,30 @@ public class NavigationServiceImpl implements NavigationService
       NodeData data = context.data;
 
       //
-      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+      VisitMode visitMode;
+      if (context.hasTrees())
+      {
+         visitMode = VisitMode.ALL_CHILDREN;
+      }
+      else
+      {
+         visitMode = visitor.visit(depth, data.id, data.name, data.state);
+      }
 
       //
       if (visitMode == VisitMode.ALL_CHILDREN)
       {
+         Map<String, NodeContext<N>> previous = Collections.emptyMap();
          if (context.hasTrees())
          {
+            previous = new HashMap<String, NodeContext<N>>();
+            for (NodeContext<N> a : context.getContexts())
+            {
+               if (a.data != null)
+               {
+                  previous.put(a.getId(), a);
+               }
+            }
             context.setContexts(null);
          }
 
@@ -502,7 +517,16 @@ public class NavigationServiceImpl implements NavigationService
             NodeData childData = getNodeData(session, childId);
             if (childData != null)
             {
-               NodeContext<N> childContext = load(model, session, childData, visitor, depth + 1);
+               NodeContext<N> childContext = previous.get(childId);
+               if (childContext != null)
+               {
+                  childContext.data = childData;
+                  visit(model, session, childContext, visitor, depth + 1);
+               }
+               else
+               {
+                  childContext = load(model, session, childData, visitor, depth + 1);
+               }
                children.add(childContext);
             }
             else
@@ -513,9 +537,6 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          context.setContexts(children);
-
-         //
-         context.setHidden(false);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
@@ -523,13 +544,10 @@ public class NavigationServiceImpl implements NavigationService
          {
             context.setContexts(null);
          }
-
-         //
-         context.setHidden(false);
       }
       else
       {
-         context.setHidden(true);
+         throw new AssertionError();
       }
    }
 

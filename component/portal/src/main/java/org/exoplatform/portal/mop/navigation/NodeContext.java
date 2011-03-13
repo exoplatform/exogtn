@@ -41,9 +41,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    /** The new state if any. */
    NodeState state;
 
-   NodeContext(NodeModel<N> model, NodeData data, boolean hidden)
+   NodeContext(NodeModel<N> model, NodeData data)
    {
-      super(data.getName(), hidden);
+      super(data.getName());
 
       //
       this.node = model.create(this);
@@ -51,14 +51,37 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.state = data.getState();
    }
 
-   NodeContext(NodeModel<N> model, String name, NodeState state, boolean hidden)
+   NodeContext(NodeModel<N> model, String name, NodeState state)
    {
-      super(name, hidden);
+      super(name);
 
       //
       this.node = model.create(this);
       this.data = null;
       this.state = state;
+   }
+
+   /**
+    * Applies a filter recursively.
+    *
+    * @param filter the filter to apply
+    */
+   public void filter(NodeFilter filter)
+   {
+      filter(0, filter);
+   }
+
+   private void filter(int depth, NodeFilter filter)
+   {
+      boolean accept = filter.accept(depth, getId(), getName(), state);
+      setHidden(!accept);
+      if (hasTrees())
+      {
+         for (NodeContext<N> node : getTrees())
+         {
+            node.filter(depth + 1, filter);
+         }
+      }
    }
 
    public N getElement()
@@ -198,7 +221,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture(), false);
+      NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
       insert(null, nodeContext);
       return nodeContext.node;

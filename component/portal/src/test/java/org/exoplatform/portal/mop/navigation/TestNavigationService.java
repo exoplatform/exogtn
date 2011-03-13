@@ -259,38 +259,6 @@ public class TestNavigationService extends AbstractPortalTest
    }
 
 
-   public void testSkipVisitMode() throws Exception
-   {
-      Navigation nav = service.loadNavigation(SiteKey.portal("classic"));
-      Node root = service.loadNode(Node.MODEL, nav, new Scope()
-      {
-         public Visitor get()
-         {
-            return new Visitor()
-            {
-               public VisitMode visit(int depth, String id, String name, NodeState state)
-               {
-                  if (name.equals("webexplorer"))
-                  {
-                     return VisitMode.SKIP;
-                  }
-                  else
-                  {
-                     return VisitMode.ALL_CHILDREN;
-                  }
-               }
-            };
-         }
-      });
-      assertEquals("default", root.getName());
-      Iterator<? extends Node> i = root.getChildren().iterator();
-      assertTrue(i.hasNext());
-      Node home = i.next();
-      assertNotNull(home.getChildren());
-      assertEquals("home", home.getName());
-      assertFalse(i.hasNext());
-   }
-
    public void testLoadSingleScope() throws Exception
    {
       Navigation nav = service.loadNavigation(SiteKey.portal("classic"));
@@ -375,8 +343,10 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("c", c.getName());
       assertSame(a, c.getParent());
       assertSame(a, service.loadNode(Node.MODEL, a, Scope.SINGLE));
-      assertNull(a.getChildren());
-      assertNull(c.getParent());
+      assertNotNull(a.getChildren());
+      assertEquals(1, a.getChildren().size());
+      assertSame(c, a.getChild("c"));
+      assertNotNull(c.getParent());
    }
 
    public void testState() throws Exception
@@ -412,25 +382,12 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       Navigation nav = service.loadNavigation(SiteKey.portal("hidden_node"));
-      Node root = service.loadNode(Node.MODEL, nav, new Scope()
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      root.filter(new NodeFilter()
       {
-         public Visitor get()
+         public boolean accept(int depth, String id, String name, NodeState state)
          {
-            return new Visitor()
-            {
-               public VisitMode visit(int depth, String id, String name, NodeState state)
-               {
-                  switch (depth)
-                  {
-                     case 0:
-                        return VisitMode.ALL_CHILDREN;
-                     case 1:
-                        return "a".equals(name) ? VisitMode.SKIP : VisitMode.NO_CHILDREN;
-                     default:
-                        throw new AssertionError();
-                  }
-               }
-            };
+            return !(depth == 1 && "a".equals(name));
          }
       });
 

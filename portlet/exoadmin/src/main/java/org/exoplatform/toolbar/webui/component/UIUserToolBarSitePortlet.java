@@ -23,12 +23,12 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -50,7 +50,8 @@ import java.util.List;
 public class UIUserToolBarSitePortlet extends UIPortletApplication
 {
 
-   private final Scope TOOLBAR_SITE_SCOPE;   
+   private final NodeFilter TOOLBAR_SITE_FILTER;
+   private static final Scope TOOLBAR_SITE_SCOPE = Scope.GRANDCHILDREN;
 
    public UIUserToolBarSitePortlet() throws Exception
    {
@@ -59,7 +60,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
-      TOOLBAR_SITE_SCOPE = userPortal.createScope(2, scopeBuilder.build());
+      TOOLBAR_SITE_FILTER = userPortal.createFilter(scopeBuilder.build());
    }
 
    public List<String> getAllPortalNames() throws Exception
@@ -99,7 +100,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       UserNavigation nav = userPortal.getNavigation(SiteKey.portal(getCurrentPortal()));
       if (nav != null)
       {
-         UserNode rootNodes =  userPortal.getNode(nav, TOOLBAR_SITE_SCOPE);
+         UserNode rootNodes =  userPortal.getNode(nav, TOOLBAR_SITE_SCOPE).filter(TOOLBAR_SITE_FILTER);
          if (rootNodes != null)
          {
             return rootNodes.getChildren();

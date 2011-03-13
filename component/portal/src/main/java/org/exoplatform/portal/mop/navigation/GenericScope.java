@@ -124,45 +124,24 @@ public class GenericScope implements Scope
    private final Visitor visitor;
 
    /**
-    * @param height the max height of the pruned tree
-    * @see #GenericScope(int, NodeFilter)
-    */
-   public GenericScope(int height)
-   {
-      this(height, null);
-   }
-
-   /**
     * Creates a new navigation scope. When the height is positive or null, the tree will be pruned to the specified
     * height, when the height is negative  no pruning will occur.
     *
     * @param height the max height of the pruned tree
-    * @param filter the filter
     */
-   public GenericScope(final int height, final NodeFilter filter)
+   public GenericScope(final int height)
    {
       this.visitor = new Visitor()
       {
          public VisitMode visit(int depth, String id, String name, NodeState state)
          {
-            if (filter == null || filter.accept(depth, id, name, state))
+            if (height < 0 || depth < height)
             {
-               if (height < 0 || depth < height)
-               {
-                  return VisitMode.ALL_CHILDREN;
-               }
-               else if (depth == height)
-               {
-                  return VisitMode.NO_CHILDREN;
-               }
-               else
-               {
-                  return VisitMode.SKIP;
-               }
+               return VisitMode.ALL_CHILDREN;
             }
             else
             {
-               return VisitMode.SKIP;
+               return VisitMode.NO_CHILDREN;
             }
          }
       };

@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.common.text.EntityEncoder;
 
@@ -65,6 +66,12 @@ public class UserNode
    public String getId()
    {
       return context.getId();
+   }
+
+   public UserNode filter(NodeFilter filter)
+   {
+      context.filter(filter);
+      return this;
    }
 
    public String getName()

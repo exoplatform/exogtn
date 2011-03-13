@@ -340,7 +340,7 @@ public class UIPageBrowser extends UISearch
          UserPortal userPortal = portalApplication.getUserPortalConfig().getUserPortal();
 
          UserNavigation userNav = userPortal.getNavigation(SiteKey.user(event.getRequestContext().getRemoteUser()));
-         UserNode rootNode = userPortal.getNode(userNav, userPortal.createScope(1, UserNodePredicate.builder().build()));               
+         UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN).filter(userPortal.createFilter(UserNodePredicate.builder().build()));
 
          for (UserNode userNode : rootNode.getChildren())
          {

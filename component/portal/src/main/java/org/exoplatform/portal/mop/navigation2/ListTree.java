@@ -60,7 +60,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
    /** . */
    private int count;
 
-   public ListTree(String name, boolean hidden)
+   public ListTree(String name)
    {
       if (name == null)
       {
@@ -73,7 +73,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       this.previous = null;
       this.head = null;
       this.tail = null;
-      this.hidden = hidden;
+      this.hidden = false;
       this.count = -1;
    }
 

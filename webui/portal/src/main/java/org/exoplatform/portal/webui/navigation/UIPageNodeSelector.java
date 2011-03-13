@@ -22,7 +22,7 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -60,7 +60,9 @@ public class UIPageNodeSelector extends UIContainer
 
    private SelectedNode selectedNode;
 
-   private final Scope NODE_SELECTOR_SCOPE;
+   private static final Scope NODE_SELECTOR_SCOPE = Scope.GRANDCHILDREN;
+
+   private final NodeFilter NODE_SELECTOR_FILTER;
 
    public UIPageNodeSelector() throws Exception
    {
@@ -74,14 +76,14 @@ public class UIPageNodeSelector extends UIContainer
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
       scopeBuilder.withAuthorizationCheck();
-      NODE_SELECTOR_SCOPE = userPortal.createScope(2, scopeBuilder.build());
+      NODE_SELECTOR_FILTER = userPortal.createFilter(scopeBuilder.build());
    }
 
    public void setNavigation(UserNavigation nav) throws Exception
    {
       this.navigation = nav;
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE);
+      rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE).filter(NODE_SELECTOR_FILTER);
 
       if (navigation != null)
       {
