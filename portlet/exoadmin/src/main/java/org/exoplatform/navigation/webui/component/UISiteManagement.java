@@ -379,6 +379,7 @@ public class UISiteManagement extends UIContainer
          popUp.setUIComponent(naviManager);
          popUp.setShowMask(true);
          popUp.setShow(true);
+         popUp.setWindowSize(400, 400);
 
          uicomp.naviManager = naviManager;
       }

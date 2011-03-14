@@ -262,7 +262,7 @@ public class UIPortalNavigation extends UIComponent
 
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-         UserNode expandNode = userPortal.getNode(expandTree.getNode(), SITEMAP_SCOPE).filter(event.getSource().SITEMAP_FILTER);
+         UserNode expandNode = userPortal.getNode(expandTree.getNode(), SITEMAP_SCOPE);
          if (expandNode == null)
          {
             event.getSource().loadTreeNodes();
@@ -271,6 +271,7 @@ public class UIPortalNavigation extends UIComponent
          }
          else
          {
+            expandNode.filter(event.getSource().SITEMAP_FILTER);
             expandTree.setChildren(expandNode.getChildren());
             expandTree.setExpanded(true);
          }

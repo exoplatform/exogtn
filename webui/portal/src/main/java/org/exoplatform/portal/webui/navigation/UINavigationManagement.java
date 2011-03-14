@@ -143,13 +143,13 @@ public class UINavigationManagement extends UIContainer
             return;
          }
 
-         uiNodeSelector.getRootNode().save();
-
          UIPopupWindow uiPopup = uiManagement.getParent();
          uiPopup.setShow(false);
          UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          prContext.setFullRender(true);
+
+         uiNodeSelector.getRootNode().save();
       }
    }
 

@@ -49,7 +49,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIFilterableTree;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
@@ -94,7 +93,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private static final Scope NODE_SCOPE = Scope.CHILDREN;
 
-   private Map<String, TreeNodeData> cachedNodes;
+   private Map<String, TreeNodeData> cachedNodes = new HashMap<String, TreeNodeData>();
 
    public UINavigationNodeSelector() throws Exception
    {
@@ -127,7 +126,7 @@ public class UINavigationNodeSelector extends UIContainer
          throw new IllegalStateException("edittedNavigation and userPortal must be initialized first");
       }
 
-      cachedNodes = new HashMap<String, TreeNodeData>();
+      cachedNodes.clear();
 
       initRootNode();
       selectNode(rootNode);
@@ -135,13 +134,18 @@ public class UINavigationNodeSelector extends UIContainer
 
    public TreeNodeData selectNode(String nodeID) throws Exception
    {
-      TreeNodeData node = searchPageNode(nodeID);
+      TreeNodeData node = searchNode(nodeID);
       return selectNode(node);
    }
 
    public TreeNodeData selectNode(TreeNodeData node) throws Exception
    {
       node = lazyLoadData(node);
+
+      if (node == null)
+      {
+         return null;
+      }
 
       UITree tree = getChild(UITree.class);
       tree.setSelected(node);
@@ -161,7 +165,7 @@ public class UINavigationNodeSelector extends UIContainer
       return node;
    }
 
-   public TreeNodeData searchPageNode(String nodeID)
+   public TreeNodeData searchNode(String nodeID)
    {
       if (nodeID == null || nodeID.trim().isEmpty())
       {
@@ -180,6 +184,10 @@ public class UINavigationNodeSelector extends UIContainer
 
    private TreeNodeData addToCached(TreeNodeData node)
    {
+      if (node == null)
+      {
+         return null;
+      }
       if (!cachedNodes.containsKey(node.getId()))
       {
          cachedNodes.put(node.getId(), node);
@@ -196,7 +204,16 @@ public class UINavigationNodeSelector extends UIContainer
    {
       if (node == null)
       {
-         throw new IllegalArgumentException("Can't remove null node");
+         return null;
+      }
+
+      TreeNodeData currentCopy = getCopyNode();
+      if (currentCopy != null && currentCopy.getURI().equals(node.getURI()))
+      {
+         setCopyNode(null);
+         UIRightClickPopupMenu popup = getChild(UITree.class).getUIRightClickPopupMenu();
+         popup.setActions(new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CutNode",
+            "CloneNode", "DeleteNode", "MoveUp", "MoveDown"});
       }
       
       cachedNodes.remove(node.getId());
@@ -220,7 +237,17 @@ public class UINavigationNodeSelector extends UIContainer
          return treeNode;
       }
 
-      userPortal.getNode(node, NODE_SCOPE).filter(nodeFilter);
+      if (userPortal.getNode(node, NODE_SCOPE) == null)
+      {
+         TreeNodeData parent = treeNode.getParent();
+         if (parent != null)
+         {
+            parent.removeChild(treeNode);
+            selectNode(parent);  
+         }
+         return null;
+      }
+      node.filter(nodeFilter);
       treeNode.setLoaded(true);
       return addToCached(treeNode);
    }
@@ -257,7 +284,7 @@ public class UINavigationNodeSelector extends UIContainer
       if (userPortal == null)
       {
          throw new IllegalStateException("userPortal must be initialized first");
-      }
+      }                                                         
       return rootNode;
    }
 
@@ -275,32 +302,6 @@ public class UINavigationNodeSelector extends UIContainer
    private void setNodeFilter(NodeFilter nodeFilter)
    {
       this.nodeFilter = nodeFilter;
-   }
-
-   /**
-    * Setup a filter on the tree node. In this case, SYSTEM node is not displayed if user is not super user
-    *
-    */
-   private void setupTreeFilter()
-   {
-      UIFilterableTree.TreeNodeFilter nodeFilter = new UIFilterableTree.TreeNodeFilter()
-      {
-         public boolean filterThisNode(Object nodeObject, WebuiRequestContext context)
-         {
-            boolean isSystemNode = (((TreeNodeData)nodeObject).getVisibility() == Visibility.SYSTEM );
-            if(!isSystemNode)
-            {
-               return false;
-            }
-            else
-            {
-               UserACL userACL = context.getUIApplication().getApplicationComponent(UserACL.class);
-               return !userACL.getSuperUser().equals(context.getRemoteUser());
-            }
-
-         }
-      };
-      this.getChild(UIFilterableTree.class).setTreeNodeFilter(nodeFilter);
    }
 
    public void setEdittedNavigation(UserNavigation _filteredEdittedNavigation) throws Exception
@@ -338,17 +339,18 @@ public class UINavigationNodeSelector extends UIContainer
          UIRightClickPopupMenu uiPopupMenu = event.getSource();
 
          UINavigationNodeSelector uiNodeSelector = uiPopupMenu.getAncestorOfType(UINavigationNodeSelector.class);
+
+         TreeNodeData selectedNode = uiNodeSelector.searchNode(nodeID);
+         if (selectedNode == null || uiNodeSelector.lazyLoadData(selectedNode) == null)
+         {
+            return;
+         }
+
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm uiNodeForm = uiManagementPopup.createUIComponent(UIPageNodeForm.class, null, null);
          uiNodeForm.setValues(null);
          uiManagementPopup.setUIComponent(uiNodeForm);
 
-         TreeNodeData selectedNode = uiNodeSelector.searchPageNode(nodeID);
-         if (selectedNode == null)
-         {
-            selectedNode = uiNodeSelector.getRootNode();
-         }
-         uiNodeSelector.lazyLoadData(selectedNode);
          uiNodeForm.setSelectedParent(selectedNode);
 
          UserNavigation edittedNavigation = uiNodeSelector.getEdittedNavigation();
@@ -370,7 +372,7 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = uiPopupMenu.getAncestorOfType(UINavigationNodeSelector.class);
 
          // get Selected Node
-         TreeNodeData selectedPageNode =uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData selectedPageNode = uiNodeSelector.searchNode(nodeID);
 
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          if (selectedPageNode == null || selectedPageNode.getPageRef() == null)
@@ -440,7 +442,11 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = popupMenu.getAncestorOfType(UINavigationNodeSelector.class);
 
          UserNavigation edittedNav = uiNodeSelector.getEdittedNavigation();
-         TreeNodeData selectedNode = uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData selectedNode = uiNodeSelector.searchNode(nodeID);
+         if (selectedNode == null)
+         {
+            return;
+         }
          String pageId = selectedNode.getPageRef();
 
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
@@ -478,7 +484,7 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
-         TreeNodeData node = uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData node = uiNodeSelector.searchNode(nodeID);
          if (node == null)
          {
             return;
@@ -505,7 +511,7 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
-         TreeNodeData node = uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData node = uiNodeSelector.searchNode(nodeID);
          if (node == null)
          {
             return;
@@ -551,16 +557,11 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
+         TreeNodeData targetNode = uiNodeSelector.searchNode(nodeID);
          TreeNodeData sourceNode = uiNodeSelector.getCopyNode();
-         if (sourceNode == null)
+         if (sourceNode == null || uiNodeSelector.lazyLoadData(targetNode) == null)
          {
             return;
-         }
-
-         TreeNodeData targetNode = uiNodeSelector.searchPageNode(nodeID);         
-         if (targetNode == null)
-         {
-            targetNode = uiNodeSelector.getRootNode();
          }
 
          if (targetNode != null && sourceNode.getURI().equals(targetNode.getURI()))
@@ -570,7 +571,6 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }
 
-         uiNodeSelector.lazyLoadData(targetNode);
          if (isExistChild(targetNode, sourceNode))
          {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
@@ -580,7 +580,7 @@ public class UINavigationNodeSelector extends UIContainer
 
          if (sourceNode.isDeleteNode())
          {
-            sourceNode.getParent().removeChild(sourceNode.getName());
+            sourceNode.getParent().removeChild(sourceNode);
          }
          uiNodeSelector.setCopyNode(null);
 
@@ -598,7 +598,10 @@ public class UINavigationNodeSelector extends UIContainer
 
       private TreeNodeData pasteNode(TreeNodeData sourceNode, TreeNodeData parent, boolean isClone) throws Exception
       {
-         uiNodeSelector.lazyLoadData(sourceNode);
+         if (uiNodeSelector.lazyLoadData(sourceNode) == null)
+         {
+            return null;
+         }
          TreeNodeData node = parent.addChild(sourceNode.getName());
          node.setLabel(sourceNode.getLabel());
          node.setVisibility(sourceNode.getVisibility());
@@ -657,7 +660,11 @@ public class UINavigationNodeSelector extends UIContainer
          String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNodeSelector.getParent());
-         TreeNodeData targetNode = uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData targetNode = uiNodeSelector.searchNode(nodeID);
+         if (targetNode == null)
+         {
+            return;
+         }
          TreeNodeData parentNode = targetNode.getParent();
          Collection<TreeNodeData> children = parentNode.getChildren();
 
@@ -705,7 +712,11 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          pcontext.addUIComponentToUpdateByAjax(uiNodeSelector);
 
-         TreeNodeData childNode = uiNodeSelector.searchPageNode(nodeID);
+         TreeNodeData childNode = uiNodeSelector.searchNode(nodeID);
+         if (childNode == null)
+         {
+            return;
+         }
          TreeNodeData parentNode = childNode.getParent();
 
          if(Visibility.SYSTEM.equals(childNode.getVisibility())) {
@@ -713,8 +724,8 @@ public class UINavigationNodeSelector extends UIContainer
         		return;
         	}
 
-         parentNode.removeChild(childNode.getName());
-         uiNodeSelector.selectNode(parentNode);                  
+         parentNode.removeChild(childNode);
+         uiNodeSelector.selectNode(parentNode);
       }
    }
 
@@ -801,7 +812,7 @@ public class UINavigationNodeSelector extends UIContainer
             wrappedChilds = new ArrayList<TreeNodeData>();
             for (UserNode child : node.getChildren())
             {
-               TreeNodeData node = selector.searchPageNode(child.getURI());
+               TreeNodeData node = selector.searchNode(child.getURI());
                //This is for the first time rootNode is loaded
                if (node == null)
                {
@@ -820,7 +831,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             return null;
          }
-         return selector.searchPageNode(child.getURI());
+         return selector.searchNode(child.getURI());
       }
 
       public TreeNodeData addChild(String childName)
@@ -838,15 +849,26 @@ public class UINavigationNodeSelector extends UIContainer
          {
             return false;
          }
-         selector.removeFromCached(selector.searchPageNode(child.getURI()));
+         selector.removeFromCached(selector.searchNode(child.getURI()));
          return node.removeChild(childName);
+      }
+
+      public boolean removeChild(TreeNodeData child)
+      {
+         wrappedChilds = null;
+         if (child == null)
+         {
+            return false;
+         }
+         selector.removeFromCached(child);
+         return node.removeChild(child.getName());
       }
 
       public TreeNodeData getParent()
       {
          if (node.getParent() == null)
             return null;
-         return selector.searchPageNode(node.getParent().getURI());
+         return selector.searchNode(node.getParent().getURI());
       }
 
       public String getPageRef()
@@ -962,7 +984,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             return null;
          }
-         return selector.searchPageNode(child.getURI());
+         return selector.searchNode(child.getURI());
       }
 
       public void addChild(TreeNodeData node)
@@ -990,7 +1012,7 @@ public class UINavigationNodeSelector extends UIContainer
 
       public void save() throws NavigationServiceException
       {
-         selector.cachedNodes = null;
+         selector.cachedNodes.clear();
          node.save();
       }
    }
