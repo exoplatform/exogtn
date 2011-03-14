@@ -92,6 +92,16 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       return hidden;
    }
 
+   public final T getNext()
+   {
+      return next;
+   }
+
+   public final T getPrevious()
+   {
+      return previous;
+   }
+
    public final void setHidden(boolean hidden)
    {
       if (this.hidden != hidden)
@@ -677,6 +687,8 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       }
       parent.map.remove(name);
       parent = null;
+      previous = null;
+      next = null;
    }
 
    public String toString()

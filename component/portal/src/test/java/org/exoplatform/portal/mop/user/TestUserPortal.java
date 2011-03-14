@@ -741,10 +741,14 @@ public class TestUserPortal extends AbstractPortalTest
             System.out.println(level + " ====> " + node.getURI());
             Collection<UserNode> children = node.getChildren();
             UserNode temp = null;
-            for (UserNode child : children)
+            Iterator<UserNode> it = children.iterator();
+            while (it.hasNext())
             {
+               UserNode child = it.next();
+               System.out.println(child.getName());
                if (child == temp)
                {
+                  child = it.next();
                   fail("There is infinite loop");
                }
                temp = child;

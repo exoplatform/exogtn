@@ -354,19 +354,23 @@ public class TestNodeContext extends TestCase
 
    public void testRemove()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
+      IntegerTree root = shown("", 0, hidden("a", 1), shown("b", 2), shown("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
       //
-      assertNull(root.remove("b"));
+      assertNull(root.remove("a"));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
       //
-      assertEquals(1, (int)root.remove("a").getElement());
-      assertAllChildren(root, 2, 3);
-      assertAllChildren(root, "b", "c");
+      IntegerTree b = root.remove("b");
+      assertNull(b.getParent());
+      assertNull(b.getPrevious());
+      assertNull(b.getNext());
+      assertEquals(2, (int)b.getElement());
+      assertAllChildren(root, 1, 3);
+      assertAllChildren(root, "a", "c");
    }
 
    public void testRemoveLast()
