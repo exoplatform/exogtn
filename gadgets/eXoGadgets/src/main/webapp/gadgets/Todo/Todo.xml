@@ -36,10 +36,10 @@
 		description="To-do Gadget, easily manage and track your daily to-do list."
 		thumbnail="http://localhost:8080/eXoGadgets/skin/DefaultSkin/portletIcons/Todo.png"
 		height="235">
-		<Locale messages="http://localhost:8080/eXoGadgets/locale/Todo/ALL_ALL.xml" />
-		<Locale lang="ar" messages="http://localhost:8080/eXoGadgets/locale/Todo/ar_ALL.xml" language_direction="rtl"/>
-		<Locale lang="fr" messages="http://localhost:8080/eXoGadgets/locale/Todo/fr_ALL.xml" />
-		<Locale lang="vi" messages="http://localhost:8080/eXoGadgets/locale/Todo/vi_ALL.xml" />
+		<Locale messages="locale/ALL_ALL.xml" />
+		<Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
+		<Locale lang="fr" messages="locale/fr_ALL.xml" />
+		<Locale lang="vi" messages="locale/vi_ALL.xml" />
 		<Require feature="setprefs"/>
 	</ModulePrefs>
 	<UserPref name="todoList" datatype="list"/>
@@ -72,7 +72,7 @@
 			}
 
 			.Note {
-				background: url(/eXoGadgets/skin/image/Note__BIDI_START_EDGE__.jpg) top __BIDI_START_EDGE__ no-repeat;
+				background: url(style/images/Note__BIDI_START_EDGE__.jpg) top __BIDI_START_EDGE__ no-repeat;
 				width: 160px;
 				height: 235px;
 				margin: 0 auto;
@@ -87,7 +87,7 @@
 			}
 
 			.write input {
-				background: url(/eXoGadgets/skin/image/line.gif) bottom left repeat-x;
+				background: url(style/images/line.gif) bottom left repeat-x;
 				font-size: 11px;
 				color: #be0d08;
 				border: none;

@@ -65,19 +65,19 @@
 			}
 			
 			.LeftCalculator {
-				background: url(/eXoGadgets/skin/image/Calculator.png) no-repeat top left;
+				background: url(style/images/Calculator.png) no-repeat top left;
 				width: 193px;
 				padding-left: 7px;
 				margin: 0 auto;
 			}
 			
 			.RightCalculator {
-				background: url(/eXoGadgets/skin/image/Calculator.png) no-repeat top right;
+				background: url(style/images/Calculator.png) no-repeat top right;
 				padding-right: 9px;
 			}
 			
 			.CenterCalculator {
-				background: url(/eXoGadgets/skin/image/Calculator.png) repeat-x bottom left;
+				background: url(style/images/Calculator.png) repeat-x bottom left;
 				height: 227px;
 			}
 			
@@ -87,7 +87,7 @@
 			}
 			
 			.Display input {
-				background: url(/eXoGadgets/skin/image/Display.png) no-repeat top left;
+				background: url(style/images/Display.png) no-repeat top left;
 				width: 164px;
 				height: 23px;
 				margin: 0 auto;
@@ -105,7 +105,7 @@
 			}
 		
 			.Row a {
-				background: url(/eXoGadgets/skin/image/Button.gif) no-repeat top center;
+				background: url(style/images/Button.gif) no-repeat top center;
 				color: #000000;
 				font-weight: bold;
 				text-align: center;

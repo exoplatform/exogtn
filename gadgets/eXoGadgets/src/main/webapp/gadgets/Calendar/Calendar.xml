@@ -66,19 +66,19 @@
 			}
 		
 			.LeftCalender {
-				background: url(/eXoGadgets/skin/image/calender.gif) top left no-repeat;
+				background: url(style/images/calendar.gif) top left no-repeat;
 				width: 190px;
 				padding-left: 10px;
 				margin: 0 auto;
 			}
 		
 			.RightCalender {
-				background: url(/eXoGadgets/skin/image/calender.gif) top right no-repeat;
+				background: url(style/images/calendar.gif) top right no-repeat;
 				padding-right: 12px;
 			}
 		
 			.CenterCalender {
-				background: url(/eXoGadgets/skin/image/calender.gif) bottom left repeat-x;
+				background: url(style/images/calendar.gif) bottom left repeat-x;
 				height: 203px;
 			}
 		
@@ -89,7 +89,7 @@
 		
 			.LeftButtonCalendarMonth,
 			.RightButtonCalendarMonth {
-				background: url(/eXoGadgets/skin/image/ButtonCalendar__BIDI_START_EDGE__.gif) top __BIDI_START_EDGE__ no-repeat;
+				background: url(style/images/ButtonCalendar__BIDI_START_EDGE__.gif) top __BIDI_START_EDGE__ no-repeat;
 				width: 17px;
 				height: 16px;
 				display: block;
@@ -99,7 +99,7 @@
 			}
 		
 			.RightButtonCalendarMonth {
-				background: url(/eXoGadgets/skin/image/ButtonCalendar__BIDI_START_EDGE__.gif) __BIDI_START_EDGE__ -25px no-repeat;
+				background: url(style/images/ButtonCalendar__BIDI_START_EDGE__.gif) __BIDI_START_EDGE__ -25px no-repeat;
 			}
 		
 			.Month .text {
@@ -170,7 +170,7 @@
 		
 			.Prev,
 			.Next {
-				background: url(/eXoGadgets/skin/image/ButtonCalendar__BIDI_START_EDGE__.gif) center -50px no-repeat;
+				background: url(style/images/ButtonCalendar__BIDI_START_EDGE__.gif) center -50px no-repeat;
 				width: 15px;
 				height: 13px;
 				display: block;
@@ -180,7 +180,7 @@
 			}
 		
 			.Next {
-				background: url(/eXoGadgets/skin/image/ButtonCalendar__BIDI_START_EDGE__.gif) center -70px no-repeat;
+				background: url(style/images/ButtonCalendar__BIDI_START_EDGE__.gif) center -70px no-repeat;
 				float: __BIDI_END_EDGE__;
 			}
 			
