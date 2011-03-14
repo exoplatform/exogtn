@@ -1001,6 +1001,34 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(state.getVisibility());
    }
 
+   public void testSaveStateOverwrite() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state_overwrite");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("save_state_overwrite"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      root.addChild("foo");
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root.addChild("bar");
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("save_state_overwrite"));
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertEquals(2, root.getChildren().size());
+   }
+
    public void testDelayBetweenServices() throws Exception
    {
       PortalConfig portalConfig = new PortalConfig();
