@@ -29,6 +29,9 @@ public class Navigation
 {
 
    /** . */
+   final String path;
+
+   /** . */
    final SiteKey key;
 
    /** . */
@@ -37,14 +40,19 @@ public class Navigation
    /** . */
    final String rootId;
 
-   public Navigation(SiteKey key, NavigationState state, String rootId)
+   Navigation(String path, SiteKey key, NavigationState state, String rootId)
    {
+      if (path == null)
+      {
+         throw new NullPointerException();
+      }
       if (key == null)
       {
          throw new NullPointerException();
       }
 
       //
+      this.path = path;
       this.key = key;
       this.state = state;
       this.rootId = rootId;
