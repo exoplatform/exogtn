@@ -233,8 +233,12 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), new NavigationState(5)));
+      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      //The nav need to be updated here, before the end of request
+      assertNotNull(nav.getState());
+      assertEquals(5, nav.getState().getPriority().intValue());
       end(true);
-
+      
       //
       begin();
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
@@ -245,6 +249,10 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), null));
+      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      //The nav need to be updated here, before the end of request
+      assertNull(nav.getState());
+      assertNull(nav.getRootId());
       end(true);
 
       //
