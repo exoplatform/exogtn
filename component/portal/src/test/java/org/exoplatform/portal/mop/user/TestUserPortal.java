@@ -44,6 +44,7 @@ import org.gatein.common.i18n.MapResourceBundle;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -709,6 +710,46 @@ public class TestUserPortal extends AbstractPortalTest
             root.save();
             root = userPortal.getNode(navigation, Scope.CHILDREN);
             assertNotNull(root.getChild("foo")); // should Cache be invalidated right after save()
+         }
+      }.execute("root");
+   }
+   
+   public void testInfiniteLoop()
+   {
+      new UnitTest()
+      {
+         @Override
+         protected void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal portal = userPortalCfg.getUserPortal();
+            UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
+
+            //
+            UserNode root = portal.getNode(nav, Scope.GRANDCHILDREN);
+            root = portal.getNode(root, Scope.GRANDCHILDREN);
+            Collection<UserNode> children = root.getChildren();
+            int level = 0;
+            for (UserNode child : children)
+            {
+               println(child, level);
+            }
+         }
+
+         private void println(UserNode node, int level)
+         {
+            System.out.println(level + " ====> " + node.getURI());
+            Collection<UserNode> children = node.getChildren();
+            UserNode temp = null;
+            for (UserNode child : children)
+            {
+               if (child == temp)
+               {
+                  fail("There is infinite loop");
+               }
+               temp = child;
+               println(child, level + 1);
+            }
          }
       }.execute("root");
    }
