@@ -147,6 +147,8 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          Page page = session.getManager().getPOMService().getModel().findObjectById(ObjectType.PAGE, id);
          return new Mapper(session).load(page);
       }
+
+
    }
 
    public static class FindNavigation extends FindSiteObject<Navigation, NavigationData>
@@ -274,4 +276,10 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          return new LazyPageList<PortalKey>(la, 10);
       }
    }
+
+  @Override
+  public String toString()
+  {
+     return getClass().getSimpleName() + "[query=" + q + "]";
+  }
 }
