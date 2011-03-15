@@ -17,9 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation2;
+package org.exoplatform.portal.mop.navigation;
 
 import junit.framework.TestCase;
+import org.exoplatform.portal.mop.navigation.ListTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import java.util.ListIterator;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNodeContext extends TestCase
+public class TestListTree extends TestCase
 {
 
    public static class IntegerTree extends ListTree<IntegerTree, Integer>
