@@ -227,23 +227,27 @@ public class DataStorageImpl implements DataStorage
 
 
       private List<D> sort(List<D> list, final Comparator<O> comparator) {
-         List<D> tmpList = new ArrayList<D>();
-         for (int i=0; i<list.size();i++) {
-            tmpList.add(list.get(i));
-         }
-         Collections.sort(tmpList, new Comparator<D>() {
-            public int compare(D d1, D d2)
-            {
-               if (comparator == null) {
-                  return d1.getStorageId().compareTo(d2.getStorageId());
-               }
-               O o1 = create(d1);
-               O o2 = create(d2);
-               return comparator.compare(o1, o2);
+         if (comparator != null)
+         {
+            List<D> tmpList = new ArrayList<D>();
+            for (int i=0; i<list.size();i++) {
+               tmpList.add(list.get(i));
             }
+            Collections.sort(tmpList, new Comparator<D>() {
+               public int compare(D d1, D d2)
+               {
+                  O o1 = create(d1);
+                  O o2 = create(d2);
+                  return comparator.compare(o1, o2);
+               }
 
-         });
-         return tmpList;
+            });
+            return tmpList;
+         }
+         else
+         {
+            return list;
+         }
       }
    }
 

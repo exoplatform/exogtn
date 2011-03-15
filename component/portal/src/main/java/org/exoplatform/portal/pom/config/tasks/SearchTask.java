@@ -95,6 +95,7 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
             public T[] load(int index, int length) throws Exception, IllegalArgumentException
             {
                POMSession session = manager.getSession();
+               System.out.println("Fetching batch of object " + index + " " + length);
                T[] result = createT(length);
                for (int i = 0; i < length; i++)
                {
