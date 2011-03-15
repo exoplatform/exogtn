@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -51,13 +52,12 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
-
-import static org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
 
 /**
  * Author : Dang Van Minh, Pham Tuan minhdv81@yahoo.com Jun 14, 2006
@@ -104,8 +104,8 @@ public class UIPageNodeForm extends UIFormTabPane
       addUIFormInput(uiSettingSet);
       setSelectedTab(uiSettingSet.getId());
 
-      UIPageSelector2 uiPageSelector = createUIComponent(UIPageSelector2.class, null, null);
-      uiPageSelector.configure("UIPageSelector2", "pageRef");
+      UIPageSelector uiPageSelector = createUIComponent(UIPageSelector.class, null, null);
+      uiPageSelector.configure("UIPageSelector", "pageRef");
       addUIFormInput(uiPageSelector);
 
       UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "icon");
@@ -232,7 +232,7 @@ public class UIPageNodeForm extends UIFormTabPane
    {
       super.processRender(context);
 
-      UIPageSelector2 uiPageSelector = getChild(UIPageSelector2.class);
+      UIPageSelector uiPageSelector = getChild(UIPageSelector.class);
       if (uiPageSelector == null)
          return;
       UIPopupWindow uiPopupWindowPage = uiPageSelector.getChild(UIPopupWindow.class);
@@ -324,7 +324,7 @@ public class UIPageNodeForm extends UIFormTabPane
          }
 
 
-         UIPageSelector2 pageSelector = uiPageNodeForm.getChild(UIPageSelector2.class);
+         UIPageSelector pageSelector = uiPageNodeForm.getChild(UIPageSelector.class);
          if (pageSelector.getPage() == null)
          {
             pageSelector.setValue(null);
@@ -391,7 +391,7 @@ public class UIPageNodeForm extends UIFormTabPane
       public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          UIPageNodeForm uiForm = event.getSource();
-         UIPageSelector2 pageSelector = uiForm.findFirstComponentOfType(UIPageSelector2.class);
+         UIPageSelector pageSelector = uiForm.findFirstComponentOfType(UIPageSelector.class);
          pageSelector.setPage(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector);
       }
@@ -402,7 +402,7 @@ public class UIPageNodeForm extends UIFormTabPane
       public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          UIPageNodeForm uiForm = event.getSource();
-         UIPageSelector2 pageSelector = uiForm.findFirstComponentOfType(UIPageSelector2.class);
+         UIPageSelector pageSelector = uiForm.findFirstComponentOfType(UIPageSelector.class);
 
          PortalRequestContext pcontext = Util.getPortalRequestContext();
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
