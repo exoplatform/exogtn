@@ -47,6 +47,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -182,28 +183,18 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          UserNode tobeRemoved = parentNode.getChild(nodeName);
-         UserNode selectedNode = uiPortal.getNavPath().getTarget();
+         UserNode prevNode = null;
 
          if (parentNode.getChildrenCount() >= 2)
          {
-            List<UserNode> childs = new ArrayList<UserNode>(parentNode.getChildren());
-            int idx;
-            for (idx = 0; idx < childs.size(); idx++)
+            for (UserNode child : parentNode.getChildren())
             {
-               if (childs.get(idx).getName().equals(nodeName))
+               if (child.getName().equals(nodeName))
                {
-                  childs.remove(idx);
+                  parentNode.removeChild(nodeName);
                   break;
                }
-            }
-
-            // Remove node
-            parentNode.removeChild(nodeName);
-
-            // Choose selected Node
-            if (tobeRemoved.getURI().equals(selectedNode.getURI()))
-            {
-               selectedNode = childs.get(Math.max(0, idx - 1));
+               prevNode = child;
             }
 
             String pageRef = tobeRemoved.getPageRef();
@@ -225,6 +216,11 @@ public class UITabPaneDashboard extends UIContainer
             return null;
          }
 
+         UserNode selectedNode = uiPortal.getNavPath().getTarget();
+         if (nodeName.equals(selectedNode.getName()))
+         {
+            selectedNode = prevNode != null ? prevNode : parentNode.getChildren().iterator().next();
+         }
          return selectedNode;
       }
       catch (Exception ex)
@@ -250,17 +246,18 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          String uniqueNodeName = nodeLabel.toLowerCase().replace(' ', '_');
-         if (parentNode.getChild(uniqueNodeName) != null)
-         {
-            uniqueNodeName = uniqueNodeName + "_" + System.currentTimeMillis();
-         }
 
          SiteKey siteKey = userNav.getKey();
          Page page =
             configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
          page.setTitle(nodeLabel);
-         page.setName(uniqueNodeName);
+         page.setName(uniqueNodeName + page.hashCode());
          dataService.create(page);
+
+         if (parentNode.getChild(uniqueNodeName) != null)
+         {
+            uniqueNodeName = uniqueNodeName + "_" + System.currentTimeMillis();
+         }
 
          UserNode tabNode = parentNode.addChild(uniqueNodeName);
          tabNode.setLabel(nodeLabel);
@@ -364,6 +361,25 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
+   private String encodeURI(String uri) throws UnsupportedEncodingException
+   {
+      if (uri == null || uri.isEmpty())
+      {
+         return "";
+      }
+      String[] path = uri.split("/");
+      StringBuilder uriBuilder = new StringBuilder();
+      for (String name : path)
+      {
+         uriBuilder.append("/").append(URLEncoder.encode(name, "UTF-8"));
+      }
+      if (uriBuilder.indexOf("/") == 0)
+      {
+         uriBuilder.deleteCharAt(0);
+      }
+      return uriBuilder.toString();
+   }
+
    static public class DeleteTabActionListener extends EventListener<UITabPaneDashboard>
    {
       public void execute(Event<UITabPaneDashboard> event) throws Exception
@@ -386,7 +402,7 @@ public class UITabPaneDashboard extends UIContainer
 
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(selectedNode.getURI(), "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + source.encodeURI(selectedNode.getURI()));
          }
       }
    }
@@ -404,7 +420,8 @@ public class UITabPaneDashboard extends UIContainer
             //We should redirect to current node while adding new tab fails
             UserNode currentNode = tabPane.uiPortal.getNavPath().getTarget();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getURI(), "UTF-8"));
+
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(currentNode.getURI()));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
@@ -417,7 +434,7 @@ public class UITabPaneDashboard extends UIContainer
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(uri, "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(uri));
          }
       }
    }
@@ -445,7 +462,7 @@ public class UITabPaneDashboard extends UIContainer
             //We should redirect to current node while renaming fails
             UserNode currentNode = tabPane.uiPortal.getNavPath().getTarget();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getURI(), "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(currentNode.getURI()));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
@@ -454,10 +471,10 @@ public class UITabPaneDashboard extends UIContainer
          String newUri = tabPane.renamePageNode(nodeName, newTabLabel);
 
          //If page node is renamed with success, then redirect to new URL
-         if (newUri != null)
+         if (newUri != null)                                                                                                                           
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(newUri, "UTF-8"));
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(newUri));
             prContext.setResponseComplete(true);
          }
       }

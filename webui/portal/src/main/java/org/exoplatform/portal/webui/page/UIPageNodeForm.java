@@ -153,7 +153,7 @@ public class UIPageNodeForm extends UIFormTabPane
       else
       {
          Visibility visibility = pageNode.getVisibility();
-         boolean isVisible = EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL).contains(visibility);
+         boolean isVisible = visibility == null || EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL).contains(visibility);
          getUIFormCheckBoxInput(VISIBLE).setChecked(isVisible);
          getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(Visibility.TEMPORAL.equals(visibility));
          setShowCheckPublicationDate(isVisible);
@@ -181,12 +181,17 @@ public class UIPageNodeForm extends UIFormTabPane
       super.invokeSetBindingBean(bean);
       TreeNodeData node = (TreeNodeData) bean;
 
-      node.setVisibility(getUIFormCheckBoxInput(VISIBLE).isChecked() ? Visibility.DISPLAYED : Visibility.HIDDEN);      
-      if (getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked() &&
-          !Visibility.HIDDEN.equals(node.getVisibility()))
+      Visibility visibility;
+      if (getUIFormCheckBoxInput(VISIBLE).isChecked())
       {
-         node.setVisibility(Visibility.TEMPORAL);
+         UIFormCheckBoxInput showPubDate = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+         visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;  
       }
+      else
+      {
+         visibility = Visibility.HIDDEN;
+      }
+      node.setVisibility(visibility);
 
       if (node.getVisibility() != Visibility.SYSTEM)
       {

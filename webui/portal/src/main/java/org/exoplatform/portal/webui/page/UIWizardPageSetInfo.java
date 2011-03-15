@@ -121,10 +121,19 @@ public class UIWizardPageSetInfo extends UIForm
    {
       super.invokeSetBindingBean(bean);
       UserNode node = (UserNode)bean;
+      
+      Visibility visibility;
       if (getUIFormCheckBoxInput(VISIBLE).isChecked())
       {
-         node.setVisibility(Visibility.DISPLAYED);
+         UIFormCheckBoxInput showPubDate = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+         visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;
       }
+      else
+      {
+         visibility = Visibility.HIDDEN;
+      }
+      node.setVisibility(visibility);
+
       Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
       long time = (cal != null) ? cal.getTimeInMillis() : -1;
       node.setStartPublicationTime(time);

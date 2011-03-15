@@ -105,7 +105,7 @@ public class UINavigationNodeSelector extends UIContainer
       uiTree.setIcon("DefaultPageIcon");
       uiTree.setSelectedIcon("DefaultPageIcon");
       uiTree.setBeanIdField("Id");
-      uiTree.setBeanChildCountField("ChildrenCount");
+      uiTree.setBeanChildCountField("childrenCount");
       uiTree.setBeanLabelField("encodedResolvedLabel");
       uiTree.setBeanIconField("icon");
       
