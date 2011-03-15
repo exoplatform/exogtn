@@ -27,7 +27,9 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,12 +96,12 @@ public class UITree extends UIComponent
    /**
     * A list of sibling nodes
     */
-   private List<?> sibbling;
+   private Collection<?> sibbling;
 
    /**
     * A list of children nodes
     */
-   private List<?> children;
+   private Collection<?> children;
 
    /**
     * The selected node
@@ -111,8 +113,6 @@ public class UITree extends UIComponent
     */
    private Object parentSelected;
 
-   private NodeMetaDataManager nodeMetadataManager;
-   
    /**
     * A right click popup menu
     */
@@ -206,12 +206,12 @@ public class UITree extends UIComponent
       this.selectedIcon = selectedIcon;
    }
 
-   public List<?> getChildren()
+   public Collection<?> getChildren()
    {
       return children;
    }
 
-   public void setChildren(List<?> children)
+   public void setChildren(Collection<?> children)
    {
       this.children = children;
    }
@@ -238,12 +238,12 @@ public class UITree extends UIComponent
       this.parentSelected = parentSelected;
    }
 
-   public List<?> getSibbling()
+   public Collection<?> getSibbling()
    {
       return sibbling;
    }
 
-   public void setSibbling(List<?> sibbling)
+   public void setSibbling(Collection<?> sibbling)
    {
       this.sibbling = sibbling;
    }
@@ -418,34 +418,4 @@ public class UITree extends UIComponent
    {
       this.colapseIcon = colapseIcon;
    }
-   
-   public String getNodeMetaData(Object nodeObject, WebuiRequestContext context)
-   {
-      if (nodeMetadataManager == null)
-      {
-         return null;
-      }
-      else
-      {
-         return nodeMetadataManager.getNodeMetaData(nodeObject, context);
-      }
-   }
-   
-   public void setNodeMetaDataManager(NodeMetaDataManager _nodeMetadataManager)
-   {
-      this.nodeMetadataManager = _nodeMetadataManager;
-   }
-   
-   /**
-    * A node metadata manager. Node 's metadata is used for action informing/warning.
-    * 
-    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
-    * @version $Id$
-    *
-    */
-   public static interface NodeMetaDataManager
-   {
-      public String getNodeMetaData(Object nodeObject, WebuiRequestContext context);
-   }
-
 }

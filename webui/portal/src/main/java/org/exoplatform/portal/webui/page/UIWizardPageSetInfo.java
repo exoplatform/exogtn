@@ -28,7 +28,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -43,7 +42,6 @@ import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-import org.gatein.common.FixMe;
 
 import java.util.Calendar;
 
@@ -160,41 +158,15 @@ public class UIWizardPageSetInfo extends UIForm
       getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
    }
 
-   public void setPageNode(UserNode pageNode) throws Exception
-   {
-      throw new FixMe("Need to be done after new API supporting save operation");
-      //      if (pageNode.getName() != null)
-      //         getUIStringInput(PAGE_NAME).setValue(pageNode.getName());
-      //      if (pageNode.getLabel() != null)
-      //         getUIStringInput(PAGE_DISPLAY_NAME).setValue(pageNode.getLabel());
-      //      getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode.isVisible());
-      //      setShowPublicationDate(pageNode.isShowPublicationDate());
-      //      Calendar cal = Calendar.getInstance();
-      //      if (pageNode.getStartPublicationDate() != null)
-      //      {
-      //         cal.setTime(pageNode.getStartPublicationDate());
-      //         getUIFormDateTimeInput(START_PUBLICATION_DATE).setCalendar(cal);
-      //      }
-      //      else
-      //         getUIFormDateTimeInput(START_PUBLICATION_DATE).setValue(null);
-      //      if (pageNode.getEndPublicationDate() != null)
-      //      {
-      //         cal.setTime(pageNode.getEndPublicationDate());
-      //         getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
-      //      }
-      //      else
-      //         getUIFormDateTimeInput(END_PUBLICATION_DATE).setValue(null);
-   }
-
    public UserNode getSelectedPageNode()
    {
       UIPageNodeSelector uiPageNodeSelector = getChild(UIPageNodeSelector.class);
-      return uiPageNodeSelector.getSelectedPageNode();
+      return uiPageNodeSelector.getSelectedNode();
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      if (isEditMode && getChild(UIPageNodeSelector.class).getSelectedPageNode() == null)
+      if (isEditMode && getChild(UIPageNodeSelector.class).getSelectedNode() == null)
          reset();
       super.processRender(context);
    }
@@ -216,16 +188,7 @@ public class UIWizardPageSetInfo extends UIForm
          String uri = event.getRequestContext().getRequestParameter(OBJECTID);
 
          UIPageNodeSelector uiPageNodeSelector = event.getSource().getChild(UIPageNodeSelector.class);
-         UITree tree = uiPageNodeSelector.getChild(UITree.class);
-
-         if (tree.getParentSelected() == null && (uri == null || uri.length() < 1))
-         {
-            uiPageNodeSelector.selectNavigation(uiPageNodeSelector.getNavigation());
-         }
-         else
-         {
-            uiPageNodeSelector.selectPageNodeByUri(uri);
-         }
+         uiPageNodeSelector.setSelectedURI(uri);
 
          UIPortalApplication uiPortalApp = uiPageNodeSelector.getAncestorOfType(UIPortalApplication.class);
          UIWizard uiWizard = uiPortalApp.findFirstComponentOfType(UIWizard.class);

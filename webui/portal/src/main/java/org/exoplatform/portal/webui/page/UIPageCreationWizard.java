@@ -82,14 +82,14 @@ public class UIPageCreationWizard extends UIPageWizard
       }
    }
 
-   private void saveData() throws Exception
+   private UserNode saveData() throws Exception
    {
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
       UIPage uiPage = (UIPage)uiPagePreview.getUIComponent();
 
       UIWizardPageSetInfo uiPageInfo = getChild(UIWizardPageSetInfo.class);
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
-      UserNode selectedNode = uiNodeSelector.getSelectedPageNode();
+      UserNode selectedNode = uiNodeSelector.getSelectedNode();
 
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
       UserNode pageNode = uiPageInfo.createUserNode(selectedNode);
@@ -99,11 +99,11 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          selectedNode.addChild(pageNode);
       }
-      uiNodeSelector.selectPageNodeByUri(pageNode.getURI());
-
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       selectedNode.save();
+      return pageNode;
+
    }
 
    /**
@@ -330,16 +330,13 @@ public class UIPageCreationWizard extends UIPageWizard
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         uiWizard.saveData();
+         UserNode newNode = uiWizard.saveData();
          UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          toolPanel.setUIComponent(null);
          uiWizard.updateUIPortal(event);
-         UIWizardPageSetInfo uiPageInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
-         UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
-         UserNode selectedNode = uiNodeSelector.getSelectedPageNode();
          
          PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String uri = pcontext.getPortalURI() + selectedNode.getURI();
+         String uri = pcontext.getPortalURI() + newNode.getURI();
          pcontext.getResponse().sendRedirect(uri);
       }
    }

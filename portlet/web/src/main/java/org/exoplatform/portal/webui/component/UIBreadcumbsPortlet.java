@@ -35,6 +35,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -79,6 +80,8 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
          node = node.getParent();
       }
       while (node != null && node.getParent() != null);
+      
+      Collections.reverse(paths);
       
       UIBreadcumbs uiBreadCumbs = getChild(UIBreadcumbs.class);
       uiBreadCumbs.setPath(paths);

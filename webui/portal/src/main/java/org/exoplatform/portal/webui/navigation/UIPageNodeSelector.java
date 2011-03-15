@@ -19,50 +19,33 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
-import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 @ComponentConfig(
-   template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl",
-   events = {@EventConfig(listeners = UIPageNodeSelector.ChangeNodeActionListener.class)}
+   template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl"
 )
 public class UIPageNodeSelector extends UIContainer
 {
    private UserNavigation navigation;
 
-   private UserNode rootNode;
-
-   private SelectedNode selectedNode;
-
-   private static final Scope NODE_SELECTOR_SCOPE = Scope.GRANDCHILDREN;
+   private UserNode selectedNode;
 
    private final NodeFilter NODE_SELECTOR_FILTER;
+
+   private UserPortal userPortal;
 
    public UIPageNodeSelector() throws Exception
    {
@@ -72,8 +55,9 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanIdField("URI");
       uiTree.setBeanLabelField("encodedResolvedLabel");
       uiTree.setBeanIconField("icon");
+      uiTree.setBeanChildCountField("childrenCount");
 
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
       scopeBuilder.withAuthorizationCheck();
       NODE_SELECTOR_FILTER = userPortal.createFilter(scopeBuilder.build());
@@ -81,143 +65,70 @@ public class UIPageNodeSelector extends UIContainer
 
    public void setNavigation(UserNavigation nav) throws Exception
    {
-      this.navigation = nav;
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-
-      if (navigation != null)
-      {
-         rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE);
-         if (rootNode == null)
-         {
-            return;
-         }
-         rootNode.filter(NODE_SELECTOR_FILTER);
-         selectNavigation(navigation);
-         UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
-         if (selectedNode != null)
-         {
-            selectPageNodeByUri(selectedNode.getURI());
-         }
-         return;
-      }
-      selectNavigation();
+      navigation = nav;
+      UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
+      setSelectedNode(selectedNode);
    }
 
-   private void selectNavigation()
+   private UserNode load(UserNode node) throws Exception
    {
-      if (navigation == null)
-      {
-         return;
-      }
-      if (selectedNode == null || !navigation.getKey().equals(selectedNode.getNavigation().getKey()))
-      {
-         selectedNode = new SelectedNode(navigation, rootNode);
-
-         Iterator<UserNode> iterator = rootNode.getChildren().iterator();
-
-         if (iterator.hasNext())
-         {
-            selectedNode.setNode(iterator.next());
-         }
-      }
-      selectNavigation(selectedNode.getNavigation());
-      if (selectedNode.getNode() != null)
-      {
-         selectPageNodeByUri(selectedNode.getNode().getURI());
-      }
+      return userPortal.getNode(node, Scope.GRANDCHILDREN).filter(NODE_SELECTOR_FILTER);
    }
-
-   public void selectNavigation(UserNavigation pageNav)
+   
+   private void setSelectedNode(UserNode node) throws Exception
    {
-      navigation = pageNav;
-      selectedNode = new SelectedNode(pageNav, rootNode);
-      selectPageNodeByUri(null);
-      UITree uiTree = getChild(UITree.class);
-      uiTree.setSibbling(new ArrayList(rootNode.getChildren()));
-   }
-
-   public void selectPageNodeByUri(String uri)
-   {
-      if (selectedNode == null || !(navigation.getKey().equals(selectedNode.getNavigation().getKey())))
+      if (node == null)
       {
          return;
       }
       UITree tree = getChild(UITree.class);
-      List<?> sibbling = tree.getSibbling();
-      tree.setSibbling(null);
-      tree.setParentSelected(null);
-      selectedNode.setNode(searchPageNodeByUri(rootNode, uri));
-      if (selectedNode.getNode() != null)
+      if (node.getParent() != null)
       {
-         tree.setSelected(selectedNode.getNode());
-         tree.setChildren(new ArrayList(selectedNode.getNode().getChildren()));
-         return;
+         node = load(node);
+         tree.setSelected(node);
+         tree.setChildren(node.getChildren());
+         UserNode parent = load(node.getParent());
+         tree.setSibbling(parent.getChildren());
+         tree.setParentSelected(parent);
       }
-      tree.setSelected(null);
-      tree.setChildren(null);
-      tree.setSibbling(sibbling);
+      else
+      {
+         tree.setSelected(null);
+         tree.setChildren(null);
+      }
+      selectedNode = node;
    }
-
-   public UserNode searchPageNodeByUri(UserNode rootNode, String uri)
+   
+   public void setSelectedURI(String uri) throws Exception
    {
-      if (rootNode == null || uri == null)
+      UserNode node;
+      if (selectedNode.getParent() != null)
       {
-         return null;
+         node = findUserNodeByURI(selectedNode.getParent(), uri);
       }
+      else
+      {
+         node = findUserNodeByURI(selectedNode, uri);
+      }
+      setSelectedNode(node);
+   }
+   
+   private UserNode findUserNodeByURI(UserNode rootNode, String uri)
+   {
       if (rootNode.getURI().equals(uri))
       {
          return rootNode;
       }
-      Collection<UserNode> pageNodes = rootNode.getChildren();
-      Iterator<UserNode> iterator = pageNodes.iterator();
-      UITree uiTree = getChild(UITree.class);
+      Iterator<UserNode> iterator = rootNode.getChildren().iterator();
       while (iterator.hasNext())
       {
-         UserNode ele = iterator.next();
-         UserNode returnPageNode = searchPageNodeByUri(ele, uri, uiTree);
-         if (returnPageNode == null)
+         UserNode next = iterator.next();
+         UserNode node = findUserNodeByURI(next, uri);
+         if (node == null)
          {
             continue;
          }
-         if (uiTree.getSibbling() == null)
-         {
-            uiTree.setSibbling(new ArrayList(pageNodes));
-         }
-         return returnPageNode;
-      }
-      return null;
-   }
-
-   private UserNode searchPageNodeByUri(UserNode userNode, String uri, UITree tree)
-   {
-      if (userNode.getURI().equals(uri))
-      {
-         return userNode;
-      }
-      Collection<UserNode> children = userNode.getChildren();
-      if (children == null)
-      {
-         return null;
-      }
-      Iterator<UserNode> iterator = children.iterator();
-      while (iterator.hasNext())
-      {
-         UserNode ele = iterator.next();
-         UserNode returnPageNode = searchPageNodeByUri(ele, uri, tree);
-         if (returnPageNode == null)
-         {
-            continue;
-         }
-         if (tree.getSibbling() == null)
-         {
-            tree.setSibbling(new ArrayList(children));
-         }
-         if (tree.getParentSelected() == null)
-         {
-            tree.setParentSelected(userNode);
-         }
-         //         selectedNode.setParentNode(pageNode);
-         return returnPageNode;
+         return node;
       }
       return null;
    }
@@ -232,7 +143,7 @@ public class UIPageNodeSelector extends UIContainer
       super.processRender(context);
    }
 
-   public SelectedNode getSelectedNode()
+   public UserNode getSelectedNode()
    {
       return selectedNode;
    }
@@ -241,111 +152,4 @@ public class UIPageNodeSelector extends UIContainer
    {
       return navigation;
    }
-
-   public UserNode getSelectedPageNode()
-   {
-      return selectedNode == null ? null : selectedNode.getNode();
-   }
-
-   public String getUpLevelUri()
-   {
-      return selectedNode.getParentNode().getURI();
-   }
-
-   static public class ChangeNodeActionListener extends EventListener<UITree>
-   {
-      public void execute(Event<UITree> event) throws Exception
-      {
-         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-         UIPageNodeSelector uiPageNodeSelector = event.getSource().getParent();
-         uiPageNodeSelector.selectPageNodeByUri(uri);
-
-         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         UIPortalApplication uiPortalApp = uiPageNodeSelector.getAncestorOfType(UIPortalApplication.class);
-         UIPortalToolPanel uiToolPanel = Util.getUIPortalToolPanel();
-         uiToolPanel.setRenderSibling(UIPortalToolPanel.class);
-         uiToolPanel.setShowMaskLayer(true);
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
-
-         UIContainer uiParent = uiPageNodeSelector.getParent();
-         UserNode node = null;
-         if (uiPageNodeSelector.getSelectedNode() == null)
-         {
-            node = Util.getUIPortal().getNavPath().getTarget();
-         }
-         else
-         {
-            node = uiPageNodeSelector.getSelectedNode().getNode();
-         }
-         if (node == null)
-         {
-            uiPageNodeSelector.selectNavigation(uiPageNodeSelector.getNavigation());
-            uiToolPanel.setUIComponent(null);
-            return;
-         }
-
-         UserPortalConfigService configService = uiParent.getApplicationComponent(UserPortalConfigService.class);
-         Page page = null;
-         if (node.getPageRef() != null)
-         {
-            page = configService.getPage(node.getPageRef(), event.getRequestContext().getRemoteUser());
-         }
-
-         if (page == null)
-         {
-            uiToolPanel.setUIComponent(null);
-            return;
-         }
-
-         UIPage uiPage = Util.toUIPage(node.getPageRef(), uiToolPanel);
-         UIPageBody uiPageBody = uiPortalApp.findFirstComponentOfType(UIPageBody.class);
-         if (uiPageBody.getUIComponent() != null)
-         {
-            uiPageBody.setUIComponent(null);
-         }
-         uiToolPanel.setUIComponent(uiPage);
-      }
-   }
-
-   public static class SelectedNode
-   {
-
-      private UserNavigation nav;
-
-      private UserNode node;
-
-      public SelectedNode(UserNavigation navigation, UserNode userNode)
-      {
-         this.nav = navigation;
-         this.node = userNode;
-      }
-
-      public UserNavigation getNavigation()
-      {
-         return nav;
-      }
-
-      public void setNavigation(UserNavigation nav)
-      {
-         this.nav = nav;
-      }
-
-      private UserNode getParentNode()
-      {
-         return node.getParent();
-      }
-
-      public UserNode getNode()
-      {
-         return node;
-      }
-
-      public void setNode(UserNode node)
-      {
-         this.node = node;
-      }
-   }
-
 }
