@@ -664,12 +664,18 @@ UIPortal.prototype.collapseExpand = function(element, actExpand, actCollapse) {
 	if(!subGroup) return;
 	if(subGroup.style.display == "none") {
 		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon ClearFix" ;
-		subGroup.style.display = "block" ;
-		actExpand.call();
+//		subGroup.style.display = "block" ;
+		if (actExpand)
+		{
+			actExpand.call();
+		}
 	} else {
 		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon ClearFix" ;
 		subGroup.style.display = "none" ;
-		actCollapse.call();
+		if (actCollapse)
+		{
+			actCollapse.call();
+		}
 	}
 };
 	

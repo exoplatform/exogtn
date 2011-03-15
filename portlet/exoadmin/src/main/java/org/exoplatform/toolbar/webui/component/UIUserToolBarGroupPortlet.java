@@ -85,9 +85,10 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    public Collection<UserNode> getNodes(UserNavigation groupNav) throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode rootNodes =  userPortal.getNode(groupNav, TOOLBAR_GROUP_SCOPE).filter(TOOLBAR_GROUP_FILTER);
+      UserNode rootNodes =  userPortal.getNode(groupNav, TOOLBAR_GROUP_SCOPE);
       if (rootNodes != null)
       {
+         rootNodes.filter(TOOLBAR_GROUP_FILTER);
          return rootNodes.getChildren();
       }
       return Collections.emptyList();

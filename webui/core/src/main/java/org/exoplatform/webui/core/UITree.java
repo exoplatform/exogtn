@@ -19,17 +19,14 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -72,6 +69,12 @@ public class UITree extends UIComponent
     * The bean field that holds the id of the bean
     */
    private String beanIdField_;
+
+   /**
+    * The bean field that holds the count number of the children
+    * This help to express the node have childs or not
+    */
+   private String beanChildCountField_;
 
    /**
     * The bean field that holds the label of the bean
@@ -134,6 +137,11 @@ public class UITree extends UIComponent
    public void setBeanLabelField(String beanLabelField_)
    {
       this.beanLabelField_ = beanLabelField_;
+   }
+
+   public void setBeanChildCountField(String beanChildCountField)
+   {
+      this.beanChildCountField_ = beanChildCountField;
    }
 
    public Object getId(Object object) throws Exception
@@ -272,9 +280,16 @@ public class UITree extends UIComponent
          iconGroup = selectedIcon;
          note = " NodeSelected";
       }
-      if(obj instanceof UserNode && ((UserNode)obj).getChildren().size() == 0) {
-         nodeIcon = nullItemIcon;
+
+      if(getBeanChildCountField() != null) {
+         Object childCount = getFieldValue(obj, getBeanChildCountField());         
+         if (childCount != null && childCount.getClass().isAssignableFrom(Integer.class) &&
+            (Integer)childCount == 0)
+         {
+            nodeIcon = nullItemIcon;  
+         }
       }
+
       if (beanIconField_ != null && beanIconField_.length() > 0)
       {
          if (getFieldValue(obj, beanIconField_) != null)
@@ -362,6 +377,11 @@ public class UITree extends UIComponent
    public String getBeanIdField()
    {
       return beanIdField_;
+   }
+
+   public String getBeanChildCountField()
+   {
+      return beanChildCountField_;
    }
 
    public String getBeanLabelField()

@@ -37,7 +37,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,10 +57,9 @@ public class UIPortalNavigation extends UIComponent
 
    private String template;
 
-   private final NodeFilter PORTAL_NAVIGATION_FILTER;
+   private final NodeFilter NAVIGATION_FILTER;
    private static final Scope PORTAL_NAVIGATION_SCOPE = Scope.GRANDCHILDREN;
 
-   private final NodeFilter SITEMAP_FILTER;
    private static final Scope SITEMAP_SCOPE = Scope.CHILDREN;
 
    public UIPortalNavigation()
@@ -70,12 +68,7 @@ public class UIPortalNavigation extends UIComponent
       UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
-      PORTAL_NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
-
-      UserNodePredicate.Builder sitemapScopeBuilder = UserNodePredicate.builder();
-      sitemapScopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL, Visibility.SYSTEM);
-      sitemapScopeBuilder.withTemporalCheck();
-      SITEMAP_FILTER = userPortal.createFilter(scopeBuilder.build());
+      NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
    }
 
    @Override
@@ -129,8 +122,12 @@ public class UIPortalNavigation extends UIComponent
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       List<UserNode> nodes = new ArrayList<UserNode>();
       if (context.getRemoteUser() != null)
-      {                                      
-         nodes.add(getCurrentNavigation());
+      {
+         UserNode currRootNode = getCurrentNavigation();
+         if (currRootNode != null)
+         {
+            nodes.add(currRootNode);  
+         }
       }
       else
       {
@@ -143,8 +140,12 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE).filter(PORTAL_NAVIGATION_FILTER);
-            nodes.add(rootNode);
+            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE);
+            if (rootNode != null)
+            {
+               rootNode.filter(NAVIGATION_FILTER);
+               nodes.add(rootNode);
+            }
          }
       }
       return nodes;
@@ -164,8 +165,12 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE).filter(SITEMAP_FILTER);
-         childNodes.addAll(rootNode.getChildren());         
+         UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE);
+         if (rootNode != null)
+         {
+            rootNode.filter(NAVIGATION_FILTER);
+            childNodes.addAll(rootNode.getChildren());
+         }
       }
       treeNode_.setChildren(childNodes);
    }
@@ -216,7 +221,12 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      return userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE).filter(PORTAL_NAVIGATION_FILTER);
+      UserNode rootNode = userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE);
+      if (rootNode != null)
+      {
+         rootNode.filter(NAVIGATION_FILTER);
+      }
+      return rootNode;
    }
 
    public UserNode getSelectedPageNode() throws Exception
@@ -271,7 +281,7 @@ public class UIPortalNavigation extends UIComponent
          }
          else
          {
-            expandNode.filter(event.getSource().SITEMAP_FILTER);
+            expandNode.filter(event.getSource().NAVIGATION_FILTER);
             expandTree.setChildren(expandNode.getChildren());
             expandTree.setExpanded(true);
          }

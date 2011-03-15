@@ -83,10 +83,15 @@ public class UIPageNodeSelector extends UIContainer
    {
       this.navigation = nav;
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE).filter(NODE_SELECTOR_FILTER);
 
       if (navigation != null)
       {
+         rootNode = userPortal.getNode(nav, NODE_SELECTOR_SCOPE);
+         if (rootNode == null)
+         {
+            return;
+         }
+         rootNode.filter(NODE_SELECTOR_FILTER);
          selectNavigation(navigation);
          UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
          if (selectedNode != null)

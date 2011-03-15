@@ -138,7 +138,6 @@ public class UITabPaneDashboard extends UIContainer
          return null;         
       }
       parent.filter(TAB_PANE_DASHBOARD_FILTER);
-      uiPortal.setNavPath(new NavigationPath(navPath.getNavigation(), parent.getChild(selectedNode.getName())));
 
       return parent;
    }
@@ -238,14 +237,14 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
-         UserNavigation userNav = getCurrentUserNavigation();
          if (nodeLabel == null || nodeLabel.length() == 0)
          {
             nodeLabel = "Tab_" + getCurrentNumberOfTabs();
          }
 
+         UserNavigation userNav = getCurrentUserNavigation();
          UserNode parentNode = getParentTab();
-         if (parentNode == null)
+         if (userNav == null || parentNode == null)
          {
             return null;
          }

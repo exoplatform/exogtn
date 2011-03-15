@@ -76,12 +76,17 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
    public Collection<UserNode> getUserNodes() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode rootNodes = userPortal.getNode(getCurrentUserNavigation(), TOOLBAR_DASHBOARD_SCOPE).filter(TOOLBAR_DASHBOARD_FILTER);
-
-      if (rootNodes != null)
-      {                                  
-         return rootNodes.getChildren();
+      UserNavigation userNav = getCurrentUserNavigation();
+      if (userNav != null)
+      {
+         UserNode rootNodes = userPortal.getNode(userNav, TOOLBAR_DASHBOARD_SCOPE);
+         if (rootNodes != null)
+         {
+            rootNodes.filter(TOOLBAR_DASHBOARD_FILTER);
+            return rootNodes.getChildren();
+         }
       }
+
       return Collections.emptyList();
    }
 
@@ -152,6 +157,10 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
 
             UserPortal userPortal = toolBarPortlet.getUserPortal();
             UserNavigation userNav = toolBarPortlet.getCurrentUserNavigation();
+            if (userNav == null)
+            {
+               return;
+            }
             SiteKey siteKey = userNav.getKey();
 
             UserPortalConfigService _configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
@@ -161,7 +170,12 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
             page.setName(_nodeName);
             toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-            UserNode rootNode = userPortal.getNode(userNav, TOOLBAR_DASHBOARD_SCOPE).filter(toolBarPortlet.TOOLBAR_DASHBOARD_FILTER);
+            UserNode rootNode = userPortal.getNode(userNav, TOOLBAR_DASHBOARD_SCOPE);
+            if (rootNode == null)
+            {
+               return;
+            }
+            rootNode.filter(toolBarPortlet.TOOLBAR_DASHBOARD_FILTER);
             UserNode tabNode = rootNode.addChild(_nodeName);
             tabNode.setLabel(_nodeName);            
             tabNode.setPageRef(page.getPageId());
