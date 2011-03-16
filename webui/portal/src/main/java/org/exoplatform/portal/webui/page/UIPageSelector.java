@@ -31,6 +31,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.event.Event;
@@ -44,15 +45,16 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-
 import java.util.List;
 
 /**
  * Author : Dang Van Minh minhdv81@yahoo.com Jun 14, 2006
  */
 @ComponentConfigs({
-   @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageSelector.gtmpl"),
-   @ComponentConfig(id = "SelectPage", type = UIPageBrowser.class, template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = @EventConfig(listeners = UIPageSelector.SelectPageActionListener.class))})
+   @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageSelector.gtmpl", events = @EventConfig(listeners = UIPageSelector.OpenSelectPagePopUp.class)),
+   @ComponentConfig(id = "SelectPage", type = UIPageBrowser.class, template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = @EventConfig(listeners = UIPageSelector.SelectPageActionListener.class)),
+   @ComponentConfig(type = UIFormPopupWindow.class, template = "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+      events = @EventConfig(listeners = UIPageSelector.CloseActionListener.class, name = "CloseFormPopup", phase = Event.Phase.DECODE))})
 public class UIPageSelector extends UIFormInputContainer<String>
 {
 
@@ -65,9 +67,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
       super("UIPageSelector", null);
       UIFormPopupWindow uiPopup = addChild(UIFormPopupWindow.class, null, "PopupPageSelector2");
       uiPopup.setWindowSize(900, 400);
-      uiPopup.setRendered(false);
-      UIPageBrowser uiPageBrowser = createUIComponent(UIPageBrowser.class, "SelectPage", null);
-      uiPopup.setUIComponent(uiPageBrowser);
+      uiPopup.setShow(false);
 
       UIFormInputSet uiInputSet = new UIFormInputSet("PageNodeSetting");
 
@@ -78,8 +78,6 @@ public class UIPageSelector extends UIFormInputContainer<String>
          StringLengthValidator.class, 3, 120));
 
       addChild(uiInputSet);
-      UIVirtualList uiVirtualList = uiPageBrowser.getChild(UIVirtualList.class);
-      configureVirtualList(uiVirtualList);
    }
 
    private static void configureVirtualList(UIVirtualList vList)
@@ -132,8 +130,11 @@ public class UIPageSelector extends UIFormInputContainer<String>
    {
       super.processDecode(context);
       UIPageBrowser uiPageBrowser = findFirstComponentOfType(UIPageBrowser.class);
-      uiPageBrowser.processDecode(context);
-
+      if (uiPageBrowser != null)
+      {
+         uiPageBrowser.processDecode(context);
+      }
+      
       UIFormInputSet uiInputSet = getChild(UIFormInputSet.class);
 
       List<UIComponent> children = uiInputSet.getChildren();
@@ -149,6 +150,34 @@ public class UIPageSelector extends UIFormInputContainer<String>
       //
       //    UIFormStringInput uiPageTitle = getChildById("pageTitle");
       //    uiPageTitle.processDecode(context);
+   }
+
+   static public class OpenSelectPagePopUp extends EventListener<UIPageSelector>
+   {
+      @Override
+      public void execute(Event<UIPageSelector> event) throws Exception
+      {
+         UIPageSelector pageSelector = event.getSource();
+         UIFormPopupWindow uiPopup = pageSelector.getChild(UIFormPopupWindow.class);
+
+         UIPageBrowser uiPageBrowser = pageSelector.createUIComponent(UIPageBrowser.class, "SelectPage", null);
+         uiPopup.setUIComponent(uiPageBrowser);
+         uiPopup.setShow(true);
+
+         UIVirtualList uiVirtualList = uiPageBrowser.getChild(UIVirtualList.class);
+         configureVirtualList(uiVirtualList);
+      }
+   }
+
+   static public class CloseActionListener extends UIFormPopupWindow.CloseActionListener
+   {
+      @Override
+      public void execute(Event<UIPopupWindow> event) throws Exception
+      {
+         UIPopupWindow popWindow = event.getSource();
+         popWindow.setUIComponent(null);
+         super.execute(event);
+      }
    }
 
    static public class SelectPageActionListener extends EventListener<UIPageBrowser>
@@ -167,7 +196,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.NoPermission", new String[]{id}));;
          }
          uiPageSelector.setValue(id);
-         uiPageBrowser.feedDataWithQuery(null);
+//         uiPageBrowser.feedDataWithQuery(null);
 
          UIForm uiForm = uiPageSelector.getAncestorOfType(UIForm.class);
          if (uiForm != null)
@@ -179,6 +208,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
             ctx.addUIComponentToUpdateByAjax(uiPageSelector.getParent());
          }
          UIFormPopupWindow uiPopup = uiPageSelector.getChild(UIFormPopupWindow.class);
+         uiPopup.setUIComponent(null);
          uiPopup.setShow(false);
       }
    }

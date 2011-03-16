@@ -75,7 +75,9 @@ import java.util.UUID;
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)})})
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)}),
+   @ComponentConfig(type = UIPopupWindow.class, template = "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+      events = @EventConfig(listeners = UIGroupNavigationManagement.CloseActionListener.class, name = "ClosePopup"))})
 public class UIGroupNavigationManagement extends UIContainer
 {
 
@@ -190,7 +192,12 @@ public class UIGroupNavigationManagement extends UIContainer
          SiteKey siteKey = nav.getKey();
 
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
-         UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+         UINavigationManagement naviManager = uicomp.naviManager;
+         if (naviManager == null)
+         {
+            naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+            uicomp.naviManager = naviManager;
+         }
          naviManager.setOwner(siteKey.getName());
          naviManager.setOwnerType(siteKey.getTypeName());
 
@@ -203,8 +210,6 @@ public class UIGroupNavigationManagement extends UIContainer
          popUp.setWindowSize(400, 400);
          popUp.setShowMask(true);
          popUp.setShow(true);
-
-         uicomp.naviManager = naviManager;
       }
    }
 
@@ -288,5 +293,15 @@ public class UIGroupNavigationManagement extends UIContainer
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
       }
 
+   }
+
+   static public class CloseActionListener extends UIPopupWindow.CloseActionListener
+   {
+      public void execute(Event<UIPopupWindow> event) throws Exception
+      {
+         UIPopupWindow popWindow = event.getSource();
+         popWindow.setUIComponent(null);
+         super.execute(event);
+      }
    }
 }

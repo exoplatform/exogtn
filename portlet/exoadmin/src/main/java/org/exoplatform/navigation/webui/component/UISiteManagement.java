@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -75,7 +74,9 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)})})
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)}),
+   @ComponentConfig(type = UIPopupWindow.class, template = "system:/groovy/webui/core/UIPopupWindow.gtmpl", 
+      events = @EventConfig(listeners = UISiteManagement.CloseActionListener.class, name = "ClosePopup"))})
 public class UISiteManagement extends UIContainer
 {
 
@@ -365,7 +366,12 @@ public class UISiteManagement extends UIContainer
          */
          
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
-         UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+         UINavigationManagement naviManager = uicomp.naviManager;
+         if (naviManager == null)
+         {
+            naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+            uicomp.naviManager = naviManager;
+         }
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
@@ -379,9 +385,7 @@ public class UISiteManagement extends UIContainer
          popUp.setUIComponent(naviManager);
          popUp.setShowMask(true);
          popUp.setShow(true);
-         popUp.setWindowSize(400, 400);
-
-         uicomp.naviManager = naviManager;
+         popUp.setWindowSize(400, 400);         
       }
    }
 
@@ -404,6 +408,16 @@ public class UISiteManagement extends UIContainer
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
       }
 
+   }
+
+   static public class CloseActionListener extends UIPopupWindow.CloseActionListener
+   {
+      public void execute(Event<UIPopupWindow> event) throws Exception
+      {
+         UIPopupWindow popWindow = event.getSource();
+         popWindow.setUIComponent(null);
+         super.execute(event);
+      }
    }
 
 }

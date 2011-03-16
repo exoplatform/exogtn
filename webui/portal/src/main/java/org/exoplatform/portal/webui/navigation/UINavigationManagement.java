@@ -100,6 +100,14 @@ public class UINavigationManagement extends UIContainer
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
          UserPortalConfigService portalConfigService = uiManagement.getApplicationComponent(UserPortalConfigService.class);
 
+         UIPopupWindow uiPopup = uiManagement.getParent();
+         uiPopup.setShow(false);
+         uiPopup.setUIComponent(null);
+         UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+         prContext.setFullRender(true);
+
          UserNavigation navigation = uiNodeSelector.getEdittedNavigation();
 
          SiteKey siteKey = navigation.getKey();
@@ -115,12 +123,6 @@ public class UINavigationManagement extends UIContainer
             {
                UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
-               UIPopupWindow uiPopup = uiManagement.getParent();
-               uiPopup.setShow(false);
-               UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-               UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-               prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-               prContext.setFullRender(true);
                return;
             }
          }
@@ -134,20 +136,8 @@ public class UINavigationManagement extends UIContainer
          {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
-            UIPopupWindow uiPopup = uiManagement.getParent();
-            uiPopup.setShow(false);
-            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            prContext.setFullRender(true);
             return;
-         }
-
-         UIPopupWindow uiPopup = uiManagement.getParent();
-         uiPopup.setShow(false);
-         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         prContext.setFullRender(true);
+         }         
 
          uiNodeSelector.getRootNode().save();
       }
