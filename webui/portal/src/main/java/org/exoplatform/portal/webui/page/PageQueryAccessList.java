@@ -27,6 +27,8 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
 
+import java.util.Comparator;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -44,6 +46,12 @@ public class PageQueryAccessList extends PageListAccess<Page, Query<Page>>
    {
       ExoContainer container = PortalContainer.getInstance();
       DataStorage service = (DataStorage)container.getComponentInstance(DataStorage.class);
-      return service.find2(state);
+      return service.find2(state, new Comparator<Page>()
+      {
+         public int compare(Page page1, Page page2)
+         {
+            return page1.getName().compareTo(page2.getName());
+         }
+      });
    }
 }

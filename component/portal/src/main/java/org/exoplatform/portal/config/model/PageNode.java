@@ -186,7 +186,6 @@ public class PageNode extends PageNodeContainer
       children = list;
    }
 
-   // Remove this which seems to be not used
    public boolean isModifiable()
    {
       return modifiable;

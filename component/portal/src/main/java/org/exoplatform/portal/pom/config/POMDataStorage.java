@@ -39,8 +39,6 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
-import org.exoplatform.portal.pom.config.tasks.MOPAccess;
-import org.exoplatform.portal.pom.config.tasks.NodeTask;
 import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
@@ -53,7 +51,6 @@ import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationKey;
-import org.exoplatform.portal.pom.data.NodeData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
@@ -148,17 +145,6 @@ public class POMDataStorage implements ModelDataStorage
       pomMgr.execute(new PageNavigationTask.Remove(navigation));
    }
 
-
-   public NodeData loadNode(NavigationKey key) throws Exception
-   {
-      return pomMgr.execute(new NodeTask.Load<NavigationKey>(NodeTask.KeyType.NAVIGATION, key));
-   }
-
-   public NodeData loadNode(String key) throws Exception
-   {
-      return pomMgr.execute(new NodeTask.Load<String>(NodeTask.KeyType.STRING, key));
-   }
-
    public void save(PortletPreferences portletPreferences) throws Exception
    {
       pomMgr.execute(new PortletPreferencesTask.Save(portletPreferences));
@@ -251,11 +237,11 @@ public class POMDataStorage implements ModelDataStorage
       Class<T> type = q.getClassType();
       if (PageData.class.equals(type))
       {
-         return (LazyPageList<T>)new LazyPageList<PageData>(new MOPAccess.PageAccess(pomMgr, (Query<PageData>)q), 10);
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPage((Query<PageData>)q));
       }
       else if (NavigationData.class.equals(type))
       {
-         return (LazyPageList<T>)new LazyPageList<NavigationData>(new MOPAccess.NavigationAccess(pomMgr, (Query<NavigationData>)q), 10);
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindNavigation((Query<NavigationData>)q));
       }
       else if (PortletPreferences.class.equals(type))
       {

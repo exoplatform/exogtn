@@ -19,18 +19,27 @@
 
 package org.exoplatform.portal.webui.page;
 
-import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
@@ -41,6 +50,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by The eXo Platform SARL
@@ -48,10 +58,10 @@ import java.util.Calendar;
  *          hoa.nguyen@exoplatform.com
  * Oct 31, 2006  
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIWizardPageSetInfo.gtmpl", events = {
+@ComponentConfigs({@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIWizardPageSetInfo.gtmpl", events = {
    @EventConfig(listeners = UIWizardPageSetInfo.ChangeNodeActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIWizardPageSetInfo.SwitchVisibleActionListener.class, phase = Phase.DECODE),
-   @EventConfig(listeners = UIWizardPageSetInfo.SwitchPublicationDateActionListener.class, phase = Phase.DECODE)})
+   @EventConfig(listeners = UIWizardPageSetInfo.SwitchPublicationDateActionListener.class, phase = Phase.DECODE)})})
 public class UIWizardPageSetInfo extends UIForm
 {
 
@@ -73,24 +83,23 @@ public class UIWizardPageSetInfo extends UIForm
 
    public UIWizardPageSetInfo() throws Exception
    {
-      UIFormCheckBoxInput<Boolean> uiDateInputCheck =
-         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, null, false);
-      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, null, false);
-      uiDateInputCheck.setOnChange("SwitchPublicationDate");
-      uiVisibleCheck.setOnChange("SwitchVisible");
-
+   	UIFormCheckBoxInput<Boolean> uiDateInputCheck =
+         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, SHOW_PUBLICATION_DATE, false);
+   	UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, VISIBLE, false);
+   	uiDateInputCheck.setOnChange("SwitchPublicationDate");
+   	uiVisibleCheck.setOnChange("SwitchVisible");
+   	
       addChild(UIPageNodeSelector.class, null, null);
       addUIFormInput(new UIFormStringInput(PAGE_NAME, "name", null).addValidator(MandatoryValidator.class)
-         .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
-      addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null).setMaxLength(255).addValidator(
-         StringLengthValidator.class, 3, 120));
+                     .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
+      addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null)
+      		.setMaxLength(255).addValidator(StringLengthValidator.class, 3, 120));
       addUIFormInput(uiVisibleCheck.setChecked(true));
       addUIFormInput(uiDateInputCheck);
       addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
       addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
    }
 
-   //TODO: it looks like this method is not used
    public void setEditMode() throws Exception
    {
       isEditMode = true;
@@ -106,37 +115,55 @@ public class UIWizardPageSetInfo extends UIForm
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       super.invokeSetBindingBean(bean);
-      UserNode node = (UserNode)bean;
-      
-      Visibility visibility;
-      if (getUIFormCheckBoxInput(VISIBLE).isChecked())
+      PageNode node = (PageNode)bean;
+      if(!getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
       {
-         UIFormCheckBoxInput showPubDate = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
-         visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;
+      	node.setVisible(getUIFormCheckBoxInput(VISIBLE).isChecked());	
       }
-      else
-      {
-         visibility = Visibility.HIDDEN;
-      }
-      node.setVisibility(visibility);
-
       Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
-      long time = (cal != null) ? cal.getTimeInMillis() : -1;
-      node.setStartPublicationTime(time);
+      Date date = (cal != null) ? cal.getTime() : null;
+      node.setStartPublicationDate(date);
       cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
-      time = (cal != null) ? cal.getTimeInMillis() : -1;
-      node.setEndPublicationTime(time);
+      date = (cal != null) ? cal.getTime() : null;
+      node.setEndPublicationDate(date);
    }
 
-   public UserNode createUserNode(UserNode parent) throws Exception
+   public PageNode getPageNode() throws Exception
    {
-      UserNode child = parent.addChild("temp");
-      invokeSetBindingBean(child);
-      if (child.getLabel() == null || child.getLabel().trim().length() == 0)
+      if (isEditMode)
       {
-         child.setLabel(child.getName());
+         PageNode pageNode = getSelectedPageNode();
+         PageNode clonedNode = (pageNode != null) ? pageNode.clone() : null;
+         invokeSetBindingBean(clonedNode);
+         if (clonedNode.getLabel() == null || clonedNode.getLabel().trim().length() == 0)
+         {
+            clonedNode.setLabel(clonedNode.getName());
+         }
+         return clonedNode;
       }
-      return child;
+
+      PageNode pageNode = new PageNode();
+      invokeSetBindingBean(pageNode);
+      if (pageNode.getLabel() == null || pageNode.getLabel().trim().length() == 0)
+      {
+         pageNode.setLabel(pageNode.getName());
+      }
+
+      UIPageNodeSelector uiNodeSelector = getChild(UIPageNodeSelector.class);
+      PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
+      PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+      if(nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         pageNode.setUri(pageNode.getName());
+      else
+      {
+         if (selectedNode != null)
+         {
+            pageNode.setUri(selectedNode.getUri() + "/" + pageNode.getName());
+         }
+         else
+            pageNode.setUri(pageNode.getName());
+      }
+      return pageNode;
    }
 
    public void setShowCheckPublicationDate(boolean show)
@@ -146,24 +173,61 @@ public class UIWizardPageSetInfo extends UIForm
       uiForm.setRendered(show);
       setShowPublicationDate(show && uiForm.isChecked());
    }
-
+   
    public void setShowPublicationDate(boolean show)
    {
       getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(show);
       getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
    }
 
-   public UserNode getSelectedPageNode()
+   public void setPageNode(PageNode pageNode) throws Exception
+   {
+      if (pageNode.getName() != null)
+         getUIStringInput(PAGE_NAME).setValue(pageNode.getName());
+      if (pageNode.getLabel() != null)
+         getUIStringInput(PAGE_DISPLAY_NAME).setValue(pageNode.getLabel());
+      getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode.isVisible());
+      setShowPublicationDate(pageNode.isShowPublicationDate());
+      Calendar cal = Calendar.getInstance();
+      if (pageNode.getStartPublicationDate() != null)
+      {
+         cal.setTime(pageNode.getStartPublicationDate());
+         getUIFormDateTimeInput(START_PUBLICATION_DATE).setCalendar(cal);
+      }
+      else
+         getUIFormDateTimeInput(START_PUBLICATION_DATE).setValue(null);
+      if (pageNode.getEndPublicationDate() != null)
+      {
+         cal.setTime(pageNode.getEndPublicationDate());
+         getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
+      }
+      else
+         getUIFormDateTimeInput(END_PUBLICATION_DATE).setValue(null);
+   }
+
+   public PageNode getSelectedPageNode()
    {
       UIPageNodeSelector uiPageNodeSelector = getChild(UIPageNodeSelector.class);
-      return uiPageNodeSelector.getSelectedNode();
+      PageNavigation nav = uiPageNodeSelector.getSelectedNavigation();
+      if(nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         return null;
+      return uiPageNodeSelector.getSelectedPageNode();
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      if (isEditMode && getChild(UIPageNodeSelector.class).getSelectedNode() == null)
+      if (isEditMode && getChild(UIPageNodeSelector.class).getSelectedPageNode() == null)
          reset();
       super.processRender(context);
+   }
+
+   public void processDecode(WebuiRequestContext context) throws Exception
+   {
+      super.processDecode(context);
+      String action = context.getRequestParameter(UIForm.ACTION);
+      Event<UIComponent> event = createEvent(action, Event.Phase.DECODE, context);
+      if (event != null)
+         event.broadcast();
    }
 
    public boolean isFirstTime()
@@ -181,13 +245,61 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+         UIWizardPageSetInfo uiForm = event.getSource();
 
          UIPageNodeSelector uiPageNodeSelector = event.getSource().getChild(UIPageNodeSelector.class);
-         uiPageNodeSelector.setSelectedURI(uri);
+         UITree tree = uiPageNodeSelector.getChild(UITree.class);
+
+         if (tree.getParentSelected() == null && (uri == null || uri.length() < 1))
+         {
+            uiPageNodeSelector.selectNavigation(uiPageNodeSelector.getSelectedNavigation());
+         }
+         else
+         {
+            uiPageNodeSelector.selectPageNodeByUri(uri);
+         }
 
          UIPortalApplication uiPortalApp = uiPageNodeSelector.getAncestorOfType(UIPortalApplication.class);
          UIWizard uiWizard = uiPortalApp.findFirstComponentOfType(UIWizard.class);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWizard);
+
+         if (!event.getSource().isEditMode())
+         {
+            return;
+         }
+         PageNode pageNode = uiPageNodeSelector.getSelectedPageNode();
+
+         if (pageNode == null && uiForm.isFirstTime())
+         {
+            uiForm.setShowPublicationDate(false);
+            uiForm.setFirstTime(false);
+            UIPortal uiPortal = Util.getUIPortal();
+            uiPageNodeSelector.selectNavigation(uiPortal.getSelectedNavigation());
+            if (uiPortal.getSelectedNode() != null)
+            {
+               uiPageNodeSelector.selectPageNodeByUri(uiPortal.getSelectedNode().getUri());
+            }
+            pageNode = uiPageNodeSelector.getSelectedPageNode();
+         }
+
+         if (pageNode == null)
+         {
+            uiForm.setShowPublicationDate(false);
+            return;
+         }
+         UserPortalConfigService configService = uiWizard.getApplicationComponent(UserPortalConfigService.class);
+         String accessUser = event.getRequestContext().getRemoteUser();
+         Page page = null;
+         if (pageNode.getPageReference() != null)
+            page = configService.getPage(pageNode.getPageReference(), accessUser);
+         if (page == null)
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIWizardPageSetInfo.msg.null", null));
+            uiForm.reset();
+            uiForm.setShowPublicationDate(false);
+            return;
+         }
+         uiForm.setPageNode(pageNode);
       }
    }
 
@@ -204,17 +316,17 @@ public class UIWizardPageSetInfo extends UIForm
       }
 
    }
-
+   
    static public class SwitchVisibleActionListener extends EventListener<UIWizardPageSetInfo>
    {
-      @Override
-      public void execute(Event<UIWizardPageSetInfo> event) throws Exception
-      {
-         UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
-         uiForm.setShowCheckPublicationDate(isCheck);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
-      }
+		@Override
+		public void execute(Event<UIWizardPageSetInfo> event) throws Exception
+		{
+			UIWizardPageSetInfo uiForm = event.getSource();
+			boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
+			uiForm.setShowCheckPublicationDate(isCheck);
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+		}
    }
 
 }

@@ -25,9 +25,8 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageNodeForm;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -41,6 +40,8 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.util.List;
 
 @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UINavigationManagement.gtmpl", events = {
    @EventConfig(listeners = UINavigationManagement.SaveActionListener.class),
@@ -98,49 +99,88 @@ public class UINavigationManagement extends UIContainer
          PortalRequestContext prContext = Util.getPortalRequestContext();
          UINavigationManagement uiManagement = event.getSource();
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
+         DataStorage dataService = uiManagement.getApplicationComponent(DataStorage.class);
          UserPortalConfigService portalConfigService = uiManagement.getApplicationComponent(UserPortalConfigService.class);
-
-         UIPopupWindow uiPopup = uiManagement.getParent();
-         uiPopup.setShow(false);
-         uiPopup.setUIComponent(null);
-         UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         prContext.setFullRender(true);
-
-         UserNavigation navigation = uiNodeSelector.getEdittedNavigation();
-
-         SiteKey siteKey = navigation.getKey();
-         String editedOwnerId = siteKey.getName();
-
+         
+         PageNavigation navigation = uiNodeSelector.getEdittedNavigation();
+         String editedOwnerType = navigation.getOwnerType();
+         String editedOwnerId = navigation.getOwnerId();
          // Check existed
-         UserPortalConfig userPortalConfig;
-         if (PortalConfig.PORTAL_TYPE.equals(siteKey.getTypeName()))
+         PageNavigation persistNavigation =  dataService.getPageNavigation(editedOwnerType, editedOwnerId);
+         if (persistNavigation == null)
          {
-            userPortalConfig = portalConfigService.getUserPortalConfig(editedOwnerId, event.getRequestContext().getRemoteUser());
-
-            if (userPortalConfig == null)
+            UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
+            UIPopupWindow uiPopup = uiManagement.getParent();
+            uiPopup.setShow(false);
+            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            prContext.setFullRender(true);
+            return;
+         }
+         
+         if(PortalConfig.PORTAL_TYPE.equals(navigation.getOwnerType()))
+         {
+            UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
+            if(portalConfig != null)
+            {
+               dataService.save(navigation);
+            }
+            else
             {
                UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
+               UIPopupWindow uiPopup = uiManagement.getParent();
+               uiPopup.setShow(false);
+               UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+               UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+               prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+               prContext.setFullRender(true);
                return;
             }
          }
          else
          {
-            userPortalConfig =  portalConfigService.getUserPortalConfig(prContext.getPortalOwner(), event.getRequestContext().getRemoteUser());
+            dataService.save(navigation);
          }
 
-         UserNavigation persistNavigation =  userPortalConfig.getUserPortal().getNavigation(siteKey);
-         if (persistNavigation == null)
-         {
-            UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
-            return;
-         }         
+         // Reload navigation here as some navigation could exist in the back end such as system navigations
+         // that would not be in the current edited UI navigation
+         navigation = dataService.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId());
 
-         uiNodeSelector.getRootNode().save();
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         setNavigation(uiPortalApp.getNavigations(), navigation);
+
+         // Need to relocalize as it was loaded from storage
+         uiPortalApp.localizeNavigations();
+         
+         //Update UIPortal corredponding to edited navigation
+         UIPortal targetedUIPortal = uiPortalApp.getCachedUIPortal(editedOwnerType, editedOwnerId);
+         if(targetedUIPortal != null)
+         {
+            targetedUIPortal.setNavigation(navigation);
+         }
+         
+         UIPopupWindow uiPopup = uiManagement.getParent();
+         uiPopup.setShow(false);
+         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+         prContext.setFullRender(true);
       }
+
+      private void setNavigation(List<PageNavigation> navs, PageNavigation nav)
+      {
+         for (int i = 0; i < navs.size(); i++)
+         {
+            if (navs.get(i).getId() == nav.getId())
+            {
+               navs.set(i, nav);
+               return;
+            }
+         }
+      }
+
    }
 
    static public class AddRootNodeActionListener extends EventListener<UINavigationManagement>
@@ -155,9 +195,10 @@ public class UINavigationManagement extends UIContainer
          UIPageNodeForm uiNodeForm = uiManagementPopup.createUIComponent(UIPageNodeForm.class, null, null);
          uiNodeForm.setValues(null);
          uiManagementPopup.setUIComponent(uiNodeForm);
+         PageNavigation nav = uiNodeSelector.getEdittedNavigation();
+         uiNodeForm.setSelectedParent(nav);
 
-         uiNodeForm.setSelectedParent(uiNodeSelector.getSelectedNode());
-         uiNodeForm.setContextPageNavigation(uiNodeSelector.getEdittedNavigation());
+         uiNodeForm.setContextPageNavigation(nav);
 
          uiManagementPopup.setWindowSize(800, 500);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());

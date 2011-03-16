@@ -23,11 +23,13 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
-import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -44,6 +46,7 @@ public class UIPageBody extends UIComponentDecorator
 
    private String storageId;
 
+   @SuppressWarnings("unused")
    public UIPageBody(PageBody model) throws Exception
    {
       setId("UIPageBody");
@@ -64,12 +67,13 @@ public class UIPageBody extends UIComponentDecorator
       setId("UIPageBody");
    }
 
+   @SuppressWarnings("unused")
    public void init(PageBody model) throws Exception
    {
       setId("UIPageBody");
    }
 
-   public void setPageBody(UserNode pageNode, UIPortal uiPortal) throws Exception
+   public void setPageBody(PageNode pageNode, UIPortal uiPortal) throws Exception
    {
       WebuiRequestContext context = Util.getPortalRequestContext();
       uiPortal.setMaximizedUIComponent(null);
@@ -110,7 +114,7 @@ public class UIPageBody extends UIComponentDecorator
     * @param uiPortal
     * @return
     */
-   private UIPage getUIPage(UserNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
+   private UIPage getUIPage(PageNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
       throws Exception
    {
       Page page = null;
@@ -118,7 +122,7 @@ public class UIPageBody extends UIComponentDecorator
       
       if (pageNode != null)
       {
-         pageReference = pageNode.getPageRef();
+         pageReference = pageNode.getPageReference();
          if (pageReference != null)
          {
             ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();

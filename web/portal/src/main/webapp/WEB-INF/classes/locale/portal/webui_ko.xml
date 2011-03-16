@@ -617,7 +617,7 @@
          <done>완료</done>
       </action>
    </UIGroupSelector>
-   <UIPageSelector>
+   <UIPageSelector2>
       <header>
          <name>이름</name>
          <id>페이지 아이디</id>
@@ -634,7 +634,7 @@
          <name>#{word.name}</name>
          <accessGroups>액세스 그룹</accessGroups>
       </label>
-   </UIPageSelector>
+   </UIPageSelector2>
    <UIPageBrowser>
       <msg>
          <NoPermission>이 페이지의 액세스 권한이 없습니다.</NoPermission>
@@ -818,7 +818,7 @@
          <label>
             <PageNodeSetting>페이지 노드 설정</PageNodeSetting>
             <Icon>#{word.icon}</Icon>
-            <UIPageSelector>페이지 선택기</UIPageSelector>
+            <UIPageSelector2>페이지 선택기</UIPageSelector2>
          </label>
       </tab>
    </UIPageNodeForm>

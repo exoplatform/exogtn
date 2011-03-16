@@ -20,25 +20,18 @@
 package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
-import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
-import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,25 +44,21 @@ public class UIPortalNavigation extends UIComponent
 
    private boolean showUserNavigation = true;
 
+   protected PageNode selectedNode_;
+
+   protected Object selectedParent_;
+
    private TreeNode treeNode_;
 
    private String cssClassName = "";
 
    private String template;
-
-   private final NodeFilter NAVIGATION_FILTER;
-   private static final Scope PORTAL_NAVIGATION_SCOPE = Scope.GRANDCHILDREN;
-
-   private static final Scope SITEMAP_SCOPE = Scope.CHILDREN;
-
-   public UIPortalNavigation()
-   {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
-      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-      scopeBuilder.withTemporalCheck();
-      NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
-   }
+   
+   private final static String PORTAL_NAV = "portal";
+   
+   private final static String GROUP_NAV = "group";
+   
+   private final static String USER_NAV = "user";
 
    @Override
    public String getTemplate()
@@ -117,89 +106,69 @@ public class UIPortalNavigation extends UIComponent
       return cssClassName;
    }
 
-   public List<UserNode> getNavigations() throws Exception
+   public List<PageNavigation> getNavigations() throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      List<UserNode> nodes = new ArrayList<UserNode>();
+      List<PageNavigation> result = new ArrayList<PageNavigation>();
+
       if (context.getRemoteUser() != null)
       {
-         UserNode currRootNode = getCurrentNavigation();
-         if (currRootNode != null)
-         {
-            nodes.add(currRootNode);  
-         }
+         result.add(PageNavigationUtils.filter(getSelectedNavigation(), context.getRemoteUser()));
       }
       else
       {
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         List<UserNavigation> navigations = userPortal.getNavigations();
-         for (UserNavigation userNav : navigations)
+         for (PageNavigation nav : Util.getUIPortalApplication().getNavigations())
          {
-            if (!showUserNavigation && userNav.getKey().getType().equals(SiteType.USER))
-            {
+            if (!showUserNavigation && nav.getOwnerType().equals("user"))
                continue;
-            }
-
-            UserNode rootNode = userPortal.getNode(userNav, PORTAL_NAVIGATION_SCOPE);
-            if (rootNode != null)
-            {
-               rootNode.filter(NAVIGATION_FILTER);
-               nodes.add(rootNode);
-            }
+            result.add(PageNavigationUtils.filter(nav, null));
          }
       }
-      return nodes;
+      return result;
    }
 
    public void loadTreeNodes() throws Exception
    {
-      treeNode_ = new TreeNode();
-
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      List<UserNavigation> listNavigations = userPortal.getNavigations();
-
-      List<UserNode> childNodes = new LinkedList<UserNode>();
-      for (UserNavigation nav : rearrangeNavigations(listNavigations))
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      treeNode_ = new TreeNode(new PageNode(), new PageNavigation(), true);
+      List<PageNavigation> listNavigations = Util.getUIPortalApplication().getNavigations();
+      
+      for (PageNavigation nav : rearrangeNavigations(listNavigations))
       {
-         if (!showUserNavigation && nav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (!showUserNavigation && nav.getOwnerType().equals("user"))
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, SITEMAP_SCOPE);
-         if (rootNode != null)
-         {
-            rootNode.filter(NAVIGATION_FILTER);
-            childNodes.addAll(rootNode.getChildren());
-         }
+         PageNavigation filterNav = PageNavigationUtils.filter(nav, context.getRemoteUser());
+         treeNode_.setChildren(filterNav.getNodes(), filterNav);
       }
-      treeNode_.setChildren(childNodes);
    }
-
+   
    /**
     * 
     * @param listNavigation
     * @return
     */
-   private List<UserNavigation> rearrangeNavigations(List<UserNavigation> listNavigation)
+   private List<PageNavigation> rearrangeNavigations(List<PageNavigation> listNavigation)
    {
-      List<UserNavigation> returnNavs = new ArrayList<UserNavigation>();
+      List<PageNavigation> returnNavs = new ArrayList<PageNavigation>();
 
-      List<UserNavigation> portalNavs = new ArrayList<UserNavigation>();
-      List<UserNavigation> groupNavs = new ArrayList<UserNavigation>();
-      List<UserNavigation> userNavs = new ArrayList<UserNavigation>();
+      List<PageNavigation> portalNavs = new ArrayList<PageNavigation>();
+      List<PageNavigation> groupNavs = new ArrayList<PageNavigation>();
+      List<PageNavigation> userNavs = new ArrayList<PageNavigation>();
 
-      for (UserNavigation nav : listNavigation)
+      for (PageNavigation nav : listNavigation)
       {
-         String ownerType = nav.getKey().getTypeName();
-         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+         String ownerType = nav.getOwnerType();
+         if (PORTAL_NAV.equals(ownerType))
          {
             portalNavs.add(nav);
          }
-         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
+         else if (GROUP_NAV.equals(ownerType))
          {
             groupNavs.add(nav);
          }
-         else if (PortalConfig.USER_TYPE.equals(ownerType))
+         else if (USER_NAV.equals(ownerType))
          {
             userNavs.add(nav);
          }
@@ -217,40 +186,105 @@ public class UIPortalNavigation extends UIComponent
       return treeNode_;
    }
 
-   public UserNode getCurrentNavigation() throws Exception
+   public PageNavigation getSelectedNavigation() throws Exception
    {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      UserNode rootNode = userPortal.getNode(userNavigation, PORTAL_NAVIGATION_SCOPE);
-      if (rootNode != null)
-      {
-         rootNode.filter(NAVIGATION_FILTER);
-      }
-      return rootNode;
+      PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
+      if (nav != null)
+         return nav;
+      if (Util.getUIPortal().getNavigations().size() < 1)
+         return null;
+      return Util.getUIPortal().getNavigations().get(0);
    }
 
-   public UserNode getSelectedPageNode() throws Exception
+   public Object getSelectedParent()
    {
-      return  Util.getUIPortal().getSelectedUserNode();
+      return selectedParent_;
+   }
+
+   public PageNode getSelectedPageNode() throws Exception
+   {
+      if (selectedNode_ != null)
+         return selectedNode_;
+      selectedNode_ = Util.getUIPortal().getSelectedNode();
+      return selectedNode_;
+   }
+
+   public boolean isSelectedNode(PageNode node)
+   {
+      if (selectedNode_ != null && node.getUri().equals(selectedNode_.getUri()))
+         return true;
+      if (selectedParent_ == null || selectedParent_ instanceof PageNavigation)
+         return false;
+      PageNode pageNode = (PageNode)selectedParent_;
+      return node.getUri().equals(pageNode.getUri());
+   }
+
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      UIPortal uiPortal = Util.getUIPortal();
+      if ((uiPortal.getSelectedNode() != null) && (uiPortal.getSelectedNode() != selectedNode_))
+      {
+         setSelectedPageNode(uiPortal.getSelectedNode());
+      }
+      super.processRender(context);
+   }
+
+   private void setSelectedPageNode(PageNode selectedNode) throws Exception
+   {
+      selectedNode_ = selectedNode;
+      selectedParent_ = null;
+      String seletctUri = selectedNode.getUri();
+      int index = seletctUri.lastIndexOf("/");
+      String parentUri = null;
+      if (index > 0)
+         parentUri = seletctUri.substring(0, seletctUri.lastIndexOf("/"));
+      List<PageNavigation> pageNavs = getNavigations();
+      for (PageNavigation pageNav : pageNavs)
+      {
+         if (PageNavigationUtils.searchPageNodeByUri(pageNav, selectedNode.getUri()) != null)
+         {
+            if (parentUri == null || parentUri.length() < 1)
+               selectedParent_ = pageNav;
+            else
+               selectedParent_ = PageNavigationUtils.searchPageNodeByUri(pageNav, parentUri);
+            break;
+         }
+      }
    }
 
    static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
+         UIPortalNavigation uiNavigation = event.getSource();
          UIPortal uiPortal = Util.getUIPortal();
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-
-         TreeNode selectedode = event.getSource().getTreeNodes().findNodes(treePath);
-         //There're may be interuption between browser and server
-         if (selectedode == null)
+         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+         int index = uri.lastIndexOf("::");
+         String id = uri.substring(index + 2);
+         PageNavigation selectNav = null;
+         if (index <= 0)
          {
-            event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
-            return;
+            selectNav = uiPortal.getSelectedNavigation();
          }
-         
+         else
+         {
+            String navId = uri.substring(0, index);
+            //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+            selectNav = uiPortal.getSelectedNavigation();
+         }
+         PageNode selectNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
+         uiNavigation.selectedNode_ = selectNode;
+         String parentUri = null;
+         index = uri.lastIndexOf("/");
+         if (index > 0)
+            parentUri = uri.substring(0, index);
+         if (parentUri == null || parentUri.length() < 1)
+            uiNavigation.selectedParent_ = selectNav;
+         else
+            uiNavigation.selectedParent_ = PageNavigationUtils.searchPageNodeByUri(selectNav, parentUri);
+
          PageNodeEvent<UIPortal> pnevent;
-         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedode.getNode().getURI());
+         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
       }
    }
@@ -259,34 +293,41 @@ public class UIPortalNavigation extends UIComponent
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-                                                        
-         TreeNode treeNode = event.getSource().getTreeNodes();
-         TreeNode expandTree = treeNode.findNodes(treePath);
-         //There're may be interuption between browser and server
-         if (expandTree == null)
+         UIPortalNavigation uiNavigation = event.getSource();
+
+         TreeNode treeNode = uiNavigation.getTreeNodes();
+         List<PageNavigation> all_Navigations = Util.getUIPortalApplication().getNavigations();
+         
+         // get URI
+         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+         int index = uri.lastIndexOf("::");
+         String id = uri.substring(index + 2);
+
+         // get PageNavigation by uri
+         PageNavigation selectNav = null;
+
+         String navId = uri.substring(0, index);
+         selectNav = PageNavigationUtils.findNavigationByID(all_Navigations, Integer.parseInt(navId));
+         if(selectNav == null)
          {
-            event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
             return;
          }
+         
+         // get PageNode by uri
+         PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
 
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         TreeNode expandTree = null;
+         if (treeNode.getChildren() != null)
+         {
+            expandTree = treeNode.getChildByPath(uri, treeNode);
+         }
 
-         UserNode expandNode = userPortal.getNode(expandTree.getNode(), SITEMAP_SCOPE);
-         if (expandNode == null)
+         if(expandTree != null)
          {
-            event.getSource().loadTreeNodes();
-            event.getRequestContext().getUIApplication().addMessage(new
-               ApplicationMessage("UIPortalNavigation.msg.staleData", null, ApplicationMessage.WARNING));
+            expandTree.setChildren(expandNode.getChildren(), selectNav);
          }
-         else
-         {
-            expandNode.filter(event.getSource().NAVIGATION_FILTER);
-            expandTree.setChildren(expandNode.getChildren());
-            expandTree.setExpanded(true);
-         }
-                               
-         event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
+         
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
 
@@ -294,19 +335,41 @@ public class UIPortalNavigation extends UIComponent
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
-         // get URI
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-
          UIPortalNavigation uiNavigation = event.getSource();
-         TreeNode rootNode = uiNavigation.getTreeNodes();
+
+         TreeNode treeNode = uiNavigation.getTreeNodes();
+         UIPortal uiPortal = Util.getUIPortal();
+
+         // get URI
+         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+
+         int index = uri.lastIndexOf("::");
+         String id = uri.substring(index + 2);
+
+         // get PageNavigation by uri
+         PageNavigation selectNav = null;
+
+         String navId = uri.substring(0, index);
          
-         TreeNode collapseTree = rootNode.findNodes(treePath);
-         if (collapseTree != null)
+         //TODO: Minh Hoang TO
+         //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+         selectNav = uiPortal.getSelectedNavigation();
+         
+         // get PageNode by uri
+         PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
+
+         TreeNode expandTree = null;
+         if (treeNode.getChildren() != null)
          {
-            collapseTree.setExpanded(false);
-         }         
+            expandTree = treeNode.getChildByPath(uri, treeNode);
+         }
          
-         Util.getPortalRequestContext().setResponseComplete(true);
+         if(expandTree != null) 
+         {
+            expandTree.setExpanded(false);
+         }
+         
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
 
@@ -314,7 +377,9 @@ public class UIPortalNavigation extends UIComponent
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
+         PortalRequestContext prContext = Util.getPortalRequestContext();
          UIPortalNavigation uiNavigation = event.getSource();
+
          uiNavigation.loadTreeNodes();
 
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
@@ -343,19 +408,19 @@ public class UIPortalNavigation extends UIComponent
          {
             for (TreeNode child : treeNode.getChildren())
             {
-//               PageNode expandNode = child.getNode();
-//               PageNavigation selectNav = child.getNavigation();
-//
-//               // set node to child tree
-//               if (expandNode.getChildren().size() > 0)
-//               {
-//                  child.setChildren(expandNode.getChildren(), selectNav);
-//               }
+               PageNode expandNode = child.getNode();
+               PageNavigation selectNav = child.getNavigation();
+
+               // set node to child tree
+               if (expandNode.getChildren().size() > 0)
+               {
+                  child.setChildren(expandNode.getChildren(), selectNav);
+               }
 
                // expand child tree
                expandAllNode(child);
             }
          }
       }
-   }   
+   }
 }

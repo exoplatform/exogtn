@@ -22,11 +22,12 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.webui.application.UIAddNewApplication;
 import org.exoplatform.portal.webui.application.UIApplication;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UIPageActionListener.DeleteGadgetActionListener;
 import org.exoplatform.portal.webui.page.UIPageActionListener.RemoveChildActionListener;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -74,10 +75,16 @@ public class UIDesktopPage extends UIPage
       return true;
    }
 
-   //TODO: This is not used anymore in WebOS 2.0
-   public List<UserNavigation> getNavigations() throws Exception
+   public List<PageNavigation> getNavigations() throws Exception
    {
-      throw new UnsupportedOperationException("This is not used anymore in WebOS 2.0");
+      List<PageNavigation> allNav = Util.getUIPortal().getNavigations();
+      String removeUser = Util.getPortalRequestContext().getRemoteUser();
+      List<PageNavigation> result = new ArrayList<PageNavigation>();
+      for (PageNavigation nav : allNav)
+      {
+         result.add(PageNavigationUtils.filter(nav, removeUser));
+      }
+      return result;
    }
 
    static public class SaveGadgetPropertiesActionListener extends EventListener<UIPage>
