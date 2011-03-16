@@ -29,9 +29,13 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -57,8 +61,8 @@ import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -278,6 +282,11 @@ public class UIPageBrowser extends UISearch
          PageListAccess datasource = (PageListAccess)repeater.getDataSource();
          int currentPage = datasource.getCurrentPage();
 
+         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
+         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
+            removePageNode(page, event);
+         }
+
          dataService.remove(page);
          //Minh Hoang TO: The cached UIPage objects corresponding to removed Page should be removed here.
          //As we have multiple UIPortal, which means multiple caches of UIPage. It 's unwise to garbage
@@ -285,11 +294,11 @@ public class UIPageBrowser extends UISearch
          //removed
          
          UIPortal uiPortal = Util.getUIPortal();
-         if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
+         UserNode userNode = uiPortal.getSelectedUserNode();
+         if (userNode.getPageRef().equals(page.getPageId()))
          {
             PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
-                  .getUri());
+               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else
@@ -303,11 +312,6 @@ public class UIPageBrowser extends UISearch
                currentPage = datasource.getAvailablePage();
             datasource.getPage(currentPage);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
-         }
-         
-         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
-            removePageNode(page, event);
          }
       }
       
@@ -323,58 +327,40 @@ public class UIPageBrowser extends UISearch
        */
       private void removePageNode(Page page, Event<UIPageBrowser> event) throws Exception
       {
-         UIPageBrowser uiPageBrowser = event.getSource();
-         DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
-
-         PageNavigation pageNavigation = null;
          UIPortalApplication portalApplication = Util.getUIPortalApplication();
+         UserPortal userPortal = portalApplication.getUserPortalConfig().getUserPortal();
 
-         List<PageNavigation> listPageNavigation = portalApplication.getNavigations();
-
-         for (PageNavigation pageNvg : listPageNavigation)
+         UserNavigation userNav = userPortal.getNavigation(SiteKey.user(event.getRequestContext().getRemoteUser()));
+         UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN);
+         if (rootNode == null)
          {
-            if (pageNvg.getOwnerType().equals(PortalConfig.USER_TYPE))
-            {
-               pageNavigation = pageNvg;
-               break;
-            }
+            return;
          }
-         UIPortal uiPortal = Util.getUIPortal();
+         rootNode.filter(userPortal.createFilter(UserNodePredicate.builder().build()));
 
-         PageNode tobeRemoved = null;
-         List<PageNode> nodes = pageNavigation.getNodes();
-         for (PageNode pageNode : nodes)
+         for (UserNode userNode : rootNode.getChildren())
          {
-            String pageReference = pageNode.getPageReference();
-            String pageId = page.getPageId();
-
-            if (pageReference != null && pageReference.equals(pageId))
+            if (page.getPageId().equals(userNode.getPageRef()))
             {
-               tobeRemoved = pageNode;
-               break;
+               // Remove pageNode
+               rootNode.removeChild(userNode.getName());
+               rootNode.save();
+
+               // Update navigation and UserToolbarGroupPortlet
+
+               String pageRef = page.getPageId();
+               if (pageRef != null && pageRef.length() > 0)
+               {
+                  // Remove from cache
+                  UIPortal uiPortal = Util.getUIPortal();
+                  uiPortal.clearUIPage(pageRef);
+               }
+
+               //Update UserToolbarGroupPortlet
+               UIWorkingWorkspace uiWorkingWS = portalApplication.getChild(UIWorkingWorkspace.class);
+               uiWorkingWS.updatePortletsByName("UserToolbarDashboardPortlet");
+               return;
             }
-         }
-
-         if (tobeRemoved != null)
-         {
-            // Remove pageNode
-            pageNavigation.getNodes().remove(tobeRemoved);
-
-            // Update navigation and UserToolbarGroupPortlet
-
-            String pageRef = tobeRemoved.getPageReference();
-            if (pageRef != null && pageRef.length() > 0)
-            {
-               // Remove from cache
-               uiPortal.clearUIPage(pageRef);
-            }
-
-            dataService.save(pageNavigation);
-
-            //Update UserToolbarGroupPortlet
-            UIWorkingWorkspace uiWorkingWS = portalApplication.getChild(UIWorkingWorkspace.class);
-            uiWorkingWS.updatePortletsByName("UserToolbarDashboardPortlet");
-
          }
       }
    }

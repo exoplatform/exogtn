@@ -73,6 +73,11 @@ public class POMSessionManager implements Startable
       this.executor = new PortalNamesCache(new DataCache(new ExecutorDispatcher()));
    }
 
+   public ChromatticLifeCycle getLifeCycle()
+   {
+      return configurator;
+   }
+
    public void cachePut(Serializable key, Object value)
    {
       GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);

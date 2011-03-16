@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
+import org.chromattic.api.query.QueryResult;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
@@ -239,8 +240,13 @@ public class POMSession
       return prefs;
    }
 
-   public <O extends WorkspaceObject> Iterator<O> findObjects(ObjectType<O> type, ObjectType<? extends Site> siteType,
-      String ownerId, String title)
+   public <O extends WorkspaceObject> QueryResult<O> findObjects(
+      ObjectType<O> type,
+      ObjectType<Site> siteType,
+      String ownerId,
+      String title,
+      int offset,
+      int limit)
    {
       this.save();
       //
@@ -351,7 +357,7 @@ public class POMSession
          throw new Error(e);
       }
       Class<O> mappedClass = (Class<O>)mapping.get(type);
-      return session.createQueryBuilder(mappedClass).where(statement).get().objects();
+      return session.createQueryBuilder(mappedClass).where(statement).get().objects((long)offset, (long)limit);
    }
 
    private final SynchronizationListener listener = new SynchronizationListener()

@@ -25,20 +25,14 @@ import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
-import org.gatein.mop.api.workspace.WorkspaceObject;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -54,124 +48,6 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
    public SearchTask(Query<T> query)
    {
       this.q = query;
-   }
-
-   public abstract static class FindSiteObject<W extends WorkspaceObject, T> extends SearchTask<T>
-   {
-
-      public FindSiteObject(Query<T> query)
-      {
-         super(query);
-      }
-
-      public LazyPageList<T> run(final POMSession session) throws Exception
-      {
-         Iterator<W> ite;
-         try
-         {
-            String ownerType = q.getOwnerType();
-            ObjectType<? extends Site> siteType = null;
-            if (ownerType != null)
-            {
-               siteType = Mapper.parseSiteType(ownerType);
-            }
-            ite = findW(session, siteType, q.getOwnerId(), q.getTitle());
-
-         }
-         catch (IllegalArgumentException e)
-         {
-            ite = Collections.<W> emptyList().iterator();
-         }
-
-         //
-         final ArrayList<W> array = new ArrayList<W>();
-         while (ite.hasNext())
-         {
-            array.add(ite.next());
-         }
-
-         //
-         final Iterator<W> it = array.iterator();
-         ListAccess<T> la = new ListAccess<T>()
-         {
-            public T[] load(int index, int length) throws Exception, IllegalArgumentException
-            {
-               T[] result = createT(length);
-               for (int i = 0; i < length; i++)
-               {
-                  T t = loadT(session, it.next());
-                  result[i] = t;
-               }
-               return result;
-            }
-
-            public int getSize() throws Exception
-            {
-               return array.size();
-            }
-         };
-
-         //
-         return new LazyPageList<T>(la, 10);
-      }
-
-      protected abstract Iterator<W> findW(POMSession session, ObjectType<? extends Site> siteType, String ownerId,
-         String title);
-
-      protected abstract T[] createT(int length);
-
-      protected abstract T loadT(POMSession session, W w);
-
-   }
-
-   public static class FindPage extends FindSiteObject<org.gatein.mop.api.workspace.Page, PageData>
-   {
-
-      public FindPage(Query<PageData> pageQuery)
-      {
-         super(pageQuery);
-      }
-
-      protected Iterator<org.gatein.mop.api.workspace.Page> findW(POMSession session,
-         ObjectType<? extends Site> siteType, String ownerId, String title)
-      {
-         return session.findObjects(ObjectType.PAGE, siteType, q.getOwnerId(), q.getTitle());
-      }
-
-      protected PageData[] createT(int length)
-      {
-         return new PageData[length];
-      }
-
-      protected PageData loadT(POMSession session, org.gatein.mop.api.workspace.Page w)
-      {
-         return new Mapper(session).load(w);
-      }
-   }
-
-   public static class FindNavigation extends FindSiteObject<Navigation, NavigationData>
-   {
-
-      public FindNavigation(Query<NavigationData> pageQuery)
-      {
-         super(pageQuery);
-      }
-
-      protected Iterator<Navigation> findW(POMSession session, ObjectType<? extends Site> siteType, String ownerId,
-         String title)
-      {
-         return session.findObjects(ObjectType.NAVIGATION, siteType, q.getOwnerId(), q.getTitle());
-      }
-
-      protected NavigationData[] createT(int length)
-      {
-         return new NavigationData[length];
-      }
-
-      protected NavigationData loadT(POMSession session, Navigation w)
-      {
-         return new Mapper(session).load(w);
-      }
    }
 
    public static class FindPortletPreferences extends SearchTask<PortletPreferences>
@@ -273,4 +149,10 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          return new LazyPageList<PortalKey>(la, 10);
       }
    }
+
+  @Override
+  public String toString()
+  {
+     return getClass().getSimpleName() + "[query=" + q + "]";
+  }
 }
