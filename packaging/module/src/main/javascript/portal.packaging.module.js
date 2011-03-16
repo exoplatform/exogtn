@@ -186,7 +186,6 @@ function getModule(params)
 
       addDependency(kernel.container).
       addDependency(kernel.component.common).
-      addDependency(kernel.component.remote).
       addDependency(kernel.component.cache).
       addDependency(kernel.component.command).
       addDependency(new Project("org.exoplatform.kernel", "exo.kernel.component.ext.cache.impl.jboss.v3", "jar", kernel.version)).       
