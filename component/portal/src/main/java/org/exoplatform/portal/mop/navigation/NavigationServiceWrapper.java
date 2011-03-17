@@ -21,9 +21,13 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.organization.OrganizationService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picocontainer.Startable;
 
 /**
@@ -34,11 +38,18 @@ public class NavigationServiceWrapper implements Startable, NavigationService
 {
 
    /** . */
+   private static final Logger log = LoggerFactory.getLogger(NavigationServiceWrapper.class);
+
+   /** . */
    private final NavigationServiceImpl service;
 
-   public NavigationServiceWrapper(POMSessionManager manager, OrganizationService organization)
+   /** . */
+   private ListenerService listenerService;
+
+   public NavigationServiceWrapper(POMSessionManager manager, OrganizationService organization, ListenerService listenerService)
    {
       this.service = new NavigationServiceImpl(manager);
+      this.listenerService = listenerService;
    }
 
    public void start()
@@ -78,7 +89,20 @@ public class NavigationServiceWrapper implements Startable, NavigationService
 
    public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
    {
-      return service.saveNavigation(key, state);
+      boolean changed = service.saveNavigation(key, state);
+      String name = state != null ? (changed ? EventType.NAVIGATION_CREATED : EventType.NAVIGATION_UPDATED) : (changed ? EventType.NAVIGATION_DESTROYED : null);
+      if (name != null)
+      {
+         try
+         {
+            listenerService.broadcast(name, this, key);
+         }
+         catch (Exception e)
+         {
+            log.error("Error when delivering notification " + name + " for navigation " + key, e);
+         }
+      }
+      return changed;
    }
 
    public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)

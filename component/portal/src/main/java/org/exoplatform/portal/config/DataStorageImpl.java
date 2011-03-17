@@ -37,6 +37,8 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -120,19 +122,19 @@ public class DataStorageImpl implements DataStorage
    public void create(PageNavigation navigation) throws Exception
    {
       delegate.create(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_CREATED, this, navigation);
+      listenerServ_.broadcast(EventType.NAVIGATION_CREATED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
    }
 
    public void save(PageNavigation navigation) throws Exception
    {
       delegate.save(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_UPDATED, this, navigation);
+      listenerServ_.broadcast(EventType.NAVIGATION_UPDATED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
    }
 
    public void remove(PageNavigation navigation) throws Exception
    {
       delegate.remove(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_REMOVED, this, navigation);
+      listenerServ_.broadcast(EventType.NAVIGATION_DESTROYED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
    }
 
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception

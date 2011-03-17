@@ -32,6 +32,8 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -131,9 +133,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          listenerService.addListener(DataStorage.PAGE_CREATED, listener);
          listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
          listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_CREATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_REMOVED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_UPDATED, listener);
+         listenerService.addListener(EventType.NAVIGATION_CREATED, listener);
+         listenerService.addListener(EventType.NAVIGATION_DESTROYED, listener);
+         listenerService.addListener(EventType.NAVIGATION_UPDATED, listener);
       }
    }
 
@@ -583,10 +585,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             storage_.remove(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_REMOVED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
+            assertEquals(EventType.NAVIGATION_DESTROYED, event.getEventName());
+            SiteKey n = ((SiteKey)event.getData());
+            assertEquals(SiteKey.group("/platform/administrators"), n);
             assertEquals(null, storage_.getPageNavigation("group", "/platform/administrators"));
          }
       }.execute(null);
@@ -607,10 +608,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             storage_.create(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_CREATED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
+            assertEquals(EventType.NAVIGATION_CREATED, event.getEventName());
+            SiteKey n = ((SiteKey)event.getData());
+            assertEquals(SiteKey.group("/platform/administrators"), n);
             PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
             assertEquals("group", n2.getOwnerType());
             assertEquals("/platform/administrators", n2.getOwnerId());
@@ -692,11 +692,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             storage_.save(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_UPDATED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
-            assertEquals(3, n.getPriority());
+            assertEquals(EventType.NAVIGATION_UPDATED, event.getEventName());
+            SiteKey n = ((SiteKey)event.getData());
+            assertEquals(SiteKey.group("/platform/administrators"), n);
             PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
             assertEquals("group", n2.getOwnerType());
             assertEquals("/platform/administrators", n2.getOwnerId());
