@@ -31,32 +31,9 @@
    <packaging>pom</packaging>
    <name>GateIn Portal Packaging</name>
 
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>module</module>
-                <module>product</module>
-                <module>pkg</module>
-                <module>reports</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>pkg-jbossas-beta</id>
-            <modules>
-                <module>jboss-as</module>
-                <module>reports</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>pkg-tomcat-beta</id>
-            <modules>
-                <module>tomcat</module>
-                <module>reports</module>
-            </modules>
-        </profile>
-    </profiles>
+   <modules>
+      <module>module</module>
+      <module>product</module>
+      <module>pkg</module>
+   </modules>
 </project>

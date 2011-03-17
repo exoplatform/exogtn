@@ -119,15 +119,15 @@
 
    <build>
       <plugins>
-         <!-- needed for exobuild to call maven dependency:get --> 
+         <!-- needed for exobuild to call maven dependency:get -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.1</version>
             <configuration>
-              <repositoryUrl>xxx</repositoryUrl>
+               <repositoryUrl>xxx</repositoryUrl>
             </configuration>
          </plugin>
+
          <!-- check-out exobuild -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -151,119 +151,31 @@
                      </artifactItems>
                   </configuration>
                </execution>
-			     <execution>
-			       <id>copy-dependencies</id>
-			       <phase>compile</phase>
-			       <goals>
-			         <goal>copy-dependencies</goal>
-			       </goals>
-			       <configuration>
+			      <execution>
+			         <id>copy-dependencies</id>
+			         <phase>compile</phase>
+			         <goals>
+			           <goal>copy-dependencies</goal>
+			         </goals>
+			         <configuration>
                      <includeTypes>js</includeTypes>
                      <stripVersion>true</stripVersion>
                      <outputDirectory>${project.build.directory}/packager-conf</outputDirectory>
-			       </configuration>
-			     </execution>
+			         </configuration>
+			      </execution>
             </executions>
          </plugin>
-   <!-- JBoss-EAR packaging - not in a specific profile so hudson will generate the zip and publish it on maven repo -->
-   <!-- Ensure your environment is correctly setup -->
-       <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <executions>
-             <execution>
-                <id>jbossas-check-environment-ready</id>
-                <goals>
-                   <goal>enforce</goal>
-                </goals>
-                <configuration>
-                   <rules>
-                      <requireProperty>
-                         <property>exo.projects.directory.dependencies</property>
-                         <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
-                      </requireProperty>
-                      <requireProperty>
-                         <property>exo.projects.app.jboss.version</property>
-                         <message>"You must define the property exo.projects.app.jboss.version to give the name of the directory where is stored JBossAS"</message>
-                      </requireProperty>
-                      <requireFilesExist>
-                         <files>
-                            <file>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}/</file>
-                         </files>
-                         <message>"The following JBossAS directory doesn't exist : ${exo.projects.directory.dependencies}/${{exo.projects.app.jboss.version}"</message>
-                      </requireFilesExist>
-                   </rules>
-                   <fail>true</fail>
-                </configuration>
-             </execution>
-          </executions>
-       </plugin>
-       <!-- run exo buils -->
-       <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <executions>
-             <execution>
-                <id>jbossas-packaging</id>
-                <phase>package</phase>
-                <configuration>
-                   <executable>java</executable>
-                   <workingDirectory>${basedir}</workingDirectory>
-                   <arguments>
-                      <argument>-Dexo.package.home=${basedir}/target/packager</argument>
-                      <argument>-Dexo.current.dir=${basedir}</argument>
-                      <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
-                      <argument>-Dexo.conf.dir=${basedir}/target/packager-conf</argument>
-                      <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
-                      <!--argument>-Dexo.src.dir=NONE</argument-->
-                      <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                      <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
-                      <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
-                      <argument>-Dexo.m2.home=${maven.home}</argument>
-                      <argument>-Xms128m</argument>
-                      <argument>-Xmx512m</argument>
-                      <argument>-classpath</argument>
-                      <argument>${basedir}/target/packager/lib/js.jar</argument>
-                      <argument>org.mozilla.javascript.tools.shell.Main</argument>
-                      <argument>${basedir}/target/packager/javascript/eXo/eXo.js</argument>
-                      <argument>exobuild</argument>
-                      <argument>--product=portal</argument>
-                      <argument>--deploy=jbossear</argument>
-                   </arguments>
-                </configuration>
-                <goals>
-                   <goal>exec</goal>
-                </goals>
-             </execution>
-          </executions>
-       </plugin>
-
-       <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <executions>
-             <execution>
-                <id>jboss-ear-assembly</id>
-                <phase>package</phase>
-                <goals>
-                   <goal>single</goal>
-                </goals>
-                <configuration>
-                   <descriptors>
-                      <descriptor>src/main/assembly/gatein-ear.xml</descriptor>
-                   </descriptors>
-                   <attach>true</attach>
-                </configuration>
-             </execution>
-          </executions>
-       </plugin>
-    <!-- End of JBoss-EAR packaging -->
-
      </plugins>
    </build>
 
    <profiles>
       <profile>
          <id>pkg-tomcat</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
          <build>
             <finalName>GateIn-${project.version}</finalName>
             <plugins>
@@ -306,7 +218,7 @@
                   <executions>
                      <execution>
                         <id>tomcat-packaging</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <configuration>
                            <executable>java</executable>
                            <workingDirectory>${basedir}</workingDirectory>
@@ -318,7 +230,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>
@@ -338,7 +250,18 @@
                      </execution>
                   </executions>
                </plugin>
-<!--
+            </plugins>
+         </build>
+      </profile>
+      <profile>
+         <id>arc-tomcat</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
+         <build>
+            <plugins>
                <plugin>
                   <artifactId>maven-assembly-plugin</artifactId>
                   <executions>
@@ -357,13 +280,123 @@
                      </execution>
                   </executions>
                </plugin>
--->
             </plugins>
          </build>
       </profile>
 
+
+      <profile>
+         <id>pkg-jbossear</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
+         <build>
+            <plugins>
+               <!-- JBoss-EAR packaging - not in a specific profile so hudson will generate the zip and publish it on maven repo -->
+               <!-- Ensure your environment is correctly setup -->
+                   <plugin>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-enforcer-plugin</artifactId>
+                      <executions>
+                         <execution>
+                            <id>jbossas-check-environment-ready</id>
+                            <goals>
+                               <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                               <rules>
+                                  <requireProperty>
+                                     <property>exo.projects.directory.dependencies</property>
+                                     <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
+                                  </requireProperty>
+                                  <requireProperty>
+                                     <property>exo.projects.app.jboss.version</property>
+                                     <message>"You must define the property exo.projects.app.jboss.version to give the name of the directory where is stored JBossAS"</message>
+                                  </requireProperty>
+                                  <requireFilesExist>
+                                     <files>
+                                        <file>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}/</file>
+                                     </files>
+                                     <message>"The following JBossAS directory doesn't exist : ${exo.projects.directory.dependencies}/${{exo.projects.app.jboss.version}"</message>
+                                  </requireFilesExist>
+                               </rules>
+                               <fail>true</fail>
+                            </configuration>
+                         </execution>
+                      </executions>
+                   </plugin>
+
+                   <!-- run exo build -->
+                   <plugin>
+                      <groupId>org.codehaus.mojo</groupId>
+                      <artifactId>exec-maven-plugin</artifactId>
+                      <executions>
+                         <execution>
+                            <id>jbossas-packaging</id>
+                            <phase>prepare-package</phase>
+                            <configuration>
+                               <executable>java</executable>
+                               <workingDirectory>${basedir}</workingDirectory>
+                               <arguments>
+                                  <argument>-Dexo.package.home=${basedir}/target/packager</argument>
+                                  <argument>-Dexo.current.dir=${basedir}</argument>
+                                  <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
+                                  <argument>-Dexo.conf.dir=${basedir}/target/packager-conf</argument>
+                                  <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
+                                  <!--argument>-Dexo.src.dir=NONE</argument-->
+                                  <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
+                                  <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
+                                  <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
+                                  <argument>-Dexo.m2.home=${maven.home}</argument>
+                                  <argument>-Xms128m</argument>
+                                  <argument>-Xmx512m</argument>
+                                  <argument>-classpath</argument>
+                                  <argument>${basedir}/target/packager/lib/js.jar</argument>
+                                  <argument>org.mozilla.javascript.tools.shell.Main</argument>
+                                  <argument>${basedir}/target/packager/javascript/eXo/eXo.js</argument>
+                                  <argument>exobuild</argument>
+                                  <argument>--product=portal</argument>
+                                  <argument>--deploy=jbossear</argument>
+                               </arguments>
+                            </configuration>
+                            <goals>
+                               <goal>exec</goal>
+                            </goals>
+                         </execution>
+                      </executions>
+                   </plugin>
+
+                   <plugin>
+                      <artifactId>maven-assembly-plugin</artifactId>
+                      <executions>
+                         <execution>
+                            <id>jboss-ear-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                               <goal>single</goal>
+                            </goals>
+                            <configuration>
+                               <descriptors>
+                                  <descriptor>src/main/assembly/gatein-ear.xml</descriptor>
+                               </descriptors>
+                               <attach>true</attach>
+                            </configuration>
+                         </execution>
+                      </executions>
+                   </plugin>
+                <!-- End of JBoss-EAR packaging -->
+            </plugins>
+         </build>
+      </profile>
       <profile>
          <id>pkg-jbossas</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
          <build>
             <finalName>GateIn-${project.version}</finalName>
             <plugins>
@@ -406,7 +439,7 @@
                   <executions>
                      <execution>
                         <id>jbossas-packaging</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <configuration>
                            <executable>java</executable>
                            <workingDirectory>${basedir}</workingDirectory>
@@ -418,7 +451,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>
@@ -438,7 +471,18 @@
                      </execution>
                   </executions>
                </plugin>
-<!--
+            </plugins>
+         </build>
+      </profile>
+      <profile>
+         <id>arc-jbossas</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
+         <build>
+            <plugins>
                <plugin>
                   <artifactId>maven-assembly-plugin</artifactId>
                   <executions>
@@ -457,12 +501,17 @@
                      </execution>
                   </executions>
                </plugin>
--->
             </plugins>
          </build>
       </profile>
+
       <profile>
          <id>pkg-tomcat-tests</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
          <build>
             <finalName>GateIn-${project.version}</finalName>
             <plugins>
@@ -517,7 +566,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>
@@ -564,6 +613,11 @@
       </profile>
       <profile>
          <id>pkg-jbossas-tests</id>
+         <activation>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
+         </activation>
          <build>
             <finalName>GateIn-${project.version}</finalName>
             <plugins>
@@ -618,7 +672,7 @@
                               <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
-                              <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xms128m</argument>

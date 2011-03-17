@@ -51,10 +51,10 @@
 
    <profiles>
      <profile>
-       <id>normal</id>
+       <id>examples</id>
        <activation>
          <property>
-           <name>!development</name>
+           <name>!gatein.dev</name>
          </property>
        </activation>
        <modules>
