@@ -22,6 +22,8 @@ package org.exoplatform.portal.application;
 import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.core.UIComponent;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.net.URLEncoder;
 
@@ -31,6 +33,8 @@ import java.net.URLEncoder;
  */
 public class PortalURLBuilder extends URLBuilder<UIComponent>
 {
+
+   private static Logger LOGGER = LoggerFactory.getLogger(PortalURLBuilder.class);
 
    public PortalURLBuilder(String baseURL)
    {
@@ -74,7 +78,7 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
          }
          catch (Exception e)
          {
-            System.err.println(e.toString());
+            LOGGER.error("Could not encode URL", e);
          }
          builder.append("&amp;").append(param.getName()).append('=').append(param.getValue());
       }

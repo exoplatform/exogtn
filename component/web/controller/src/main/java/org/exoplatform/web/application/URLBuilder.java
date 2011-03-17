@@ -19,6 +19,9 @@
 
 package org.exoplatform.web.application;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 import java.net.URLEncoder;
 
 /**
@@ -27,6 +30,8 @@ import java.net.URLEncoder;
  */
 abstract public class URLBuilder<T>
 {
+
+   private static Logger LOGGER = LoggerFactory.getLogger(URLBuilder.class);
 
    protected String baseURL_;
 
@@ -90,7 +95,7 @@ abstract public class URLBuilder<T>
          }
          catch (Exception e)
          {
-            System.err.println(e.toString());
+            LOGGER.error("Fail to encode AjaxURL", e);
          }
       }
       createURL(builder, targetComponent, action, targetBeanId, params);
@@ -115,7 +120,7 @@ abstract public class URLBuilder<T>
          }
          catch (Exception e)
          {
-            System.err.println(e.toString());
+            LOGGER.error("Fail to encode URL", e);
          }
       }
       createURL(builder, targetComponent, action, targetBeanId, params);

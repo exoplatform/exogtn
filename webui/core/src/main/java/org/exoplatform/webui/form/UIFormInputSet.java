@@ -27,6 +27,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.Writer;
 import java.util.MissingResourceException;
@@ -45,6 +47,8 @@ public class UIFormInputSet extends UIContainer
 {
 
    private transient BeanDataMapping beanMapping = null;
+
+   private static Logger LOGGER = LoggerFactory.getLogger(UIFormInputSet.class);
 
    private static String selectedCompId = "";
 
@@ -180,7 +184,7 @@ public class UIFormInputSet extends UIContainer
             {
                //label = "&nbsp;" ;
                label = inputEntry.getName();
-               System.err.println("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
+               LOGGER.warn("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value", ex);
             }
             w.write("<tr>");
             w.write("<td class=\"FieldLabel\">");

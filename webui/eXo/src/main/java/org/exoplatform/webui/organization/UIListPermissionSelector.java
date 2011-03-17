@@ -46,6 +46,8 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormPageIterator;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.validator.Validator;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /** Created by The eXo Platform SARL Author : Pham Dung Ha ha.pham@exoplatform.com May 7, 2007o */
 @ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {
@@ -56,6 +58,8 @@ import org.exoplatform.webui.form.validator.Validator;
 public class UIListPermissionSelector extends UISelector<String[]>
 {
    private boolean publicMode_ = false;
+
+   private static Logger LOGGER = LoggerFactory.getLogger(UIListPermissionSelector.class);
 
    public UIListPermissionSelector() throws Exception
    {
@@ -215,7 +219,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       }
       catch (MissingResourceException e)
       {
-         System.err.println("\nkey: " + key);
+         LOGGER.warn("Could not find localized value for key: " + key, e);
       }
       return label;
    }
