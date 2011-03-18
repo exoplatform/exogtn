@@ -23,11 +23,14 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
+import static org.exoplatform.portal.mop.navigation.Utils.*;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
 import org.picocontainer.Startable;
 
 /**
@@ -93,14 +96,7 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       String name = state != null ? (changed ? EventType.NAVIGATION_CREATED : EventType.NAVIGATION_UPDATED) : (changed ? EventType.NAVIGATION_DESTROYED : null);
       if (name != null)
       {
-         try
-         {
-            listenerService.broadcast(name, this, key);
-         }
-         catch (Exception e)
-         {
-            log.error("Error when delivering notification " + name + " for navigation " + key, e);
-         }
+         notify(name, key);
       }
       return changed;
    }
@@ -123,5 +119,22 @@ public class NavigationServiceWrapper implements Startable, NavigationService
    public <N> void saveNode(NodeModel<N> model, N node)
    {
       service.saveNode(model, node);
+      NodeContext<N> context = model.getContext(node);
+      org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION, context.data.id);
+      Site site = nav.getSite();
+      SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
+      notify(EventType.NAVIGATION_UPDATED, key);
+   }
+
+   private void notify(String name, SiteKey key)
+   {
+      try
+      {
+         listenerService.broadcast(name, this, key);
+      }
+      catch (Exception e)
+      {
+         log.error("Error when delivering notification " + name + " for navigation " + key, e);
+      }
    }
 }

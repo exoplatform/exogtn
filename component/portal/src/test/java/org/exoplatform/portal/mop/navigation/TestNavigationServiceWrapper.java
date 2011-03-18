@@ -111,6 +111,19 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       assertSame(navigationService, event.getSource());
       assertEquals(0, destroyListener.events.size());
 
+      // Update
+      Navigation navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
+      Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
+      root.setState(new NodeState.Builder(root.getState()).setLabel("foo").capture());
+      navigationService.saveNode(Node.MODEL, root);
+      assertEquals(0, createListener.events.size());
+      assertEquals(1, updateListener.events.size());
+      event = updateListener.events.removeFirst();
+      assertEquals(SiteKey.portal("notification"), event.getData());
+      assertEquals(EventType.NAVIGATION_UPDATED, event.getEventName());
+      assertSame(navigationService, event.getSource());
+      assertEquals(0, destroyListener.events.size());
+
       // Destroy
       navigationService.saveNavigation(SiteKey.portal("notification"), null);
       assertEquals(0, createListener.events.size());

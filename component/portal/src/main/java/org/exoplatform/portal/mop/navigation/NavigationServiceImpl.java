@@ -22,12 +22,12 @@ package org.exoplatform.portal.mop.navigation;
 import org.chromattic.api.Chromattic;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.exoplatform.portal.pom.data.Mapper;
+import static org.exoplatform.portal.mop.navigation.Utils.*;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -77,7 +76,7 @@ public class NavigationServiceImpl implements NavigationService
    private Map<String, String> nodePathCache;
 
    /** . */
-   private final POMSessionManager manager;
+   final POMSessionManager manager;
 
    /** . */
    private Session bridgeSession;
@@ -86,17 +85,7 @@ public class NavigationServiceImpl implements NavigationService
    private InvalidationManager invalidationManager;
 
    /** . */
-   private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
-
-   /** . */
    final Logger log = LoggerFactory.getLogger(NavigationServiceImpl.class);
-
-   static
-   {
-      a.put(SiteType.PORTAL, ObjectType.PORTAL_SITE);
-      a.put(SiteType.GROUP, ObjectType.GROUP_SITE);
-      a.put(SiteType.USER, ObjectType.USER_SITE);
-   }
 
    public NavigationServiceImpl(POMSessionManager manager)
    {
@@ -323,7 +312,7 @@ public class NavigationServiceImpl implements NavigationService
    private Navigation findNavigation(POMSession session, SiteKey key)
    {
       Workspace workspace = session.getWorkspace();
-      ObjectType<Site> objectType = a.get(key.getType());
+      ObjectType<Site> objectType = objectType(key.getType());
       Site site = workspace.getSite(objectType, key.getName());
       if (site != null)
       {
@@ -357,7 +346,7 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       POMSession session = manager.getSession();
-      ObjectType<Site> objectType = a.get(key.getType());
+      ObjectType<Site> objectType = objectType(key.getType());
       Workspace workspace = session.getWorkspace();
       Site site = workspace.getSite(objectType, key.getName());
       if (site == null)
