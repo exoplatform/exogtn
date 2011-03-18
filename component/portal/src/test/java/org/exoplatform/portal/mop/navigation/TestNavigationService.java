@@ -1074,4 +1074,72 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(root.getChild("foo").getId());
       assertNotSame(fooId, root.getChild("foo").getId());
    }
+
+   public void testSaveRemovedNode() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_removed_node");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("save_removed_node"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE);
+      end();
+
+      //
+      begin();
+      assertTrue(service.saveNavigation(SiteKey.portal("save_removed_node"), null));
+      end(true);
+
+      //
+      begin();
+      try
+      {
+         service.saveNode(Node.MODEL, root);
+         fail();
+      }
+      catch (NavigationSaveException ignore)
+      {
+      }
+   }
+
+/*
+   public void testSavePhantomNode() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_save");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("concurrent_save"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root.addChild("foo");
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+*/
+/*
+      begin();
+      //Reload the root node
+      root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      end(true);
+*//*
+
+
+      //Edit navigation in another browser
+      begin();
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root2.removeChild("foo");
+      service.saveNode(Node.MODEL, root2);
+      end(true);
+
+      begin();
+      //Now click Save button in the first browser
+      service.saveNode(Node.MODEL, root);
+   }
+*/
 }

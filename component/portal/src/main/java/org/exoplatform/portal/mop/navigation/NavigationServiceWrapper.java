@@ -116,7 +116,7 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       service.refresh(model, node, scope);
    }
 
-   public <N> void saveNode(NodeModel<N> model, N node)
+   public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
    {
       service.saveNode(model, node);
       NodeContext<N> context = model.getContext(node);

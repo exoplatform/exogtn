@@ -618,7 +618,7 @@ public class NavigationServiceImpl implements NavigationService
       context.data = to;
    }
 
-   public <N> void saveNode(NodeModel<N> model, N node)
+   public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
    {
       POMSession session = manager.getSession();
       NodeContext<N> context = model.getContext(node);
@@ -792,7 +792,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       // Create new nodes and associates with navigation object
-      void phase1(POMSession session)
+      void phase1(POMSession session) throws NavigationServiceException
       {
          if (context.data == null)
          {
@@ -803,13 +803,20 @@ public class NavigationServiceImpl implements NavigationService
             navigation = session.findObjectById(ObjectType.NAVIGATION, context.getId());
 
             //
-            for (SaveContext<N> child : children)
+            if (navigation == null)
             {
-               if (child.context.data == null)
+               throw new NavigationSaveException("The node " + context.getId() + " does not exist anymore");
+            }
+            else
+            {
+               for (SaveContext<N> child : children)
                {
-                  org.gatein.mop.api.workspace.Navigation added = navigation.addChild(child.context.getName());
-                  child.context.data = new NodeData(added);
-                  childrenIds.add(added.getObjectId());
+                  if (child.context.data == null)
+                  {
+                     org.gatein.mop.api.workspace.Navigation added = navigation.addChild(child.context.getName());
+                     child.context.data = new NodeData(added);
+                     childrenIds.add(added.getObjectId());
+                  }
                }
             }
          }
