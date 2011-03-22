@@ -49,6 +49,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -938,25 +939,39 @@ public class NavigationServiceImpl implements NavigationService
                orders.add(foo.data.id);
             }
 
+            // Now sort children according to the order provided by the container
+            // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
+            org.gatein.mop.api.workspace.Navigation[] a = navigation.getChildren().toArray(new org.gatein.mop.api.workspace.Navigation[navigation.getChildren().size()]);
+
+
             //
-            if (!childrenIds.equals(orders))
+            LinkedList<org.gatein.mop.api.workspace.Navigation> d = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
+            org.gatein.mop.api.workspace.Navigation[] b = new org.gatein.mop.api.workspace.Navigation[a.length];
+            for (org.gatein.mop.api.workspace.Navigation c : a)
             {
-               // Now sort children according to the order provided by the container
-               // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
-               org.gatein.mop.api.workspace.Navigation[] a = navigation.getChildren().toArray(new org.gatein.mop.api.workspace.Navigation[navigation.getChildren().size()]);
-               Arrays.sort(a, new Comparator<org.gatein.mop.api.workspace.Navigation>()
+               int order = orders.indexOf(c.getObjectId());
+               if (order == -1)
                {
-                  public int compare(org.gatein.mop.api.workspace.Navigation o1, org.gatein.mop.api.workspace.Navigation o2)
-                  {
-                     int i1 = orders.indexOf(o1.getObjectId());
-                     int i2 = orders.indexOf(o2.getObjectId());
-                     return i1 - i2;
-                  }
-               });
-               for (int j = 0; j < a.length; j++)
-               {
-                  navigation.getChildren().add(j, a[j]);
+                  d.add(c);
                }
+               else
+               {
+                  // Could we have an array index out of bounds
+                  b[order] = c;
+               }
+            }
+            for (int i = 0;i < b.length;i++)
+            {
+               if (b[i] == null)
+               {
+                  b[i] = d.removeFirst();
+               }
+            }
+
+            //
+            for (int j = 0; j < b.length; j++)
+            {
+               navigation.getChildren().add(j, b[j]);
             }
          }
 

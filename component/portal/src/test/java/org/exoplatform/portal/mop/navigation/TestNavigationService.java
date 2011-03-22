@@ -1105,6 +1105,37 @@ public class TestNavigationService extends AbstractPortalTest
       }
    }
 
+   public void testSaveMergeNodes() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "bilto");
+      org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
+      nav.addChild("a");
+      nav.addChild("b");
+      nav.addChild("c");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("bilto"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
+      end();
+
+      //
+      begin();
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
+      root2.addChild(1, root2.addChild("2"));
+      service.saveNode(Node.MODEL, root2);
+      end(true);
+
+      //
+      begin();
+      service.saveNode(Node.MODEL, root1);
+      root1.addChild(1, root1.addChild("1"));
+      service.saveNode(Node.MODEL, root1);
+   }
+
+
 /*
    public void testSavePhantomNode() throws Exception
    {
