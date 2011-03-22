@@ -22,7 +22,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.test</artifactId>
-      <version>3.1.8-REBASED-SNAPSHOT</version>
+      <version>3.1.8-PLF</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
