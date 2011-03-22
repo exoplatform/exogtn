@@ -31,16 +31,16 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>3.1.8-PLF</version>
+   <version>3.1.9-PLF-SNAPSHOT</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.2.8-GA</org.exoplatform.kernel.version>
-      <org.exoplatform.core.version>2.3.8-GA</org.exoplatform.core.version>
-      <org.exoplatform.ws.version>2.1.8-GA</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.12.8-GA</org.exoplatform.jcr.version>
+      <org.exoplatform.kernel.version>2.2.9-GA-SNAPSHOT</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.3.9-GA-SNAPSHOT</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.1.9-GA-SNAPSHOT</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.12.9-GA-SNAPSHOT</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch04</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
@@ -402,161 +402,161 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.common</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.controller</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.security</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.server</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.api</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web.resources</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.pc</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.identity</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.resources</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.application-registry</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.scripting</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.management</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.framework</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portlet</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portal</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.eXo</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.core</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.dashboard</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.gadgets-core</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>gatein.portal.component.wsrp</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>      
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.server.jboss.plugin</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.server.tomcat.plugin</artifactId>
-          <version>3.1.8-PLF</version>
+          <version>3.1.9-PLF-SNAPSHOT</version>
         </dependency>  
 
          <!-- Chromattic -->
