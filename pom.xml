@@ -107,9 +107,9 @@
    </distributionManagement>
 
    <scm>
-      <connection>scm:git:git://github.com/exoplatform/exogtn.git</connection>
-      <developerConnection>scm:git:ssh://git@github.com/exoplatform/exogtn.git</developerConnection>
-      <url>https://github.com/exoplatform/exogtn</url>
+      <connection>scm:git:git://github.com/exoportal/exogtn.git</connection>
+      <developerConnection>scm:git:ssh://git@github.com/exoportal/exogtn.git</developerConnection>
+      <url>https://github.com/exoportal/exogtn</url>
    </scm>
 
    <modules>
