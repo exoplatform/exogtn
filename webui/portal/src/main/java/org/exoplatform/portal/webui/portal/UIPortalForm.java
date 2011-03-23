@@ -347,8 +347,7 @@ public class UIPortalForm extends UIFormTabPane
       {
          UIPortalForm uiForm = event.getSource();
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         String template = "classic";
-//         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
+         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
          String portalName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          PortalConfig config = dataService.getPortalConfig(portalName);
