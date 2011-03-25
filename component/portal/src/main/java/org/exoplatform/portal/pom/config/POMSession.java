@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
@@ -35,7 +36,6 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.WorkspaceObject;
-import org.gatein.mop.core.api.MOPFormatter;
 import org.gatein.mop.core.api.ModelImpl;
 import org.gatein.mop.core.api.workspace.NavigationImpl;
 import org.gatein.mop.core.api.workspace.PageImpl;
@@ -239,12 +239,14 @@ public class POMSession
       return prefs;
    }
 
+  private static final BaseEncodingObjectFormatter formatter = new BaseEncodingObjectFormatter();
+
    public <O extends WorkspaceObject> Iterator<O> findObjects(ObjectType<O> type, ObjectType<? extends Site> siteType,
       String ownerId, String title)
    {
       this.save();
       //
-      String ownerIdChunk = ownerId != null ? new MOPFormatter().encodeNodeName(null, ownerId) : "%";
+      String ownerIdChunk = ownerId != null ? ("mop:" + formatter.encodeNodeName(null, ownerId)) : "%";
 
       //
       String ownerTypeChunk;
