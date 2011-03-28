@@ -36,16 +36,9 @@ import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.observation.Event;
-import javax.jcr.observation.EventListener;
-import javax.jcr.observation.EventListenerIterator;
-import javax.jcr.observation.ObservationManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -53,7 +46,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
@@ -65,25 +57,10 @@ public class NavigationServiceImpl implements NavigationService
 {
 
    /** . */
-   private Map<SiteKey, Navigation> navigationKeyCache;
-
-   /** . */
-   private Map<String, SiteKey> navigationPathCache;
-
-   /** . */
-   private Map<String, NodeData> nodeIdCache;
-
-   /** . */
-   private Map<String, String> nodePathCache;
-
-   /** . */
    final POMSessionManager manager;
 
    /** . */
-   private Session bridgeSession;
-
-   /** . */
-   private InvalidationManager invalidationManager;
+   private final Cache cache;
 
    /** . */
    final Logger log = LoggerFactory.getLogger(NavigationServiceImpl.class);
@@ -95,187 +72,20 @@ public class NavigationServiceImpl implements NavigationService
          throw new NullPointerException("No null pom session manager allowed");
       }
       this.manager = manager;
-      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, Navigation>(1000);
-      this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
-      this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
-      this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
-      this.invalidationManager = null;
+      this.cache = new CacheById();
    }
 
    public void start() throws Exception
    {
       Chromattic chromattic = manager.getLifeCycle().getChromattic();
       Session session = chromattic.openSession().getJCRSession();
-      ObservationManager observationManager = session.getWorkspace().getObservationManager();
-
-      invalidationManager = new InvalidationManager(observationManager);
-
-      //
-      final String NAVIGATION_CONTAINER = "mop:navigationcontainer";
-      final String NAVIGATION = "mop:navigation";
-      final String ATTRIBUTES = "mop:attributes";
-
-      //
-      invalidationManager.register(NAVIGATION_CONTAINER, Event.NODE_REMOVED + Event.NODE_ADDED, new Invalidator()
-      {
-         @Override
-         void invalidate(int eventType, String nodeType, String itemPath)
-         {
-            if (nodeType.equals(NAVIGATION_CONTAINER))
-            {
-               switch (eventType)
-               {
-                  case Event.NODE_REMOVED:
-                  {
-                     String nodeId = nodePathCache.remove(itemPath);
-                     if (nodeId != null)
-                     {
-                        nodeIdCache.remove(nodeId);
-                     }
-                     String parentPath = parentPath(parentPath(itemPath));
-                     String id = nodePathCache.remove(parentPath);
-                     if (id != null)
-                     {
-                        nodeIdCache.remove(id);
-                     }
-                     String a = parentPath(parentPath(parentPath(itemPath)));
-                     SiteKey sk = navigationPathCache.remove(a);
-                     if (sk != null)
-                     {
-                        navigationKeyCache.remove(sk);
-                     }
-                     break;
-                  }
-                  case Event.NODE_ADDED:
-                  {
-                     String parentPath = parentPath(parentPath(itemPath));
-                     String id = nodePathCache.remove(parentPath);
-                     if (id != null)
-                     {
-                        nodeIdCache.remove(id);
-                     }
-                     String a = parentPath(parentPath(parentPath(itemPath)));
-                     SiteKey sk = navigationPathCache.remove(a);
-                     if (sk != null)
-                     {
-                        navigationKeyCache.remove(sk);
-                     }
-                     break;
-                  }
-               }
-            }
-         }
-      });
-
-      //
-      invalidationManager.register(NAVIGATION, Event.PROPERTY_ADDED + Event.PROPERTY_CHANGED + Event.PROPERTY_REMOVED, new Invalidator()
-      {
-         @Override
-         void invalidate(int eventType, String nodeType, String itemPath)
-         {
-            // Look for node
-            String nodePath = parentPath(itemPath);
-            String id = nodePathCache.remove(nodePath);
-            if (id != null)
-            {
-               nodeIdCache.remove(id);
-            }
-         }
-      });
-
-      //
-      invalidationManager.register(ATTRIBUTES, Event.NODE_ADDED + Event.NODE_REMOVED, new Invalidator()
-      {
-         @Override
-         void invalidate(int eventType, String nodeType, String itemPath)
-         {
-            String nodePath = parentPath(parentPath(itemPath));
-
-            //
-            String id = nodePathCache.remove(nodePath);
-            if (id != null)
-            {
-               nodeIdCache.remove(id);
-            }
-
-            //
-            String navPath = parentPath(parentPath(parentPath(nodePath)));
-            SiteKey navigationKey = navigationPathCache.remove(navPath);
-            if (navigationKey != null)
-            {
-               navigationKeyCache.remove(navigationKey);
-            }
-         }
-      });
-
-      //
-      this.bridgeSession = session;
+      cache.start(session);
    }
 
-   private String parentPath(String path)
-   {
-      int index = path.lastIndexOf('/');
-      return path.substring(0, index);
-   }
 
    public void stop()
    {
-      if (bridgeSession != null)
-      {
-         Session session = bridgeSession;
-         bridgeSession = null;
-
-         // Unregister
-         try
-         {
-            ObservationManager om = session.getWorkspace().getObservationManager();
-            EventListenerIterator i = om.getRegisteredEventListeners();
-            while (i.hasNext())
-            {
-               EventListener listener = i.nextEventListener();
-               om.removeEventListener(listener);
-            }
-         }
-         catch (RepositoryException e)
-         {
-            e.printStackTrace();
-         }
-
-         //
-         session.logout();
-      }
-   }
-
-   private NodeData getNodeData(POMSession session, String nodeId)
-   {
-      NodeData data;
-      if (session.isModified())
-      {
-         org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-         if (navigation != null)
-         {
-            data = new NodeData(navigation);
-         }
-         else
-         {
-            data = null;
-         }
-      }
-      else
-      {
-         data = nodeIdCache.get(nodeId);
-         if (data == null)
-         {
-            org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-            if (navigation != null)
-            {
-               data = new NodeData(navigation);
-               nodeIdCache.put(nodeId, data);
-               nodePathCache.put(session.pathOf(navigation), nodeId);
-            }
-         }
-      }
-      return data;
+      cache.stop();
    }
 
    public Navigation loadNavigation(SiteKey key)
@@ -286,56 +96,8 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      Navigation data;
       POMSession session = manager.getSession();
-      if (session.isModified())
-      {
-         data = findNavigation(session, key);
-      }
-      else
-      {
-         data = navigationKeyCache.get(key);
-         if (data == null)
-         {
-            data = findNavigation(session, key);
-            if (data != null)
-            {
-               navigationKeyCache.put(key, data);
-               navigationPathCache.put(data.path, key);
-            }
-         }
-      }
-
-      //
-      return data;
-   }
-
-   private Navigation findNavigation(POMSession session, SiteKey key)
-   {
-      Workspace workspace = session.getWorkspace();
-      ObjectType<Site> objectType = objectType(key.getType());
-      Site site = workspace.getSite(objectType, key.getName());
-      if (site != null)
-      {
-         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
-         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
-         String path = session.pathOf(site);
-         if (rootNode != null)
-         {
-
-            Integer priority = rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
-            String rootId = rootNode.getObjectId();
-            return new Navigation(path, key, new NavigationState(priority), rootId);
-         }
-         else
-         {
-            return new Navigation(path, key, null, null);
-         }
-      }
-      else
-      {
-         return null;
-      }
+      return cache.getNavigation(session, key);
    }
 
    public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
@@ -400,7 +162,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          POMSession session = manager.getSession();
          Scope.Visitor visitor = scope.get();
-         NodeData data = getNodeData(session, nodeId);
+         NodeData data = cache.getNodeData(session, nodeId);
          if (data != null)
          {
             NodeContext<N> context = load(model, session, data, visitor, 0);
@@ -433,7 +195,7 @@ public class NavigationServiceImpl implements NavigationService
          ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
          for (String childId : data.children)
          {
-            NodeData childData = getNodeData(session, childId);
+            NodeData childData = cache.getNodeData(session, childId);
             if (childData != null)
             {
                NodeContext<N> childContext = load(model, session, childData, visitor, depth + 1);
@@ -473,7 +235,7 @@ public class NavigationServiceImpl implements NavigationService
    private <N> N load(NodeModel<N> model, POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
    {
       String nodeId = context.getId();
-      NodeData data = getNodeData(session, nodeId);
+      NodeData data = cache.getNodeData(session, nodeId);
 
       //
       if (data != null)
@@ -527,7 +289,7 @@ public class NavigationServiceImpl implements NavigationService
          ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
          for (String childId : data.children)
          {
-            NodeData childData = getNodeData(session, childId);
+            NodeData childData = cache.getNodeData(session, childId);
             if (childData != null)
             {
                NodeContext<N> childContext = previous.get(childId);
@@ -584,7 +346,7 @@ public class NavigationServiceImpl implements NavigationService
 
       NodeData from = context.data;
 
-      NodeData to = getNodeData(session, id);
+      NodeData to = cache.getNodeData(session, id);
 
       if (to == null)
       {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,13 +19,22 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.pom.config.POMSession;
+
+import javax.jcr.Session;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-interface Invalidator
+abstract class Cache
 {
 
-   void invalidate(int eventType, String nodeType, String itemPath);
+   abstract NodeData getNodeData(POMSession session, String nodeId);
 
+   abstract Navigation getNavigation(POMSession session, SiteKey key);
+
+   abstract void start(Session session) throws Exception;
+
+   abstract void stop();
 }
