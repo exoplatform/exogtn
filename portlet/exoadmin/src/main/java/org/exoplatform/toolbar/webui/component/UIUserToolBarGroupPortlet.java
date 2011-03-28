@@ -25,8 +25,11 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +40,13 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl")
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl",
+   events = {
+      @EventConfig(listeners = UIUserToolBarGroupPortlet.UpdateGroupNavigationActionListener.class)
+   }
+)
 public class UIUserToolBarGroupPortlet extends UIPortletApplication
 {
-
    public UIUserToolBarGroupPortlet() throws Exception
    {
    }
@@ -64,5 +70,14 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    public PageNode getSelectedPageNode() throws Exception
    {
       return Util.getUIPortal().getSelectedNode();
+   }
+   
+   public static class UpdateGroupNavigationActionListener extends EventListener<UIUserToolBarGroupPortlet>
+   {
+      @Override
+      public void execute(Event<UIUserToolBarGroupPortlet> event) throws Exception
+      {
+         // This event is only a trick for updating the Toolbar group portlet
+      }
    }
 }

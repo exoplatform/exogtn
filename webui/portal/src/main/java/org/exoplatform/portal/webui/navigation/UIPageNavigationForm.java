@@ -46,6 +46,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.portlet.ActionResponse;
+import javax.xml.namespace.QName;
+
 /*
  * Created by The eXo Platform SAS
  * Author : tam.nguyen
@@ -178,9 +181,9 @@ public class UIPageNavigationForm extends UIForm
          UIPopupWindow uiPopup = uiForm.getParent();
          uiPopup.setShow(false);
          UIComponent opener = uiPopup.getParent();
-         UIWorkingWorkspace uiWorkingWS =
-            Util.getUIPortal().getAncestorOfType(UIPortalApplication.class).getChild(UIWorkingWorkspace.class);
-         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
+         
+         ActionResponse response = event.getRequestContext().getResponse();
+         response.setEvent(new QName("UpdateGroupNavigation"), null);
          pcontext.addUIComponentToUpdateByAjax(opener);
       }
       
