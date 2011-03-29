@@ -681,6 +681,20 @@ public class UserPortalConfigService implements Startable
       }
    }
 
+   public void deleteListenerElements(ComponentPlugin listener)
+   {
+      if (listener instanceof NewPortalConfigListener)
+      {
+         synchronized (this)
+         {
+            if (newPortalConfigListener_ != null)
+            {
+               newPortalConfigListener_.deleteListenerElements((NewPortalConfigListener)listener);
+            }
+         }
+      }
+   }
+
    public void start()
    {
       try
