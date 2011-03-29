@@ -24,8 +24,8 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.MoveChildActionListener;
+import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
@@ -38,8 +38,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * May 19, 2006
@@ -61,27 +59,7 @@ public class UIPage extends UIContainer
 
    private UIPortlet maximizedUIPortlet;
 
-   protected static Map<String, Class<? extends UIPage>> realClass;
-
    public static String DEFAULT_FACTORY_ID = "Default";
-
-   static
-   {
-      if (realClass == null)
-      {
-         realClass = new HashMap<String, Class<? extends UIPage>>();
-         realClass.put(DEFAULT_FACTORY_ID, UIPage.class);
-      }
-   }
-
-   public static Class<? extends UIPage> getRealClass(String factoryID)
-   {
-      if (factoryID == null || factoryID.trim().equals("") || factoryID.trim().equals(DEFAULT_FACTORY_ID))
-      {
-         return UIPage.class;
-      }
-      return realClass.get(factoryID);
-   }
 
    public String getOwnerId()
    {
@@ -193,7 +171,7 @@ public class UIPage extends UIContainer
       prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
       prContext.setFullRender(true);
    }
-   
+
    public static class EditCurrentPageActionListener extends EventListener<UIPage>
    {
       @Override

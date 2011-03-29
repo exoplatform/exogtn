@@ -407,8 +407,9 @@ public class UIPageBrowser extends UISearch
          }
 
          //Need this code to override editpage action in extension project
-         Class<? extends UIPage> clazz = UIPage.getRealClass(page.getFactoryId());
-         clazz.getConstructor().newInstance().switchToEditMode(page);
+         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPage uipage = clazz.createUIPage(null);
+         uipage.switchToEditMode(page);
       }
    }
 

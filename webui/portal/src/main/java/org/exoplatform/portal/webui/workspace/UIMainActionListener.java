@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
+import org.exoplatform.portal.webui.page.UIPageFactory;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -93,8 +94,8 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          // We clone the edited UIPage object, that is required for Abort action
-         Class<? extends UIPage> clazz = UIPage.getRealClass(page.getFactoryId());
-         UIPage newUIPage = uiWorkingWS.createUIComponent(clazz, null, null);
+         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPage newUIPage = clazz.createUIPage(null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
 

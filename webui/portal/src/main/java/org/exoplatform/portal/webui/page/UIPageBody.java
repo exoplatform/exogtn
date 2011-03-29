@@ -28,8 +28,6 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -46,7 +44,6 @@ public class UIPageBody extends UIComponentDecorator
 
    private String storageId;
 
-   @SuppressWarnings("unused")
    public UIPageBody(PageBody model) throws Exception
    {
       setId("UIPageBody");
@@ -67,7 +64,6 @@ public class UIPageBody extends UIComponentDecorator
       setId("UIPageBody");
    }
 
-   @SuppressWarnings("unused")
    public void init(PageBody model) throws Exception
    {
       setId("UIPageBody");
@@ -146,8 +142,8 @@ public class UIPageBody extends UIComponentDecorator
          return uiPage;
       }
                                                                                                   
-      Class<? extends UIPage> clazz =  UIPage.getRealClass(page.getFactoryId());
-      uiPage = createUIComponent(context, clazz, null, null);
+      UIPageFactory clazz =  UIPageFactory.getInstance(page.getFactoryId());
+      uiPage = clazz.createUIPage(context);
       
       PortalDataMapper.toUIPage(uiPage, page);
       uiPortal.setUIPage(page.getId(), uiPage);
