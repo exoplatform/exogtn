@@ -239,7 +239,12 @@ public class POMSession
       return prefs;
    }
 
-  private static final BaseEncodingObjectFormatter formatter = new BaseEncodingObjectFormatter();
+   public POMSessionManager getManager()
+   {
+      return mgr;
+   }
+
+   private static final BaseEncodingObjectFormatter formatter = new BaseEncodingObjectFormatter();
 
    public <O extends WorkspaceObject> Iterator<O> findObjects(ObjectType<O> type, ObjectType<? extends Site> siteType,
       String ownerId, String title)
