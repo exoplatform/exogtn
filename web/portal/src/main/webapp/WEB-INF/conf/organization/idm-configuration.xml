@@ -39,7 +39,10 @@
         <name>hibernate.properties</name>
         <description>Default Hibernate Service</description>
         <property name="hibernate.cache.region.jbc2.query.localonly" value="true" />
-        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.MultiplexedJBossCacheRegionFactory" />
+        <property name="hibernate.cache.region.jbc2.cachefactory" value="java:CacheManager"/>
+        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory" />
+        <!--<property name="hibernate.cache.region.jbc2.query.localonly" value="true" />-->
+        <!--<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.MultiplexedJBossCacheRegionFactory" />-->
         <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
         <property name="hibernate.show_sql" value="false"/>
         <property name="hibernate.current_session_context_class" value="thread"/>
