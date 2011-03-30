@@ -19,7 +19,7 @@
 <protocol_stacks>
    <stack name="jcr.stack">
       <config>
-         <UDP mcast_addr="228.10.10.10" mcast_port="45588" tos="8" ucast_recv_buf_size="20000000"
+         <UDP mcast_addr="${jboss.jgroups.udp_async.mcast_addr:228.10.10.10}" mcast_port="${jboss.jgroups.udp_async.mcast_port:45588}" tos="8" ucast_recv_buf_size="20000000"
             ucast_send_buf_size="640000" mcast_recv_buf_size="25000000" mcast_send_buf_size="640000" loopback="false"
             discard_incompatible_packets="true" max_bundle_size="64000" max_bundle_timeout="30"
             use_incoming_packet_handler="true" ip_ttl="2" enable_bundling="true" enable_diagnostics="true"
