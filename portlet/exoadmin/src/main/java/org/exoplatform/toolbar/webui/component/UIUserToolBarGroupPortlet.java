@@ -42,7 +42,7 @@ import java.util.List;
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl",
    events = {
-      @EventConfig(listeners = UIUserToolBarGroupPortlet.UpdateGroupNavigationActionListener.class)
+      @EventConfig(listeners = UIUserToolBarGroupPortlet.NavigationChangeActionListener.class)
    }
 )
 public class UIUserToolBarGroupPortlet extends UIPortletApplication
@@ -72,7 +72,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       return Util.getUIPortal().getSelectedNode();
    }
    
-   public static class UpdateGroupNavigationActionListener extends EventListener<UIUserToolBarGroupPortlet>
+   public static class NavigationChangeActionListener extends EventListener<UIUserToolBarGroupPortlet>
    {
       @Override
       public void execute(Event<UIUserToolBarGroupPortlet> event) throws Exception

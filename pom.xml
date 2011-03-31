@@ -49,14 +49,14 @@
       <org.gatein.pc.version>2.2.0-GA</org.gatein.pc.version>
       <org.picketlink.idm>1.1.7.GA</org.picketlink.idm>
       <org.gatein.wsrp.version>2.0.0-GA</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.0.4-GA</org.gatein.mop.version>
+      <org.gatein.mop.version>1.1.0-Beta01</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <commons-pool.version>1.2</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.0.4</version.chromattic>
-      <version.reflect>1.0.0</version.reflect>
+      <version.chromattic>1.1.0-beta2</version.chromattic>
+      <version.reflect>1.1.0-beta12</version.reflect>
       <jcip.version>1.0</jcip.version>
 
       <!-- EXOGTN-106 : forced at packaging level -->
@@ -822,6 +822,12 @@
                <include>**/*.properties</include>
                <include>**/*.xml</include>
                <include>**/*.xsd</include>
+            </includes>
+         </resource>
+         <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+               <include>**/*.*</include>
             </includes>
          </resource>
       </resources>

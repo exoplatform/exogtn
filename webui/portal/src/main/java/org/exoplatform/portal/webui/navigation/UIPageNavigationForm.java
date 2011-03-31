@@ -183,7 +183,7 @@ public class UIPageNavigationForm extends UIForm
          UIComponent opener = uiPopup.getParent();
          
          ActionResponse response = event.getRequestContext().getResponse();
-         response.setEvent(new QName("UpdateGroupNavigation"), null);
+         response.setEvent(new QName("NavigationChange"), null);
          pcontext.addUIComponentToUpdateByAjax(opener);
       }
       
