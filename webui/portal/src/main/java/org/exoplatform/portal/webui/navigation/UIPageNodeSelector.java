@@ -65,9 +65,7 @@ public class UIPageNodeSelector extends UIContainer
 
    public void setNavigation(UserNavigation nav) throws Exception
    {
-      navigation = nav;
-      UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
-      setSelectedNode(selectedNode);
+      navigation = nav;      
    }
 
    private UserNode load(UserNode node) throws Exception
@@ -75,7 +73,7 @@ public class UIPageNodeSelector extends UIContainer
       return userPortal.getNode(node, Scope.GRANDCHILDREN).filter(NODE_SELECTOR_FILTER);
    }
    
-   private void setSelectedNode(UserNode node) throws Exception
+   public void setSelectedNode(UserNode node) throws Exception
    {
       if (node == null)
       {

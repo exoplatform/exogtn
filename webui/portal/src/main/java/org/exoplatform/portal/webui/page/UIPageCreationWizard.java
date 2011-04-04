@@ -19,13 +19,16 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.apache.poi.hssf.record.SCLRecord;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -67,19 +70,29 @@ public class UIPageCreationWizard extends UIPageWizard
    public UIPageCreationWizard() throws Exception
    {
       UIWizardPageSetInfo uiPageInfo = addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
+      UIPageNodeSelector nodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class); 
       addChild(UIWizardPageSelectLayoutForm.class, null, null).setRendered(false);
       addChild(UIPagePreview.class, null, null).setRendered(false);
       setNumberSteps(NUMBER_OF_STEPs);
       viewStep(FIRST_STEP);
       setShowWelcomeComponent(false);
+      
       boolean isUserNav = Util.getUIPortal().getSiteKey().getTypeName().equals(PortalConfig.USER_TYPE);
-      UserNavigation navigation = Util.getUIPortal().getNavPath().getNavigation();
-      uiPageInfo.getChild(UIPageNodeSelector.class).setNavigation(navigation);
+      UserNavigation navigation = Util.getUIPortal().getNavPath().getNavigation();      
+      nodeSelector.setNavigation(navigation);
 
+      UserNode selectedNode;
       if (isUserNav)
       {
-         uiPageInfo.getChild(UIPageNodeSelector.class).setRendered(false);
+         nodeSelector.setRendered(false);
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN);
       }
+      else
+      {
+         selectedNode = Util.getUIPortal().getSelectedUserNode();
+      }
+      nodeSelector.setSelectedNode(selectedNode);
    }
 
    private UserNode saveData() throws Exception
