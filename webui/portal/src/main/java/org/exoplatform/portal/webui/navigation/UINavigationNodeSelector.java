@@ -130,7 +130,14 @@ public class UINavigationNodeSelector extends UIContainer
       cachedNodes.clear();
 
       initRootNode();
-      selectNode(rootNode);
+      if (rootNode.getChildren().size() > 0)
+      {
+         selectNode(rootNode.getChild(0));
+      }
+      else
+      {
+         selectNode(rootNode);
+      }
    }
 
    public TreeNodeData selectNode(String nodeID) throws Exception
