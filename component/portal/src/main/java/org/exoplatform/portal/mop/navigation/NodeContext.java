@@ -41,6 +41,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    /** The new state if any. */
    NodeState state;
 
+   /** . */
+   boolean hidden;
+
+   /** . */
+   int hiddenCount;
+
    NodeContext(NodeModel<N> model, NodeData data)
    {
       super(data.getName());
@@ -49,6 +55,8 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.node = model.create(this);
       this.data = data;
       this.state = data.getState();
+      this.hidden = false;
+      this.hiddenCount = 0;
    }
 
    NodeContext(NodeModel<N> model, String name, NodeState state)
@@ -59,6 +67,49 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.node = model.create(this);
       this.data = null;
       this.state = state;
+      this.hidden = false;
+      this.hiddenCount = 0;
+   }
+
+   public boolean isHidden()
+   {
+      return hidden;
+   }
+
+   public void afterInsert(NodeContext<N> tree)
+   {
+      if (tree.hidden)
+      {
+         hiddenCount++;
+      }
+   }
+
+   public void afterRemove(NodeContext<N> tree)
+   {
+      if (tree.hidden)
+      {
+         hiddenCount--;
+      }
+   }
+
+   public final void setHidden(boolean hidden)
+   {
+      if (this.hidden != hidden)
+      {
+         NodeContext<N> parent = getParent();
+         if (parent != null)
+         {
+            if (hidden)
+            {
+               parent.hiddenCount++;
+            }
+            else
+            {
+               parent.hiddenCount--;
+            }
+         }
+         this.hidden = hidden;
+      }
    }
 
    /**
@@ -137,7 +188,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    {
       if (hasTrees())
       {
-         return getCount();
+         return getSize() - hiddenCount;
       }
       else
       {

@@ -54,12 +54,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
    /** . */
    private T tail;
 
-   /** . */
-   private boolean hidden;
-
-   /** . */
-   private int count;
-
    public ListTree(String name)
    {
       if (name == null)
@@ -73,8 +67,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       this.previous = null;
       this.head = null;
       this.tail = null;
-      this.hidden = false;
-      this.count = -1;
    }
 
    public final int getSize()
@@ -82,14 +74,9 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       return map == null ? -1 : map.size();
    }
 
-   public final int getCount()
+   public boolean isHidden()
    {
-      return count;
-   }
-
-   public final boolean isHidden()
-   {
-      return hidden;
+      return false;
    }
 
    public final T getNext()
@@ -100,25 +87,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
    public final T getPrevious()
    {
       return previous;
-   }
-
-   public final void setHidden(boolean hidden)
-   {
-      if (this.hidden != hidden)
-      {
-         if (parent != null)
-         {
-            if (hidden)
-            {
-               parent.count--;
-            }
-            else
-            {
-               parent.count++;
-            }
-         }
-         this.hidden = hidden;
-      }
    }
 
    public abstract E getElement();
@@ -160,7 +128,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             throw new IllegalArgumentException("the node " + from + " + does not exist");
          }
-         if (child.hidden)
+         if (child.isHidden())
          {
             throw new IllegalArgumentException("the node " + from + " + is hidden");
          }
@@ -201,7 +169,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
 
       //
       T child = map.get(name);
-      return child == null || child.hidden ? null : child;
+      return child == null || child.isHidden() ? null : child;
    }
 
    public final T getFirst()
@@ -237,7 +205,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       T current = head;
       while (true)
       {
-         while (current != null && current.hidden)
+         while (current != null && current.isHidden())
          {
             current = current.next;
          }
@@ -279,7 +247,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       {
          throw new NullPointerException("No null tree accepted");
       }
-      if (tree.hidden)
+      if (tree.isHidden())
       {
          throw new IllegalArgumentException("Cannot insert hidden tree");
       }
@@ -311,7 +279,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             while (index > 0)
             {
-               while (a != null && a.hidden)
+               while (a != null && a.isHidden())
                {
                   a = a.next;
                }
@@ -337,7 +305,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       else
       {
          T a = tail;
-         while (a != null && a.hidden)
+         while (a != null && a.isHidden())
          {
             a = a.previous;
          }
@@ -358,7 +326,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       {
          T next = head;
          {
-            while (next != null && next.hidden)
+            while (next != null && next.isHidden())
             {
                next = next.next;
             }
@@ -376,7 +344,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
                {
                   next = next.next;
                }
-               while (next != null && next.hidden);
+               while (next != null && next.isHidden());
                return tmp.getElement();
             }
             else
@@ -531,7 +499,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
                head.remove();
             }
             this.map = null;
-            this.count = -1;
          }
       }
       else
@@ -540,7 +507,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             @SuppressWarnings("unchecked") Map<String, T> map = Collections.EMPTY_MAP;
             this.map = map;
-            this.count = 0;
             for (T child : children)
             {
                insertLast(child);
@@ -575,14 +541,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          if (parent.map == Collections.EMPTY_MAP)
          {
             parent.map = new HashMap<String, T>();
-            parent.count = 0;
-         }
-         if (!tree.hidden)
-         {
-            parent.count++;
          }
          parent.map.put(tree.name, tree);
          tree.parent = parent;
+         afterInsert(tree);
       }
    }
 
@@ -608,15 +570,29 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          if (parent.map == Collections.EMPTY_MAP)
          {
             parent.map = new HashMap<String, T>();
-            parent.count = 0;
-         }
-         if (!tree.hidden)
-         {
-            parent.count++;
          }
          parent.map.put(tree.name, tree);
          tree.parent = parent;
+         afterInsert(tree);
       }
+   }
+
+   /**
+    * Callback to signal insertion occured.
+    *
+    * @param tree the child inserted
+    */
+   public void afterInsert(T tree)
+   {
+   }
+
+   /**
+    * Callback to signal insertion occured.
+    *
+    * @param tree the child inserted
+    */
+   public void afterRemove(T tree)
+   {
    }
 
    /**
@@ -636,14 +612,10 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          if (map == Collections.EMPTY_MAP)
          {
             map = new HashMap<String, T>();
-            count = 0;
-         }
-         if (!tree.hidden)
-         {
-            count++;
          }
          map.put(tree.name, tree);
          tree.parent = (T)this;
+         afterInsert(tree);
       }
       else
       {
@@ -681,14 +653,12 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
       {
          next.previous = previous;
       }
-      if (!hidden)
-      {
-         parent.count--;
-      }
       parent.map.remove(name);
+      T _parent = parent;
       parent = null;
       previous = null;
       next = null;
+      _parent.afterRemove((T)this);
    }
 
    public String toString()
