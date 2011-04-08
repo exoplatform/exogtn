@@ -21,10 +21,7 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.tree.list.ListTree;
 
-import java.util.AbstractCollection;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * The context of a node.
@@ -233,6 +230,45 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    {
       NodeContext<N> child = get(index);
       return child != null ? child.node: null;
+   }
+
+   public final Iterator<N> iterator()
+   {
+      return new Iterator<N>()
+      {
+         NodeContext<N> next = getFirst();
+         {
+            while (next != null && next.isHidden())
+            {
+               next = next.getNext();
+            }
+         }
+         public boolean hasNext()
+         {
+            return next != null;
+         }
+         public N next()
+         {
+            if (next != null)
+            {
+               NodeContext<N> tmp = next;
+               do
+               {
+                  next = next.getNext();
+               }
+               while (next != null && next.isHidden());
+               return tmp.getElement();
+            }
+            else
+            {
+               throw new NoSuchElementException();
+            }
+         }
+         public void remove()
+         {
+            throw new UnsupportedOperationException();
+         }
+      };
    }
 
    /** . */

@@ -85,9 +85,12 @@ public class TestListTree extends TestCase
    private void assertChildren(IntegerTree tree, Integer... expected)
    {
       List<Integer> children = new ArrayList<Integer>();
-      for (int child : tree)
+      for (Iterator<IntegerTree> iterator = tree.listIterator();iterator.hasNext();)
       {
-         children.add(child);
+         IntegerTree next = iterator.next();
+         if (!next.isHidden()) {
+            children.add(next.getElement());
+         }
       }
       assertEquals(Arrays.asList(expected), children);
    }

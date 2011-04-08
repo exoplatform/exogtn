@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<E>
+public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterable<E>
 {
 
    /** . */
@@ -376,45 +376,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          tree.parent = parent;
          afterInsert(tree);
       }
-   }
-
-   public final Iterator<E> iterator()
-   {
-      return new Iterator<E>()
-      {
-         T next = head;
-         {
-            while (next != null && next.isHidden())
-            {
-               next = next.next;
-            }
-         }
-         public boolean hasNext()
-         {
-            return next != null;
-         }
-         public E next()
-         {
-            if (next != null)
-            {
-               T tmp = next;
-               do
-               {
-                  next = next.next;
-               }
-               while (next != null && next.isHidden());
-               return tmp.getElement();
-            }
-            else
-            {
-               throw new NoSuchElementException();
-            }
-         }
-         public void remove()
-         {
-            throw new UnsupportedOperationException();
-         }
-      };
    }
 
    public final ListIterator<T> listIterator()
