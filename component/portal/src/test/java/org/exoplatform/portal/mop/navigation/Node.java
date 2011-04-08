@@ -114,7 +114,12 @@ public class Node
 
    public Node addChild(String childName)
    {
-      return context.addNode(MODEL, childName);
+      return context.addNode(MODEL, null, childName);
+   }
+
+   public Node addChild(int index, String childName)
+   {
+      return context.addNode(MODEL, index, childName);
    }
 
    public boolean removeChild(String childName)
@@ -122,9 +127,24 @@ public class Node
       return context.removeNode(MODEL, childName);
    }
 
-   public int getChildrenCount()
+   public int getNodeCount()
    {
       return context.getNodeCount();
+   }
+
+   public int getSize()
+   {
+      return context.getSize();
+   }
+
+   public void setHidden(boolean hidden)
+   {
+      context.setHidden(hidden);
+   }
+
+   public boolean isHidden()
+   {
+      return context.isHidden();
    }
 
    public void filter(NodeFilter filter)

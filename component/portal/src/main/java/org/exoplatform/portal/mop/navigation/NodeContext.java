@@ -223,13 +223,28 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    public N getNode(String name) throws NullPointerException
    {
       NodeContext<N> child = get(name);
-      return child != null ? child.node: null;
+      return child != null && !child.hidden ? child.node: null;
    }
 
    public N getNode(int index)
    {
-      NodeContext<N> child = get(index);
-      return child != null ? child.node: null;
+      if (index < 0)
+      {
+         throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
+      }
+      NodeContext<N> context = getFirst();
+      while (context != null && (context.hidden || index-- > 0))
+      {
+         context = context.getNext();
+      }
+      if (context == null)
+      {
+         throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+      }
+      else
+      {
+         return context.node;
+      }
    }
 
    public final Iterator<N> iterator()
@@ -300,7 +315,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
    }
 
-   public N addNode(NodeModel<N> model, String name)
+   public N addNode(NodeModel<N> model, Integer index, String name)
    {
       if (model == null)
       {
@@ -310,7 +325,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       //
       NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
-      insertAt(null, nodeContext);
+      addNode(index, nodeContext);
       return nodeContext.node;
    }
 
@@ -323,7 +338,46 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
 
       //
       NodeContext<N> nodeContext = model.getContext(child);
-      insertAt(index, nodeContext);
+
+      //
+      addNode(index, nodeContext);
+   }
+
+   private void addNode(Integer index, NodeContext<N> child)
+   {
+      if (index == null)
+      {
+         NodeContext<N> before = getLast();
+         while (before != null && before.isHidden())
+         {
+            before = before.getPrevious();
+         }
+         if (before == null)
+         {
+            insertAt(0, child);
+         }
+         else
+         {
+            before.insertAfter(child);
+         }
+      }
+      else if (index == 0)
+      {
+         insertAt(0, child);
+      }
+      else
+      {
+         NodeContext<N> before = getFirst();
+         while (index > 1)
+         {
+            before = before.getNext();
+            if (!before.isHidden())
+            {
+               index--;
+            }
+         }
+         before.insertAfter(child);
+      }
    }
 
    public boolean removeNode(NodeModel<N> model, String name)
@@ -334,7 +388,16 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
 
       //
-      return remove(name) != null;
+      NodeContext<N> node = get(name);
+      if (node.hidden)
+      {
+         return false;
+      }
+      else
+      {
+         node.remove();
+         return true;
+      }
    }
 
    NodeContext<N> getRoot()

@@ -296,7 +296,7 @@ public class UserNode
 
    public UserNode addChild(String childName)
    {
-      return context.addNode(navigation.model, childName);
+      return context.addNode(navigation.model, null, childName);
    }
 
    public boolean removeChild(String childName)

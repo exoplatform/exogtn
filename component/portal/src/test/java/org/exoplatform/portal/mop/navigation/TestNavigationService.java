@@ -359,7 +359,7 @@ public class TestNavigationService extends AbstractPortalTest
    {
       Navigation nav = service.loadNavigation(SiteKey.portal("test"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      assertEquals(5, root.getChildrenCount());
+      assertEquals(5, root.getNodeCount());
       Node child1 = root.getChild("node_name");
       Node child2 = root.getChild("node_name4");
       assertEquals("node_name", child1.getName());
@@ -383,32 +383,281 @@ public class TestNavigationService extends AbstractPortalTest
       org.gatein.mop.api.workspace.Navigation defaultNav = portal.getRootNavigation().addChild("default");
       defaultNav.addChild("a");
       defaultNav.addChild("b");
+      defaultNav.addChild("c");
       end(true);
 
       //
       begin();
       Navigation nav = service.loadNavigation(SiteKey.portal("hidden_node"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      root.filter(new NodeFilter()
-      {
-         public boolean accept(int depth, String id, String name, NodeState state)
-         {
-            return !(depth == 1 && "a".equals(name));
-         }
-      });
 
       //
-      assertEquals(1, root.getChildren().size());
+      Node root;
+      Node a;
+      Node b;
+      Node c;
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      a.setHidden(true);
+      assertEquals(2, root.getChildren().size());
       assertNull(root.getChild("a"));
       assertEquals("b", root.getChild(0).getName());
       try
       {
-         root.getChild(1);
+         root.getChild(2);
          fail();
       }
       catch (IndexOutOfBoundsException ignore)
       {
       }
+      assertFalse(root.removeChild("a"));
+      try
+      {
+         b.setName("a");
+         fail();
+      }
+      catch (IllegalArgumentException ignore)
+      {
+      }
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      b.setHidden(true);
+      assertSame(a, root.getChild(0));
+      assertSame(c, root.getChild(1));
+      try
+      {
+         root.getChild(2);
+         fail();
+      }
+      catch (IndexOutOfBoundsException e)
+      {
+      }
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      a.setHidden(true);
+      c.setHidden(true);
+      assertSame(b, root.getChild(0));
+      try
+      {
+         root.getChild(1);
+         fail();
+      }
+      catch (IndexOutOfBoundsException e)
+      {
+      }
+   }
+
+   public void testHiddenInsert1() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "hidden_insert_1");
+      org.gatein.mop.api.workspace.Navigation defaultNav = portal.getRootNavigation().addChild("default");
+      defaultNav.addChild("a");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("hidden_insert_1"));
+
+      //
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Node a = root.getChild("a");
+      a.setHidden(true);
+      Node b = root.addChild("b");
+      assertEquals(1, root.getChildren().size());
+      assertSame(b, root.getChildren().iterator().next());
+      a.setHidden(false);
+      assertEquals(2, root.getChildren().size());
+      Iterator<Node> it = root.getChildren().iterator();
+      assertSame(b, it.next());
+      assertSame(a, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      a.setHidden(true);
+      b = root.addChild(0, "b");
+      assertEquals(1, root.getChildren().size());
+      assertSame(b, root.getChildren().iterator().next());
+      a.setHidden(false);
+      assertEquals(2, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(b, it.next());
+      assertSame(a, it.next());
+   }
+
+   public void testHiddenInsert2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "hidden_insert_2");
+      org.gatein.mop.api.workspace.Navigation defaultNav = portal.getRootNavigation().addChild("default");
+      defaultNav.addChild("a");
+      defaultNav.addChild("b");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("hidden_insert_2"));
+
+      //
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Node a = root.getChild("a");
+      Node b = root.getChild("b");
+      b.setHidden(true);
+      Node c = root.addChild(0, "c");
+      assertEquals(2, root.getChildren().size());
+      Iterator<Node> it = root.getChildren().iterator();
+      assertSame(c, it.next());
+      assertSame(a, it.next());
+      b.setHidden(false);
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(c, it.next());
+      assertSame(a, it.next());
+      assertSame(b, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      b.setHidden(true);
+      c = root.addChild(1, "c");
+      assertEquals(2, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      b.setHidden(false);
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      assertSame(b, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      b.setHidden(true);
+      c = root.addChild("c");
+      assertEquals(2, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      b.setHidden(false);
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      assertSame(b, it.next());
+   }
+
+   public void testHiddenInsert3() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "hidden_insert_3");
+      org.gatein.mop.api.workspace.Navigation defaultNav = portal.getRootNavigation().addChild("default");
+      defaultNav.addChild("a");
+      defaultNav.addChild("b");
+      defaultNav.addChild("c");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("hidden_insert_3"));
+
+      //
+      Node root,a,b,c,d;
+      Iterator<Node> it;
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      b.setHidden(true);
+      d = root.addChild(0, "d");
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(d, it.next());
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      b.setHidden(false);
+      assertEquals(4, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(d, it.next());
+      assertSame(a, it.next());
+      assertSame(b, it.next());
+      assertSame(c, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      b.setHidden(true);
+      d = root.addChild(1, "d");
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(d, it.next());
+      assertSame(c, it.next());
+      b.setHidden(false);
+      assertEquals(4, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(d, it.next());
+      assertSame(b, it.next());
+      assertSame(c, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      b.setHidden(true);
+      d = root.addChild(2, "d");
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      assertSame(d, it.next());
+      b.setHidden(false);
+      assertEquals(4, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(b, it.next());
+      assertSame(c, it.next());
+      assertSame(d, it.next());
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      b.setHidden(true);
+      d = root.addChild("d");
+      assertEquals(3, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(c, it.next());
+      assertSame(d, it.next());
+      b.setHidden(false);
+      assertEquals(4, root.getChildren().size());
+      it = root.getChildren().iterator();
+      assertSame(a, it.next());
+      assertSame(b, it.next());
+      assertSame(c, it.next());
+      assertSame(d, it.next());
    }
 
    public void testNodeInvalidationByRemoval() throws Exception
@@ -607,14 +856,14 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       Navigation nav = service.loadNavigation(SiteKey.portal("add_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      assertEquals(0, root.getChildrenCount());
+      assertEquals(0, root.getNodeCount());
 
       //
       Node foo = root.addChild("foo");
       assertNull(foo.getId());
       assertEquals("foo", foo.getName());
       assertSame(foo, root.getChild("foo"));
-      assertEquals(1, root.getChildrenCount());
+      assertEquals(1, root.getNodeCount());
       service.saveNode(Node.MODEL, root);
       end(true);
 
@@ -623,7 +872,7 @@ public class TestNavigationService extends AbstractPortalTest
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
       foo = root.getChild("foo");
       assertNotNull(foo);
-      assertEquals(1, root.getChildrenCount());
+      assertEquals(1, root.getNodeCount());
       assertEquals("foo", foo.getName());
    }
 
@@ -1158,6 +1407,35 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
+   }
+
+   public void testCount()
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "count");
+      org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("count"));
+      Node root;
+
+      //
+      root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE);
+      assertEquals(0, root.getNodeCount());
+      assertEquals(-1, root.getSize());
+
+      //
+      root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
+      assertEquals(0, root.getNodeCount());
+      assertEquals(0, root.getSize());
+      Node a = root.addChild("a");
+      assertEquals(1, root.getNodeCount());
+      assertEquals(1, root.getSize());
+      a.setHidden(true);
+      assertEquals(0, root.getNodeCount());
+      assertEquals(1, root.getSize());
    }
 
 /*

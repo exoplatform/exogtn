@@ -40,16 +40,12 @@ public class TestListTree extends TestCase
       /** . */
       private final int value;
 
-      /** . */
-      private boolean hidden;
-
       public IntegerTree(int value, String name)
       {
          super(name);
 
          //
          this.value = value;
-         this.hidden = false;
       }
 
       @Override
@@ -57,22 +53,9 @@ public class TestListTree extends TestCase
       {
          return value;
       }
-
-      @Override
-      public boolean isHidden()
-      {
-         return hidden;
-      }
    }
 
-   private static IntegerTree hidden(String name, int value, IntegerTree... trees)
-   {
-      IntegerTree tree = shown(name, value, trees);
-      tree.hidden = true;
-      return tree;
-   }
-
-   private static IntegerTree shown(String name, int value, IntegerTree... trees)
+   private static IntegerTree tree(String name, int value, IntegerTree... trees)
    {
       IntegerTree tree = new IntegerTree(value, name);
       if (trees != null)
@@ -88,9 +71,7 @@ public class TestListTree extends TestCase
       for (Iterator<IntegerTree> iterator = tree.listIterator();iterator.hasNext();)
       {
          IntegerTree next = iterator.next();
-         if (!next.isHidden()) {
-            children.add(next.getElement());
-         }
+         children.add(next.getElement());
       }
       assertEquals(Arrays.asList(expected), children);
    }
@@ -123,115 +104,28 @@ public class TestListTree extends TestCase
 
    public void testInsert1()
    {
-      IntegerTree root = shown("", 0);
+      IntegerTree root = tree("", 0);
       assertChildren(root);
       assertAllChildren(root);
 
       //
-      root = shown("", 0);
-      root.insertAt(0, shown("a", 1));
+      root = tree("", 0);
+      root.insertAt(0, tree("a", 1));
       assertChildren(root, 1);
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
 
       //
-      root = shown("", 0);
-      root.insertAt(null, shown("a", 1));
+      root = tree("", 0);
+      root.insertAt(null, tree("a", 1));
       assertChildren(root, 1);
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
-   }
-
-   public void testInsert2()
-   {
-      IntegerTree root = shown("", 0, hidden("a", 1));
-      assertChildren(root);
-      assertAllChildren(root, 1);
-      assertAllChildren(root, "a");
-
-      //
-      root = shown("", 0, hidden("a", 1));
-      root.insertAt(0, shown("b", 2));
-      assertChildren(root, 2);
-      assertAllChildren(root, 2, 1);
-      assertAllChildren(root, "b", "a");
-
-      //
-      root = shown("", 0, hidden("a", 1));
-      root.insertAt(null, shown("b", 2));
-      assertChildren(root, 2);
-      assertAllChildren(root, 2, 1);
-      assertAllChildren(root, "b", "a");
-   }
-
-   public void testInsert3()
-   {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2));
-      assertChildren(root, 1);
-      assertAllChildren(root, 1, 2);
-      assertAllChildren(root, "a", "b");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insertAt(0, shown("c", 3));
-      assertChildren(root, 3, 1);
-      assertAllChildren(root, 3, 1, 2);
-      assertAllChildren(root, "c", "a", "b");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insertAt(1, shown("c", 3));
-      assertChildren(root, 1, 3);
-      assertAllChildren(root, 1, 3, 2);
-      assertAllChildren(root, "a", "c", "b");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insertAt(null, shown("c", 3));
-      assertChildren(root, 1, 3);
-      assertAllChildren(root, 1, 3, 2);
-      assertAllChildren(root, "a", "c", "b");
-   }
-
-   public void testInsert4()
-   {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      assertChildren(root, 1, 3);
-      assertAllChildren(root, 1, 2, 3);
-      assertAllChildren(root, "a", "b", "c");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insertAt(0, shown("d", 4));
-      assertChildren(root, 4, 1, 3);
-      assertAllChildren(root, 4, 1, 2, 3);
-      assertAllChildren(root, "d", "a", "b", "c");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insertAt(1, shown("d", 4));
-      assertChildren(root, 1, 4, 3);
-      assertAllChildren(root, 1, 4, 2, 3);
-      assertAllChildren(root, "a", "d", "b", "c");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insertAt(2, shown("d", 4));
-      assertChildren(root, 1, 3, 4);
-      assertAllChildren(root, 1, 2, 3, 4);
-      assertAllChildren(root, "a", "b", "c", "d");
-
-      //
-      root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insertAt(null, shown("d", 4));
-      assertChildren(root, 1, 3, 4);
-      assertAllChildren(root, 1, 2, 3, 4);
-      assertAllChildren(root, "a", "b", "c", "d");
    }
 
    public void testInsertDuplicate()
    {
-      IntegerTree root = shown("", 0, shown("a", 1));
+      IntegerTree root = tree("", 0, tree("a", 1));
       assertChildren(root, 1);
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
@@ -239,7 +133,7 @@ public class TestListTree extends TestCase
       //
       try
       {
-         root.insertAt(0, shown("a", 2));
+         root.insertAt(0, tree("a", 2));
          fail();
       }
       catch (IllegalArgumentException ignore)
@@ -251,13 +145,13 @@ public class TestListTree extends TestCase
 
    public void testInsertWithNoChildren()
    {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
+      IntegerTree root = tree("", 0, (IntegerTree[]) null);
       assertFalse(root.hasTrees());
 
       //
       try
       {
-         root.insertAt(0, shown("a", 1));
+         root.insertAt(0, tree("a", 1));
          fail();
       }
       catch (IllegalStateException ignore)
@@ -268,9 +162,9 @@ public class TestListTree extends TestCase
 
    public void testInsertMove1()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree b = shown("b", 2);
-      IntegerTree root1 = shown("", 0, a, b);
+      IntegerTree a = tree("a", 1);
+      IntegerTree b = tree("b", 2);
+      IntegerTree root1 = tree("", 0, a, b);
 
       //
       root1.insertAt(0, b);
@@ -279,8 +173,8 @@ public class TestListTree extends TestCase
 
    public void testInsertMove2()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree root1 = shown("", 0, a);
+      IntegerTree a = tree("a", 1);
+      IntegerTree root1 = tree("", 0, a);
 
       //
       root1.insertAt(null, a);
@@ -293,9 +187,9 @@ public class TestListTree extends TestCase
 
    public void testInsertMove3()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree root1 = shown("", 0, a);
-      IntegerTree root2 = shown("", 0);
+      IntegerTree a = tree("a", 1);
+      IntegerTree root1 = tree("", 0, a);
+      IntegerTree root2 = tree("", 0);
 
       //
       root2.insertAt(0, a);
@@ -307,8 +201,8 @@ public class TestListTree extends TestCase
 
    public void testInsertReorder1()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree root1 = shown("", 0, a);
+      IntegerTree a = tree("a", 1);
+      IntegerTree root1 = tree("", 0, a);
 
       //
       root1.insertAt(0, a);
@@ -319,8 +213,8 @@ public class TestListTree extends TestCase
 
    public void testInsertReorder2()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree root1 = shown("", 0, a, shown("b", 2));
+      IntegerTree a = tree("a", 1);
+      IntegerTree root1 = tree("", 0, a, tree("b", 2));
 
       //
       root1.insertAt(2, a);
@@ -337,19 +231,18 @@ public class TestListTree extends TestCase
 
    public void testGetByKey()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
       //
-      assertEquals(1, (int)root.get("a").getElement());
-      assertNull(root.get("b"));
+      assertEquals(1, (int) root.get("a").getElement());
       assertNull(root.get("d"));
    }
 
    public void testGetByKeyWithNoChildren()
    {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
+      IntegerTree root = tree("", 0, (IntegerTree[]) null);
       assertFalse(root.hasTrees());
 
       //
@@ -366,17 +259,13 @@ public class TestListTree extends TestCase
 
    public void testRemove()
    {
-      IntegerTree root = shown("", 0, hidden("a", 1), shown("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
       //
-      assertNull(root.remove("a"));
-      assertAllChildren(root, 1, 2, 3);
-      assertAllChildren(root, "a", "b", "c");
-
-      //
-      IntegerTree b = root.remove("b");
+      IntegerTree b = root.get("b");
+      b.remove();
       assertNull(b.getParent());
       assertNull(b.getPrevious());
       assertNull(b.getNext());
@@ -387,37 +276,22 @@ public class TestListTree extends TestCase
 
    public void testRemoveLast()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), shown("b", 2));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2));
       assertAllChildren(root, 1, 2);
       assertAllChildren(root, "a", "b");
 
       //
-      assertEquals(2, (int)root.remove("b").getElement());
+      IntegerTree b = root.get("b");
+      assertEquals(2, (int)b.getElement());
+      b.remove();
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
       assertEquals(1, (int)root.getLast().getElement());
    }
 
-   public void testRemoveWithNoChildren()
-   {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
-      assertFalse(root.hasTrees());
-
-      //
-      try
-      {
-         root.remove("a");
-         fail();
-      }
-      catch (IllegalStateException ignore)
-      {
-         assertFalse(root.hasTrees());
-      }
-   }
-
    public void testRename()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
@@ -434,7 +308,7 @@ public class TestListTree extends TestCase
 
    public void testRenameWithNoChildren()
    {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
+      IntegerTree root = tree("", 0, (IntegerTree[]) null);
       assertFalse(root.hasTrees());
 
       //
@@ -451,7 +325,7 @@ public class TestListTree extends TestCase
 
    public void testRenameWithNonExisting()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
@@ -470,7 +344,7 @@ public class TestListTree extends TestCase
 
    public void testRenameWithExisting()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       assertAllChildren(root, 1, 2, 3);
       assertAllChildren(root, "a", "b", "c");
 
@@ -487,61 +361,9 @@ public class TestListTree extends TestCase
       }
    }
 
-   public void testRenameHidden()
-   {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      assertAllChildren(root, 1, 2, 3);
-      assertAllChildren(root, "a", "b", "c");
-
-      //
-      try
-      {
-         root.rename("b", "d");
-         fail();
-      }
-      catch (IllegalArgumentException e)
-      {
-         assertAllChildren(root, 1, 2, 3);
-         assertAllChildren(root, "a", "b", "c");
-      }
-   }
-
-   public void testGetByIndex1()
-   {
-      IntegerTree root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-
-      //
-      assertEquals(1, (int)root.get(0).getElement());
-      assertEquals(3, (int)root.get(1).getElement());
-      try
-      {
-         root.get(2);
-         fail();
-      }
-      catch (IndexOutOfBoundsException e)
-      {
-      }
-   }
-
-   public void testGetByIndex2()
-   {
-      IntegerTree root = shown("", 0, hidden("a", 1), shown("b", 2), hidden("c", 3));
-
-      //
-      assertEquals(2, (int)root.get(0).getElement());
-      try
-      {
-         root.get(1);
-         fail();
-      }
-      catch (IndexOutOfBoundsException e)
-      {
-      }
-   }
-
    public void testGetByIndexWithNoChildren()
    {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
+      IntegerTree root = tree("", 0, (IntegerTree[]) null);
 
       //
       try
@@ -556,7 +378,7 @@ public class TestListTree extends TestCase
 
    public void testIteratorRemove()
    {
-      IntegerTree root = shown("", 0, shown("a", 1));
+      IntegerTree root = tree("", 0, tree("a", 1));
       Iterator<IntegerTree> it = root.getTrees().iterator();
 
       //
@@ -579,8 +401,8 @@ public class TestListTree extends TestCase
 
    public void testListIterator1()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree root = shown("", 0, a);
+      IntegerTree a = tree("a", 1);
+      IntegerTree root = tree("", 0, a);
 
       //
       ListIterator<IntegerTree> i = root.listIterator();
@@ -606,9 +428,9 @@ public class TestListTree extends TestCase
 
    public void testListIterator2()
    {
-      IntegerTree a = shown("a", 1);
-      IntegerTree b = shown("b", 2);
-      IntegerTree root = shown("", 0, a, b);
+      IntegerTree a = tree("a", 1);
+      IntegerTree b = tree("b", 2);
+      IntegerTree root = tree("", 0, a, b);
 
       //
       ListIterator<IntegerTree> i = root.listIterator();
@@ -636,10 +458,10 @@ public class TestListTree extends TestCase
    public void testListIterator3()
    {
       // Remove middle
-      IntegerTree a = shown("a", 1);
-      IntegerTree b = shown("b", 2);
-      IntegerTree c = shown("c", 3);
-      IntegerTree root = shown("", 0, a, b, c);
+      IntegerTree a = tree("a", 1);
+      IntegerTree b = tree("b", 2);
+      IntegerTree c = tree("c", 3);
+      IntegerTree root = tree("", 0, a, b, c);
       ListIterator<IntegerTree> i = root.listIterator();
       i.next();
       i.next();
@@ -651,7 +473,7 @@ public class TestListTree extends TestCase
       assertSame(c, i.next());
 
       // Remove middle
-      root = shown("", 0, a = shown("a", 1), b = shown("b", 2), c = shown("c", 3));
+      root = tree("", 0, a = tree("a", 1), b = tree("b", 2), c = tree("c", 3));
       i = root.listIterator();
       i.next();
       i.next();
@@ -666,7 +488,7 @@ public class TestListTree extends TestCase
       assertSame(c, i.next());
 
       // Remove middle
-      root = shown("", 0, a = shown("a", 1), b = shown("b", 2), c = shown("c", 3));
+      root = tree("", 0, a = tree("a", 1), b = tree("b", 2), c = tree("c", 3));
       i = root.listIterator();
       i.next();
       i.next();
@@ -678,7 +500,7 @@ public class TestListTree extends TestCase
       assertSame(a, i.previous());
 
       // Remove middle
-      root = shown("", 0, a = shown("a", 1), b = shown("b", 2), c = shown("c", 3));
+      root = tree("", 0, a = tree("a", 1), b = tree("b", 2), c = tree("c", 3));
       i = root.listIterator();
       i.next();
       i.next();
@@ -693,28 +515,10 @@ public class TestListTree extends TestCase
       assertSame(a, i.previous());
    }
 
-/*
-   public void testCount()
-   {
-      IntegerTree root = shown("", 0, (IntegerTree[])null);
-      assertEquals(-1, root.getCount());
-      IntegerTree a = shown("a", 1);
-      root.setTrees(Collections.singleton(a));
-      assertEquals(1, root.getCount());
-      a.setHidden(true);
-      assertEquals(0, root.getCount());
-      a.remove("a");
-      assertEquals(0, root.getCount());
-      root.setTrees(null);
-      assertEquals(-1, root.getCount());
-   }
-*/
-
-
    @SuppressWarnings("unchecked")
    public void testListIteratorNavigation()
    {
-      IntegerTree root = shown("", 0, shown("1", 1), shown("2", 2), shown("3", 3), shown("4", 4), shown("5", 5));
+      IntegerTree root = tree("", 0, tree("1", 1), tree("2", 2), tree("3", 3), tree("4", 4), tree("5", 5));
       ListIterator<IntegerTree> it = root.listIterator();
       assertTrue(it.hasNext());
       assertTrue(!it.hasPrevious());
@@ -821,7 +625,7 @@ public class TestListTree extends TestCase
 
    public void testListIteratorRemove()
    {
-      IntegerTree root = shown("", 0, shown("1", 1), shown("2", 2), shown("3", 3), shown("4", 4), shown("5", 5));
+      IntegerTree root = tree("", 0, tree("1", 1), tree("2", 2), tree("3", 3), tree("4", 4), tree("5", 5));
       ListIterator<IntegerTree> it = root.listIterator();
       try
       {
@@ -866,24 +670,24 @@ public class TestListTree extends TestCase
 
    public void testListIteratorAdd()
    {
-      IntegerTree root = shown("", 0);
+      IntegerTree root = tree("", 0);
       ListIterator<IntegerTree> it = root.listIterator();
-      it.add(shown("a", 1));
+      it.add(tree("a", 1));
       assertEquals(0, it.previousIndex());
       assertEquals(1, it.nextIndex());
       assertAllChildren(root, 1);
-      it.add(shown("c", 3));
+      it.add(tree("c", 3));
       assertEquals(1, it.previousIndex());
       assertEquals(2, it.nextIndex());
       assertAllChildren(root, 1, 3);
-      it.add(shown("e", 5));
+      it.add(tree("e", 5));
       assertEquals(2, it.previousIndex());
       assertEquals(3, it.nextIndex());
       assertAllChildren(root, 1, 3, 5);
       assertEquals(5, it.previous().value);
       assertEquals(1, it.previousIndex());
       assertEquals(2, it.nextIndex());
-      it.add(shown("d", 4));
+      it.add(tree("d", 4));
       assertEquals(2, it.previousIndex());
       assertEquals(3, it.nextIndex());
       assertAllChildren(root, 1, 3, 4, 5);
@@ -893,7 +697,7 @@ public class TestListTree extends TestCase
       assertEquals(3, it.previous().value);
       assertEquals(0, it.previousIndex());
       assertEquals(1, it.nextIndex());
-      it.add(shown("b", 2));
+      it.add(tree("b", 2));
       assertEquals(1, it.previousIndex());
       assertEquals(2, it.nextIndex());
       assertAllChildren(root, 1, 2, 3, 4, 5);
@@ -901,7 +705,7 @@ public class TestListTree extends TestCase
 
    public void testListIteratorMove()
    {
-      IntegerTree root = shown("", 0, shown("a", 1), shown("b", 2), shown("c", 3));
+      IntegerTree root = tree("", 0, tree("a", 1), tree("b", 2), tree("c", 3));
       ListIterator<IntegerTree> it = root.listIterator();
       it.add(root.get(2));
       assertAllChildren(root, 3, 1, 2);

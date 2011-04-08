@@ -74,11 +74,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       return map == null ? -1 : map.size();
    }
 
-   public boolean isHidden()
-   {
-      return false;
-   }
-
    public final T getNext()
    {
       return next;
@@ -128,26 +123,8 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
          {
             throw new IllegalArgumentException("the node " + from + " + does not exist");
          }
-         if (child.isHidden())
-         {
-            throw new IllegalArgumentException("the node " + from + " + is hidden");
-         }
          child.name = to;
          map.put(to, child);
-      }
-   }
-
-   public final T remove(String name) throws NullPointerException, IllegalStateException
-   {
-      T child = get(name);
-      if (child != null)
-      {
-         child.remove();
-         return child;
-      }
-      else
-      {
-         return null;
       }
    }
 
@@ -168,8 +145,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       }
 
       //
-      T child = map.get(name);
-      return child == null || child.isHidden() ? null : child;
+      return map.get(name);
    }
 
    public final T getFirst()
@@ -205,10 +181,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       T current = head;
       while (true)
       {
-         while (current != null && current.isHidden())
-         {
-            current = current.next;
-         }
          if (current == null)
          {
             throw new IndexOutOfBoundsException("index " + index + " is greater than the children size");
@@ -238,7 +210,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
     * @param tree the tree
     * @throws NullPointerException if the context is null
     * @throws IllegalStateException if the children relationship does not exist
-    * @throws IllegalArgumentException if an existing child with the same name already exist or if the context is hidden
+    * @throws IllegalArgumentException if an existing child with the same name already exist
     * @throws IndexOutOfBoundsException if the index is negative or is greater than the children size
     */
    public final void insertAt(Integer index, T tree) throws NullPointerException, IllegalStateException, IllegalArgumentException, IndexOutOfBoundsException
@@ -246,10 +218,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       if (tree == null)
       {
          throw new NullPointerException("No null tree accepted");
-      }
-      if (tree.isHidden())
-      {
-         throw new IllegalArgumentException("Cannot insert hidden tree");
       }
       if (map == null)
       {
@@ -279,10 +247,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
          {
             while (index > 0)
             {
-               while (a != null && a.isHidden())
-               {
-                  a = a.next;
-               }
                if (a == null)
                {
                   throw new IndexOutOfBoundsException();
@@ -305,10 +269,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       else
       {
          T a = tail;
-         while (a != null && a.isHidden())
-         {
-            a = a.previous;
-         }
          if (a == null)
          {
             insertFirst(tree);
@@ -376,6 +336,32 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
          tree.parent = parent;
          afterInsert(tree);
       }
+   }
+
+   public void remove()
+   {
+      if (previous == null)
+      {
+         parent.head = next;
+      }
+      else
+      {
+         previous.next = next;
+      }
+      if (next == null)
+      {
+         parent.tail = previous;
+      }
+      else
+      {
+         next.previous = previous;
+      }
+      parent.map.remove(name);
+      T _parent = parent;
+      parent = null;
+      previous = null;
+      next = null;
+      _parent.afterRemove((T)this);
    }
 
    public final ListIterator<T> listIterator()
@@ -594,32 +580,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterab
       {
          tail.insertAfter(context);
       }
-   }
-
-   private void remove()
-   {
-      if (previous == null)
-      {
-         parent.head = next;
-      }
-      else
-      {
-         previous.next = next;
-      }
-      if (next == null)
-      {
-         parent.tail = previous;
-      }
-      else
-      {
-         next.previous = previous;
-      }
-      parent.map.remove(name);
-      T _parent = parent;
-      parent = null;
-      previous = null;
-      next = null;
-      _parent.afterRemove((T)this);
    }
 
    public String toString()
