@@ -17,32 +17,18 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util;
-
-import java.util.List;
+package org.exoplatform.portal.tree.sync.lcs;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SimpleModel implements TreeModel<SimpleNode> {
+public enum LCSChangeType {
 
-   /** . */
-   public static final TreeModel<SimpleNode> INSTANCE = new SimpleModel();
+  REMOVE,
 
-   public String getId(SimpleNode node) {
-      return node.getId();
-   }
+  KEEP,
 
-   public SimpleNode getParent(SimpleNode node) {
-      return node.getParent();
-   }
+  ADD
 
-   public List<SimpleNode> getChildren(SimpleNode node) {
-      return node.getChildren();
-   }
-
-   public SimpleNode getChild(SimpleNode node, String id) {
-      return node.getChild(id);
-   }
 }

@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.tree.list.ListTree;
+
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Collections;

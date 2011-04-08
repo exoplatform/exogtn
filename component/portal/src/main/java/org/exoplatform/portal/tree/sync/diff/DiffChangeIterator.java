@@ -17,12 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util.diff;
+package org.exoplatform.portal.tree.sync.diff;
 
-import org.exoplatform.portal.util.TreeContext;
-import org.exoplatform.portal.util.TreeModel;
-import org.exoplatform.portal.util.lcs.LCS;
-import org.exoplatform.portal.util.lcs.LCSChangeIterator;
+import org.exoplatform.portal.tree.sync.TreeContext;
+import org.exoplatform.portal.tree.sync.TreeModel;
+import org.exoplatform.portal.tree.sync.lcs.LCS;
+import org.exoplatform.portal.tree.sync.lcs.LCSChangeIterator;
 
 import java.util.Iterator;
 import java.util.List;

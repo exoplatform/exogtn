@@ -17,29 +17,58 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util.diff;
-
-import org.exoplatform.portal.util.TreeContext;
-import org.exoplatform.portal.util.TreeModel;
+package org.exoplatform.portal.tree.sync;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Diff<N1, N2> {
+public class TreeContext<N> {
 
    /** . */
-   final TreeModel<N1> model1;
+   final TreeModel<N> model;
 
    /** . */
-   final TreeModel<N2> model2;
+   final N root;
 
-   public Diff(TreeModel<N1> model1, TreeModel<N2> model2) {
-      this.model1 = model1;
-      this.model2 = model2;
+   public TreeContext(TreeModel<N> model, N root) throws NullPointerException {
+      if (model == null) {
+         throw new NullPointerException();
+      }
+      if (root == null) {
+         throw new NullPointerException();
+      }
+
+      this.model = model;
+      this.root = root;
    }
 
-   public DiffChangeIterator<N1, N2> perform(N1 node1, N2 node2) {
-      return new DiffChangeIterator<N1, N2>(this, new TreeContext<N1>(model1, node1), new TreeContext<N2>(model2, node2));
+   public TreeModel<N> getModel() {
+      return model;
    }
+
+   public N getRoot() {
+      return root;
+   }
+
+   public N findById(String id) {
+      return findById(root, id);
+   }
+
+   public N findById(N node, String id) {
+      N found;
+      if (model.getId(node).equals(id)) {
+         found = node;
+      } else {
+         found = null;
+         for (N child : model.getChildren(node)) {
+            found = findById(child, id);
+            if (found != null) {
+               break;
+            }
+         }
+      }
+      return found;
+   }
+
 }

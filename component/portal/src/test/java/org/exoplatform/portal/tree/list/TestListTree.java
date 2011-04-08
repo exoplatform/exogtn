@@ -17,10 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.tree.list;
 
 import junit.framework.TestCase;
-import org.exoplatform.portal.mop.navigation.ListTree;
+import org.exoplatform.portal.tree.list.ListTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;

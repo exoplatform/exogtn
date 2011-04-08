@@ -17,18 +17,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util.lcs;
+package org.exoplatform.portal.tree.sync.diff;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public enum LCSChangeType {
+public enum DiffChangeType {
 
-  REMOVE,
+   ENTER,
 
-  KEEP,
+   ADDED,
 
-  ADD
+   REMOVED,
+
+   MOVED_IN,
+
+   MOVED_OUT,
+
+   LEAVE,
+
+   ERROR
 
 }

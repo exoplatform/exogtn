@@ -17,11 +17,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util.diff;
+package org.exoplatform.portal.tree.sync.diff;
 
 import junit.framework.TestCase;
-import org.exoplatform.portal.util.SimpleModel;
-import org.exoplatform.portal.util.SimpleNode;
+import org.exoplatform.portal.tree.sync.SimpleModel;
+import org.exoplatform.portal.tree.sync.SimpleNode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

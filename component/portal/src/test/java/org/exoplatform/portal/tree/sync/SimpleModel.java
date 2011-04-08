@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.util;
+package org.exoplatform.portal.tree.sync;
 
 import java.util.List;
 
@@ -25,14 +25,24 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface TreeModel<N> {
+public class SimpleModel implements TreeModel<SimpleNode> {
 
-   String getId(N node);
+   /** . */
+   public static final TreeModel<SimpleNode> INSTANCE = new SimpleModel();
 
-   N getParent(N node);
+   public String getId(SimpleNode node) {
+      return node.getId();
+   }
 
-   List<N> getChildren(N node);
+   public SimpleNode getParent(SimpleNode node) {
+      return node.getParent();
+   }
 
-   N getChild(N node, String id);
+   public List<SimpleNode> getChildren(SimpleNode node) {
+      return node.getChildren();
+   }
 
+   public SimpleNode getChild(SimpleNode node, String id) {
+      return node.getChild(id);
+   }
 }
