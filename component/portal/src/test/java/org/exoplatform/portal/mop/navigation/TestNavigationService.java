@@ -1135,6 +1135,30 @@ public class TestNavigationService extends AbstractPortalTest
       service.saveNode(Node.MODEL, root1);
    }
 
+   public void _testSaveSpecialCase() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "special_case");
+      org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
+      nav.addChild("a").addChild("c");
+      nav.addChild("b");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("special_case"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN);
+      Node a = root1.getChild("a");
+      Node b = root1.getChild("b");
+      Node c = a.getChild("c");
+      b.addChild(c);
+      root1.removeChild("a");
+      service.saveNode(Node.MODEL, root1);
+      end();
+
+      //
+      begin();
+   }
 
 /*
    public void testSavePhantomNode() throws Exception
