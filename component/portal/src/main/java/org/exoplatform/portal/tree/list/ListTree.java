@@ -241,7 +241,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
     * @throws IllegalArgumentException if an existing child with the same name already exist or if the context is hidden
     * @throws IndexOutOfBoundsException if the index is negative or is greater than the children size
     */
-   public final void insert(Integer index, T tree) throws NullPointerException, IllegalStateException, IllegalArgumentException, IndexOutOfBoundsException
+   public final void insertAt(Integer index, T tree) throws NullPointerException, IllegalStateException, IllegalArgumentException, IndexOutOfBoundsException
    {
       if (tree == null)
       {
@@ -317,6 +317,64 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             a.insertAfter(tree);
          }
+      }
+   }
+
+   public final void insertAfter(T tree)
+   {
+      if (this != tree)
+      {
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         tree.previous = (T)this;
+         tree.next = next;
+         if (next == null)
+         {
+            parent.tail = tree;
+         }
+         else
+         {
+            next.previous = tree;
+         }
+         next = tree;
+         if (parent.map == Collections.EMPTY_MAP)
+         {
+            parent.map = new HashMap<String, T>();
+         }
+         parent.map.put(tree.name, tree);
+         tree.parent = parent;
+         afterInsert(tree);
+      }
+   }
+
+   public final void insertBefore(T tree)
+   {
+      if (this != tree)
+      {
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         tree.previous = previous;
+         tree.next = (T)this;
+         if (previous == null)
+         {
+            parent.head = tree;
+         }
+         else
+         {
+            previous.next = tree;
+         }
+         previous = tree;
+         if (parent.map == Collections.EMPTY_MAP)
+         {
+            parent.map = new HashMap<String, T>();
+         }
+         parent.map.put(tree.name, tree);
+         tree.parent = parent;
+         afterInsert(tree);
       }
    }
 
@@ -516,64 +574,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E> implements Iterable<
          {
             throw new IllegalStateException();
          }
-      }
-   }
-
-   private void insertAfter(T tree)
-   {
-      if (this != tree)
-      {
-         if (tree.parent != null)
-         {
-            tree.remove();
-         }
-         tree.previous = (T)this;
-         tree.next = next;
-         if (next == null)
-         {
-            parent.tail = tree;
-         }
-         else
-         {
-            next.previous = tree;
-         }
-         next = tree;
-         if (parent.map == Collections.EMPTY_MAP)
-         {
-            parent.map = new HashMap<String, T>();
-         }
-         parent.map.put(tree.name, tree);
-         tree.parent = parent;
-         afterInsert(tree);
-      }
-   }
-
-   private void insertBefore(T tree)
-   {
-      if (this != tree)
-      {
-         if (tree.parent != null)
-         {
-            tree.remove();
-         }
-         tree.previous = previous;
-         tree.next = (T)this;
-         if (previous == null)
-         {
-            parent.head = tree;
-         }
-         else
-         {
-            previous.next = tree;
-         }
-         previous = tree;
-         if (parent.map == Collections.EMPTY_MAP)
-         {
-            parent.map = new HashMap<String, T>();
-         }
-         parent.map.put(tree.name, tree);
-         tree.parent = parent;
-         afterInsert(tree);
       }
    }
 

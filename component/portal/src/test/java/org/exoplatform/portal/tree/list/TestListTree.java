@@ -20,11 +20,9 @@
 package org.exoplatform.portal.tree.list;
 
 import junit.framework.TestCase;
-import org.exoplatform.portal.tree.list.ListTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -128,14 +126,14 @@ public class TestListTree extends TestCase
 
       //
       root = shown("", 0);
-      root.insert(0, shown("a", 1));
+      root.insertAt(0, shown("a", 1));
       assertChildren(root, 1);
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
 
       //
       root = shown("", 0);
-      root.insert(null, shown("a", 1));
+      root.insertAt(null, shown("a", 1));
       assertChildren(root, 1);
       assertAllChildren(root, 1);
       assertAllChildren(root, "a");
@@ -150,14 +148,14 @@ public class TestListTree extends TestCase
 
       //
       root = shown("", 0, hidden("a", 1));
-      root.insert(0, shown("b", 2));
+      root.insertAt(0, shown("b", 2));
       assertChildren(root, 2);
       assertAllChildren(root, 2, 1);
       assertAllChildren(root, "b", "a");
 
       //
       root = shown("", 0, hidden("a", 1));
-      root.insert(null, shown("b", 2));
+      root.insertAt(null, shown("b", 2));
       assertChildren(root, 2);
       assertAllChildren(root, 2, 1);
       assertAllChildren(root, "b", "a");
@@ -172,21 +170,21 @@ public class TestListTree extends TestCase
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insert(0, shown("c", 3));
+      root.insertAt(0, shown("c", 3));
       assertChildren(root, 3, 1);
       assertAllChildren(root, 3, 1, 2);
       assertAllChildren(root, "c", "a", "b");
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insert(1, shown("c", 3));
+      root.insertAt(1, shown("c", 3));
       assertChildren(root, 1, 3);
       assertAllChildren(root, 1, 3, 2);
       assertAllChildren(root, "a", "c", "b");
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2));
-      root.insert(null, shown("c", 3));
+      root.insertAt(null, shown("c", 3));
       assertChildren(root, 1, 3);
       assertAllChildren(root, 1, 3, 2);
       assertAllChildren(root, "a", "c", "b");
@@ -201,28 +199,28 @@ public class TestListTree extends TestCase
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insert(0, shown("d", 4));
+      root.insertAt(0, shown("d", 4));
       assertChildren(root, 4, 1, 3);
       assertAllChildren(root, 4, 1, 2, 3);
       assertAllChildren(root, "d", "a", "b", "c");
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insert(1, shown("d", 4));
+      root.insertAt(1, shown("d", 4));
       assertChildren(root, 1, 4, 3);
       assertAllChildren(root, 1, 4, 2, 3);
       assertAllChildren(root, "a", "d", "b", "c");
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insert(2, shown("d", 4));
+      root.insertAt(2, shown("d", 4));
       assertChildren(root, 1, 3, 4);
       assertAllChildren(root, 1, 2, 3, 4);
       assertAllChildren(root, "a", "b", "c", "d");
 
       //
       root = shown("", 0, shown("a", 1), hidden("b", 2), shown("c", 3));
-      root.insert(null, shown("d", 4));
+      root.insertAt(null, shown("d", 4));
       assertChildren(root, 1, 3, 4);
       assertAllChildren(root, 1, 2, 3, 4);
       assertAllChildren(root, "a", "b", "c", "d");
@@ -238,7 +236,7 @@ public class TestListTree extends TestCase
       //
       try
       {
-         root.insert(0, shown("a", 2));
+         root.insertAt(0, shown("a", 2));
          fail();
       }
       catch (IllegalArgumentException ignore)
@@ -256,7 +254,7 @@ public class TestListTree extends TestCase
       //
       try
       {
-         root.insert(0, shown("a", 1));
+         root.insertAt(0, shown("a", 1));
          fail();
       }
       catch (IllegalStateException ignore)
@@ -272,7 +270,7 @@ public class TestListTree extends TestCase
       IntegerTree root1 = shown("", 0, a, b);
 
       //
-      root1.insert(0, b);
+      root1.insertAt(0, b);
       assertAllChildren(root1, 2, 1);
    }
 
@@ -282,11 +280,11 @@ public class TestListTree extends TestCase
       IntegerTree root1 = shown("", 0, a);
 
       //
-      root1.insert(null, a);
+      root1.insertAt(null, a);
       assertAllChildren(root1, 1);
 
       //
-      root1.insert(0, a);
+      root1.insertAt(0, a);
       assertAllChildren(root1, 1);
    }
 
@@ -297,7 +295,7 @@ public class TestListTree extends TestCase
       IntegerTree root2 = shown("", 0);
 
       //
-      root2.insert(0, a);
+      root2.insertAt(0, a);
       assertAllChildren(root1);
       assertAllChildren(root2, 1);
       assertAllChildren(root2, "a");
@@ -310,7 +308,7 @@ public class TestListTree extends TestCase
       IntegerTree root1 = shown("", 0, a);
 
       //
-      root1.insert(0, a);
+      root1.insertAt(0, a);
       assertAllChildren(root1, 1);
       assertAllChildren(root1, "a");
       assertSame(root1, a.getParent());
@@ -322,13 +320,13 @@ public class TestListTree extends TestCase
       IntegerTree root1 = shown("", 0, a, shown("b", 2));
 
       //
-      root1.insert(2, a);
+      root1.insertAt(2, a);
       assertAllChildren(root1, 2, 1);
       assertAllChildren(root1, "b", "a");
       assertSame(root1, a.getParent());
 
       //
-      root1.insert(0, a);
+      root1.insertAt(0, a);
       assertAllChildren(root1, 1, 2);
       assertAllChildren(root1, "a", "b");
       assertSame(root1, a.getParent());

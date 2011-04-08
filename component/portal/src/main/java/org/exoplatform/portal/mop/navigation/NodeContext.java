@@ -274,7 +274,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       //
       NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
-      insert(null, nodeContext);
+      insertAt(null, nodeContext);
       return nodeContext.node;
    }
 
@@ -287,7 +287,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
 
       //
       NodeContext<N> nodeContext = model.getContext(child);
-      insert(index, nodeContext);
+      insertAt(index, nodeContext);
    }
 
    public boolean removeNode(NodeModel<N> model, String name)
