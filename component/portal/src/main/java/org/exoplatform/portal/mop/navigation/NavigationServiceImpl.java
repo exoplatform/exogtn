@@ -327,60 +327,6 @@ public class NavigationServiceImpl implements NavigationService
    }
 
 
-   public <N> void refresh(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException
-   {
-      POMSession session = manager.getSession();
-      NodeContext<N> context = model.getContext(node);
-      refresh(model, session, context, scope.get(), 0);
-   }
-
-   private <N> void refresh(
-      NodeModel<N> model,
-      POMSession session,
-      NodeContext<N> context,
-      Scope.Visitor visitor,
-      int depth)
-   {
-
-      String id = context.data.getId();
-
-      NodeData from = context.data;
-
-      NodeData to = cache.getNodeData(session, id);
-
-      if (to == null)
-      {
-         throw new UnsupportedOperationException("Handle me gracefully");
-      }
-
-      //
-      if (context.hasTrees())
-      {
-         Iterable<NodeContext<N>> children = context.getContexts();
-
-         // Remove what we need
-         for (Iterator<NodeContext<N>> it = children.iterator();it.hasNext();)
-         {
-            NodeContext<N> child = it.next();
-            if (child.data == null || !to.children.contains(child.data.getId()))
-            {
-               it.remove();
-            }
-            else
-            {
-               // We do nothing for now
-            }
-         }
-      }
-      else
-      {
-         throw new UnsupportedOperationException("Handle me gracefully");
-      }
-
-      // Update data now
-      context.data = to;
-   }
-
    public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
    {
       POMSession session = manager.getSession();

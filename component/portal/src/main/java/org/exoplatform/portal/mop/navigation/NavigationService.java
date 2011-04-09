@@ -89,8 +89,6 @@ public interface NavigationService
     */
    <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException;
 
-   <N> void refresh(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException;
-
    <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException;
 
 }
