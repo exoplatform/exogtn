@@ -39,10 +39,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    NodeState state;
 
    /** . */
-   boolean hidden;
+   private boolean hidden;
 
    /** . */
-   int hiddenCount;
+   private int hiddenCount;
 
    NodeContext(NodeModel<N> model, NodeData data)
    {
