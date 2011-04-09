@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ListTree<T extends ListTree<T, E>, E> // implements Iterable<E>
+public abstract class ListTree<T extends ListTree<T, E>, E>
 {
 
    /** . */
