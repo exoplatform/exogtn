@@ -19,17 +19,61 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.tree.sync.ListAdapter;
+import org.exoplatform.portal.tree.sync.SyncModel;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TreeContext<N>
+public class TreeContext<N> implements
+   SyncModel<NodeData, NodeData, Object>,
+   ListAdapter<NodeData, Object>
 {
 
    /** . */
-   private Map<String, NodeData> snapshot;
+   private Map<String, NodeContext<N>> nodes = new HashMap<String, NodeContext<N>>();
 
+   public NodeContext<N> newContext(NodeModel<N> model, NodeData data)
+   {
+      NodeContext<N> context = new NodeContext<N>(this, model, data);
+      nodes.put(context.getId(), context);
+      return context;
+   }
 
+   public String getId(NodeData node)
+   {
+      return node.id;
+   }
 
+   public NodeData getChildren(NodeData node)
+   {
+      return node;
+   }
+
+   public String getHandle(NodeData node)
+   {
+      return node.getId();
+   }
+
+   public NodeData getDescendant(NodeData node, Object handle)
+   {
+      String s = (String) handle;
+      NodeContext<N> context = nodes.get(s);
+      return context != null ? context.data : null;
+   }
+
+   public int size(NodeData list)
+   {
+      return list.children.length;
+   }
+
+   public Iterator<Object> iterator(NodeData list, boolean reverse)
+   {
+      return (Iterator)list.iterator(reverse);
+   }
 }

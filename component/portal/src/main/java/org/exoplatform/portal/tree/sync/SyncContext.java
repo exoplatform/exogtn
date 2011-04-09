@@ -19,19 +19,27 @@
 
 package org.exoplatform.portal.tree.sync;
 
+import java.util.Iterator;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TreeContext<N> {
+public class SyncContext<L, N, H> {
 
    /** . */
-   final TreeModel<N> model;
+   final ListAdapter<L, H> adapter;
+
+   /** . */
+   final SyncModel<L, N, H> model;
 
    /** . */
    final N root;
 
-   public TreeContext(TreeModel<N> model, N root) throws NullPointerException {
+   public SyncContext(ListAdapter<L, H> adapter, SyncModel<L, N, H> model, N root) throws NullPointerException {
+      if (adapter == null) {
+         throw new NullPointerException();
+      }
       if (model == null) {
          throw new NullPointerException();
       }
@@ -39,11 +47,13 @@ public class TreeContext<N> {
          throw new NullPointerException();
       }
 
+      //
+      this.adapter = adapter;
       this.model = model;
       this.root = root;
    }
 
-   public TreeModel<N> getModel() {
+   public SyncModel<L, N, H> getModel() {
       return model;
    }
 
@@ -51,24 +61,7 @@ public class TreeContext<N> {
       return root;
    }
 
-   public N findById(String id) {
-      return findById(root, id);
+   public N findByHandle(H handle) {
+      return model.getDescendant(root, handle);
    }
-
-   public N findById(N node, String id) {
-      N found;
-      if (model.getId(node).equals(id)) {
-         found = node;
-      } else {
-         found = null;
-         for (N child : model.getChildren(node)) {
-            found = findById(child, id);
-            if (found != null) {
-               break;
-            }
-         }
-      }
-      return found;
-   }
-
 }

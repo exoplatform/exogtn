@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.tree.sync.diff;
 
-import org.exoplatform.portal.tree.sync.TreeContext;
-import org.exoplatform.portal.tree.sync.TreeModel;
+import org.exoplatform.portal.tree.sync.SyncContext;
+import org.exoplatform.portal.tree.sync.SyncModel;
 import org.exoplatform.portal.tree.sync.lcs.LCS;
 import org.exoplatform.portal.tree.sync.lcs.LCSChangeIterator;
 
@@ -32,21 +32,21 @@ import java.util.RandomAccess;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
+public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChangeType> {
 
    /** . */
-   private final Diff<N1, N2> diff;
+   private final Diff<L1, N1, L2, N2, H> diff;
 
    /** . */
    private Frame frame;
 
    /** . */
-   private final TreeContext<N1> context1;
+   private final SyncContext<L1, N1, H> context1;
 
    /** . */
-   private final TreeContext<N2> context2;
+   private final SyncContext<L2, N2, H> context2;
 
-   DiffChangeIterator(Diff<N1, N2> diff, TreeContext<N1> context1, TreeContext<N2> context2) {
+   DiffChangeIterator(Diff<L1, N1, L2, N2, H> diff, SyncContext<L1, N1, H> context1, SyncContext<L2, N2, H> context2) {
       this.diff = diff;
       this.context1 = context1;
       this.context2 = context2;
@@ -96,25 +96,19 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
       private N2 node2;
 
       /** . */
-      private List<N1> children1;
+      private L1 children1;
 
       /** . */
-      private String[] childrenIds1;
+      private Iterator<H> it1;
 
       /** . */
-      private Iterator<N1> it1;
+      private L2 children2;
 
       /** . */
-      private List<N2> children2;
+      private Iterator<H> it2;
 
       /** . */
-      private String[] childrenIds2;
-
-      /** . */
-      private Iterator<N2> it2;
-
-      /** . */
-      private LCSChangeIterator<String> it;
+      private LCSChangeIterator<L1, L2, H> it;
 
       /** . */
       private Status previous;
@@ -141,9 +135,9 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
          if (frame.next == null) {
             switch (frame.previous) {
                case INIT:
-                  String id1 = context1.getModel().getId(frame.node1);
-                  String id2 = context2.getModel().getId(frame.node2);
-                  if (!id1.equals(id2)) {
+                  H id1 = context1.getModel().getHandle(frame.node1);
+                  H id2 = context2.getModel().getHandle(frame.node2);
+                  if (diff.comparator.compare(id1, id2) != 0) {
                      frame.next = Status.ERROR;
                      frame.source = frame.node1;
                      frame.destination = frame.node2;
@@ -168,12 +162,13 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
                   return hasNext();
                case ENTER:
                   frame.children1 = context1.getModel().getChildren(frame.node1);
-                  frame.childrenIds1 = ids(context1.getModel().getChildren(frame.node1), context1.getModel());
-                  frame.it1 = frame.children1.iterator();
+                  frame.it1 = diff.adapter1.iterator(frame.children1, false);
                   frame.children2 = context2.getModel().getChildren(frame.node2);
-                  frame.childrenIds2 = ids(context2.getModel().getChildren(frame.node2), context2.getModel());
-                  frame.it2 = frame.children2.iterator();
-                  frame.it = new LCS<String>().perform(frame.childrenIds1, frame.childrenIds2);
+                  frame.it2 = diff.adapter2.iterator(frame.children2, false);
+                  frame.it = LCS.create(
+                        diff.adapter1,
+                        diff.adapter2,
+                        diff.comparator).perform(frame.children1, frame.children2);
                case ADDED:
                case REMOVED:
                case MOVED_OUT:
@@ -181,12 +176,16 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
                   if (frame.it.hasNext()) {
                      switch (frame.it.next()) {
                         case KEEP:
-                           frame = new Frame(frame, frame.it1.next(), frame.it2.next());
+                           N1 next1 = context1.getModel().getDescendant(frame.node1, frame.it1.next());
+                           N2 next2 = context2.getModel().getDescendant(frame.node2, frame.it2.next());
+                           frame = new Frame(frame, next1, next2);
                            return hasNext();
                         case ADD:
                            frame.it2.next();
-                           N1 a = context1.findById(frame.it.getElement());
-                           N2 added = frame.children2.get(frame.it.getIndex2() - 1);
+                           H addedHandle = frame.it.getElement();
+                           N2 added = context2.getModel().getDescendant(frame.node2, addedHandle);
+                           H addedId = context2.getModel().getHandle(added);
+                           N1 a = context1.findByHandle(addedId);
                            if (a != null) {
                               frame.next = Status.MOVED_IN;
                               frame.source = a;
@@ -199,8 +198,10 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
                            break;
                         case REMOVE:
                            frame.it1.next();
-                           N1 removed = frame.children1.get(frame.it.getIndex1() - 1);
-                           N2 b = context2.findById(frame.it.getElement());
+                           H removedHandle = frame.it.getElement();
+                           N1 removed = context1.getModel().getDescendant(frame.node1, removedHandle);
+                           H removedId = context1.getModel().getHandle(removed);
+                           N2 b = context2.findByHandle(removedId);
                            if (b != null) {
                               frame.next = Status.MOVED_OUT;
                               frame.source = removed;
@@ -249,21 +250,5 @@ public class DiffChangeIterator<N1, N2> implements Iterator<DiffChangeType> {
 
    public void remove() {
       throw new UnsupportedOperationException();
-   }
-
-   private static <N> String[] ids(List<N> nodes, TreeModel<N> model) {
-      int size = nodes.size();
-      String[] ids = new String[size];
-      if (nodes instanceof RandomAccess) {
-         for (int i = 0; i < size; i++) {
-            ids[i] = model.getId(nodes.get(i));
-         }
-      } else {
-         int i = 0;
-         for (N node : nodes) {
-            ids[i++] = model.getId(node);
-         }
-      }
-      return ids;
    }
 }

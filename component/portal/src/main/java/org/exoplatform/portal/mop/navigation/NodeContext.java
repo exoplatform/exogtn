@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -26,8 +26,12 @@ import java.util.*;
 /**
  * The context of a node.
  */
-public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
+public class NodeContext<N> extends ListTree<NodeContext<N>, N>
 {
+
+
+   /** . */
+   final TreeContext<N> tree;
 
    /** . */
    final N node;
@@ -44,11 +48,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
    /** . */
    private int hiddenCount;
 
-   NodeContext(NodeModel<N> model, NodeData data)
+   NodeContext(TreeContext<N> tree, NodeModel<N> model, NodeData data)
    {
       super(data.getName());
 
       //
+      this.tree = tree;
       this.node = model.create(this);
       this.data = data;
       this.state = data.getState();
@@ -56,11 +61,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.hiddenCount = 0;
    }
 
-   NodeContext(NodeModel<N> model, String name, NodeState state)
+   private NodeContext(TreeContext<N> tree, NodeModel<N> model, String name, NodeState state)
    {
       super(name);
 
       //
+      this.tree = tree;
       this.node = model.create(this);
       this.data = null;
       this.state = state;
@@ -168,7 +174,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
       else
       {
-         return data.children.size();
+         return data.children.length;
       }
    }
 
@@ -189,7 +195,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
       else
       {
-         return data.children.size();
+         return data.children.length;
       }
    }
 
@@ -323,7 +329,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(model, name, new NodeState.Builder().capture());
+      NodeContext<N> nodeContext = new NodeContext<N>(tree, model, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
       addNode(index, nodeContext);
       return nodeContext.node;

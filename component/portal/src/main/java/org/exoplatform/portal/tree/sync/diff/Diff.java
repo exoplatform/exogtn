@@ -19,27 +19,42 @@
 
 package org.exoplatform.portal.tree.sync.diff;
 
-import org.exoplatform.portal.tree.sync.TreeContext;
-import org.exoplatform.portal.tree.sync.TreeModel;
+import org.exoplatform.portal.tree.sync.ListAdapter;
+import org.exoplatform.portal.tree.sync.SyncContext;
+import org.exoplatform.portal.tree.sync.SyncModel;
+
+import java.util.Comparator;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Diff<N1, N2> {
+public class Diff<L1, N1, L2, N2, H> {
 
    /** . */
-   final TreeModel<N1> model1;
+   final ListAdapter<L1, H> adapter1;
 
    /** . */
-   final TreeModel<N2> model2;
+   final SyncModel<L1, N1, H> model1;
 
-   public Diff(TreeModel<N1> model1, TreeModel<N2> model2) {
+   /** . */
+   final ListAdapter<L2, H> adapter2;
+
+   /** . */
+   final SyncModel<L2, N2, H> model2;
+
+   /** . */
+   final Comparator<H> comparator;
+
+   public Diff(ListAdapter<L1, H> adapter1, SyncModel<L1, N1, H> model1, ListAdapter<L2, H> adapter2, SyncModel<L2, N2, H> model2, Comparator<H> comparator) {
+      this.adapter1 = adapter1;
       this.model1 = model1;
+      this.adapter2 = adapter2;
       this.model2 = model2;
+      this.comparator = comparator;
    }
 
-   public DiffChangeIterator<N1, N2> perform(N1 node1, N2 node2) {
-      return new DiffChangeIterator<N1, N2>(this, new TreeContext<N1>(model1, node1), new TreeContext<N2>(model2, node2));
+   public DiffChangeIterator<L1, N1, L2, N2, H> perform(N1 node1, N2 node2) {
+      return new DiffChangeIterator<L1, N1, L2, N2, H>(this, new SyncContext<L1, N1, H>(adapter1, model1, node1), new SyncContext<L2, N2, H>(adapter2, model2, node2));
    }
 }

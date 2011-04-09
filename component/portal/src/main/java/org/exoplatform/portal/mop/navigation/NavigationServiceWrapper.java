@@ -132,4 +132,9 @@ public class NavigationServiceWrapper implements Startable, NavigationService
          log.error("Error when delivering notification " + name + " for navigation " + key, e);
       }
    }
+
+   public <N> void saveNode2(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException
+   {
+      service.saveNode2(model, node);
+   }
 }

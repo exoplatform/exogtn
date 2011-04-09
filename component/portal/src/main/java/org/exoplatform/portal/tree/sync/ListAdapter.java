@@ -19,20 +19,17 @@
 
 package org.exoplatform.portal.tree.sync;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
+ * An adapter for a list of elements.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public interface TreeModel<N> {
+public interface ListAdapter<L, E> {
 
-   String getId(N node);
+   int size(L list);
 
-   N getParent(N node);
-
-   List<N> getChildren(N node);
-
-   N getChild(N node, String id);
+   Iterator<E> iterator(L list, boolean reverse);
 
 }

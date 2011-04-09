@@ -19,16 +19,19 @@
 
 package org.exoplatform.portal.tree.sync.lcs;
 
+import org.exoplatform.portal.tree.sync.ListAdapter;
+
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class LCS<E> {
+public class LCS<L1, L2, E> {
 
-  public static <E extends Comparable<E>> LCS<E> create() {
-    return new LCS<E>() {
+  public static <L1, L2, E extends Comparable<E>> LCS<L1, L2, E> create(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2) {
+    return new LCS<L1, L2, E>(adapter1, adapter2) {
       @Override
       protected boolean equals(E e1, E e2) {
         return e1.compareTo(e2) == 0;
@@ -36,8 +39,8 @@ public class LCS<E> {
     };
   }
 
-  public static <E> LCS<E> create(final Comparator<E> comparator) {
-    return new LCS<E>() {
+  public static <L1, L2, E> LCS<L1, L2, E> create(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2, final Comparator<E> comparator) {
+    return new LCS<L1, L2, E>(adapter1, adapter2) {
       @Override
       protected boolean equals(E e1, E e2) {
         return comparator.compare(e1, e2) == 0;
@@ -57,15 +60,25 @@ public class LCS<E> {
   /** . */
   int n;
 
-  public LCS() {
+  /** . */
+  final ListAdapter<L1, E> adapter1;
+
+  /** . */
+  final ListAdapter<L2, E> adapter2;
+
+  public LCS(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2) {
     this.matrix = EMPTY;
     this.m = -1;
     this.n = -1;
+    this.adapter1 = adapter1;
+    this.adapter2 = adapter2;
   }
 
-  public final LCSChangeIterator<E> perform(E[] elements1, E[] elements2) {
-    m = 1 + elements1.length;
-    n = 1 + elements2.length;
+  public final LCSChangeIterator<L1, L2, E> perform(L1 elements1, L2 elements2) {
+    int size1 = adapter1.size(elements1);
+    int size2 = adapter2.size(elements2);
+    m = 1 + size1;
+    n = 1 + size2;
     int s = m * n;
     if (matrix.length < s) {
       matrix = new int[s];
@@ -77,26 +90,46 @@ public class LCS<E> {
         matrix[j * m] = 0;
       }
     }
+    Iterator<E> itI = adapter1.iterator(elements1, true);
     for (int i = 1;i < m;i++) {
+      E abc = itI.next();
+      Iterator<E> itJ = adapter2.iterator(elements2, true);
       for (int j = 1;j < n;j++) {
         int index = i + j * m;
         int v;
-        if (equals(elements1[elements1.length - i], elements2[elements2.length - j])) {
+         E def = itJ.next();
+         if (equals(abc, def)) {
           v = matrix[index - m - 1] + 1;
         } else {
           int v1 = matrix[index - 1];
           int v2 = matrix[index - m];
-          v = v1 < v2 ? v1 : v2;
+          v = v1 < v2 ? v2 : v1;
         }
         matrix[index] = v;
       }
     }
 
     //
-    return new LCSChangeIterator<E>(this, elements1, elements2);
+    return new LCSChangeIterator<L1, L2, E>(this, elements1, elements2, size1, size2);
   }
 
   protected boolean equals(E e1, E e2) {
     return e1.equals(e2);
   }
+
+   @Override
+   public String toString() {
+     StringBuilder sb = new StringBuilder();
+     for (int i = 0;i < m;i++) {
+       sb.append('[');
+       for (int j = 0;j < n;j++) {
+         if (j > 0) {
+           sb.append(',');
+         }
+         sb.append(matrix[i + j * m]);
+       }
+       sb.append("]\n");
+     }
+     return sb.toString();
+   }
 }

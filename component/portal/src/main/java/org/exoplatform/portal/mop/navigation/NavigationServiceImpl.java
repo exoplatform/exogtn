@@ -28,6 +28,8 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
+
+import org.exoplatform.portal.tree.sync.diff.Diff;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -37,15 +39,7 @@ import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import javax.jcr.Session;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
@@ -165,7 +159,7 @@ public class NavigationServiceImpl implements NavigationService
          NodeData data = cache.getNodeData(session, nodeId);
          if (data != null)
          {
-            NodeContext<N> context = load(model, session, data, visitor, 0);
+            NodeContext<N> context = load(new TreeContext<N>(), model, session, data, visitor, 0);
             return context.node;
          }
          else
@@ -180,6 +174,7 @@ public class NavigationServiceImpl implements NavigationService
    }
 
    private <N> NodeContext<N> load(
+      TreeContext<N> tree,
       NodeModel<N> model,
       POMSession session,
       NodeData data,
@@ -192,13 +187,13 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<N> context;
       if (visitMode == VisitMode.ALL_CHILDREN)
       {
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
          for (String childId : data.children)
          {
             NodeData childData = cache.getNodeData(session, childId);
             if (childData != null)
             {
-               NodeContext<N> childContext = load(model, session, childData, visitor, depth + 1);
+               NodeContext<N> childContext = load(tree, model, session, childData, visitor, depth + 1);
                children.add(childContext);
             }
             else
@@ -208,16 +203,16 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         context = new NodeContext<N>(model, data);
+         context = tree.newContext(model, data);
          context.setContexts(children);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         context = new NodeContext<N>(model, data);
+         context = tree.newContext(model, data);
       }
       else
       {
-         context = new NodeContext<N>(model, data);
+         context = tree.newContext(model, data);
       }
 
       //
@@ -229,11 +224,8 @@ public class NavigationServiceImpl implements NavigationService
       POMSession session = manager.getSession();
       NodeContext<N> context = model.getContext(node);
       Scope.Visitor visitor = scope.get();
-      return load(model, session, context, visitor, 0);
-   }
 
-   private <N> N load(NodeModel<N> model, POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
-   {
+      //
       String nodeId = context.getId();
       NodeData data = cache.getNodeData(session, nodeId);
 
@@ -241,10 +233,9 @@ public class NavigationServiceImpl implements NavigationService
       if (data != null)
       {
          context.data = data;
-         visit(model, session, context, visitor, depth);
+         visit(model, session, context, visitor, 0);
          return context.node;
       }
-      
       return null;
    }
 
@@ -286,7 +277,7 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.size());
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
          for (String childId : data.children)
          {
             NodeData childData = cache.getNodeData(session, childId);
@@ -300,7 +291,7 @@ public class NavigationServiceImpl implements NavigationService
                }
                else
                {
-                  childContext = load(model, session, childData, visitor, depth + 1);
+                  childContext = load(context.tree, model, session, childData, visitor, depth + 1);
                }
                children.add(childContext);
             }
@@ -325,6 +316,45 @@ public class NavigationServiceImpl implements NavigationService
          throw new AssertionError();
       }
    }
+
+
+   public <N> void saveNode2(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException
+   {
+
+
+      POMSession session = manager.getSession();
+      NodeContext<N> context = model.getContext(node);
+      TreeContext<N> tree = context.tree;
+
+
+      Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object> diff =
+         new Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object>(
+            tree,
+            tree,
+            Sync.<N>getNodeContextAdapter(),
+            Sync.<N>getNodeContextModel(),
+            new Comparator<Object>()
+            {
+               public int compare(Object o1, Object o2)
+               {
+                  throw new UnsupportedOperationException();
+               }
+            }
+         );
+
+
+   }
+
+
+
+
+
+
+
+
+
+
+
 
 
    public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
@@ -373,7 +403,7 @@ public class NavigationServiceImpl implements NavigationService
       private SaveContext<N> parent;
 
       /** The related navigation object. */
-      private org.gatein.mop.api.workspace.Navigation  navigation;
+      private org.gatein.mop.api.workspace.Navigation navigation;
 
       private SaveContext(NodeContext<N> context)
       {
@@ -394,10 +424,16 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         ArrayList<String> bilto;
+         List<String> bilto;
          if (context.data != null)
          {
-            bilto = new ArrayList<String>(context.data.children);
+            String[] array = context.data.children;
+            int length = array.length;
+            bilto = new ArrayList<String>(length);
+            for (int i = 0;i < length;i++)
+            {
+               bilto.add(array[i]);
+            }
          }
          else
          {
@@ -608,8 +644,9 @@ public class NavigationServiceImpl implements NavigationService
          {
             for (NodeContext<N> childCtx : context.getContexts())
             {
+               final String childName = childCtx.data.name;
                final String childId = childCtx.data.id;
-               if (!context.data.children.contains(childId))
+               if (!context.data.hasChild(childId))
                {
                   if (!childrenIds.contains(childId))
                   {
@@ -693,15 +730,15 @@ public class NavigationServiceImpl implements NavigationService
       // Update model
       void phase6(POMSession session)
       {
-         Set<String> childMap;
+         String[] childrenIds;
          if (context.hasTrees())
          {
             // todo : I think we have a bug here :-)
-            childMap = new LinkedHashSet<String>();
+            childrenIds = new String[0];
          }
          else
          {
-            childMap = context.data.children;
+            childrenIds = context.data.children;
          }
 
          //
@@ -710,7 +747,7 @@ public class NavigationServiceImpl implements NavigationService
          NodeState state = context.getState();
 
          //
-         context.data = new NodeData(id, name, state, childMap);
+         context.data = new NodeData(id, name, state, childrenIds);
 
          //
          for (SaveContext<N> child : children)

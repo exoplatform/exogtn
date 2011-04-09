@@ -19,30 +19,16 @@
 
 package org.exoplatform.portal.tree.sync;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SimpleModel implements TreeModel<SimpleNode> {
+public interface SyncModel<L, N, H> {
 
-   /** . */
-   public static final TreeModel<SimpleNode> INSTANCE = new SimpleModel();
+   H getHandle(N node);
 
-   public String getId(SimpleNode node) {
-      return node.getId();
-   }
+   L getChildren(N node);
 
-   public SimpleNode getParent(SimpleNode node) {
-      return node.getParent();
-   }
+   N getDescendant(N node, H handle);
 
-   public List<SimpleNode> getChildren(SimpleNode node) {
-      return node.getChildren();
-   }
-
-   public SimpleNode getChild(SimpleNode node, String id) {
-      return node.getChild(id);
-   }
 }

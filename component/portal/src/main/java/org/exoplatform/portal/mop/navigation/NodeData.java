@@ -32,11 +32,7 @@ import org.gatein.mop.api.workspace.link.Link;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An immutable node data class.
@@ -57,22 +53,44 @@ class NodeData implements Serializable
    final NodeState state;
 
    /** . */
-   final Set<String> children;
+   final String[] children;
 
-   NodeData(String id, String name, NodeState state, Set<String> children)
+   NodeData(String id, String name, NodeState state, String[] children)
    {
       this.id = id;
       this.name = name;
       this.state = state;
-      this.children = Collections.unmodifiableSet(children);
+      this.children = children;
+   }
+
+   boolean hasChild(String childId)
+   {
+      for (int i = 0;i < children.length;i++)
+      {
+         if (children[i].equals(childId))
+         {
+            return true;
+         }
+      }
+      return false;
    }
 
    NodeData(Navigation nav)
    {
-      LinkedHashSet<String> children = new LinkedHashSet<String>();
-      for (Navigation child : nav.getChildren())
+      String[] children;
+      List<Navigation> _children = nav.getChildren();
+      if (_children == null)
       {
-         children.add(child.getObjectId());
+         children = new String[0];
+      }
+      else
+      {
+         children = new String[_children.size()];
+         int index = 0;
+         for (Navigation child : _children)
+         {
+            children[index++] = child.getObjectId();
+         }
       }
 
       //
@@ -128,7 +146,63 @@ class NodeData implements Serializable
       this.id = nav.getObjectId();
       this.name = nav.getName();
       this.state = state;
-      this.children = Collections.unmodifiableSet(children);
+      this.children = children;
+   }
+
+   public Iterator<String> iterator(boolean reverse)
+   {
+      if (reverse)
+      {
+         return new Iterator<String>()
+         {
+            int index = children.length;
+            public boolean hasNext()
+            {
+               return index > 0;
+            }
+            public String next()
+            {
+               if (index > 0)
+               {
+                  return children[--index];
+               }
+               else
+               {
+                  throw new NoSuchElementException();
+               }
+            }
+            public void remove()
+            {
+               throw new UnsupportedOperationException();
+            }
+         };
+      }
+      else
+      {
+         return new Iterator<String>()
+         {
+            int index = 0;
+            public boolean hasNext()
+            {
+               return index < children.length;
+            }
+            public String next()
+            {
+               if (index < children.length)
+               {
+                  return children[index++];
+               }
+               else
+               {
+                  throw new NoSuchElementException();
+               }
+            }
+            public void remove()
+            {
+               throw new UnsupportedOperationException();
+            }
+         };
+      }
    }
 
    public String getId()
