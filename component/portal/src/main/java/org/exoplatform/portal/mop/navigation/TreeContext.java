@@ -62,9 +62,29 @@ public class TreeContext<N> implements
 
    public NodeData getDescendant(NodeData node, Object handle)
    {
-      String s = (String) handle;
-      NodeContext<N> context = nodes.get(s);
-      return context != null ? context.data : null;
+      String s;
+      if (handle instanceof String)
+      {
+         s = (String)handle;
+      }
+      else if (handle instanceof NodeContext)
+      {
+         NodeContext nc = (NodeContext)handle;
+         s = nc.getId();
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Implement me " + handle);
+      }
+      if (s != null)
+      {
+         NodeContext<N> context = nodes.get(s);
+         return context != null ? context.data : null;
+      }
+      else
+      {
+         return null;
+      }
    }
 
    public int size(NodeData list)

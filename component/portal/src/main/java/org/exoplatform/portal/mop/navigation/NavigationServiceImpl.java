@@ -30,6 +30,7 @@ import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
 import org.exoplatform.portal.tree.sync.diff.Diff;
+import org.exoplatform.portal.tree.sync.diff.DiffChangeIterator;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -337,10 +338,32 @@ public class NavigationServiceImpl implements NavigationService
             {
                public int compare(Object o1, Object o2)
                {
-                  throw new UnsupportedOperationException();
+                  String s1 = (String)o1;
+                  NodeContext<N> n2 = (NodeContext<N>)o2;
+                  return s1.equals(n2.data.id) ? 0 : 1;
                }
             }
          );
+
+      DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object> it = diff.perform(context.data, context);
+      org.gatein.mop.api.workspace.Navigation current = session.findObjectById(ObjectType.NAVIGATION, context.getId());
+      while (it.hasNext())
+      {
+         switch (it.next())
+         {
+            case ENTER:
+               current = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
+               break;
+            case LEAVE:
+               break;
+            case ADDED:
+               NodeContext<N> destination = it.getDestination();
+               current.addChild(destination.getName());
+               break;
+            default:
+               throw new AssertionError();
+         }
+      }
 
 
    }

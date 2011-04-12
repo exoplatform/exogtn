@@ -876,6 +876,37 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("foo", foo.getName());
    }
 
+   public void testAddChild2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child_2");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("add_child_2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      assertEquals(0, root.getNodeCount());
+
+      //
+      Node foo = root.addChild("foo");
+      assertNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+      assertEquals(1, root.getNodeCount());
+      service.saveNode2(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      foo = root.getChild("foo");
+      assertNotNull(foo);
+      assertEquals(1, root.getNodeCount());
+      assertEquals("foo", foo.getName());
+   }
+
    public void testRemoveChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -896,6 +927,35 @@ public class TestNavigationService extends AbstractPortalTest
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
       service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      foo = root.getChild("foo");
+      assertNull(foo);
+   }
+
+   public void testRemoveChild_2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child_2");
+      portal.getRootNavigation().addChild("default").addChild("foo");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("remove_child_2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Node foo = root.getChild("foo");
+      assertNotNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+
+      //
+      assertTrue(root.removeChild("foo"));
+      assertNull(root.getChild("foo"));
+      service.saveNode2(Node.MODEL, root);
       end(true);
 
       //
