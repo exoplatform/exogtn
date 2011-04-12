@@ -31,6 +31,7 @@ import static org.exoplatform.portal.mop.navigation.Utils.*;
 
 import org.exoplatform.portal.tree.sync.diff.Diff;
 import org.exoplatform.portal.tree.sync.diff.DiffChangeIterator;
+import org.exoplatform.portal.tree.sync.diff.DiffChangeType;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -328,28 +329,27 @@ public class NavigationServiceImpl implements NavigationService
       TreeContext<N> tree = context.tree;
 
 
-      Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object> diff =
-         new Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object>(
+      Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> diff =
+         new Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String>(
             tree,
             tree,
             Sync.<N>getNodeContextAdapter(),
             Sync.<N>getNodeContextModel(),
-            new Comparator<Object>()
+            new Comparator<String>()
             {
-               public int compare(Object o1, Object o2)
+               public int compare(String o1, String o2)
                {
-                  String s1 = (String)o1;
-                  NodeContext<N> n2 = (NodeContext<N>)o2;
-                  return s1.equals(n2.data.id) ? 0 : 1;
+                  return o1.compareTo(o2);
                }
             }
          );
 
-      DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, Object> it = diff.perform(context.data, context);
+      DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> it = diff.perform(context.data, context);
       org.gatein.mop.api.workspace.Navigation current = session.findObjectById(ObjectType.NAVIGATION, context.getId());
       while (it.hasNext())
       {
-         switch (it.next())
+         DiffChangeType change = it.next();
+         switch (change)
          {
             case ENTER:
                current = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
@@ -357,11 +357,30 @@ public class NavigationServiceImpl implements NavigationService
             case LEAVE:
                break;
             case ADDED:
+            {
                NodeContext<N> destination = it.getDestination();
                current.addChild(destination.getName());
                break;
+            }
+            case REMOVED:
+            {
+               NodeData source = it.getSource();
+               org.gatein.mop.api.workspace.Navigation a = current.getChild(source.getName());
+               if (a != null)
+               {
+                  if (a.getObjectId().equals(source.getId()))
+                  {
+                     a.destroy();
+                  }
+                  else
+                  {
+                     throw new UnsupportedOperationException("Handle me gracefully");
+                  }
+               }
+               break;
+            }
             default:
-               throw new AssertionError();
+               throw new AssertionError("Does not handle yet " + change);
          }
       }
 

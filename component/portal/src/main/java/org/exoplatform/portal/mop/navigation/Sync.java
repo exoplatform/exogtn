@@ -32,54 +32,55 @@ class Sync
 {
 
    /** . */
-   private static final SyncModel nodeContextModel = new SyncModel<NodeContext<?>, NodeContext<?>, Object>()
+   private static final SyncModel nodeContextModel = new SyncModel<NodeContext<?>, NodeContext<?>, String>()
    {
-      public NodeContext getHandle(NodeContext node)
+      public String getHandle(NodeContext node)
       {
-         return node;
+         return node.getHandle();
       }
+
       public NodeContext getChildren(NodeContext node)
       {
          return node;
       }
-      public NodeContext getDescendant(NodeContext node, Object handle)
+
+      public NodeContext getDescendant(NodeContext node, String handle)
       {
-         NodeContext handle1 = (NodeContext)handle;
-         return handle1;
+         return node.getDescendantByHandle(handle);
       }
    };
 
-   static <N> SyncModel<NodeContext<N>, NodeContext<N>, Object> getNodeContextModel() {
+   static <N> SyncModel<NodeContext<N>, NodeContext<N>, String> getNodeContextModel() {
       @SuppressWarnings("unchecked")
-      SyncModel<NodeContext<N>, NodeContext<N>, Object> tmp = (SyncModel<NodeContext<N>, NodeContext<N>, Object>) nodeContextModel;
+      SyncModel<NodeContext<N>, NodeContext<N>, String> tmp = (SyncModel<NodeContext<N>, NodeContext<N>, String>)nodeContextModel;
       return tmp;
    }
 
    /** . */
-   private static final ListAdapter nodeContextAdapter = new ListAdapter<NodeContext, Object>()
+   private static final ListAdapter nodeContextAdapter = new ListAdapter<NodeContext, String>()
    {
       public int size(NodeContext list)
       {
          return list.getSize();
       }
-      public Iterator<Object> iterator(final NodeContext list, final boolean reverse)
+      public Iterator<String> iterator(final NodeContext list, final boolean reverse)
       {
-         return new Iterator<Object>()
+         return new Iterator<String>()
          {
             NodeContext current = reverse ? (NodeContext)list.getLast() : (NodeContext)list.getFirst();
             public boolean hasNext()
             {
                return current != null;
             }
-            public NodeContext next()
+            public String next()
             {
                if (current == null)
                {
                   throw new NoSuchElementException();
                }
-               NodeContext tmp = current;
+               String handle = current.getHandle();
                current = reverse ? (NodeContext)current.getPrevious() : (NodeContext)current.getNext();
-               return tmp;
+               return handle;
             }
             public void remove()
             {
@@ -89,10 +90,10 @@ class Sync
       }
    };
 
-   static <N> ListAdapter<NodeContext<N>, Object> getNodeContextAdapter()
+   static <N> ListAdapter<NodeContext<N>, String> getNodeContextAdapter()
    {
       @SuppressWarnings("unchecked")
-      ListAdapter<NodeContext<N>, Object> tmp = (ListAdapter<NodeContext<N>, Object>)nodeContextAdapter;
+      ListAdapter<NodeContext<N>, String> tmp = (ListAdapter<NodeContext<N>, String>)nodeContextAdapter;
       return tmp;
    }
 

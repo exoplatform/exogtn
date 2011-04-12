@@ -936,7 +936,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(foo);
    }
 
-   public void testRemoveChild_2() throws Exception
+   public void testRemoveChild2() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child_2");

@@ -31,8 +31,8 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class TreeContext<N> implements
-   SyncModel<NodeData, NodeData, Object>,
-   ListAdapter<NodeData, Object>
+   SyncModel<NodeData, NodeData, String>,
+   ListAdapter<NodeData, String>
 {
 
    /** . */
@@ -60,31 +60,14 @@ public class TreeContext<N> implements
       return node.getId();
    }
 
-   public NodeData getDescendant(NodeData node, Object handle)
+   public NodeData getDescendant(NodeData node, String handle)
    {
-      String s;
-      if (handle instanceof String)
-      {
-         s = (String)handle;
-      }
-      else if (handle instanceof NodeContext)
-      {
-         NodeContext nc = (NodeContext)handle;
-         s = nc.getId();
-      }
-      else
-      {
-         throw new UnsupportedOperationException("Implement me " + handle);
-      }
-      if (s != null)
-      {
-         NodeContext<N> context = nodes.get(s);
-         return context != null ? context.data : null;
-      }
-      else
+      if (handle.length() > 0 && handle.charAt(0) == '/')
       {
          return null;
       }
+      NodeContext<N> context = nodes.get(handle);
+      return context != null ? context.data : null;
    }
 
    public int size(NodeData list)
@@ -92,7 +75,7 @@ public class TreeContext<N> implements
       return list.children.length;
    }
 
-   public Iterator<Object> iterator(NodeData list, boolean reverse)
+   public Iterator<String> iterator(NodeData list, boolean reverse)
    {
       return (Iterator)list.iterator(reverse);
    }

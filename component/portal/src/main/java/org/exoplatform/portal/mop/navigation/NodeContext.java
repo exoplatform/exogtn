@@ -74,6 +74,94 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.hiddenCount = 0;
    }
 
+   private NodeContext<N> findChildById(String id)
+   {
+      NodeContext<N> found = null;
+      if (data != null && data.id.equals(id))
+      {
+         found = this;
+      }
+      else
+      {
+         for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
+         {
+            found = current.findChildById(id);
+            if (found != null)
+            {
+               break;
+            }
+         }
+      }
+      return found;
+   }
+
+   private NodeContext<N> findChildByPath(String path)
+   {
+      if (path.length() == 0 || path.charAt(0) != '/')
+      {
+         throw new IllegalArgumentException("Illegal path");
+      }
+      int prev = 1;
+      NodeContext<N> current = this;
+      while (true)
+      {
+         int next = path.indexOf('/', prev);
+         if (next == -1)
+         {
+            return current;
+         }
+         else
+         {
+            String name = path.substring(prev, next);
+            current = current.get(name);
+            if (current == null)
+            {
+               return null;
+            }
+            prev = next + 1;
+         }
+      }
+   }
+
+   public NodeContext<N> getDescendantByHandle(String handle)
+   {
+      if (handle.length() > 0 && handle.charAt(0) == '/')
+      {
+         return findChildByPath(handle);
+      }
+      else
+      {
+         return findChildById(handle);
+      }
+   }
+
+   public String getHandle()
+   {
+      return data != null ? data.id : path();
+   }
+
+   private String path()
+   {
+      StringBuilder sb = new StringBuilder();
+      path(sb);
+      return sb.toString();
+   }
+
+   private void path(StringBuilder sb)
+   {
+      NodeContext<N> parent = getParent();
+      if (parent != null)
+      {
+         parent.path(sb);
+         sb.append(getName());
+         sb.append('/');
+      }
+      else
+      {
+         sb.append('/');
+      }
+   }
+
    public boolean isHidden()
    {
       return hidden;
