@@ -359,7 +359,8 @@ public class NavigationServiceImpl implements NavigationService
             case ADDED:
             {
                NodeContext<N> destination = it.getDestination();
-               current.addChild(destination.getName());
+               org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
+//               destination.data = new NodeData(added);
                break;
             }
             case REMOVED:

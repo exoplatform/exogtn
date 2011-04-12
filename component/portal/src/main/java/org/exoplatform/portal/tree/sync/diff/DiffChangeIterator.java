@@ -176,14 +176,14 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                   if (frame.it.hasNext()) {
                      switch (frame.it.next()) {
                         case KEEP:
-                           N1 next1 = context1.getModel().getDescendant(frame.node1, frame.it1.next());
-                           N2 next2 = context2.getModel().getDescendant(frame.node2, frame.it2.next());
+                           N1 next1 = context1.findByHandle(frame.it1.next());
+                           N2 next2 = context2.findByHandle(frame.it2.next());
                            frame = new Frame(frame, next1, next2);
                            return hasNext();
                         case ADD:
                            frame.it2.next();
                            H addedHandle = frame.it.getElement();
-                           N2 added = context2.getModel().getDescendant(frame.node2, addedHandle);
+                           N2 added = context2.findByHandle(addedHandle);
                            H addedId = context2.getModel().getHandle(added);
                            N1 a = context1.findByHandle(addedId);
                            if (a != null) {
@@ -199,7 +199,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                         case REMOVE:
                            frame.it1.next();
                            H removedHandle = frame.it.getElement();
-                           N1 removed = context1.getModel().getDescendant(frame.node1, removedHandle);
+                           N1 removed = context1.findByHandle(removedHandle);
                            H removedId = context1.getModel().getHandle(removed);
                            N2 b = context2.findByHandle(removedId);
                            if (b != null) {

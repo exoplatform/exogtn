@@ -1307,6 +1307,34 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(juu.getId());
    }
 
+   public void testSaveRecursive2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("save_recursive2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node foo = root.getChild("foo");
+      Node bar = foo.addChild("bar");
+      bar.addChild("juu");
+      service.saveNode2(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      foo = root.getChild("foo");
+      bar = foo.getChild("bar");
+      assertNotNull(bar.getId());
+      Node juu = bar.getChild("juu");
+      assertNotNull(juu.getId());
+   }
+
    public void testSaveState() throws Exception
    {
       MOPService mop = mgr.getPOMService();
