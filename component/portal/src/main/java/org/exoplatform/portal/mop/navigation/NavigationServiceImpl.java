@@ -379,6 +379,17 @@ public class NavigationServiceImpl implements NavigationService
                }
                break;
             }
+            case MOVED_OUT:
+            {
+               // ???
+               break;
+            }
+            case MOVED_IN:
+            {
+               org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
+               current.getChildren().add(moved);
+               break;
+            }
             default:
                throw new AssertionError("Does not handle yet " + change);
          }
