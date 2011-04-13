@@ -344,21 +344,27 @@ public class NavigationServiceImpl implements NavigationService
             }
          );
 
+      LinkedList<org.gatein.mop.api.workspace.Navigation> toRemove = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
+
+      LinkedList<org.gatein.mop.api.workspace.Navigation> stack = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
+
       DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> it = diff.perform(context.data, context);
-      org.gatein.mop.api.workspace.Navigation current = session.findObjectById(ObjectType.NAVIGATION, context.getId());
+//      org.gatein.mop.api.workspace.Navigation current = session.findObjectById(ObjectType.NAVIGATION, context.getId());
       while (it.hasNext())
       {
          DiffChangeType change = it.next();
          switch (change)
          {
             case ENTER:
-               current = session.findObjectById(ObjectType.NAVIGATION, it.getDestination().getId());
+               stack.addLast(session.findObjectById(ObjectType.NAVIGATION, it.getDestination().getId()));
                break;
             case LEAVE:
+               stack.removeLast();
                break;
             case ADDED:
             {
                NodeContext<N> destination = it.getDestination();
+               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
                org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
                destination.data = new NodeData(added);
                break;
@@ -366,12 +372,13 @@ public class NavigationServiceImpl implements NavigationService
             case REMOVED:
             {
                NodeData source = it.getSource();
+               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
                org.gatein.mop.api.workspace.Navigation a = current.getChild(source.getName());
                if (a != null)
                {
                   if (a.getObjectId().equals(source.getId()))
                   {
-                     a.destroy();
+                     toRemove.add(a);
                   }
                   else
                   {
@@ -387,6 +394,7 @@ public class NavigationServiceImpl implements NavigationService
             }
             case MOVED_IN:
             {
+               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
                org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
                current.getChildren().add(moved);
                break;
@@ -396,7 +404,11 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
 
-
+      //
+      for (org.gatein.mop.api.workspace.Navigation r : toRemove)
+      {
+         r.destroy();
+      }
    }
 
 

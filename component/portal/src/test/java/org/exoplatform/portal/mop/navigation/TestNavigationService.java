@@ -1503,10 +1503,41 @@ public class TestNavigationService extends AbstractPortalTest
       service.saveNode(Node.MODEL, root1);
    }
 
-   public void _testSaveSpecialCase() throws Exception
+   public void testMoveToAdded() throws Exception
    {
       MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "special_case");
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_added");
+      org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
+      nav.addChild("a").addChild("b");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN);
+      Node a = root1.getChild("a");
+      Node b = a.getChild("b");
+      Node c = root1.addChild("c");
+      c.addChild(b);
+      service.saveNode2(Node.MODEL, root1);
+      end(true);
+
+      //
+      begin();
+      navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
+      root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN);
+      a = root1.getChild("a");
+      assertNotNull(a);
+      c = root1.getChild("c");
+      assertNotNull(c);
+      b = c.getChild("b");
+      assertNotNull(b);
+   }
+
+   public void testMoveFromRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "moved_from_removed");
       org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
       nav.addChild("a").addChild("c");
       nav.addChild("b");
@@ -1514,18 +1545,25 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      Navigation navigation = service.loadNavigation(SiteKey.portal("special_case"));
+      Navigation navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN);
       Node a = root1.getChild("a");
       Node b = root1.getChild("b");
       Node c = a.getChild("c");
       b.addChild(c);
       root1.removeChild("a");
-      service.saveNode(Node.MODEL, root1);
-      end();
+      service.saveNode2(Node.MODEL, root1);
+      end(true);
 
       //
       begin();
+      navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
+      root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN);
+      assertNull(root1.getChild("a"));
+      b = root1.getChild("b");
+      assertNotNull(b);
+      c = b.getChild("c");
+      assertNotNull(c);
    }
 
    public void testCount()

@@ -81,7 +81,7 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       {
          found = this;
       }
-      else
+      else if (hasTrees())
       {
          for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
          {
@@ -110,7 +110,7 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
          {
             return current;
          }
-         else
+         else if (hasTrees())
          {
             String name = path.substring(prev, next);
             current = current.get(name);
@@ -119,6 +119,10 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
                return null;
             }
             prev = next + 1;
+         }
+         else
+         {
+            return null;
          }
       }
    }

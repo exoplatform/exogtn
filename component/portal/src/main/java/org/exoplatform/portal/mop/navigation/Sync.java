@@ -61,13 +61,13 @@ class Sync
    {
       public int size(NodeContext list)
       {
-         return list.getSize();
+         return list.hasTrees() ? list.getSize() : 0;
       }
       public Iterator<String> iterator(final NodeContext list, final boolean reverse)
       {
          return new Iterator<String>()
          {
-            NodeContext current = reverse ? (NodeContext)list.getLast() : (NodeContext)list.getFirst();
+            NodeContext current = list.hasTrees() ? (reverse ? (NodeContext)list.getLast() : (NodeContext)list.getFirst()) : null;
             public boolean hasNext()
             {
                return current != null;
