@@ -20,7 +20,9 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.IOUtil;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
@@ -152,34 +154,49 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    public void run() throws Exception
    {
       //DANGEROUS! If the user delete the defaultPortal (ie: classic), the next time he restarts
-      //the server. Data of predefined owners would be overriden
-      if (dataStorage_.getPortalConfig(defaultPortal) != null && !overrideExistingData)
-         return;
+      //the server. Data of predefined owners would be overriden      
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
+      {
+         if (dataStorage_.getPortalConfig(defaultPortal) != null && !overrideExistingData)
+            return;
+      }
+      finally
+      {
+         RequestLifeCycle.end();
+      }
 
       if (isUseTryCatch)
       {
-
-         for (NewPortalConfig ele : configs)
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
          {
-            try
+            for (NewPortalConfig ele : configs)
             {
-               initPortletPreferencesDB(ele);
+               try
+               {
+                  initPortletPreferencesDB(ele);
+               }
+               catch (Exception e)
+               {
+                  log.error("NewPortalConfig error: " + e.getMessage(), e);
+               }
             }
-            catch (Exception e)
+            for (NewPortalConfig ele : configs)
             {
-               log.error("NewPortalConfig error: " + e.getMessage(), e);
+               try
+               {
+                  initPortalConfigDB(ele);
+               }
+               catch (Exception e)
+               {
+                  log.error("NewPortalConfig error: " + e.getMessage(), e);
+               }
             }
          }
-         for (NewPortalConfig ele : configs)
+         finally
          {
-            try
-            {
-               initPortalConfigDB(ele);
-            }
-            catch (Exception e)
-            {
-               log.error("NewPortalConfig error: " + e.getMessage(), e);
-            }
+            RequestLifeCycle.end();
          }
          for (NewPortalConfig ele : configs)
          {
@@ -192,16 +209,24 @@ public class NewPortalConfigListener extends BaseComponentPlugin
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-         for (NewPortalConfig ele : configs)
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
          {
-            try
+            for (NewPortalConfig ele : configs)
             {
-               initPageNavigationDB(ele);
+               try
+               {
+                  initPageNavigationDB(ele);
+               }
+               catch (Exception e)
+               {
+                  log.error("NewPortalConfig error: " + e.getMessage(), e);
+               }
             }
-            catch (Exception e)
-            {
-               log.error("NewPortalConfig error: " + e.getMessage(), e);
-            }
+         }
+         finally
+         {
+            RequestLifeCycle.end();
          }
          for (NewPortalConfig ele : configs)
          {
@@ -218,21 +243,37 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       else
       {
-         for (NewPortalConfig ele : configs)
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
          {
-            initPortletPreferencesDB(ele);
+            for (NewPortalConfig ele : configs)
+            {
+               initPortletPreferencesDB(ele);
+            }
+            for (NewPortalConfig ele : configs)
+            {
+               initPortalConfigDB(ele);
+            }
          }
-         for (NewPortalConfig ele : configs)
+         finally
          {
-            initPortalConfigDB(ele);
+            RequestLifeCycle.end();
          }
          for (NewPortalConfig ele : configs)
          {
             initPageDB(ele);
          }
-         for (NewPortalConfig ele : configs)
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
          {
-            initPageNavigationDB(ele);
+            for (NewPortalConfig ele : configs)
+            {
+               initPageNavigationDB(ele);
+            }
+         }
+         finally
+         {
+            RequestLifeCycle.end();
          }
          for (NewPortalConfig ele : configs)
          {
@@ -467,8 +508,15 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       ArrayList<Page> list = pageSet.getPages();
       for (Page page : list)
       {
-         dataStorage_.create(page);
-         pomMgr.getSession().save();
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
+         {
+            dataStorage_.create(page);
+         }
+         finally
+         {
+            RequestLifeCycle.end();
+         }
       }
    }
 
@@ -483,7 +531,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       if (currentNavigation == null)
       {
          dataStorage_.create(navigation);
-//         pomMgr.getSession().save();
       }
       else
       {
@@ -496,7 +543,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             navigation.merge(currentNavigation);
             dataStorage_.save(navigation);
-            pomMgr.getSession().save();
          }         
       }
    }
@@ -512,7 +558,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       for (PortletPreferences portlet : list)
       {
          dataStorage_.save(portlet);
-         pomMgr.getSession().save();
       }
    }
 

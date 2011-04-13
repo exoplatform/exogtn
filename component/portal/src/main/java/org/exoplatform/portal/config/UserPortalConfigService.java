@@ -660,18 +660,11 @@ public class UserPortalConfigService implements Startable
          }
 
          //
-         RequestLifeCycle.begin(PortalContainer.getInstance());
-
          newPortalConfigListener_.run();
       }
       catch (Exception e)
       {
          log.error("Could not import initial data", e);
-
-      }
-      finally
-      {
-         RequestLifeCycle.end();
       }
    }
 
