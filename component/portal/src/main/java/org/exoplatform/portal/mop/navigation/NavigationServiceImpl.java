@@ -344,12 +344,13 @@ public class NavigationServiceImpl implements NavigationService
             }
          );
 
+      //
       LinkedList<org.gatein.mop.api.workspace.Navigation> toRemove = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
-
       LinkedList<org.gatein.mop.api.workspace.Navigation> stack = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
+      org.gatein.mop.api.workspace.Navigation previous = null;
 
+      //
       DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> it = diff.perform(context.data, context);
-//      org.gatein.mop.api.workspace.Navigation current = session.findObjectById(ObjectType.NAVIGATION, context.getId());
       while (it.hasNext())
       {
          DiffChangeType change = it.next();
@@ -367,16 +368,8 @@ public class NavigationServiceImpl implements NavigationService
                }
                break;
             case LEAVE:
-               stack.removeLast();
+               previous = stack.removeLast();
                break;
-            case ADDED:
-            {
-               NodeContext<N> destination = it.getDestination();
-               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
-               org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
-               destination.data = new NodeData(added);
-               break;
-            }
             case REMOVED:
             {
                NodeData source = it.getSource();
@@ -400,11 +393,42 @@ public class NavigationServiceImpl implements NavigationService
                // ???
                break;
             }
+            case ADDED:
+            {
+               NodeContext<N> destination = it.getDestination();
+               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
+               org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
+               destination.data = new NodeData(added);
+
+               //
+               List<org.gatein.mop.api.workspace.Navigation> children = current.getChildren();
+               if (previous != null && previous.getParent() == current)
+               {
+                  int index = children.indexOf(previous) + 1;
+                  children.add(index, added);
+               }
+               else
+               {
+                  children.add(0, added);
+               }
+               break;
+            }
             case MOVED_IN:
             {
                org.gatein.mop.api.workspace.Navigation current = stack.getLast();
                org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
-               current.getChildren().add(moved);
+
+               //
+               List<org.gatein.mop.api.workspace.Navigation> children = current.getChildren();
+               if (previous != null && previous.getParent() == current)
+               {
+                  int index = children.indexOf(previous) + 1;
+                  children.add(index, moved);
+               }
+               else
+               {
+                  children.add(0, moved);
+               }
                break;
             }
             default:

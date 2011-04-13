@@ -1009,6 +1009,64 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(i.hasNext());
    }
 
+   public void testReorderChild2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      rootNavigation.addChild("bar");
+      rootNavigation.addChild("juu");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("reorder_child2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Iterator<Node> i = root.getChildren().iterator();
+      Node foo = i.next();
+      assertEquals("foo", foo.getName());
+      Node bar = i.next();
+      assertEquals("bar", bar.getName());
+      Node juu = i.next();
+      assertEquals("juu", juu.getName());
+      assertFalse(i.hasNext());
+
+      //
+      root.addChild(1, juu);
+      service.saveNode2(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      i = root.getChildren().iterator();
+      foo = i.next();
+      assertEquals("foo", foo.getName());
+      juu = i.next();
+      assertEquals("juu", juu.getName());
+      bar = i.next();
+      assertEquals("bar", bar.getName());
+      assertFalse(i.hasNext());
+
+      //
+      root.addChild(0, bar);
+      service.saveNode2(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      i = root.getChildren().iterator();
+      bar = i.next();
+      assertEquals("bar", bar.getName());
+      foo = i.next();
+      assertEquals("foo", foo.getName());
+      juu = i.next();
+      assertEquals("juu", juu.getName());
+      assertFalse(i.hasNext());
+   }
+
    public void _testReorderChild2() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -1309,6 +1367,46 @@ public class TestNavigationService extends AbstractPortalTest
       root.addChild(0, root.getChild("3"));
       root.addChild(1, root.addChild("."));
       service.saveNode(Node.MODEL, root);
+      Iterator<Node> i = root.getChildren().iterator();
+      assertEquals("3", i.next().getName());
+      assertEquals(".", i.next().getName());
+      assertEquals("1", i.next().getName());
+      assertEquals("4", i.next().getName());
+      assertFalse(i.hasNext());
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      i = root.getChildren().iterator();
+      assertEquals("3", i.next().getName());
+      assertEquals(".", i.next().getName());
+      assertEquals("1", i.next().getName());
+      assertEquals("4", i.next().getName());
+      assertFalse(i.hasNext());
+   }
+
+   public void testSaveChildren2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_children2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("1");
+      rootNavigation.addChild("2");
+      rootNavigation.addChild("3");
+      rootNavigation.addChild("4");
+      rootNavigation.addChild("5");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("save_children2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      root.removeChild("5");
+      root.removeChild("2");
+      root.addChild(0, root.getChild("3"));
+      root.addChild(1, root.addChild("."));
+      service.saveNode2(Node.MODEL, root);
       Iterator<Node> i = root.getChildren().iterator();
       assertEquals("3", i.next().getName());
       assertEquals(".", i.next().getName());
