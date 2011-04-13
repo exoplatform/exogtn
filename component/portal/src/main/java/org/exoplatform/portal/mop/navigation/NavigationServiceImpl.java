@@ -357,6 +357,14 @@ public class NavigationServiceImpl implements NavigationService
          {
             case ENTER:
                stack.addLast(session.findObjectById(ObjectType.NAVIGATION, it.getDestination().getId()));
+               NodeData src = it.getSource();
+               if (src != null)
+               {
+                  if (!it.getDestination().getName().equals(src.getName()))
+                  {
+                     stack.getLast().setName(it.getDestination().getName());
+                  }
+               }
                break;
             case LEAVE:
                stack.removeLast();

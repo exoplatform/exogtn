@@ -1239,6 +1239,55 @@ public class TestNavigationService extends AbstractPortalTest
       }
    }
 
+   public void testRenameNode2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename_node2");
+      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("foo");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("rename_node2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node foo = root.getChild("foo");
+      foo.setName("foo");
+      service.saveNode2(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("rename_node2"));
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      foo = root.getChild("foo");
+      foo.setName("bar");
+      assertEquals("bar", foo.getName());
+      assertSame(foo, root.getChild("bar"));
+      service.saveNode2(Node.MODEL, root);
+      assertEquals("bar", foo.getName());
+      assertSame(foo, root.getChild("bar"));
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
+      Node bar = root.getChild("bar");
+      assertNotNull(bar);
+      assertSame(bar, root.getChild("bar"));
+
+      //
+      root.addChild("foo");
+      try
+      {
+         bar.setName("foo");
+         fail();
+      }
+      catch (IllegalArgumentException ignore)
+      {
+      }
+   }
+
    public void testSaveChildren() throws Exception
    {
       MOPService mop = mgr.getPOMService();
