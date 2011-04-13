@@ -352,7 +352,7 @@ public class NavigationServiceImpl implements NavigationService
          switch (change)
          {
             case ENTER:
-               current = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
+               current = session.findObjectById(ObjectType.NAVIGATION, it.getDestination().getId());
                break;
             case LEAVE:
                break;
@@ -360,7 +360,7 @@ public class NavigationServiceImpl implements NavigationService
             {
                NodeContext<N> destination = it.getDestination();
                org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
-//               destination.data = new NodeData(added);
+               destination.data = new NodeData(added);
                break;
             }
             case REMOVED:
