@@ -72,7 +72,7 @@
 
          <example>
             <title>Example of service component configuration:</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -102,7 +102,7 @@
          <para>In the following example, <emphasis role="bold">PortalContainerDefinitionPlugin</emphasis> implements ComponentPlugin:</para>
          <example>
             <title>PortalContainerDefinitionPlugin</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -137,7 +137,7 @@
          <para>It is possible to break the <emphasis role="bold">configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
          The included files are complete configuration.xml documents, not fragments of text.</para>
          <para>The following is an example configuration.xml which 'outsources' its content into several files:</para>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
                           http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
@@ -167,7 +167,7 @@
          <para>A good example for this is <emphasis role="bold">HibernateService</emphasis>:</para>
          <example id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example">
             <title>HibernateService using variables</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -229,7 +229,7 @@
 
       <example>
          <title>InitParams - properties-param</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <component>
    <key>org.exoplatform.services.naming.InitialContextInitializer</key>
    <type>org.exoplatform.services.naming.InitialContextInitializer</type>
@@ -261,7 +261,7 @@
 
       <example>
          <title>InitParams - value-param</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <component>
    <key>org.exoplatform.services.transaction.TransactionService</key>
    <type>org.exoplatform.services.transaction.impl.jotm.TransactionServiceJotmImpl</type>
@@ -282,7 +282,7 @@
 
       <example>
          <title>InitParams - values-param</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <component>
   <key>org.exoplatform.services.resources.ResourceBundleService</key>
   <type>org.exoplatform.services.resources.impl.SimpleResourceBundleService</type>
@@ -319,7 +319,7 @@
 
       <example>
          <title>InitParams - object-param</title>
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <component>
    <key>org.exoplatform.services.cache.CacheService</key>
    <jmx-name>cache:type=CacheService</jmx-name>
@@ -397,7 +397,7 @@
 
       <example id="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">
          <title>Portal container declaration example</title>
-      <programlisting role="XML"><![CDATA[
+      <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -533,7 +533,7 @@
       </para>
       <example><title>Example of a portal extension called sample-ext:</title>
 
-         <programlisting role="XML"><![CDATA[
+         <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE web-app PUBLIC -//Sun Microsystems, Inc.//DTD Web Application 2.3//EN
      http://java.sun.com/dtd/web-app_2_3.dtd>
@@ -608,7 +608,7 @@
 
          If your servlet handles the requests by implementing the <emphasis role="bold">service()</emphasis> method, you need to rename that method to match
          the following signature:</para>
-         <programlisting role="JAVA"><![CDATA[
+         <programlisting language="java"><![CDATA[
 /**
  * Use this method instead of Servlet.service()
  */
@@ -625,7 +625,7 @@ protected void onService(ExoContainer container, HttpServletRequest req,
          You may also need to access portal information within your <emphasis role="bold">HttpSessionListener</emphasis>. Again, make sure to extend the
          provided abstract class - <emphasis role="bold">org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
          Also, modify your method signatures as follows:</para>
-         <programlisting role="JAVA"><![CDATA[
+         <programlisting language="java"><![CDATA[
 /**
  * Use this method instead of HttpSessionListener.sessionCreated()
  */
@@ -638,7 +638,7 @@ protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event
          ]]></programlisting>
       <para>
          There is another method you have to implement in this case:</para>
-         <programlisting role="JAVA"><![CDATA[
+         <programlisting language="java"><![CDATA[
 /**
  * Method should return true if unified servlet context,
  * and unified classloader should be made available
@@ -676,7 +676,7 @@ protected boolean requirePortalEnvironment();
       <para>An example of this is the Gadgets application which registers the Google gadgets with the current PortalContainer:
       </para>
 
-      <programlisting role="JAVA"><![CDATA[
+      <programlisting language="java"><![CDATA[
 public class GadgetRegister implements ServletContextListener
 {
    public void contextInitialized(ServletContextEvent event)

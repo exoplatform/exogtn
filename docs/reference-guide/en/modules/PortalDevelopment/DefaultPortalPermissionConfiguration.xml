@@ -82,7 +82,7 @@
 			</varlistentry>
 		</variablelist>
 		
-<programlisting role="XML">&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.portal.config.UserACL&#60;/key&#62;
   &#60;type&#62;org.exoplatform.portal.config.UserACL&#60;/type&#62;   
   &#60;init-params&#62;      
@@ -125,7 +125,7 @@
       using <literal>org.exoplatform.portal.config.PortalACLPlugin</literal>, configuring it as an external-plugin of
       <literal>org.exoplatform.portal.config.UserACL</literal> service:</para>
 
-<programlisting role="XML">&#60;external-component-plugins&#62;
+<programlisting language="xml">&#60;external-component-plugins&#62;
     &#60;target-component&#62;org.exoplatform.portal.config.UserACL&#60;/target-component&#62;
     &#60;component-plugin&#62;
       &#60;name&#62;addPortalACLPlugin&#60;/name&#62;

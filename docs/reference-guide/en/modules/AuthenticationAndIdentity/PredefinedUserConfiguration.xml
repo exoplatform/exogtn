@@ -38,7 +38,7 @@
          </para>
       </note>
 		
-<programlisting role="XML">&#60;field name=&#34;membershipType&#34;&#62;
+<programlisting language="xml">&#60;field name=&#34;membershipType&#34;&#62;
   &#60;collection type=&#34;java.util.ArrayList&#34;&#62;
     &#60;value&#62;
       &#60;object type=&#34;org.exoplatform.services.organization.OrganizationConfig$MembershipType&#34;&#62;
@@ -81,7 +81,7 @@
 			The predefined groups are specified in the <emphasis role="bold">group</emphasis> field of the <emphasis role="bold">OrganizationConfig</emphasis> plugin parameter.
 		</para>
 		
-<programlisting role="XML">&#60;field name=&#34;group&#34;&#62;
+<programlisting language="xml">&#60;field name=&#34;group&#34;&#62;
   &#60;collection type=&#34;java.util.ArrayList&#34;&#62;
     &#60;value&#62;
       &#60;object type=&#34;org.exoplatform.services.organization.OrganizationConfig$Group&#34;&#62;
@@ -127,7 +127,7 @@
 			The predefined users are specified in the <emphasis role="bold">membershipType</emphasis> field of the <emphasis role="bold">OrganizationConfig</emphasis> plugin parameter.
 		</para>
 		
-<programlisting role="XML">&#60;field name=&#34;user&#34;&#62;
+<programlisting language="xml">&#60;field name=&#34;user&#34;&#62;
   &#60;collection type=&#34;java.util.ArrayList&#34;&#62;
     &#60;value&#62;
       &#60;object type=&#34;org.exoplatform.services.organization.OrganizationConfig$User&#34;&#62;
@@ -167,7 +167,7 @@
          <para>The terms 'membership' and 'membership type' refer to the same thing, and are used interchangeably.</para>
       </note>
 		
-<programlisting role="XML">&#60;component-plugin&#62;
+<programlisting language="xml">&#60;component-plugin&#62;
   &#60;name&#62;new.user.event.listener&#60;/name&#62;
   &#60;set-method&#62;addListenerPlugin&#60;/set-method&#62;
   &#60;type&#62;org.exoplatform.services.organization.impl.NewUserEventListener&#60;/type&#62;

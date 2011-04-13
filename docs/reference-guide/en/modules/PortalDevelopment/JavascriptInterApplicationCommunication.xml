@@ -107,7 +107,7 @@
 			The Inter Application Communication library is found in <filename>01eXoResources.war:/javascript/eXo/core/Topic.js</filename>
 		</para>
 		
-<programlisting>/**
+<programlisting language="javascript">/**
  * publish is used to publish an event to the other subscribers to the given channels
  * @param {Object} senderId is a string that identify the sender
  * @param {String} topic is the topic that the message will be published
@@ -248,7 +248,7 @@ Topic.prototype.initCometdBridge = function() { ... }
 	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Example_of_what">
 		<title>Example of Javascript events usage</title>
 		
-<programlisting role="HTML">&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
+<programlisting language="html">&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
 &#60;portlet:defineObjects/&#62;
 &#60;div&#62;
   &#60;p&#62;

@@ -138,7 +138,7 @@ common graphic resource reuse and ease of development
         you would make the following changes:
       </para>
 
-      <programlisting role="XML">&lt;portal-config&gt;
+      <programlisting language="xml">&lt;portal-config&gt;
                 &lt;portal-name&gt;classic&lt;/portal-name&gt;
                 &lt;locale&gt;en&lt;/locale&gt;
                 &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
@@ -193,7 +193,7 @@ common graphic resource reuse and ease of development
 
     <para>In the code fragment below, you can see two types of links:</para>
 
-<programlisting role="XML">&lt;head&gt;
+<programlisting language="html">&lt;head&gt;
 ...
 &lt;!-- The portal skin --&gt;
 &lt;link id="CoreSkin" rel="stylesheet" type="text/css" href="/eXoResources/skin/Stylesheet.css" /&gt;
@@ -235,7 +235,7 @@ common graphic resource reuse and ease of development
     
       <para>Here is an example where a skin (MySkin) with its CSS location is defined, and a few window decorator skins are specified: 
       </para>
-      <programlisting role="XML">&lt;gatein-resources&gt;
+      <programlisting language="xml">&lt;gatein-resources&gt;
   &lt;portal-skin&gt;
     &lt;skin-name&gt;MySkin&lt;/skin-name&gt;
     &lt;css-path&gt;/skin/myskin.css&lt;/css-path&gt;
@@ -271,7 +271,7 @@ common graphic resource reuse and ease of development
      :
     </para>
 
-    <programlisting role="XML">&lt;filter&gt;
+    <programlisting language="xml">&lt;filter&gt;
       &lt;filter-name&gt;ResourceRequestFilter&lt;/filter-name&gt;
       &lt;filter-class&gt;org.exoplatform.portal.application.ResourceRequestFilter&lt;/filter-class&gt;
       &lt;/filter&gt;
@@ -355,7 +355,7 @@ skin/Stylesheet.css</programlisting>
         <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes" />
         <area coords="4" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet" />
       </areaspec>
-    <programlisting>@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
+    <programlisting language="css">@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
 @import url(DefaultSkin/webui/component/Stylesheet.css);
 @import url(PortletThemes/Stylesheet.css);
 @import url(Portlet/Stylesheet.css);</programlisting>
@@ -381,7 +381,7 @@ skin/Stylesheet.css</programlisting>
 		  </para>
 		  <para>To reuse the CSS stylesheet from the default portal skin, you need to refer to the default skin from eXoResources.
 		  For example, to include the window decorators from the default skin within a new portal skin, you need to use this import: </para>
-		  <programlisting>@import url(/eXoResources/skin/Portlet/Stylesheet.css);</programlisting>
+		  <programlisting language="css">@import url(/eXoResources/skin/Portlet/Stylesheet.css);</programlisting>
 		  <note>
 		  <para>When the portal skin is added to the page, it merges all the CSS stylesheets into a single file.</para>
 		  </note>
@@ -411,7 +411,7 @@ skin/Stylesheet.css</programlisting>
         of the new skin, where to locate its CSS stylesheet file and whether to overwrite an existing portal theme with
         the same name.
         </para>
-        <programlisting role="XML">&lt;gatein-resources&gt;
+        <programlisting language="xml">&lt;gatein-resources&gt;
   &lt;portal-skin&gt;
     &lt;skin-name&gt;MySkin&lt;/skin-name&gt;
     &lt;css-path&gt;/skin/myskin.css&lt;/css-path&gt;
@@ -452,7 +452,7 @@ skin/Stylesheet.css</programlisting>
          <para>
          For the portal named <emphasis role="bold">MySkin</emphasis>, the CSS class must be defined as follows:
          </para>
-         <programlisting>.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
+         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
             role="bold">MySkinImage</emphasis></programlisting>
          
 
@@ -466,7 +466,7 @@ skin/Stylesheet.css</programlisting>
          <emphasis
             role="bold">MySkin</emphasis>, you need to update the following:</para>
          <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
-         <programlisting>.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
+         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
             role="bold">MySkinImage</emphasis> {
   margin: auto;
   width: 329px; height:204px;
@@ -503,7 +503,7 @@ skin/Stylesheet.css</programlisting>
         <para>The following gatein-resource.xml fragment adds MyThemeBlue and MyThemeRed to 
         the MyTheme category.</para>
         
-        <programlisting role="XML">&lt;window-style&gt;
+        <programlisting language="xml">&lt;window-style&gt;
   &lt;style-name&gt;MyTheme&lt;/style-name&gt;
   &lt;style-theme&gt;
     &lt;theme-name&gt;MyThemeBlue&lt;/theme-name&gt;
@@ -539,7 +539,7 @@ skin/Stylesheet.css</programlisting>
         <para>Create the CSS file:</para>
 
 
-    <programlisting>
+    <programlisting language="css">
 /*---- MyTheme ----*/
 .MyTheme .WindowBarCenter .WindowPortletInfo {
   margin-right: 80px; /* orientation=lt */
@@ -691,7 +691,9 @@ for a theme called <literal>DefaultTheme</literal>.
     <parameter>id="content<literal>ContentPortlet".</literal></parameter></para>
 
     <para>To define a new CSS file to include whenever a portlet is available on a portal page, the
-    following fragment needs to be added to gatein-resources.xml.<programlisting>&lt;portlet-skin&gt;
+    following fragment needs to be added to gatein-resources.xml.</para>
+    
+    <programlisting language="xml">&lt;portlet-skin&gt;
   &lt;application-name&gt;portletAppName&lt;/application-name&gt;
   &lt;portlet-name&gt;PortletName&lt;/portlet-name&gt;
   &lt;skin-name&gt;Default&lt;/skin-name&gt;
@@ -703,7 +705,7 @@ for a theme called <literal>DefaultTheme</literal>.
   &lt;portlet-name&gt;PortletName&lt;/portlet-name&gt;
   &lt;skin-name&gt;OtherSkin&lt;/skin-name&gt;
   &lt;css-path&gt;/skin/OtherSkinStylesheet.css&lt;/css-path&gt;
-&lt;/portlet-skin&gt;</programlisting></para>
+&lt;/portlet-skin&gt;</programlisting>
 
     <para>This will load the DefaultStylesheet.css or OtherSkinStylesheet.css when the Default skin or OtherSkin is used respectively.</para>
     <note><para>If the current portal skin is not defined as part of the supported
@@ -812,7 +814,7 @@ for a theme called <literal>DefaultTheme</literal>.
           </imageobject>
         </mediaobject>
 
-        <programlisting role="HTML">
+        <programlisting language="html">
 &lt;div class="Parent"&gt;
   &lt;div class="TopLeft"&gt;
     &lt;div class="TopRight"&gt;
@@ -849,7 +851,7 @@ for a theme called <literal>DefaultTheme</literal>.
           </imageobject>
         </mediaobject>
 
-        <programlisting role="HTML">
+        <programlisting language="html">
 &lt;div class="Parent"&gt;
   &lt;div style="float: left; width: 100px"&gt;
   &lt;/div&gt;

@@ -9,7 +9,7 @@
 		The following code retrieves the details for a logged-in user:
 	</para>
 	
-<programlisting role="JAVA">// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+<programlisting language="java">// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
 PortalRequestContext context = PortalRequestContext.getCurrentInstance() ;
 // Get the id of the user logged
 String userId = context.getRemoteUser();
@@ -32,13 +32,13 @@ if (userId != null)
 	<orderedlist>
 		<listitem>
 			
-<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+<programlisting language="java">OrganizationService service = (OrganizationService)
    ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
 </programlisting>
 		</listitem>
 		<listitem>
 			
-<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+<programlisting language="java">OrganizationService service = (OrganizationService)
    PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
 </programlisting>
 		</listitem>

@@ -82,8 +82,9 @@
 					</step>
 					<step>
 						<para>
-							Replace: 
-<programlisting> &#60;!--
+							Replace:
+            </para>    
+<programlisting language="xml"> &#60;!--
   | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
   | AuthenticationHandlers actually authenticate credentials.  Here e declare the AuthenticationHandlers that
   | authenticate the Principals that the CredentialsToPrincipalResolvers identified.  CAS will try these handlers in turn
@@ -109,15 +110,12 @@
    &#60;/list&#62;
  &#60;/property&#62;
 </programlisting>
-						</para>
-					</step>
-					<step>
+						
 						<para>
 							With the following (Make sure to set the host, port and context with the values corresponding to your portal). Also available in <filename>GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</filename>.
 						</para>
-						<para>
-							
-<programlisting>&#60;!--
+            
+<programlisting language="xml">&#60;!--
  | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
  | AuthenticationHandlers actually authenticate credentials.  Here we declare the AuthenticationHandlers that
  | authenticate the Principals that the CredentialsToPrincipalResolvers identified.  CAS will try these handlers in turn
@@ -151,7 +149,7 @@
    &#60;/list&#62;
  &#60;/property&#62;
 </programlisting>
-						</para>
+						
 					</step>
 					<step>
 						<para>
@@ -211,7 +209,7 @@
 							<para>
 							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
 							</para>
-<programlisting>&#60;authentication&#62;
+<programlisting language="xml">&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
   &#60;/login-module&#62;      
   &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
@@ -260,7 +258,7 @@ realmName=gatein-domain
 				To utilize the Central Authentication Service, &PRODUCT; needs to redirect all user authentication to the CAS server.
 			</para>
 			<para>
-				Information about where the CAS is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying three files: 
+				Information about where the CAS is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying three files:</para>
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -291,8 +289,10 @@ realmName=gatein-domain
 					<listitem>
 						<para>
 							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
-						</para>							
-<programlisting>&#60;html&#62;
+						</para>
+          </listitem>
+        </itemizedlist>
+<programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
      window.location = &#39;/portal/sso&#39;;
@@ -302,13 +302,16 @@ realmName=gatein-domain
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-					</listitem>
+				
+        <itemizedlist>
 					<listitem>
 						<para>
 							Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-
+            </para>
+          </listitem>
+        </itemizedlist>
 							
-<programlisting>
+<programlisting language="xml">
 <![CDATA[
 	<filter>
 		<filter-name>LoginRedirectFilter</filter-name>
@@ -350,12 +353,16 @@ realmName=gatein-domain
 	</filter-mapping>
 ]]>  
 </programlisting>
-						</para>
-					</listitem>
+						
+				<itemizedlist>	
 					<listitem>
 						<para>
 							Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-<programlisting>&#60;servlet&#62;
+            </para>
+          </listitem>
+        </itemizedlist>
+            
+<programlisting language="xml">&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
   &#60;init-param&#62;
@@ -368,11 +375,8 @@ realmName=gatein-domain
   &#60;/init-param&#62;
 &#60;/servlet&#62;
 </programlisting>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-			<para>
+	
+      <para>
 				Once these changes have been made, all links to the user authentication pages will redirect to the CAS centralized authentication form.
 			</para>
 		</section>
@@ -484,7 +488,7 @@ realmName=gatein-domain
 							<para>
 								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
 							</para>
-<programlisting>&#60;authentication&#62;
+<programlisting language="xml">&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
   &#60;/login-module&#62;      
   &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
@@ -532,7 +536,9 @@ realmName=gatein-domain
 				The next part of the process redirects all user authentication to the JOSSO server.
 			</para>
 			<para>
-				Information about where the JOSSO server is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying four files: 
+				Information about where the JOSSO server is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying four files:
+      </para>
+      
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -560,11 +566,15 @@ realmName=gatein-domain
 </programlisting>
 						</para>
 					</listitem>
-					<listitem>
+        </itemizedlist>
+        <itemizedlist>
+          <listitem>
 						<para>
 							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
-						</para>							
-<programlisting>&#60;html&#62;
+						</para>
+           </listitem> 
+        </itemizedlist>           
+<programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
      window.location = &#39;/portal/sso&#39;;
@@ -574,13 +584,16 @@ realmName=gatein-domain
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-					</listitem>
+				
+        <itemizedlist>
 					<listitem>
 						<para>
 							Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-
+            </para>
+          </listitem>
+        </itemizedlist>
 							
-<programlisting>
+<programlisting language="xml">
 <![CDATA[
   <filter>
       <filter-name>LoginRedirectFilter</filter-name>
@@ -613,13 +626,16 @@ realmName=gatein-domain
   </filter-mapping>
 ]]> 
 </programlisting>
-						</para>
-					</listitem>
+						
+        <itemizedlist>
 					<listitem>
 						<para>
 						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-						</para>					
-<programlisting>&#60;servlet&#62;
+						</para>
+          </listitem>
+        </itemizedlist>
+        
+<programlisting language="xml">&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
   &#60;init-param&#62;
@@ -628,14 +644,16 @@ realmName=gatein-domain
   &#60;/init-param&#62;    
 &#60;/servlet&#62;
 </programlisting>
-					</listitem>
+					
+        <itemizedlist> 
 					<listitem>
 						<para>
 							Remove the <literal>PortalLoginController</literal> servlet declaration and mapping in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>
 						</para>
 					</listitem>
-				</itemizedlist>
-			</para>
+        </itemizedlist>
+				
+			
 			<para>
 				From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
 			</para>
@@ -702,8 +720,10 @@ realmName=gatein-domain
 					</step>
 					<step>
 						<para>
-							Ensure the <filename>TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</filename> file looks like this: 
-<programlisting>
+							Ensure the <filename>TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</filename> file looks like this:
+            </para> 
+            
+<programlisting language="xml">
 &#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
 
 &#60;!DOCTYPE ModuleProperties PUBLIC &#34;=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN&#34;
@@ -725,7 +745,7 @@ realmName=gatein-domain
   &#60;/Callbacks&#62;
 &#60;/ModuleProperties&#62;
 </programlisting>
-						</para>
+						
 					</step>
 					<step>
 						<para>
@@ -812,7 +832,7 @@ realmName=gatein-domain
 							<para>
 								In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment this section
 							</para>
-<programlisting>&#60;authentication&#62;
+<programlisting language="xml">&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
   &#60;/login-module&#62;      
   &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
@@ -855,12 +875,13 @@ realmName=gatein-domain
 		</section>
 		
 		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_the_portal_to_redirect_to_OpenSSO">
-			<title>Set up the portal to redirect to OpenSSO.</title>
+			<title>Set up the portal to redirect to OpenSSO</title>
 			<para>
 				The next part of the process is to redirect all user authentication to the OpenSSO server.
 			</para>
 			<para>
 				Information about where the OpenSSO server is hosted must be properly configured within the Enterprise Portal Platform instance. The required configuration is done by modifying three files:
+      </para>
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -888,11 +909,17 @@ realmName=gatein-domain
 </programlisting>
 						</para>
 					</listitem>
+        </itemizedlist>
+        
+        <itemizedlist>
 					<listitem>
 						<para>
 							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
-						</para>							
-<programlisting>&#60;html&#62;
+						</para>
+          </listitem>
+        </itemizedlist>
+        
+<programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
      window.location = &#39;/portal/sso&#39;;
@@ -902,13 +929,16 @@ realmName=gatein-domain
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-					</listitem>
+					
+        <itemizedlist>
 					<listitem>
 						<para>
 							Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-
-							
-<programlisting>
+            </para>
+          </listitem>
+				</itemizedlist>
+        
+<programlisting language="xml">
 <![CDATA[
   <filter>
       <filter-name>LoginRedirectFilter</filter-name>
@@ -941,13 +971,16 @@ realmName=gatein-domain
   </filter-mapping>
 ]]> 
 </programlisting>
-						</para>
-					</listitem>
+						
+				<itemizedlist>	
 					<listitem>
 						<para>
 						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-						</para>					
-<programlisting>&#60;servlet&#62;
+						</para>	
+          </listitem>
+        </itemizedlist>
+        
+<programlisting language="xml">&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
   &#60;init-param&#62;
@@ -960,9 +993,8 @@ realmName=gatein-domain
   &#60;/init-param&#62;   
 &#60;/servlet&#62;
 </programlisting>
-					</listitem>
-				</itemizedlist>
-			</para>
+					
+			
 			<para>
 				From now on, all links redirecting to the user authentication pages will redirect to the OpenSSO centralized authentication form.
 			</para>
@@ -1008,10 +1040,10 @@ realmName=gatein-domain
 			<procedure>
 				<step>
 					<para>
-						Activate the Host authentication
-
-						Under conf/login-config.xml, add the following host login module:
-						<programlisting><![CDATA[<!-- SPNEGO domain -->
+						Activate the Host authentication. Under the conf/login-config.xml file, add the following host login module:
+          </para>
+						
+            <programlisting language="xml"><![CDATA[<!-- SPNEGO domain -->
   <application-policy name="host">
    <authentication>
       <login-module code="com.sun.security.auth.module.Krb5LoginModule"
@@ -1026,21 +1058,21 @@ realmName=gatein-domain
    </authentication>
  </application-policy>
 ]]></programlisting>
-						the 'keyTab' value should point to the keytab file that was
+
+						<para>The 'keyTab' value should point to the keytab file that was
 						generated by the kadmin kerberos tool. See the Setting up your
 						Kerberos Development Environment guide for more details.
-					</para>
+            </para>
 				</step>
-				<step>
+				
+        <step>
 					<para>
-						Extend the core authentication mechanisms to support
-						SPNEGO
-
-						Under
+						Extend the core authentication mechanisms to support SPNEGO. Under
 						deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml,
-						add 'SPNEGO' authenticators property
+						add 'SPNEGO' authenticators property.
+          </para>
 
-						<programlisting><![CDATA[<property name="authenticators">
+						<programlisting language="xml"><![CDATA[<property name="authenticators">
          <map keyClass="java.lang.String" valueClass="java.lang.String">
             <entry>
                <key>BASIC</key>
@@ -1071,28 +1103,22 @@ realmName=gatein-domain
          </map>         
       </property>]]></programlisting>
 
-					</para>
+					
 				</step>
 				<step>
-					<para>Add the JBoss Negotiation binary
-
-					      by copying $GATEIN_SSO_HOME/spnego/jboss-negotiation-2.0.3.GA.jar to the lib.
-</para>
+					<para>Add the JBoss Negotiation binary by copying $GATEIN_SSO_HOME/spnego/jboss-negotiation-2.0.3.GA.jar to the lib.
+        </para>
 				</step>
 				<step>
-					<para>Add the GateIn SSO module binaries by copying
-
-					 $GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent.jar, and $GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-spnego.jar to the deploy/gatein.ear/lib.
-</para>
+					<para>Add the GateIn SSO module binaries by copying $GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent.jar, and $GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-spnego.jar to the deploy/gatein.ear/lib.
+          </para>
 				</step>
 				<step>
 					<para>
-						Activate the SPNEGO LoginModule for GateIn
+						Activate the SPNEGO LoginModule for GateIn by modifying deploy/gatein.ear/META-INF/gatein-jboss-beans.xml, so that it looks like this:
+          </para>
 
-						by modifying deploy/gatein.ear/META-INF/gatein-jboss-beans.xml, so that it
-						looks like this:
-
-						<programlisting><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
+						<programlisting language="xml"><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
     <!-- Uncomment this for Kerberos based SSO integration -->
     <authentication>
@@ -1112,18 +1138,16 @@ realmName=gatein-domain
    </authentication>
   </application-policy>
 </deployment>]]></programlisting>
-					</para>
+					
 				</step>
 				<step>
 					<para>
-						Integrate the SPNEGO support into the Portal web archive
-
-						by switching the GateIn authentication mechanism from the default "FORM"
+						Integrate the SPNEGO support into the Portal web archive by switching the GateIn authentication mechanism from the default "FORM"
 						based to "SPNEGO" based authentication as follows:
 
-						Modify gatein.ear/02portal.war/WEB-INF/web.xml
+						Modify gatein.ear/02portal.war/WEB-INF/web.xml</para>
 
-						<programlisting><![CDATA[    <!--
+						<programlisting language="xml"><![CDATA[    <!--
     <login-config>
       <auth-method>FORM</auth-method> 
       <realm-name>gatein-domain</realm-name> 
@@ -1143,7 +1167,7 @@ realmName=gatein-domain
 						Add the following filters to the web.xml at the top of the Filter
 						chain:
 
-						<programlisting><![CDATA[   <filter>
+						<programlisting language="xml"><![CDATA[   <filter>
       <filter-name>LoginRedirectFilter</filter-name>
       <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
       <init-param>                                 
@@ -1165,7 +1189,7 @@ realmName=gatein-domain
         <filter-name>SPNEGOFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>]]></programlisting>
-					</para>
+					
 				</step>
 				<step>
 					<para>

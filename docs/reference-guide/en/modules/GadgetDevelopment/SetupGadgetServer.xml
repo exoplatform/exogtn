@@ -17,7 +17,7 @@
 			To do this, configure a parameter called <emphasis>gadgets.hostName</emphasis>. The value is the <emphasis>path/to/gadgetServer</emphasis> in <literal>GadgetRegisteryService</literal>:
 		</para>
 		
-<programlisting>&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.application.gadget.GadgetRegistryService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl&#60;/type&#62;
   &#60;init-params&#62;
@@ -58,7 +58,7 @@
 				These servers have to be on the same domain as the gadget server. You can configure the container in <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>.
 			</para>
 			
-<programlisting>&#34;gadgets.content-rewrite&#34; : {
+<programlisting language="javascript">&#34;gadgets.content-rewrite&#34; : {
   &#34;include-urls&#34;: &#34;.*&#34;,
   &#34;exclude-urls&#34;: &#34;&#34;,
   &#34;include-tags&#34;: [&#34;link&#34;, &#34;script&#34;, &#34;embed&#34;, &#34;img&#34;, &#34;style&#34;],

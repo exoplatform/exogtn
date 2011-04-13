@@ -8,7 +8,7 @@
 	<!-- 	<section id="sect-Reference_Guide-Upload_Component-Overview">
 		<title>Overview</title>
 		<para>
-			In this article, you will learn how to :
+			In this article, you will learn how to:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -42,7 +42,7 @@
 			This can be configured with the following xml code:
 		</para>
 		
-<programlisting role="XML">&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
    &#60;type&#62;org.exoplatform.upload.UploadService&#60;/type&#62;
      &#60;init-params&#62;
        &#60;value-param&#62;
@@ -72,19 +72,19 @@
 					Two constructors are available for this:
 				</para>
 				
-<programlisting>public UIFormUploadInput(String name, String bindingExpression)
+<programlisting language="java">public UIFormUploadInput(String name, String bindingExpression)
 </programlisting>
 				<para>
 					or:
 				</para>
 				
-<programlisting>public UIFormUploadInput(String name, String bindingExpression, int limit)
+<programlisting language="java">public UIFormUploadInput(String name, String bindingExpression, int limit)
 </programlisting>
 				<para>
 					This is an example using the second form:
 				</para>
 				
-<programlisting role="JAVA">PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+<programlisting language="java">PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
 PortletPreferences portletPref = pcontext.getRequest().getPreferences();
 int limitMB = Integer.parseInt(portletPref.getValue(&#34;uploadFileSizeLimitMB&#34;, &#34;&#34;).trim());
 UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&#34;, limitMB);
@@ -95,7 +95,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename>:
 				</para>
 				
-<programlisting role="XML">&#60;preference&#62;
+<programlisting language="xml">&#60;preference&#62;
   &#60;name&#62;uploadFileSizeLimitMB&#60;/name&#62;
   &#60;value&#62;30&#60;/value&#62;
   &#60;read-only&#62;false&#60;/read-only&#62;
@@ -110,7 +110,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 					Use the <literal>getUploadDataAsStream()</literal> method to get the uploaded data:
 				</para>
 				
-<programlisting role="JAVA">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(&#34;upload&#34;);
+<programlisting language="java">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(&#34;upload&#34;);
 InputStream inputStream = input.getUploadDataAsStream();
 ...
 jcrData.setValue(inputStream);
@@ -136,7 +136,7 @@ jcrData.setValue(inputStream);
 					Use the<literal>removeUpload()</literal> method defined in the upload service to purge the file:
 				</para>
 				
-<programlisting role="JAVA">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+<programlisting language="java">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
 UIFormUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
 uploadService.removeUpload(uiChild.getUploadId()) ;
 </programlisting>

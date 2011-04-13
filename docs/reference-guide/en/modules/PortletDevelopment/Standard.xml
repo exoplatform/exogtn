@@ -227,7 +227,7 @@
 						<area coords="16" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write" />
 						<area coords="17" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close" />
 					</areaspec>
-<programlisting role="JAVA">package org.gatein.portal.examples.portlets;
+<programlisting language="java">package org.gatein.portal.examples.portlets;
  
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -307,7 +307,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports" />
 						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo" />
 					</areaspec>
-<programlisting>
+<programlisting language="xml">
 &#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
    xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
@@ -466,7 +466,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="25" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.requestDispatcher" />
 						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.include" />
 					</areaspec>
-<programlisting role="JAVA">package org.gatein.portal.examples.portlets;
+<programlisting language="java">package org.gatein.portal.examples.portlets;
  
 import java.io.IOException;
  
@@ -535,7 +535,7 @@ public class JSPHelloUserPortlet extends GenericPortlet
 					The generic portlet that is inherited dispatches different views to the methods: <literal>doView</literal> , <literal>doHelp</literal> and <literal>doEdit</literal>.
 				</para>
 				
-<programlisting role="JAVA">...
+<programlisting language="java">...
    protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
          UnavailableException
    {
@@ -568,7 +568,7 @@ public class JSPHelloUserPortlet extends GenericPortlet
 						<area coords="5" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter" />
 						<area coords="6" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter" />
 					</areaspec>
-<programlisting role="JAVA">...
+<programlisting language="java">...
          public void processAction(ActionRequest aRequest, ActionResponse aResponse) throws PortletException, IOException,
          UnavailableException
    {
@@ -604,11 +604,11 @@ public class JSPHelloUserPortlet extends GenericPortlet
 					The <filename>help.jsp</filename> and <filename>edit.jsp</filename> files are very simple. Note that CSS styles are used as defined in the portlet specification. This ensures that the portlet will render successfully within the theme and across portal vendors.
 				</para>
 				
-<programlisting role="XHTML">&#60;div class=&#34;portlet-section-header&#34;&#62;Help mode&#60;/div&#62;
+<programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Help mode&#60;/div&#62;
 &#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode where you can find useful information.&#60;/div&#62;
 </programlisting>
 				
-<programlisting role="XHTML">&#60;div class=&#34;portlet-section-header&#34;&#62;Edit mode&#60;/div&#62;
+<programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Edit mode&#60;/div&#62;
 &#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode where you can change your portlet preferences.&#60;/div&#62;
 </programlisting>
 				<para>
@@ -716,7 +716,7 @@ Please check the source code to see the difference with Method 1.
 					As in any JSF application, the file <literal>faces-config.xml</literal> is required. It must contain the following information:
 				</para>
 				
-<programlisting role="XML">&#60;faces-config&#62;
+<programlisting language="xml">&#60;faces-config&#62;
 ...
     &#60;application&#62;
       &#60;view-handler&#62;org.jboss.portletbridge.application.PortletViewHandler&#60;/view-handler&#62;
@@ -738,7 +738,7 @@ Please check the source code to see the difference with Method 1.
 						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.edit" />
 						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.help" />
 					</areaspec>
-<programlisting>&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
 &#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
    xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 

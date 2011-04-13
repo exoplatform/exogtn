@@ -31,7 +31,7 @@
 			These navigations are configured using the standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting role="XML">&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
   &#60;component-plugins&#62;           
@@ -122,7 +122,7 @@
                   &PRODUCT; is extremely configurable as every view element (even the banner and footer) is a portlet.
 					</para>
 					
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
 &#60;portal-config&#62;
   &#60;portal-name&#62;classic&#60;/portal-name&#62;
   &#60;locale&#62;en&#60;/locale&#62;
@@ -182,7 +182,7 @@
                   so the literal property name is replaced by a localized value taken from the associated properties file matching the current locale.
 					</para>
 
-<programlisting role="XML">
+<programlisting language="xml">
  <![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <node-navigation
@@ -230,7 +230,7 @@
                   Each application can decide whether to render the portlet border, the window state, the icons or portlet's mode.
 					</para>
 
-<programlisting role="XML">
+<programlisting language="xml">
   <![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <page-set
@@ -290,7 +290,7 @@
 						Porlet instances can be associated with <literal>portlet-preferences</literal> that override the ones defined in <filename>src/main/webapp/WEB-INF/portlet.xml</filename> of the portlet application <literal>war</literal>.
 					</para>
 					
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
 &#60;portlet-preferences-set&#62;
   &#60;portlet-preferences&#62;
     &#60;owner-type&#62;portal&#60;/owner-type&#62;
@@ -347,7 +347,7 @@
 			That file describes the layout and portlets that will be shown for all pages. Usually the layout contains the banner, footer, menu, breadcrumbs portlets. Indeed, in GateIn, every area is a portlet even the banner and footer which makes the platform extremely configurable.
 		</para>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+<programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;portal-config&gt;
   &lt;portal-name&gt;classic&lt;/portal-name&gt;
   &lt;locale&gt;en&lt;/locale&gt;
@@ -405,7 +405,7 @@
 			If the label #{} is used then it means the i18n mechanism is activated and that the real label to render is taken from an associated properties file for the current locale.
 		</para>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;node-navigation&gt;
   &lt;owner-type&gt;portal&lt;/owner-type&gt;
   &lt;owner-id&gt;classic&lt;/owner-id&gt;
@@ -442,7 +442,7 @@
 			This XML file structure is very similar to portal.xml and it can also contain container tags. Each application can decide if it wishes to render the portlet border, the window state icons or the mode.
 		</para>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+<programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;page-set&gt;  
   &lt;page&gt;
     &lt;page-id&gt;portal::classic::homepage&lt;/page-id&gt;
@@ -485,7 +485,7 @@
 			Porlet instances can be associated with portlet-preferences that override the one defined in the usual portlet.xml file of the portlet application WAR.
 		</para>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+<programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;portlet-preferences-set&gt;
   &lt;portlet-preferences&gt;
     &lt;owner-type&gt;portal&lt;/owner-type&gt;
@@ -560,7 +560,7 @@
 			The user's workspace is located on the left of the page and access is restricted to some privileged users, see <xref linkend="sect-Reference_Guide-Predefined_User_Configuration" />
 		</para>
 		
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
 &#60;widgets&#62;
   &#60;owner-type&#62;user&#60;/owner-type&#62;
   &#60;owner-id&#62;root&#60;/owner-id&#62;
@@ -608,13 +608,14 @@
 				If you wish to add a link to a URL outside the portal you first have to define a &#34;page&#34; that will only serve as a navigation placeholder for external redirect - it will not be used for any portlets.
             Then add the URL to the navigation.
 			</para>
-			<variablelist>
-				<varlistentry>
-					<term>pages.xml</term>
-					<listitem>
-						<para>
+			<itemizedlist>
+          <listitem>
+            <para>pages.xml</para>
+					</listitem>
+      </itemizedlist>
+						
 							
-<programlisting>&#60;page&#62;
+<programlisting language="xml">&#60;page&#62;
   &#60;owner-type&#62;portal&#60;/owner-type&#62;
   &#60;owner-id&#62;website&#60;/owner-id&#62;
   &#60;name&#62;documentation&#60;/name&#62;
@@ -623,31 +624,28 @@
   &#60;edit-permission&#62;*:/platform/administrators&#60;/edit-permission&#62;
 &#60;/page&#62;
 </programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>navigation.xml</term>
-					<listitem>
-						<para>
+					
+          <itemizedlist>
+            <listitem>
+              <para>navigation.xml</para>
+            </listitem>
+         	</itemizedlist>	
 							
-<programlisting>&#60;node&#62;
+<programlisting language="xml">&#60;node&#62;
   &#60;uri&#62;http://wiki.exoplatform.com/xwiki/bin/view/Main/WebHome&#60;/uri&#62;
   &#60;name&#62;documentation&#60;/name&#62;
   &#60;label&#62;#{portal.classic.documentation}&#60;/label&#62;
   &#60;page-reference&#62;portal::website::documentation&#60;/page-reference&#62;
 &#60;/node&#62;
 </programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
+						
+								
 			<warning>
 				<title>Direct external links were not a design goal</title>
 				<para>
 					Currently, you cannot modify the URL using the portal interface, you must change it in the configuration files or modify the underlying database table.
 				</para>
-			</warning>s
+			</warning>
 		</section>
 
 	</section>

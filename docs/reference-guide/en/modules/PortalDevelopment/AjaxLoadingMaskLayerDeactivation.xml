@@ -75,7 +75,7 @@
 			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <literal>bAsync</literal> parameter.
 		</para>
 		
-<programlisting>var bAsync = false; // Synchronous
+<programlisting language="javascript">var bAsync = false; // Synchronous
 request.open(instance.method, instance.url, bAsync);
 </programlisting>
 		<para>
@@ -88,7 +88,7 @@ request.open(instance.method, instance.url, bAsync); // Firefox will not execute
 		<para>
 			So 
 		</para>  -->
-<programlisting>// Asynchronous request
+<programlisting language="javascript">// Asynchronous request
 request.open(instance.method, instance.url, true);
 </programlisting>
 	</section>

@@ -39,7 +39,7 @@
 				<area coords="5" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
 				<area coords="22" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
 			</areaspec>
-<programlisting>&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+<programlisting language="xml">&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
                xsi:schemaLocation=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;
                xmlns=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;&#62;
  
@@ -312,7 +312,7 @@
 			A sample <emphasis role="bold">PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide.
 		</para>
 		
-<programlisting role="XML">&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;
+<programlisting language="xml">&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;
                 xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
                 xsi:schemaLocation=&#34;urn:jboss:identity:idm:config:v1_0_alpha identity-config.xsd&#34;&#62;
     &#60;realms&#62;

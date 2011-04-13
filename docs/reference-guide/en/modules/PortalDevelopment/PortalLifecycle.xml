@@ -102,7 +102,7 @@
 			</para>
 		</note>
 		
-<programlisting role="XML">
+<programlisting language="xml">
 &#60;servlet&#62;
   &#60;servlet-name&#62;TomcatGateInServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.wci.command.CommandServlet&#60;/servlet-class&#62;
@@ -124,7 +124,7 @@
 			The filter class:
 		</para>
 		
-<programlisting role="JAVA">
+<programlisting language="java">
 package org.example;
 
 import java.io.IOException;
@@ -160,7 +160,7 @@ public class MyFilter implements javax.servlet.Filter {
 			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above, &PRODUCT; does not require anything special to be included, only the URL pattern to set has to be known.
 		</para>
 		
-<programlisting role="XML">
+<programlisting language="xml">
 &#60;?xml version=&#34;1.0&#34;?&#62;
 &#60;web-app xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
     xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd&#34;

@@ -9,7 +9,7 @@
 		The text orientation depends on the current locale setting. The orientation is a Java 5 enum that provides a set of functionalities:
 	</para>
 	
-<programlisting>
+<programlisting language="javascript">
    LT, // Western Europe
    RT, // Middle East (Arabic, Hebrew)
    TL, // Japanese, Chinese, Korean
@@ -80,57 +80,66 @@
 		<para>
 			Stylesheet authors can annotate their stylesheet to create content that depends on the orientation.
 		</para>
-		<formalpara id="form-Reference_Guide-Stylesheet-Example_1">
-			<title>Example 1</title>
+    
+		<example>
 			<para>
-				In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right: 
-<programlisting>
+				In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right:</para>
+        
+<programlisting language="css">
 float: left; /* orientation=lt */
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-				 The LT produced output will be: 
-<programlisting>
+
+				 <para>The LT produced output will be:</para>
+         
+<programlisting language="css">
 float: left; /* orientation=lt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-				 The RT produced output will be: 
-<programlisting> 
+				 
+         <para>The RT produced output will be:</para>
+         
+<programlisting language="css"> 
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-			</para>
-		</formalpara>
-		<formalpara id="form-Reference_Guide-Stylesheet-Example_2">
-			<title>Example 2</title>
+			</example>
+		
+		<example>
 			<para>
-				In this example, you need to modify the padding according to the orientation: 
-<programlisting>
+				In this example, you need to modify the padding according to the orientation:</para>
+        
+<programlisting language="css">
 color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
 padding: 0px 0px 0px 5px; /* &#62;orientation=rt */
 </programlisting>
-				 The LT produced output will be: 
-<programlisting> 
+
+				 <para>The LT produced output will be:</para>
+         
+<programlisting language="css"> 
 color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
 </programlisting>
-				 The RT produced output will be: 
-<programlisting> 
+
+				 <para>The RT produced output will be:</para>
+         
+<programlisting language="css"> 
 color: white;
 line-height: 24px;
 padding: 0px 0px 0px 5px; /* orientation=rt */
 </programlisting>
-			</para>
-		</formalpara>
+			
+		</example>
 	</section>
 	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">
@@ -153,14 +162,15 @@ padding: 0px 0px 0px 5px; /* orientation=rt */
 			Here is an example combining stylesheet and images:
 		</para>
 		
-<programlisting>
+<programlisting language="css">
 line-height: 24px; 
 background: url(&#39;background/NavigationTab.gif&#39;) no-repeat right top; /* orientation=lt */
 background: url(&#39;background/NavigationTab-rt.gif&#39;) no-repeat left top; /* orientation=rt */
 padding-right: 2px; /* orientation=lt */
 padding-left: 2px; /* orientation=rt */
 </programlisting>
-	</section>
+	
+  </section>
 	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
 		<title>Client side JavaScript</title>

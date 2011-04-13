@@ -27,7 +27,7 @@
 			The following example configuration can be found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting role="XML">&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
     &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
     &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
     &#60;component-plugins&#62;           

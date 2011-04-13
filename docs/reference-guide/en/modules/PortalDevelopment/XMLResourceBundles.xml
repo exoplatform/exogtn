@@ -46,7 +46,7 @@ UIAccountForm.label.email= ...
 UIAccountForm.action.Reset= ...
 </programlisting>
 		
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
 &#60;bundle&#62;
   &#60;UIAccountForm&#62;
     &#60;tab&#62;

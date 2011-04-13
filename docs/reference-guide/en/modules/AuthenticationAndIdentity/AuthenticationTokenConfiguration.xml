@@ -26,7 +26,7 @@
          The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
-<programlisting role="JAVA">
+<programlisting language="java">
 		public Token getToken(String id) throws PathNotFoundException, RepositoryException;
 		public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
 		public String[] getAllTokens();
@@ -58,7 +58,7 @@
 				<area coords="8" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time" />
 				<area coords="9" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit" />
 			</areaspec>
-<programlisting>&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/type&#62;
   &#60;init-params&#62;
