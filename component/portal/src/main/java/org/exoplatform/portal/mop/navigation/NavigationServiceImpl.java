@@ -370,6 +370,10 @@ public class NavigationServiceImpl implements NavigationService
          {
             Change.Move move = (Change.Move)change;
             org.gatein.mop.api.workspace.Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
+            if (src == null)
+            {
+               throw new NavigationSaveException("Cannot move node from a removed parent");
+            }
 
             //
             org.gatein.mop.api.workspace.Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);

@@ -1490,7 +1490,7 @@ public class TestNavigationService extends AbstractPortalTest
       }
    }
 
-   public void testRemoveRemoved() throws Exception
+   public void testRemoveConcurrentRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_removed");
@@ -1587,6 +1587,36 @@ public class TestNavigationService extends AbstractPortalTest
       root.getChild("b").addChild(root.getChild("a"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       root2.getChild("c").addChild(root2.getChild("a"));
+      service.saveNode(Node.MODEL, root2);
+      end(true);
+
+      //
+      begin();
+      try
+      {
+         service.saveNode(Node.MODEL, root);
+         fail();
+      }
+      catch (NavigationSaveException ignore)
+      {
+      }
+   }
+
+   public void testConcurrentMoveFromRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_move_from_removed");
+      portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
+      portal.getRootNavigation().getChild("default").addChild("c");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("concurrent_move_from_removed"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root.getChild("c").addChild(root.getChild("a").getChild("b"));
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root2.removeChild("a");
       service.saveNode(Node.MODEL, root2);
       end(true);
 
