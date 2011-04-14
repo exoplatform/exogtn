@@ -96,7 +96,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
       return parent;
    }
 
-   public final void rename(String from, String to) throws NullPointerException, IllegalStateException, IllegalArgumentException
+   public final boolean rename(String from, String to) throws NullPointerException, IllegalStateException, IllegalArgumentException
    {
       if (from == null)
       {
@@ -125,6 +125,11 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
          }
          child.name = to;
          map.put(to, child);
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 

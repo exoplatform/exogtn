@@ -29,9 +29,6 @@ import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
-import org.exoplatform.portal.tree.sync.diff.Diff;
-import org.exoplatform.portal.tree.sync.diff.DiffChangeIterator;
-import org.exoplatform.portal.tree.sync.diff.DiffChangeType;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -328,119 +325,69 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<N> context = model.getContext(node);
       TreeContext<N> tree = context.tree;
 
-
-      Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> diff =
-         new Diff<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String>(
-            tree,
-            tree,
-            Sync.<N>getNodeContextAdapter(),
-            Sync.<N>getNodeContextModel(),
-            new Comparator<String>()
-            {
-               public int compare(String o1, String o2)
-               {
-                  return o1.compareTo(o2);
-               }
-            }
-         );
-
-      //
-      LinkedList<org.gatein.mop.api.workspace.Navigation> toRemove = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
-      LinkedList<org.gatein.mop.api.workspace.Navigation> stack = new LinkedList<org.gatein.mop.api.workspace.Navigation>();
-      org.gatein.mop.api.workspace.Navigation previous = null;
-
-      //
-      DiffChangeIterator<NodeData, NodeData, NodeContext<N>, NodeContext<N>, String> it = diff.perform(context.data, context);
-      while (it.hasNext())
+      Iterator<Change> changes = tree.getChanges();
+      while (changes.hasNext())
       {
-         DiffChangeType change = it.next();
-         switch (change)
+         Change change = changes.next();
+         if (change instanceof Change.Add)
          {
-            case ENTER:
-               stack.addLast(session.findObjectById(ObjectType.NAVIGATION, it.getDestination().getId()));
-               NodeData src = it.getSource();
-               if (src != null)
-               {
-                  if (!it.getDestination().getName().equals(src.getName()))
-                  {
-                     stack.getLast().setName(it.getDestination().getName());
-                  }
-               }
-               break;
-            case LEAVE:
-               previous = stack.removeLast();
-               break;
-            case REMOVED:
+            Change.Add add = (Change.Add)change;
+            org.gatein.mop.api.workspace.Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
+            org.gatein.mop.api.workspace.Navigation added = parent.addChild(add.name);
+            int index = 0;
+            if (add.predecessor != null)
             {
-               NodeData source = it.getSource();
-               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
-               org.gatein.mop.api.workspace.Navigation a = current.getChild(source.getName());
-               if (a != null)
-               {
-                  if (a.getObjectId().equals(source.getId()))
-                  {
-                     toRemove.add(a);
-                  }
-                  else
-                  {
-                     throw new UnsupportedOperationException("Handle me gracefully");
-                  }
-               }
-               break;
+               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, add.predecessor.data.id);
+               index = parent.getChildren().indexOf(predecessor) + 1;
             }
-            case MOVED_OUT:
+            parent.getChildren().add(index, added);
+            add.node.data = new NodeData(added);
+            add.parent.data = new NodeData(parent);
+         }
+         else if (change instanceof Change.Remove)
+         {
+            Change.Remove remove = (Change.Remove)change;
+            if (remove.node.data != null)
             {
-               // ???
-               break;
+               org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
+               org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
+               removed.destroy();
+               remove.node.data = null;
+               remove.parent.data = new NodeData(parent);
             }
-            case ADDED:
+         }
+         else if (change instanceof Change.Move)
+         {
+            Change.Move move = (Change.Move)change;
+            org.gatein.mop.api.workspace.Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
+            org.gatein.mop.api.workspace.Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
+            org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
+            int index = 0;
+            if (move.predecessor != null)
             {
-               NodeContext<N> destination = it.getDestination();
-               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
-               org.gatein.mop.api.workspace.Navigation added = current.addChild(destination.getName());
-               destination.data = new NodeData(added);
-
-               //
-               List<org.gatein.mop.api.workspace.Navigation> children = current.getChildren();
-               if (previous != null && previous.getParent() == current)
-               {
-                  int index = children.indexOf(previous) + 1;
-                  children.add(index, added);
-               }
-               else
-               {
-                  children.add(0, added);
-               }
-               break;
+               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, move.predecessor.data.id);
+               index = dst.getChildren().indexOf(predecessor) + 1;
             }
-            case MOVED_IN:
-            {
-               org.gatein.mop.api.workspace.Navigation current = stack.getLast();
-               org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, it.getSource().getId());
-
-               //
-               List<org.gatein.mop.api.workspace.Navigation> children = current.getChildren();
-               if (previous != null && previous.getParent() == current)
-               {
-                  int index = children.indexOf(previous) + 1;
-                  children.add(index, moved);
-               }
-               else
-               {
-                  children.add(0, moved);
-               }
-               break;
-            }
-            default:
-               throw new AssertionError("Does not handle yet " + change);
+            dst.getChildren().add(index, moved);
+            move.src.data = new NodeData(src);
+            move.dst.data = new NodeData(dst);
+         }
+         else if (change instanceof Change.Rename)
+         {
+            Change.Rename rename = (Change.Rename)change;
+            org.gatein.mop.api.workspace.Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
+            org.gatein.mop.api.workspace.Navigation parent = renamed.getParent();
+            int index = parent.getChildren().indexOf(renamed);
+            renamed.setName(rename.name);
+            parent.getChildren().add(index, renamed);
+         }
+         else
+         {
+            throw new UnsupportedOperationException("handle me " + change);
          }
       }
 
-      //
-      for (org.gatein.mop.api.workspace.Navigation r : toRemove)
-      {
-         r.destroy();
-      }
+
    }
 
 

@@ -249,7 +249,10 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
       else
       {
-         parent.rename(getName(), name);
+         if (parent.rename(getName(), name))
+         {
+            tree.addChange(new Change.Rename(this, name));
+         }
       }
    }
 
@@ -443,6 +446,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
 
    private void addNode(Integer index, NodeContext<N> child)
    {
+      NodeContext<N> previousParent = child.getParent();
+
+      //
       if (index == null)
       {
          NodeContext<N> before = getLast();
@@ -476,6 +482,16 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
          }
          before.insertAfter(child);
       }
+
+      //
+      if (previousParent != null)
+      {
+         tree.addChange(new Change.Move(previousParent, this, child.getPrevious(), child));
+      }
+      else
+      {
+         tree.addChange(new Change.Add(this, child.getPrevious(), child, child.getName()));
+      }
    }
 
    public boolean removeNode(NodeModel<N> model, String name)
@@ -494,6 +510,11 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       else
       {
          node.remove();
+
+         //
+         tree.addChange(new Change.Remove(this, node));
+
+         //
          return true;
       }
    }
@@ -517,5 +538,4 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
    {
       setTrees(contexts);
    }
-
 }

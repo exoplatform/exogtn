@@ -22,10 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.tree.sync.ListAdapter;
 import org.exoplatform.portal.tree.sync.SyncModel;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -38,6 +35,9 @@ public class TreeContext<N> implements
    /** . */
    private Map<String, NodeContext<N>> nodes = new HashMap<String, NodeContext<N>>();
 
+   /** . */
+   private LinkedList<Change> changes;
+
    public NodeContext<N> newContext(NodeModel<N> model, NodeData data)
    {
       NodeContext<N> context = new NodeContext<N>(this, model, data);
@@ -48,6 +48,20 @@ public class TreeContext<N> implements
    public String getId(NodeData node)
    {
       return node.id;
+   }
+
+   void addChange(Change change)
+   {
+      if (changes == null)
+      {
+         changes = new LinkedList<Change>();
+      }
+      changes.addLast(change);
+   }
+
+   public Iterator<Change> getChanges()
+   {
+      return changes != null ? changes.iterator() : Collections.<Change>emptyList().iterator();
    }
 
    public NodeData getChildren(NodeData node)
