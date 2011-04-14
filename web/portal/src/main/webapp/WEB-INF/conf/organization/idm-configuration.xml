@@ -30,6 +30,8 @@
     <type>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</type>
   </component>
 
+        
+  <!-- non-clustered profile -->
   <component>
     <key>org.exoplatform.services.database.HibernateService</key>
     <jmx-name>database:type=HibernateService</jmx-name>
@@ -39,10 +41,12 @@
         <name>hibernate.properties</name>
         <description>Default Hibernate Service</description>
         <property name="hibernate.cache.region.jbc2.query.localonly" value="true" />
-        <property name="hibernate.cache.region.jbc2.cachefactory" value="java:CacheManager"/>
-        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory" />
-        <!--<property name="hibernate.cache.region.jbc2.query.localonly" value="true" />-->
-        <!--<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.MultiplexedJBossCacheRegionFactory" />-->
+        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.MultiplexedJBossCacheRegionFactory" />
+        <!-- force usage of LOCAL cache configurations -->
+        <property name="hibernate.cache.region.jbc2.configs" value="picketlink-idm/idm-local-cache-config.xml" />
+        <property name="hibernate.cache.region.jbc2.cfg.entity" value="local-optimistic-entity" />
+        <property name="hibernate.cache.region.jbc2.cfg.ts" value="local-timestamps-cache" />   
+        
         <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
         <property name="hibernate.show_sql" value="false"/>
         <property name="hibernate.current_session_context_class" value="thread"/>
@@ -56,7 +60,35 @@
          -->
       </properties-param>
     </init-params>
+  </component>      
+      
+  <!-- clustered profile -->
+  <component profiles="cluster">
+    <key>org.exoplatform.services.database.HibernateService</key>
+    <jmx-name>database:type=HibernateService</jmx-name>
+    <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+    <init-params>
+      <properties-param>
+        <name>hibernate.properties</name>
+        <description>Default Hibernate Service</description>
+        <property name="hibernate.cache.region.jbc2.query.localonly" value="true" />
+        <property name="hibernate.cache.region.jbc2.cachefactory" value="java:CacheManager"/>
+        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory" />        
+        <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+        <property name="hibernate.show_sql" value="false"/>
+        <property name="hibernate.current_session_context_class" value="thread"/>
+        <property name="hibernate.cache.use_second_level_cache" value="true"/>
+        <property name="hibernate.cache.use_query_cache" value="true"/>
+        <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
+        <property name="hibernate.connection.autocommit" value="true"/>
+        <!--
+        	Should be automatically detected. Force otherwise 
+        <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
+         -->
+      </properties-param>      
+    </init-params>
   </component>
+
 
   <component>
     <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
@@ -100,7 +132,7 @@
       
       <value-param profiles="cluster">
         <name>apiCacheConfig</name>
-        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-api-cluster.xml</value>
       </value-param>
 
       <value-param>
@@ -110,8 +142,18 @@
 
       <value-param profiles="cluster">
         <name>storeCacheConfig</name>
-        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-store-cluster.xml</value>
       </value-param>
+      
+      <value-param profiles="cluster">
+        <name>jgroups-configuration</name>
+        <value>${gatein.jcr.jgroups.config}</value>
+      </value-param>
+
+      <value-param profiles="cluster">
+        <name>jgroups-multiplexer-stack</name>
+        <value>true</value>
+      </value-param>      
 
     </init-params>
   </component>

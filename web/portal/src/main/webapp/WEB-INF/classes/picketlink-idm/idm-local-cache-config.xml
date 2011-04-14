@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Hibernate, Relational Persistence for Idiomatic Java
+  ~
+  ~ Copyright (c) 2007, Red Hat Middleware LLC or third-party contributors as
+  ~ indicated by the @author tags or express copyright attribution
+  ~ statements applied by the authors.  All third-party contributions are
+  ~ distributed under license by Red Hat Middleware LLC.
+  ~
+  ~ This copyrighted material is made available to anyone wishing to use, modify,
+  ~ copy, or redistribute it subject to the terms and conditions of the GNU
+  ~ Lesser General Public License, as published by the Free Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  ~ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this distribution; if not, write to:
+  ~ Free Software Foundation, Inc.
+  ~ 51 Franklin Street, Fifth Floor
+  ~ Boston, MA  02110-1301  USA
+  -->
+<cache-configs>
+
+    <!-- 
+     Various JBoss Cache configurations, suitable for different caching
+     uses (e.g. entities vs. queries).
+     
+     In all cases, TransactionManager configuration not required.
+     Hibernate will plug in its own transaction manager integration. 
+    -->
+    
+    
+    <!-- A config appropriate for entity/collection caching. -->
+    <cache-config name="local-optimistic-entity">
+
+        <!-- Node locking scheme -->
+        <attribute name="NodeLockingScheme">OPTIMISTIC</attribute>
+
+        <!-- Mode of communication with peer caches.
+        
+             LOCAL
+        -->
+        <attribute name="CacheMode">LOCAL</attribute>
+
+        <!-- Name of cluster. Needs to be the same for all members, in order
+             to find each other -->
+        <attribute name="ClusterName">local-optimistic-entity</attribute>
+        
+        <!-- Use a UDP (multicast) based stack. A udp-sync stack might be
+             slightly better (no JGroups FC) but we stick with udp to
+             help ensure this cache and others like timestamps-cache
+             that require FC can use the same underlying JGroups resources. -->
+        <attribute name="MultiplexerStack"></attribute>
+
+        <!-- Whether or not to fetch state on joining a cluster. -->
+        <attribute name="FetchInMemoryState">false</attribute>
+
+        <!--
+          The max amount of time (in milliseconds) we wait until the
+          state (ie. the contents of the cache) are retrieved from
+          existing members at startup. Ignored if FetchInMemoryState=false.
+        -->
+        <attribute name="StateRetrievalTimeout">20000</attribute>
+
+        <!--
+            Number of milliseconds to wait until all responses for a
+            synchronous call have been received.
+        -->
+        <attribute name="SyncReplTimeout">20000</attribute>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <attribute name="LockAcquisitionTimeout">15000</attribute>
+
+       <!--
+          Indicate whether to use marshalling or not. Set this to true if you 
+          are running under a scoped class loader, e.g., inside an application 
+          server.
+       -->
+       <attribute name="UseRegionBasedMarshalling">true</attribute>
+       <!-- Must match the value of "useRegionBasedMarshalling" -->
+       <attribute name="InactiveOnStartup">true</attribute>
+
+      <!--  Eviction policy configurations. -->
+      <attribute name="EvictionPolicyConfig">
+        <config>
+          <attribute name="wakeUpIntervalSeconds">5</attribute>
+          <!-- Name of the DEFAULT eviction policy class. -->
+          <attribute name="policyClass">org.jboss.cache.eviction.LRUPolicy</attribute>
+          <!--  Cache wide default -->
+          <region name="/_default_">
+            <!-- Evict LRU node once we have more than this number of nodes -->
+            <attribute name="maxNodes">10000</attribute>
+            <!-- And, evict any node that hasn't been accessed in this many seconds -->
+            <attribute name="timeToLiveSeconds">1000</attribute>
+            <!-- Don't evict a node that's been accessed within this many seconds. 
+                 Set this to a value greater than your max expected transaction length. -->
+            <attribute name="minTimeToLiveSeconds">120</attribute>
+          </region>
+          <!--  Don't ever evict modification timestamps -->
+          <region name="/TS" policyClass="org.jboss.cache.eviction.NullEvictionPolicy"/>
+        </config>
+     </attribute>
+
+    </cache-config>   
+    
+    
+
+    <!-- Optimized for timestamp caching. A clustered timestamp cache
+         is required if query caching is used, even if the query cache
+         itself is configured with CacheMode=LOCAL.
+    -->
+    <cache-config name="local-timestamps-cache">
+
+        <!-- Node locking scheme -->
+        <attribute name="NodeLockingScheme">PESSIMISTIC</attribute>
+
+        <!--
+            READ_COMMITTED is as strong as necessary.
+        -->
+        <attribute name="IsolationLevel">READ_COMMITTED</attribute>
+
+        <!-- Cannot be INVALIDATION. ASYNC for improved performance. -->
+        <attribute name="CacheMode">LOCAL</attribute>
+
+        <!-- Name of cluster. Needs to be the same for all members, in order
+             to find each other -->
+        <attribute name="ClusterName">local-timestamp-cache</attribute>
+        
+        <!-- Use a UDP (multicast) based stack -->
+        <attribute name="MultiplexerStack"></attribute>
+
+        <!-- Used for timestamps, so must fetch state. -->
+        <attribute name="FetchInMemoryState">true</attribute>
+
+        <!--
+          The max amount of time (in milliseconds) we wait until the
+          state (ie. the contents of the cache) are retrieved from
+          existing members at startup. Ignored if FetchInMemoryState=false.
+        -->
+        <attribute name="StateRetrievalTimeout">20000</attribute>
+
+        <!--
+            Number of milliseconds to wait until all responses for a
+            synchronous call have been received.
+        -->
+        <attribute name="SyncReplTimeout">20000</attribute>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <attribute name="LockAcquisitionTimeout">15000</attribute>
+
+       <!--
+          Indicate whether to use marshalling or not. Set this to true if you 
+          are running under a scoped class loader, e.g., inside an application 
+          server. Default is "false".
+       -->
+       <attribute name="UseRegionBasedMarshalling">true</attribute>
+       <!-- Must match the value of "useRegionBasedMarshalling" -->
+       <attribute name="InactiveOnStartup">true</attribute>
+
+      <!--  Eviction policy configurations. -->
+      <attribute name="EvictionPolicyConfig">
+        <config>
+          <attribute name="wakeUpIntervalSeconds">5</attribute>
+          <!-- Name of the DEFAULT eviction policy class. -->
+          <attribute name="policyClass">org.jboss.cache.eviction.LRUPolicy</attribute>
+          <!--  Cache wide default -->
+          <region name="/_default_">
+            <!-- Evict LRU node once we have more than this number of nodes -->
+            <attribute name="maxNodes">10000</attribute>
+            <!-- And, evict any node that hasn't been accessed in this many seconds -->
+            <attribute name="timeToLiveSeconds">1000</attribute>
+            <!-- Don't evict a node that's been accessed within this many seconds. 
+                 Set this to a value greater than your max expected transaction length. -->
+            <attribute name="minTimeToLiveSeconds">120</attribute>
+          </region>
+          <!--  Don't ever evict modification timestamps -->
+          <region name="/TS" policyClass="org.jboss.cache.eviction.NullEvictionPolicy"/>
+        </config>
+     </attribute>
+
+    </cache-config>  
+</cache-configs>    
+    
