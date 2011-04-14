@@ -19,17 +19,12 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.tree.sync.ListAdapter;
-import org.exoplatform.portal.tree.sync.SyncModel;
-
 import java.util.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeContext<N> implements
-   SyncModel<NodeData, NodeData, String>,
-   ListAdapter<NodeData, String>
+class TreeContext<N>
 {
 
    /** . */
@@ -71,35 +66,5 @@ class TreeContext<N> implements
          throw new NoSuchElementException();
       }
       return changes.removeFirst();
-   }
-
-   public NodeData getChildren(NodeData node)
-   {
-      return node;
-   }
-
-   public String getHandle(NodeData node)
-   {
-      return node.getId();
-   }
-
-   public NodeData getDescendant(NodeData node, String handle)
-   {
-      if (handle.length() > 0 && handle.charAt(0) == '/')
-      {
-         return null;
-      }
-      NodeContext<N> context = nodes.get(handle);
-      return context != null ? context.data : null;
-   }
-
-   public int size(NodeData list)
-   {
-      return list.children.length;
-   }
-
-   public Iterator<String> iterator(NodeData list, boolean reverse)
-   {
-      return (Iterator)list.iterator(reverse);
    }
 }
