@@ -186,12 +186,19 @@ UIMaskLayer.prototype.createMaskForFrame = function(blockContainerId, object, op
 		maskLayer.maxZIndex = 3 ;
 		maskLayer.style.width = blockContainer.offsetWidth + "px"  ;
 		maskLayer.style.height =  blockContainer.offsetHeight + "px"  ;
-		var parentOfBlockContainer = eXo.core.DOMUtil.findAncestorById(blockContainer, "UIMaskWorkspace");
-		if (!parentOfBlockContainer) {
-			parentOfBlockContainer = document.getElementById("UIWorkingWorkspace");
-		}
-		maskLayer.style.top = eXo.core.Browser.findPosYInContainer(blockContainer, parentOfBlockContainer) + "px" ;
-		maskLayer.style.left = eXo.core.Browser.findPosXInContainer(blockContainer, parentOfBlockContainer) + "px" ;		
+				
+		window.setTimeout(function() {
+			var temp = blockContainer.parentNode;
+			var parentOfBlockContainer;			
+			do {
+				parentOfBlockContainer = temp;			
+				temp = temp.parentNode;			
+			} while (temp && eXo.core.DOMUtil.getStyle(parentOfBlockContainer, "position") === "static");
+			
+			maskLayer.style.top = eXo.core.Browser.findPosYInContainer(blockContainer, parentOfBlockContainer) + "px" ;
+			maskLayer.style.left = eXo.core.Browser.findPosXInContainer(blockContainer, parentOfBlockContainer) + "px" ;				
+		}, 200);			
+		
 		maskLayer.style.zIndex = maskLayer.maxZIndex ;
 		if(opacity) {
 	    Browser.setOpacity(maskLayer, opacity) ;
