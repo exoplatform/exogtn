@@ -1461,6 +1461,35 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(1, root.getSize());
    }
 
+   public void testAddToRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_to_removed");
+      portal.getRootNavigation().addChild("default").addChild("a");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("add_to_removed"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root.getChild("a").addChild("b");
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root2.removeChild("a");
+      service.saveNode(Node.MODEL, root2);
+      end(true);
+
+      //
+      begin();
+      try
+      {
+         service.saveNode(Node.MODEL, root);
+         fail();
+      }
+      catch (NavigationSaveException ignore)
+      {
+      }
+   }
+
    public void testSavePhantomNode() throws Exception
    {
       MOPService mop = mgr.getPOMService();

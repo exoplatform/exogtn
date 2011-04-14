@@ -332,6 +332,10 @@ public class NavigationServiceImpl implements NavigationService
          {
             Change.Add add = (Change.Add)change;
             org.gatein.mop.api.workspace.Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
+            if (parent == null)
+            {
+               throw new NavigationSaveException("Cannot add a child to a removed node");
+            }
             org.gatein.mop.api.workspace.Navigation added = parent.addChild(add.name);
             int index = 0;
             if (add.predecessor != null)
