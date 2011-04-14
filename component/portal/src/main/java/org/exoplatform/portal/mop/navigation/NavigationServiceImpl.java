@@ -385,6 +385,12 @@ public class NavigationServiceImpl implements NavigationService
                throw new NavigationSaveException("Cannot move removed node");
             }
 
+            //
+            if (src != moved.getParent())
+            {
+               throw new NavigationSaveException("Cannot move while it was already moved");
+            }
+
             int index = 0;
             if (move.predecessor != null)
             {
