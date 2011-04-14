@@ -371,7 +371,14 @@ public class NavigationServiceImpl implements NavigationService
             Change.Move move = (Change.Move)change;
             org.gatein.mop.api.workspace.Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
             org.gatein.mop.api.workspace.Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
+
+            //
             org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
+            if (moved == null)
+            {
+               throw new NavigationSaveException("Cannot move removed node");
+            }
+
             int index = 0;
             if (move.predecessor != null)
             {
