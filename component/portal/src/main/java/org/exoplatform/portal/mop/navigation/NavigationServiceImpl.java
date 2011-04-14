@@ -353,10 +353,17 @@ public class NavigationServiceImpl implements NavigationService
             if (remove.node.data != null)
             {
                org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
-               org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
-               removed.destroy();
-               remove.node.data = null;
-               remove.parent.data = new NodeData(parent);
+               if (removed != null)
+               {
+                  org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
+                  removed.destroy();
+                  remove.node.data = null;
+                  remove.parent.data = new NodeData(parent);
+               }
+               else
+               {
+                  // It was already removed concurrently
+               }
             }
          }
          else if (change instanceof Change.Move)
