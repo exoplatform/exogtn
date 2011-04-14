@@ -317,7 +317,7 @@ public class NavigationServiceImpl implements NavigationService
    }
 
 
-   public <N> void saveNode2(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException
+   public <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException
    {
 
 
@@ -325,10 +325,9 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<N> context = model.getContext(node);
       TreeContext<N> tree = context.tree;
 
-      Iterator<Change> changes = tree.getChanges();
-      while (changes.hasNext())
+      while (tree.hasChange())
       {
-         Change change = changes.next();
+         Change change = tree.nextChange();
          if (change instanceof Change.Add)
          {
             Change.Add add = (Change.Add)change;
@@ -387,7 +386,67 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
 
+      // Update state
+      saveState(session, context);
+   }
 
+   private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationSaveException
+   {
+      org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
+
+      //
+      if (navigation == null)
+      {
+         throw new NavigationSaveException("Node " + context.data.id + " does not exist anymore");
+      }
+
+      //
+      NodeState state = context.getState();
+      if (state != null)
+      {
+         Workspace workspace = navigation.getSite().getWorkspace();
+         String reference = state.getPageRef();
+         if (reference != null)
+         {
+            String[] pageChunks = split("::", reference);
+            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+            Site site = workspace.getSite(siteType, pageChunks[1]);
+            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(target);
+         }
+         else
+         {
+            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(null);
+         }
+
+         //
+         Described described = navigation.adapt(Described.class);
+         described.setName(state.getLabel());
+
+         //
+         Visible visible = navigation.adapt(Visible.class);
+         visible.setVisibility(state.getVisibility());
+
+         //
+         visible.setStartPublicationDate(state.getStartPublicationDate());
+         visible.setEndPublicationDate(state.getEndPublicationDate());
+
+         //
+         Attributes attrs = navigation.getAttributes();
+         attrs.setValue(MappedAttributes.URI, state.getURI());
+         attrs.setValue(MappedAttributes.ICON, state.getIcon());
+      }
+
+      //
+      if (context.hasTrees())
+      {
+         for (NodeContext<N> child : context.getContexts())
+         {
+            saveState(session, child);
+         }
+      }
    }
 
 
@@ -402,7 +461,8 @@ public class NavigationServiceImpl implements NavigationService
 
 
 
-   public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
+/*
+   public <N> void _saveNode(NodeModel<N> model, N node) throws NavigationServiceException
    {
       POMSession session = manager.getSession();
       NodeContext<N> context = model.getContext(node);
@@ -435,19 +495,29 @@ public class NavigationServiceImpl implements NavigationService
    private static class SaveContext<N>
    {
 
-      /** . */
+      */
+/** . *//*
+
       private final NodeContext<N> context;
 
-      /** . */
+      */
+/** . *//*
+
       private final List<SaveContext<N>> children;
 
-      /** The list of actual children ids, maintained during the phases. */
+      */
+/** The list of actual children ids, maintained during the phases. *//*
+
       private List<String> childrenIds;
 
-      /** . */
+      */
+/** . *//*
+
       private SaveContext<N> parent;
 
-      /** The related navigation object. */
+      */
+/** The related navigation object. *//*
+
       private org.gatein.mop.api.workspace.Navigation navigation;
 
       private SaveContext(NodeContext<N> context)
@@ -801,4 +871,5 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
    }
+*/
 }

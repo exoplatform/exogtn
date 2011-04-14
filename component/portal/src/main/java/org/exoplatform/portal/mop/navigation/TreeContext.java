@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TreeContext<N> implements
+class TreeContext<N> implements
    SyncModel<NodeData, NodeData, String>,
    ListAdapter<NodeData, String>
 {
@@ -59,9 +59,18 @@ public class TreeContext<N> implements
       changes.addLast(change);
    }
 
-   public Iterator<Change> getChanges()
+   boolean hasChange()
    {
-      return changes != null ? changes.iterator() : Collections.<Change>emptyList().iterator();
+      return changes != null && changes.size() > 0;
+   }
+
+   public Change nextChange()
+   {
+      if (changes == null || changes.size() == 0)
+      {
+         throw new NoSuchElementException();
+      }
+      return changes.removeFirst();
    }
 
    public NodeData getChildren(NodeData node)

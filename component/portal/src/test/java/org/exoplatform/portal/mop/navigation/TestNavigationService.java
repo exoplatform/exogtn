@@ -52,6 +52,7 @@ public class TestNavigationService extends AbstractPortalTest
    /** . */
    private NavigationServiceImpl service;
 
+   /** . */
    private DataStorage dataStorage;
 
    @Override
@@ -876,37 +877,6 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("foo", foo.getName());
    }
 
-   public void testAddChild2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child_2");
-      portal.getRootNavigation().addChild("default");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("add_child_2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      assertEquals(0, root.getNodeCount());
-
-      //
-      Node foo = root.addChild("foo");
-      assertNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
-      assertEquals(1, root.getNodeCount());
-      service.saveNode2(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      foo = root.getChild("foo");
-      assertNotNull(foo);
-      assertEquals(1, root.getNodeCount());
-      assertEquals("foo", foo.getName());
-   }
-
    public void testRemoveChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -936,83 +906,10 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(foo);
    }
 
-   public void testRemoveChild2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child_2");
-      portal.getRootNavigation().addChild("default").addChild("foo");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("remove_child_2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      Node foo = root.getChild("foo");
-      assertNotNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
-
-      //
-      assertTrue(root.removeChild("foo"));
-      assertNull(root.getChild("foo"));
-      service.saveNode2(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      foo = root.getChild("foo");
-      assertNull(foo);
-   }
-
    public void testReorderChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child");
-      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-      rootNavigation.addChild("foo");
-      rootNavigation.addChild("bar");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("reorder_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      Iterator<Node> i = root.getChildren().iterator();
-      Node foo = i.next();
-      assertNotNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
-      Node bar = i.next();
-      assertNotNull(bar.getId());
-      assertEquals("bar", bar.getName());
-      assertSame(bar, root.getChild("bar"));
-      assertFalse(i.hasNext());
-
-      //
-      root.addChild(foo);
-      service.saveNode(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      i = root.getChildren().iterator();
-      bar = i.next();
-      assertNotNull(bar.getId());
-      assertEquals("bar", bar.getName());
-      assertSame(bar, root.getChild("bar"));
-      foo = i.next();
-      assertNotNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
-      assertFalse(i.hasNext());
-   }
-
-   public void testReorderChild2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child2");
       org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
@@ -1021,7 +918,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("reorder_child2"));
+      Navigation nav = service.loadNavigation(SiteKey.portal("reorder_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
       Iterator<Node> i = root.getChildren().iterator();
       Node foo = i.next();
@@ -1034,7 +931,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       root.addChild(1, juu);
-      service.saveNode2(Node.MODEL, root);
+      service.saveNode(Node.MODEL, root);
       end(true);
 
       //
@@ -1051,7 +948,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       root.addChild(0, bar);
-      service.saveNode2(Node.MODEL, root);
+      service.saveNode(Node.MODEL, root);
       end(true);
 
       //
@@ -1217,37 +1114,6 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotNull(juu);
    }
 
-   public void testMoveChild2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_child2");
-      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-      rootNavigation.addChild("foo").addChild("juu");
-      rootNavigation.addChild("bar");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("move_child2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      Node foo = root.getChild("foo");
-      Node bar = root.getChild("bar");
-      Node juu = foo.getChild("juu");
-      bar.addChild(juu);
-      service.saveNode2(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      foo = root.getChild("foo");
-      juu = foo.getChild("juu");
-      assertNull(juu);
-      bar = root.getChild("bar");
-      juu = bar.getChild("juu");
-      assertNotNull(juu);
-   }
-
    public void testRenameNode() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -1274,55 +1140,6 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("bar", foo.getName());
       assertSame(foo, root.getChild("bar"));
       service.saveNode(Node.MODEL, root);
-      assertEquals("bar", foo.getName());
-      assertSame(foo, root.getChild("bar"));
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      Node bar = root.getChild("bar");
-      assertNotNull(bar);
-      assertSame(bar, root.getChild("bar"));
-
-      //
-      root.addChild("foo");
-      try
-      {
-         bar.setName("foo");
-         fail();
-      }
-      catch (IllegalArgumentException ignore)
-      {
-      }
-   }
-
-   public void testRenameNode2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename_node2");
-      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-      rootNavigation.addChild("foo");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("rename_node2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      Node foo = root.getChild("foo");
-      foo.setName("foo");
-      service.saveNode2(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      nav = service.loadNavigation(SiteKey.portal("rename_node2"));
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      foo = root.getChild("foo");
-      foo.setName("bar");
-      assertEquals("bar", foo.getName());
-      assertSame(foo, root.getChild("bar"));
-      service.saveNode2(Node.MODEL, root);
       assertEquals("bar", foo.getName());
       assertSame(foo, root.getChild("bar"));
       end(true);
@@ -1386,46 +1203,6 @@ public class TestNavigationService extends AbstractPortalTest
       assertFalse(i.hasNext());
    }
 
-   public void testSaveChildren2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_children2");
-      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-      rootNavigation.addChild("1");
-      rootNavigation.addChild("2");
-      rootNavigation.addChild("3");
-      rootNavigation.addChild("4");
-      rootNavigation.addChild("5");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("save_children2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      root.removeChild("5");
-      root.removeChild("2");
-      root.addChild(0, root.getChild("3"));
-      root.addChild(1, root.addChild("."));
-      service.saveNode2(Node.MODEL, root);
-      Iterator<Node> i = root.getChildren().iterator();
-      assertEquals("3", i.next().getName());
-      assertEquals(".", i.next().getName());
-      assertEquals("1", i.next().getName());
-      assertEquals("4", i.next().getName());
-      assertFalse(i.hasNext());
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
-      i = root.getChildren().iterator();
-      assertEquals("3", i.next().getName());
-      assertEquals(".", i.next().getName());
-      assertEquals("1", i.next().getName());
-      assertEquals("4", i.next().getName());
-      assertFalse(i.hasNext());
-   }
-
    public void testSaveRecursive() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -1442,34 +1219,6 @@ public class TestNavigationService extends AbstractPortalTest
       Node bar = foo.addChild("bar");
       bar.addChild("juu");
       service.saveNode(Node.MODEL, root);
-      end(true);
-
-      //
-      begin();
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      foo = root.getChild("foo");
-      bar = foo.getChild("bar");
-      assertNotNull(bar.getId());
-      Node juu = bar.getChild("juu");
-      assertNotNull(juu.getId());
-   }
-
-   public void testSaveRecursive2() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive2");
-      org.gatein.mop.api.workspace.Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-      rootNavigation.addChild("foo");
-      end(true);
-
-      //
-      begin();
-      Navigation nav = service.loadNavigation(SiteKey.portal("save_recursive2"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL);
-      Node foo = root.getChild("foo");
-      Node bar = foo.addChild("bar");
-      bar.addChild("juu");
-      service.saveNode2(Node.MODEL, root);
       end(true);
 
       //
@@ -1514,7 +1263,7 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(state.getVisibility());
    }
 
-   public void testSaveStateOverwrite() throws Exception
+   public void _testSaveStateOverwrite() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state_overwrite");
@@ -1590,40 +1339,10 @@ public class TestNavigationService extends AbstractPortalTest
       assertNotSame(fooId, root.getChild("foo").getId());
    }
 
-   public void testSaveRemovedNode() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_removed_node");
-      portal.getRootNavigation().addChild("default");
-      end(true);
-
-      //
-      begin();
-      Navigation navigation = service.loadNavigation(SiteKey.portal("save_removed_node"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE);
-      end();
-
-      //
-      begin();
-      assertTrue(service.saveNavigation(SiteKey.portal("save_removed_node"), null));
-      end(true);
-
-      //
-      begin();
-      try
-      {
-         service.saveNode(Node.MODEL, root);
-         fail();
-      }
-      catch (NavigationSaveException ignore)
-      {
-      }
-   }
-
    public void testSaveMergeNodes() throws Exception
    {
       MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "bilto");
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_merge");
       org.gatein.mop.api.workspace.Navigation nav = portal.getRootNavigation().addChild("default");
       nav.addChild("a");
       nav.addChild("b");
@@ -1632,7 +1351,7 @@ public class TestNavigationService extends AbstractPortalTest
 
       //
       begin();
-      Navigation navigation = service.loadNavigation(SiteKey.portal("bilto"));
+      Navigation navigation = service.loadNavigation(SiteKey.portal("save_merge"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
       end();
 
@@ -1666,7 +1385,7 @@ public class TestNavigationService extends AbstractPortalTest
       Node b = a.getChild("b");
       Node c = root1.addChild("c");
       c.addChild(b);
-      service.saveNode2(Node.MODEL, root1);
+      service.saveNode(Node.MODEL, root1);
       end(true);
 
       //
@@ -1699,7 +1418,7 @@ public class TestNavigationService extends AbstractPortalTest
       Node c = a.getChild("c");
       b.addChild(c);
       root1.removeChild("a");
-      service.saveNode2(Node.MODEL, root1);
+      service.saveNode(Node.MODEL, root1);
       end(true);
 
       //
@@ -1742,7 +1461,6 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals(1, root.getSize());
    }
 
-/*
    public void testSavePhantomNode() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -1758,25 +1476,28 @@ public class TestNavigationService extends AbstractPortalTest
       service.saveNode(Node.MODEL, root);
       end(true);
 
-*/
-/*
+      // Reload the root node
       begin();
-      //Reload the root node
       root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       end(true);
-*//*
 
 
-      //Edit navigation in another browser
+      // Edit navigation in another browser
       begin();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       root2.removeChild("foo");
       service.saveNode(Node.MODEL, root2);
       end(true);
 
+      // Now click Save button in the first browser
       begin();
-      //Now click Save button in the first browser
-      service.saveNode(Node.MODEL, root);
+      try
+      {
+         service.saveNode(Node.MODEL, root);
+         fail();
+      }
+      catch (NavigationSaveException ignore)
+      {
+      }
    }
-*/
 }

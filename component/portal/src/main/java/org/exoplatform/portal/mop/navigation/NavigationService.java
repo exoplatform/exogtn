@@ -91,6 +91,4 @@ public interface NavigationService
 
    <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException;
 
-   <N> void saveNode2(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException;
-
 }
