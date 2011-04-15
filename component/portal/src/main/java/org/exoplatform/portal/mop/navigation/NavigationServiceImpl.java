@@ -404,6 +404,7 @@ public class NavigationServiceImpl implements NavigationService
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
             }
 
+            //
             int index = 0;
             if (move.predecessor != null)
             {
@@ -422,6 +423,8 @@ public class NavigationServiceImpl implements NavigationService
             {
                throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
             }
+
+            //
             org.gatein.mop.api.workspace.Navigation parent = renamed.getParent();
             int index = parent.getChildren().indexOf(renamed);
             renamed.setName(rename.name);
@@ -429,7 +432,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          else
          {
-            throw new UnsupportedOperationException("handle me " + change);
+            throw new AssertionError("Cannot execute " + change);
          }
       }
 
