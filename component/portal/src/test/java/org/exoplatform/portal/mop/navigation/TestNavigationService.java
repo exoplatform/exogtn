@@ -906,6 +906,35 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(foo);
    }
 
+   public void testRemoveTransientChild() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_transient_child");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("remove_transient_child"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      Node foo = root.addChild("foo");
+      assertNull(foo.getId());
+      assertEquals("foo", foo.getName());
+      assertSame(foo, root.getChild("foo"));
+
+      //
+      assertTrue(root.removeChild("foo"));
+      assertNull(root.getChild("foo"));
+      service.saveNode(Node.MODEL, root);
+      end(true);
+
+      //
+      begin();
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
+      foo = root.getChild("foo");
+      assertNull(foo);
+   }
+
    public void testReorderChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
