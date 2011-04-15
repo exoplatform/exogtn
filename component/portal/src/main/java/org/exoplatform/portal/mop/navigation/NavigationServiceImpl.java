@@ -331,11 +331,15 @@ public class NavigationServiceImpl implements NavigationService
          if (change instanceof Change.Add)
          {
             Change.Add add = (Change.Add)change;
+
+            //
             org.gatein.mop.api.workspace.Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
             if (parent == null)
             {
                throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
             }
+
+            //
             org.gatein.mop.api.workspace.Navigation added = parent.addChild(add.name);
             int index = 0;
             if (add.predecessor != null)
@@ -350,20 +354,17 @@ public class NavigationServiceImpl implements NavigationService
          else if (change instanceof Change.Remove)
          {
             Change.Remove remove = (Change.Remove)change;
-            if (remove.node.data != null)
+            org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
+            if (removed != null)
             {
-               org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
-               if (removed != null)
-               {
-                  org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
-                  removed.destroy();
-                  remove.node.data = null;
-                  remove.parent.data = new NodeData(parent);
-               }
-               else
-               {
-                  // It was already removed concurrently
-               }
+               org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
+               removed.destroy();
+               remove.node.data = null;
+               remove.parent.data = new NodeData(parent);
+            }
+            else
+            {
+               // It was already removed concurrently
             }
          }
          else if (change instanceof Change.Move)
