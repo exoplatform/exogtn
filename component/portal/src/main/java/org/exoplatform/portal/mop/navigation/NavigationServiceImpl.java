@@ -409,6 +409,10 @@ public class NavigationServiceImpl implements NavigationService
          {
             Change.Rename rename = (Change.Rename)change;
             org.gatein.mop.api.workspace.Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
+            if (renamed == null)
+            {
+               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
+            }
             org.gatein.mop.api.workspace.Navigation parent = renamed.getParent();
             int index = parent.getChildren().indexOf(renamed);
             renamed.setName(rename.name);
