@@ -1485,9 +1485,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, ignore.getError());
+         assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
       }
    }
 
@@ -1537,9 +1537,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE, ignore.getError());
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE, e.getError());
       }
    }
 
@@ -1568,9 +1568,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE, ignore.getError());
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE, e.getError());
       }
    }
 
@@ -1600,9 +1600,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE, ignore.getError());
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE, e.getError());
       }
    }
 
@@ -1631,9 +1631,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE, ignore.getError());
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE, e.getError());
       }
    }
 
@@ -1672,9 +1672,9 @@ public class TestNavigationService extends AbstractPortalTest
          service.saveNode(Node.MODEL, root);
          fail();
       }
-      catch (NavigationServiceException ignore)
+      catch (NavigationServiceException e)
       {
-         assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, ignore.getError());
+         assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
       }
    }
 }
