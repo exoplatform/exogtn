@@ -340,16 +340,24 @@ public class NavigationServiceImpl implements NavigationService
             }
 
             //
-            org.gatein.mop.api.workspace.Navigation added = parent.addChild(add.name);
-            int index = 0;
-            if (add.predecessor != null)
+            org.gatein.mop.api.workspace.Navigation added = parent.getChild(add.name);
+            if (added != null)
             {
-               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, add.predecessor.data.id);
-               index = parent.getChildren().indexOf(predecessor) + 1;
+               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
             }
-            parent.getChildren().add(index, added);
-            add.node.data = new NodeData(added);
-            add.parent.data = new NodeData(parent);
+            else
+            {
+               added = parent.addChild(add.name);
+               int index = 0;
+               if (add.predecessor != null)
+               {
+                  org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, add.predecessor.data.id);
+                  index = parent.getChildren().indexOf(predecessor) + 1;
+               }
+               parent.getChildren().add(index, added);
+               add.node.data = new NodeData(added);
+               add.parent.data = new NodeData(parent);
+            }
          }
          else if (change instanceof Change.Remove)
          {
