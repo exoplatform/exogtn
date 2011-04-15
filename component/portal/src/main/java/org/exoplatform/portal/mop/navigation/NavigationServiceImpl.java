@@ -107,7 +107,7 @@ public class NavigationServiceImpl implements NavigationService
       Site site = workspace.getSite(objectType, key.getName());
       if (site == null)
       {
-         throw new NavigationServiceException("The site " + key + " does not exist");
+         throw new NavigationServiceException(NavigationError.NAVIGATION_CONCURRENCY_REMOVED);
       }
 
       //
@@ -334,7 +334,7 @@ public class NavigationServiceImpl implements NavigationService
             org.gatein.mop.api.workspace.Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
             if (parent == null)
             {
-               throw new NavigationSaveException("Cannot add a child to a removed node");
+               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
             }
             org.gatein.mop.api.workspace.Navigation added = parent.addChild(add.name);
             int index = 0;
@@ -372,27 +372,27 @@ public class NavigationServiceImpl implements NavigationService
             org.gatein.mop.api.workspace.Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
             if (src == null)
             {
-               throw new NavigationSaveException("Cannot move node from a removed parent");
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
             }
 
             //
             org.gatein.mop.api.workspace.Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
             if (dst == null)
             {
-               throw new NavigationSaveException("Cannot move node to a removed parent");
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
             }
 
             //
             org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
             if (moved == null)
             {
-               throw new NavigationSaveException("Cannot move removed node");
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
             }
 
             //
             if (src != moved.getParent())
             {
-               throw new NavigationSaveException("Cannot move while it was already moved");
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
             }
 
             int index = 0;
@@ -424,14 +424,14 @@ public class NavigationServiceImpl implements NavigationService
       saveState(session, context);
    }
 
-   private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationSaveException
+   private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationServiceException
    {
       org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
 
       //
       if (navigation == null)
       {
-         throw new NavigationSaveException("Node " + context.data.id + " does not exist anymore");
+         throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
       }
 
       //

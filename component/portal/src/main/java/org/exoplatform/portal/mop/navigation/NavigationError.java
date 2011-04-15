@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,28 +19,26 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.regex.Pattern;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public class NavigationSaveException extends NavigationServiceException
+public enum NavigationError
 {
-   public NavigationSaveException()
-   {
-   }
 
-   public NavigationSaveException(String message)
-   {
-      super(message);
-   }
+   MOVE_CONCURRENTLY_REMOVED_SRC_NODE,
 
-   public NavigationSaveException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+   MOVE_CONCURRENTLY_REMOVED_DST_NODE,
 
-   public NavigationSaveException(Throwable cause)
-   {
-      super(cause);
-   }
+   MOVE_CONCURRENTLY_REMOVED_MOVED_NODE,
+
+   MOVE_CONCURRENTLY_CHANGED_SRC_NODE,
+
+   ADD_CONCURRENTLY_REMOVED_PARENT_NODE,
+
+   UPDATE_CONCURRENTLY_REMOVED_NODE,
+
+   NAVIGATION_CONCURRENCY_REMOVED
+
 }

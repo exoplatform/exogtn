@@ -19,28 +19,49 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.regex.Pattern;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class NavigationServiceException extends Exception
 {
-   public NavigationServiceException()
+
+   /** . */
+   private final NavigationError error;
+
+   public NavigationServiceException(NavigationError error)
    {
+      this.error = error;
    }
 
-   public NavigationServiceException(String message)
+   public NavigationServiceException(NavigationError error, String message)
    {
       super(message);
+
+      //
+      this.error = error;
    }
 
-   public NavigationServiceException(String message, Throwable cause)
+   public NavigationServiceException(NavigationError error, String message, Throwable cause)
    {
       super(message, cause);
+
+      //
+      this.error = error;
    }
 
-   public NavigationServiceException(Throwable cause)
+   public NavigationServiceException(NavigationError error, Throwable cause)
    {
       super(cause);
+
+      //
+      this.error = error;
+   }
+
+   public NavigationError getError()
+   {
+      return error;
    }
 }
