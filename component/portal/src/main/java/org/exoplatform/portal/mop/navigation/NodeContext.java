@@ -78,6 +78,36 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.hiddenCount = 0;
    }
 
+   public NodeContext<N> getDescendant(String id) throws NullPointerException
+   {
+      if (id == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      NodeContext<N> found = null;
+      if (data != null && data.id.equals(id))
+      {
+         found = this;
+      }
+      else
+      {
+         if (hasTrees())
+         {
+            for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
+            {
+               found = current.getDescendant(id);
+               if (found != null)
+               {
+                  break;
+               }
+            }
+         }
+      }
+      return found;
+   }
+
    /**
     * Returns true if the context is currently hidden.
     *
@@ -157,6 +187,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       return data != null ? data.getId() : null;
    }
 
+   /**
+    * Returns the context index among its parent.
+    *
+    * @return the index value
+    */
    public int getIndex()
    {
       int count = 0;

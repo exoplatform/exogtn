@@ -222,7 +222,7 @@ public class UserNode
     */
    public boolean hasChildrenRelationship()
    {
-      return context.getNodes() != null;
+      return context.hasTrees();
    }
 
    /**
@@ -242,8 +242,7 @@ public class UserNode
 
    public Collection<UserNode> getChildren()
    {
-      Collection<UserNode> children = context.getNodes();
-      return children != null ? children : Collections.<UserNode>emptyList();
+      return context.hasTrees() ? context.getNodes() : Collections.<UserNode>emptyList();
    }
 
    /**
@@ -255,7 +254,7 @@ public class UserNode
     */
    public UserNode getChild(String childName) throws NullPointerException
    {
-      if (context.getNodes() != null)
+      if (context.hasTrees())
       {
          return context.getNode(childName);
       }
@@ -274,7 +273,7 @@ public class UserNode
     */
    public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
    {
-      if (context.getNodes() != null)
+      if (context.hasTrees())
       {
          return context.getNode(childIndex);
       }
@@ -312,27 +311,7 @@ public class UserNode
    // Keep this internal for now
    UserNode find(String nodeId)
    {
-      UserNode found = null;
-      if (context.getId().equals(nodeId))
-      {
-         found = this;
-      }
-      else
-      {
-         Collection<UserNode> children = context.getNodes();
-         if (children != null)
-         {
-            for (UserNode child : children)
-            {
-               UserNode a = child.find(nodeId);
-               if (a != null)
-               {
-                  found = a;
-                  break;
-               }
-            }
-         }
-      }
-      return found;
+      NodeContext<UserNode> found = context.getDescendant(nodeId);
+      return found != null ? found.getNode() : null;
    }
 }
