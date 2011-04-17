@@ -280,6 +280,30 @@ public class TestNavigationService extends AbstractPortalTest
       catch (IllegalStateException ignore)
       {
       }
+      try
+      {
+         root.addChild("a");
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+      }
+      try
+      {
+         root.addChild(0, "a");
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+      }
+      try
+      {
+         root.removeChild("a");
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+      }
    }
 
    public void testLoadChildrenScope() throws Exception

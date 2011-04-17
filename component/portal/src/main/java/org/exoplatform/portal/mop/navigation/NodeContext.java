@@ -361,8 +361,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>>
     * @return the created node
     * @throws NullPointerException if the model or the name is null
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
+    * @throws IllegalStateException if the children relationship does not exist
     */
-   public N addNode(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException
+   public N addNode(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
    {
       if (name == null)
       {
@@ -385,8 +386,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>>
     * @param node the node to move
     * @throws NullPointerException if the model or the node is null
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
+    * @throws IllegalStateException if the children relationship does not exist
     */
-   public void addNode(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException
+   public void addNode(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
    {
       if (node == null)
       {
@@ -465,8 +467,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>>
     * @return true if the context was removed
     * @throws NullPointerException if the name argument is null
     * @throws IllegalArgumentException if the named context does not exist
+    * @throws IllegalStateException if the children relationship does not exist
     */
-   public boolean removeNode(String name) throws NullPointerException, IllegalArgumentException
+   public boolean removeNode(String name) throws NullPointerException, IllegalArgumentException, IllegalStateException
    {
       NodeContext<N> node = get(name);
       if (node == null)
