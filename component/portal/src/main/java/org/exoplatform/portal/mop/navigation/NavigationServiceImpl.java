@@ -408,8 +408,12 @@ public class NavigationServiceImpl implements NavigationService
             int index = 0;
             if (move.previous != null)
             {
-               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
-               index = dst.getChildren().indexOf(predecessor) + 1;
+               org.gatein.mop.api.workspace.Navigation previous = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
+               if (previous == null)
+               {
+                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+               }
+               index = dst.getChildren().indexOf(previous) + 1;
             }
             dst.getChildren().add(index, moved);
             move.src.data = new NodeData(src);

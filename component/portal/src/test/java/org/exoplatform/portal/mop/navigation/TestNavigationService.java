@@ -1665,6 +1665,38 @@ public class TestNavigationService extends AbstractPortalTest
       }
    }
 
+   public void testConcurrentMoveAfterRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_move_after_removed");
+      org.gatein.mop.api.workspace.Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a").addChild("b");
+      def.addChild("c");
+      end(true);
+
+      //
+      begin();
+      Navigation navigation = service.loadNavigation(SiteKey.portal("concurrent_move_after_removed"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root.addChild(2, root.getChild("a").getChild("b"));
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      root2.removeChild("c");
+      service.saveNode(Node.MODEL, root2);
+      end(true);
+
+      //
+      begin();
+      try
+      {
+         service.saveNode(Node.MODEL, root);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE, e.getError());
+      }
+   }
+
    public void testConcurrentMoveFromRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
