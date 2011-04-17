@@ -195,12 +195,12 @@ public class UserPortalImpl implements UserPortal
 
    public UserNode getNode(UserNavigation userNavigation, Scope scope) throws Exception
    {
-      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope).getElement();
+      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope).getNode();
    }
 
    public UserNode getNode(UserNode node, Scope scope) throws Exception
    {
-      return navigationService.loadNode(node.context, scope).getElement();
+      return navigationService.loadNode(node.context, scope).getNode();
    }
 
    private class MatchingScope implements Scope
@@ -220,7 +220,7 @@ public class UserPortalImpl implements UserPortal
 
       void resolve() throws NavigationServiceException
       {
-         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this).getElement();
+         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this).getNode();
          if (score > 0)
          {
             userNode = node.find(id);
@@ -266,7 +266,7 @@ public class UserPortalImpl implements UserPortal
          Navigation navigation = userNavigation.navigation;
          if (navigation.getState() != null)
          {
-            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN).getElement();
+            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN).getNode();
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

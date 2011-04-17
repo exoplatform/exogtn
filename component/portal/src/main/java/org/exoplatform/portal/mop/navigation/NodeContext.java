@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 /**
  * The context of a node.
  */
-public class NodeContext<N> extends ListTree<NodeContext<N>, N>
+public class NodeContext<N> extends ListTree<NodeContext<N>>
 {
 
 
@@ -137,7 +137,12 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
    }
 
-   public N getElement()
+   /**
+    * Returns the associated node with this context
+    *
+    * @return the node
+    */
+   public N getNode()
    {
       return node;
    }
@@ -280,7 +285,7 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
                   next = next.getNext();
                }
                while (next != null && next.isHidden());
-               return tmp.getElement();
+               return tmp.getNode();
             }
             else
             {

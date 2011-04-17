@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ListTree<T extends ListTree<T, E>, E>
+public class ListTree<T extends ListTree<T>>
 {
 
    /** . */
@@ -83,8 +83,6 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
    {
       return previous;
    }
-
-   public abstract E getElement();
 
    public final String getName()
    {
@@ -589,7 +587,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
 
    public String toString()
    {
-      return getClass().getSimpleName() + "[name=" + getName() + ",element=" + getElement() + "]";
+      return getClass().getSimpleName() + "[name=" + getName() + "]";
    }
 }
 
