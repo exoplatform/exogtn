@@ -426,8 +426,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
     * @param name the node name
     * @return the created node
     * @throws NullPointerException if the model or the name is null
+    * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     */
-   public N addNode(NodeModel<N> model, Integer index, String name) throws NullPointerException
+   public N addNode(NodeModel<N> model, Integer index, String name) throws NullPointerException, IndexOutOfBoundsException
    {
       if (model == null)
       {
@@ -454,8 +455,9 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
     * @param index the index
     * @param node the node to move
     * @throws NullPointerException if the model or the node is null
+    * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     */
-   public void addNode(NodeModel<N> model, Integer index, N node) throws NullPointerException
+   public void addNode(NodeModel<N> model, Integer index, N node) throws NullPointerException, IndexOutOfBoundsException
    {
       if (model == null)
       {
@@ -473,7 +475,7 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       addNode(index, nodeContext);
    }
 
-   private void addNode(Integer index, NodeContext<N> child)
+   private void addNode(final Integer index, NodeContext<N> child)
    {
       NodeContext<N> previousParent = child.getParent();
 
@@ -494,6 +496,10 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
             before.insertAfter(child);
          }
       }
+      else if (index < 0)
+      {
+         throw new IndexOutOfBoundsException("No negative index accepted");
+      }
       else if (index == 0)
       {
          insertAt(0, child);
@@ -501,12 +507,16 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       else
       {
          NodeContext<N> before = getFirst();
-         while (index > 1)
+         if (before == null)
+         {
+            throw new IndexOutOfBoundsException("Index " + index + " is greater than 0");
+         }
+         for (int count = index;count > 1;count -= before.isHidden() ? 0 : 1)
          {
             before = before.getNext();
-            if (!before.isHidden())
+            if (before == null)
             {
-               index--;
+               throw new IndexOutOfBoundsException("Index " + index + " is greater than the number of children " + (index - count));
             }
          }
          before.insertAfter(child);

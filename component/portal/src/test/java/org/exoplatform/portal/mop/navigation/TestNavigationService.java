@@ -869,6 +869,24 @@ public class TestNavigationService extends AbstractPortalTest
       {
       }
 
+      // Test what happens when an illegal index is added
+      try
+      {
+         root.addChild(-1, "foo");
+         fail();
+      }
+      catch (IndexOutOfBoundsException ignore)
+      {
+      }
+      try
+      {
+         root.addChild(1, "foo");
+         fail();
+      }
+      catch (IndexOutOfBoundsException ignore)
+      {
+      }
+
       //
       Node foo = root.addChild("foo");
       assertNull(foo.getId());
@@ -968,13 +986,31 @@ public class TestNavigationService extends AbstractPortalTest
       assertEquals("juu", juu.getName());
       assertFalse(i.hasNext());
 
-      //
+      // Test what happens when null is added
       try
       {
          root.addChild(1, (Node)null);
          fail();
       }
       catch (NullPointerException expected)
+      {
+      }
+
+      // Test what happens when an illegal index is added
+      try
+      {
+         root.addChild(-1, juu);
+         fail();
+      }
+      catch (IndexOutOfBoundsException expected)
+      {
+      }
+      try
+      {
+         root.addChild(4, juu);
+         fail();
+      }
+      catch (IndexOutOfBoundsException expected)
       {
       }
 
