@@ -534,7 +534,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
     *
     * @param tree the child inserted
     */
-   public void afterInsert(T tree)
+   protected void afterInsert(T tree)
    {
    }
 
@@ -543,7 +543,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
     *
     * @param tree the child inserted
     */
-   public void afterRemove(T tree)
+   protected void afterRemove(T tree)
    {
    }
 

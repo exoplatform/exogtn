@@ -78,28 +78,22 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       this.hiddenCount = 0;
    }
 
+   /**
+    * Returns true if the context is currently hidden.
+    *
+    * @return the hidden value
+    */
    public boolean isHidden()
    {
       return hidden;
    }
 
-   public void afterInsert(NodeContext<N> tree)
-   {
-      if (tree.hidden)
-      {
-         hiddenCount++;
-      }
-   }
-
-   public void afterRemove(NodeContext<N> tree)
-   {
-      if (tree.hidden)
-      {
-         hiddenCount--;
-      }
-   }
-
-   public final void setHidden(boolean hidden)
+   /**
+    * Updates the hiddent value.
+    *
+    * @param hidden the hidden value
+    */
+   public void setHidden(boolean hidden)
    {
       if (this.hidden != hidden)
       {
@@ -120,16 +114,17 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
    }
 
    /**
-    * Applies a filter recursively.
+    * Applies a filter recursively, the filter will update the hiddent status of the
+    * fragment.
     *
     * @param filter the filter to apply
     */
    public void filter(NodeFilter filter)
    {
-      filter(0, filter);
+      doFilter(0, filter);
    }
 
-   private void filter(int depth, NodeFilter filter)
+   private void doFilter(int depth, NodeFilter filter)
    {
       boolean accept = filter.accept(depth, getId(), getName(), state);
       setHidden(!accept);
@@ -137,7 +132,7 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       {
          for (NodeContext<N> node : getTrees())
          {
-            node.filter(depth + 1, filter);
+            node.doFilter(depth + 1, filter);
          }
       }
    }
@@ -462,5 +457,21 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
    void setContexts(Iterable<NodeContext<N>> contexts)
    {
       setTrees(contexts);
+   }
+
+   protected void afterInsert(NodeContext<N> tree)
+   {
+      if (tree.hidden)
+      {
+         hiddenCount++;
+      }
+   }
+
+   protected void afterRemove(NodeContext<N> tree)
+   {
+      if (tree.hidden)
+      {
+         hiddenCount--;
+      }
    }
 }
