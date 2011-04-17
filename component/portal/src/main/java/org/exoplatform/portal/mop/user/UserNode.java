@@ -286,27 +286,27 @@ public class UserNode
 
    public void addChild(UserNode child)
    {
-      context.addNode(navigation.model, null, child);
+      context.addNode(null, child);
    }
 
    public void addChild(int index, UserNode child)
    {
-      context.addNode(navigation.model, index, child);
+      context.addNode(index, child);
    }
 
    public UserNode addChild(String childName)
    {
-      return context.addNode(navigation.model, null, childName);
+      return context.addNode(null, childName);
    }
 
    public boolean removeChild(String childName)
    {
-      return context.removeNode(navigation.model, childName);
+      return context.removeNode(childName);
    }
 
    public void save() throws NavigationServiceException
    {
-      navigation.portal.navigationService.saveNode(navigation.model, this);
+      navigation.portal.navigationService.saveNode(context);
    }
 
    // Keep this internal for now

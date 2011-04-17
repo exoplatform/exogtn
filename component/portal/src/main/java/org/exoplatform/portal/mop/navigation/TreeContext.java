@@ -33,9 +33,17 @@ class TreeContext<N>
    /** . */
    private LinkedList<Change> changes;
 
-   public NodeContext<N> newContext(NodeModel<N> model, NodeData data)
+   /** . */
+   final NodeModel<N> model;
+
+   TreeContext(NodeModel<N> model)
    {
-      NodeContext<N> context = new NodeContext<N>(this, model, data);
+      this.model = model;
+   }
+
+   public NodeContext<N> newContext(NodeData data)
+   {
+      NodeContext<N> context = new NodeContext<N>(this, data);
       nodes.put(context.getId(), context);
       return context;
    }

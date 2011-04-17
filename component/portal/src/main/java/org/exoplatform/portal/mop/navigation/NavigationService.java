@@ -62,33 +62,30 @@ public interface NavigationService
    boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationServiceException;
 
    /**
-    * Load a navigation node from a specified navigation. The returned node will be the root node of the navigation.
+    * Load a navigation node from a specified navigation. The returned context will be the root node of the navigation.
     *
     * @param model the node model
     * @param navigation the navigation
     * @param scope the scope
-    * @param <N> the node model generic type
     * @return the loaded node
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException if the loading operation could not be performed
     */
-   <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationServiceException;
+   <N> NodeContext<N> loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationServiceException;
 
    /**
     * Load a navigation node from a specified node. It will affect the node argument as well as all its descendants
     * when they are loaded according to the specified scope. The returned node is either the same node or null
     * if the node was skipped precisely.
     *
-    * @param model the node model
-    * @param node the node
+    * @param context the context to load
     * @param scope the scope
-    * @param <N> the node model generic type
-    * @return the loaded node
+    * @return the loaded node context
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException if the loading operation could not be performed
     */
-   <N> N loadNode(NodeModel<N> model, N node, Scope scope) throws NullPointerException, NavigationServiceException;
+   <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
 
-   <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException;
+   <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
 }

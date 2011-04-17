@@ -101,20 +101,19 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return changed;
    }
 
-   public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
    {
       return service.loadNode(model, navigation, scope);
    }
 
-   public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
    {
-      return service.loadNode(model, node, scope);
+      return service.loadNode(context, scope);
    }
 
-   public <N> void saveNode(NodeModel<N> model, N node) throws NavigationServiceException
+   public <N> void saveNode(NodeContext<N> context) throws NavigationServiceException
    {
-      service.saveNode(model, node);
-      NodeContext<N> context = model.getContext(node);
+      service.saveNode(context);
       org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION, context.data.id);
       Site site = nav.getSite();
       SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());

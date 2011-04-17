@@ -21,7 +21,11 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.tree.list.ListTree;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * The context of a node.
@@ -48,122 +52,30 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
    /** . */
    private int hiddenCount;
 
-   NodeContext(TreeContext<N> tree, NodeModel<N> model, NodeData data)
+   NodeContext(TreeContext<N> tree, NodeData data)
    {
       super(data.getName());
 
       //
       this.tree = tree;
-      this.node = model.create(this);
+      this.node = tree.model.create(this);
       this.data = data;
       this.state = data.getState();
       this.hidden = false;
       this.hiddenCount = 0;
    }
 
-   private NodeContext(TreeContext<N> tree, NodeModel<N> model, String name, NodeState state)
+   private NodeContext(TreeContext<N> tree, String name, NodeState state)
    {
       super(name);
 
       //
       this.tree = tree;
-      this.node = model.create(this);
+      this.node = tree.model.create(this);
       this.data = null;
       this.state = state;
       this.hidden = false;
       this.hiddenCount = 0;
-   }
-
-   private NodeContext<N> findChildById(String id)
-   {
-      NodeContext<N> found = null;
-      if (data != null && data.id.equals(id))
-      {
-         found = this;
-      }
-      else if (hasTrees())
-      {
-         for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
-         {
-            found = current.findChildById(id);
-            if (found != null)
-            {
-               break;
-            }
-         }
-      }
-      return found;
-   }
-
-   private NodeContext<N> findChildByPath(String path)
-   {
-      if (path.length() == 0 || path.charAt(0) != '/')
-      {
-         throw new IllegalArgumentException("Illegal path");
-      }
-      int prev = 1;
-      NodeContext<N> current = this;
-      while (true)
-      {
-         int next = path.indexOf('/', prev);
-         if (next == -1)
-         {
-            return current;
-         }
-         else if (hasTrees())
-         {
-            String name = path.substring(prev, next);
-            current = current.get(name);
-            if (current == null)
-            {
-               return null;
-            }
-            prev = next + 1;
-         }
-         else
-         {
-            return null;
-         }
-      }
-   }
-
-   public NodeContext<N> getDescendantByHandle(String handle)
-   {
-      if (handle.length() > 0 && handle.charAt(0) == '/')
-      {
-         return findChildByPath(handle);
-      }
-      else
-      {
-         return findChildById(handle);
-      }
-   }
-
-   public String getHandle()
-   {
-      return data != null ? data.id : path();
-   }
-
-   private String path()
-   {
-      StringBuilder sb = new StringBuilder();
-      path(sb);
-      return sb.toString();
-   }
-
-   private void path(StringBuilder sb)
-   {
-      NodeContext<N> parent = getParent();
-      if (parent != null)
-      {
-         parent.path(sb);
-         sb.append(getName());
-         sb.append('/');
-      }
-      else
-      {
-         sb.append('/');
-      }
    }
 
    public boolean isHidden()
@@ -421,26 +333,21 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
     * is null then the node is added at the last position among the children otherwise
     * the node is added at the specified index.
     *
-    * @param model the model
     * @param index the index
     * @param name the node name
     * @return the created node
     * @throws NullPointerException if the model or the name is null
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     */
-   public N addNode(NodeModel<N> model, Integer index, String name) throws NullPointerException, IndexOutOfBoundsException
+   public N addNode(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException
    {
-      if (model == null)
-      {
-         throw new NullPointerException();
-      }
       if (name == null)
       {
          throw new NullPointerException("No null name accepted");
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(tree, model, name, new NodeState.Builder().capture());
+      NodeContext<N> nodeContext = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
       addNode(index, nodeContext);
       return nodeContext.node;
@@ -451,25 +358,20 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
     * is null then the node is added at the last position among the children otherwise
     * the node is added at the specified index.
     *
-    * @param model the model
     * @param index the index
     * @param node the node to move
     * @throws NullPointerException if the model or the node is null
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     */
-   public void addNode(NodeModel<N> model, Integer index, N node) throws NullPointerException, IndexOutOfBoundsException
+   public void addNode(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException
    {
-      if (model == null)
-      {
-         throw new NullPointerException();
-      }
       if (node == null)
       {
          throw new NullPointerException("No null node argument accepted");
       }
 
       //
-      NodeContext<N> nodeContext = model.getContext(node);
+      NodeContext<N> nodeContext = tree.model.getContext(node);
 
       //
       addNode(index, nodeContext);
@@ -533,14 +435,8 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
    }
 
-   public boolean removeNode(NodeModel<N> model, String name)
+   public boolean removeNode(String name)
    {
-      if (model == null)
-      {
-         throw new NullPointerException();
-      }
-
-      //
       NodeContext<N> node = get(name);
       if (node.hidden)
       {
@@ -556,16 +452,6 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
          //
          return true;
       }
-   }
-
-   NodeContext<N> getRoot()
-   {
-      NodeContext<N> root = this;
-      while (root.getParent() != null)
-      {
-         root = root.getParent();
-      }
-      return root;
    }
 
    Iterable<NodeContext<N>> getContexts()

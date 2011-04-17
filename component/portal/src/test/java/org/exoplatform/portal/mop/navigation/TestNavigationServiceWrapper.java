@@ -30,7 +30,6 @@ import org.exoplatform.services.listener.ListenerService;
 import org.gatein.mop.api.workspace.ObjectType;
 
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -113,9 +112,9 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
 
       // Update
       Navigation navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
-      Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN);
+      Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getElement();
       root.setState(new NodeState.Builder(root.getState()).setLabel("foo").capture());
-      navigationService.saveNode(Node.MODEL, root);
+      navigationService.saveNode(root.context);
       assertEquals(0, createListener.events.size());
       assertEquals(1, updateListener.events.size());
       event = updateListener.events.removeFirst();

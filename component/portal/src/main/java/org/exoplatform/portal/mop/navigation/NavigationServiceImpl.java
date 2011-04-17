@@ -136,7 +136,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> N loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
    {
       if (model == null)
       {
@@ -158,8 +158,7 @@ public class NavigationServiceImpl implements NavigationService
          NodeData data = cache.getNodeData(session, nodeId);
          if (data != null)
          {
-            NodeContext<N> context = load(new TreeContext<N>(), model, session, data, visitor, 0);
-            return context.node;
+            return load(new TreeContext<N>(model), session, data, visitor, 0);
          }
          else
          {
@@ -174,7 +173,6 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> NodeContext<N> load(
       TreeContext<N> tree,
-      NodeModel<N> model,
       POMSession session,
       NodeData data,
       Scope.Visitor visitor,
@@ -192,7 +190,7 @@ public class NavigationServiceImpl implements NavigationService
             NodeData childData = cache.getNodeData(session, childId);
             if (childData != null)
             {
-               NodeContext<N> childContext = load(tree, model, session, childData, visitor, depth + 1);
+               NodeContext<N> childContext = load(tree, session, childData, visitor, depth + 1);
                children.add(childContext);
             }
             else
@@ -202,26 +200,25 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         context = tree.newContext(model, data);
+         context = tree.newContext(data);
          context.setContexts(children);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         context = tree.newContext(model, data);
+         context = tree.newContext(data);
       }
       else
       {
-         context = tree.newContext(model, data);
+         context = tree.newContext(data);
       }
 
       //
       return context;
    }
 
-   public <N> N loadNode(NodeModel<N> model, N node, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
    {
       POMSession session = manager.getSession();
-      NodeContext<N> context = model.getContext(node);
       Scope.Visitor visitor = scope.get();
 
       //
@@ -232,14 +229,13 @@ public class NavigationServiceImpl implements NavigationService
       if (data != null)
       {
          context.data = data;
-         visit(model, session, context, visitor, 0);
-         return context.node;
+         visit(session, context, visitor, 0);
+         return context;
       }
       return null;
    }
 
    private <N> void visit(
-      NodeModel<N> model,
       POMSession session,
       NodeContext<N> context,
       Scope.Visitor visitor,
@@ -286,11 +282,11 @@ public class NavigationServiceImpl implements NavigationService
                if (childContext != null)
                {
                   childContext.data = childData;
-                  visit(model, session, childContext, visitor, depth + 1);
+                  visit(session, childContext, visitor, depth + 1);
                }
                else
                {
-                  childContext = load(context.tree, model, session, childData, visitor, depth + 1);
+                  childContext = load(context.tree, session, childData, visitor, depth + 1);
                }
                children.add(childContext);
             }
@@ -317,12 +313,11 @@ public class NavigationServiceImpl implements NavigationService
    }
 
 
-   public <N> void saveNode(NodeModel<N> model, N node) throws NullPointerException, NavigationServiceException
+   public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
    {
 
 
       POMSession session = manager.getSession();
-      NodeContext<N> context = model.getContext(node);
       TreeContext<N> tree = context.tree;
 
       while (tree.hasChange())

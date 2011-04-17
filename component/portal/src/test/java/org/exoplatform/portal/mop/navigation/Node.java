@@ -104,27 +104,27 @@ public class Node
 
    public void addChild(Node child)
    {
-      context.addNode(MODEL, null, child);
+      context.addNode(null, child);
    }
 
    public void addChild(int index, Node child)
    {
-      context.addNode(MODEL, index, child);
+      context.addNode(index, child);
    }
 
    public Node addChild(String childName)
    {
-      return context.addNode(MODEL, null, childName);
+      return context.addNode(null, childName);
    }
 
    public Node addChild(int index, String childName)
    {
-      return context.addNode(MODEL, index, childName);
+      return context.addNode(index, childName);
    }
 
    public boolean removeChild(String childName)
    {
-      return context.removeNode(MODEL, childName);
+      return context.removeNode(childName);
    }
 
    public int getNodeCount()
