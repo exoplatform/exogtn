@@ -58,7 +58,7 @@ public abstract class ListTree<T extends ListTree<T, E>, E>
    {
       if (name == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null name is accepted");
       }
 
       //

@@ -416,11 +416,26 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       }
    }
 
-   public N addNode(NodeModel<N> model, Integer index, String name)
+   /**
+    * Add a child node at the specified index with the specified name. If the index argument
+    * is null then the node is added at the last position among the children otherwise
+    * the node is added at the specified index.
+    *
+    * @param model the model
+    * @param index the index
+    * @param name the node name
+    * @return the created node
+    * @throws NullPointerException if the model or the name is null
+    */
+   public N addNode(NodeModel<N> model, Integer index, String name) throws NullPointerException
    {
       if (model == null)
       {
          throw new NullPointerException();
+      }
+      if (name == null)
+      {
+         throw new NullPointerException("No null name accepted");
       }
 
       //
@@ -430,15 +445,29 @@ public class NodeContext<N> extends ListTree<NodeContext<N>, N>
       return nodeContext.node;
    }
 
-   public void addNode(NodeModel<N> model, Integer index, N child)
+   /**
+    * Move a node as a child node of this node at the specified index. If the index argument
+    * is null then the node is added at the last position among the children otherwise
+    * the node is added at the specified index.
+    *
+    * @param model the model
+    * @param index the index
+    * @param node the node to move
+    * @throws NullPointerException if the model or the node is null
+    */
+   public void addNode(NodeModel<N> model, Integer index, N node) throws NullPointerException
    {
       if (model == null)
       {
          throw new NullPointerException();
       }
+      if (node == null)
+      {
+         throw new NullPointerException("No null node argument accepted");
+      }
 
       //
-      NodeContext<N> nodeContext = model.getContext(child);
+      NodeContext<N> nodeContext = model.getContext(node);
 
       //
       addNode(index, nodeContext);

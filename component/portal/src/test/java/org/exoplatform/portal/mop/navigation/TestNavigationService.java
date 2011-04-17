@@ -859,6 +859,16 @@ public class TestNavigationService extends AbstractPortalTest
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN);
       assertEquals(0, root.getNodeCount());
 
+      // Test what happens when null is added
+      try
+      {
+         root.addChild((String)null);
+         fail();
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+
       //
       Node foo = root.addChild("foo");
       assertNull(foo.getId());
@@ -957,6 +967,16 @@ public class TestNavigationService extends AbstractPortalTest
       Node juu = i.next();
       assertEquals("juu", juu.getName());
       assertFalse(i.hasNext());
+
+      //
+      try
+      {
+         root.addChild(1, (Node)null);
+         fail();
+      }
+      catch (NullPointerException expected)
+      {
+      }
 
       //
       root.addChild(1, juu);
