@@ -428,10 +428,7 @@ public class NavigationServiceImpl implements NavigationService
             }
 
             //
-            org.gatein.mop.api.workspace.Navigation parent = renamed.getParent();
-            int index = parent.getChildren().indexOf(renamed);
             renamed.setName(rename.name);
-            parent.getChildren().add(index, renamed);
          }
          else
          {

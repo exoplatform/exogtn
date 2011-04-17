@@ -109,11 +109,11 @@ public class ListTree<T extends ListTree<T>>
    {
       if (from == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null from name accepted");
       }
       if (to == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null to name accepted");
       }
       if (map == null)
       {

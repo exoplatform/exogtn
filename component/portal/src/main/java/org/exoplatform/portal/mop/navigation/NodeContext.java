@@ -147,12 +147,35 @@ public class NodeContext<N> extends ListTree<NodeContext<N>>
       return node;
    }
 
+   /**
+    * Reutrns the context id or null if the context is not associated with a persistent navigation node.
+    *
+    * @return the id
+    */
    public String getId()
    {
       return data != null ? data.getId() : null;
    }
 
-   public void setName(String name)
+   public int getIndex()
+   {
+      int count = 0;
+      for (NodeContext<N> current = getPrevious();current != null;current = current.getPrevious())
+      {
+         count++;
+      }
+      return count;
+   }
+
+   /**
+    * Rename this context.
+    *
+    * @param name the new name
+    * @throws NullPointerException if the name is null
+    * @throws IllegalStateException if the parent is null
+    * @throws IllegalArgumentException if the parent already have a child with the specified name
+    */
+   public void setName(String name) throws NullPointerException, IllegalStateException, IllegalArgumentException
    {
       NodeContext<N> parent = getParent();
       if (parent == null)

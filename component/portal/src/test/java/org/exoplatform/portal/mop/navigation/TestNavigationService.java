@@ -963,6 +963,64 @@ public class TestNavigationService extends AbstractPortalTest
       assertNull(foo);
    }
 
+   public void testRename() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename");
+      org.gatein.mop.api.workspace.Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+      def.addChild("b");
+      end(true);
+
+      //
+      begin();
+      Navigation nav = service.loadNavigation(SiteKey.portal("rename"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      try
+      {
+         root.setName("something");
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+      }
+
+      //
+      Node a = root.getChild("a");
+      assertEquals(0, a.context.getIndex());
+      try
+      {
+         a.setName(null);
+         fail();
+      }
+      catch (NullPointerException e)
+      {
+      }
+      try
+      {
+         a.setName("b");
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      //
+      a.setName("c");
+      assertEquals("c", a.getName());
+      assertEquals(0, a.context.getIndex());
+      service.saveNode(a.context);
+      end(true);
+
+      //
+      begin();
+      nav = service.loadNavigation(SiteKey.portal("rename"));
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node c = root.getChild("c");
+      assertNotNull(c);
+      assertEquals(0, c.context.getIndex());
+   }
+
    public void testReorderChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
