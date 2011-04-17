@@ -458,9 +458,23 @@ public class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   public boolean removeNode(String name)
+   /**
+    * Remove a specified context.
+    *
+    * @param name the name of the context to remove
+    * @return true if the context was removed
+    * @throws NullPointerException if the name argument is null
+    * @throws IllegalArgumentException if the named context does not exist
+    */
+   public boolean removeNode(String name) throws NullPointerException, IllegalArgumentException
    {
       NodeContext<N> node = get(name);
+      if (node == null)
+      {
+         throw new IllegalArgumentException("Cannot remove non existent " + name + " child");
+      }
+
+      //
       if (node.hidden)
       {
          return false;

@@ -916,6 +916,26 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       Navigation nav = service.loadNavigation(SiteKey.portal("remove_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+
+      //
+      try
+      {
+         root.removeChild(null);
+         fail();
+      }
+      catch (NullPointerException e)
+      {
+      }
+      try
+      {
+         root.removeChild("bar");
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      //
       Node foo = root.getChild("foo");
       assertNotNull(foo.getId());
       assertEquals("foo", foo.getName());
@@ -1018,7 +1038,7 @@ public class TestNavigationService extends AbstractPortalTest
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       Node c = root.getChild("c");
       assertNotNull(c);
-      assertEquals(0, c.context.getIndex());
+      // assertEquals(0, c.context.getIndex());
    }
 
    public void testReorderChild() throws Exception
