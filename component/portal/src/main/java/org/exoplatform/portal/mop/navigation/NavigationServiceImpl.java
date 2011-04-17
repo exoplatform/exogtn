@@ -349,9 +349,9 @@ public class NavigationServiceImpl implements NavigationService
             {
                added = parent.addChild(add.name);
                int index = 0;
-               if (add.predecessor != null)
+               if (add.previous != null)
                {
-                  org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, add.predecessor.data.id);
+                  org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, add.previous.data.id);
                   index = parent.getChildren().indexOf(predecessor) + 1;
                }
                parent.getChildren().add(index, added);
@@ -406,9 +406,9 @@ public class NavigationServiceImpl implements NavigationService
 
             //
             int index = 0;
-            if (move.predecessor != null)
+            if (move.previous != null)
             {
-               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, move.predecessor.data.id);
+               org.gatein.mop.api.workspace.Navigation predecessor = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
                index = dst.getChildren().indexOf(predecessor) + 1;
             }
             dst.getChildren().add(index, moved);

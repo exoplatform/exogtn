@@ -50,16 +50,16 @@ class Change
       final NodeContext<?> dst;
 
       /** . */
-      final NodeContext<?> predecessor;
+      final NodeContext<?> previous;
 
       /** . */
       final NodeContext<?> node;
 
-      Move(NodeContext<?> src, NodeContext<?> dst, NodeContext<?> predecessor, NodeContext<?> node)
+      Move(NodeContext<?> src, NodeContext<?> dst, NodeContext<?> previous, NodeContext<?> node)
       {
          this.src = src;
          this.dst = dst;
-         this.predecessor = predecessor;
+         this.previous = previous;
          this.node = node;
       }
    }
@@ -87,7 +87,7 @@ class Change
       final NodeContext<?> parent;
 
       /** . */
-      final NodeContext<?> predecessor;
+      final NodeContext<?> previous;
 
       /** . */
       final NodeContext<?> node;
@@ -95,10 +95,10 @@ class Change
       /** . */
       final String name;
 
-      Add(NodeContext<?> parent, NodeContext<?> predecessor, NodeContext<?> node, String name)
+      Add(NodeContext<?> parent, NodeContext<?> previous, NodeContext<?> node, String name)
       {
          this.parent = parent;
-         this.predecessor = predecessor;
+         this.previous = previous;
          this.node = node;
          this.name = name;
       }
