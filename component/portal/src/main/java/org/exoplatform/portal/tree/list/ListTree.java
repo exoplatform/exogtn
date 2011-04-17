@@ -27,6 +27,17 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
+ * <p>A tree structure where the children in which each child has a name and an index. The name
+ * and index are unique for a given tree node. A node maintains a map of its children keyed by their names.</p>
+ *
+ * <p>The children of a node is a linked list and can be iterated with an iterator
+ * or thanks to the {@link #getFirst()}, {@link #getLast()}, {@link #getNext()} and {@link #getPrevious()}
+ * methods.</p>
+ *
+ * <p>Accessing a child by its name is done in constant time because of the map maintained by the
+ * the parent. Accessing a child by its index is not provided as it would be done in a linear time, instead
+ * the relevant method to navigate the child list are provided.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -341,7 +352,7 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   public void remove()
+   public final void remove()
    {
       if (previous == null)
       {
@@ -474,7 +485,7 @@ public class ListTree<T extends ListTree<T>>
       };
    }
 
-   protected final Iterable<T> getTrees()
+   public final Iterable<T> getTrees()
    {
       if (map != null)
       {
@@ -492,7 +503,7 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   protected final void setTrees(Iterable<T> children)
+   public final void setTrees(Iterable<T> children)
    {
       if (children == null)
       {
