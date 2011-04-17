@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 /**
  * The context of a node.
  */
-public class NodeContext<N> extends ListTree<NodeContext<N>>
+public final class NodeContext<N> extends ListTree<NodeContext<N>>
 {
 
 
