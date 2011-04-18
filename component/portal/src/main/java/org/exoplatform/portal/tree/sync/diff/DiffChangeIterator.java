@@ -88,16 +88,10 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
       private final Frame parent;
 
       /** . */
-      private N1 node1;
+      private final N1 srcRoot;
 
       /** . */
-      private N2 node2;
-
-      /** . */
-      private Iterator<H> it1;
-
-      /** . */
-      private Iterator<H> it2;
+      private final N2 dstRoot;
 
       /** . */
       private LCSChangeIterator<L1, L2, H> it;
@@ -109,44 +103,48 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
       private Status next;
 
       /** . */
-      private N1 source;
+      private Iterator<H> srcIt;
 
       /** . */
-      private N2 destination;
+      private Iterator<H> dstIt;
 
-      private Frame(Frame parent, N1 node1, N2 node2) {
+      /** . */
+      private N1 src;
+
+      /** . */
+      private N2 dst;
+
+      private Frame(Frame parent, N1 srcRoot, N2 dstRoot) {
          this.parent = parent;
-         this.node1 = node1;
-         this.node2 = node2;
+         this.srcRoot = srcRoot;
+         this.dstRoot = dstRoot;
          this.previous = Status.INIT;
       }
    }
-
-//   private static
 
    public boolean hasNext() {
       if (frame != null && frame.next == null) {
          while (true) {
 
             if (frame.previous == Status.INIT) {
-               H id2 = context2.getModel().getHandle(frame.node2);
-               if (frame.node1 == null)
+               H id2 = context2.getModel().getHandle(frame.dstRoot);
+               if (frame.srcRoot == null)
                {
                   frame.next = Status.ENTER;
-                  frame.source = null;
-                  frame.destination = frame.node2;
+                  frame.src = null;
+                  frame.dst = frame.dstRoot;
                }
                else
                {
-                  H id1 = context1.getModel().getHandle(frame.node1);
+                  H id1 = context1.getModel().getHandle(frame.srcRoot);
                   if (diff.comparator.compare(id1, id2) != 0) {
                      frame.next = Status.ERROR;
-                     frame.source = frame.node1;
-                     frame.destination = frame.node2;
+                     frame.src = frame.srcRoot;
+                     frame.dst = frame.dstRoot;
                   } else {
                      frame.next = Status.ENTER;
-                     frame.source = frame.node1;
-                     frame.destination = frame.node2;
+                     frame.src = frame.srcRoot;
+                     frame.dst = frame.dstRoot;
                   }
                }
                break;
@@ -161,17 +159,17 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                   break;
                }
             } else if (frame.previous == Status.MOVED_IN) {
-               frame = new Frame(frame, frame.source, frame.destination);
+               frame = new Frame(frame, frame.src, frame.dst);
                continue;
             } else if (frame.previous == Status.ADDED) {
-               frame = new Frame(frame, frame.source, frame.destination);
+               frame = new Frame(frame, frame.src, frame.dst);
                continue;
             } else if (frame.previous == Status.ENTER) {
                ListAdapter<L1, H> adapter1;
                L1 children1;
-               if (frame.source != null)
+               if (frame.src != null)
                {
-                  children1 = context1.getModel().getChildren(frame.node1);
+                  children1 = context1.getModel().getChildren(frame.srcRoot);
                   adapter1 = diff.adapter1;
                }
                else
@@ -186,9 +184,9 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                      }
                   };
                }
-               L2 children2 = context2.getModel().getChildren(frame.node2);
-               frame.it1 = adapter1.iterator(children1, false);
-               frame.it2 = diff.adapter2.iterator(children2, false);
+               L2 children2 = context2.getModel().getChildren(frame.dstRoot);
+               frame.srcIt = adapter1.iterator(children1, false);
+               frame.dstIt = diff.adapter2.iterator(children2, false);
                frame.it = LCS.create(
                      adapter1,
                      diff.adapter2,
@@ -201,40 +199,40 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
             if (frame.it.hasNext()) {
                switch (frame.it.next()) {
                   case KEEP:
-                     N1 next1 = context1.findByHandle(frame.it1.next());
-                     N2 next2 = context2.findByHandle(frame.it2.next());
+                     N1 next1 = context1.findByHandle(frame.srcIt.next());
+                     N2 next2 = context2.findByHandle(frame.dstIt.next());
                      frame = new Frame(frame, next1, next2);
-                     return hasNext();
+                     continue;
                   case ADD:
-                     frame.it2.next();
+                     frame.dstIt.next();
                      H addedHandle = frame.it.getElement();
                      N2 added = context2.findByHandle(addedHandle);
                      H addedId = context2.getModel().getHandle(added);
                      N1 a = context1.findByHandle(addedId);
                      if (a != null) {
                         frame.next = Status.MOVED_IN;
-                        frame.source = a;
-                        frame.destination = added;
+                        frame.src = a;
+                        frame.dst = added;
                      } else {
                         frame.next = Status.ADDED;
-                        frame.source = null;
-                        frame.destination = added;
+                        frame.src = null;
+                        frame.dst = added;
                      }
                      break;
                   case REMOVE:
-                     frame.it1.next();
+                     frame.srcIt.next();
                      H removedHandle = frame.it.getElement();
                      N1 removed = context1.findByHandle(removedHandle);
                      H removedId = context1.getModel().getHandle(removed);
                      N2 b = context2.findByHandle(removedId);
                      if (b != null) {
                         frame.next = Status.MOVED_OUT;
-                        frame.source = removed;
-                        frame.destination = b;
+                        frame.src = removed;
+                        frame.dst = b;
                      } else {
                         frame.next = Status.REMOVED;
-                        frame.source = removed;
-                        frame.destination = null;
+                        frame.src = removed;
+                        frame.dst = null;
                      }
                      break;
                   default:
@@ -242,8 +240,8 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                }
             } else {
                frame.next = Status.LEAVE;
-               frame.source = frame.node1;
-               frame.destination = frame.node2;
+               frame.src = frame.srcRoot;
+               frame.dst = frame.dstRoot;
             }
 
             //
@@ -264,11 +262,11 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
    }
 
    public N1 getSource() {
-      return frame.source;
+      return frame.src;
    }
 
    public N2 getDestination() {
-      return frame.destination;
+      return frame.dst;
    }
 
    public void remove() {
