@@ -30,7 +30,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.webui.util.Util;
@@ -112,7 +112,7 @@ public class UIAddGroupNavigation extends UIContainer
       List<String> groupsHavingNavigation = new ArrayList<String>();
       for(String groupName : listGroup)
       {
-         Navigation navigation = navigationService.loadNavigation(SiteKey.group(groupName));
+         NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(groupName));
          if(navigation != null && navigation.getState() != null)
          {
             groupsHavingNavigation.add(groupName);
@@ -139,7 +139,7 @@ public class UIAddGroupNavigation extends UIContainer
 
          // ensure this navigation does not exist
          NavigationService navigationService = uicomp.getApplicationComponent(NavigationService.class);
-         Navigation navigation = navigationService.loadNavigation(SiteKey.group(ownerId));
+         NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(ownerId));
          if (navigation != null && navigation.getState() != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",

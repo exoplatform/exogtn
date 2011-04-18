@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
@@ -58,7 +59,7 @@ class CacheById extends Cache implements Invalidator
    private InvalidationManager invalidationManager;
 
    /** . */
-   private Map<SiteKey, Navigation> navigationKeyCache;
+   private Map<SiteKey, NavigationContext> navigationKeyCache;
 
    /** . */
    private Map<String, SiteKey> navigationPathCache;
@@ -76,7 +77,7 @@ class CacheById extends Cache implements Invalidator
    {
       this.nodeIdCache = new ConcurrentHashMap<String, NodeData>(1000);
       this.nodePathCache = new ConcurrentHashMap<String, String>(1000);
-      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, Navigation>(1000);
+      this.navigationKeyCache = new ConcurrentHashMap<SiteKey, NavigationContext>(1000);
       this.navigationPathCache = new ConcurrentHashMap<String, SiteKey>(1000);
    }
 
@@ -85,7 +86,7 @@ class CacheById extends Cache implements Invalidator
       NodeData data;
       if (session.isModified())
       {
-         org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
          if (navigation != null)
          {
             data = new NodeData(navigation);
@@ -100,7 +101,7 @@ class CacheById extends Cache implements Invalidator
          data = nodeIdCache.get(nodeId);
          if (data == null)
          {
-            org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
             if (navigation != null)
             {
                data = new NodeData(navigation);
@@ -112,7 +113,7 @@ class CacheById extends Cache implements Invalidator
       return data;
    }
 
-   Navigation getNavigation(POMSession session, SiteKey key)
+   NavigationContext getNavigation(POMSession session, SiteKey key)
    {
       if (key == null)
       {
@@ -120,7 +121,7 @@ class CacheById extends Cache implements Invalidator
       }
 
       //
-      Navigation data;
+      NavigationContext data;
       if (session.isModified())
       {
          data = findNavigation(session, key);
@@ -143,26 +144,26 @@ class CacheById extends Cache implements Invalidator
       return data;
    }
 
-   private Navigation findNavigation(POMSession session, SiteKey key)
+   private NavigationContext findNavigation(POMSession session, SiteKey key)
    {
       Workspace workspace = session.getWorkspace();
       ObjectType<Site> objectType = objectType(key.getType());
       Site site = workspace.getSite(objectType, key.getName());
       if (site != null)
       {
-         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
-         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+         Navigation root = site.getRootNavigation();
+         Navigation rootNode = root.getChild("default");
          String path = session.pathOf(site);
          if (rootNode != null)
          {
 
             Integer priority = rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
             String rootId = rootNode.getObjectId();
-            return new Navigation(path, key, new NavigationState(priority), rootId);
+            return new NavigationContext(path, key, new NavigationState(priority), rootId);
          }
          else
          {
-            return new Navigation(path, key, null, null);
+            return new NavigationContext(path, key, null, null);
          }
       }
       else

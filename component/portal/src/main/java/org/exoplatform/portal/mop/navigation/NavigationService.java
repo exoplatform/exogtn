@@ -46,7 +46,7 @@ public interface NavigationService
     * @throws NullPointerException if the key is null
     * @throws NavigationServiceException if the navigation could not be loaded
     */
-   Navigation loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
+   NavigationContext loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
 
    /**
     * Create, update or destroy a navigation. When the navigation state is not null, the navigation
@@ -71,7 +71,7 @@ public interface NavigationService
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException if the loading operation could not be performed
     */
-   <N> NodeContext<N> loadNode(NodeModel<N> model, Navigation navigation, Scope scope) throws NullPointerException, NavigationServiceException;
+   <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope) throws NullPointerException, NavigationServiceException;
 
    /**
     * Load a navigation node from a specified node. It will affect the node argument as well as all its descendants

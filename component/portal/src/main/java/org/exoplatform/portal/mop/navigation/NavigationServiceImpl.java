@@ -32,6 +32,7 @@ import static org.exoplatform.portal.mop.navigation.Utils.*;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
+import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
@@ -81,7 +82,7 @@ public class NavigationServiceImpl implements NavigationService
       cache.stop();
    }
 
-   public Navigation loadNavigation(SiteKey key)
+   public NavigationContext loadNavigation(SiteKey key)
    {
       if (key == null)
       {
@@ -113,8 +114,8 @@ public class NavigationServiceImpl implements NavigationService
       //
       if (state != null)
       {
-         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
-         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+         Navigation root = site.getRootNavigation();
+         Navigation rootNode = root.getChild("default");
          boolean created = rootNode == null;
          if (created)
          {
@@ -125,8 +126,8 @@ public class NavigationServiceImpl implements NavigationService
       }
       else
       {
-         org.gatein.mop.api.workspace.Navigation root = site.getRootNavigation();
-         org.gatein.mop.api.workspace.Navigation rootNode = root.getChild("default");
+         Navigation root = site.getRootNavigation();
+         Navigation rootNode = root.getChild("default");
          boolean destroyed = rootNode != null;
          if (destroyed)
          {
@@ -136,7 +137,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, Navigation navigation, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)
    {
       if (model == null)
       {
@@ -328,14 +329,14 @@ public class NavigationServiceImpl implements NavigationService
             Change.Add add = (Change.Add)change;
 
             //
-            org.gatein.mop.api.workspace.Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
+            Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
             if (parent == null)
             {
                throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
             }
 
             //
-            org.gatein.mop.api.workspace.Navigation added = parent.getChild(add.name);
+            Navigation added = parent.getChild(add.name);
             if (added != null)
             {
                throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
@@ -346,7 +347,7 @@ public class NavigationServiceImpl implements NavigationService
                int index = 0;
                if (add.previous != null)
                {
-                  org.gatein.mop.api.workspace.Navigation previous = session.findObjectById(ObjectType.NAVIGATION, add.previous.data.id);
+                  Navigation previous = session.findObjectById(ObjectType.NAVIGATION, add.previous.data.id);
                   if (previous == null)
                   {
                      throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
@@ -361,10 +362,10 @@ public class NavigationServiceImpl implements NavigationService
          else if (change instanceof Change.Remove)
          {
             Change.Remove remove = (Change.Remove)change;
-            org.gatein.mop.api.workspace.Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
+            Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
             if (removed != null)
             {
-               org.gatein.mop.api.workspace.Navigation parent = removed.getParent();
+               Navigation parent = removed.getParent();
                removed.destroy();
                remove.node.data = null;
                remove.parent.data = new NodeData(parent);
@@ -377,21 +378,21 @@ public class NavigationServiceImpl implements NavigationService
          else if (change instanceof Change.Move)
          {
             Change.Move move = (Change.Move)change;
-            org.gatein.mop.api.workspace.Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
+            Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
             if (src == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
             }
 
             //
-            org.gatein.mop.api.workspace.Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
+            Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
             if (dst == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
             }
 
             //
-            org.gatein.mop.api.workspace.Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
+            Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
             if (moved == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
@@ -407,7 +408,7 @@ public class NavigationServiceImpl implements NavigationService
             int index = 0;
             if (move.previous != null)
             {
-               org.gatein.mop.api.workspace.Navigation previous = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
+               Navigation previous = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
                if (previous == null)
                {
                   throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
@@ -421,7 +422,7 @@ public class NavigationServiceImpl implements NavigationService
          else if (change instanceof Change.Rename)
          {
             Change.Rename rename = (Change.Rename)change;
-            org.gatein.mop.api.workspace.Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
+            Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
             if (renamed == null)
             {
                throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
@@ -442,7 +443,7 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationServiceException
    {
-      org.gatein.mop.api.workspace.Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
+      Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
 
       //
       if (navigation == null)

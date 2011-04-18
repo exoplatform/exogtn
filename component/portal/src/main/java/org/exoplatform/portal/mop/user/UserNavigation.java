@@ -20,7 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
@@ -39,7 +39,7 @@ public class UserNavigation
    final UserPortalImpl portal;
 
    /** . */
-   final Navigation navigation;
+   final NavigationContext navigation;
 
    /** . */
    private final boolean modifiable;
@@ -68,7 +68,7 @@ public class UserNavigation
       }
    };
 
-   UserNavigation(UserPortalImpl portal, Navigation navigation, boolean modifiable)
+   UserNavigation(UserPortalImpl portal, NavigationContext navigation, boolean modifiable)
    {
       if (navigation == null)
       {

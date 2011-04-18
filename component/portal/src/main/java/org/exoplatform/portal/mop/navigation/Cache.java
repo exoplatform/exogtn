@@ -32,7 +32,7 @@ abstract class Cache
 
    abstract NodeData getNodeData(POMSession session, String nodeId);
 
-   abstract Navigation getNavigation(POMSession session, SiteKey key);
+   abstract NavigationContext getNavigation(POMSession session, SiteKey key);
 
    abstract void start(Session session) throws Exception;
 

@@ -25,7 +25,7 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Navigation
+public class NavigationContext
 {
 
    /** . */
@@ -40,7 +40,7 @@ public class Navigation
    /** . */
    final String rootId;
 
-   Navigation(String path, SiteKey key, NavigationState state, String rootId)
+   NavigationContext(String path, SiteKey key, NavigationState state, String rootId)
    {
       if (path == null)
       {

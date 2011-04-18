@@ -24,7 +24,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.Navigation;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
@@ -120,7 +120,7 @@ public class UserPortalImpl implements UserPortal
       if (navigations == null)
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
-         Navigation portalNav = navigationService.loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
+         NavigationContext portalNav = navigationService.loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
          navigations.add(new UserNavigation(
             this,
             portalNav,
@@ -130,7 +130,7 @@ public class UserPortalImpl implements UserPortal
          if (userName != null)
          {
             // Add user nav if any
-            Navigation userNavigation = navigationService.loadNavigation(SiteKey.user(userName));
+            NavigationContext userNavigation = navigationService.loadNavigation(SiteKey.user(userName));
             if (userNavigation != null && userNavigation.getState() != null)
             {
                navigations.add(new UserNavigation(this, userNavigation, true));
@@ -152,7 +152,7 @@ public class UserPortalImpl implements UserPortal
                String groupId = m.getId().trim();
                if (!groupId.equals(acl.getGuestsGroup()))
                {
-                  Navigation groupNavigation = navigationService.loadNavigation(SiteKey.group(groupId));
+                  NavigationContext groupNavigation = navigationService.loadNavigation(SiteKey.group(groupId));
                   if (groupNavigation != null && groupNavigation.getState() != null)
                   {
                      navigations.add(new UserNavigation(
@@ -263,7 +263,7 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation userNavigation : getNavigations())
       {
-         Navigation navigation = userNavigation.navigation;
+         NavigationContext navigation = userNavigation.navigation;
          if (navigation.getState() != null)
          {
             UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN).getNode();
