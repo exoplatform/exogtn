@@ -19,16 +19,16 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 /**
+ * The context of a tree.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 class TreeContext<N>
 {
-
-   /** . */
-   private Map<String, NodeContext<N>> nodes = new HashMap<String, NodeContext<N>>();
 
    /** . */
    private LinkedList<Change> changes;
@@ -41,18 +41,6 @@ class TreeContext<N>
       this.model = model;
    }
 
-   public NodeContext<N> newContext(NodeData data)
-   {
-      NodeContext<N> context = new NodeContext<N>(this, data);
-      nodes.put(context.getId(), context);
-      return context;
-   }
-
-   public String getId(NodeData node)
-   {
-      return node.id;
-   }
-
    void addChange(Change change)
    {
       if (changes == null)
@@ -62,7 +50,7 @@ class TreeContext<N>
       changes.addLast(change);
    }
 
-   boolean hasChange()
+   boolean hasChanges()
    {
       return changes != null && changes.size() > 0;
    }

@@ -200,16 +200,16 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          //
-         context = tree.newContext(data);
+         context = new NodeContext<N>(tree, data);
          context.setContexts(children);
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         context = tree.newContext(data);
+         context = new NodeContext<N>(tree, data);
       }
       else
       {
-         context = tree.newContext(data);
+         context = new NodeContext<N>(tree, data);
       }
 
       //
@@ -320,7 +320,7 @@ public class NavigationServiceImpl implements NavigationService
       POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
 
-      while (tree.hasChange())
+      while (tree.hasChanges())
       {
          Change change = tree.nextChange();
          if (change instanceof Change.Add)
