@@ -88,4 +88,6 @@ public interface NavigationService
 
    <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
+   <N> void updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
+
 }

@@ -120,6 +120,11 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       notify(EventType.NAVIGATION_UPDATED, key);
    }
 
+   public <N> void updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
+   {
+      service.updateNode(context);
+   }
+
    private void notify(String name, SiteKey key)
    {
       try

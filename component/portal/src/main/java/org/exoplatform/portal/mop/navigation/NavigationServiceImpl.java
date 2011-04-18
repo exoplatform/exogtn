@@ -29,6 +29,11 @@ import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
+import org.exoplatform.portal.tree.sync.ListAdapter;
+import org.exoplatform.portal.tree.sync.SyncModel;
+import org.exoplatform.portal.tree.sync.diff.Diff;
+import org.exoplatform.portal.tree.sync.diff.DiffChangeIterator;
+import org.exoplatform.portal.tree.sync.diff.DiffChangeType;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -313,6 +318,144 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
+   public <N> void updateNode(final NodeContext<N> root) throws NullPointerException, NavigationServiceException
+   {
+
+      final POMSession session = manager.getSession();
+      TreeContext<N> tree = root.tree;
+
+      if (tree.hasChanges())
+      {
+         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
+      }
+
+      ListAdapter<String[], String> a1 = new ListAdapter<String[], String>()
+      {
+         public int size(String[] list)
+         {
+            return list.length;
+         }
+         public Iterator<String> iterator(final String[] list, final boolean reverse)
+         {
+            return new Iterator<String>()
+            {
+               int count = 0;
+               public boolean hasNext()
+               {
+                  return count < list.length;
+               }
+               public String next()
+               {
+                  if (!hasNext())
+                  {
+                     throw new NoSuchElementException();
+                  }
+                  int index = count++;
+                  if (reverse)
+                  {
+                     index = list.length - index - 1;
+                  }
+                  return list[index];
+               }
+               public void remove()
+               {
+                  throw new UnsupportedOperationException();
+               }
+            };
+         }
+      };
+
+      //
+      class M1 implements SyncModel<String[], NodeContext<N>, String>
+      {
+         public String getHandle(NodeContext<N> node)
+         {
+            return node.data.id;
+         }
+         public String[] getChildren(NodeContext<N> node)
+         {
+            return node.hasTrees() ? node.data.children : new String[0];
+         }
+         public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
+         {
+            return root.getDescendant(handle);
+         }
+      }
+
+      //
+      class M2 implements SyncModel<String[], NodeData, String>
+      {
+         public String getHandle(NodeData node)
+         {
+            return node.id;
+         }
+         public String[] getChildren(NodeData node)
+         {
+            NodeContext<N> context = root.getDescendant(node.getId());
+            return context != null && context.hasTrees() ? node.children : new String[0];
+         }
+         public NodeData getDescendant(NodeData node, String handle)
+         {
+            return cache.getNodeData(session, handle);
+         }
+      }
+
+      //
+      Diff<String[], NodeContext<N>, String[], NodeData, String> a =
+         new Diff<String[], NodeContext<N>, String[], NodeData, String>(
+            a1,
+            new M1(),
+            a1,
+            new M2(),
+            new Comparator<String>()
+            {
+               public int compare(String s1, String s2)
+               {
+                  return s1.compareTo(s2);
+               }
+            }
+         );
+
+      //
+      NodeData dataRoot = cache.getNodeData(session, root.data.id);
+
+      //
+      DiffChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = a.perform(root, dataRoot);
+
+      LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
+      NodeContext<N> last = null;
+
+      while (it.hasNext())
+      {
+         DiffChangeType change = it.next();
+         switch (change)
+         {
+            case ENTER:
+               stack.addLast(it.getSource());
+               break;
+            case LEAVE:
+               last = stack.removeLast();
+               break;
+            case ADDED:
+               NodeContext<N> parent = stack.getLast();
+               NodeContext<N> added = new NodeContext<N>(parent.tree, it.getDestination());
+               if (last == null || last.getParent() != parent)
+               {
+                  parent.insertAt(0, added);
+               }
+               else
+               {
+                  last.insertAfter(added);
+               }
+               break;
+            case REMOVED:
+               it.getSource().remove();
+               break;
+            default:
+               throw new UnsupportedOperationException("todo : " + change);
+         }
+      }
+   }
 
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
    {
