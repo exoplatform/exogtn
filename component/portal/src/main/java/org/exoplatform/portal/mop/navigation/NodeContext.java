@@ -280,8 +280,18 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   public void setState(NodeState state)
+   /**
+    * Update the context state
+    *
+    * @param state the new state
+    * @throws NullPointerException if the state is null
+    */
+   public void setState(NodeState state) throws NullPointerException
    {
+      if (state == null)
+      {
+         throw new NullPointerException("No null state accepted");
+      }
       this.state = state;
    }
 

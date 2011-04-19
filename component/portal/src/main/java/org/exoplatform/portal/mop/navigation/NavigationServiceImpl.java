@@ -586,18 +586,21 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationServiceException
    {
-      Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
+      NodeState state = context.state;
 
-      //
-      if (navigation == null)
+      // For now we just do a reference comparison but it would make sense
+      // to use an equals instead
+      if (state != context.data.state)
       {
-         throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
-      }
+         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
 
-      //
-      NodeState state = context.getState();
-      if (state != null)
-      {
+         //
+         if (navigation == null)
+         {
+            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+         }
+
+         //
          Workspace workspace = navigation.getSite().getWorkspace();
          String reference = state.getPageRef();
          if (reference != null)

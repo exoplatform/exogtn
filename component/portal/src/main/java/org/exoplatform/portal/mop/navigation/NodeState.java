@@ -262,4 +262,9 @@ public class NodeState
    {
       return pageRef;
    }
+
+   public Builder builder()
+   {
+      return new Builder(this);
+   }
 }
