@@ -24,6 +24,8 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Iterator;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -66,8 +68,9 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       begin();
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_add_second"));
-      NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
-      assertEquals(1, root1.getNodeSize());
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node a = root1.getChild("a");
+      assertEquals(1, root1.getSize());
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.addChild("b");
       service.saveNode(root2.context);
@@ -75,10 +78,15 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 
       //
       begin();
-      service.updateNode(root1);
-      assertEquals(2, root1.getNodeSize());
-      assertEquals("a", root1.getNode(0).getName());
-      assertEquals("b", root1.getNode(1).getName());
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      assertSame(root1, added.parent);
+      assertSame(root1.getChild("b"), added.node);
+      assertSame(a, added.previous);
+      assertFalse(changes.hasNext());
+      assertEquals(2, root1.getSize());
+      assertEquals("a", root1.getChild(0).getName());
+      assertEquals("b", root1.getChild(1).getName());
    }
 
    public void testRemove() throws Exception
@@ -93,6 +101,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_remove"));
       NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       assertEquals(1, root1.getNodeSize());
+      Node a = root1.getNode("a");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
@@ -100,9 +109,105 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 
       //
       begin();
-      service.updateNode(root1);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1);
+      NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>)changes.next();
+      assertSame(root1.node, removed.parent);
+      assertSame(a, removed.node);
+      assertFalse(changes.hasNext());
       assertEquals(0, root1.getNodeSize());
-//      assertEquals("a", root1.getNode(0).getName());
-//      assertEquals("b", root1.getNode(1).getName());
+   }
+
+   public void testMove() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_move");
+      portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
+      portal.getRootNavigation().getChild("default").addChild("c");
+      end(true);
+
+      //
+      begin();
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_move"));
+      NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      assertEquals(2, root1.getNodeSize());
+      Node a = root1.getNode("a");
+      Node b = a.getChild("b");
+      Node c = root1.getNode("c");
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
+      service.saveNode(root2.context);
+      end(true);
+
+      //
+      begin();
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1);
+      NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>)changes.next();
+      assertSame(a, moved.from);
+      assertSame(c, moved.to);
+      assertSame(b, moved.node);
+      assertSame(null, moved.previous);
+      assertFalse(changes.hasNext());
+      assertEquals(0, root1.getNode("a").getSize());
+      assertEquals(1, root1.getNode("c").getSize());
+   }
+
+   public void testComplex() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_complex");
+      portal.getRootNavigation().addChild("default");
+      end(true);
+
+      //
+      begin();
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_complex"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node a1 = root1.addChild("a");
+      a1.addChild("c");
+      a1.addChild("d");
+      a1.addChild("e");
+      Node b1 = root1.addChild("b");
+      b1.addChild("f");
+      b1.addChild("g");
+      b1.addChild("h");
+      service.saveNode(root1.context);
+      end(true);
+
+      //
+      begin();
+      root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      a1 = root1.getChild("a");
+      Node c1 = a1.getChild("c");
+      Node d1 = a1.getChild("d");
+      Node e1 = a1.getChild("e");
+      b1 = root1.getChild("b");
+      Node f1 = a1.getChild("f");
+      Node g1 = a1.getChild("g");
+      Node h1 = a1.getChild("h");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node a2 = root2.getChild("a");
+      a2.removeChild("e");
+      Node b2 = root2.getChild("b");
+      b2.addChild(2, a2.getChild("d"));
+      a2.addChild(1, "d");
+      b2.removeChild("g");
+      service.saveNode(root2.context);
+      end(true);
+
+      // a(c)
+      // b(f,
+
+      begin();
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      assertSame(a1, root1.getChild("a"));
+      assertSame(b1, root1.getChild("b"));
+      assertEquals(2, a1.getSize());
+      assertSame(c1, a1.getChild(0));
+//      assertEquals(3, b1.getSize());
+//      assertSame(f1, b1.getChild(0));
+
+
    }
 }

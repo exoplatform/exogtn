@@ -20,85 +20,92 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
+ * Describe a node change.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class Change
+public class NodeChange<N>
 {
-   static class Remove extends Change
+
+   private NodeChange()
+   {
+   }
+
+   public static class Removed<N> extends NodeChange<N>
    {
 
       /** . */
-      final NodeContext<?> parent;
+      final N parent;
 
       /** . */
-      final NodeContext<?> node;
+      final N node;
 
-      Remove(NodeContext<?> parent, NodeContext<?> node)
+      public Removed(N parent, N node)
       {
          this.parent = parent;
          this.node = node;
       }
    }
 
-   static class Move extends Change
+   public static class Added<N> extends NodeChange<N>
    {
 
       /** . */
-      final NodeContext<?> src;
+      final N parent;
 
       /** . */
-      final NodeContext<?> dst;
+      final N previous;
 
       /** . */
-      final NodeContext<?> previous;
-
-      /** . */
-      final NodeContext<?> node;
-
-      Move(NodeContext<?> src, NodeContext<?> dst, NodeContext<?> previous, NodeContext<?> node)
-      {
-         this.src = src;
-         this.dst = dst;
-         this.previous = previous;
-         this.node = node;
-      }
-   }
-
-   static class Rename extends Change
-   {
-
-      /** . */
-      final NodeContext<?> node;
+      final N node;
 
       /** . */
       final String name;
 
-      Rename(NodeContext<?> node, String name)
+      public Added(N parent, N previous, N node, String name)
       {
+         this.parent = parent;
+         this.previous = previous;
          this.node = node;
          this.name = name;
       }
    }
 
-   static class Add extends Change
+   public static class Moved<N> extends NodeChange<N>
+   {
+      
+      /** . */
+      final N from;
+
+      /** . */
+      final N to;
+
+      /** . */
+      final N previous;
+
+      /** . */
+      final N node;
+
+      public Moved(N from, N to, N previous, N node)
+      {
+         this.from = from;
+         this.to = to;
+         this.previous = previous;
+         this.node = node;
+      }
+   }
+
+   public static class Renamed<N> extends NodeChange<N>
    {
 
       /** . */
-      final NodeContext<?> parent;
-
-      /** . */
-      final NodeContext<?> previous;
-
-      /** . */
-      final NodeContext<?> node;
+      final N node;
 
       /** . */
       final String name;
 
-      Add(NodeContext<?> parent, NodeContext<?> previous, NodeContext<?> node, String name)
+      public Renamed(N node, String name)
       {
-         this.parent = parent;
-         this.previous = previous;
          this.node = node;
          this.name = name;
       }

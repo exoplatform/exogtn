@@ -155,6 +155,6 @@ public class Node
    @Override
    public String toString()
    {
-      return "Node[id=" + getId() + ",name" + context.getName() + "]";
+      return "Node[id=" + getId() + ",name=" + context.getName() + "]";
    }
 }

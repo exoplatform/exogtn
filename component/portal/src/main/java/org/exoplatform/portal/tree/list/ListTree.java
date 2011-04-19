@@ -243,13 +243,6 @@ public class ListTree<T extends ListTree<T>>
       }
 
       //
-      T existing = map.get(tree.name);
-      if (existing != null && existing != tree)
-      {
-         throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
-      }
-
-      //
       if (index != null)
       {
          T a = head;
@@ -294,10 +287,60 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
+   private void insertLast(T context)
+   {
+      if (tail == null)
+      {
+         insertFirst(context);
+      }
+      else
+      {
+         tail.insertAfter(context);
+      }
+   }
+
+   /**
+    * Insert the specified context at the first position among the children of this context.
+    *
+    * @param tree the content to insert
+    */
+   private void insertFirst(T tree)
+   {
+      T existing = map.get(tree.name);
+      if (existing != null && existing != tree)
+      {
+         throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
+      }
+      if (head == null)
+      {
+         if (tree.parent != null)
+         {
+            tree.remove();
+         }
+         head = tail = tree;
+         if (map == Collections.EMPTY_MAP)
+         {
+            map = new HashMap<String, T>();
+         }
+         map.put(tree.name, tree);
+         tree.parent = (T)this;
+         afterInsert(tree);
+      }
+      else
+      {
+         head.insertBefore(tree);
+      }
+   }
+
    public final void insertAfter(T tree)
    {
       if (this != tree)
       {
+         T existing = parent.map.get(tree.name);
+         if (existing != null && existing != tree)
+         {
+            throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
+         }
          if (tree.parent != null)
          {
             tree.remove();
@@ -327,6 +370,11 @@ public class ListTree<T extends ListTree<T>>
    {
       if (this != tree)
       {
+         T existing = parent.map.get(tree.name);
+         if (existing != null && existing != tree)
+         {
+            throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
+         }
          if (tree.parent != null)
          {
             tree.remove();
@@ -554,46 +602,6 @@ public class ListTree<T extends ListTree<T>>
     */
    protected void afterRemove(T tree)
    {
-   }
-
-   /**
-    * Insert the specified context at the first position among the children of this context.
-    *
-    * @param tree the content to insert
-    */
-   private void insertFirst(T tree)
-   {
-      if (head == null)
-      {
-         if (tree.parent != null)
-         {
-            tree.remove();
-         }
-         head = tail = tree;
-         if (map == Collections.EMPTY_MAP)
-         {
-            map = new HashMap<String, T>();
-         }
-         map.put(tree.name, tree);
-         tree.parent = (T)this;
-         afterInsert(tree);
-      }
-      else
-      {
-         head.insertBefore(tree);
-      }
-   }
-
-   private void insertLast(T context)
-   {
-      if (tail == null)
-      {
-         insertFirst(context);
-      }
-      else
-      {
-         tail.insertAfter(context);
-      }
    }
 
    public String toString()

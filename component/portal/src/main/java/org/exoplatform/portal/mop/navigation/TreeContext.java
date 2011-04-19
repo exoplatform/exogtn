@@ -31,7 +31,7 @@ class TreeContext<N>
 {
 
    /** . */
-   private LinkedList<Change> changes;
+   private LinkedList<NodeChange<NodeContext<N>>> changes;
 
    /** . */
    final NodeModel<N> model;
@@ -41,11 +41,11 @@ class TreeContext<N>
       this.model = model;
    }
 
-   void addChange(Change change)
+   void addChange(NodeChange<NodeContext<N>> change)
    {
       if (changes == null)
       {
-         changes = new LinkedList<Change>();
+         changes = new LinkedList<NodeChange<NodeContext<N>>>();
       }
       changes.addLast(change);
    }
@@ -55,7 +55,7 @@ class TreeContext<N>
       return changes != null && changes.size() > 0;
    }
 
-   public Change nextChange()
+   public NodeChange<NodeContext<N>> nextChange()
    {
       if (changes == null || changes.size() == 0)
       {

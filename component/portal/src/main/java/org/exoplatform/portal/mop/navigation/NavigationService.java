@@ -21,6 +21,8 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
 
+import java.util.Iterator;
+
 /**
  * <p>The navigation service takes care of managing the various portal navigations and their nodes.</p>
  *
@@ -88,6 +90,6 @@ public interface NavigationService
 
    <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
-   <N> void updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
+   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
 }

@@ -318,7 +318,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void updateNode(final NodeContext<N> root) throws NullPointerException, NavigationServiceException
+   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root) throws NullPointerException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
@@ -425,6 +425,14 @@ public class NavigationServiceImpl implements NavigationService
       LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
       NodeContext<N> last = null;
 
+      // Returns empty iterator if we can
+      if (!it.hasNext())
+      {
+         return Collections.<NodeChange<N>>emptyList().iterator();
+      }
+
+      LinkedList<NodeChange<N>> list = new LinkedList<NodeChange<N>>();
+
       while (it.hasNext())
       {
          DiffChangeType change = it.next();
@@ -436,25 +444,84 @@ public class NavigationServiceImpl implements NavigationService
             case LEAVE:
                last = stack.removeLast();
                break;
+            case MOVED_OUT:
+               break;
+            case MOVED_IN:
+            {
+               NodeContext<N> to = stack.getLast();
+               NodeContext<N> moved = it.getSource();
+               NodeContext<N> from = moved.getParent();
+               NodeContext<N> previous;
+               if (last == null || last.getParent() != to)
+               {
+                  previous = null;
+                  to.insertAt(0, moved);
+               }
+               else
+               {
+                  previous = last;
+                  last.insertAfter(moved);
+               }
+
+               //
+               list.addLast(new NodeChange.Moved<N>(
+                  from.getNode(),
+                  to.getNode(),
+                  previous != null ? previous.getNode() : null,
+                  moved.getNode()));
+
+               //
+               break;
+            }
             case ADDED:
+            {
                NodeContext<N> parent = stack.getLast();
                NodeContext<N> added = new NodeContext<N>(parent.tree, it.getDestination());
+               NodeContext<N> previous;
                if (last == null || last.getParent() != parent)
                {
+                  previous = null;
                   parent.insertAt(0, added);
                }
                else
                {
+                  previous = last;
                   last.insertAfter(added);
                }
+
+               //
+               list.addLast(new NodeChange.Added<N>(
+                  parent.getNode(),
+                  previous != null ? previous.getNode() : null,
+                  added.getNode(),
+                  added.getName()));
+
+               //
                break;
+            }
             case REMOVED:
-               it.getSource().remove();
+            {
+               NodeContext<N> removed = it.getSource();
+               NodeContext<N> parent = removed.getParent();
+
+               //
+               removed.remove();
+
+               //
+               list.addLast(new NodeChange.Removed<N>(
+                  parent.getNode(),
+                  removed.getNode()));
+
+               //
                break;
+            }
             default:
                throw new UnsupportedOperationException("todo : " + change);
          }
       }
+
+      //
+      return list.iterator();
    }
 
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
@@ -466,10 +533,10 @@ public class NavigationServiceImpl implements NavigationService
 
       while (tree.hasChanges())
       {
-         Change change = tree.nextChange();
-         if (change instanceof Change.Add)
+         NodeChange<NodeContext<N>> change = tree.nextChange();
+         if (change instanceof NodeChange.Added<?>)
          {
-            Change.Add add = (Change.Add)change;
+            NodeChange.Added<NodeContext<N>> add = (NodeChange.Added<NodeContext<N>>)change;
 
             //
             Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
@@ -502,9 +569,9 @@ public class NavigationServiceImpl implements NavigationService
                add.parent.data = new NodeData(parent);
             }
          }
-         else if (change instanceof Change.Remove)
+         else if (change instanceof NodeChange.Removed<?>)
          {
-            Change.Remove remove = (Change.Remove)change;
+            NodeChange.Removed<NodeContext<N>> remove = (NodeChange.Removed<NodeContext<N>>)change;
             Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
             if (removed != null)
             {
@@ -518,17 +585,17 @@ public class NavigationServiceImpl implements NavigationService
                // It was already removed concurrently
             }
          }
-         else if (change instanceof Change.Move)
+         else if (change instanceof NodeChange.Moved<?>)
          {
-            Change.Move move = (Change.Move)change;
-            Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.src.data.id);
+            NodeChange.Moved<NodeContext<N>> move = (NodeChange.Moved<NodeContext<N>>)change;
+            Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.from.data.id);
             if (src == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
             }
 
             //
-            Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.dst.data.id);
+            Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.to.data.id);
             if (dst == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
@@ -559,12 +626,12 @@ public class NavigationServiceImpl implements NavigationService
                index = dst.getChildren().indexOf(previous) + 1;
             }
             dst.getChildren().add(index, moved);
-            move.src.data = new NodeData(src);
-            move.dst.data = new NodeData(dst);
+            move.from.data = new NodeData(src);
+            move.to.data = new NodeData(dst);
          }
-         else if (change instanceof Change.Rename)
+         else if (change instanceof NodeChange.Renamed)
          {
-            Change.Rename rename = (Change.Rename)change;
+            NodeChange.Renamed<NodeContext<N>> rename = (NodeChange.Renamed<NodeContext<N>>)change;
             Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
             if (renamed == null)
             {
