@@ -42,7 +42,7 @@
          <groupId>org.gatein.tools</groupId>
          <artifactId>packager</artifactId>
          <type>zip</type>
-         <version>1.0.0-CR02</version>
+         <version>1.0.0-CR04</version>
       </dependency>
 
       <dependency>
@@ -109,7 +109,7 @@
 <dependency><groupId>org.gatein.pc</groupId><artifactId>pc-controller</artifactId><version>${org.gatein.pc.version}</version><type>jar</type></dependency><!-- 2.1.1-GA-->
 
 <!-- Tomcat PKG -->
-<dependency><groupId>javassist</groupId><artifactId>javassist</artifactId><version>${javassist.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
+<dependency><groupId>org.javassist</groupId><artifactId>javassist</artifactId><version>${javassist.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
 <dependency><groupId>antlr</groupId><artifactId>antlr</artifactId><version>${antlr.version}</version><type>jar</type></dependency><!-- 2.7.6rc1-->
 <dependency><groupId>cglib</groupId><artifactId>cglib</artifactId><version>${cglib.version}</version><type>jar</type></dependency><!-- 2.2-->
 <dependency><groupId>org.exoplatform.tool</groupId><artifactId>exo.tool.webunit</artifactId><version>${exo.tool.webunit.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
