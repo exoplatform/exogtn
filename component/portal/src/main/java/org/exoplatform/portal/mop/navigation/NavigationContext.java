@@ -77,9 +77,4 @@ public class NavigationContext
    {
       return state;
    }
-
-   String getRootId()
-   {
-      return rootId;
-   }
 }

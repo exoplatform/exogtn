@@ -138,7 +138,7 @@ public class TestNavigationService extends AbstractPortalTest
       NavigationContext nav = service.loadNavigation(key);
       assertNotNull(nav);
       assertEquals(key, nav.getKey());
-      assertNull(nav.getState());
+      assertNull(nav.state);
       end();
 
       //
@@ -150,9 +150,9 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       nav = service.loadNavigation(key);
       assertNotNull(nav);
-      assertEquals(1, (int)nav.getState().getPriority());
+      assertEquals(1, (int)nav.state.getPriority());
       assertEquals(key, nav.getKey());
-      assertNotNull(nav.getRootId());
+      assertNotNull(nav.rootId);
       end();
 
       //
@@ -165,7 +165,7 @@ public class TestNavigationService extends AbstractPortalTest
       nav = service.loadNavigation(key);
       assertNotNull(nav);
       assertEquals(key, nav.getKey());
-      assertNull(nav.getState());
+      assertNull(nav.state);
    }
 
    public void testNavigationInvalidationByPriority()
@@ -177,7 +177,7 @@ public class TestNavigationService extends AbstractPortalTest
       begin();
       SiteKey key = new SiteKey(SiteType.PORTAL, "invalidation_by_priority_change");
       NavigationContext nav = service.loadNavigation(key);
-      assertEquals(1, (int)nav.getState().getPriority());
+      assertEquals(1, (int)nav.state.getPriority());
       end();
 
       //
@@ -189,7 +189,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.loadNavigation(key);
-      assertEquals(2, (int)nav.getState().getPriority());
+      assertEquals(2, (int)nav.state.getPriority());
       end();
 
       //
@@ -201,7 +201,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.loadNavigation(key);
-      assertEquals(4, (int)nav.getState().getPriority());
+      assertEquals(4, (int)nav.state.getPriority());
       end();
 
       //
@@ -213,7 +213,7 @@ public class TestNavigationService extends AbstractPortalTest
       //
       begin();
       nav = service.loadNavigation(key);
-      assertEquals(1, (int)nav.getState().getPriority());
+      assertEquals(1, (int)nav.state.getPriority());
    }
 
    public void testSaveNavigation() throws Exception
@@ -230,14 +230,14 @@ public class TestNavigationService extends AbstractPortalTest
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-      assertNull(nav.getState());
-      assertNull(nav.getRootId());
+      assertNull(nav.state);
+      assertNull(nav.rootId);
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), new NavigationState(5)));
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNotNull(nav.getState());
-      assertEquals(5, nav.getState().getPriority().intValue());
+      assertNotNull(nav.state);
+      assertEquals(5, nav.state.getPriority().intValue());
       end(true);
       
       //
@@ -245,22 +245,22 @@ public class TestNavigationService extends AbstractPortalTest
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-      assertEquals(5, (int)nav.getState().getPriority());
-      assertNotNull(nav.getRootId());
+      assertEquals(5, (int)nav.state.getPriority());
+      assertNotNull(nav.rootId);
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), null));
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNull(nav.getState());
-      assertNull(nav.getRootId());
+      assertNull(nav.state);
+      assertNull(nav.rootId);
       end(true);
 
       //
       begin();
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
-      assertNull(nav.getState());
-      assertNull(nav.getRootId());
+      assertNull(nav.state);
+      assertNull(nav.rootId);
 
       //
       assertFalse(service.saveNavigation(nav.getKey(), null));
