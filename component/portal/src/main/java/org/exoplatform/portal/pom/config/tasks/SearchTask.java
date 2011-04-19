@@ -32,6 +32,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -126,24 +127,27 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
       public LazyPageList<PortalKey> run(final POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         final Collection<? extends Site> portals = workspace.getSites(ObjectType.PORTAL_SITE);
+         Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
+         final ArrayList<PortalKey> keys = new ArrayList<PortalKey>(sites.size());
+         for (Site site : sites)
+         {
+            keys.add(new PortalKey("portal", site.getName()));
+         }
          ListAccess<PortalKey> la = new ListAccess<PortalKey>()
          {
             public PortalKey[] load(int index, int length) throws Exception, IllegalArgumentException
             {
-               Iterator<? extends Site> iterator = portals.iterator();
                PortalKey[] result = new PortalKey[length];
                for (int i = 0; i < length; i++)
                {
-                  Site site = iterator.next();
-                  result[i] = new PortalKey("portal", site.getName());
+                  result[i] = keys.get(index++);
                }
                return result;
             }
 
             public int getSize() throws Exception
             {
-               return portals.size();
+               return keys.size();
             }
          };
          return new LazyPageList<PortalKey>(la, 10);
