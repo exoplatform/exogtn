@@ -54,10 +54,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_navigation");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
@@ -69,10 +70,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav.state);
       assertEquals(5, nav.state.getPriority().intValue());
-      end(true);
-      
+
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
@@ -84,10 +86,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNull(nav.state);
       assertNull(nav.rootId);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertNull(nav.state);
@@ -103,10 +106,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("pending_changes_bypass_cache"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       root.addChild("foo");
@@ -122,10 +126,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("add_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       assertEquals(0, root.getNodeCount());
@@ -165,10 +170,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertSame(foo, root.getChild("foo"));
       assertEquals(1, root.getNodeCount());
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       foo = root.getChild("foo");
       assertNotNull(foo);
@@ -181,10 +187,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child");
       portal.getRootNavigation().addChild("default").addChild("foo");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("remove_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
 
@@ -216,10 +223,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       foo = root.getChild("foo");
       assertNull(foo);
@@ -230,10 +238,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_transient_child");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("remove_transient_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       Node foo = root.addChild("foo");
@@ -245,10 +254,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertTrue(root.removeChild("foo"));
       assertNull(root.getChild("foo"));
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       foo = root.getChild("foo");
       assertNull(foo);
@@ -261,10 +271,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Navigation def = portal.getRootNavigation().addChild("default");
       def.addChild("a");
       def.addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("rename"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       try
@@ -301,10 +312,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals("c", a.getName());
       assertEquals(0, a.context.getIndex());
       service.saveNode(a.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("rename"));
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       Node c = root.getChild("c");
@@ -320,10 +332,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
       rootNavigation.addChild("juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("reorder_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       Iterator<Node> i = root.getChildren().iterator();
@@ -366,10 +379,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       root.addChild(1, juu);
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       i = root.getChildren().iterator();
       foo = i.next();
@@ -383,10 +397,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       root.addChild(0, bar);
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       i = root.getChildren().iterator();
       bar = i.next();
@@ -406,28 +421,31 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
       rootNavigation.addChild("juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("reorder_child_2"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       assertEquals("bar", root.getChild(1).getName());
       assertTrue(root.removeChild("bar"));
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       root.addChild("daa");
       Node tab3 = root.getChild(2);
       assertEquals("daa", tab3.getName());
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = new NavigationServiceImpl(mgr).loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       for (Node child : root.getChildren())
       {
@@ -453,24 +471,27 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
       rootNavigation.addChild("juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       rootNavigation.getChild("bar").destroy();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       rootNavigation.addChild("daa");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       Navigation daa = rootNavigation.getChildren().get(2);
@@ -490,25 +511,28 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       container.addNode("mop:foo");
       container.addNode("mop:bar");
       container.addNode("mop:juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       session = mop.getModel().getSession().getJCRSession();
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       container.getNode("mop:bar").remove();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       session = mop.getModel().getSession().getJCRSession();
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       container.addNode("mop:daa");
       container.orderBefore("mop:daa", null);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       NodeIterator it = container.getNodes();
       assertEquals("mop:foo", it.nextNode().getName());
@@ -524,10 +548,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo").addChild("juu");
       rootNavigation.addChild("bar");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("move_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       Node foo = root.getChild("foo");
@@ -535,10 +560,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node juu = foo.getChild("juu");
       bar.addChild(juu);
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       foo = root.getChild("foo");
       juu = foo.getChild("juu");
@@ -554,19 +580,21 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename_node");
       Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("rename_node"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       Node foo = root.getChild("foo");
       foo.setName("foo");
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("rename_node"));
       root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       foo = root.getChild("foo");
@@ -576,10 +604,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       service.saveNode(root.context);
       assertEquals("bar", foo.getName());
       assertSame(foo, root.getChild("bar"));
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       Node bar = root.getChild("bar");
       assertNotNull(bar);
@@ -607,10 +636,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       rootNavigation.addChild("3");
       rootNavigation.addChild("4");
       rootNavigation.addChild("5");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_children"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       root.removeChild("5");
@@ -624,10 +654,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals("1", i.next().getName());
       assertEquals("4", i.next().getName());
       assertFalse(i.hasNext());
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       i = root.getChildren().iterator();
       assertEquals("3", i.next().getName());
@@ -643,20 +674,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive");
       Navigation rootNavigation = portal.getRootNavigation().addChild("default");
       rootNavigation.addChild("foo");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_recursive"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       Node foo = root.getChild("foo");
       Node bar = foo.addChild("bar");
       bar.addChild("juu");
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       foo = root.getChild("foo");
       bar = foo.getChild("bar");
@@ -670,10 +703,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_state"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       NodeState state = root.getState();
@@ -684,10 +718,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       long now = System.currentTimeMillis();
       root.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
       state = root.getState();
       assertEquals("foo", state.getURI());
@@ -702,24 +737,27 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state_overwrite");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_state_overwrite"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       root.addChild("foo");
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root.addChild("bar");
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(SiteKey.portal("save_state_overwrite"));
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       assertEquals(2, root.getChildren().size());
@@ -730,20 +768,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "recreate_node");
       portal.getRootNavigation().addChild("default").addChild("foo");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("recreate_node"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       String fooId = root.getChild("foo").getId();
       assertTrue(root.removeChild("foo"));
       assertNull(root.addChild("foo").getId());
       service.saveNode(root.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       assertNotNull(root.getChild("foo").getId());
       assertNotSame(fooId, root.getChild("foo").getId());
@@ -757,23 +797,26 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       nav.addChild("a");
       nav.addChild("b");
       nav.addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("save_merge"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
       root2.addChild(1, root2.addChild("2"));
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       service.saveNode(root1.context);
       root1.addChild(1, root1.addChild("1"));
       service.saveNode(root1.context);
@@ -785,10 +828,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_added");
       Navigation nav = portal.getRootNavigation().addChild("default");
       nav.addChild("a").addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
       Node a = root1.getChild("a");
@@ -796,10 +840,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node c = root1.addChild("c");
       c.addChild(b);
       service.saveNode(root1.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
       root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
       a = root1.getChild("a");
@@ -817,10 +862,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Navigation nav = portal.getRootNavigation().addChild("default");
       nav.addChild("a").addChild("c");
       nav.addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
       Node a = root1.getChild("a");
@@ -829,10 +875,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       b.addChild(c);
       root1.removeChild("a");
       service.saveNode(root1.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
       root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
       assertNull(root1.getChild("a"));
@@ -847,20 +894,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_to_removed");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("add_to_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("a").addChild("b");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -877,20 +926,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_removed");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("remove_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.removeChild("a");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       service.saveNode(root.context);
    }
 
@@ -899,20 +950,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_removed");
       portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.addChild(root.getChild("a").getChild("b"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.getChild("a").removeChild("b");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -930,20 +983,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_removed");
       portal.getRootNavigation().addChild("default").addChild("a");
       portal.getRootNavigation().getChild("default").addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_to_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("b").addChild(root.getChild("a"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("b");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -962,20 +1017,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       portal.getRootNavigation().addChild("default").addChild("a");
       portal.getRootNavigation().getChild("default").addChild("b");
       portal.getRootNavigation().getChild("default").addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_moved"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("b").addChild(root.getChild("a"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.getChild("c").addChild(root2.getChild("a"));
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -992,19 +1049,21 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_add_duplicate");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_add_duplicate"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.addChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root.addChild("a");
       try
       {
@@ -1022,20 +1081,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_add_after_removed");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_add_after_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.addChild(1, "b");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -1054,20 +1115,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Navigation def = portal.getRootNavigation().addChild("default");
       def.addChild("a").addChild("b");
       def.addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_move_after_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.addChild(2, root.getChild("a").getChild("b"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("c");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -1085,20 +1148,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_move_from_removed");
       portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
       portal.getRootNavigation().getChild("default").addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_move_from_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("c").addChild(root.getChild("a").getChild("b"));
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -1115,20 +1180,22 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_rename_removed");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_rename_removed"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("a").setName("b");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       try
       {
          service.saveNode(root.context);
@@ -1145,32 +1212,35 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_save");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_save"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.addChild("a");
       service.saveNode(root.context);
-      end(true);
+
+      //
+      sync(true);
 
       // Reload the root node and modify it
-      begin();
       root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root.getChild("a").setState(root.getState().builder().setLabel("foo").capture());
-      end(true);
 
+      //
+      sync(true);
 
       // Edit navigation in another browser
-      begin();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
+
+      //
+      sync(true);
 
       // Now click Save button in the first browser
-      begin();
       try
       {
          service.saveNode(root.context);
@@ -1187,19 +1257,21 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "bilto");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("bilto"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       service.saveNode(root1.context);
    }
 }

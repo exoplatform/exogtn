@@ -50,38 +50,42 @@ public class TestNavigationService extends AbstractTestNavigationService
    public void testNavigationInvalidationByRootId() throws Exception
    {
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "get_navigation");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       SiteKey key = new SiteKey(SiteType.PORTAL, "get_navigation");
       NavigationContext nav = service.loadNavigation(key);
       assertNotNull(nav);
       assertEquals(key, nav.getKey());
       assertNull(nav.state);
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
       nav = service.loadNavigation(key);
       assertNotNull(nav);
       assertEquals(1, (int)nav.state.getPriority());
       assertEquals(key, nav.getKey());
       assertNotNull(nav.rootId);
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "get_navigation").getRootNavigation().getChild("default").destroy();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(key);
       assertNotNull(nav);
       assertEquals(key, nav.getKey());
@@ -91,47 +95,54 @@ public class TestNavigationService extends AbstractTestNavigationService
    public void testNavigationInvalidationByPriority()
    {
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change").getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       SiteKey key = new SiteKey(SiteType.PORTAL, "invalidation_by_priority_change");
       NavigationContext nav = service.loadNavigation(key);
       assertEquals(1, (int)nav.state.getPriority());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 2);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(key);
       assertEquals(2, (int)nav.state.getPriority());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, 4);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(key);
       assertEquals(4, (int)nav.state.getPriority());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_priority_change");
       site.getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.PRIORITY, null);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       nav = service.loadNavigation(key);
       assertEquals(1, (int)nav.state.getPriority());
    }
@@ -279,10 +290,11 @@ public class TestNavigationService extends AbstractTestNavigationService
       defaultNav.addChild("a");
       defaultNav.addChild("b");
       defaultNav.addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_node"));
 
       //
@@ -358,10 +370,11 @@ public class TestNavigationService extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "hidden_insert_1");
       Navigation defaultNav = portal.getRootNavigation().addChild("default");
       defaultNav.addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_1"));
 
       //
@@ -398,10 +411,11 @@ public class TestNavigationService extends AbstractTestNavigationService
       Navigation defaultNav = portal.getRootNavigation().addChild("default");
       defaultNav.addChild("a");
       defaultNav.addChild("b");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_2"));
 
       //
@@ -464,10 +478,11 @@ public class TestNavigationService extends AbstractTestNavigationService
       defaultNav.addChild("a");
       defaultNav.addChild("b");
       defaultNav.addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_3"));
 
       //
@@ -561,22 +576,25 @@ public class TestNavigationService extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_removal");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("invalidation_by_removal"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertNotNull(root);
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_removal").getRootNavigation().getChild("default").destroy();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NodeContext<Node> rootCtx = service.loadNode(Node.MODEL, nav, Scope.SINGLE);
       assertNull(rootCtx);
    }
@@ -587,36 +605,41 @@ public class TestNavigationService extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_child");
       portal.getRootNavigation().addChild("default");
-      end(true);
+
+      //
+      sync(true);
 
       // Put the navigation in the cache
-      begin();
       NavigationContext nav = service.loadNavigation(SiteKey.portal("invalidation_by_child"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       Iterator<? extends Node> iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").addChild("new");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       iterator = root.getChildren().iterator();
       iterator.next();
       assertFalse(iterator.hasNext());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_child").getRootNavigation().getChild("default").getChild("new").destroy();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
       iterator = root.getChildren().iterator();
       assertFalse(iterator.hasNext());
@@ -628,47 +651,54 @@ public class TestNavigationService extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("invalidation_by_propertychange"));
       Node defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertNull(defaultNode.getContext().getState().getLabel());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       Described defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilto");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertEquals("bilto", defaultNode.getContext().getState().getLabel());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName("bilta");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertEquals("bilta", defaultNode.getContext().getState().getLabel());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       defaultDescribed = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_propertychange").getRootNavigation().getChild("default").adapt(Described.class);
       defaultDescribed.setName(null);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertNull(defaultNode.getContext().getState().getLabel());
    }
@@ -679,44 +709,51 @@ public class TestNavigationService extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("invalidation_by_attribute"));
       Node defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertNull(defaultNode.getContext().getState().getURI());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, "foo_uri");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertEquals("foo_uri", defaultNode.getContext().getState().getURI());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, "bar_uri");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertEquals("bar_uri", defaultNode.getContext().getState().getURI());
-      end();
 
       //
-      begin();
+      sync();
+
+      //
       mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "invalidation_by_attribute").getRootNavigation().getChild("default").getAttributes().setValue(MappedAttributes.URI, null);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       defaultNode = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
       assertNull(defaultNode.getContext().getState().getURI());
    }
@@ -729,24 +766,27 @@ public class TestNavigationService extends AbstractTestNavigationService
       rootNavigation.addChild("foo");
       rootNavigation.addChild("bar");
       rootNavigation.addChild("juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       rootNavigation.getChild("bar").destroy();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       rootNavigation.addChild("daa");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
       rootNavigation = portal.getRootNavigation().getChild("default");
       Navigation daa = rootNavigation.getChildren().get(2);
@@ -766,25 +806,28 @@ public class TestNavigationService extends AbstractTestNavigationService
       container.addNode("mop:foo");
       container.addNode("mop:bar");
       container.addNode("mop:juu");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       session = mop.getModel().getSession().getJCRSession();
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       container.getNode("mop:bar").remove();
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       session = mop.getModel().getSession().getJCRSession();
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       container.addNode("mop:daa");
       container.orderBefore("mop:daa", null);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       container = session.getRootNode().getNode("mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
       NodeIterator it = container.getNodes();
       assertEquals("mop:foo", it.nextNode().getName());
@@ -821,11 +864,12 @@ public class TestNavigationService extends AbstractTestNavigationService
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "count");
-      Navigation nav = portal.getRootNavigation().addChild("default");
-      end(true);
+      portal.getRootNavigation().addChild("default");
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("count"));
       Node root;
 

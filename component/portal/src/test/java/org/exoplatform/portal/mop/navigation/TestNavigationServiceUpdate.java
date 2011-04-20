@@ -37,20 +37,22 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_add_first");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_add_first"));
       NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       assertEquals(0, root1.getNodeSize());
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.addChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       service.updateNode(root1);
       assertEquals(1, root1.getNodeSize());
       Node a = root1.getNode(0);
@@ -63,10 +65,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_add_second");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_add_second"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       Node a = root1.getChild("a");
@@ -74,10 +77,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.addChild("b");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertSame(root1, added.parent);
@@ -94,10 +98,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_remove");
       portal.getRootNavigation().addChild("default").addChild("a");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_remove"));
       NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       assertEquals(1, root1.getNodeSize());
@@ -105,10 +110,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       Iterator<NodeChange<Node>> changes = service.updateNode(root1);
       NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>)changes.next();
       assertSame(root1.node, removed.parent);
@@ -123,10 +129,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_move");
       portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
       portal.getRootNavigation().getChild("default").addChild("c");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_move"));
       NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL);
       assertEquals(2, root1.getNodeSize());
@@ -136,10 +143,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
       service.saveNode(root2.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       Iterator<NodeChange<Node>> changes = service.updateNode(root1);
       NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>)changes.next();
       assertSame(a, moved.from);
@@ -156,10 +164,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_complex");
       portal.getRootNavigation().addChild("default");
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_complex"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       Node a1 = root1.addChild("a");
@@ -171,10 +180,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       b1.addChild("g");
       b1.addChild("h");
       service.saveNode(root1.context);
-      end(true);
 
       //
-      begin();
+      sync(true);
+
+      //
       root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       a1 = root1.getChild("a");
       Node c1 = a1.getChild("c");
@@ -186,25 +196,27 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node h1 = a1.getChild("h");
 
       //
-      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      Node a2 = root2.getChild("a");
-      a2.removeChild("e");
-      Node b2 = root2.getChild("b");
-      b2.addChild(2, a2.getChild("d"));
-      a2.addChild(1, "d");
-      b2.removeChild("g");
-      service.saveNode(root2.context);
-      end(true);
+//      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+//      Node a2 = root2.getChild("a");
+//      a2.removeChild("e");
+//      Node b2 = root2.getChild("b");
+//      b2.addChild(2, a2.getChild("d"));
+//      a2.addChild(1, "d");
+//      b2.removeChild("g");
+//      service.saveNode(root2.context);
 
       // a(c)
       // b(f,
 
-      begin();
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
-      assertSame(a1, root1.getChild("a"));
-      assertSame(b1, root1.getChild("b"));
-      assertEquals(2, a1.getSize());
-      assertSame(c1, a1.getChild(0));
+      //
+//      sync(true);
+
+      //
+//      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+//      assertSame(a1, root1.getChild("a"));
+//      assertSame(b1, root1.getChild("b"));
+//      assertEquals(2, a1.getSize());
+//      assertSame(c1, a1.getChild(0));
 //      assertEquals(3, b1.getSize());
 //      assertSame(f1, b1.getChild(0));
 

@@ -54,6 +54,18 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
       begin();
    }
 
+   protected void sync()
+   {
+      end();
+      begin();
+   }
+
+   protected void sync(boolean save)
+   {
+      end(save);
+      begin();
+   }
+
    @Override
    protected void end(boolean save)
    {
