@@ -86,4 +86,9 @@ public class PageData extends ContainerData
    {
       return showMaxWindow;
    }
+   
+   public String toString()
+   {
+      return "PageData[storageId=" + getStorageId() + ",key=" + key + "]"; 
+   }
 }
