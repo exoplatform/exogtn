@@ -304,7 +304,7 @@ public class TestNavigationService extends AbstractTestNavigationService
       Node c;
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      root = service.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN).getNode();
       a = root.getChild("a");
       b = root.getChild("b");
       a.setHidden(true);

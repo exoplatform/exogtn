@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.tree.list.NamedListTree;
+import org.exoplatform.portal.tree.list.ListTree;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 /**
  * The context of a node.
  */
-public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
+public final class NodeContext<N> extends ListTree<NodeContext<N>>
 {
 
 
@@ -52,30 +52,34 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
    /** . */
    private int hiddenCount;
 
+   /** . */
+   private String name;
+
+   /** . */
+   private boolean hasContexts;
+
    NodeContext(TreeContext<N> tree, NodeData data)
    {
-      super(data.getName());
-
-      //
+      this.name = data.getName();
       this.tree = tree;
       this.node = tree.model.create(this);
       this.data = data;
       this.state = data.getState();
       this.hidden = false;
       this.hiddenCount = 0;
+      this.hasContexts = false;
    }
 
    private NodeContext(TreeContext<N> tree, String name, NodeState state)
    {
-      super(name);
-
-      //
+      this.name = name;
       this.tree = tree;
       this.node = tree.model.create(this);
       this.data = null;
       this.state = state;
       this.hidden = false;
       this.hiddenCount = 0;
+      this.hasContexts = false;
    }
 
    public NodeContext<N> getDescendant(String id) throws NullPointerException
@@ -93,7 +97,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
       }
       else
       {
-         if (hasTrees())
+         if (hasContexts)
          {
             for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
             {
@@ -156,11 +160,11 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
 
    private void doFilter(int depth, NodeFilter filter)
    {
-      boolean accept = filter.accept(depth, getId(), getName(), state);
+      boolean accept = filter.accept(depth, getId(), name, state);
       setHidden(!accept);
-      if (hasTrees())
+      if (hasContexts)
       {
-         for (NodeContext<N> node : getTrees())
+         for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
          {
             node.doFilter(depth + 1, filter);
          }
@@ -195,11 +199,16 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
    public int getIndex()
    {
       int count = 0;
-      for (NodeContext<N> current = getPrevious();current != null;current = current.getPrevious())
+      for (NodeContext<N> node = getPrevious();node != null;node = node.getPrevious())
       {
          count++;
       }
       return count;
+   }
+
+   public String getName()
+   {
+      return name;
    }
 
    /**
@@ -219,11 +228,48 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
       }
       else
       {
-         if (parent.rename(getName(), name))
+         NodeContext<N> blah = parent.get(name);
+         if (blah != null)
          {
+            if (blah == this)
+            {
+               // We do nothing
+            }
+            else
+            {
+               throw new IllegalArgumentException("the node " + name + " already exist");
+            }
+         }
+         else
+         {
+            this.name = name;
             tree.addChange(new NodeChange.Renamed<NodeContext<N>>(this, name));
          }
       }
+   }
+
+   public NodeContext<N> get(String name) throws NullPointerException, IllegalStateException
+   {
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (!hasContexts)
+      {
+         throw new IllegalStateException("No children relationship");
+      }
+
+      //
+      for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
+      {
+         if (node.name.equals(name))
+         {
+            return node;
+         }
+      }
+
+      //
+      return null;
    }
 
    /**
@@ -233,7 +279,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
     */
    public int getNodeSize()
    {
-      if (hasTrees())
+      if (hasContexts)
       {
          return getSize();
       }
@@ -254,7 +300,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
     */
    public int getNodeCount()
    {
-      if (hasTrees())
+      if (hasContexts)
       {
          return getSize() - hiddenCount;
       }
@@ -313,7 +359,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
       {
          throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
       }
-      if (!hasTrees())
+      if (!hasContexts)
       {
          throw new IllegalStateException("No children relationship");
       }
@@ -376,7 +422,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
 
    public Collection<N> getNodes()
    {
-      if (hasTrees())
+      if (hasContexts)
       {
          if (nodes == null)
          {
@@ -505,7 +551,7 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
       }
       else
       {
-         tree.addChange(new NodeChange.Added<NodeContext<N>>(this, child.getPrevious(), child, child.getName()));
+         tree.addChange(new NodeChange.Added<NodeContext<N>>(this, child.getPrevious(), child, child.name));
       }
    }
 
@@ -543,14 +589,84 @@ public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
       }
    }
 
+   public boolean hasContexts()
+   {
+      return hasContexts;
+   }
+
    Iterable<NodeContext<N>> getContexts()
    {
-      return getTrees();
+      if (hasContexts)
+      {
+         return new Iterable<NodeContext<N>>()
+         {
+            public Iterator<NodeContext<N>> iterator()
+            {
+               return listIterator();
+            }
+         };
+      }
+      else
+      {
+         return null;
+      }
    }
 
    void setContexts(Iterable<NodeContext<N>> contexts)
    {
-      setTrees(contexts);
+      if (contexts == null)
+      {
+         if (!hasContexts)
+         {
+            throw new IllegalStateException();
+         }
+         else
+         {
+            while (getFirst() != null)
+            {
+               getFirst().remove();
+            }
+            this.hasContexts = false;
+         }
+      }
+      else
+      {
+         if (!hasContexts)
+         {
+            this.hasContexts = true;
+            for (NodeContext<N> context : contexts)
+            {
+               insertLast(context);
+            }
+         }
+         else
+         {
+            throw new IllegalStateException();
+         }
+      }
+   }
+
+   protected void beforeRemove(NodeContext<N> tree)
+   {
+      if (!hasContexts)
+      {
+         throw new IllegalStateException();
+      }
+   }
+
+   protected void beforeInsert(NodeContext<N> tree)
+   {
+      if (!hasContexts)
+      {
+         throw new IllegalStateException("No children relationship");
+      }
+
+      //
+      NodeContext<N> existing = get(tree.name);
+      if (existing != null && existing != tree)
+      {
+         throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
+      }
    }
 
    protected void afterInsert(NodeContext<N> tree)

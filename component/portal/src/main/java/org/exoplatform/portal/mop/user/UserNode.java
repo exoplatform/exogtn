@@ -222,7 +222,7 @@ public class UserNode
     */
    public boolean hasChildrenRelationship()
    {
-      return context.hasTrees();
+      return context.hasContexts();
    }
 
    /**
@@ -242,7 +242,7 @@ public class UserNode
 
    public Collection<UserNode> getChildren()
    {
-      return context.hasTrees() ? context.getNodes() : Collections.<UserNode>emptyList();
+      return context.hasContexts() ? context.getNodes() : Collections.<UserNode>emptyList();
    }
 
    /**
@@ -254,7 +254,7 @@ public class UserNode
     */
    public UserNode getChild(String childName) throws NullPointerException
    {
-      if (context.hasTrees())
+      if (context.hasContexts())
       {
          return context.getNode(childName);
       }
@@ -273,7 +273,7 @@ public class UserNode
     */
    public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
    {
-      if (context.hasTrees())
+      if (context.hasContexts())
       {
          return context.getNode(childIndex);
       }

@@ -277,7 +277,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("rename"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node root = service.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN).getNode();
       try
       {
          root.setName("something");

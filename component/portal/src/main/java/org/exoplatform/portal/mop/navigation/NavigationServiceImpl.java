@@ -251,7 +251,7 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       VisitMode visitMode;
-      if (context.hasTrees())
+      if (context.hasContexts())
       {
          visitMode = VisitMode.ALL_CHILDREN;
       }
@@ -264,7 +264,7 @@ public class NavigationServiceImpl implements NavigationService
       if (visitMode == VisitMode.ALL_CHILDREN)
       {
          Map<String, NodeContext<N>> previous = Collections.emptyMap();
-         if (context.hasTrees())
+         if (context.hasContexts())
          {
             previous = new HashMap<String, NodeContext<N>>();
             for (NodeContext<N> a : context.getContexts())
@@ -307,7 +307,7 @@ public class NavigationServiceImpl implements NavigationService
       }
       else if (visitMode == VisitMode.NO_CHILDREN)
       {
-         if (context.hasTrees())
+         if (context.hasContexts())
          {
             context.setContexts(null);
          }
@@ -374,7 +374,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          public String[] getChildren(NodeContext<N> node)
          {
-            return node.hasTrees() ? node.data.children : new String[0];
+            return node.hasContexts() ? node.data.children : new String[0];
          }
          public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
          {
@@ -392,7 +392,7 @@ public class NavigationServiceImpl implements NavigationService
          public String[] getChildren(NodeData node)
          {
             NodeContext<N> context = root.getDescendant(node.getId());
-            return context != null && context.hasTrees() ? node.children : new String[0];
+            return context != null && context.hasContexts() ? node.children : new String[0];
          }
          public NodeData getDescendant(NodeData node, String handle)
          {
@@ -704,7 +704,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      if (context.hasTrees())
+      if (context.hasContexts())
       {
          for (NodeContext<N> child : context.getContexts())
          {
