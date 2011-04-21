@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.tree.list.ListTree;
+import org.exoplatform.portal.tree.list.NamedListTree;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 /**
  * The context of a node.
  */
-public final class NodeContext<N> extends ListTree<NodeContext<N>>
+public final class NodeContext<N> extends NamedListTree<NodeContext<N>>
 {
 
 
@@ -313,6 +313,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
       }
+      if (!hasTrees())
+      {
+         throw new IllegalStateException("No children relationship");
+      }
       NodeContext<N> context = getFirst();
       while (context != null && (context.hidden || index-- > 0))
       {
@@ -551,6 +555,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    protected void afterInsert(NodeContext<N> tree)
    {
+      super.afterInsert(tree);
+
+      //
       if (tree.hidden)
       {
          hiddenCount++;
@@ -563,5 +570,8 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          hiddenCount--;
       }
+
+      //
+      super.afterRemove(tree);
    }
 }

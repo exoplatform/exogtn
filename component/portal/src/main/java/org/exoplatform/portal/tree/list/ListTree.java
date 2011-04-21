@@ -19,11 +19,7 @@
 
 package org.exoplatform.portal.tree.list;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -45,13 +41,7 @@ public class ListTree<T extends ListTree<T>>
 {
 
    /** . */
-   private String name;
-
-   /** . */
    private T parent;
-
-   /** . */
-   private Map<String, T> map;
 
    /** . */
    private T next;
@@ -65,24 +55,16 @@ public class ListTree<T extends ListTree<T>>
    /** . */
    private T tail;
 
-   public ListTree(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException("No null name is accepted");
-      }
+   /** . */
+   private int size;
 
-      //
-      this.name = name;
+   public ListTree()
+   {
       this.next = null;
       this.previous = null;
       this.head = null;
       this.tail = null;
-   }
-
-   public final int getSize()
-   {
-      return map == null ? -1 : map.size();
+      this.size = 0;
    }
 
    public final T getNext()
@@ -95,97 +77,46 @@ public class ListTree<T extends ListTree<T>>
       return previous;
    }
 
-   public final String getName()
-   {
-      return name;
-   }
-
    public final T getParent()
    {
       return parent;
    }
 
-   public final boolean rename(String from, String to) throws NullPointerException, IllegalStateException, IllegalArgumentException
+   public final int getSize()
    {
-      if (from == null)
-      {
-         throw new NullPointerException("No null from name accepted");
-      }
-      if (to == null)
-      {
-         throw new NullPointerException("No null to name accepted");
-      }
-      if (map == null)
-      {
-         throw new IllegalStateException();
-      }
-
-      //
-      if (!from.equals(to))
-      {
-         if (map.containsKey(to))
-         {
-            throw new IllegalArgumentException("the node " + to + " already exist");
-         }
-         T child = map.remove(from);
-         if (child == null)
-         {
-            throw new IllegalArgumentException("the node " + from + " + does not exist");
-         }
-         child.name = to;
-         map.put(to, child);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   public final boolean contains(String name) throws NullPointerException, IllegalStateException
-   {
-      return get(name) != null;
-   }
-
-   public final T get(String name) throws NullPointerException, IllegalStateException
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      if (map == null)
-      {
-         throw new IllegalStateException("No children relationship");
-      }
-
-      //
-      return map.get(name);
+      return size;
    }
 
    public final T getFirst()
    {
+/*
       if (map == null)
       {
          throw new IllegalStateException("no children");
       }
+*/
       return head;
    }
 
    public final T getLast()
    {
+/*
       if (map == null)
       {
          throw new IllegalStateException("no children");
       }
+*/
       return tail;
    }
 
    public final T get(int index) throws IllegalStateException, IndexOutOfBoundsException
    {
+/*
       if (map == null)
       {
          throw new IllegalStateException("no children");
       }
+*/
       if (index < 0)
       {
          throw new IndexOutOfBoundsException("No negative index allowed");
@@ -212,11 +143,6 @@ public class ListTree<T extends ListTree<T>>
       return current;
    }
 
-   public final boolean hasTrees()
-   {
-      return map != null;
-   }
-
    /**
     * Insert the specified tree.
     *
@@ -233,10 +159,12 @@ public class ListTree<T extends ListTree<T>>
       {
          throw new NullPointerException("No null tree accepted");
       }
+/*
       if (map == null)
       {
          throw new IllegalStateException("No trees relationship");
       }
+*/
       if (index != null && index < 0)
       {
          throw new IndexOutOfBoundsException("No negative index permitted");
@@ -287,7 +215,7 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   private void insertLast(T context)
+   public final void insertLast(T context)
    {
       if (tail == null)
       {
@@ -306,24 +234,16 @@ public class ListTree<T extends ListTree<T>>
     */
    private void insertFirst(T tree)
    {
-      T existing = map.get(tree.name);
-      if (existing != null && existing != tree)
-      {
-         throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
-      }
       if (head == null)
       {
+         beforeInsert(tree);
          if (tree.parent != null)
          {
             tree.remove();
          }
          head = tail = tree;
-         if (map == Collections.EMPTY_MAP)
-         {
-            map = new HashMap<String, T>();
-         }
-         map.put(tree.name, tree);
          tree.parent = (T)this;
+         size++;
          afterInsert(tree);
       }
       else
@@ -334,13 +254,13 @@ public class ListTree<T extends ListTree<T>>
 
    public final void insertAfter(T tree)
    {
+      if (tree == null)
+      {
+         throw new NullPointerException("No null tree argument accepted");
+      }
       if (this != tree)
       {
-         T existing = parent.map.get(tree.name);
-         if (existing != null && existing != tree)
-         {
-            throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
-         }
+         parent.beforeInsert(tree);
          if (tree.parent != null)
          {
             tree.remove();
@@ -356,25 +276,21 @@ public class ListTree<T extends ListTree<T>>
             next.previous = tree;
          }
          next = tree;
-         if (parent.map == Collections.EMPTY_MAP)
-         {
-            parent.map = new HashMap<String, T>();
-         }
-         parent.map.put(tree.name, tree);
          tree.parent = parent;
-         afterInsert(tree);
+         parent.size++;
+         parent.afterInsert(tree);
       }
    }
 
    public final void insertBefore(T tree)
    {
+      if (tree == null)
+      {
+         throw new NullPointerException("No null tree argument accepted");
+      }
       if (this != tree)
       {
-         T existing = parent.map.get(tree.name);
-         if (existing != null && existing != tree)
-         {
-            throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
-         }
+         parent.beforeInsert(tree);
          if (tree.parent != null)
          {
             tree.remove();
@@ -390,18 +306,15 @@ public class ListTree<T extends ListTree<T>>
             previous.next = tree;
          }
          previous = tree;
-         if (parent.map == Collections.EMPTY_MAP)
-         {
-            parent.map = new HashMap<String, T>();
-         }
-         parent.map.put(tree.name, tree);
          tree.parent = parent;
-         afterInsert(tree);
+         parent.size++;
+         parent.afterInsert(tree);
       }
    }
 
    public final void remove()
    {
+      parent.beforeRemove((T)this);
       if (previous == null)
       {
          parent.head = next;
@@ -418,20 +331,22 @@ public class ListTree<T extends ListTree<T>>
       {
          next.previous = previous;
       }
-      parent.map.remove(name);
       T _parent = parent;
       parent = null;
       previous = null;
       next = null;
+      _parent.size--;
       _parent.afterRemove((T)this);
    }
 
    public final ListIterator<T> listIterator()
    {
+/*
       if (map == null)
       {
          return null;
       }
+*/
       return new ListIterator<T>()
       {
          T next = head;
@@ -533,57 +448,13 @@ public class ListTree<T extends ListTree<T>>
       };
    }
 
-   public final Iterable<T> getTrees()
+   /**
+    * Callback to signal insertion occured.
+    *
+    * @param tree the child inserted
+    */
+   protected void beforeInsert(T tree)
    {
-      if (map != null)
-      {
-         return new Iterable<T>()
-         {
-            public Iterator<T> iterator()
-            {
-               return listIterator();
-            }
-         };
-      }
-      else
-      {
-         return null;
-      }
-   }
-
-   public final void setTrees(Iterable<T> children)
-   {
-      if (children == null)
-      {
-         if (map == null)
-         {
-            throw new IllegalStateException();
-         }
-         else
-         {
-            while (head != null)
-            {
-               head.remove();
-            }
-            this.map = null;
-         }
-      }
-      else
-      {
-         if (map == null)
-         {
-            @SuppressWarnings("unchecked") Map<String, T> map = Collections.EMPTY_MAP;
-            this.map = map;
-            for (T child : children)
-            {
-               insertLast(child);
-            }
-         }
-         else
-         {
-            throw new IllegalStateException();
-         }
-      }
    }
 
    /**
@@ -600,13 +471,17 @@ public class ListTree<T extends ListTree<T>>
     *
     * @param tree the child inserted
     */
-   protected void afterRemove(T tree)
+   protected void beforeRemove(T tree)
    {
    }
 
-   public String toString()
+   /**
+    * Callback to signal insertion occured.
+    *
+    * @param tree the child inserted
+    */
+   protected void afterRemove(T tree)
    {
-      return getClass().getSimpleName() + "[name=" + getName() + "]";
    }
 }
 
