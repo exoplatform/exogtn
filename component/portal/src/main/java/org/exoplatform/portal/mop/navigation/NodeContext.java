@@ -646,7 +646,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   protected void beforeRemove(NodeContext<N> tree)
+   protected void beforeRemove(NodeContext<N> context)
    {
       if (!hasContexts)
       {
@@ -654,7 +654,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   protected void beforeInsert(NodeContext<N> tree)
+   protected void beforeInsert(NodeContext<N> context)
    {
       if (!hasContexts)
       {
@@ -662,32 +662,35 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      NodeContext<N> existing = get(tree.name);
-      if (existing != null && existing != tree)
+      if (!tree.editMode)
       {
-         throw new IllegalArgumentException("Tree " + tree.name + " already in the map");
+         NodeContext<N> existing = get(context.name);
+         if (existing != null && existing != context)
+         {
+            throw new IllegalArgumentException("Tree " + context.name + " already in the map");
+         }
       }
    }
 
-   protected void afterInsert(NodeContext<N> tree)
+   protected void afterInsert(NodeContext<N> context)
    {
-      super.afterInsert(tree);
+      super.afterInsert(context);
 
       //
-      if (tree.hidden)
+      if (context.hidden)
       {
          hiddenCount++;
       }
    }
 
-   protected void afterRemove(NodeContext<N> tree)
+   protected void afterRemove(NodeContext<N> context)
    {
-      if (tree.hidden)
+      if (context.hidden)
       {
          hiddenCount--;
       }
 
       //
-      super.afterRemove(tree);
+      super.afterRemove(context);
    }
 }

@@ -433,6 +433,8 @@ public class NavigationServiceImpl implements NavigationService
 
       LinkedList<NodeChange<N>> list = new LinkedList<NodeChange<N>>();
 
+      tree.editMode = true;
+
       while (it.hasNext())
       {
          DiffChangeType change = it.next();
@@ -519,6 +521,9 @@ public class NavigationServiceImpl implements NavigationService
                throw new UnsupportedOperationException("todo : " + change);
          }
       }
+
+      //
+      tree.editMode = false;
 
       //
       return list.iterator();

@@ -889,4 +889,26 @@ public class TestNavigationService extends AbstractTestNavigationService
       assertEquals(0, root.getNodeCount());
       assertEquals(1, root.getSize());
    }
+
+   public void testInsertDuplicate()
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "insert_duplicate");
+      portal.getRootNavigation().addChild("default").addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("insert_duplicate"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      try
+      {
+         root.addChild("a");
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+   }
 }

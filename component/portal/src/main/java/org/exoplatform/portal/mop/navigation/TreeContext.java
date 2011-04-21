@@ -36,13 +36,21 @@ class TreeContext<N>
    /** . */
    final NodeModel<N> model;
 
+   /** . */
+   boolean editMode;
+
    TreeContext(NodeModel<N> model)
    {
       this.model = model;
+      this.editMode = false;
    }
 
    void addChange(NodeChange<NodeContext<N>> change)
    {
+      if (editMode)
+      {
+         throw new AssertionError();
+      }
       if (changes == null)
       {
          changes = new LinkedList<NodeChange<NodeContext<N>>>();

@@ -159,6 +159,57 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals(1, root1.getNode("c").getSize());
    }
 
+   public void testAddWithSameName() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_add_with_same_name");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_add_with_same_name"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.addChild("a").addChild("b");
+      root1.addChild("c");
+      service.saveNode(root1.context);
+
+      //
+      sync(true);
+
+      //
+      root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node a = root1.getChild("a");
+      Node b = a.getChild("b");
+      Node c = root1.getChild("c");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
+      Node b2 = root2.getChild("a").addChild("b");
+      service.saveNode(root2.context);
+
+      //
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      assertNull(added.previous);
+      assertSame(a, added.parent);
+      NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>)changes.next();
+      assertNull(moved.previous);
+      assertSame(a, moved.from);
+      assertSame(c, moved.to);
+      assertSame(b, moved.node);
+      assertFalse(changes.hasNext());
+
+      //
+      assertSame(a, root1.getChild("a"));
+      assertSame(c, root1.getChild("c"));
+      assertSame(b, c.getChild("b"));
+      assertEquals(b2.getId(), a.getChild("b").getId());
+      assertSame(a.getChild("b"), added.node);
+   }
+
    public void testComplex() throws Exception
    {
       MOPService mop = mgr.getPOMService();
