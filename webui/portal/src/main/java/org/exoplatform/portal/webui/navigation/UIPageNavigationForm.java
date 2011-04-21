@@ -155,9 +155,10 @@ public class UIPageNavigationForm extends UIForm
             UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
             uiPortalApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            UIPopupWindow uiPopup = uiForm.getParent();
-            uiPopup.setShow(false);
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            prContext.setFullRender(true);
+            UIPopupWindow uiPopup = uiForm.getParent();
+            uiPopup.setShow(false);            
             return;
          }
 

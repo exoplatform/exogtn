@@ -261,8 +261,9 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
-         PortalRequestContext prContext = Util.getPortalRequestContext();
+         PortalRequestContext prContext = Util.getPortalRequestContext();         
          UIPortalApplication portalApp = (UIPortalApplication)prContext.getUIApplication();
+         UIWorkingWorkspace uiWorkingWS = portalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
 
          UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
 
@@ -270,6 +271,7 @@ public class UISiteManagement extends UIContainer
          {
             portalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                new String[]{portalName}));
+            uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             return;
          }
          PortalConfig portalConfig = userConfig.getPortalConfig();
@@ -281,8 +283,7 @@ public class UISiteManagement extends UIContainer
                new String[]{portalConfig.getName()}));
             return;
          }
-
-         UIWorkingWorkspace uiWorkingWS = portalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+        
          //UIEditInlineWorkspace uiEditWS = uiWorkingWS.addChild(UIEditInlineWorkspace.class, null, UIPortalApplication.UI_EDITTING_WS_ID);
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChildById(UIPortalApplication.UI_EDITTING_WS_ID);
          UIPortalComposer uiComposer = uiEditWS.getComposer().setRendered(true);
@@ -327,7 +328,7 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          WebuiRequestContext context = event.getRequestContext();
-         UIApplication uiApplication = context.getUIApplication();
+         UIApplication uiApplication = context.getUIApplication();         
          
          //Minh Hoang TO: User could edit navigation if he/she has edit permissions on PortalConfig. That is not
          //at all logical and should be modified after release 3.1 GA
@@ -337,7 +338,9 @@ public class UISiteManagement extends UIContainer
          if(userPortalConfig == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-               new String[]{portalName}));
+               new String[]{portalName}));         
+            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             return;
          }
          

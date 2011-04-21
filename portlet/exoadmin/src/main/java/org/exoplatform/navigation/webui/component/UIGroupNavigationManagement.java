@@ -164,6 +164,8 @@ public class UIGroupNavigationManagement extends UIContainer
          if (navigation == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
+            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+            uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");       
             return;
          }
 
@@ -267,7 +269,10 @@ public class UIGroupNavigationManagement extends UIContainer
          uiMaskWS.setUIComponent(uiNewPortal);
          uiMaskWS.setShow(true);
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
-
+         
+         //If other users has add or remove group navigation, we need to refresh this portlet
+         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");  
       }
    }
 

@@ -144,19 +144,20 @@ public class UIAddGroupNavigation extends UIContainer
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
                new String[]{ownerId}));
-            return;
          }
-
-         // Create portal config of the group when it does not exist
-         DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
-         if (dataService.getPortalConfig("group", ownerId) == null)
+         else
          {
-            UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
-            configService.createGroupSite(ownerId);
-         }
+            // Create portal config of the group when it does not exist
+            DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
+            if (dataService.getPortalConfig("group", ownerId) == null)
+            {
+               UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
+               configService.createGroupSite(ownerId);
+            }
 
-         // create navigation for group
-         navigationService.saveNavigation(SiteKey.group(ownerId), new NavigationState(0));
+            // create navigation for group
+            navigationService.saveNavigation(SiteKey.group(ownerId), new NavigationState(0));
+         }
 
          //Update group navigation list
          ctx.addUIComponentToUpdateByAjax(uicomp);
