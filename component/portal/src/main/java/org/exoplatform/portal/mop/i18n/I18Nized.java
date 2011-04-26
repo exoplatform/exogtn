@@ -29,8 +29,11 @@ import org.chromattic.api.annotations.Owner;
  * Apr 15, 2011
  */
 
+/**
+ * The entry point for carrying the information
+ * and can be attached to mop entities
+ */
 @MixinType(name = "gtn:i18nized")
-
 public abstract class I18Nized
 {
    @Create
@@ -43,15 +46,18 @@ public abstract class I18Nized
    
    public abstract void setLanguageSpace(LanguageSpace languageSpace);
    
-   
-   public <M> M putMixin(Class<M> classType, String locale)
+   protected <M> M getMixin(Class<M> classType, String locale, boolean createMixin)
    {
       LanguageSpace languageSpace = this.getLanguageSpace();
-      if (languageSpace == null)
+      if (languageSpace == null && createMixin)
       {
          languageSpace = this.createLanguageSpace();
       }
+      else if (languageSpace == null)
+      {
+         return null;
+      }
       
-      return languageSpace.addNewLanguage(classType, locale);
+      return languageSpace.getLanguage(classType, locale, createMixin);
    }
 }

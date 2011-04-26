@@ -20,14 +20,12 @@ package org.exoplatform.portal.i18n;
 
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.i18n.I18NFramework;
-import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.i18n.Injector;
 import org.exoplatform.portal.mop.i18n.Language;
 
@@ -56,16 +54,11 @@ public class TestI18NFramework extends AbstractKernelTest
       lifeCycle.openContext();
    }
 
-   public void testI18N()
+   private <E> ChromatticSession createSampleData(String nodeName)
    {
-      String homepage_en = "Homepage";
-      String homepage_vi = "Trangchu";
-      String description_en = "This is the homepage";
-      ChromatticSession session = null;
-      session = lifeCycle.getChromattic().openSession();
+      ChromatticSession session = lifeCycle.getChromattic().openSession();
       session.addEventListener(new Injector(session));
-      NavigationNode node = session.insert(NavigationNode.class, "node1");
-
+      NavigationNode node = session.insert(NavigationNode.class, nodeName);
       Described described = session.getEmbedded(node, Described.class);
       if (described == null)
       {
@@ -81,12 +74,23 @@ public class TestI18NFramework extends AbstractKernelTest
       session.setEmbedded(node, Described.class, described);
       session.setEmbedded(node, A.class, a);
 
+      return session;
+   }
+
+   public void testI18N()
+   {
+      String homepage_en = "Homepage";
+      String homepage_vi = "Trangchu";
+      String description_en = "This is the homepage";
+
+      ChromatticSession session = createSampleData("node1");
+      NavigationNode node = session.findByPath(NavigationNode.class, "node1");
+
       I18NFramework framework = new I18NFramework(session);
-      I18Nized i18n = framework.createI18nMixin(node);
-      Described describe_en = i18n.putMixin(Described.class, "en");
+      Described describe_en = framework.putMixin(node, Described.class, "en");
       describe_en.setName(homepage_en);
 
-      Described describe_vi = i18n.putMixin(Described.class, "vi");
+      Described describe_vi = framework.putMixin(node, Described.class, "vi");
       describe_vi.setName(homepage_vi);
 
       Language language = session.findByPath(Language.class, "node1/gtn:languages/en");
@@ -99,15 +103,65 @@ public class TestI18NFramework extends AbstractKernelTest
       Described describe_vi_new = session.getEmbedded(language, Described.class);
       assertEquals(describe_vi_new.getName(), homepage_vi);
 
-      A a_en = i18n.putMixin(A.class, "en");
+      A a_en = framework.putMixin(node, A.class, "en");
       a_en.setDescription(description_en);
 
-      a_en = i18n.putMixin(A.class, "en");
+      a_en = framework.getMixin(node, A.class, "en");
       assertEquals(description_en, a_en.getDescription());
       session.save();
       session.close();
    }
+
+   public void testNotEmbedded()
+   {
+      String nodeTest = "testNotEmbedded";
+      ChromatticSession session = this.createSampleData(nodeTest);
+      NavigationNode node = session.findByPath(NavigationNode.class, nodeTest);
+      I18NFramework framework = new I18NFramework(session);
+      try
+      {
+         framework.putMixin(node, B.class, "en");
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+         e.printStackTrace();
+      }
+      
+      try
+      {
+         framework.getMixin(node, B.class, "en");
+         fail();
+      }
+      catch(IllegalStateException e)
+      {
+         e.printStackTrace();
+      }
+   }
    
+   public void testGetDefaultLanguage()
+   {
+      String nodeTest = "testGetDefaultLanguage";
+      String name_en = "homepage";
+      String name_vi = "trangchu";
+      ChromatticSession session = this.createSampleData(nodeTest);
+      NavigationNode node = session.findByPath(NavigationNode.class, nodeTest);
+      Described described = session.getEmbedded(node, Described.class);
+      described.setName(name_en);
+      
+      I18NFramework framework = new I18NFramework(session);
+      described = framework.putMixin(node, Described.class, "vi");
+      described.setName(name_vi);
+      
+      described = framework.getMixin(node, Described.class, "en");
+      assertNotNull(described);
+      assertEquals(described.getName(), name_en);
+      
+      described = framework.getMixin(node, Described.class, "vi");
+      assertNotNull(described);
+      assertEquals(described.getName(), name_vi);
+   }
+
    @Override
    protected void tearDown() throws Exception
    {

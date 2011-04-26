@@ -25,6 +25,10 @@ import org.chromattic.api.event.LifeCycleListener;
  * @author <a href="mailto:khoi.nguyen@exoplatform.com">Nguyen Duc Khoi</a>
  * Apr 22, 2011
  */
+
+/**
+ * 
+ */
 public class Injector implements LifeCycleListener
 {
    private ChromatticSession session;

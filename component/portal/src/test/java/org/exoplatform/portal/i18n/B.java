@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  * 
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,21 +16,17 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.mop.i18n;
+package org.exoplatform.portal.i18n;
 
-import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.MixinType;
 
 /**
  * @author <a href="mailto:khoi.nguyen@exoplatform.com">Nguyen Duc Khoi</a>
- * Apr 15, 2011
+ * Apr 26, 2011
  */
 
-/**
- * A nake node type that describe a language entry
- * This node is able to support data through addition of mixins
- */
-@PrimaryType(name = "gtn:language")
-public class Language
+@MixinType(name = "gtn:b")
+public class B
 {
 
 }

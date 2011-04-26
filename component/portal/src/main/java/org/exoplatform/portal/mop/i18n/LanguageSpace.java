@@ -30,6 +30,9 @@ import org.chromattic.api.annotations.PrimaryType;
  * Apr 15, 2011
  */
 
+/**
+ * A bare node container for language entries
+ */
 @PrimaryType(name = "gtn:languages")
 public abstract class LanguageSpace
 {
@@ -41,27 +44,31 @@ public abstract class LanguageSpace
    @OneToMany
    public abstract Map<String, Language> getChildren();
 
-   public <E> E addNewLanguage(Class<E> classType, String locale)
+   protected <E> E getLanguage(Class<E> classType, String locale, boolean create)
    {
       Language language = null;
       Map<String, Language> children = getChildren();
-      if (!children.containsKey(locale))
+      if (children.containsKey(locale))
+      {
+         language = children.get(locale);
+      }
+      else if (create)
       {
          language = session.create(Language.class);
          children.put(locale, language);
       }
       else
       {
-         language = children.get(locale);
+         return null;
       }
-      
+
       E e = session.getEmbedded(language, classType);
       if (e == null)
       {
          e = session.create(classType);
          session.setEmbedded(language, classType, e);
       }
-      
+
       e = session.getEmbedded(language, classType);
 
       return e;

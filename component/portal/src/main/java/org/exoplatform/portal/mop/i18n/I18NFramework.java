@@ -27,24 +27,71 @@ import org.chromattic.api.ChromatticSession;
 public class I18NFramework
 {
    private ChromatticSession session;
-   public I18NFramework()
-   {
-      
-   }
-   
+
    public I18NFramework(ChromatticSession _session)
    {
       this.session = _session;
    }
-   
-   public I18Nized createI18nMixin(Object entityNode)
+
+   /**
+    * Add new language to the entity node
+    * 
+    * @param entityNode the node which want to add new language
+    * @param classType a mixin node type which existed in entity node
+    * @param locale the language added to i18n mixin
+    * @return mixin node type added to the entity node
+    */
+   public <M> M putMixin(Object entityNode, Class<M> classType, String locale)
    {
-      I18Nized mixin = session.create(I18Nized.class);
-      session.setEmbedded(entityNode, I18Nized.class, mixin);
-      
-      // Language space is mandatory
-      LanguageSpace languageSpace = session.create(LanguageSpace.class);
-      mixin.setLanguageSpace(languageSpace);
-      return mixin;
+      // Check whether class type is entity node's embedded
+      M m = session.getEmbedded(entityNode, classType);
+      if (m == null)
+      {
+         throw new IllegalStateException("Can not put i18n mixin for entity node with mixin " + classType.getName());
+      }
+
+      I18Nized mixin = session.getEmbedded(entityNode, I18Nized.class);
+      if (mixin == null)
+      {
+         mixin = session.create(I18Nized.class);
+         session.setEmbedded(entityNode, I18Nized.class, mixin);
+
+         // Language space is mandatory
+         LanguageSpace languageSpace = session.create(LanguageSpace.class);
+         mixin.setLanguageSpace(languageSpace);
+      }
+
+      return mixin.getMixin(classType, locale, true);
+   }
+
+   /**
+    * Return a mixin type of a language node
+    * <p>
+    * If the language has not defined in entity node, 
+    * mixin nodetype of entity node will be returned as default value
+    * 
+    * @param entityNode The node which want to get i18n mixin
+    * @param classType Mixin nodetype in entity node want to be localized
+    * @param locale
+    * @return Mixin nodetype has been localized
+    */
+   public <M> M getMixin(Object entityNode, Class<M> classType, String locale)
+   {
+      // Check whether class type is entity node's embedded
+      M m = session.getEmbedded(entityNode, classType);
+      if (m == null)
+      {
+         throw new IllegalStateException(classType.getName() + " is not a mixin of the entity node");
+      }
+
+      I18Nized mixin = session.getEmbedded(entityNode, I18Nized.class);
+      if (mixin != null && mixin.getMixin(classType, locale, false) != null)
+      {
+         return mixin.getMixin(classType, locale, false);
+      }
+      else
+      {
+         return m;
+      }
    }
 }
