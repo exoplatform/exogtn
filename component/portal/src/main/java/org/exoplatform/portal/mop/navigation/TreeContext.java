@@ -19,7 +19,9 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -58,17 +60,17 @@ class TreeContext<N>
       changes.addLast(change);
    }
 
-   boolean hasChanges()
-   {
-      return changes != null && changes.size() > 0;
-   }
-
-   public NodeChange<NodeContext<N>> nextChange()
+   List<NodeChange<NodeContext<N>>> popChanges()
    {
       if (changes == null || changes.size() == 0)
       {
-         throw new NoSuchElementException();
+         return Collections.emptyList();
       }
-      return changes.removeFirst();
+      else
+      {
+         LinkedList<NodeChange<NodeContext<N>>> tmp = changes;
+         changes = null;
+         return tmp;
+      }
    }
 }

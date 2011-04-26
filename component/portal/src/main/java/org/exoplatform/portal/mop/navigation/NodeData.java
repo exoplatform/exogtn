@@ -63,22 +63,10 @@ class NodeData implements Serializable
       this.children = children;
    }
 
-   boolean hasChild(String childId)
-   {
-      for (int i = 0;i < children.length;i++)
-      {
-         if (children[i].equals(childId))
-         {
-            return true;
-         }
-      }
-      return false;
-   }
-
-   NodeData(Navigation nav)
+   NodeData(Navigation navigation)
    {
       String[] children;
-      List<Navigation> _children = nav.getChildren();
+      List<Navigation> _children = navigation.getChildren();
       if (_children == null)
       {
          children = new String[0];
@@ -95,9 +83,9 @@ class NodeData implements Serializable
 
       //
       String label = null;
-      if (nav.isAdapted(Described.class))
+      if (navigation.isAdapted(Described.class))
       {
-         Described described = nav.adapt(Described.class);
+         Described described = navigation.adapt(Described.class);
          label = described.getName();
       }
 
@@ -105,9 +93,9 @@ class NodeData implements Serializable
       Visibility visibility = Visibility.DISPLAYED;
       Date startPublicationDate = null;
       Date endPublicationDate = null;
-      if (nav.isAdapted(Visible.class))
+      if (navigation.isAdapted(Visible.class))
       {
-         Visible visible = nav.adapt(Visible.class);
+         Visible visible = navigation.adapt(Visible.class);
          visibility = visible.getVisibility();
          startPublicationDate = visible.getStartPublicationDate();
          endPublicationDate = visible.getEndPublicationDate();
@@ -115,7 +103,7 @@ class NodeData implements Serializable
 
       //
       String pageRef = null;
-      Link link = nav.getLink();
+      Link link = navigation.getLink();
       if (link instanceof PageLink)
       {
          PageLink pageLink = (PageLink)link;
@@ -129,7 +117,7 @@ class NodeData implements Serializable
       }
 
       //
-      Attributes attrs = nav.getAttributes();
+      Attributes attrs = navigation.getAttributes();
 
       //
       NodeState state = new NodeState(
@@ -143,8 +131,8 @@ class NodeData implements Serializable
       );
 
       //
-      this.id = nav.getObjectId();
-      this.name = nav.getName();
+      this.id = navigation.getObjectId();
+      this.name = navigation.getName();
       this.state = state;
       this.children = children;
    }

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NodeState
+public final class NodeState
 {
 
    public static class Builder
@@ -63,7 +64,7 @@ public class NodeState
          this.label = null;
          this.startPublicationTime = -1;
          this.endPublicationTime = -1;
-         this.visibility = null;
+         this.visibility = Visibility.DISPLAYED;
          this.pageRef = null;
       }
 
@@ -261,6 +262,34 @@ public class NodeState
    public String getPageRef()
    {
       return pageRef;
+   }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      if (o == this)
+      {
+         return true;
+      }
+      if (o instanceof NodeState)
+      {
+         NodeState that = (NodeState)o;
+         return Safe.equals(uri, that.uri)
+            && Safe.equals(label, that.label)
+            && Safe.equals(icon, that.icon)
+            && Safe.equals(startPublicationTime, that.startPublicationTime)
+            && Safe.equals(endPublicationTime, that.endPublicationTime)
+            && Safe.equals(visibility, that.visibility)
+            && Safe.equals(pageRef, that.pageRef);
+      }
+      return false;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "NodeState[uri=" + uri + ",label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime +
+         ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef + "]";
    }
 
    public Builder builder()

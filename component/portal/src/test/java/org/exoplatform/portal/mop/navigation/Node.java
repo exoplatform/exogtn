@@ -19,7 +19,12 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import junit.framework.Assert;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a navigation node.
@@ -152,9 +157,91 @@ public class Node
       context.filter(filter);
    }
 
+   public void assertConsistent()
+   {
+      if (context.hasContexts())
+      {
+         List<String> a = new ArrayList<String>();
+         for (NodeContext<Node> b = context.getFirst();b != null;b = b.getNext()) {
+            Assert.assertNotNull(b.data);
+            a.add(b.data.getId());
+         }
+         List<String> b = Arrays.asList(context.data.children);
+         Assert.assertEquals(a, b);
+         for (NodeContext<Node> c = context.getFirst();c != null;c = c.getNext()) {
+            c.getNode().assertConsistent();
+         }
+      }
+   }
+
+   public void assertEquals(Node node) {
+
+      // First check state
+      if (context.data != null) {
+         Assert.assertNotNull(node.context.data);
+         Assert.assertEquals(context.data.id, node.context.data.id);
+         Assert.assertEquals(context.data.name, node.context.data.name);
+         Assert.assertEquals(context.data.state, node.context.data.state);
+         Assert.assertEquals(context.state, node.context.state);
+      } else {
+         Assert.assertNull(node.context.data);
+         Assert.assertEquals(context.getName(), node.context.getName());
+         Assert.assertEquals(context.state, node.context.state);
+      }
+
+      //
+      List<Node> nodes1 = new ArrayList<Node>();
+      for (NodeContext<Node> current = context.getFirst();current != null;current = current.getNext()) {
+         nodes1.add(current.getNode());
+      }
+
+      //
+      List<Node> nodes2 = new ArrayList<Node>();
+      for (NodeContext<Node> current = node.context.getFirst();current != null;current = current.getNext()) {
+         nodes2.add(current.getNode());
+      }
+
+      //
+      Assert.assertEquals("Was expecting to have the same children for node " + toString(1) + " " + node.toString(1), nodes1.size(), nodes2.size());
+
+      //
+      for (int i = 0;i < nodes1.size();i++) {
+         nodes1.get(i).assertEquals(nodes2.get(i));
+      }
+   }
+
    @Override
    public String toString()
    {
-      return "Node[id=" + getId() + ",name=" + context.getName() + "]";
+      StringBuilder sb = new StringBuilder();
+      toString(1, sb);
+      return sb.toString();
+   }
+
+   public String toString(int depth)
+   {
+      StringBuilder sb = new StringBuilder();
+      toString(depth, sb);
+      return sb.toString();
+   }
+
+   private void toString(int depth, StringBuilder sb)
+   {
+      if (depth < 0) {
+         throw new IllegalArgumentException("Depth cannot be negative " + depth);
+      }
+      sb.append("Node[id=").append(getId()).append(",name=").append(getName());
+      if (context.hasContexts() && depth > 0) {
+         sb.append(",children={");
+         for (Node node : context.getNodes()) {
+            if (node.context.getPrevious() != null) {
+               sb.append(',');
+            }
+            node.toString(depth - 1, sb);
+         }
+         sb.append("}");
+      } else {
+         sb.append("]");
+      }
    }
 }

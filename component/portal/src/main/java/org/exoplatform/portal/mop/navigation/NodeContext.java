@@ -33,7 +33,6 @@ import java.util.NoSuchElementException;
 public final class NodeContext<N> extends ListTree<NodeContext<N>>
 {
 
-
    /** . */
    final TreeContext<N> tree;
 
@@ -64,7 +63,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.tree = tree;
       this.node = tree.model.create(this);
       this.data = data;
-      this.state = data.getState();
+      this.state = null;
       this.hidden = false;
       this.hiddenCount = 0;
       this.hasContexts = false;
@@ -80,6 +79,28 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.hidden = false;
       this.hiddenCount = 0;
       this.hasContexts = false;
+   }
+
+   NodeData toData()
+   {
+      String id = data.id;
+      String name = getName();
+      NodeState state = this.state != null ? this.state : data.state;
+      String[] children;
+      if (hasContexts)
+      {
+         children = new String[getSize()];
+         int index = 0;
+         for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
+         {
+            children[index++] = current.data.id;
+         }
+      }
+      else
+      {
+         children = data.children;
+      }
+      return new NodeData(id, name, state, children);
    }
 
    public NodeContext<N> getDescendant(String id) throws NullPointerException
@@ -160,7 +181,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    private void doFilter(int depth, NodeFilter filter)
    {
-      boolean accept = filter.accept(depth, getId(), name, state);
+      boolean accept = filter.accept(depth, getId(), name, getState());
       setHidden(!accept);
       if (hasContexts)
       {

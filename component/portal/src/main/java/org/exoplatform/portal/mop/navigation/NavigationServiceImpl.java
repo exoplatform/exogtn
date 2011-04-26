@@ -324,9 +324,10 @@ public class NavigationServiceImpl implements NavigationService
       final POMSession session = manager.getSession();
       TreeContext<N> tree = root.tree;
 
-      if (tree.hasChanges())
+      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
+      if (changes.size() > 0)
       {
-         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
+         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes " + changes);
       }
 
       ListAdapter<String[], String> a1 = new ListAdapter<String[], String>()
@@ -541,9 +542,12 @@ public class NavigationServiceImpl implements NavigationService
       POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
 
-      while (tree.hasChanges())
+      //
+      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
+
+      // First pass we update persistent store
+      for (NodeChange<NodeContext<N>> change : changes)
       {
-         NodeChange<NodeContext<N>> change = tree.nextChange();
          if (change instanceof NodeChange.Added<?>)
          {
             NodeChange.Added<NodeContext<N>> add = (NodeChange.Added<NodeContext<N>>)change;
@@ -576,7 +580,6 @@ public class NavigationServiceImpl implements NavigationService
                }
                parent.getChildren().add(index, added);
                add.node.data = new NodeData(added);
-               add.parent.data = new NodeData(parent);
             }
          }
          else if (change instanceof NodeChange.Removed<?>)
@@ -588,7 +591,6 @@ public class NavigationServiceImpl implements NavigationService
                Navigation parent = removed.getParent();
                removed.destroy();
                remove.node.data = null;
-               remove.parent.data = new NodeData(parent);
             }
             else
             {
@@ -636,8 +638,6 @@ public class NavigationServiceImpl implements NavigationService
                index = dst.getChildren().indexOf(previous) + 1;
             }
             dst.getChildren().add(index, moved);
-            move.from.data = new NodeData(src);
-            move.to.data = new NodeData(dst);
          }
          else if (change instanceof NodeChange.Renamed)
          {
@@ -649,7 +649,17 @@ public class NavigationServiceImpl implements NavigationService
             }
 
             //
+            Navigation parent = renamed.getParent();
+            if (parent.getChild(rename.name) != null)
+            {
+               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
+            }
+
+            // We rename and reorder to compensate the move from the rename
+            List<Navigation> children = parent.getChildren();
+            int index = children.indexOf(renamed);
             renamed.setName(rename.name);
+            children.add(index, renamed);
          }
          else
          {
@@ -667,7 +677,7 @@ public class NavigationServiceImpl implements NavigationService
 
       // For now we just do a reference comparison but it would make sense
       // to use an equals instead
-      if (state != context.data.state)
+      if (state != null && !state.equals(context.data.state))
       {
          Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
 
@@ -712,6 +722,12 @@ public class NavigationServiceImpl implements NavigationService
          attrs.setValue(MappedAttributes.URI, state.getURI());
          attrs.setValue(MappedAttributes.ICON, state.getIcon());
       }
+
+      //
+      context.data = context.toData();
+
+      //
+      context.state = null;
 
       //
       if (context.hasContexts())

@@ -19,13 +19,8 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -132,13 +127,13 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("add_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      assertEquals(0, root.getNodeCount());
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      assertEquals(0, root1.getNodeCount());
 
       // Test what happens when null is added
       try
       {
-         root.addChild((String)null);
+         root1.addChild((String)null);
          fail();
       }
       catch (NullPointerException ignore)
@@ -148,7 +143,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Test what happens when an illegal index is added
       try
       {
-         root.addChild(-1, "foo");
+         root1.addChild(-1, "foo");
          fail();
       }
       catch (IndexOutOfBoundsException ignore)
@@ -156,7 +151,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
       try
       {
-         root.addChild(1, "foo");
+         root1.addChild(1, "foo");
          fail();
       }
       catch (IndexOutOfBoundsException ignore)
@@ -164,22 +159,28 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      Node foo = root.addChild("foo");
+      Node foo = root1.addChild("foo");
       assertNull(foo.getId());
       assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
-      assertEquals(1, root.getNodeCount());
-      service.saveNode(root.context);
+      assertSame(foo, root1.getChild("foo"));
+      assertEquals(1, root1.getNodeCount());
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      foo = root.getChild("foo");
-      assertNotNull(foo);
-      assertEquals(1, root.getNodeCount());
-      assertEquals("foo", foo.getName());
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node foo2 = root2.getChild("foo");
+      assertNotNull(foo2);
+      assertEquals(1, root2.getNodeCount());
+      assertEquals("foo", foo2.getName());
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testRemoveChild() throws Exception
@@ -193,12 +194,12 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("remove_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
 
       //
       try
       {
-         root.removeChild(null);
+         root1.removeChild(null);
          fail();
       }
       catch (NullPointerException e)
@@ -206,7 +207,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
       try
       {
-         root.removeChild("bar");
+         root1.removeChild("bar");
          fail();
       }
       catch (IllegalArgumentException e)
@@ -214,23 +215,29 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      Node foo = root.getChild("foo");
-      assertNotNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
+      Node foo1 = root1.getChild("foo");
+      assertNotNull(foo1.getId());
+      assertEquals("foo", foo1.getName());
+      assertSame(foo1, root1.getChild("foo"));
 
       //
-      assertTrue(root.removeChild("foo"));
-      assertNull(root.getChild("foo"));
-      service.saveNode(root.context);
+      assertTrue(root1.removeChild("foo"));
+      assertNull(root1.getChild("foo"));
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      foo = root.getChild("foo");
-      assertNull(foo);
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node foo2 = root2.getChild("foo");
+      assertNull(foo2);
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testRemoveTransientChild() throws Exception
@@ -244,24 +251,30 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("remove_transient_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      Node foo = root.addChild("foo");
-      assertNull(foo.getId());
-      assertEquals("foo", foo.getName());
-      assertSame(foo, root.getChild("foo"));
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node foo1 = root1.addChild("foo");
+      assertNull(foo1.getId());
+      assertEquals("foo", foo1.getName());
+      assertSame(foo1, root1.getChild("foo"));
 
       //
-      assertTrue(root.removeChild("foo"));
-      assertNull(root.getChild("foo"));
-      service.saveNode(root.context);
+      assertTrue(root1.removeChild("foo"));
+      assertNull(root1.getChild("foo"));
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      foo = root.getChild("foo");
-      assertNull(foo);
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node foo2 = root2.getChild("foo");
+      assertNull(foo2);
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testRename() throws Exception
@@ -277,10 +290,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("rename"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN).getNode();
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN).getNode();
       try
       {
-         root.setName("something");
+         root1.setName("something");
          fail();
       }
       catch (IllegalStateException e)
@@ -288,11 +301,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      Node a = root.getChild("a");
-      assertEquals(0, a.context.getIndex());
+      Node a1 = root1.getChild("a");
+      assertEquals(0, a1.context.getIndex());
       try
       {
-         a.setName(null);
+         a1.setName(null);
          fail();
       }
       catch (NullPointerException e)
@@ -300,7 +313,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
       try
       {
-         a.setName("b");
+         a1.setName("b");
          fail();
       }
       catch (IllegalArgumentException e)
@@ -308,20 +321,26 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      a.setName("c");
-      assertEquals("c", a.getName());
-      assertEquals(0, a.context.getIndex());
-      service.saveNode(a.context);
+      a1.setName("c");
+      assertEquals("c", a1.getName());
+      assertEquals(0, a1.context.getIndex());
+      service.saveNode(a1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
       nav = service.loadNavigation(SiteKey.portal("rename"));
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      Node c = root.getChild("c");
-      assertNotNull(c);
-      // assertEquals(0, c.context.getIndex());
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Node a2 = root2.getChild("c");
+      assertNotNull(a2);
+      // assertEquals(0, a2.context.getIndex());
+
+      // Does not pass randomly because of JCR bugs
+      // root1.assertEquals(root2);
    }
 
    public void testReorderChild() throws Exception
@@ -338,20 +357,20 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("reorder_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      Iterator<Node> i = root.getChildren().iterator();
-      Node foo = i.next();
-      assertEquals("foo", foo.getName());
-      Node bar = i.next();
-      assertEquals("bar", bar.getName());
-      Node juu = i.next();
-      assertEquals("juu", juu.getName());
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      Iterator<Node> i = root1.getChildren().iterator();
+      Node foo1 = i.next();
+      assertEquals("foo", foo1.getName());
+      Node bar1 = i.next();
+      assertEquals("bar", bar1.getName());
+      Node juu1 = i.next();
+      assertEquals("juu", juu1.getName());
       assertFalse(i.hasNext());
 
       // Test what happens when null is added
       try
       {
-         root.addChild(1, (Node)null);
+         root1.addChild(1, (Node)null);
          fail();
       }
       catch (NullPointerException expected)
@@ -361,7 +380,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Test what happens when an illegal index is added
       try
       {
-         root.addChild(-1, juu);
+         root1.addChild(-1, juu1);
          fail();
       }
       catch (IndexOutOfBoundsException expected)
@@ -369,7 +388,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
       try
       {
-         root.addChild(4, juu);
+         root1.addChild(4, juu1);
          fail();
       }
       catch (IndexOutOfBoundsException expected)
@@ -377,40 +396,54 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      root.addChild(1, juu);
-      service.saveNode(root.context);
+      root1.addChild(1, juu1);
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      i = root.getChildren().iterator();
-      foo = i.next();
-      assertEquals("foo", foo.getName());
-      juu = i.next();
-      assertEquals("juu", juu.getName());
-      bar = i.next();
-      assertEquals("bar", bar.getName());
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      i = root2.getChildren().iterator();
+      Node foo2 = i.next();
+      assertEquals("foo", foo2.getName());
+      Node juu2 = i.next();
+      assertEquals("juu", juu2.getName());
+      Node bar2 = i.next();
+      assertEquals("bar", bar2.getName());
       assertFalse(i.hasNext());
 
       //
-      root.addChild(0, bar);
-      service.saveNode(root.context);
+      root1.assertEquals(root2);
+
+      //
+      root2.addChild(0, bar2);
+
+      //
+      service.saveNode(root2.context);
+
+      //
+      root2.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      i = root.getChildren().iterator();
-      bar = i.next();
-      assertEquals("bar", bar.getName());
-      foo = i.next();
-      assertEquals("foo", foo.getName());
-      juu = i.next();
-      assertEquals("juu", juu.getName());
+      Node root3 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      i = root3.getChildren().iterator();
+      Node bar3 = i.next();
+      assertEquals("bar", bar3.getName());
+      Node foo3 = i.next();
+      assertEquals("foo", foo3.getName());
+      Node juu3 = i.next();
+      assertEquals("juu", juu3.getName());
       assertFalse(i.hasNext());
+
+      //
+      root2.assertEquals(root3);
    }
 
    public void _testReorderChild2() throws Exception
@@ -554,24 +587,30 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("move_child"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      Node foo = root.getChild("foo");
-      Node bar = root.getChild("bar");
-      Node juu = foo.getChild("juu");
-      bar.addChild(juu);
-      service.saveNode(root.context);
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node foo1 = root1.getChild("foo");
+      Node bar1 = root1.getChild("bar");
+      Node juu1 = foo1.getChild("juu");
+      bar1.addChild(juu1);
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      foo = root.getChild("foo");
-      juu = foo.getChild("juu");
-      assertNull(juu);
-      bar = root.getChild("bar");
-      juu = bar.getChild("juu");
-      assertNotNull(juu);
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node foo2 = root2.getChild("foo");
+      Node juu2 = foo2.getChild("juu");
+      assertNull(juu2);
+      Node bar2 = root2.getChild("bar");
+      juu2 = bar2.getChild("juu");
+      assertNotNull(juu2);
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testRenameNode() throws Exception
@@ -586,39 +625,53 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("rename_node"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      Node foo = root.getChild("foo");
-      foo.setName("foo");
-      service.saveNode(root.context);
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node foo1 = root1.getChild("foo");
+      foo1.setName("foo");
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
       nav = service.loadNavigation(SiteKey.portal("rename_node"));
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      foo = root.getChild("foo");
-      foo.setName("bar");
-      assertEquals("bar", foo.getName());
-      assertSame(foo, root.getChild("bar"));
-      service.saveNode(root.context);
-      assertEquals("bar", foo.getName());
-      assertSame(foo, root.getChild("bar"));
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+
+      //
+      root1.assertEquals(root2);
+
+      //
+      Node foo2 = root2.getChild("foo");
+      foo2.setName("bar");
+      assertEquals("bar", foo2.getName());
+      assertSame(foo2, root2.getChild("bar"));
+      service.saveNode(root2.context);
+      assertEquals("bar", foo2.getName());
+      assertSame(foo2, root2.getChild("bar"));
+
+      //
+      root2.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      Node bar = root.getChild("bar");
-      assertNotNull(bar);
-      assertSame(bar, root.getChild("bar"));
+      Node root3 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node bar3 = root3.getChild("bar");
+      assertNotNull(bar3);
+      assertSame(bar3, root3.getChild("bar"));
 
       //
-      root.addChild("foo");
+      root2.assertEquals(root3);
+
+      //
+      root3.addChild("foo");
       try
       {
-         bar.setName("foo");
+         bar3.setName("foo");
          fail();
       }
       catch (IllegalArgumentException ignore)
@@ -642,30 +695,36 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_children"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      root.removeChild("5");
-      root.removeChild("2");
-      root.addChild(0, root.getChild("3"));
-      root.addChild(1, root.addChild("."));
-      service.saveNode(root.context);
-      Iterator<Node> i = root.getChildren().iterator();
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      root1.removeChild("5");
+      root1.removeChild("2");
+      root1.addChild(0, root1.getChild("3"));
+      root1.addChild(1, root1.addChild("."));
+      service.saveNode(root1.context);
+      Iterator<Node> i = root1.getChildren().iterator();
       assertEquals("3", i.next().getName());
       assertEquals(".", i.next().getName());
       assertEquals("1", i.next().getName());
       assertEquals("4", i.next().getName());
       assertFalse(i.hasNext());
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      i = root.getChildren().iterator();
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      i = root2.getChildren().iterator();
       assertEquals("3", i.next().getName());
       assertEquals(".", i.next().getName());
       assertEquals("1", i.next().getName());
       assertEquals("4", i.next().getName());
       assertFalse(i.hasNext());
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testSaveRecursive() throws Exception
@@ -680,22 +739,28 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_recursive"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      Node foo = root.getChild("foo");
-      Node bar = foo.addChild("bar");
-      bar.addChild("juu");
-      service.saveNode(root.context);
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node foo1 = root1.getChild("foo");
+      Node bar1 = foo1.addChild("bar");
+      bar1.addChild("juu");
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      foo = root.getChild("foo");
-      bar = foo.getChild("bar");
-      assertNotNull(bar.getId());
-      Node juu = bar.getChild("juu");
-      assertNotNull(juu.getId());
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node foo2 = root2.getChild("foo");
+      Node bar2 = foo2.getChild("bar");
+      assertNotNull(bar2.getId());
+      Node juu2 = bar2.getChild("juu");
+      assertNotNull(juu2.getId());
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void testSaveState() throws Exception
@@ -709,27 +774,33 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_state"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
-      NodeState state = root.getState();
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.SINGLE).getNode();
+      NodeState state = root1.getState();
       assertNull(state.getURI());
       assertNull(state.getLabel());
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(-1, state.getEndPublicationTime());
       long now = System.currentTimeMillis();
-      root.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
-      service.saveNode(root.context);
+      root1.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
-      state = root.getState();
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      state = root2.getState();
       assertEquals("foo", state.getURI());
       assertEquals("bar", state.getLabel());
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(now, state.getEndPublicationTime());
-      assertNull(state.getVisibility());
+      assertEquals(Visibility.DISPLAYED, state.getVisibility());
+
+      //
+      root1.assertEquals(root2);
    }
 
    public void _testSaveStateOverwrite() throws Exception
@@ -774,22 +845,141 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext nav = service.loadNavigation(SiteKey.portal("recreate_node"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      String fooId = root.getChild("foo").getId();
-      assertTrue(root.removeChild("foo"));
-      assertNull(root.addChild("foo").getId());
-      service.saveNode(root.context);
+      Node root1 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      String fooId = root1.getChild("foo").getId();
+      assertTrue(root1.removeChild("foo"));
+      assertNull(root1.addChild("foo").getId());
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
 
       //
       sync(true);
 
       //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
-      assertNotNull(root.getChild("foo").getId());
-      assertNotSame(fooId, root.getChild("foo").getId());
+      Node root2 = service.loadNode(Node.MODEL, nav, Scope.CHILDREN).getNode();
+      assertNotNull(root2.getChild("foo").getId());
+      assertNotSame(fooId, root2.getChild("foo").getId());
+
+      //
+      root1.assertEquals(root2);
    }
 
-   public void testSaveMergeNodes() throws Exception
+   public void testMoveToAdded() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_added");
+      Navigation nav = portal.getRootNavigation().addChild("default");
+      nav.addChild("a").addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
+      Node a1 = root1.getChild("a");
+      Node b1 = a1.getChild("b");
+      Node c1 = root1.addChild("c");
+      c1.addChild(b1);
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
+
+      //
+      sync(true);
+
+      //
+      navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
+      Node a2 = root2.getChild("a");
+      assertNotNull(a2);
+      Node c2 = root2.getChild("c");
+      assertNotNull(c2);
+      Node b2 = c2.getChild("b");
+      assertNotNull(b2);
+
+      //
+      root1.assertEquals(root2);
+   }
+
+   public void testMoveFromRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "moved_from_removed");
+      Navigation nav = portal.getRootNavigation().addChild("default");
+      nav.addChild("a").addChild("c");
+      nav.addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
+      Node a1 = root1.getChild("a");
+      Node b1 = root1.getChild("b");
+      Node c1 = a1.getChild("c");
+      b1.addChild(c1);
+      root1.removeChild("a");
+      service.saveNode(root1.context);
+
+      //
+      root1.assertConsistent();
+
+      //
+      sync(true);
+
+      //
+      navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
+      assertNull(root2.getChild("a"));
+      Node b2 = root2.getChild("b");
+      assertNotNull(b2);
+      Node c2 = b2.getChild("c");
+      assertNotNull(c2);
+
+      //
+      root1.assertEquals(root2);
+   }
+
+   public void testConcurrentAddToRemoved() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_to_removed");
+      portal.getRootNavigation().addChild("default").addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("add_to_removed"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root.getChild("a").addChild("b");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root2.removeChild("a");
+      service.saveNode(root2.context);
+
+      //
+      sync(true);
+
+      //
+      try
+      {
+         service.saveNode(root.context);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
+      }
+   }
+
+   public void testConcurrentMerge() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_merge");
@@ -818,110 +1008,15 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       service.saveNode(root1.context);
+      root1.assertConsistent();
+
+      //
       root1.addChild(1, root1.addChild("1"));
       service.saveNode(root1.context);
+      root1.assertConsistent();
    }
 
-   public void testMoveToAdded() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_added");
-      Navigation nav = portal.getRootNavigation().addChild("default");
-      nav.addChild("a").addChild("b");
-
-      //
-      sync(true);
-
-      //
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
-      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
-      Node a = root1.getChild("a");
-      Node b = a.getChild("b");
-      Node c = root1.addChild("c");
-      c.addChild(b);
-      service.saveNode(root1.context);
-
-      //
-      sync(true);
-
-      //
-      navigation = service.loadNavigation(SiteKey.portal("move_to_added"));
-      root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
-      a = root1.getChild("a");
-      assertNotNull(a);
-      c = root1.getChild("c");
-      assertNotNull(c);
-      b = c.getChild("b");
-      assertNotNull(b);
-   }
-
-   public void testMoveFromRemoved() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "moved_from_removed");
-      Navigation nav = portal.getRootNavigation().addChild("default");
-      nav.addChild("a").addChild("c");
-      nav.addChild("b");
-
-      //
-      sync(true);
-
-      //
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
-      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
-      Node a = root1.getChild("a");
-      Node b = root1.getChild("b");
-      Node c = a.getChild("c");
-      b.addChild(c);
-      root1.removeChild("a");
-      service.saveNode(root1.context);
-
-      //
-      sync(true);
-
-      //
-      navigation = service.loadNavigation(SiteKey.portal("moved_from_removed"));
-      root1 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
-      assertNull(root1.getChild("a"));
-      b = root1.getChild("b");
-      assertNotNull(b);
-      c = b.getChild("c");
-      assertNotNull(c);
-   }
-
-   public void testAddToRemoved() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_to_removed");
-      portal.getRootNavigation().addChild("default").addChild("a");
-
-      //
-      sync(true);
-
-      //
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("add_to_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("a").addChild("b");
-      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root2.removeChild("a");
-      service.saveNode(root2.context);
-
-      //
-      sync(true);
-
-      //
-      try
-      {
-         service.saveNode(root.context);
-         fail();
-      }
-      catch (NavigationServiceException e)
-      {
-         assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
-      }
-   }
-
-   public void testRemoveConcurrentRemoved() throws Exception
+   public void testConcurrentRemoveRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_removed");
@@ -932,8 +1027,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("remove_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.removeChild("a");
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.removeChild("a");
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
@@ -942,10 +1039,13 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       sync(true);
 
       //
-      service.saveNode(root.context);
+      service.saveNode(root1.context);
+
+      //
+      root1.assertEquals(root2);
    }
 
-   public void testMoveRemoved() throws Exception
+   public void testConcurrentMoveRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_removed");
@@ -956,8 +1056,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.addChild(root.getChild("a").getChild("b"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.addChild(root1.getChild("a").getChild("b"));
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.getChild("a").removeChild("b");
       service.saveNode(root2.context);
@@ -968,7 +1070,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -977,7 +1079,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
    }
 
-   public void testMoveToRemoved() throws Exception
+   public void testConcurrentMoveToRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_removed");
@@ -989,8 +1091,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_to_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("b").addChild(root.getChild("a"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("b").addChild(root1.getChild("a"));
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("b");
       service.saveNode(root2.context);
@@ -1001,7 +1105,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1010,7 +1114,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
    }
 
-   public void testMoveMoved() throws Exception
+   public void testConcurrentMoveMoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_moved");
@@ -1023,8 +1127,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("move_moved"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("b").addChild(root.getChild("a"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("b").addChild(root1.getChild("a"));
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.getChild("c").addChild(root2.getChild("a"));
       service.saveNode(root2.context);
@@ -1035,7 +1141,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1055,7 +1161,9 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_add_duplicate"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.addChild("a");
       service.saveNode(root2.context);
@@ -1064,10 +1172,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       sync(true);
 
       //
-      root.addChild("a");
+      root1.addChild("a");
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1087,8 +1195,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_add_after_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.addChild(1, "b");
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.addChild(1, "b");
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
@@ -1099,7 +1209,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1121,8 +1231,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_move_after_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.addChild(2, root.getChild("a").getChild("b"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.addChild(2, root1.getChild("a").getChild("b"));
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("c");
       service.saveNode(root2.context);
@@ -1133,7 +1245,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1154,8 +1266,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_move_from_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("c").addChild(root.getChild("a").getChild("b"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("c").addChild(root1.getChild("a").getChild("b"));
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
@@ -1166,7 +1280,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1186,8 +1300,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_rename_removed"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("a").setName("b");
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("a").setName("b");
+
+      //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
       service.saveNode(root2.context);
@@ -1198,12 +1314,46 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
       {
          assertEquals(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
+   }
+
+   public void testConcurrentDuplicateRename() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_duplicate_rename");
+      portal.getRootNavigation().addChild("default").addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_duplicate_rename"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("a").setName("b");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root2.addChild("b");
+      service.saveNode(root2.context);
+
+      //
+      sync(true);
+
+      //
+      try
+      {
+         service.saveNode(root1.context);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
       }
    }
 
@@ -1218,16 +1368,16 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_save"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.addChild("a");
-      service.saveNode(root.context);
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.addChild("a");
+      service.saveNode(root1.context);
 
       //
       sync(true);
 
       // Reload the root node and modify it
-      root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-      root.getChild("a").setState(root.getState().builder().setLabel("foo").capture());
+      root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("a").setState(root1.getState().builder().setLabel("foo").capture());
 
       //
       sync(true);
@@ -1243,7 +1393,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Now click Save button in the first browser
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root1.context);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1252,17 +1402,17 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
    }
 
-   public void testFoo() throws Exception
+   public void testConcurrentRemovalDoesNotPreventSave() throws Exception
    {
       MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "bilto");
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "removal_does_not_prevent_save");
       portal.getRootNavigation().addChild("default").addChild("a");
 
       //
       sync(true);
 
       //
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("bilto"));
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("removal_does_not_prevent_save"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
       root2.removeChild("a");
