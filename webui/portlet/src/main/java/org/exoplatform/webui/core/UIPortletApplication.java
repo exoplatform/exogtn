@@ -23,6 +23,8 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
 import org.apache.commons.collections.map.HashedMap;
@@ -144,5 +146,13 @@ abstract public class UIPortletApplication extends UIApplication
          }
       }
       super.processRender(context);
+   }
+
+   /**
+    * Root uicomponent of a portlet should override this method to leverage serveResource that JSR286 offers 
+    * @param context - WebUI context
+    */
+   public void serveResource(WebuiRequestContext context) throws Exception
+   {      
    }
 }

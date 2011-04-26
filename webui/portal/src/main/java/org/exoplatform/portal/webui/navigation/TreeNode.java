@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import org.exoplatform.portal.mop.user.UserNode;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.jcr.RepositoryException;
+
+import org.exoplatform.portal.mop.user.UserNode;
 
 /**
  * Created by The eXo Platform SARL
@@ -68,11 +68,6 @@ public class TreeNode
    public void setExpanded(boolean isExpanded)
    {
       isExpanded_ = isExpanded;
-   }
-
-   public String getName() throws RepositoryException
-   {
-      return node_.getName();
    }
 
    public UserNode getNode()

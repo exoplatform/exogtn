@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.webui.component;
 
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.ResourceRequest;
+import javax.resource.spi.IllegalStateException;
+
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -27,9 +33,8 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by The eXo Platform SARL
@@ -58,6 +63,29 @@ public class UISitemapPortlet extends UIPortletApplication
 
       UIPortalNavigation uiPortalNavigation = addChild(UIPortalNavigation.class, "UISiteMap", null);
       uiPortalNavigation.setTemplate(template);
+      uiPortalNavigation.setUseAjax(isUseAjax());
+   }
+
+   @Override
+   public void serveResource(WebuiRequestContext context) throws Exception
+   {
+      if (!(context.getRequest() instanceof ResourceRequest))
+      {
+         throw new IllegalStateException("serveSource can only be called in portlet context");
+      }
+      ResourceRequest req = context.getRequest();
+      String nodeID = req.getResourceID();
+      
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
+      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID);
+      if (jsChilds == null)
+      {
+         return;
+      }
+      
+      MimeResponse res = context.getResponse(); 
+      res.setContentType("text/json");
+      res.getWriter().write(jsChilds.toString());
    }
 
    public boolean isUseAjax()

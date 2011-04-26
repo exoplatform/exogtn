@@ -19,6 +19,16 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletResponse;
+import javax.portlet.ResourceResponse;
+import javax.portlet.ResourceURL;
+import javax.resource.spi.IllegalStateException;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
@@ -34,12 +44,13 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
@@ -174,6 +185,84 @@ public class UIPortalNavigation extends UIComponent
       }
       treeNode_.setChildren(childNodes);
    }
+   
+   public JSONArray getChildrenAsJSON(String nodeID) throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      if (!(context instanceof PortletRequestContext))
+      {
+         throw new IllegalStateException("Can only run in portlet context");
+      }           
+      List<TreeNode> childs = null;
+      
+      TreeNode tnode = treeNode_.findNodes(nodeID);
+      if (tnode != null) 
+      {
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserNode userNode = userPortal.getNode(tnode.getNode(), SITEMAP_SCOPE);
+         if (userNode != null)
+         {
+            userNode.filter(NAVIGATION_FILTER);
+            tnode.setChildren(userNode.getChildren());
+            tnode.setExpanded(true);            
+            childs = tnode.getChildren();
+         }
+      }
+      
+      JSONArray jsChilds = new JSONArray();
+      if (childs == null)
+      {
+         return null;
+      }                  
+      MimeResponse res = context.getResponse();
+      for (TreeNode child : childs)
+      {
+         jsChilds.put(toJSON(child, res));
+      }
+      return jsChilds;
+   }
+
+   private JSONObject toJSON(TreeNode tnode, MimeResponse res) throws Exception
+   {
+      JSONObject json = new JSONObject();
+      UserNode node = tnode.getNode();
+      String nodeId = node.getId();
+      
+      json.put("id", nodeId);
+      json.put("label", node.getEncodedResolvedLabel());
+      json.put("isExpanded", tnode.isExpanded());
+      json.put("hasChild", tnode.hasChild());            
+      
+      ResourceURL rsURL = res.createResourceURL();
+      rsURL.setResourceID(nodeId);
+      json.put("getNodeURL", rsURL.toString());
+      
+      json.put("collapseURL", url("CollapseNode", nodeId));
+      
+      String actionLink;
+      if (node.getPageRef() == null)
+      {
+         actionLink = null;
+      } 
+      else if (isUseAjax())
+      {
+         actionLink = event("SelectNode", nodeId);
+      } 
+      else
+      {
+         actionLink = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+      }
+      json.put("actionLink", actionLink);
+      
+      JSONArray childs = new JSONArray();
+      for (TreeNode child : tnode.getChildren())
+      {
+         childs.put(toJSON(child, res));
+      }      
+      json.put("childs", childs);
+      return json;
+   }
+   
 
    /**
     * 
@@ -241,16 +330,16 @@ public class UIPortalNavigation extends UIComponent
          UIPortal uiPortal = Util.getUIPortal();
          String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
 
-         TreeNode selectedode = event.getSource().getTreeNodes().findNodes(treePath);
+         TreeNode selectedNode = event.getSource().getTreeNodes().findNodes(treePath);
          //There're may be interuption between browser and server
-         if (selectedode == null)
+         if (selectedNode == null)
          {
             event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
             return;
          }
          
          PageNodeEvent<UIPortal> pnevent;
-         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedode.getNode().getURI());
+         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getNode().getURI());
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
       }
    }

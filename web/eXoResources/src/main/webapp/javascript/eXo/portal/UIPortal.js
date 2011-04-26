@@ -654,6 +654,7 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 	var requestStr = eXo.env.server.createPortalURL(portalComposer.id, "Toggle", true);
 	ajaxAsyncGetRequest(requestStr);
 };
+
 /**
  * Clollapse or expand an element (all its children) of tree
  * @param {Object} element object to collapse or expand
@@ -663,22 +664,72 @@ UIPortal.prototype.collapseExpand = function(element, actExpand, actCollapse) {
 	var className = element.className;
 	if(!subGroup) return;
 	if(subGroup.style.display == "none") {
-		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon ClearFix" ;
-//		subGroup.style.display = "block" ;
-		if (actExpand)
-		{
-			actExpand.call();
+		if (className.indexOf("ExpandIcon") == 0) 
+		if (actExpand) {
+			eXo.portal.UIPortal.updateTreeNode(actExpand.call(), element, subGroup);
 		}
 	} else {
 		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon ClearFix" ;
 		subGroup.style.display = "none" ;
-		if (actCollapse)
-		{
+		if (actCollapse) {
 			actCollapse.call();
 		}
 	}
 };
 	
+UIPortal.prototype.updateTreeNode = function(jsChilds, targetNode, subGroup) {	
+	try {
+		var data = eXo.core.JSON.parse(jsChilds);
+	} catch (e) {
+		alert("need refresh");
+		return;
+	}	
+	if (isNaN(data.length) || data.length < 1) {
+		return;
+	}			
+	
+	function toHtml(node, isLast) {
+		if (!node) return;
+		var lastNode = isLast ? "LastNode" : "";
+		var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
+		
+		var actionExpand = 'return ajaxAsyncGetRequest("' + node.getNodeURL + '", false)';
+		var actionCollapse = 'ajaxAsyncGetRequest("' + node.collapseURL + '", true)'; 
+		var coEx = "eXo.portal.UIPortal.collapseExpand(this, function() {" + actionExpand + "},  function() {" + actionCollapse + "})";		 
+			
+		var str = "";			
+		if (node.hasChild) {
+			str += "<div class='" + lastNode + " Node'>";			
+			if (node.isExpanded) {
+				str += "<div class='CollapseIcon ClearFix' onclick='" + coEx + "'>";
+				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
+				str += "</div><div class='ChildrenContainer' style='display: block'>";
+				for (var idx = 0; idx < node.childs.length; i++) {
+					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
+				}				
+			} else {
+				str += "<div class='ExpandIcon ClearFix' onclick='" + coEx + "'>";
+				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
+				str += "</div><div class='ChildrenContainer' style='display: none'>";
+			}
+			str += "</div></div>";
+		} else {
+			str += "<div class='" + lastNode + " Node ClearFix'><div class='NullItem'><div class='ClearFix'>";
+			str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a></div></div></div>";			
+		}
+		return str;
+	}
+	
+	var htmlFrags = "";	
+	for (var i = 0; i < data.length; i++) {
+		htmlFrags += toHtml(data[i], i == data.length - 1);
+	}
+	
+	subGroup.innerHTML = htmlFrags;
+	targetNode.className = "CollapseIcon ClearFix" ;
+	subGroup.style.display = "block";	
+};
+
 /*
 * This method will start the creation of a new javascript application such as a widget
 *
