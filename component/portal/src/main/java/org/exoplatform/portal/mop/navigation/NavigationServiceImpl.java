@@ -401,7 +401,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      Diff<String[], NodeContext<N>, String[], NodeData, String> a =
+      Diff<String[], NodeContext<N>, String[], NodeData, String> diff =
          new Diff<String[], NodeContext<N>, String[], NodeData, String>(
             a1,
             new M1(),
@@ -417,113 +417,118 @@ public class NavigationServiceImpl implements NavigationService
          );
 
       //
-      NodeData dataRoot = cache.getNodeData(session, root.data.id);
+      List<NodeChange<N>> list = Collections.emptyList();
 
-      //
-      DiffChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = a.perform(root, dataRoot);
-
-      LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
-      NodeContext<N> last = null;
-
-      // Returns empty iterator if we can
-      if (!it.hasNext())
-      {
-         return Collections.<NodeChange<N>>emptyList().iterator();
-      }
-
-      LinkedList<NodeChange<N>> list = new LinkedList<NodeChange<N>>();
-
+      // Switch to edit mode
       tree.editMode = true;
 
-      while (it.hasNext())
+      try
       {
-         DiffChangeType change = it.next();
-         switch (change)
+         NodeData dataRoot = cache.getNodeData(session, root.data.id);
+         DiffChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.perform(root, dataRoot);
+         LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
+         NodeContext<N> last = null;
+         while (it.hasNext())
          {
-            case ENTER:
-               stack.addLast(it.getSource());
-               break;
-            case LEAVE:
-               last = stack.removeLast();
-               break;
-            case MOVED_OUT:
-               break;
-            case MOVED_IN:
+            DiffChangeType change = it.next();
+            switch (change)
             {
-               NodeContext<N> to = stack.getLast();
-               NodeContext<N> moved = it.getSource();
-               NodeContext<N> from = moved.getParent();
-               NodeContext<N> previous;
-               if (last == null || last.getParent() != to)
+               case ENTER:
+                  stack.addLast(it.getSource());
+                  break;
+               case LEAVE:
+                  last = stack.removeLast();
+                  break;
+               case MOVED_OUT:
+                  break;
+               case MOVED_IN:
                {
-                  previous = null;
-                  to.insertAt(0, moved);
+                  NodeContext<N> to = stack.getLast();
+                  NodeContext<N> moved = it.getSource();
+                  NodeContext<N> from = moved.getParent();
+                  NodeContext<N> previous;
+                  if (last == null || last.getParent() != to)
+                  {
+                     previous = null;
+                     to.insertAt(0, moved);
+                  }
+                  else
+                  {
+                     previous = last;
+                     last.insertAfter(moved);
+                  }
+
+                  //
+                  if (list.isEmpty()) {
+                     list = new LinkedList<NodeChange<N>>();
+                  }
+                  list.add(new NodeChange.Moved<N>(
+                     from.getNode(),
+                     to.getNode(),
+                     previous != null ? previous.getNode() : null,
+                     moved.getNode()));
+
+                  //
+                  break;
                }
-               else
+               case ADDED:
                {
-                  previous = last;
-                  last.insertAfter(moved);
+                  NodeContext<N> parent = stack.getLast();
+                  NodeContext<N> added = new NodeContext<N>(parent.tree, it.getDestination());
+                  NodeContext<N> previous;
+                  if (last == null || last.getParent() != parent)
+                  {
+                     previous = null;
+                     parent.insertAt(0, added);
+                  }
+                  else
+                  {
+                     previous = last;
+                     last.insertAfter(added);
+                  }
+
+                  //
+                  if (list.isEmpty()) {
+                     list = new LinkedList<NodeChange<N>>();
+                  }
+                  list.add(new NodeChange.Added<N>(
+                     parent.getNode(),
+                     previous != null ? previous.getNode() : null,
+                     added.getNode(),
+                     added.getName()));
+
+                  //
+                  break;
                }
+               case REMOVED:
+               {
+                  NodeContext<N> removed = it.getSource();
+                  NodeContext<N> parent = removed.getParent();
 
-               //
-               list.addLast(new NodeChange.Moved<N>(
-                  from.getNode(),
-                  to.getNode(),
-                  previous != null ? previous.getNode() : null,
-                  moved.getNode()));
+                  //
+                  removed.remove();
 
-               //
-               break;
+                  //
+                  if (list.isEmpty()) {
+                     list = new LinkedList<NodeChange<N>>();
+                  }
+                  list.add(new NodeChange.Removed<N>(
+                     parent.getNode(),
+                     removed.getNode()));
+
+                  //
+                  break;
+               }
+               default:
+                  throw new UnsupportedOperationException("todo : " + change);
             }
-            case ADDED:
-            {
-               NodeContext<N> parent = stack.getLast();
-               NodeContext<N> added = new NodeContext<N>(parent.tree, it.getDestination());
-               NodeContext<N> previous;
-               if (last == null || last.getParent() != parent)
-               {
-                  previous = null;
-                  parent.insertAt(0, added);
-               }
-               else
-               {
-                  previous = last;
-                  last.insertAfter(added);
-               }
-
-               //
-               list.addLast(new NodeChange.Added<N>(
-                  parent.getNode(),
-                  previous != null ? previous.getNode() : null,
-                  added.getNode(),
-                  added.getName()));
-
-               //
-               break;
-            }
-            case REMOVED:
-            {
-               NodeContext<N> removed = it.getSource();
-               NodeContext<N> parent = removed.getParent();
-
-               //
-               removed.remove();
-
-               //
-               list.addLast(new NodeChange.Removed<N>(
-                  parent.getNode(),
-                  removed.getNode()));
-
-               //
-               break;
-            }
-            default:
-               throw new UnsupportedOperationException("todo : " + change);
          }
       }
-
-      //
-      tree.editMode = false;
+      finally
+      {
+         // Disabled edit mode
+         tree.editMode = false;
+      }
 
       //
       return list.iterator();
