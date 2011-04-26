@@ -242,35 +242,53 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node d1 = a1.getChild("d");
       Node e1 = a1.getChild("e");
       b1 = root1.getChild("b");
-      Node f1 = a1.getChild("f");
-      Node g1 = a1.getChild("g");
-      Node h1 = a1.getChild("h");
+      Node f1 = b1.getChild("f");
+      Node g1 = b1.getChild("g");
+      Node h1 = b1.getChild("h");
 
       //
-//      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
-//      Node a2 = root2.getChild("a");
-//      a2.removeChild("e");
-//      Node b2 = root2.getChild("b");
-//      b2.addChild(2, a2.getChild("d"));
-//      a2.addChild(1, "d");
-//      b2.removeChild("g");
-//      service.saveNode(root2.context);
-
-      // a(c)
-      // b(f,
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node a2 = root2.getChild("a");
+      a2.removeChild("e");
+      Node b2 = root2.getChild("b");
+      b2.addChild(2, a2.getChild("d"));
+      a2.addChild(1, "d");
+      b2.removeChild("g");
+      service.saveNode(root2.context);
 
       //
-//      sync(true);
+      sync(true);
 
       //
-//      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
-//      assertSame(a1, root1.getChild("a"));
-//      assertSame(b1, root1.getChild("b"));
-//      assertEquals(2, a1.getSize());
-//      assertSame(c1, a1.getChild(0));
-//      assertEquals(3, b1.getSize());
-//      assertSame(f1, b1.getChild(0));
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      assertSame(a1, added.parent);
+      assertEquals("d", added.node.getName());
+      assertSame(c1, added.previous);
+      NodeChange.Removed<Node> removed1 = (NodeChange.Removed<Node>)changes.next();
+      assertSame(a1 , removed1.parent);
+      assertSame(e1 , removed1.node);
+      NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>)changes.next();
+      assertSame(a1 , moved.from);
+      assertSame(b1 , moved.to);
+      assertSame(d1 , moved.node);
+      assertSame(f1 , moved.previous);
+      NodeChange.Removed<Node> removed2 = (NodeChange.Removed<Node>)changes.next();
+      assertSame(b1 , removed2.parent);
+      assertSame(g1 , removed2.node);
+      assertFalse(changes.hasNext());
 
-
+      //
+      assertSame(a1, root1.getChild("a"));
+      assertSame(b1, root1.getChild("b"));
+      assertEquals(2, a1.getSize());
+      assertSame(c1, a1.getChild(0));
+      assertNotNull(a1.getChild(1));
+      assertEquals("d", a1.getChild(1).getName());
+      assertFalse(d1.getId().equals(a1.getChild(1).getId()));
+      assertEquals(3, b1.getSize());
+      assertSame(f1, b1.getChild(0));
+      assertSame(d1, b1.getChild(1));
+      assertSame(h1, b1.getChild(2));
    }
 }
