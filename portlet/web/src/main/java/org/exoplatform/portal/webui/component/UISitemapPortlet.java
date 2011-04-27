@@ -69,15 +69,13 @@ public class UISitemapPortlet extends UIPortletApplication
    @Override
    public void serveResource(WebuiRequestContext context) throws Exception
    {
-      if (!(context.getRequest() instanceof ResourceRequest))
-      {
-         throw new IllegalStateException("serveSource can only be called in portlet context");
-      }
+      super.serveResource(context);
+      
       ResourceRequest req = context.getRequest();
       String nodeID = req.getResourceID();
       
       UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
-      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID);
+      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID, true);
       if (jsChilds == null)
       {
          return;

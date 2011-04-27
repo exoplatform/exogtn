@@ -1,8 +1,10 @@
 <% 
-  import org.exoplatform.portal.mop.user.UserNode;
+  	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.gatein.common.text.EntityEncoder;
+	import javax.portlet.MimeResponse;
+	import javax.portlet.ResourceURL;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -11,46 +13,43 @@
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');
 	
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
-	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');
-
-	rootNodes = uicomponent.getNavigations();
+	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
+	uicomponent.loadTreeNodes();
 
 	public void renderChildrenContainer(UserNode parentNode, UserNode node) {
-		print """
-			<div class="MenuItemContainer" style="display: none;">
-				<div class="MenuItemDecorator">
-					<div class="LeftTopMenuDecorator">
-						<div class="RightTopMenuDecorator">
-							<div class="CenterTopMenuDecorator"><span></span></div>
-						</div>
-					</div>					
-					<div class="LeftMiddleMenuDecorator">
-						<div class="RightMiddleMenuDecorator">
-							<div class="CenterMiddleMenuDecorator">
-		""";
-								for(child in node.getChildren()) {
-							 		renderChildNode(parentNode, child);
-								}
-		print """
-							</div>
-						</div>
-					</div>
-					<div class="LeftBottomMenuDecorator">
-						<div class="RightBottomMenuDecorator">
-							<div class="CenterBottomMenuDecorator"><span></span></div>
-						</div>
-					</div>					
-				</div>
-			</div>
-		""";
-	}	
+	   print """
+	   <div class="MenuItemContainer" style="display: none;">
+          <div class="MenuItemDecorator">
+                  <div class="LeftTopMenuDecorator">
+                          <div class="RightTopMenuDecorator">
+                                  <div class="CenterTopMenuDecorator"><span></span></div>
+                          </div>
+                  </div>                                  
+                  <div class="LeftMiddleMenuDecorator">
+                          <div class="RightMiddleMenuDecorator">
+                                  <div class="CenterMiddleMenuDecorator">
+        """;
+                                    for(child in node.getChildren()) {
+                                            renderChildNode(parentNode, child);
+                                    }
+        print """
+                                   </div>
+                           </div>
+                   </div>
+                   <div class="LeftBottomMenuDecorator">
+                           <div class="RightBottomMenuDecorator">
+                                   <div class="CenterBottomMenuDecorator"><span></span></div>
+                           </div>
+                   </div>                                  
+           </div>
+        </div>
+        """;
+	}  
+	
 	public void renderChildNode(UserNode parentNode, UserNode node) {
-		UserNode selectedNode = uicomponent.getSelectedPageNode();
-		UserNode selectedNav = uicomponent.getCurrentNavigation();
+		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
-		if(selectedNode != null &&	selectedNav != null &&
-			 selectedNav.getId () == parentNode.getId() &&
-			 node.getURI() == selectedNode.getURI()) {			 
+		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
@@ -106,7 +105,27 @@
 		print "</div>";					
 	}
 %>
-	
+ 
+<div class="MenuItemContainer-Template" style="display: none;">
+	<div class="MenuItemDecorator">
+		<div class="LeftTopMenuDecorator">
+			<div class="RightTopMenuDecorator">
+				<div class="CenterTopMenuDecorator"><span></span></div>
+			</div>
+		</div>					
+		<div class="LeftMiddleMenuDecorator">
+			<div class="RightMiddleMenuDecorator">
+				<div class="CenterMiddleMenuDecorator">
+				</div>
+			</div>
+		</div>
+		<div class="LeftBottomMenuDecorator">
+			<div class="RightBottomMenuDecorator">
+				<div class="CenterBottomMenuDecorator"><span></span></div>
+			</div>
+		</div>					
+	</div>
+</div>	
 <div class="UINavigationBar <%=uicomponent.getCssClassName()%>">
 	<div class="LeftNavigationBar">
 		<div class="RightNavigationBar">
@@ -114,23 +133,25 @@
 				<div class="UIHorizontalTabs">
 					<div class="TabsContainer">
 						<%
-							UserNode selectedNav = uicomponent.getCurrentNavigation();
-							UserNode selectedNode = uicomponent.getSelectedPageNode();
+							MimeResponse res = _ctx.getRequestContext().getResponse();
+							
+							def rootNodes = uicomponent.getNavigations();
+							UserNode selectedNode = uicomponent.getSelectedNode();
 							if(rootNodes != null) {
 								for(nav in rootNodes) {
 									
-									def pageNodes = nav.getChildren();
+									def childs = nav.getChildren();
                   
-									for(Node node in pageNodes) {
+									for(Node node in childs) {
 										String tabStyleNavigation = "NormalNavigationTab";
-										if(selectedNode != null && selectedNav != null &&
-											 selectedNav.getId() == nav.getId() &&
-											 node.getURI() == selectedNode.getURI()) {
+										if(selectedNode != null && node.getId() == selectedNode.getId()) {
 												tabStyleNavigation = "SelectedNavigationTab";
 										}
+										ResourceURL resourceURL = res.createResourceURL();
+										resourceURL.setResourceID(node.getId());	
 						%>			
 						
-										<div class="UITab">
+										<div class="UITab" exo:getNodeURL="<%=resourceURL.toString() %>">
 											<div class="$tabStyleNavigation">
 												<div class="LeftTab">
 													<div class="RightTab">
@@ -153,7 +174,7 @@
 																		label=entityEncoder.encode(label);
 															 			if(node.getPageRef() != null) {
 															 				if(uicomponent.isUseAjax()) {
-															 					String onclickEvt = uicomponent.event("SelectNode",	nav.getId() + "::" + node.getURI()) + ";return false;";
+															 					String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;";
 															 		%>
 																	 			<a class="TabLabel ${iconType}" onclick="$onclickEvt" href="$pageURI">$label</a>
 																	<%
@@ -171,11 +192,11 @@
 												</div>											 
 											</div>
 											<%
-												/*Render Popup Menu*/
-												if (node.getChildren().size() > 0) {
-													renderChildrenContainer(nav, node);
-												}
-											%>
+                                               /*Render Popup Menu*/
+                                               if (node.getChildren().size() > 0) {
+                                                       renderChildrenContainer(nav, node);
+                                               }
+                                             %>											
 										</div>									
 						<%
 									}

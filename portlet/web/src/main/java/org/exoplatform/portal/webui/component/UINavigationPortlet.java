@@ -27,9 +27,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.json.JSONArray;
 
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.ResourceRequest;
+import javax.resource.spi.IllegalStateException;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIApplicationLifecycle.class),
@@ -50,4 +54,24 @@ public class UINavigationPortlet extends UIPortletApplication
 
       portalNavigation.setCssClassName(prefers.getValue("CSSClassName", ""));
    }
+
+   @Override
+   public void serveResource(WebuiRequestContext context) throws Exception
+   {
+      super.serveResource(context);
+      
+      ResourceRequest req = context.getRequest();
+      String nodeID = req.getResourceID();
+      
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
+      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID, false);
+      if (jsChilds == null)
+      {
+         return;
+      }
+      
+      MimeResponse res = context.getResponse(); 
+      res.setContentType("text/json");
+      res.getWriter().write(jsChilds.toString());
+   }      
 }

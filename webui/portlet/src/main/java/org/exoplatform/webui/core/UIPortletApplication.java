@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
+import javax.resource.spi.IllegalStateException;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -154,5 +155,9 @@ abstract public class UIPortletApplication extends UIApplication
     */
    public void serveResource(WebuiRequestContext context) throws Exception
    {      
+      if (!(context.getRequest() instanceof ResourceRequest))
+      {
+         throw new IllegalStateException("serveSource can only be called in portlet context");
+      }
    }
 }
