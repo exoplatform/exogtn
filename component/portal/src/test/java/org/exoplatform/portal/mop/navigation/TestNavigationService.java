@@ -248,13 +248,13 @@ public class TestNavigationService extends AbstractTestNavigationService
       Node a = root.getChild("a");
       assertNotNull(a);
       assertNull(a.getChildren());
-      assertSame(a, service.loadNode(a.context, Scope.CHILDREN).getNode());
+      service.updateNode(a.context, Scope.CHILDREN);
       assertNotNull(a.getChildren());
       assertEquals(1, a.getChildren().size());
       Node c = a.getChild("c");
       assertEquals("c", c.getName());
       assertSame(a, c.getParent());
-      assertSame(a, service.loadNode(a.context, Scope.SINGLE).getNode());
+      service.loadNode(a.context, Scope.SINGLE);
       assertNotNull(a.getChildren());
       assertEquals(1, a.getChildren().size());
       assertSame(c, a.getChild("c"));

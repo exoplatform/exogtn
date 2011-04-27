@@ -90,6 +90,15 @@ public interface NavigationService
 
    <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
-   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
+   /**
+    * Update the specified content with the most recent state.
+    *
+    * @param context the context to update
+    * @param scope the optional scope
+    * @return an iterator over the changes that were applied to the context
+    * @throws NullPointerException if the context argument is null
+    * @throws NavigationServiceException anything that would prevent the update to occur
+    */
+   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
 
 }

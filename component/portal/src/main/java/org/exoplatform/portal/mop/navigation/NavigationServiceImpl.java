@@ -160,11 +160,13 @@ public class NavigationServiceImpl implements NavigationService
       if (navigation.rootId != null)
       {
          POMSession session = manager.getSession();
-         Scope.Visitor visitor = scope.get();
          NodeData data = cache.getNodeData(session, nodeId);
          if (data != null)
          {
-            return load(new TreeContext<N>(model), session, data, visitor, 0);
+            NodeContext<N> context = new NodeContext<N>(new TreeContext<N>(model), data);
+            Scope.Visitor visitor = scope.get();
+            expand(session, context, visitor, 0);
+            return context;
          }
          else
          {
@@ -177,148 +179,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private <N> NodeContext<N> load(
-      TreeContext<N> tree,
-      POMSession session,
-      NodeData data,
-      Scope.Visitor visitor,
-      int depth)
-   {
-      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
-
-      //
-      NodeContext<N> context;
-      if (visitMode == VisitMode.ALL_CHILDREN)
-      {
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
-         for (String childId : data.children)
-         {
-            NodeData childData = cache.getNodeData(session, childId);
-            if (childData != null)
-            {
-               NodeContext<N> childContext = load(tree, session, childData, visitor, depth + 1);
-               children.add(childContext);
-            }
-            else
-            {
-               throw new UnsupportedOperationException("Handle me gracefully");
-            }
-         }
-
-         //
-         context = new NodeContext<N>(tree, data);
-         context.setContexts(children);
-      }
-      else if (visitMode == VisitMode.NO_CHILDREN)
-      {
-         context = new NodeContext<N>(tree, data);
-      }
-      else
-      {
-         context = new NodeContext<N>(tree, data);
-      }
-
-      //
-      return context;
-   }
-
-   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
-   {
-      POMSession session = manager.getSession();
-      Scope.Visitor visitor = scope.get();
-
-      //
-      String nodeId = context.getId();
-      NodeData data = cache.getNodeData(session, nodeId);
-
-      //
-      if (data != null)
-      {
-         context.data = data;
-         visit(session, context, visitor, 0);
-         return context;
-      }
-      return null;
-   }
-
-   private <N> void visit(
-      POMSession session,
-      NodeContext<N> context,
-      Scope.Visitor visitor,
-      int depth)
-   {
-      NodeData data = context.data;
-
-      //
-      VisitMode visitMode;
-      if (context.hasContexts())
-      {
-         visitMode = VisitMode.ALL_CHILDREN;
-      }
-      else
-      {
-         visitMode = visitor.visit(depth, data.id, data.name, data.state);
-      }
-
-      //
-      if (visitMode == VisitMode.ALL_CHILDREN)
-      {
-         Map<String, NodeContext<N>> previous = Collections.emptyMap();
-         if (context.hasContexts())
-         {
-            previous = new HashMap<String, NodeContext<N>>();
-            for (NodeContext<N> a : context.getContexts())
-            {
-               if (a.data != null)
-               {
-                  previous.put(a.getId(), a);
-               }
-            }
-            context.setContexts(null);
-         }
-
-         //
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
-         for (String childId : data.children)
-         {
-            NodeData childData = cache.getNodeData(session, childId);
-            if (childData != null)
-            {
-               NodeContext<N> childContext = previous.get(childId);
-               if (childContext != null)
-               {
-                  childContext.data = childData;
-                  visit(session, childContext, visitor, depth + 1);
-               }
-               else
-               {
-                  childContext = load(context.tree, session, childData, visitor, depth + 1);
-               }
-               children.add(childContext);
-            }
-            else
-            {
-               throw new UnsupportedOperationException("Handle me gracefully");
-            }
-         }
-
-         //
-         context.setContexts(children);
-      }
-      else if (visitMode == VisitMode.NO_CHILDREN)
-      {
-         if (context.hasContexts())
-         {
-            context.setContexts(null);
-         }
-      }
-      else
-      {
-         throw new AssertionError();
-      }
-   }
-
-   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root) throws NullPointerException, NavigationServiceException
+   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root, Scope scope) throws NullPointerException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
@@ -423,6 +284,7 @@ public class NavigationServiceImpl implements NavigationService
       // Switch to edit mode
       tree.editMode = true;
 
+      // Apply diff changes to the model
       try
       {
          NodeData dataRoot = cache.getNodeData(session, root.data.id);
@@ -527,18 +389,61 @@ public class NavigationServiceImpl implements NavigationService
       }
       finally
       {
-         // Disabled edit mode
+         // Disable edit mode
          tree.editMode = false;
+      }
+
+      // Now update with scope
+      if (scope != null)
+      {
+         expand(session, root, scope.get(), 0);
       }
 
       //
       return list.iterator();
    }
 
+   private <N> void expand(POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
+   {
+      if (context.hasContexts())
+      {
+         for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
+         {
+            expand(session, current, visitor, depth + 1);
+         }
+      }
+      else
+      {
+         NodeData data = context.data;
+         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+         if (visitMode == VisitMode.ALL_CHILDREN)
+         {
+            ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
+            for (String childId : data.children)
+            {
+               NodeData childData = cache.getNodeData(session, childId);
+               if (childData != null)
+               {
+                  NodeContext<N> child = new NodeContext<N>(context.tree, childData);
+                  expand(session, child, visitor, depth + 1);
+                  children.add(child);
+               }
+               else
+               {
+                  throw new UnsupportedOperationException("Handle me gracefully");
+               }
+            }
+            context.setContexts(children);
+         }
+         else
+         {
+            // Do nothing
+         }
+      }
+   }
+
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
    {
-
-
       POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
 
@@ -736,6 +641,163 @@ public class NavigationServiceImpl implements NavigationService
          {
             saveState(session, child);
          }
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   // Code to remove soon below
+
+   private <N> NodeContext<N> load(
+      TreeContext<N> tree,
+      POMSession session,
+      NodeData data,
+      Scope.Visitor visitor,
+      int depth)
+   {
+      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+
+      //
+      NodeContext<N> context;
+      if (visitMode == VisitMode.ALL_CHILDREN)
+      {
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
+         for (String childId : data.children)
+         {
+            NodeData childData = cache.getNodeData(session, childId);
+            if (childData != null)
+            {
+               NodeContext<N> childContext = load(tree, session, childData, visitor, depth + 1);
+               children.add(childContext);
+            }
+            else
+            {
+               throw new UnsupportedOperationException("Handle me gracefully");
+            }
+         }
+
+         //
+         context = new NodeContext<N>(tree, data);
+         context.setContexts(children);
+      }
+      else if (visitMode == VisitMode.NO_CHILDREN)
+      {
+         context = new NodeContext<N>(tree, data);
+      }
+      else
+      {
+         context = new NodeContext<N>(tree, data);
+      }
+
+      //
+      return context;
+   }
+
+   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
+   {
+      POMSession session = manager.getSession();
+      Scope.Visitor visitor = scope.get();
+
+      //
+      String nodeId = context.getId();
+      NodeData data = cache.getNodeData(session, nodeId);
+
+      //
+      if (data != null)
+      {
+         context.data = data;
+         visit(session, context, visitor, 0);
+         return context;
+      }
+      return null;
+   }
+
+   private <N> void visit(
+      POMSession session,
+      NodeContext<N> context,
+      Scope.Visitor visitor,
+      int depth)
+   {
+      NodeData data = context.data;
+
+      //
+      VisitMode visitMode;
+      if (context.hasContexts())
+      {
+         visitMode = VisitMode.ALL_CHILDREN;
+      }
+      else
+      {
+         visitMode = visitor.visit(depth, data.id, data.name, data.state);
+      }
+
+      //
+      if (visitMode == VisitMode.ALL_CHILDREN)
+      {
+         Map<String, NodeContext<N>> previous = Collections.emptyMap();
+         if (context.hasContexts())
+         {
+            previous = new HashMap<String, NodeContext<N>>();
+            for (NodeContext<N> a : context.getContexts())
+            {
+               if (a.data != null)
+               {
+                  previous.put(a.getId(), a);
+               }
+            }
+            context.setContexts(null);
+         }
+
+         //
+         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
+         for (String childId : data.children)
+         {
+            NodeData childData = cache.getNodeData(session, childId);
+            if (childData != null)
+            {
+               NodeContext<N> childContext = previous.get(childId);
+               if (childContext != null)
+               {
+                  childContext.data = childData;
+                  visit(session, childContext, visitor, depth + 1);
+               }
+               else
+               {
+                  childContext = load(context.tree, session, childData, visitor, depth + 1);
+               }
+               children.add(childContext);
+            }
+            else
+            {
+               throw new UnsupportedOperationException("Handle me gracefully");
+            }
+         }
+
+         //
+         context.setContexts(children);
+      }
+      else if (visitMode == VisitMode.NO_CHILDREN)
+      {
+         if (context.hasContexts())
+         {
+            context.setContexts(null);
+         }
+      }
+      else
+      {
+         throw new AssertionError();
       }
    }
 }

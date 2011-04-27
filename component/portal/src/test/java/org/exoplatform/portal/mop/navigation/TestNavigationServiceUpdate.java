@@ -53,7 +53,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      service.updateNode(root1);
+      service.updateNode(root1, null);
       assertEquals(1, root1.getNodeSize());
       Node a = root1.getNode(0);
       assertEquals("a", a.getName());
@@ -82,7 +82,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context, null);
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertSame(root1, added.parent);
       assertSame(root1.getChild("b"), added.node);
@@ -115,7 +115,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1, null);
       NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>)changes.next();
       assertSame(root1.node, removed.parent);
       assertSame(a, removed.node);
@@ -148,7 +148,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1, null);
       NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>)changes.next();
       assertSame(a, moved.from);
       assertSame(c, moved.to);
@@ -191,7 +191,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       service.saveNode(root2.context);
 
       //
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context, null);
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertNull(added.previous);
       assertSame(a, added.parent);
@@ -260,7 +260,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context);
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context, null);
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertSame(a1, added.parent);
       assertEquals("d", added.node.getName());

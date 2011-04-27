@@ -122,9 +122,9 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       notify(EventType.NAVIGATION_UPDATED, key);
    }
 
-   public <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
+   public <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException
    {
-      return service.updateNode(context);
+      return service.updateNode(context, scope);
    }
 
    private void notify(String name, SiteKey key)
