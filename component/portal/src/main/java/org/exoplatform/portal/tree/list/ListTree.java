@@ -23,19 +23,13 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
- * <p>A tree structure where the children in which each child has a name and an index. The name
- * and index are unique for a given tree node. A node maintains a map of its children keyed by their names.</p>
- *
- * <p>The children of a node is a linked list and can be iterated with an iterator
- * or thanks to the {@link #getFirst()}, {@link #getLast()}, {@link #getNext()} and {@link #getPrevious()}
- * methods.</p>
- *
- * <p>Accessing a child by its name is done in constant time because of the map maintained by the
- * the parent. Accessing a child by its index is not provided as it would be done in a linear time, instead
- * the relevant method to navigate the child list are provided.</p>
+ * <p>A tree structure where the children in which the children are organized as a linked list. The children of a
+ * tree is a linked list and can be iterated with an iterator or thanks to the {@link #getFirst()}, {@link #getLast()},
+ * {@link #getNext()} and {@link #getPrevious()} methods.</p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @param <T> the self bounding tree type
  */
 public class ListTree<T extends ListTree<T>>
 {
@@ -67,56 +61,75 @@ public class ListTree<T extends ListTree<T>>
       this.size = 0;
    }
 
+   /**
+    * Returns the tree.
+    *
+    * @return the tree
+    */
    public final T getNext()
    {
       return next;
    }
 
+   /**
+    * Returns the previous.
+    *
+    * @return the previous
+    */
    public final T getPrevious()
    {
       return previous;
    }
 
+   /**
+    * Returns the parent.
+    *
+    * @return the parent
+    */
    public final T getParent()
    {
       return parent;
    }
 
+   /**
+    * Returns the size.
+    *
+    * @return the size
+    */
    public final int getSize()
    {
       return size;
    }
 
+   /**
+    * Returns the first tree.
+    *
+    * @return the first tree
+    */
    public final T getFirst()
    {
-/*
-      if (map == null)
-      {
-         throw new IllegalStateException("no children");
-      }
-*/
       return head;
    }
 
+   /**
+    * Returns the last tree.
+    *
+    * @return the last tree
+    */
    public final T getLast()
    {
-/*
-      if (map == null)
-      {
-         throw new IllegalStateException("no children");
-      }
-*/
       return tail;
    }
 
-   public final T get(int index) throws IllegalStateException, IndexOutOfBoundsException
+   /**
+    * Returns a tree specified by its index.
+    *
+    * @param index the index
+    * @return the corresponding tree
+    * @throws IndexOutOfBoundsException if the index is incorrect
+    */
+   public final T get(int index) throws IndexOutOfBoundsException
    {
-/*
-      if (map == null)
-      {
-         throw new IllegalStateException("no children");
-      }
-*/
       if (index < 0)
       {
          throw new IndexOutOfBoundsException("No negative index allowed");
@@ -149,22 +162,15 @@ public class ListTree<T extends ListTree<T>>
     * @param index the index
     * @param tree the tree
     * @throws NullPointerException if the context is null
-    * @throws IllegalStateException if the children relationship does not exist
     * @throws IllegalArgumentException if an existing child with the same name already exist
     * @throws IndexOutOfBoundsException if the index is negative or is greater than the children size
     */
-   public final void insertAt(Integer index, T tree) throws NullPointerException, IllegalStateException, IllegalArgumentException, IndexOutOfBoundsException
+   public final void insertAt(Integer index, T tree) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
    {
       if (tree == null)
       {
          throw new NullPointerException("No null tree accepted");
       }
-/*
-      if (map == null)
-      {
-         throw new IllegalStateException("No trees relationship");
-      }
-*/
       if (index != null && index < 0)
       {
          throw new IndexOutOfBoundsException("No negative index permitted");
@@ -215,15 +221,21 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   public final void insertLast(T context)
+   /**
+    * Insert the specified context at the last position among the children of this context.
+    *
+    * @param tree the content to insert
+    * @throws NullPointerException if the tree argument is null
+    */
+   public final void insertLast(T tree)
    {
       if (tail == null)
       {
-         insertFirst(context);
+         insertFirst(tree);
       }
       else
       {
-         tail.insertAfter(context);
+         tail.insertAfter(tree);
       }
    }
 
@@ -231,9 +243,14 @@ public class ListTree<T extends ListTree<T>>
     * Insert the specified context at the first position among the children of this context.
     *
     * @param tree the content to insert
+    * @throws NullPointerException if the tree argument is null
     */
-   private void insertFirst(T tree)
+   public void insertFirst(T tree) throws NullPointerException
    {
+      if (tree == null)
+      {
+         throw new NullPointerException();
+      }
       if (head == null)
       {
          beforeInsert(tree);
@@ -252,11 +269,22 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
+   /**
+    * Insert the specified tree after this tree
+    *
+    * @param tree the tree to insert after
+    * @throws NullPointerException if the specified tree argument is null
+    * @throws IllegalStateException if this tree does not have a parent
+    */
    public final void insertAfter(T tree)
    {
       if (tree == null)
       {
          throw new NullPointerException("No null tree argument accepted");
+      }
+      if (parent == null)
+      {
+         throw new IllegalStateException();
       }
       if (this != tree)
       {
@@ -282,11 +310,22 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   public final void insertBefore(T tree)
+   /**
+    * Insert the specified tree before this tree
+    *
+    * @param tree the tree to insert before
+    * @throws NullPointerException if the specified tree argument is null
+    * @throws IllegalStateException if this tree does not have a parent
+    */
+   public final void insertBefore(T tree) throws NullPointerException, IllegalStateException
    {
       if (tree == null)
       {
          throw new NullPointerException("No null tree argument accepted");
+      }
+      if (parent == null)
+      {
+         throw new IllegalStateException();
       }
       if (this != tree)
       {
@@ -312,8 +351,17 @@ public class ListTree<T extends ListTree<T>>
       }
    }
 
-   public final void remove()
+   /**
+    * Removes this tree from its parent
+    *
+    * @throws IllegalStateException if this tree does not have a parent
+    */
+   public final void remove() throws IllegalStateException
    {
+      if (parent == null)
+      {
+         throw new IllegalStateException();
+      }
       parent.beforeRemove((T)this);
       if (previous == null)
       {

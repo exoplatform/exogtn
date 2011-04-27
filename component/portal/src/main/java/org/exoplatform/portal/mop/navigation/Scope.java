@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.Visibility;
-
 /**
  * <p>The scope describes a set of nodes, the scope implementation should be stateless and should be shared
  * between many threads.</p>

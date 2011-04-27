@@ -46,7 +46,7 @@ public interface NavigationService
     * @param key the navigation key
     * @return the matching navigation
     * @throws NullPointerException if the key is null
-    * @throws NavigationServiceException if the navigation could not be loaded
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    NavigationContext loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
 
@@ -59,7 +59,7 @@ public interface NavigationService
     * @param state the navigation state
     * @return true if the intent succeeded
     * @throws NullPointerException if the key is null
-    * @throws NavigationServiceException if the navigation could not be saved
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationServiceException;
 
@@ -71,7 +71,7 @@ public interface NavigationService
     * @param scope the scope
     * @return the loaded node
     * @throws NullPointerException if any argument is null
-    * @throws NavigationServiceException if the loading operation could not be performed
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope) throws NullPointerException, NavigationServiceException;
 
@@ -84,10 +84,17 @@ public interface NavigationService
     * @param scope the scope
     * @return the loaded node context
     * @throws NullPointerException if any argument is null
-    * @throws NavigationServiceException if the loading operation could not be performed
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
 
+   /**
+    * Save the specified context state to the persistent storage.
+    *
+    * @param context the context to save
+    * @throws NullPointerException if the context argument is null
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
+    */
    <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
    /**
@@ -97,7 +104,7 @@ public interface NavigationService
     * @param scope the optional scope
     * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
-    * @throws NavigationServiceException anything that would prevent the update to occur
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
 

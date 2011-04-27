@@ -642,4 +642,97 @@ public class TestListTree extends TestCase
       it.add(root.get(2));
       assertAllChildren(root, 3, 1, 2);
    }
+
+   public void testInsertFirstThrowsNPE()
+   {
+      IntegerTree a = tree("a", 0);
+      try
+      {
+         a.insertFirst(null);
+         fail();
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+   }
+
+   public void testInsertLastThrowsNPE()
+   {
+      IntegerTree a = tree("a", 0);
+      try
+      {
+         a.insertLast(null);
+         fail();
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+   }
+
+   public void testInsertBeforeThrowsNPE()
+   {
+      IntegerTree a = tree("a", 0);
+      try
+      {
+         a.insertBefore(null);
+         fail();
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+   }
+
+   public void testInsertBeforeThrowsISE()
+   {
+      IntegerTree a = tree("a", 0);
+      IntegerTree b = tree("b", 1);
+      try
+      {
+         a.insertBefore(b);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+   }
+
+   public void testInsertAfterThrowsNPE()
+   {
+      IntegerTree a = tree("a", 0);
+      try
+      {
+         a.insertAfter(null);
+         fail();
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+   }
+
+   public void testInsertAfterThrowsISE()
+   {
+      IntegerTree a = tree("a", 0);
+      IntegerTree b = tree("b", 1);
+      try
+      {
+         a.insertAfter(b);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+   }
+
+   public void testRemoveThrowsISE()
+   {
+      IntegerTree a = tree("a", 0);
+      try
+      {
+         a.remove();
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+   }
 }
