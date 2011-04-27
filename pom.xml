@@ -90,9 +90,10 @@
 
       <!-- ***************** -->
       <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
+      <!-- webdav required to safely deploy large artifacts -->
       <!-- ***************** -->
-      <exo.releases.repo.url>http://repository.exoplatform.org/service/local/staging/deploy/maven2/</exo.releases.repo.url>
-      <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-snapshots/</exo.snapshots.repo.url>
+      <exo.releases.repo.url>dav:http://repository.exoplatform.org/service/local/staging/deploy/maven2/</exo.releases.repo.url>
+      <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/exo-snapshots/</exo.snapshots.repo.url>
    </properties>
 
    <distributionManagement>
@@ -917,6 +918,18 @@
                   </goals>
                </execution>
             </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <!-- Required by Maven 3+ to deploy artifacts in webdav -->
+            <dependencies>
+               <dependency>
+                  <groupId>org.apache.maven.wagon</groupId>
+                  <artifactId>wagon-webdav-jackrabbit</artifactId>
+                  <version>${version.wagon-webdav-jackrabbit}</version>
+               </dependency>
+            </dependencies>
          </plugin>
       </plugins>
    </build>
