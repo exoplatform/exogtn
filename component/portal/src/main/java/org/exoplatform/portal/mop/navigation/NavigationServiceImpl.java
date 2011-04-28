@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.chromattic.api.Chromattic;
+import org.exoplatform.commons.utils.Queues;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visible;
@@ -289,7 +290,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          NodeData dataRoot = cache.getNodeData(session, root.data.id);
          HierarchyChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.iterator(root, dataRoot);
-         LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
+         Queue<NodeContext<N>> stack = Queues.lifo();
          NodeContext<N> last = null;
          while (it.hasNext())
          {
@@ -297,16 +298,16 @@ public class NavigationServiceImpl implements NavigationService
             switch (change)
             {
                case ENTER:
-                  stack.addLast(it.getSource());
+                  stack.add(it.getSource());
                   break;
                case LEAVE:
-                  last = stack.removeLast();
+                  last = stack.poll();
                   break;
                case MOVED_OUT:
                   break;
                case MOVED_IN:
                {
-                  NodeContext<N> to = stack.getLast();
+                  NodeContext<N> to = stack.peek();
                   NodeContext<N> moved = it.getSource();
                   NodeContext<N> from = moved.getParent();
                   NodeContext<N> previous;
@@ -336,7 +337,7 @@ public class NavigationServiceImpl implements NavigationService
                }
                case ADDED:
                {
-                  NodeContext<N> parent = stack.getLast();
+                  NodeContext<N> parent = stack.peek();
                   NodeContext<N> added = new NodeContext<N>(parent.tree, it.getDestination());
                   NodeContext<N> previous;
                   if (last == null || last.getParent() != parent)

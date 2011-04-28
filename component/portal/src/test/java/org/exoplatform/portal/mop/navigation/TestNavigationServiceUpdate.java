@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
@@ -31,6 +32,26 @@ import java.util.Iterator;
  */
 public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 {
+
+   public void testNoop() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_no_op");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+      def.addChild("b");
+      def.addChild("c");
+      def.addChild("d");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_no_op"));
+      NodeContext<Node> root = service.loadNode(Node.MODEL, navigation, Scope.ALL);
+      Iterator<NodeChange<Node>> it = service.updateNode(root, null);
+      assertFalse(it.hasNext());
+   }
 
    public void testAddFirst() throws Exception
    {
