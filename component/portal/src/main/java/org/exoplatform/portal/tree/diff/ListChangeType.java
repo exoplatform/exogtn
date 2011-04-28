@@ -17,18 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.tree.sync;
+package org.exoplatform.portal.tree.diff;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public interface SyncModel<L, N, H> {
+public enum ListChangeType {
 
-   H getHandle(N node);
+   REMOVE,
 
-   L getChildren(N node);
+   SAME,
 
-   N getDescendant(N node, H handle);
+   ADD
 
 }

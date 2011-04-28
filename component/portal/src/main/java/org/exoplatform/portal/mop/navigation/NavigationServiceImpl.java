@@ -29,11 +29,11 @@ import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
-import org.exoplatform.portal.tree.sync.ListAdapter;
-import org.exoplatform.portal.tree.sync.SyncModel;
-import org.exoplatform.portal.tree.sync.diff.Diff;
-import org.exoplatform.portal.tree.sync.diff.DiffChangeIterator;
-import org.exoplatform.portal.tree.sync.diff.DiffChangeType;
+import org.exoplatform.portal.tree.diff.HierarchyAdapter;
+import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
+import org.exoplatform.portal.tree.diff.HierarchyChangeType;
+import org.exoplatform.portal.tree.diff.HierarchyDiff;
+import org.exoplatform.portal.tree.diff.ListAdapter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -228,7 +228,7 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      class M1 implements SyncModel<String[], NodeContext<N>, String>
+      class M1 implements HierarchyAdapter<String[], NodeContext<N>, String>
       {
          public String getHandle(NodeContext<N> node)
          {
@@ -245,7 +245,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      class M2 implements SyncModel<String[], NodeData, String>
+      class M2 implements HierarchyAdapter<String[], NodeData, String>
       {
          public String getHandle(NodeData node)
          {
@@ -263,8 +263,8 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      Diff<String[], NodeContext<N>, String[], NodeData, String> diff =
-         new Diff<String[], NodeContext<N>, String[], NodeData, String>(
+      HierarchyDiff<String[], NodeContext<N>, String[], NodeData, String> diff =
+         new HierarchyDiff<String[], NodeContext<N>, String[], NodeData, String>(
             a1,
             new M1(),
             a1,
@@ -288,12 +288,12 @@ public class NavigationServiceImpl implements NavigationService
       try
       {
          NodeData dataRoot = cache.getNodeData(session, root.data.id);
-         DiffChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.perform(root, dataRoot);
+         HierarchyChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.iterator(root, dataRoot);
          LinkedList<NodeContext<N>> stack = new LinkedList<NodeContext<N>>();
          NodeContext<N> last = null;
          while (it.hasNext())
          {
-            DiffChangeType change = it.next();
+            HierarchyChangeType change = it.next();
             switch (change)
             {
                case ENTER:

@@ -17,25 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.tree.sync.diff;
+package org.exoplatform.portal.tree.diff;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum DiffChangeType {
+public interface HierarchyAdapter<L, N, H> {
 
-   ENTER,
+   H getHandle(N node);
 
-   ADDED,
+   L getChildren(N node);
 
-   REMOVED,
-
-   MOVED_IN,
-
-   MOVED_OUT,
-
-   LEAVE,
-
-   ERROR
+   N getDescendant(N node, H handle);
 
 }

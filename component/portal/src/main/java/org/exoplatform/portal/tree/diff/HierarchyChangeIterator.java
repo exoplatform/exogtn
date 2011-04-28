@@ -17,38 +17,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.tree.sync.diff;
+package org.exoplatform.portal.tree.diff;
 
-import org.exoplatform.portal.tree.sync.ListAdapter;
-import org.exoplatform.portal.tree.sync.SyncContext;
-import org.exoplatform.portal.tree.sync.SyncModel;
-import org.exoplatform.portal.tree.sync.lcs.LCS;
-import org.exoplatform.portal.tree.sync.lcs.LCSChangeIterator;
-
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChangeType> {
+public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<HierarchyChangeType>
+{
 
    /** . */
-   private final Diff<L1, N1, L2, N2, H> diff;
+   private final HierarchyDiff<L1, N1, L2, N2, H> diff;
 
    /** . */
    private Frame frame;
 
    /** . */
-   private final SyncContext<L1, N1, H> context1;
+   private final HierarchyContext<L1, N1, H> context1;
 
    /** . */
-   private final SyncContext<L2, N2, H> context2;
+   private final HierarchyContext<L2, N2, H> context2;
 
-   DiffChangeIterator(Diff<L1, N1, L2, N2, H> diff, SyncContext<L1, N1, H> context1, SyncContext<L2, N2, H> context2) {
+   /** . */
+   private final ListDiff<L1, L2, H> listDiff;
+
+   HierarchyChangeIterator(HierarchyDiff<L1, N1, L2, N2, H> diff, HierarchyContext<L1, N1, H> context1, HierarchyContext<L2, N2, H> context2) {
       this.diff = diff;
       this.context1 = context1;
       this.context2 = context2;
       this.frame = new Frame(null, context1.getRoot(), context2.getRoot());
+      this.listDiff = new ListDiff<L1, L2, H>(
+            diff.listAdapter1,
+            diff.listAdapter2,
+            diff.comparator);
    }
 
    /**
@@ -58,26 +61,26 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
 
       INIT(null),
 
-      ENTER(DiffChangeType.ENTER),
+      ENTER(HierarchyChangeType.ENTER),
 
-      ADDED(DiffChangeType.ADDED),
+      ADDED(HierarchyChangeType.ADDED),
 
-      REMOVED(DiffChangeType.REMOVED),
+      REMOVED(HierarchyChangeType.REMOVED),
 
-      MOVED_IN(DiffChangeType.MOVED_IN),
+      MOVED_IN(HierarchyChangeType.MOVED_IN),
 
-      MOVED_OUT(DiffChangeType.MOVED_OUT),
+      MOVED_OUT(HierarchyChangeType.MOVED_OUT),
 
-      LEAVE(DiffChangeType.LEAVE),
+      LEAVE(HierarchyChangeType.LEAVE),
 
-      ERROR(DiffChangeType.ERROR),
+      ERROR(HierarchyChangeType.ERROR),
 
       RESUME(null);
 
       /** The associated change type. */
-      final DiffChangeType changeType;
+      final HierarchyChangeType changeType;
 
-      private Status(DiffChangeType changeType) {
+      private Status(HierarchyChangeType changeType) {
          this.changeType = changeType;
       }
    }
@@ -94,7 +97,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
       private final N2 dstRoot;
 
       /** . */
-      private LCSChangeIterator<L1, L2, H> it;
+      private ListChangeIterator<L1, L2, H> it;
 
       /** . */
       private Status previous;
@@ -127,7 +130,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
          while (true) {
 
             if (frame.previous == Status.INIT) {
-               H id2 = context2.getModel().getHandle(frame.dstRoot);
+               H id2 = context2.getHierarchyAdapter().getHandle(frame.dstRoot);
                if (frame.srcRoot == null)
                {
                   frame.next = Status.ENTER;
@@ -136,7 +139,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                }
                else
                {
-                  H id1 = context1.getModel().getHandle(frame.srcRoot);
+                  H id1 = context1.getHierarchyAdapter().getHandle(frame.srcRoot);
                   if (diff.comparator.compare(id1, id2) != 0) {
                      frame.next = Status.ERROR;
                      frame.src = frame.srcRoot;
@@ -165,32 +168,18 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                frame = new Frame(frame, frame.src, frame.dst);
                continue;
             } else if (frame.previous == Status.ENTER) {
-               ListAdapter<L1, H> adapter1;
                L1 children1;
-               if (frame.src != null)
-               {
-                  children1 = context1.getModel().getChildren(frame.srcRoot);
-                  adapter1 = diff.adapter1;
+               if (frame.src != null) {
+                  children1 = context1.getHierarchyAdapter().getChildren(frame.srcRoot);
+                  frame.srcIt = diff.listAdapter1.iterator(children1, false);
                }
-               else
-               {
+               else {
                   children1 = null;
-                  adapter1 = new ListAdapter<L1, H>() {
-                     public int size(L1 list) {
-                        return 0;
-                     }
-                     public Iterator<H> iterator(L1 list, boolean reverse) {
-                        return Collections.<H>emptyList().iterator();
-                     }
-                  };
+                  frame.srcIt = null;
                }
-               L2 children2 = context2.getModel().getChildren(frame.dstRoot);
-               frame.srcIt = adapter1.iterator(children1, false);
-               frame.dstIt = diff.adapter2.iterator(children2, false);
-               frame.it = LCS.create(
-                     adapter1,
-                     diff.adapter2,
-                     diff.comparator).perform(children1, children2);
+               L2 children2 = context2.getHierarchyAdapter().getChildren(frame.dstRoot);
+               frame.dstIt = diff.listAdapter2.iterator(children2, false);
+               frame.it = listDiff.iterator(children1, children2);
             } else {
                // Nothing
             }
@@ -198,7 +187,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
             //
             if (frame.it.hasNext()) {
                switch (frame.it.next()) {
-                  case KEEP:
+                  case SAME:
                      N1 next1 = context1.findByHandle(frame.srcIt.next());
                      N2 next2 = context2.findByHandle(frame.dstIt.next());
                      frame = new Frame(frame, next1, next2);
@@ -207,7 +196,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                      frame.dstIt.next();
                      H addedHandle = frame.it.getElement();
                      N2 added = context2.findByHandle(addedHandle);
-                     H addedId = context2.getModel().getHandle(added);
+                     H addedId = context2.getHierarchyAdapter().getHandle(added);
                      N1 a = context1.findByHandle(addedId);
                      if (a != null) {
                         frame.next = Status.MOVED_IN;
@@ -223,7 +212,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
                      frame.srcIt.next();
                      H removedHandle = frame.it.getElement();
                      N1 removed = context1.findByHandle(removedHandle);
-                     H removedId = context1.getModel().getHandle(removed);
+                     H removedId = context1.getHierarchyAdapter().getHandle(removed);
                      N2 b = context2.findByHandle(removedId);
                      if (b != null) {
                         frame.next = Status.MOVED_OUT;
@@ -251,7 +240,7 @@ public class DiffChangeIterator<L1, N1, L2, N2, H> implements Iterator<DiffChang
       return frame != null && frame.next != null;
    }
 
-   public DiffChangeType next() {
+   public HierarchyChangeType next() {
       if (!hasNext()) {
          throw new NoSuchElementException();
       } else {
