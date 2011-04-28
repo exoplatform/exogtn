@@ -19,7 +19,19 @@
 
 package org.exoplatform.portal.webui.component;
 
+import java.util.Collection;
+
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceURL;
+
+import org.exoplatform.portal.mop.user.NavigationPath;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -28,12 +40,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.json.JSONArray;
-
-import javax.portlet.MimeResponse;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.ResourceRequest;
-import javax.resource.spi.IllegalStateException;
+import org.json.JSONObject;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIApplicationLifecycle.class),
@@ -48,7 +55,7 @@ public class UINavigationPortlet extends UIPortletApplication
       String template = prefers.getValue("template", "app:/groovy/portal/webui/component/UIPortalNavigation.gtmpl");
 
       UIPortalNavigation portalNavigation = addChild(UIPortalNavigation.class, "UIHorizontalNavigation", null);
-      portalNavigation.setUseAjax(Boolean.valueOf(prefers.getValue("useAJAX", "true")));
+      portalNavigation.setUseAjax(isUseAjax());
       portalNavigation.setShowUserNavigation(Boolean.valueOf(prefers.getValue("showUserNavigation", "true")));
       portalNavigation.setTemplate(template);
 
@@ -61,10 +68,9 @@ public class UINavigationPortlet extends UIPortletApplication
       super.serveResource(context);
       
       ResourceRequest req = context.getRequest();
-      String nodeID = req.getResourceID();
-      
-      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
-      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID, false);
+      String nodeURI = req.getResourceID();
+            
+      JSONArray jsChilds = getChildrenAsJSON(nodeURI);
       if (jsChilds == null)
       {
          return;
@@ -74,4 +80,93 @@ public class UINavigationPortlet extends UIPortletApplication
       res.setContentType("text/json");
       res.getWriter().write(jsChilds.toString());
    }      
+   
+
+   public JSONArray getChildrenAsJSON(String nodeURI) throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();          
+      Collection<UserNode> childs = null;
+      
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);      
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      
+      NavigationPath navPath;
+      if (context.getRemoteUser() != null)
+      {
+         navPath = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), nodeURI);
+      }
+      else
+      {
+         navPath = userPortal.resolvePath(nodeURI);
+      }
+      
+      if (navPath != null)
+      {
+         UserNode userNode = uiPortalNavigation.updateNode(navPath.getTarget());
+         if (userNode != null)
+         {
+            childs = userNode.getChildren();
+         }
+      }
+      
+      JSONArray jsChilds = new JSONArray();
+      if (childs == null)
+      {
+         return null;
+      }                  
+      MimeResponse res = context.getResponse();
+      for (UserNode child : childs)
+      {
+         jsChilds.put(toJSON(child, res));
+      }
+      return jsChilds;
+   }
+
+   private JSONObject toJSON(UserNode node, MimeResponse res) throws Exception
+   {
+      JSONObject json = new JSONObject();
+      String nodeId = node.getId();
+      
+      json.put("label", node.getEncodedResolvedLabel());      
+      json.put("hasChild", node.getChildrenCount() > 0);            
+      
+      UserNode selectedNode = Util.getUIPortal().getNavPath().getTarget();
+      json.put("isSelected", nodeId.equals(selectedNode.getId()));
+      json.put("icon", node.getIcon());      
+      
+      ResourceURL rsURL = res.createResourceURL();
+      rsURL.setResourceID(res.encodeURL(node.getURI()));
+      json.put("getNodeURL", rsURL.toString());            
+      
+      String actionLink;
+      if (node.getPageRef() == null)
+      {
+         actionLink = null;
+      } 
+      else if (isUseAjax())
+      {
+         actionLink = event("SelectNode", nodeId);
+      } 
+      else
+      {
+         actionLink = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+      }
+      json.put("actionLink", actionLink);
+      
+      JSONArray childs = new JSONArray();
+      for (UserNode child : node.getChildren())
+      {
+         childs.put(toJSON(child, res));
+      }      
+      json.put("childs", childs);
+      return json;
+   }
+   
+   public boolean isUseAjax()
+   {
+      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      PortletRequest prequest = context.getRequest();
+      PortletPreferences prefers = prequest.getPreferences();
+      return Boolean.valueOf(prefers.getValue("useAJAX", "true"));
+   }
 }

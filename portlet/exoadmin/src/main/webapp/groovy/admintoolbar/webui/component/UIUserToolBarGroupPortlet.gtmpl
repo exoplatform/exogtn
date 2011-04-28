@@ -56,13 +56,16 @@
         EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		
-		MimeResponse res = _ctx.getRequestContext().getResponse();
-		ResourceURL resourceURL = res.createResourceURL();
-		resourceURL.setResourceID(res.encodeURL(groupId + "::" + node.getURI()));	
-		def rs = resourceURL.toString(); 
+		def getNodeURL = "";
+		if (hasChild) {
+			MimeResponse res = _ctx.getRequestContext().getResponse();
+			ResourceURL resourceURL = res.createResourceURL();
+			resourceURL.setResourceID(res.encodeURL(groupId + "::" + node.getURI()));	
+			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation" exo:getNodeURL="$rs">
+			<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 				<div class="$clazz">
 		""";
 						if(node.pageRef != null) {

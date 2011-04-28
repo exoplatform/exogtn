@@ -23,7 +23,7 @@
 function UIPortalNavigation() {
   this.currentOpenedMenu = null;
   this.scrollMgr = null;
-  this.scrollManagerLoaded = false;
+  this.scrollManagerLoaded = false;   
 };
 /**
  * Sets some parameters :
@@ -131,42 +131,33 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
 //  }
 //}
 
-UIPortalNavigation.prototype.generateContainer = function(jsChilds, parentCont) {
-	try {
-		var data = eXo.core.JSON.parse(jsChilds);
-	} catch (e) {
-		alert("need refresh");
-		return;
-	}	
-	if (isNaN(data.length) || data.length < 1) {
-		return;
-	}
-
-	var cont = document.createElement("div");
-	cont.className = this.containerStyleClass;
-	cont.style.display = "none";
-	cont.id = eXo.core.DOMUtil.generateId("PortalNavigationContainer");
-	cont.resized = false;		
-	var navPortlet = document.getElementById("UINavigationPortlet");
-	cont.innerHTML = eXo.core.DOMUtil.findFirstDescendantByClass(navPortlet, "div", "MenuItemContainer-Template").innerHTML;
-	parentCont.appendChild(cont);
-	
-	var htmlFrags = "";
+UIPortalNavigation.prototype.generateContainer = function(data) {		
+	var htmlFrags = "<div class='" + this.containerStyleClass + "' style='display: none;' id='"; 
+	htmlFrags += eXo.core.DOMUtil.generateId("PortalNavigationContainer") + "' resized='false'>";	
+	htmlFrags += "<div class='MenuItemDecorator'>";
+	htmlFrags += "<div class='LeftTopMenuDecorator'><div class='RightTopMenuDecorator'>";
+	htmlFrags += "<div class='CenterTopMenuDecorator'><span></span></div></div></div>";
+	htmlFrags += "<div class='LeftMiddleMenuDecorator'><div class='RightMiddleMenuDecorator'>";
+	htmlFrags += "<div class='CenterMiddleMenuDecorator'>";	
 	for (var i = 0; i < data.length; i++) {
 		var node = data[i];
 		var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
-		
-		htmlFrags += ("<div class='MenuItem " + (node.isSelected ? "SelectedItem" : "NormalItem") + "' exo:getNodeURL='" + node.getNodeURL + "' "); 
+				
+		htmlFrags += ("<div class='MenuItem " + (node.isSelected ? "SelectedItem'" : "NormalItem'")); 
+		htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" ); 
 		htmlFrags += ("onmouseover='eXo.portal.UIPortalNavigation.onMenuItemOver(this)' onmouseout='eXo.portal.UIPortalNavigation.onMenuItemOut(this)'>");
 		htmlFrags += ("<div class='" + (node.hasChild ? "ArrowIcon" : "") + "' title='" + node.label + "'>");
 		htmlFrags += ("<div class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'>");
 		htmlFrags += ("<a href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
 		htmlFrags += ("</div></div></div>");
+		if (node.childs.length) {
+			htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);			
+		}
 	}
-	
-	var subCont = eXo.core.DOMUtil.findFirstDescendantByClass(cont, "div", "CenterMiddleMenuDecorator");
-	subCont.innerHTML = htmlFrags;
-}
+	htmlFrags += "</div></div></div><div class='LeftBottomMenuDecorator'><div class='RightBottomMenuDecorator'>";
+	htmlFrags += "<div class='CenterBottomMenuDecorator'><span></span></div></div></div></div></div>";
+	return htmlFrags;
+};
 
 UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
   var tab = this ;
@@ -174,17 +165,28 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
     eXo.portal.UIPortalNavigation.hideMenu() ;
   }
   eXo.portal.UIPortalNavigation.setTabStyleOnMouseOut(e, tab) ;
-  eXo.portal.UIPortalNavigation.previousMenuItem = tab ;  
-  eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
+  eXo.portal.UIPortalNavigation.previousMenuItem = tab ;    
   
   var getNodeURL = tab.getAttribute("exo:getNodeURL");
-  if (getNodeURL && !eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass)) {
-	  eXo.portal.UIPortalNavigation.generateContainer(ajaxAsyncGetRequest(getNodeURL,false), tab);
+  var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  if (getNodeURL && !menuItemContainer) {
+	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
+	  try {
+		  var data = eXo.core.JSON.parse(jsChilds);
+		  if (isNaN(data.length)) {
+			  return;
+		  }
+		  var temp = document.createElement("div");
+		  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
+		  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+	  } catch (e) {
+		  return;
+	  }				  
   }
   
-  if (!eXo.portal.UIPortalNavigation.menuVisible) {
-    var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  if (!eXo.portal.UIPortalNavigation.menuVisible) {    
     var hideSubmenu = tab.getAttribute('hideSubmenu') ;
+    menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
     if (menuItemContainer && !hideSubmenu) {
       var DOMUtil = eXo.core.DOMUtil ;
 		  if(eXo.core.Browser.browserType == "ie") {
@@ -203,7 +205,9 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
 		  }
       eXo.portal.UIPortalNavigation.toggleSubMenu(e, tab, menuItemContainer) ;
     }
-  }    
+  }  
+  
+  eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
   eXo.portal.UIPortalNavigation.menuVisible = true ;
 } ;
 
@@ -363,14 +367,26 @@ UIPortalNavigation.prototype.hideMenu = function() {
  */
 UIPortalNavigation.prototype.onMenuItemOver = function(menuItem) {  
   if (!menuItem.tagName) menuItem = this;
+  var DOMUtil = eXo.core.DOMUtil;
   
   var getNodeURL = menuItem.getAttribute("exo:getNodeURL");
-  if (getNodeURL && !eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass)) {
-	  eXo.portal.UIPortalNavigation.generateContainer(ajaxAsyncGetRequest(getNodeURL,false), menuItem);
-  }
-  
-  var DOMUtil = eXo.core.DOMUtil;
   var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  if (getNodeURL && !subContainer) {
+	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
+	  try {
+		  var data = eXo.core.JSON.parse(jsChilds);
+		  if (isNaN(data.length)) {
+			  return;
+		  }
+		  var temp = document.createElement("div");
+		  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
+		  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+	  } catch (e) {
+		  return;
+	  }	
+  }
+    
+  subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (subContainer) {
     eXo.portal.UIPortalNavigation.superClass.pushVisibleContainer(subContainer.id);
     eXo.portal.UIPortalNavigation.showMenuItemContainer(menuItem, subContainer) ;

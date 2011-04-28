@@ -35,7 +35,7 @@
 				tabStyleNavigation = "SelectedItem";
 		}
 		
-		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
+		boolean hasChild = (node.getChildrenCount() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
 		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();

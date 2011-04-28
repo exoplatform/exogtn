@@ -1,4 +1,5 @@
 <%
+	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.webui.core.UIPortletApplication;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.application.PortalRequestContext;
@@ -10,7 +11,10 @@
 %>
 <%
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
-	def String portalURI = pcontext.getPortalURI();
+	JavascriptManager jsmanager = pcontext.getJavascriptManager();
+	jsmanager.importJavascript('eXo.webui.UISiteMap') ;
+	
+	def portalURI = pcontext.getPortalURI();
 
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
@@ -29,14 +33,7 @@
 
 			def node = treeNode.getNode();
 			def treePath = node.getId();			
-			String label = node.getEncodedResolvedLabel();
-			
-			MimeResponse res = _ctx.getRequestContext().getResponse();
-			ResourceURL resourceURL = res.createResourceURL();
-			resourceURL.setResourceID(treePath);			
-			
-			def actionExpand = "return ajaxAsyncGetRequest('" + resourceURL.toString() + "', false)";			
-			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode", treePath) + "', true)";
+			String label = node.getEncodedResolvedLabel();											
 			if(useAjax){
 				actionLink = uicomponent.event("SelectNode", treePath);
 			}else{
@@ -44,7 +41,6 @@
 			}
 
 			lastNode = '';
-
 			if (size == childrenSize) {
 				lastNode = 'LastNode';
 			}
@@ -52,9 +48,10 @@
 
 			if(treeNode.hasChild()) {
 				if (treeNode.isExpanded()) {
+				    def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode", treePath) + "', true)";
 					println """
 						<div class="$lastNode Node">
-							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this, function() {$actionExpand},  function() {$actionCollapse})">
+							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionCollapse">
 					""";
 					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
 					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
@@ -66,9 +63,15 @@
 					renderNodes(treeNode, portalUri, useAjax);
 
 				} else {
+				    MimeResponse res = _ctx.getRequestContext().getResponse();
+					ResourceURL resourceURL = res.createResourceURL();
+					resourceURL.setResourceID(treePath);			
+					
+					def actionExpand = "eXo.webui.UISiteMap.updateTreeNode(this, '" + resourceURL.toString() + "')";	
+					
 					println """
 						<div class="$lastNode Node">
-							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this, function() {$actionExpand}, function() {$actionCollapse})">
+							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionExpand">
 					""";
 					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
 					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";

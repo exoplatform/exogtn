@@ -14,7 +14,6 @@
 	
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
 	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
-	uicomponent.loadTreeNodes();
 
 	public void renderChildrenContainer(UserNode parentNode, UserNode node) {
 	   print """
@@ -51,12 +50,19 @@
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
 				tabStyleNavigation = "SelectedItem";
-		}
+		}				
 		
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
-		if (node.getChildrenCount() > 0) arrowIcon = "ArrowIcon";
+		String getNodeURL = "";
+		if (node.getChildrenCount() > 0) {
+		   arrowIcon = "ArrowIcon";
+		   MimeResponse res = _ctx.getRequestContext().getResponse();
+		   ResourceURL resourceURL = res.createResourceURL();
+		   resourceURL.setResourceID(res.encodeURL(node.getURI()));
+		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		}
 
 		String label = node.getResolvedLabel();
 		String title = "";
@@ -71,7 +77,7 @@
 			if(uicomponent.isUseAjax()) {
 				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
-						<div class="MenuItem $tabStyleNavigation">
+						<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 							<div class="$arrowIcon" title="$title">
 								<div class="ItemIcon $icon">
 									<a href="$pageURI" onclick="$onclickEvt">$label</a>
@@ -80,7 +86,7 @@
 				""";
 			} else {
 				print """
-						<div class="MenuItem $tabStyleNavigation">
+						<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 							<div class="$arrowIcon" title="$title">
 								<div class="ItemIcon $icon">
 									<a href="$pageURI">$label</a>
@@ -90,7 +96,7 @@
 			}
 		} else {
 			print """
-					<div class="MenuItem $tabStyleNavigation">
+					<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 						<div class="$arrowIcon" title="$title">
 							<div class="ItemIcon $icon">
 								<a href="$pageURI">$label</a>
@@ -105,27 +111,7 @@
 		print "</div>";					
 	}
 %>
- 
-<div class="MenuItemContainer-Template" style="display: none;">
-	<div class="MenuItemDecorator">
-		<div class="LeftTopMenuDecorator">
-			<div class="RightTopMenuDecorator">
-				<div class="CenterTopMenuDecorator"><span></span></div>
-			</div>
-		</div>					
-		<div class="LeftMiddleMenuDecorator">
-			<div class="RightMiddleMenuDecorator">
-				<div class="CenterMiddleMenuDecorator">
-				</div>
-			</div>
-		</div>
-		<div class="LeftBottomMenuDecorator">
-			<div class="RightBottomMenuDecorator">
-				<div class="CenterBottomMenuDecorator"><span></span></div>
-			</div>
-		</div>					
-	</div>
-</div>	
+
 <div class="UINavigationBar <%=uicomponent.getCssClassName()%>">
 	<div class="LeftNavigationBar">
 		<div class="RightNavigationBar">
@@ -147,11 +133,15 @@
 										if(selectedNode != null && node.getId() == selectedNode.getId()) {
 												tabStyleNavigation = "SelectedNavigationTab";
 										}
-										ResourceURL resourceURL = res.createResourceURL();
-										resourceURL.setResourceID(node.getId());	
-						%>			
-						
+										
+										if (node.getChildrenCount() > 0) {
+										   	ResourceURL resourceURL = res.createResourceURL();
+											resourceURL.setResourceID(res.encodeURL(node.getURI()));										
+						%>									
 										<div class="UITab" exo:getNodeURL="<%=resourceURL.toString() %>">
+									<%	} else { %>
+										<div class="UITab">
+									<%  } %>																				
 											<div class="$tabStyleNavigation">
 												<div class="LeftTab">
 													<div class="RightTab">
@@ -159,7 +149,7 @@
 															<div class="TabIcon">
 																<%
 																	String arrowIcon = "";
-																	if (node.getChildren().size() > 0) {
+																	if (node.getChildrenCount() > 0) {
 																		arrowIcon = "DropDownArrowIcon";
 																	}
 																	String iconType = node.getIcon();

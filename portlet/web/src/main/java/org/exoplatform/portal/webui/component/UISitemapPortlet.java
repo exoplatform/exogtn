@@ -19,13 +19,18 @@
 
 package org.exoplatform.portal.webui.component;
 
+import java.util.List;
+
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
-import javax.resource.spi.IllegalStateException;
+import javax.portlet.ResourceURL;
 
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -73,9 +78,8 @@ public class UISitemapPortlet extends UIPortletApplication
       
       ResourceRequest req = context.getRequest();
       String nodeID = req.getResourceID();
-      
-      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
-      JSONArray jsChilds = uiPortalNavigation.getChildrenAsJSON(nodeID, true);
+            
+      JSONArray jsChilds = getChildrenAsJSON(nodeID);
       if (jsChilds == null)
       {
          return;
@@ -86,6 +90,77 @@ public class UISitemapPortlet extends UIPortletApplication
       res.getWriter().write(jsChilds.toString());
    }
 
+   private JSONArray getChildrenAsJSON(String nodeID) throws Exception
+   {            
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();   
+      List<TreeNode> childs = null;
+      
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
+      TreeNode tnode = uiPortalNavigation.getTreeNodes().findNodes(nodeID);              
+      if (tnode != null) 
+      {
+         UserNode userNode = uiPortalNavigation.updateNode(tnode.getNode());
+         if (userNode != null)
+         {
+            tnode.setExpanded(true);     
+            tnode.setChildren(userNode.getChildren());          
+            childs = tnode.getChildren();
+         }
+      }
+      
+      JSONArray jsChilds = new JSONArray();
+      if (childs == null)
+      {
+         return null;
+      }                  
+      MimeResponse res = context.getResponse();
+      for (TreeNode child : childs)
+      {
+         jsChilds.put(toJSON(child, res));
+      }
+      return jsChilds;
+   }
+
+   private JSONObject toJSON(TreeNode tnode, MimeResponse res) throws Exception
+   {
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
+      JSONObject json = new JSONObject();
+      UserNode node = tnode.getNode();
+      String nodeId = node.getId();
+      
+      json.put("label", node.getEncodedResolvedLabel());      
+      json.put("hasChild", tnode.hasChild());            
+      json.put("isExpanded", tnode.isExpanded());
+      json.put("collapseURL", uiPortalNavigation.url("CollapseNode", nodeId));  
+      
+      ResourceURL rsURL = res.createResourceURL();
+      rsURL.setResourceID(nodeId);
+      json.put("getNodeURL", rsURL.toString());            
+      
+      String actionLink;
+      if (node.getPageRef() == null)
+      {
+         actionLink = null;
+      } 
+      else if (isUseAjax())
+      {
+         actionLink = uiPortalNavigation.event("SelectNode", nodeId);
+      } 
+      else
+      {
+         actionLink = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+      }
+      json.put("actionLink", actionLink);
+      
+      JSONArray childs = new JSONArray();
+      for (TreeNode child : tnode.getChildren())
+      {
+         childs.put(toJSON(child, res));
+      }      
+      json.put("childs", childs);
+      return json;
+   }   
+   
    public boolean isUseAjax()
    {
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
