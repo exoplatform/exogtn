@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
@@ -260,7 +261,30 @@ public class POMDataStorage implements ModelDataStorage
       Class<T> type = q.getClassType();
       if (PageData.class.equals(type))
       {
-         return (LazyPageList<T>)new LazyPageList<PageData>(new MOPAccess.PageAccess(pomMgr, (Query<PageData>)q), 10);
+         ListAccess<PageData> pageAccess;
+         try
+         {
+            pageAccess = new MOPAccess.PageAccess(pomMgr, (Query<PageData>)q);
+         }
+         catch (IllegalArgumentException e)
+         {
+            pageAccess = new ListAccess<PageData>()
+            {
+               @Override
+               public PageData[] load(int index, int length) throws Exception, IllegalArgumentException
+               {
+                  return new PageData[0];
+               }
+
+               @Override
+               public int getSize() throws Exception
+               {
+                  return 0;
+               }
+               
+            };
+         }
+         return (LazyPageList<T>)new LazyPageList<PageData>(pageAccess, 10);
       }
       else if (NavigationData.class.equals(type))
       {
