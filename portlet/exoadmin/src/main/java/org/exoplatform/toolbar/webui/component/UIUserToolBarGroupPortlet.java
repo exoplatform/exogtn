@@ -24,22 +24,32 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.portlet.MimeResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceURL;
+
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodePredicate;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.util.ParameterValidation;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by The eXo Platform SAS
@@ -56,7 +66,8 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
 {
 
    private final NodeFilter TOOLBAR_GROUP_FILTER;
-   private static final Scope TOOLBAR_GROUP_SCOPE = Scope.GRANDCHILDREN;
+   private static final Scope TOOLBAR_GROUP_SCOPE = Scope.CHILDREN;
+   private static final String SPLITTER_STRING = "::";
 
    public UIUserToolBarGroupPortlet() throws Exception
    {                  
@@ -70,7 +81,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    {
       UserPortal userPortal = getUserPortal();
       List<UserNavigation> allNavs = userPortal.getNavigations();
-      
+
       List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
       for (UserNavigation nav : allNavs)
       {
@@ -94,11 +105,113 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       return Collections.emptyList();
    }
 
+   @Override
+   public void serveResource(WebuiRequestContext context) throws Exception
+   {      
+      super.serveResource(context);
+      
+      ResourceRequest req = context.getRequest();
+      String resourceId = req.getResourceID();
+      
+      JSONArray jsChilds = getChildrenAsJSON(resourceId);
+      if (jsChilds == null)
+      {
+         return;
+      }
+      
+      MimeResponse res = context.getResponse(); 
+      res.setContentType("text/json"); 
+      res.getWriter().write(jsChilds.toString());
+   }
+   
    public UserNode getSelectedNode() throws Exception
    {
       return Util.getUIPortal().getNavPath().getTarget();
    }
    
+   private JSONArray getChildrenAsJSON(String resourceId) throws Exception
+   {
+      String[] parsedId = parseResourceId(resourceId); 
+      if (parsedId == null)
+      {
+         throw new IllegalArgumentException("resourceId " + resourceId + " is invalid");
+      }
+      String groupId = parsedId[0];
+      String nodeURI = parsedId[1];
+                                   
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserNavigation grpNav = getNavigation(groupId);
+      if (grpNav == null) return null;
+      
+      NavigationPath navPath = userPortal.resolvePath(grpNav, nodeURI);
+      
+      Collection<UserNode> childs = null;
+      if (navPath != null)
+      {         
+         UserNode userNode = navPath.getTarget();
+         userNode = userPortal.getNode(userNode, TOOLBAR_GROUP_SCOPE);
+         userNode.filter(TOOLBAR_GROUP_FILTER);
+         childs = userNode.getChildren();         
+      }
+      
+      JSONArray jsChilds = new JSONArray();
+      if (childs == null)
+      {
+         return null;
+      }                  
+      
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      MimeResponse res = context.getResponse();
+      for (UserNode child : childs)
+      {
+         jsChilds.put(toJSON(child, groupId, res));
+      }
+      return jsChilds;
+   }
+
+   private JSONObject toJSON(UserNode node, String groupId, MimeResponse res) throws Exception
+   {
+      JSONObject json = new JSONObject();
+      String nodeId = node.getId();
+      
+      json.put("label", node.getEncodedResolvedLabel());      
+      json.put("hasChild", node.getChildrenCount() > 0);            
+      json.put("isSelected", nodeId.equals(getSelectedNode().getId()));
+      json.put("icon", node.getIcon());       
+      
+      ResourceURL rsURL = res.createResourceURL();
+      rsURL.setResourceID(res.encodeURL(groupId + SPLITTER_STRING + node.getURI()));
+      json.put("getNodeURL", rsURL.toString());                  
+      json.put("actionLink", Util.getPortalRequestContext().getPortalURI() + node.getURI());
+      
+      JSONArray childs = new JSONArray();
+      for (UserNode child : node.getChildren())
+      {
+         childs.put(toJSON(child, groupId, res));
+      }      
+      json.put("childs", childs);
+      return json;
+   }
+   
+   private UserNavigation getNavigation(String groupId) throws Exception
+   {
+      UserPortal userPortal = getUserPortal();
+      return userPortal.getNavigation(SiteKey.group(groupId));
+   }
+
+   private String[] parseResourceId(String resourceId)
+   {
+      if (!ParameterValidation.isNullOrEmpty(resourceId)) 
+      {
+         String[] parsedId = resourceId.split(SPLITTER_STRING);
+         if (parsedId.length == 2) 
+         {
+            return parsedId;
+         }
+      }
+      return null;
+   }
+
    private UserPortal getUserPortal()
    {
       UIPortalApplication uiApp = Util.getUIPortalApplication();

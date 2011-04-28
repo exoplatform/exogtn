@@ -56,15 +56,14 @@
 			""";
 	}
 
-	void renderCurrentPortal(Collection nodes) {
-	    MimeResponse res = _ctx.getRequestContext().getResponse();
+	void renderCurrentPortal(Collection nodes) {	    
 		print """
 			<div style="position: absolute; display:none" class="MenuItemContainer">
 				<div class="SubBlock">
 		""";
 		int idx = 0;
 		for(UserNode node : nodes) {
-			renderPageNode(node, idx++ % 2 == 0, res);
+			renderPageNode(node, idx++ % 2 == 0);
 		}
 		print """
 				</div>
@@ -72,7 +71,7 @@
 		""";
 	}
 	
-	void renderPageNode(UserNode node, boolean flag, MimeResponse res) {
+	void renderPageNode(UserNode node, boolean flag) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
@@ -93,9 +92,11 @@
         EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		
+		MimeResponse res = _ctx.getRequestContext().getResponse();
 		ResourceURL resourceURL = res.createResourceURL();
-		resourceURL.setResourceID(node.getURI());	
-		def rs = resourceURL.toString(); 
+		resourceURL.setResourceID(res.encodeURL(node.getURI()));	
+		def rs = resourceURL.toString();
+		
 		print """
 			<div class="MenuItem $tabStyleNavigation" exo:getNodeURL="$rs">
 				<div class="$clazz">
@@ -115,7 +116,7 @@
 			""" ;
 				int idx = 0;
 				for(UserNode child : node.getChildren()) {
-					renderPageNode(child, idx++ % 2 == 0, res);
+					renderPageNode(child, idx++ % 2 == 0);
 				}
 			print """
 					</div>

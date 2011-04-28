@@ -49,14 +49,14 @@
 	public void renderChildNode(UserNode parentNode, UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
-		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {			 
+		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
 				tabStyleNavigation = "SelectedItem";
 		}
 		
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
-		if (node.getChildren().size() > 0) arrowIcon = "ArrowIcon";
+		if (node.getChildrenCount() > 0) arrowIcon = "ArrowIcon";
 
 		String label = node.getResolvedLabel();
 		String title = "";
@@ -69,7 +69,7 @@
 		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		if(node.getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
-				String onclickEvt = uicomponent.event("SelectNode",	parentNode.getId() + "::" + node.getURI()) + ";return false;" ;
+				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
 						<div class="MenuItem $tabStyleNavigation">
 							<div class="$arrowIcon" title="$title">

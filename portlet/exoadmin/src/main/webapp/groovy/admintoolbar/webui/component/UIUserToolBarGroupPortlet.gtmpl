@@ -5,6 +5,8 @@
 	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.mop.user.UserNavigation;
+	import javax.portlet.MimeResponse;
+	import javax.portlet.ResourceURL;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -15,7 +17,7 @@
 	def groupNavigations = uicomponent.getGroupNavigations();
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
 	void renderGroupPageNavigation(UserNavigation navigation) {
-			nodes = uicomponent.getNodes(navigation);
+			def nodes = uicomponent.getNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
 			def ownerId = navigation.getKey().getName();
@@ -26,21 +28,21 @@
 							""" ;
 							int idx = 0;
 							for(UserNode node : nodes) {
-								renderPageNode(node, idx++ % 2 == 0);
+								renderPageNode(node, ownerId, idx++ % 2 == 0);
 							}
 							print """
 						</div>
 			""" ;		
 	}
 	
-	void renderPageNode(UserNode node, boolean flag) {
+	void renderPageNode(UserNode node, String groupId, boolean flag) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
 				tabStyleNavigation = "SelectedItem";
 		}
 		
-		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
+		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
 		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
@@ -53,8 +55,14 @@
 		else title = "";
         EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
+		
+		MimeResponse res = _ctx.getRequestContext().getResponse();
+		ResourceURL resourceURL = res.createResourceURL();
+		resourceURL.setResourceID(res.encodeURL(groupId + "::" + node.getURI()));	
+		def rs = resourceURL.toString(); 
+		
 		print """
-			<div class="MenuItem $tabStyleNavigation">
+			<div class="MenuItem $tabStyleNavigation" exo:getNodeURL="$rs">
 				<div class="$clazz">
 		""";
 						if(node.pageRef != null) {
@@ -72,7 +80,7 @@
 			""" ;
 				int idx = 0;
 				for(UserNode child : node.getChildren()) {
-					renderPageNode(child, idx++ % 2 == 0);
+					renderPageNode(child, groupId, idx++ % 2 == 0);
 				}
 			print """
 					</div>
@@ -92,7 +100,9 @@
 				<div class="">
 							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 				</div>
-				<% if (!groupNavigations.isEmpty()) { %>
+				<% 
+					if (!groupNavigations.isEmpty()) {					   
+				%>
 				<div style="display:none" class="MenuItemContainer">
 				<% for(navigation in groupNavigations) {
 						renderGroupPageNavigation(navigation);

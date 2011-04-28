@@ -155,7 +155,10 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       Collection<UserNode> childs = null;
             
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      NavigationPath navPath = userPortal.resolvePath(getCurrentUserNavigation(userPortal), nodeURI);
+      UserNavigation currNav = getCurrentUserNavigation(userPortal);
+      if (currNav == null) return null;
+      
+      NavigationPath navPath = userPortal.resolvePath(currNav, nodeURI);
       
       if (navPath != null)
       {         
