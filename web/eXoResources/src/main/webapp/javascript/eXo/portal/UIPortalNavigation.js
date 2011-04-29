@@ -366,7 +366,7 @@ UIPortalNavigation.prototype.hideMenu = function() {
  * Changes the style of the button
  */
 UIPortalNavigation.prototype.onMenuItemOver = function(menuItem) {  
-  if (!menuItem.tagName) menuItem = this;
+  if (!menuItem || !menuItem.nodeName) menuItem = this;
   var DOMUtil = eXo.core.DOMUtil;
   
   var getNodeURL = menuItem.getAttribute("exo:getNodeURL");
@@ -415,7 +415,7 @@ UIPortalNavigation.prototype.showMenuItemContainer = function(menuItem, menuItem
  * Checks if this item has a sub menu, if yes calls methods from superClass to hide it
  */
 UIPortalNavigation.prototype.onMenuItemOut = function(menuItem) {
-  if (!menuItem.tagName) menuItem = this;
+  if (!menuItem || !menuItem.nodeName) menuItem = this;
   
   var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (subContainer) {

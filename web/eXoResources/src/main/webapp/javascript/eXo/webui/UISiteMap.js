@@ -28,7 +28,7 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
 		var data = eXo.core.JSON.parse(jsChilds);		
-		exo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
+		eXo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
 	} catch (e) {		
 	}					
 };
