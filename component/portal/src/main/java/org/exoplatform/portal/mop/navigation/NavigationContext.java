@@ -29,33 +29,17 @@ public class NavigationContext
 {
 
    /** . */
-   final String path;
+   final NavigationData data;
 
-   /** . */
-   final SiteKey key;
-
-   /** . */
-   final NavigationState state;
-
-   /** . */
-   final String rootId;
-
-   NavigationContext(String path, SiteKey key, NavigationState state, String rootId)
+   NavigationContext(NavigationData data)
    {
-      if (path == null)
-      {
-         throw new NullPointerException();
-      }
-      if (key == null)
+      if (data == null)
       {
          throw new NullPointerException();
       }
 
       //
-      this.path = path;
-      this.key = key;
-      this.state = state;
-      this.rootId = rootId;
+      this.data = data;
    }
 
    /**
@@ -65,7 +49,7 @@ public class NavigationContext
     */
    public SiteKey getKey()
    {
-      return key;
+      return data.key;
    }
 
    /**
@@ -75,6 +59,6 @@ public class NavigationContext
     */
    public NavigationState getState()
    {
-      return state;
+      return data.state;
    }
 }

@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.chromattic.api.Chromattic;
 import org.exoplatform.commons.utils.Queues;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
@@ -44,8 +43,18 @@ import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
-import javax.jcr.Session;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.Set;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
@@ -60,7 +69,7 @@ public class NavigationServiceImpl implements NavigationService
    final POMSessionManager manager;
 
    /** . */
-   private final Cache cache;
+   private final DataCache dataCache;
 
    /** . */
    final Logger log = LoggerFactory.getLogger(NavigationServiceImpl.class);
@@ -72,20 +81,16 @@ public class NavigationServiceImpl implements NavigationService
          throw new NullPointerException("No null pom session manager allowed");
       }
       this.manager = manager;
-      this.cache = new CacheById();
+      this.dataCache = new SimpleDataCache();
    }
 
    public void start() throws Exception
    {
-      Chromattic chromattic = manager.getLifeCycle().getChromattic();
-      Session session = chromattic.openSession().getJCRSession();
-      cache.start(session);
    }
 
 
    public void stop()
    {
-      cache.stop();
    }
 
    public NavigationContext loadNavigation(SiteKey key)
@@ -97,7 +102,8 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       POMSession session = manager.getSession();
-      return cache.getNavigation(session, key);
+      NavigationData data = dataCache.getNavigationContext(session, key);
+      return data != null ? new NavigationContext(data) : null;
    }
 
    public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
@@ -118,29 +124,35 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
+      boolean changed;
       if (state != null)
       {
          Navigation root = site.getRootNavigation();
          Navigation rootNode = root.getChild("default");
-         boolean created = rootNode == null;
-         if (created)
+         if (changed = rootNode == null)
          {
             rootNode = root.addChild("default");
          }
          rootNode.getAttributes().setValue(MappedAttributes.PRIORITY, state.getPriority());
-         return created;
       }
       else
       {
          Navigation root = site.getRootNavigation();
          Navigation rootNode = root.getChild("default");
-         boolean destroyed = rootNode != null;
-         if (destroyed)
+         if (changed = rootNode != null)
          {
             rootNode.destroy();
          }
-         return destroyed;
       }
+
+      //
+      if (changed)
+      {
+         dataCache.removeNavigationContext(key);
+      }
+
+      //
+      return changed;
    }
 
    public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)
@@ -157,11 +169,11 @@ public class NavigationServiceImpl implements NavigationService
       {
          throw new NullPointerException();
       }
-      String nodeId = navigation.rootId;
-      if (navigation.rootId != null)
+      String nodeId = navigation.data.rootId;
+      if (navigation.data.rootId != null)
       {
          POMSession session = manager.getSession();
-         NodeData data = cache.getNodeData(session, nodeId);
+         NodeData data = dataCache.getNodeData(session, nodeId);
          if (data != null)
          {
             NodeContext<N> context = new NodeContext<N>(new TreeContext<N>(model), data);
@@ -259,7 +271,7 @@ public class NavigationServiceImpl implements NavigationService
          }
          public NodeData getDescendant(NodeData node, String handle)
          {
-            return cache.getNodeData(session, handle);
+            return dataCache.getNodeData(session, handle);
          }
       }
 
@@ -288,7 +300,7 @@ public class NavigationServiceImpl implements NavigationService
       // Apply diff changes to the model
       try
       {
-         NodeData dataRoot = cache.getNodeData(session, root.data.id);
+         NodeData dataRoot = dataCache.getNodeData(session, root.data.id);
          HierarchyChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.iterator(root, dataRoot);
          Queue<NodeContext<N>> stack = Queues.lifo();
          NodeContext<N> last = null;
@@ -422,7 +434,7 @@ public class NavigationServiceImpl implements NavigationService
             ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
             for (String childId : data.children)
             {
-               NodeData childData = cache.getNodeData(session, childId);
+               NodeData childData = dataCache.getNodeData(session, childId);
                if (childData != null)
                {
                   NodeContext<N> child = new NodeContext<N>(context.tree, childData);
@@ -450,6 +462,9 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
+
+      // The ids to remove from the cache
+      Set<String> ids = new HashSet<String>();
 
       // First pass we update persistent store
       for (NodeChange<NodeContext<N>> change : changes)
@@ -486,6 +501,7 @@ public class NavigationServiceImpl implements NavigationService
                }
                parent.getChildren().add(index, added);
                add.node.data = new NodeData(added);
+               ids.add(parent.getObjectId());
             }
          }
          else if (change instanceof NodeChange.Removed<?>)
@@ -495,8 +511,13 @@ public class NavigationServiceImpl implements NavigationService
             if (removed != null)
             {
                Navigation parent = removed.getParent();
+               String removedId = removed.getObjectId();
                removed.destroy();
                remove.node.data = null;
+
+               //
+               ids.add(removedId);
+               ids.add(parent.getObjectId());
             }
             else
             {
@@ -544,6 +565,10 @@ public class NavigationServiceImpl implements NavigationService
                index = dst.getChildren().indexOf(previous) + 1;
             }
             dst.getChildren().add(index, moved);
+
+            //
+            ids.add(src.getObjectId());
+            ids.add(dst.getObjectId());
          }
          else if (change instanceof NodeChange.Renamed)
          {
@@ -566,6 +591,10 @@ public class NavigationServiceImpl implements NavigationService
             int index = children.indexOf(renamed);
             renamed.setName(rename.name);
             children.add(index, renamed);
+
+            //
+            ids.add(parent.getObjectId());
+            ids.add(renamed.getObjectId());
          }
          else
          {
@@ -574,10 +603,13 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       // Update state
-      saveState(session, context);
+      saveState(session, context, ids);
+
+      //
+      dataCache.removeNodeData(ids);
    }
 
-   private <N> void saveState(POMSession session, NodeContext<N> context) throws NavigationServiceException
+   private <N> void saveState(POMSession session, NodeContext<N> context, Set<String> ids) throws NavigationServiceException
    {
       NodeState state = context.state;
 
@@ -627,6 +659,9 @@ public class NavigationServiceImpl implements NavigationService
          Attributes attrs = navigation.getAttributes();
          attrs.setValue(MappedAttributes.URI, state.getURI());
          attrs.setValue(MappedAttributes.ICON, state.getIcon());
+
+         //
+         ids.add(navigation.getObjectId());
       }
 
       //
@@ -640,7 +675,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          for (NodeContext<N> child : context.getContexts())
          {
-            saveState(session, child);
+            saveState(session, child, ids);
          }
       }
    }
@@ -677,7 +712,7 @@ public class NavigationServiceImpl implements NavigationService
          ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
          for (String childId : data.children)
          {
-            NodeData childData = cache.getNodeData(session, childId);
+            NodeData childData = dataCache.getNodeData(session, childId);
             if (childData != null)
             {
                NodeContext<N> childContext = load(tree, session, childData, visitor, depth + 1);
@@ -713,7 +748,7 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       String nodeId = context.getId();
-      NodeData data = cache.getNodeData(session, nodeId);
+      NodeData data = dataCache.getNodeData(session, nodeId);
 
       //
       if (data != null)
@@ -765,7 +800,7 @@ public class NavigationServiceImpl implements NavigationService
          ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
          for (String childId : data.children)
          {
-            NodeData childData = cache.getNodeData(session, childId);
+            NodeData childData = dataCache.getNodeData(session, childId);
             if (childData != null)
             {
                NodeContext<N> childContext = previous.get(childId);

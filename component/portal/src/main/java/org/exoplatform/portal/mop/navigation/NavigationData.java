@@ -20,21 +20,26 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSession;
-
-import javax.jcr.Session;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-abstract class Cache
+public class NavigationData
 {
 
-   abstract NodeData getNodeData(POMSession session, String nodeId);
+   /** . */
+   final SiteKey key;
 
-   abstract NavigationContext getNavigation(POMSession session, SiteKey key);
+   /** . */
+   final NavigationState state;
 
-   abstract void start(Session session) throws Exception;
+   /** . */
+   final String rootId;
 
-   abstract void stop();
+   public NavigationData(SiteKey key, NavigationState state, String rootId)
+   {
+      this.key = key;
+      this.state = state;
+      this.rootId = rootId;
+   }
 }

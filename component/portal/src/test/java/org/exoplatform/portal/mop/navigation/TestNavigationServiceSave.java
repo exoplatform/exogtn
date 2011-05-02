@@ -57,14 +57,14 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-      assertNull(nav.state);
-      assertNull(nav.rootId);
+      assertNull(nav.data.state);
+      assertNull(nav.data.rootId);
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), new NavigationState(5)));
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNotNull(nav.state);
-      assertEquals(5, nav.state.getPriority().intValue());
+      assertNotNull(nav.data.state);
+      assertEquals(5, nav.data.state.getPriority().intValue());
 
       //
       sync(true);
@@ -73,14 +73,16 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
       assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-      assertEquals(5, (int)nav.state.getPriority());
-      assertNotNull(nav.rootId);
+      NavigationState state = nav.data.state;
+      Integer p = state.getPriority();
+      assertEquals(5, (int) p);
+      assertNotNull(nav.data.rootId);
 
       //
       assertTrue(service.saveNavigation(nav.getKey(), null));
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNull(nav.state);
-      assertNull(nav.rootId);
+      assertNull(nav.data.state);
+      assertNull(nav.data.rootId);
 
       //
       sync(true);
@@ -88,8 +90,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
       assertNotNull(nav);
-      assertNull(nav.state);
-      assertNull(nav.rootId);
+      assertNull(nav.data.state);
+      assertNull(nav.data.rootId);
 
       //
       assertFalse(service.saveNavigation(nav.getKey(), null));
