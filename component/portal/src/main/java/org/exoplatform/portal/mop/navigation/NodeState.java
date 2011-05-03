@@ -25,7 +25,7 @@ import org.exoplatform.portal.mop.Visibility;
 import java.util.Date;
 
 /**
- * The state of a node.
+ * An immutable node state class.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$

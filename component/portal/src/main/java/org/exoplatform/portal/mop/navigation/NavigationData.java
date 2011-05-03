@@ -22,9 +22,10 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.Site;
 
 /**
+ * An immutable navigation data class.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class NavigationData

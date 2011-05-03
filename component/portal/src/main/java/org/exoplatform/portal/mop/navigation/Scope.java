@@ -23,10 +23,9 @@ package org.exoplatform.portal.mop.navigation;
  * <p>The scope describes a set of nodes, the scope implementation should be stateless and should be shared
  * between many threads.</p>
  *
- * <p>A scope is responsible for provided a {@link Visitor} object that is used to determine which node should
- * be loaded when a node loading operation occurs. Visitors are not thread safe, as a consequence
- * the {@link #get()} operation should create a new visitor instance on each call, unless the visitor itself is stateless
- * by nature.</p>
+ * <p>A scope is responsible for providing a {@link Visitor} object that is used to determine which nodes are
+ * loaded when a loading operation occurs. Visitors are not thread safe, as a consequence the {@link #get()} operation
+ * should create a new visitor instance on each call, unless the visitor itself is stateless by nature.</p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -34,12 +33,24 @@ package org.exoplatform.portal.mop.navigation;
 public interface Scope
 {
 
+   /**
+    * The node without its children.
+    */
    Scope SINGLE = new GenericScope(0);
 
+   /**
+    * A node and its chidren.
+    */
    Scope CHILDREN = new GenericScope(1);
 
+   /**
+    * A node, its chidren and grandchildren.
+    */
    Scope GRANDCHILDREN = new GenericScope(2);
 
+   /**
+    * The entire hierarchy, to use with care.
+    */
    Scope ALL = new GenericScope(-1);
 
    Visitor get();

@@ -20,6 +20,8 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
+ * An immutable navigation state class.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
