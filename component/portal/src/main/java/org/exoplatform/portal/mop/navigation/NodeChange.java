@@ -20,7 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
- * Describe a node change.
+ * Describe a change applied to a node.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -40,7 +40,7 @@ public class NodeChange<N>
       /** . */
       final N node;
 
-      public Removed(N parent, N node)
+      Removed(N parent, N node)
       {
          this.parent = parent;
          this.node = node;
@@ -62,7 +62,7 @@ public class NodeChange<N>
       /** . */
       final String name;
 
-      public Added(N parent, N previous, N node, String name)
+      Added(N parent, N previous, N node, String name)
       {
          this.parent = parent;
          this.previous = previous;
@@ -86,7 +86,7 @@ public class NodeChange<N>
       /** . */
       final N node;
 
-      public Moved(N from, N to, N previous, N node)
+      Moved(N from, N to, N previous, N node)
       {
          this.from = from;
          this.to = to;
@@ -104,7 +104,7 @@ public class NodeChange<N>
       /** . */
       final String name;
 
-      public Renamed(N node, String name)
+      Renamed(N node, String name)
       {
          this.node = node;
          this.name = name;
