@@ -156,7 +156,12 @@ public class UIAddGroupNavigation extends UIContainer
             }
 
             // create navigation for group
-            navigationService.saveNavigation(SiteKey.group(ownerId), new NavigationState(0));
+            SiteKey key = SiteKey.group(ownerId);
+            NavigationContext existing  = navigationService.loadNavigation(key);
+            if (existing == null)
+            {
+               navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+            }
          }
 
          //Update group navigation list

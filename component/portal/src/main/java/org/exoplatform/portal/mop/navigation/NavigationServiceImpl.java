@@ -102,57 +102,94 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       POMSession session = manager.getSession();
-      NavigationData data = dataCache.getNavigationContext(session, key);
+      NavigationData data = dataCache.getNavigationData(session, key);
       return data != null ? new NavigationContext(data) : null;
    }
 
-   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
+   public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
    {
-      if (key == null)
+      if (navigation == null)
       {
          throw new NullPointerException();
       }
 
       //
       POMSession session = manager.getSession();
-      ObjectType<Site> objectType = objectType(key.getType());
+      ObjectType<Site> objectType = objectType(navigation.key.getType());
       Workspace workspace = session.getWorkspace();
-      Site site = workspace.getSite(objectType, key.getName());
+      Site site = workspace.getSite(objectType, navigation.key.getName());
+
+      //
       if (site == null)
       {
-         throw new NavigationServiceException(NavigationError.NAVIGATION_CONCURRENCY_REMOVED);
+         throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
       }
 
       //
-      boolean changed;
+      Navigation rootNode = site.getRootNavigation();
+
+      //
+      Navigation defaultNode = rootNode.getChild("default");
+      if (defaultNode == null)
+      {
+         defaultNode = rootNode.addChild("default");
+      }
+
+      //
+      NavigationState state = navigation.state;
       if (state != null)
       {
-         Navigation root = site.getRootNavigation();
-         Navigation rootNode = root.getChild("default");
-         if (changed = rootNode == null)
-         {
-            rootNode = root.addChild("default");
-         }
-         rootNode.getAttributes().setValue(MappedAttributes.PRIORITY, state.getPriority());
+         Integer priority = state.getPriority();
+         defaultNode.getAttributes().setValue(MappedAttributes.PRIORITY, priority);
+      }
+
+      //
+      dataCache.removeNavigationData(session, navigation.key);
+
+      // Update state
+      navigation.data = dataCache.getNavigationData(session, navigation.key);
+      navigation.state = null;
+   }
+
+   public boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
+   {
+      if (navigation == null)
+      {
+         throw new NullPointerException();
+      }
+      if (navigation.data == null)
+      {
+         throw new IllegalArgumentException("Already removed");
+      }
+
+      //
+      POMSession session = manager.getSession();
+      ObjectType<Site> objectType = objectType(navigation.key.getType());
+      Workspace workspace = session.getWorkspace();
+      Site site = workspace.getSite(objectType, navigation.key.getName());
+
+      //
+      if (site == null)
+      {
+         throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
+      }
+
+      //
+      Navigation rootNode = site.getRootNavigation();
+      Navigation defaultNode = rootNode.getChild("default");
+
+      //
+      if (defaultNode != null)
+      {
+         dataCache.removeNavigation(navigation.key);
+         defaultNode.destroy();
+         navigation.data = null;
+         return true;
       }
       else
       {
-         Navigation root = site.getRootNavigation();
-         Navigation rootNode = root.getChild("default");
-         if (changed = rootNode != null)
-         {
-            rootNode.destroy();
-         }
+         return false;
       }
-
-      //
-      if (changed)
-      {
-         dataCache.removeNavigationContext(key);
-      }
-
-      //
-      return changed;
    }
 
    public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)
@@ -606,7 +643,7 @@ public class NavigationServiceImpl implements NavigationService
       saveState(session, context, ids);
 
       //
-      dataCache.removeNodeData(ids);
+      dataCache.removeNodeData(session, ids);
    }
 
    private <N> void saveState(POMSession session, NodeContext<N> context, Set<String> ids) throws NavigationServiceException

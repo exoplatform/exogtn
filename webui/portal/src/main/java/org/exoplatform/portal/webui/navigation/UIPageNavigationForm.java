@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -167,7 +168,9 @@ public class UIPageNavigationForm extends UIForm
 
          // update navigation
          NavigationService service = uiForm.getApplicationComponent(NavigationService.class);
-         service.saveNavigation(userNav.getKey(), new NavigationState(priority));
+         NavigationContext ctx = service.loadNavigation(userNav.getKey());
+         ctx.setState(new NavigationState(priority));
+         service.saveNavigation(ctx);
 
          UIPopupWindow uiPopup = uiForm.getParent();
          uiPopup.setShow(false);

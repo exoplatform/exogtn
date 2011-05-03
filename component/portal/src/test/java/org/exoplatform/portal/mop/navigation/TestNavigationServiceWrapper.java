@@ -91,7 +91,8 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "notification");
 
       // Create
-      navigationService.saveNavigation(SiteKey.portal("notification"), new NavigationState(3));
+      NavigationContext navigation = new NavigationContext(SiteKey.portal("notification"), new NavigationState(3));
+      navigationService.saveNavigation(navigation);
       assertEquals(1, createListener.events.size());
       Event event = createListener.events.removeFirst();
       assertEquals(SiteKey.portal("notification"), event.getData());
@@ -100,8 +101,11 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       assertEquals(0, updateListener.events.size());
       assertEquals(0, destroyListener.events.size());
 
+      //
+
       // Update
-      navigationService.saveNavigation(SiteKey.portal("notification"), new NavigationState(1));
+      navigation.setState(new NavigationState(1));
+      navigationService.saveNavigation(navigation);
       assertEquals(0, createListener.events.size());
       assertEquals(1, updateListener.events.size());
       event = updateListener.events.removeFirst();
@@ -111,7 +115,7 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       assertEquals(0, destroyListener.events.size());
 
       // Update
-      NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
+      navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
       Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
       root.setState(new NodeState.Builder(root.getState()).setLabel("foo").capture());
       navigationService.saveNode(root.context);
@@ -124,7 +128,7 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       assertEquals(0, destroyListener.events.size());
 
       // Destroy
-      navigationService.saveNavigation(SiteKey.portal("notification"), null);
+      navigationService.destroyNavigation(navigation);
       assertEquals(0, createListener.events.size());
       assertEquals(0, updateListener.events.size());
       assertEquals(1, destroyListener.events.size());

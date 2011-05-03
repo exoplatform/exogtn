@@ -55,14 +55,21 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNotNull(nav);
-      assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-      assertNull(nav.data.state);
-      assertNull(nav.data.rootId);
+      assertNull(nav);
 
       //
-      assertTrue(service.saveNavigation(nav.getKey(), new NavigationState(5)));
+      nav = new NavigationContext(SiteKey.portal("save_navigation"), new NavigationState(5));
+      assertNull(nav.data);
+      assertNotNull(nav.state);
+      service.saveNavigation(nav);
+      assertNotNull(nav.data);
+      assertNull(nav.state);
+
+      //
+      nav.setState(new NavigationState(5));
+      service.saveNavigation(nav);
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      assertNull(nav.state);
       assertNotNull(nav.data.state);
       assertEquals(5, nav.data.state.getPriority().intValue());
 
@@ -79,22 +86,29 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertNotNull(nav.data.rootId);
 
       //
-      assertTrue(service.saveNavigation(nav.getKey(), null));
+      assertTrue(service.destroyNavigation(nav));
+      assertNull(nav.state);
+      assertNull(nav.data);
+
+      //
+      try
+      {
+         service.destroyNavigation(nav);
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNull(nav.data.state);
-      assertNull(nav.data.rootId);
+      assertNull(nav);
 
       //
       sync(true);
 
       //
       nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-      assertNotNull(nav);
-      assertNull(nav.data.state);
-      assertNull(nav.data.rootId);
-
-      //
-      assertFalse(service.saveNavigation(nav.getKey(), null));
+      assertNull(nav);
    }
 
 

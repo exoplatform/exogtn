@@ -24,6 +24,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -246,8 +247,13 @@ public class UIGroupNavigationManagement extends UIContainer
          UIGroupNavigationManagement uicomp = event.getSource();
          NavigationService service = uicomp.getApplicationComponent(NavigationService.class);
 
-         service.saveNavigation(navigation.getKey(), null);
+         NavigationContext ctx = service.loadNavigation(navigation.getKey());
+         if (ctx != null)
+         {
+            service.destroyNavigation(ctx);
+         }
 
+         //
          event.getRequestContext().addUIComponentToUpdateByAjax(uicomp);
          //Update UserToolbarGroupPortlet
          UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);

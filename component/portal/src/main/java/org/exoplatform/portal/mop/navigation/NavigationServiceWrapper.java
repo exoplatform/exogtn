@@ -92,15 +92,36 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return service.loadNavigation(key);
    }
 
-   public boolean saveNavigation(SiteKey key, NavigationState state) throws NavigationServiceException
+   public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
    {
-      boolean changed = service.saveNavigation(key, state);
-      String name = state != null ? (changed ? EventType.NAVIGATION_CREATED : EventType.NAVIGATION_UPDATED) : (changed ? EventType.NAVIGATION_DESTROYED : null);
-      if (name != null)
+      boolean created = navigation.data == null;
+
+      //
+      service.saveNavigation(navigation);
+
+      //
+      if (created)
       {
-         notify(name, key);
+         notify(EventType.NAVIGATION_CREATED, navigation.key);
       }
-      return changed;
+      else
+      {
+         notify(EventType.NAVIGATION_UPDATED, navigation.key);
+      }
+   }
+
+   public boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
+   {
+      boolean destroyed = service.destroyNavigation(navigation);
+
+      //
+      if (destroyed)
+      {
+         notify(EventType.NAVIGATION_DESTROYED, navigation.key);
+      }
+
+      //
+      return destroyed;
    }
 
    public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)

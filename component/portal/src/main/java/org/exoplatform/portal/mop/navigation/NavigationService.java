@@ -51,17 +51,26 @@ public interface NavigationService
    NavigationContext loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
 
    /**
-    * Create, update or destroy a navigation. When the navigation state is not null, the navigation
-    * will be created or updated depending on whether or not the navigation already exists. When
-    * the navigation state is null, the navigation will be destroyed.
+    * Create, update a navigation. When the navigation state is not null, the navigation
+    * will be created or updated depending on whether or not the navigation already exists.
     *
-    * @param key they navigation key
-    * @param state the navigation state
-    * @return true if the intent succeeded
+    * @param navigation the navigation
     * @throws NullPointerException if the key is null
+    * @throws IllegalArgumentException if the navigation is already destroyed
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   boolean saveNavigation(SiteKey key, NavigationState state) throws NullPointerException, NavigationServiceException;
+   void saveNavigation(NavigationContext navigation) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
+
+   /**
+    * Destroy a navigation.
+    *
+    * @param navigation the navigation
+    * @return true if the navigation was destroyed
+    * @throws NullPointerException if the navigation is null
+    * @throws IllegalArgumentException if the navigation is destroyed
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
+    */
+   boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
    /**
     * Load a navigation node from a specified navigation. The returned context will be the root node of the navigation.

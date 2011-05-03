@@ -29,7 +29,13 @@ public class NavigationContext
 {
 
    /** . */
-   final NavigationData data;
+   SiteKey key;
+
+   /** . */
+   NavigationState state;
+
+   /** . */
+   NavigationData data;
 
    NavigationContext(NavigationData data)
    {
@@ -39,7 +45,24 @@ public class NavigationContext
       }
 
       //
+      this.key = data.key;
       this.data = data;
+   }
+
+   public NavigationContext(SiteKey key, NavigationState state)
+   {
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+      if (state == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      this.key = key;
+      this.state = state;
    }
 
    /**
@@ -53,12 +76,46 @@ public class NavigationContext
    }
 
    /**
-    * Returns the navigation state or null if the navigation is not entirely created yet.
+    * Returns the navigation state.
     *
     * @return the navigation state
     */
    public NavigationState getState()
    {
-      return data.state;
+      if (state != null)
+      {
+         return state;
+      }
+      else if (data != null)
+      {
+         return data.state;
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   /**
+    * Updates the navigation state the behavior is not the same wether or not the navigation is persistent:
+    * <ul>
+    *    <li>When the navigation is persistent, any state is allowed:
+    *    <li>A non null state overrides the current persistent state.</li>
+    *    <li>The null state means to reset the state to the persistent state.</li>
+    *    </li>
+    *    <li>When the navigation is transient, only a non null state is allowed as it will be used for creation
+    *    purpose.</li>
+    * </ul>
+    *
+    * @param state the new state
+    * @throws IllegalStateException when the state is cleared and the navigation is not persistent
+    */
+   public void setState(NavigationState state) throws IllegalStateException
+   {
+      if (data == null && state == null)
+      {
+         throw new IllegalStateException("Cannot clear state on a transient navigation");
+      }
+      this.state = state;
    }
 }

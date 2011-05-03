@@ -21,7 +21,6 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -80,12 +79,12 @@ abstract class DataCache
       return data;
    }
 
-   final void removeNodeData(Collection<String> nodeId)
+   final void removeNodeData(POMSession session, Collection<String> nodeId)
    {
       removeNodes(nodeId);
    }
 
-   NavigationData getNavigationContext(POMSession session, SiteKey key)
+   NavigationData getNavigationData(POMSession session, SiteKey key)
    {
       if (key == null)
       {
@@ -115,7 +114,7 @@ abstract class DataCache
       return navigation;
    }
 
-   void removeNavigationContext(SiteKey key)
+   void removeNavigationData(POMSession session, SiteKey key)
    {
       removeNavigation(key);
    }
@@ -127,19 +126,14 @@ abstract class DataCache
       Site site = workspace.getSite(objectType, key.getName());
       if (site != null)
       {
-         Navigation root = site.getRootNavigation();
-         Navigation rootNode = root.getChild("default");
-         String path = session.pathOf(site);
-         if (rootNode != null)
+         Navigation defaultNavigation = site.getRootNavigation().getChild("default");
+         if (defaultNavigation != null)
          {
-
-            Integer priority = rootNode.getAttributes().getValue(MappedAttributes.PRIORITY, 1);
-            String rootId = rootNode.getObjectId();
-            return new NavigationData(key, new NavigationState(priority), rootId);
+            return new NavigationData(key, defaultNavigation);
          }
          else
          {
-            return new NavigationData(key, null, null);
+            return null;
          }
       }
       else
