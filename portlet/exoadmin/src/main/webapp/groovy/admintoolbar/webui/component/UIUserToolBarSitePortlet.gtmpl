@@ -36,11 +36,12 @@
 				else clazz = "";
 				href = uicomponent.getPortalURI(portal);
                 EntityEncoder entityEncoder = EntityEncoder.FULL;
+            label = uicomponent.getPortalLabel(portal);
 				portal = entityEncoder.encode(portal);
 				print """
 					<div class="MenuItem">
 						<div $clazz>
-							<a href="$href" class="ItemIcon SiteIcon">$portal</a>
+							<a href="$href" class="ItemIcon SiteIcon">$label</a>
 						</div>
 				""";
 						if(isCurrent) {

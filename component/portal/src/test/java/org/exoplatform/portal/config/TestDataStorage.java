@@ -124,10 +124,14 @@ public class TestDataStorage extends AbstractPortalTest
 
    public void testCreatePortal() throws Exception
    {
+      String label = "portal_foo";
+      String description = "This is new portal for testing";
       PortalConfig portal = new PortalConfig();
       portal.setType("portal");
       portal.setName("foo");
       portal.setLocale("en");
+      portal.setLabel(label);
+      portal.setDescription(description);
       portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
 
       //
@@ -137,6 +141,8 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(portal);
       assertEquals("portal", portal.getType());
       assertEquals("foo", portal.getName());
+      assertEquals(label, portal.getLabel());
+      assertEquals(description, portal.getDescription());
    }
 
    public void testPortalConfigSave() throws Exception
