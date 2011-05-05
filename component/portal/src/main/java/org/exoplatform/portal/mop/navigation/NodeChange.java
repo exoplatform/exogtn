@@ -27,27 +27,40 @@ package org.exoplatform.portal.mop.navigation;
 public class NodeChange<N>
 {
 
-   private NodeChange()
+   /** . */
+   final N node;
+
+   private NodeChange(N node)
    {
+      this.node = node;
    }
 
-   public static class Removed<N> extends NodeChange<N>
+   public final N getNode()
+   {
+      return node;
+   }
+
+   public final static class Removed<N> extends NodeChange<N>
    {
 
       /** . */
       final N parent;
 
-      /** . */
-      final N node;
-
       Removed(N parent, N node)
       {
+         super(node);
+
+         //
          this.parent = parent;
-         this.node = node;
+      }
+
+      public N getParent()
+      {
+         return parent;
       }
    }
 
-   public static class Added<N> extends NodeChange<N>
+   public final static class Added<N> extends NodeChange<N>
    {
 
       /** . */
@@ -57,21 +70,35 @@ public class NodeChange<N>
       final N previous;
 
       /** . */
-      final N node;
-
-      /** . */
       final String name;
 
       Added(N parent, N previous, N node, String name)
       {
+         super(node);
+
+         //
          this.parent = parent;
          this.previous = previous;
-         this.node = node;
          this.name = name;
+      }
+
+      public N getParent()
+      {
+         return parent;
+      }
+
+      public N getPrevious()
+      {
+         return previous;
+      }
+
+      public String getName()
+      {
+         return name;
       }
    }
 
-   public static class Moved<N> extends NodeChange<N>
+   public final static class Moved<N> extends NodeChange<N>
    {
       
       /** . */
@@ -83,31 +110,49 @@ public class NodeChange<N>
       /** . */
       final N previous;
 
-      /** . */
-      final N node;
-
       Moved(N from, N to, N previous, N node)
       {
+         super(node);
+
+         //
          this.from = from;
          this.to = to;
          this.previous = previous;
-         this.node = node;
+      }
+
+      public N getFrom()
+      {
+         return from;
+      }
+
+      public N getTo()
+      {
+         return to;
+      }
+
+      public N getPrevious()
+      {
+         return previous;
       }
    }
 
-   public static class Renamed<N> extends NodeChange<N>
+   public final static class Renamed<N> extends NodeChange<N>
    {
-
-      /** . */
-      final N node;
 
       /** . */
       final String name;
 
       Renamed(N node, String name)
       {
-         this.node = node;
+         super(node);
+
+         //
          this.name = name;
+      }
+
+      public String getName()
+      {
+         return name;
       }
    }
 }
