@@ -160,6 +160,8 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals("test_edit_permission", portal.getEditPermission());
       assertEquals("test_skin", portal.getSkin());
       assertEquals("test_prop_value", portal.getProperty("prop_key"));
+      assertNull(portal.getLabel());
+      assertNull(portal.getDescription());
    }
 
    public void testPageWithoutPageId() throws Exception
