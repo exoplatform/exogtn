@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -203,6 +205,11 @@ public class UserPortalImpl implements UserPortal
       return navigationService.loadNode(node.context, scope).getNode();
    }
 
+   public Iterator<NodeChange<UserNode>> updateNode(UserNode node, Scope scope) throws Exception
+   {
+      return navigationService.updateNode(node.context, scope);
+   }
+   
    private class MatchingScope implements Scope
    {
       final UserNavigation userNavigation;

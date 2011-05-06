@@ -21,9 +21,12 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -81,6 +84,17 @@ public interface UserPortal
     */
    UserNode getNode(UserNode node, Scope scope) throws Exception;
 
+   /**
+    * Update the specified content with the most recent state.
+    *
+    * @param context the context to update
+    * @param scope the optional scope
+    * @return an iterator over the changes that were applied to the context
+    * @throws NullPointerException if the context argument is null
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
+    */
+   Iterator<NodeChange<UserNode>> updateNode(UserNode node, Scope scope) throws Exception;
+   
    /**
     * Returns the default navigation path.
     *

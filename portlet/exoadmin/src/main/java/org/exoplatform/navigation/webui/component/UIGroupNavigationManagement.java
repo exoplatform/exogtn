@@ -161,21 +161,22 @@ public class UIGroupNavigationManagement extends UIContainer
          // get navigation id
          String groupName = event.getRequestContext().getRequestParameter(OBJECTID);
          SiteKey siteKey = SiteKey.group(groupName);
-         UserNavigation navigation = userPortal.getNavigation(siteKey);
-         if (navigation == null)
-         {
-            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
-            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
-            uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");       
-            return;
-         }
-
+         
          // check edit permission, ensure that user has edit permission on that
          // navigation
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermissionOnNavigation(siteKey))
          {
             uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.Invalid-editPermission", null));
+            return;
+         }
+
+         UserNavigation navigation = userPortal.getNavigation(siteKey);
+         if (navigation == null)
+         {
+            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
+            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+            uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");       
             return;
          }
 
