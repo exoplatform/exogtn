@@ -43,7 +43,7 @@
 														<div class="RightTab">
 																<div class="MiddleTab">
 																		<% 
-																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + node.getResolvedLabel() + "\")"; 
+																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + tabLabel + "\")"; 
 																		%>
 																		<span ondblclick='$ondblclick'>$tabLabel</span>
 																		<a  href="<%= uicomponent.url("DeleteTab",param); %>">
