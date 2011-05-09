@@ -182,6 +182,23 @@ public class TestNavigationService extends AbstractTestNavigationService
       assertEquals(Visibility.DISPLAYED, child2.getContext().getState().getVisibility());
    }
 
+   public void testDepth() throws Exception
+   {
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("test"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL).getNode();
+      Node child1 = root.getChild("node_name");
+      assertEquals(0, child1.context.getDepth(child1.context));
+      assertEquals(1, child1.context.getDepth(root.context));
+      try
+      {
+         root.context.getDepth(child1.context);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+   }
+
    public void testHiddenNode() throws Exception
    {
       MOPService mop = mgr.getPOMService();

@@ -113,6 +113,35 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       return tree.hasChanges();
    }
 
+   /**
+    * Returns the relative depth of this node with respect to the ancestor argument.
+    *
+    * @param ancestor the ancestor
+    * @return the depth
+    * @throws IllegalArgumentException if the ancestor argument is not an ancestor
+    * @throws NullPointerException if the ancestor argument is null
+    */
+   public int getDepth(NodeContext<N> ancestor) throws IllegalArgumentException, NullPointerException
+   {
+      if (ancestor == null)
+      {
+         throw new NullPointerException();
+      }
+      int depth = 0;
+      for (NodeContext<N> current = this;current != null;current = current.getParent())
+      {
+         if (current == ancestor)
+         {
+            return depth;
+         }
+         else
+         {
+            depth++;
+         }
+      }
+      throw new IllegalArgumentException("Context " + ancestor + " is not an ancestor of " + this);
+   }
+
    public NodeContext<N> getDescendant(String id) throws NullPointerException
    {
       if (id == null)
