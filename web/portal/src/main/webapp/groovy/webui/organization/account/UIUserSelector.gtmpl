@@ -1,6 +1,9 @@
 <%
  import org.exoplatform.services.organization.User;
  import org.exoplatform.webui.core.UIPopupWindow;
+ import org.gatein.common.text.EntityEncoder;
+ 
+ EntityEncoder encoder = EntityEncoder.FULL;
  uiform.begin()
  def rcontext = _ctx.getRequestContext(); 
  boolean isMulti = uicomponent.getMulti();
@@ -104,10 +107,10 @@
 										</div>
 									</td>
 									<% } %>
-									<% String userName = data.getUserName() != null ? data.getUserName() : ""; 
-										 String firstName = data.getFirstName() != null ? data.getFirstName() : "";
-										 String lastName = data.getLastName() != null ? data.getLastName() : "";
-										 String userEmail = data.getEmail() != null ? data.getEmail() : ""; 
+									<% String userName = encoder.encode(data.getUserName() != null ? data.getUserName() : ""); 
+										 String firstName = encoder.encode(data.getFirstName() != null ? data.getFirstName() : "");
+										 String lastName = encoder.encode(data.getLastName() != null ? data.getLastName() : "");
+										 String userEmail = encoder.encode(data.getEmail() != null ? data.getEmail() : ""); 
 									%>
 									<td><div class="Text" title='$userName'><%= userName %></div></td>
 									<td><div class="Text" title="$firstName"><%= firstName %></div></td>

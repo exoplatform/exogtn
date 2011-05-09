@@ -2,6 +2,7 @@
 	import javax.portlet.PortletMode ;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
+    import org.gatein.common.text.EntityEncoder;
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
@@ -10,6 +11,8 @@
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 	String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
 	String navTitle = uicomponent.getNavigationTitle();
+    EntityEncoder encoder = EntityEncoder.FULL;
+	navTitle = encoder.encode(navTitle);
 %>
 
 <div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
