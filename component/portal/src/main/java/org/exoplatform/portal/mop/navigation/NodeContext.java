@@ -103,6 +103,16 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       return new NodeData(id, name, state, children);
    }
 
+   /**
+    * Returns true if the tree containing this node has pending transient changes.
+    *
+    * @return true if there are uncommited changes
+    */
+   public boolean hasChanges()
+   {
+      return tree.hasChanges();
+   }
+
    public NodeContext<N> getDescendant(String id) throws NullPointerException
    {
       if (id == null)

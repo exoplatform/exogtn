@@ -53,6 +53,43 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertFalse(it.hasNext());
    }
 
+   public void testHasChanges() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_cannot_save");
+      Navigation def = portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_no_op"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+
+      //
+      assertFalse(root.context.hasChanges());
+      root.addChild("foo");
+      assertTrue(root.context.hasChanges());
+
+      //
+      try
+      {
+         service.updateNode(root.context, null);
+      }
+      catch (IllegalArgumentException expected)
+      {
+      }
+
+      //
+      assertTrue(root.context.hasChanges());
+      service.saveNode(root.context);
+      assertFalse(root.context.hasChanges());
+
+      //
+      Iterator<NodeChange<Node>> it = service.updateNode(root.context, null);
+      assertFalse(it.hasNext());
+   }
+
    public void testAddFirst() throws Exception
    {
       MOPService mop = mgr.getPOMService();

@@ -60,17 +60,21 @@ class TreeContext<N>
       changes.addLast(change);
    }
 
+   boolean hasChanges() {
+      return changes != null && changes.size() > 0;
+   }
+
    List<NodeChange<NodeContext<N>>> popChanges()
    {
-      if (changes == null || changes.size() == 0)
-      {
-         return Collections.emptyList();
-      }
-      else
+      if (hasChanges())
       {
          LinkedList<NodeChange<NodeContext<N>>> tmp = changes;
          changes = null;
          return tmp;
+      }
+      else
+      {
+         return Collections.emptyList();
       }
    }
 }

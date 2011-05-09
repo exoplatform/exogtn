@@ -114,7 +114,8 @@ public interface NavigationService
     * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
+    * @throws IllegalArgumentException if the context argument has pending changes
     */
-   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
+   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
 }

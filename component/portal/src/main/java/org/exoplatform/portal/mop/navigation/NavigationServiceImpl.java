@@ -229,18 +229,19 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root, Scope scope) throws NullPointerException, NavigationServiceException
+   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root, Scope scope) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
       TreeContext<N> tree = root.tree;
 
-      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
-      if (changes.size() > 0)
+      //
+      if (tree.hasChanges())
       {
-         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes " + changes);
+         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
       }
 
+      //
       ListAdapter<String[], String> a1 = new ListAdapter<String[], String>()
       {
          public int size(String[] list)
