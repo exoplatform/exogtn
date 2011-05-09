@@ -285,6 +285,11 @@ public class UINavigationNodeSelector extends UIContainer
          }
          return changes;
       } 
+      catch (IllegalArgumentException ex)
+      {
+         //Temporary catch : workaround for pending change exception from navivation service        
+         return Collections.<NodeChange<UserNode>>emptyList().iterator();
+      }
       catch (NullPointerException ex) 
       {
          //Node has been deleted
@@ -615,7 +620,9 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }         
          super.execute(event);         
-         node.setDeleteNode(true);
+         TreeNodeData currNode = uiNodeSelector.getCopyNode(); 
+         if (currNode != null && currNode.getId().equals(nodeID))
+            currNode.setDeleteNode(true);
       }
    }
 
@@ -625,7 +632,10 @@ public class UINavigationNodeSelector extends UIContainer
       {
          super.execute(event);
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
-         uiNodeSelector.getCopyNode().setCloneNode(true);
+         TreeNodeData currNode = uiNodeSelector.getCopyNode(); 
+         String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
+         if (currNode != null && currNode.getId().equals(nodeID))
+            currNode.setCloneNode(true);
       }
    }
 
@@ -757,9 +767,13 @@ public class UINavigationNodeSelector extends UIContainer
        
          String nodeID = context.getRequestParameter(UIComponent.OBJECTID);
          TreeNodeData targetNode = uiNodeSelector.searchNode(nodeID);
+         //This happen when browser's not sync with server
+         if (targetNode == null) return;
+         
          TreeNodeData parentNode = targetNode.getParent();
          try 
          {
+            //After update parentNode, need to check again if targetNode still exists 
             if (isStaleData(parentNode.getId(), uiNodeSelector) || uiNodeSelector.searchNode(nodeID) == null)
             {
                uiNodeSelector.selectNode(uiNodeSelector.getRootNode());
