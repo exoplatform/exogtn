@@ -87,7 +87,7 @@ public interface UserPortal
    /**
     * Update the specified content with the most recent state.
     *
-    * @param context the context to update
+    * @param node the node to update
     * @param scope the optional scope
     * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
