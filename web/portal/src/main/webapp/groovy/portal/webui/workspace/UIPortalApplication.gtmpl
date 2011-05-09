@@ -7,7 +7,10 @@
 	import java.util.Iterator;
 	import org.exoplatform.portal.webui.portal.UIPortal ;
 	import org.exoplatform.portal.config.model.PortalProperties ;
+	import org.gatein.common.text.EntityEncoder;
 		
+  EntityEncoder encoder = EntityEncoder.FULL;
+  
   def rcontext = _ctx.getRequestContext() ;
   String docBase =  rcontext.getRequestContextPath() ;  
   String skin = uicomponent.getSkin();
@@ -15,7 +18,7 @@
   def portletSkins = uicomponent.getPortletSkins() ;
   def scriptsPaths = uicomponent.getJavascriptURLs();
   def lang = uicomponent.getLocale().getLanguage();
-  def title = rcontext.getTitle();
+  def title = encoder.encode(rcontext.getTitle());
   def metaInformation = rcontext.getMetaInformation();
 %>
 
