@@ -372,5 +372,9 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       service.updateNode(foo.context, Scope.CHILDREN);
       assertNull(foo.getChild("bar"));
+
+      // Update a second time (it actually test a previous bug)
+      service.updateNode(foo.context, Scope.CHILDREN);
+      assertNull(foo.getChild("bar"));
    }
 }

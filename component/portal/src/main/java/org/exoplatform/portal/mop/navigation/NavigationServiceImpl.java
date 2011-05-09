@@ -283,7 +283,8 @@ public class NavigationServiceImpl implements NavigationService
       {
          public String getHandle(NodeContext<N> node)
          {
-            return node.data.id;
+            NodeData data = node.data;
+            return data.id;
          }
          public String[] getChildren(NodeContext<N> node)
          {
@@ -490,6 +491,7 @@ public class NavigationServiceImpl implements NavigationService
                }
             }
             context.setContexts(children);
+            context.data = new NodeData(cachedData.id, cachedData.name, context.data.getState(), cachedData.children);
          }
          else
          {
