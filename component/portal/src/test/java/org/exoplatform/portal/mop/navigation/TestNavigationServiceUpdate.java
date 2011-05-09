@@ -377,4 +377,35 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       service.updateNode(foo.context, Scope.CHILDREN);
       assertNull(foo.getChild("bar"));
    }
+
+   public void testUpdateDeletedNode() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_deleted_node");
+      portal.getRootNavigation().addChild("default").addChild("foo").addChild("bar");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_deleted_node"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      Node bar = root.getChild("foo").getChild("bar");
+      sync(true);
+
+      //
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("foo").removeChild("bar");
+      service.saveNode(root1.context);
+      sync(true);
+
+      //
+      try
+      {
+         service.updateNode(bar.context, Scope.CHILDREN);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
+   }
 }

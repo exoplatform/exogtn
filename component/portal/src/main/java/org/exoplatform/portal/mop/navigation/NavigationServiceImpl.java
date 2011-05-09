@@ -242,6 +242,13 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
+      NodeData dataRoot = dataCache.getNodeData(session, root.data.id);
+      if (dataRoot == null)
+      {
+         throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+      }
+
+      //
       ListAdapter<String[], String> a1 = new ListAdapter<String[], String>()
       {
          public int size(String[] list)
@@ -339,7 +346,6 @@ public class NavigationServiceImpl implements NavigationService
       // Apply diff changes to the model
       try
       {
-         NodeData dataRoot = dataCache.getNodeData(session, root.data.id);
          HierarchyChangeIterator<String[], NodeContext<N>, String[], NodeData, String> it = diff.iterator(root, dataRoot);
          Queue<NodeContext<N>> stack = Queues.lifo();
          NodeContext<N> last = null;
