@@ -349,4 +349,28 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertSame(d1, b1.getChild(1));
       assertSame(h1, b1.getChild(2));
    }
+
+   public void testUseMostActualChildren() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_with_most_actual_children");
+      portal.getRootNavigation().addChild("default").addChild("foo").addChild("bar");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_with_most_actual_children"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode(); // it works if the Scope is set to Scope.ALL
+      Node foo = root.getChild("foo");
+      sync(true);
+
+      //
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL).getNode();
+      root1.getChild("foo").removeChild("bar");
+      service.saveNode(root1.context);
+      sync(true);
+
+      //
+      service.updateNode(foo.context, Scope.CHILDREN);
+      assertNull(foo.getChild("bar"));
+   }
 }

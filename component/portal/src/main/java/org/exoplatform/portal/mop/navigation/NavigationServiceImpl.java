@@ -456,6 +456,10 @@ public class NavigationServiceImpl implements NavigationService
 
    private <N> void expand(POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
    {
+      // Obtain most actual data
+      NodeData cachedData = dataCache.getNodeData(session, context.data.id);
+
+      //
       if (context.hasContexts())
       {
          for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
@@ -465,19 +469,20 @@ public class NavigationServiceImpl implements NavigationService
       }
       else
       {
-         NodeData data = context.data;
-         VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
+         VisitMode visitMode = visitor.visit(depth, cachedData.id, cachedData.name, cachedData.state);
+
+         //
          if (visitMode == VisitMode.ALL_CHILDREN)
          {
-            ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
-            for (String childId : data.children)
+            ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(cachedData.children.length);
+            for (String childId : cachedData.children)
             {
                NodeData childData = dataCache.getNodeData(session, childId);
                if (childData != null)
                {
-                  NodeContext<N> child = new NodeContext<N>(context.tree, childData);
-                  expand(session, child, visitor, depth + 1);
-                  children.add(child);
+                  NodeContext<N> childContext = new NodeContext<N>(context.tree, childData);
+                  expand(session, childContext, visitor, depth + 1);
+                  children.add(childContext);
                }
                else
                {

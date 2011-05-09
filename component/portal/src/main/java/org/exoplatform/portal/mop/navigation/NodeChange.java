@@ -155,4 +155,24 @@ public class NodeChange<N>
          return name;
       }
    }
+
+   public final static class Updated<N> extends NodeChange<N>
+   {
+
+      /** . */
+      private final NodeState state;
+
+      public Updated(N node, NodeState state)
+      {
+         super(node);
+
+         //
+         this.state = state;
+      }
+
+      public NodeState getState()
+      {
+         return state;
+      }
+   }
 }
