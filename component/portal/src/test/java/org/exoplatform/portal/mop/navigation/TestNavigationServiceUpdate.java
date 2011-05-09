@@ -350,6 +350,41 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertSame(h1, b1.getChild(2));
    }
 
+   public void testReplaceChild() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_replace_child");
+      portal.getRootNavigation().addChild("default").addChild("foo");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_replace_child"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      String foo1Id = root1.getChild("foo").getId();
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      root2.removeChild("foo");
+      Node foo = root2.addChild("foo");
+      foo.setState(new NodeState.Builder().setLabel("foo2").capture());
+      service.saveNode(root2.context);
+      String foo2Id = foo.getId();
+      sync(true);
+
+      //
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context, null);
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      assertEquals(foo2Id, added.getNode().getId());
+      NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>)changes.next();
+      assertEquals(foo1Id, removed.getNode().getId());
+      assertFalse(changes.hasNext());
+
+      //
+      foo = root1.getChild("foo");
+      assertEquals(foo2Id, foo.getId());
+      assertEquals("foo2", root1.getChild("foo").getState().getLabel());
+   }
+
    public void testUseMostActualChildren() throws NullPointerException, NavigationServiceException
    {
       MOPService mop = mgr.getPOMService();
@@ -359,7 +394,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_with_most_actual_children"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode(); // it works if the Scope is set to Scope.ALL
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
       Node foo = root.getChild("foo");
       sync(true);
 
