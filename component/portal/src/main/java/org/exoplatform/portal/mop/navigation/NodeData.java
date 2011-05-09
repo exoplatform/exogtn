@@ -207,4 +207,10 @@ class NodeData implements Serializable
    {
       return state;
    }
+
+   @Override
+   public String toString()
+   {
+      return "NodeData[id=" + id + ",name=" + name + ",state=" + state + ",children=" + Arrays.asList(children) + "]";
+   }
 }

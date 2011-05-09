@@ -215,7 +215,7 @@ public class NavigationServiceImpl implements NavigationService
          {
             NodeContext<N> context = new NodeContext<N>(new TreeContext<N>(model), data);
             Scope.Visitor visitor = scope.get();
-            expand(session, context, visitor, 0);
+            expand(session, context, visitor, 0, null);
             return context;
          }
          else
@@ -338,7 +338,7 @@ public class NavigationServiceImpl implements NavigationService
          );
 
       //
-      List<NodeChange<N>> list = Collections.emptyList();
+      List<NodeChange<N>> changes = Collections.emptyList();
 
       // Switch to edit mode
       tree.editMode = true;
@@ -380,10 +380,10 @@ public class NavigationServiceImpl implements NavigationService
                   }
 
                   //
-                  if (list.isEmpty()) {
-                     list = new LinkedList<NodeChange<N>>();
+                  if (changes.isEmpty()) {
+                     changes = new LinkedList<NodeChange<N>>();
                   }
-                  list.add(new NodeChange.Moved<N>(
+                  changes.add(new NodeChange.Moved<N>(
                      from.getNode(),
                      to.getNode(),
                      previous != null ? previous.getNode() : null,
@@ -409,10 +409,10 @@ public class NavigationServiceImpl implements NavigationService
                   }
 
                   //
-                  if (list.isEmpty()) {
-                     list = new LinkedList<NodeChange<N>>();
+                  if (changes.isEmpty()) {
+                     changes = new LinkedList<NodeChange<N>>();
                   }
-                  list.add(new NodeChange.Added<N>(
+                  changes.add(new NodeChange.Added<N>(
                      parent.getNode(),
                      previous != null ? previous.getNode() : null,
                      added.getNode(),
@@ -430,10 +430,10 @@ public class NavigationServiceImpl implements NavigationService
                   removed.remove();
 
                   //
-                  if (list.isEmpty()) {
-                     list = new LinkedList<NodeChange<N>>();
+                  if (changes.isEmpty()) {
+                     changes = new LinkedList<NodeChange<N>>();
                   }
-                  list.add(new NodeChange.Removed<N>(
+                  changes.add(new NodeChange.Removed<N>(
                      parent.getNode(),
                      removed.getNode()));
 
@@ -451,59 +451,74 @@ public class NavigationServiceImpl implements NavigationService
          tree.editMode = false;
       }
 
-      // Now update with scope
-      if (scope != null)
-      {
-         expand(session, root, scope.get(), 0);
-      }
+      // Now expand
+      changes = expand(session, root, scope != null ? scope.get() : null, 0, changes);
 
       //
-      return list.iterator();
+      return changes.iterator();
    }
 
-   private <N> void expand(POMSession session, NodeContext<N> context, Scope.Visitor visitor, int depth)
+   private <N> List<NodeChange<N>> expand(
+      POMSession session,
+      NodeContext<N> context,
+      Scope.Visitor visitor,
+      int depth,
+      List<NodeChange<N>> changes)
    {
       // Obtain most actual data
       NodeData cachedData = dataCache.getNodeData(session, context.data.id);
+
+      // Generate node change event (that will occur below)
+      if (!context.data.state.equals(cachedData.state))
+      {
+         context.data = cachedData;
+         if (changes.isEmpty())
+         {
+            changes = new LinkedList<NodeChange<N>>();
+         }
+         changes.add(new NodeChange.Updated<N>(context.node, cachedData.state));
+      }
 
       //
       if (context.hasContexts())
       {
          for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
          {
-            expand(session, current, visitor, depth + 1);
+            changes = expand(session, current, visitor, depth + 1, changes);
          }
       }
       else
       {
-         VisitMode visitMode = visitor.visit(depth, cachedData.id, cachedData.name, cachedData.state);
+         if (visitor != null)
+         {
+            VisitMode visitMode = visitor.visit(depth, cachedData.id, cachedData.name, cachedData.state);
+            if (visitMode == VisitMode.ALL_CHILDREN)
+            {
+               ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(cachedData.children.length);
+               for (String childId : cachedData.children)
+               {
+                  NodeData childData = dataCache.getNodeData(session, childId);
+                  if (childData != null)
+                  {
+                     NodeContext<N> childContext = new NodeContext<N>(context.tree, childData);
+                     changes = expand(session, childContext, visitor, depth + 1, changes);
+                     children.add(childContext);
+                  }
+                  else
+                  {
+                     throw new UnsupportedOperationException("Handle me gracefully");
+                  }
+               }
+               context.setContexts(children);
+            }
+         }
 
          //
-         if (visitMode == VisitMode.ALL_CHILDREN)
-         {
-            ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(cachedData.children.length);
-            for (String childId : cachedData.children)
-            {
-               NodeData childData = dataCache.getNodeData(session, childId);
-               if (childData != null)
-               {
-                  NodeContext<N> childContext = new NodeContext<N>(context.tree, childData);
-                  expand(session, childContext, visitor, depth + 1);
-                  children.add(childContext);
-               }
-               else
-               {
-                  throw new UnsupportedOperationException("Handle me gracefully");
-               }
-            }
-            context.setContexts(children);
-            context.data = new NodeData(cachedData.id, cachedData.name, context.data.getState(), cachedData.children);
-         }
-         else
-         {
-            // Do nothing
-         }
+         context.data = cachedData;
       }
+
+      //
+      return changes;
    }
 
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException

@@ -385,6 +385,53 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals("foo2", root1.getChild("foo").getState().getLabel());
    }
 
+   public void testState() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_state");
+      portal.getRootNavigation().addChild("default").addChild("foo").addChild("bar");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_state"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      Node root3 = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN).getNode();
+
+      //
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      root.getChild("foo").setState(new NodeState.Builder().setLabel("foo").capture());
+      service.saveNode(root.context);
+      sync(true);
+
+      //
+      Iterator<NodeChange<Node>> changes = service.updateNode(root1.context, Scope.GRANDCHILDREN);
+      Node foo = root1.getChild("foo");
+      assertEquals("foo", foo.getState().getLabel());
+      NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>)changes.next();
+      assertSame(foo, updated.getNode());
+      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertFalse(changes.hasNext());
+
+      //
+      changes = service.updateNode(root2.context, null);
+      foo = root2.getChild("foo");
+      assertEquals("foo", foo.getState().getLabel());
+      updated = (NodeChange.Updated<Node>)changes.next();
+      assertSame(foo, updated.getNode());
+      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertFalse(changes.hasNext());
+
+      //
+      changes = service.updateNode(root3.context, null);
+      foo = root3.getChild("foo");
+      assertEquals("foo", foo.getState().getLabel());
+      updated = (NodeChange.Updated<Node>)changes.next();
+      assertSame(foo, updated.getNode());
+      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertFalse(changes.hasNext());
+   }
+
    public void testUseMostActualChildren() throws NullPointerException, NavigationServiceException
    {
       MOPService mop = mgr.getPOMService();
