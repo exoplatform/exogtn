@@ -38,13 +38,9 @@ abstract class DataCache
 
    protected abstract void removeNodes(Collection<String> keys);
 
-   protected abstract void putNode(String key, NodeData navigation);
+   protected abstract NodeData getNode(POMSession session, String key);
 
-   protected abstract NodeData getNode(String key);
-
-   protected abstract void putNavigation(SiteKey key, NavigationData navigation);
-
-   protected abstract NavigationData getNavigation(SiteKey key);
+   protected abstract NavigationData getNavigation(POMSession session, SiteKey key);
 
    protected abstract void removeNavigation(SiteKey key);
 
@@ -55,73 +51,56 @@ abstract class DataCache
       NodeData data;
       if (session.isModified())
       {
-         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-         if (navigation != null)
-         {
-            data = new NodeData(navigation);
-         }
-         else
-         {
-            data = null;
-         }
+         data = loadNode(session, nodeId);
       }
       else
       {
-         data = getNode(nodeId);
-         if (data == null)
-         {
-            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
-            if (navigation != null)
-            {
-               data = new NodeData(navigation);
-               putNode(nodeId, data);
-            }
-         }
+         data = getNode(session, nodeId);
       }
       return data;
    }
 
-   final void removeNodeData(POMSession session, Collection<String> nodeId)
+   final NavigationData getNavigationData(POMSession session, SiteKey key)
    {
-      removeNodes(nodeId);
-   }
-
-   NavigationData getNavigationData(POMSession session, SiteKey key)
-   {
-      if (key == null)
-      {
-         throw new NullPointerException();
-      }
-
-      //
-      NavigationData navigation;
+      NavigationData data;
       if (session.isModified())
       {
-         navigation = findNavigation(session, key);
+         data = loadNavigation(session, key);
       }
       else
       {
-         navigation = getNavigation(key);
-         if (navigation == null)
-         {
-            navigation = findNavigation(session, key);
-            if (navigation != null)
-            {
-               putNavigation(key, navigation);
-            }
-         }
+         data = getNavigation(session, key);
       }
 
       //
-      return navigation;
+      return data;
    }
 
-   void removeNavigationData(POMSession session, SiteKey key)
+   final void removeNodeData(POMSession session, Collection<String> ids)
+   {
+      removeNodes(ids);
+   }
+
+   final void removeNavigationData(POMSession session, SiteKey key)
    {
       removeNavigation(key);
    }
 
-   private NavigationData findNavigation(POMSession session, SiteKey key)
+   protected final NodeData loadNode(POMSession session, String nodeId)
+   {
+      Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+      if (navigation != null)
+      {
+         return new NodeData(navigation);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+
+   protected final  NavigationData loadNavigation(POMSession session, SiteKey key)
    {
       Workspace workspace = session.getWorkspace();
       ObjectType<Site> objectType = objectType(key.getType());

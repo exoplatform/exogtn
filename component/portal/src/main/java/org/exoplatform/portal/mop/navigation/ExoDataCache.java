@@ -19,7 +19,10 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 
@@ -34,15 +37,41 @@ public class ExoDataCache extends DataCache
 {
 
    /** . */
-   protected ExoCache<SiteKey, NavigationData> navigations;
+   protected ExoCache<SiteKey, NavigationData> navigationsCache;
 
    /** . */
-   protected ExoCache<String, NodeData> nodes;
+   protected FutureExoCache<SiteKey, NavigationData, POMSession> navigations;
+
+   /** . */
+   protected ExoCache<String, NodeData> nodeCache;
+
+   /** . */
+   protected FutureExoCache<String, NodeData, POMSession> nodes;
+
+   /** . */
+   private Loader<String, NodeData, POMSession> nodeLoader = new Loader<String, NodeData, POMSession>()
+   {
+      public NodeData retrieve(POMSession session, String nodeId) throws Exception
+      {
+         return loadNode(session, nodeId);
+      }
+   };
+
+   /** . */
+   private Loader<SiteKey, NavigationData, POMSession> navigationLoader = new Loader<SiteKey, NavigationData, POMSession>()
+   {
+      public NavigationData retrieve(POMSession session, SiteKey key) throws Exception
+      {
+         return loadNavigation(session, key);
+      }
+   };
 
    public ExoDataCache(CacheService cacheService)
    {
-      this.navigations = cacheService.getCacheInstance(ExoDataCache.class + ".navigations");
-      this.nodes = cacheService.getCacheInstance(ExoDataCache.class + ".nodes");
+      this.navigationsCache = cacheService.getCacheInstance(ExoDataCache.class + ".navigations");
+      this.navigations = new FutureExoCache<SiteKey, NavigationData, POMSession>(navigationLoader, navigationsCache);
+      this.nodeCache = cacheService.getCacheInstance(ExoDataCache.class + ".nodes");
+      this.nodes = new FutureExoCache<String, NodeData, POMSession>(nodeLoader, nodeCache);
    }
 
    @Override
@@ -50,44 +79,32 @@ public class ExoDataCache extends DataCache
    {
       for (String key : keys)
       {
-         nodes.remove(key);
+         nodeCache.remove(key);
       }
    }
 
    @Override
-   protected void putNode(String key, NodeData node)
+   protected NodeData getNode(POMSession session, String key)
    {
-      nodes.put(key, node);
-   }
-
-   @Override
-   protected NodeData getNode(String key)
-   {
-      return nodes.get(key);
+      return nodes.get(session, key);
    }
 
    @Override
    protected void removeNavigation(SiteKey key)
    {
-      navigations.remove(key);
+      navigationsCache.remove(key);
    }
 
    @Override
-   protected void putNavigation(SiteKey key, NavigationData navigation)
+   protected NavigationData getNavigation(POMSession session, SiteKey key)
    {
-      navigations.put(key, navigation);
-   }
-
-   @Override
-   protected NavigationData getNavigation(SiteKey key)
-   {
-      return navigations.get(key);
+      return navigations.get(session, key);
    }
 
    @Override
    protected void clear()
    {
-      navigations.clearCache();
-      nodes.clearCache();
+      navigationsCache.clearCache();
+      nodeCache.clearCache();
    }
 }

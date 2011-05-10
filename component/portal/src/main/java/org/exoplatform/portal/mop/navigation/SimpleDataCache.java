@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.pom.config.POMSession;
 
 import java.util.Collection;
 import java.util.Map;
@@ -52,15 +53,18 @@ public class SimpleDataCache extends DataCache
    }
 
    @Override
-   protected void putNode(String key, NodeData node)
+   protected NodeData getNode(POMSession session, String key)
    {
-      nodes.put(key, node);
-   }
-
-   @Override
-   protected NodeData getNode(String key)
-   {
-      return nodes.get(key);
+      NodeData node = nodes.get(key);
+      if (node == null)
+      {
+         node = loadNode(session, key);
+         if (node != null)
+         {
+            nodes.put(key, node);
+         }
+      }
+      return node;
    }
 
    @Override
@@ -70,14 +74,17 @@ public class SimpleDataCache extends DataCache
    }
 
    @Override
-   protected void putNavigation(SiteKey key, NavigationData navigation)
+   protected NavigationData getNavigation(POMSession session, SiteKey key)
    {
-      navigations.put(key, navigation);
-   }
-
-   @Override
-   protected NavigationData getNavigation(SiteKey key)
-   {
+      NavigationData navigation = navigations.get(key);
+      if (navigation == null)
+      {
+         navigation = loadNavigation(session, key);
+         if (navigation != null)
+         {
+            navigations.put(key, navigation);
+         }
+      }
       return navigations.get(key);
    }
 
