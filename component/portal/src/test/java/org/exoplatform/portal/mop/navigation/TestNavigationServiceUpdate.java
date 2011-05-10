@@ -411,6 +411,10 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>)changes.next();
       assertSame(foo, updated.getNode());
       assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      assertEquals("bar", added.getNode().getName());
+      assertEquals(null, added.previous);
+      assertEquals("bar", added.name);
       assertFalse(changes.hasNext());
 
       //
@@ -489,5 +493,39 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       {
          assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
       }
+   }
+
+   public void testLoadEvents() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_load_events");
+      Navigation fooNav = portal.getRootNavigation().addChild("default").addChild("foo");
+      fooNav.addChild("bar1");
+      fooNav.addChild("bar2");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_load_events"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE).getNode();
+
+      //
+      Iterator<NodeChange<Node>> changes = service.updateNode(root.context, Scope.ALL);
+
+      //
+      Node foo = root.getChild(0);
+      assertEquals("foo", foo.getName());
+      Node bar1 = foo.getChild(0);
+      assertEquals("bar1", bar1.getName());
+      Node bar2 = foo.getChild(1);
+      assertEquals("bar2", bar2.getName());
+
+      //
+      NodeChange.Added<Node> added1 = (NodeChange.Added<Node>)changes.next();
+      assertSame(foo, added1.getNode());
+      NodeChange.Added<Node> added2 = (NodeChange.Added<Node>)changes.next();
+      assertSame(bar1, added2.getNode());
+      NodeChange.Added<Node> added3 = (NodeChange.Added<Node>)changes.next();
+      assertSame(bar2, added3.getNode());
+      assertFalse(changes.hasNext());
    }
 }

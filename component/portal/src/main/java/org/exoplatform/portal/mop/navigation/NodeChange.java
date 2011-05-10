@@ -58,6 +58,12 @@ public class NodeChange<N>
       {
          return parent;
       }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Removed[node" + node + ",parent=" +  parent + "]";
+      }
    }
 
    public final static class Added<N> extends NodeChange<N>
@@ -95,6 +101,12 @@ public class NodeChange<N>
       public String getName()
       {
          return name;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Added[node" + node + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
       }
    }
 
@@ -134,6 +146,12 @@ public class NodeChange<N>
       {
          return previous;
       }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Moved[node" + node + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
+      }
    }
 
    public final static class Renamed<N> extends NodeChange<N>
@@ -154,6 +172,12 @@ public class NodeChange<N>
       {
          return name;
       }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Renamed[node" + node + ",name=" + name + "]";
+      }
    }
 
    public final static class Updated<N> extends NodeChange<N>
@@ -173,6 +197,12 @@ public class NodeChange<N>
       public NodeState getState()
       {
          return state;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Remove[node" + node + ",state=" + state + "]";
       }
    }
 }

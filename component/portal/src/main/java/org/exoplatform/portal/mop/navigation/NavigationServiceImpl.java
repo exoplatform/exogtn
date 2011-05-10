@@ -472,11 +472,14 @@ public class NavigationServiceImpl implements NavigationService
       if (!context.data.state.equals(cachedData.state))
       {
          context.data = cachedData;
-         if (changes.isEmpty())
+         if (changes != null)
          {
-            changes = new LinkedList<NodeChange<N>>();
+            if (changes.isEmpty())
+            {
+               changes = new LinkedList<NodeChange<N>>();
+            }
+            changes.add(new NodeChange.Updated<N>(context.node, cachedData.state));
          }
-         changes.add(new NodeChange.Updated<N>(context.node, cachedData.state));
       }
 
       //
@@ -495,14 +498,30 @@ public class NavigationServiceImpl implements NavigationService
             if (visitMode == VisitMode.ALL_CHILDREN)
             {
                ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(cachedData.children.length);
+               N previous = null;
                for (String childId : cachedData.children)
                {
                   NodeData childData = dataCache.getNodeData(session, childId);
                   if (childData != null)
                   {
                      NodeContext<N> childContext = new NodeContext<N>(context.tree, childData);
-                     changes = expand(session, childContext, visitor, depth + 1, changes);
+
+                     // Generate event
+                     if (changes != null)
+                     {
+                        if (changes.isEmpty())
+                        {
+                           changes = new LinkedList<NodeChange<N>>();
+                        }
+                        changes.add(new NodeChange.Added<N>(context.node, previous, childContext.node, childContext.data.name));
+                        previous = childContext.node;
+                     }
+
+                     //
                      children.add(childContext);
+
+                     //
+                     changes = expand(session, childContext, visitor, depth + 1, changes);
                   }
                   else
                   {
