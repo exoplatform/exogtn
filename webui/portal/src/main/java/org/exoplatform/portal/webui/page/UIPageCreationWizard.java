@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.page;
 
-import org.apache.poi.hssf.record.SCLRecord;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
@@ -86,7 +85,7 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          nodeSelector.setRendered(false);
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN);
+         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, null);
       }
       else
       {

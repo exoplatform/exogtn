@@ -35,6 +35,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -134,7 +135,7 @@ public class UINavigationNodeSelector extends UIContainer
 
       cachedNodes.clear();
 
-      this.rootNode = new TreeNodeData(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE).filter(nodeFilter), this);
+      this.rootNode = new TreeNodeData(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, null).filter(nodeFilter), this);
       addToCached(rootNode);
       if (rootNode.getChildren().size() > 0)
       {
@@ -256,7 +257,9 @@ public class UINavigationNodeSelector extends UIContainer
       try 
       {
          boolean hasLoaded = treeNode.hasChildrenRelationship();
-         Iterator<NodeChange<UserNode>> changes = userPortal.updateNode(userNode, scope);    
+         NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+         userPortal.updateNode(userNode, scope, queue);
+         Iterator<NodeChange<UserNode>> changes = queue.iterator();
          if (changes.hasNext()) 
          {
             userNode.filter(nodeFilter);            

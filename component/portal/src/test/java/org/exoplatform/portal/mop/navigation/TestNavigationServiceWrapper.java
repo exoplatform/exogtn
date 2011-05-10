@@ -116,7 +116,7 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
 
       // Update
       navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
-      Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN).getNode();
+      Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
       root.setState(new NodeState.Builder(root.getState()).setLabel("foo").capture());
       navigationService.saveNode(root.context);
       assertEquals(0, createListener.events.size());

@@ -78,11 +78,12 @@ public interface NavigationService
     * @param model the node model
     * @param navigation the navigation
     * @param scope the scope
+    * @param listener the optional listener
     * @return the loaded node
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope) throws NullPointerException, NavigationServiceException;
+   <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException;
 
    /**
     * Load a navigation node from a specified node. It will affect the node argument as well as all its descendants
@@ -111,11 +112,12 @@ public interface NavigationService
     *
     * @param context the context to update
     * @param scope the optional scope
+    * @param listener the optional node change listener
     * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     * @throws IllegalArgumentException if the context argument has pending changes
     */
-   <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
+   <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
 }

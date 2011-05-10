@@ -29,7 +29,6 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMDataStorage;
@@ -210,7 +209,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("classic"));
 
             //
-            UserNode root = portal.getNode(nav, Scope.ALL);
+            UserNode root = portal.getNode(nav, Scope.ALL, null);
             NodeFilter filter = portal.createFilter(UserNodePredicate.builder().build());
             root.filter(filter);
             assertNotNull(root.getChild("home"));
@@ -234,7 +233,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.portal("system"));
 
             //
-            UserNode root = portal.getNode(nav, Scope.ALL);
+            UserNode root = portal.getNode(nav, Scope.ALL, null);
             NodeFilter filter = portal.createFilter(UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED).build());
             root.filter(filter);
             assertNotNull(root.getChild("home"));
@@ -242,7 +241,7 @@ public class TestUserPortal extends AbstractPortalTest
             assertNull(root.getChild("groupnavigation"));
 
             //
-            root = portal.getNode(nav, Scope.ALL);
+            root = portal.getNode(nav, Scope.ALL, null);
             filter = portal.createFilter(UserNodePredicate.builder().withVisibility(Visibility.DISPLAYED, Visibility.SYSTEM).build());
             root.filter(filter);
             assertNotNull(root.getChild("home"));
@@ -271,7 +270,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            UserNode root = portal.getNode(nav, Scope.ALL);
+            UserNode root = portal.getNode(nav, Scope.ALL, null);
             NodeFilter filter = portal.createFilter(UserNodePredicate.builder().withAuthorizationCheck().build());
             root.filter(filter);
             pass &= root.getChild("administration") != null;
@@ -503,14 +502,14 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            UserNode root = userPortal.getNode(navigation, Scope.SINGLE);
+            UserNode root = userPortal.getNode(navigation, Scope.SINGLE, null);
             assertEquals("default", root.getName());
             assertEquals(1, root.getChildrenCount());
             assertEquals(0, root.getChildren().size());
             assertFalse(root.hasChildrenRelationship());
 
             //
-            root = userPortal.getNode(navigation, Scope.CHILDREN);
+            root = userPortal.getNode(navigation, Scope.CHILDREN, null);
             assertEquals("default", root.getName());
             assertEquals(1, root.getChildrenCount());
             assertEquals(1, root.getChildren().size());
@@ -551,7 +550,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("test"));
             
-            UserNode root = userPortal.getNode(navigation, Scope.ALL);
+            UserNode root = userPortal.getNode(navigation, Scope.ALL, null);
             NodeFilter filter = userPortal.createFilter(UserNodePredicate.builder().withTemporalCheck().build());
             root.filter(filter);
             GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
@@ -599,14 +598,14 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
-            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null);
             root.addChild("foo");
             root.save();
             end(true);
 
             //
             begin();
-            root = userPortal.getNode(navigation, Scope.ALL);
+            root = userPortal.getNode(navigation, Scope.ALL, null);
             root.addChild("bar");
             root.getChild("foo").addChild("juu");
             root.save();
@@ -617,7 +616,7 @@ public class TestUserPortal extends AbstractPortalTest
             userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_recursive", getUserId());
             userPortal = userPortalCfg.getUserPortal();
             navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
-            root = userPortal.getNode(navigation, Scope.ALL);
+            root = userPortal.getNode(navigation, Scope.ALL, null);
             assertNotNull(root.getChild("bar"));
             UserNode foo = root.getChild("foo");
             assertNotNull(foo.getChild("juu"));
@@ -628,7 +627,7 @@ public class TestUserPortal extends AbstractPortalTest
             end(true);
             
             begin();
-            root = userPortal.getNode(navigation, Scope.ALL);
+            root = userPortal.getNode(navigation, Scope.ALL, null);
             foo = root.getChild("foo");
             assertNull(foo.getChild("juu"));
          }
@@ -654,7 +653,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("node_extension", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("node_extension"));
-            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null);
             root.addChild("foo");
             root.save();
             end(true);
@@ -676,7 +675,7 @@ public class TestUserPortal extends AbstractPortalTest
             end(true);
             
             begin();
-            root = userPortal.getNode(navigation, Scope.ALL);
+            root = userPortal.getNode(navigation, Scope.ALL, null);
             foo1 = root.getChild("foo").getChild("foo1");
             assertNotNull(foo1);
             assertNotNull(foo1.getChild("foo2"));
@@ -704,11 +703,11 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("cache_invalidation", "root");
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("cache_invalidation"));
-            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN);
+            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null);
             root.addChild("foo");
 
             root.save();
-            root = userPortal.getNode(navigation, Scope.CHILDREN);
+            root = userPortal.getNode(navigation, Scope.CHILDREN, null);
             assertNotNull(root.getChild("foo")); // should Cache be invalidated right after save()
          }
       }.execute("root");
@@ -726,7 +725,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation nav = portal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            UserNode root = portal.getNode(nav, Scope.GRANDCHILDREN);
+            UserNode root = portal.getNode(nav, Scope.GRANDCHILDREN, null);
             root = portal.getNode(root, Scope.GRANDCHILDREN);
             Collection<UserNode> children = root.getChildren();
             int level = 0;

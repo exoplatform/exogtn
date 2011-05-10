@@ -115,7 +115,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       UserNavigation nav = getCurrentUserNavigation(userPortal);
       if (nav != null)
       {
-         UserNode rootNodes =  userPortal.getNode(nav, TOOLBAR_SITE_SCOPE);
+         UserNode rootNodes =  userPortal.getNode(nav, TOOLBAR_SITE_SCOPE, null);
          if (rootNodes != null)
          {
             rootNodes.filter(TOOLBAR_SITE_FILTER);

@@ -27,7 +27,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -195,9 +194,9 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public UserNode getNode(UserNavigation userNavigation, Scope scope) throws Exception
+   public UserNode getNode(UserNavigation userNavigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
    {
-      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope).getNode();
+      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, listener).getNode();
    }
 
    public UserNode getNode(UserNode node, Scope scope) throws Exception
@@ -205,9 +204,9 @@ public class UserPortalImpl implements UserPortal
       return navigationService.loadNode(node.context, scope).getNode();
    }
 
-   public Iterator<NodeChange<UserNode>> updateNode(UserNode node, Scope scope) throws Exception
+   public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
    {
-      return navigationService.updateNode(node.context, scope);
+      navigationService.updateNode(node.context, scope, listener);
    }
    
    private class MatchingScope implements Scope
@@ -227,7 +226,7 @@ public class UserPortalImpl implements UserPortal
 
       void resolve() throws NavigationServiceException
       {
-         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this).getNode();
+         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this, null).getNode();
          if (score > 0)
          {
             userNode = node.find(id);
@@ -273,7 +272,7 @@ public class UserPortalImpl implements UserPortal
          NavigationContext navigation = userNavigation.navigation;
          if (navigation.getState() != null)
          {
-            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN).getNode();
+            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN, null).getNode();
             for (UserNode node : root.getChildren())
             {
                return new NavigationPath(userNavigation, node);

@@ -78,7 +78,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
       UserNavigation userNav = getCurrentUserNavigation();
       if (userNav != null)
       {
-         UserNode rootNodes = userPortal.getNode(userNav, Scope.GRANDCHILDREN);
+         UserNode rootNodes = userPortal.getNode(userNav, Scope.GRANDCHILDREN, null);
          if (rootNodes != null)
          {
             rootNodes.filter(TOOLBAR_DASHBOARD_FILTER);
@@ -169,7 +169,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
             page.setName(_nodeName);
             toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-            UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN);
+            UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN, null);
             if (rootNode == null)
             {
                return;

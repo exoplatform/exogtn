@@ -33,8 +33,6 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.picocontainer.Startable;
 
-import java.util.Iterator;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -124,9 +122,9 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       return destroyed;
    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener)
    {
-      return service.loadNode(model, navigation, scope);
+      return service.loadNode(model, navigation, scope, listener);
    }
 
    public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
@@ -143,9 +141,9 @@ public class NavigationServiceWrapper implements Startable, NavigationService
       notify(EventType.NAVIGATION_UPDATED, key);
    }
 
-   public <N> Iterator<NodeChange<N>> updateNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException
+   public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException
    {
-      return service.updateNode(context, scope);
+      service.updateNode(context, scope, listener);
    }
 
    private void notify(String name, SiteKey key)

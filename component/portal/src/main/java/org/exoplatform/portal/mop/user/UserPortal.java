@@ -23,6 +23,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
@@ -66,12 +67,14 @@ public interface UserPortal
     * Load a user node from a specified user navigation with a custom scope.
     * The returned node is the root node of the navigation.
     *
+    *
     * @param navigation the user navigation
     * @param scope the scope
+    * @param listener
     * @return the user node
     * @throws Exception any exception
     */
-   UserNode getNode(UserNavigation navigation, Scope scope) throws Exception;
+   UserNode getNode(UserNavigation navigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception;
 
    /**
     * Load a user node from a specified user node with a custom scope. The node argument will be modified according
@@ -89,11 +92,12 @@ public interface UserPortal
     *
     * @param node the node to update
     * @param scope the optional scope
+    * @param listener optional listener
     * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   Iterator<NodeChange<UserNode>> updateNode(UserNode node, Scope scope) throws Exception;
+   void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception;
    
    /**
     * Returns the default navigation path.

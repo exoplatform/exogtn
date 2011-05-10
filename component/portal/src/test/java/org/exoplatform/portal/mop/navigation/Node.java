@@ -24,6 +24,7 @@ import junit.framework.Assert;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -208,6 +209,13 @@ public class Node
       for (int i = 0;i < nodes1.size();i++) {
          nodes1.get(i).assertEquals(nodes2.get(i));
       }
+   }
+
+   public Iterator<NodeChange<Node>> update(NavigationService service, Scope scope) throws NavigationServiceException
+   {
+      NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
+      service.updateNode(context, scope, queue);
+      return queue.iterator();
    }
 
    @Override

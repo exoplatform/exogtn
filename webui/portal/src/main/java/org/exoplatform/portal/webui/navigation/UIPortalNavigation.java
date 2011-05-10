@@ -140,7 +140,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, NAVIGATION_SCOPE);
+            UserNode rootNode = userPortal.getNode(userNav, NAVIGATION_SCOPE, null);
             if (rootNode != null)
             {
                rootNode.filter(NAVIGATION_FILTER);
@@ -165,7 +165,7 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, NAVIGATION_SCOPE);
+         UserNode rootNode = userPortal.getNode(nav, NAVIGATION_SCOPE, null);
          if (rootNode != null)
          {
             rootNode.filter(NAVIGATION_FILTER);
@@ -242,7 +242,7 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      UserNode rootNode = userPortal.getNode(userNavigation, NAVIGATION_SCOPE);
+      UserNode rootNode = userPortal.getNode(userNavigation, NAVIGATION_SCOPE, null);
       if (rootNode != null)
       {
          rootNode.filter(NAVIGATION_FILTER);

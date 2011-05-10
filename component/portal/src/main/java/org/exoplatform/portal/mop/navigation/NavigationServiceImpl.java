@@ -49,7 +49,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -192,7 +191,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener)
    {
       if (model == null)
       {
@@ -215,7 +214,7 @@ public class NavigationServiceImpl implements NavigationService
          {
             NodeContext<N> context = new NodeContext<N>(new TreeContext<N>(model), data);
             Scope.Visitor visitor = scope.get();
-            expand(session, context, visitor, 0, null);
+            expand(session, context, visitor, 0, listener);
             return context;
          }
          else
@@ -229,7 +228,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> Iterator<NodeChange<N>> updateNode(final NodeContext<N> root, Scope scope) throws NullPointerException, IllegalArgumentException, NavigationServiceException
+   public <N> void updateNode(final NodeContext<N> root, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
@@ -337,9 +336,6 @@ public class NavigationServiceImpl implements NavigationService
             }
          );
 
-      //
-      List<NodeChange<N>> changes = Collections.emptyList();
-
       // Switch to edit mode
       tree.editMode = true;
 
@@ -380,14 +376,14 @@ public class NavigationServiceImpl implements NavigationService
                   }
 
                   //
-                  if (changes.isEmpty()) {
-                     changes = new LinkedList<NodeChange<N>>();
+                  if (listener != null)
+                  {
+                     listener.onMove(new NodeChange.Moved<N>(
+                        from.getNode(),
+                        to.getNode(),
+                        previous != null ? previous.getNode() : null,
+                        moved.getNode()));
                   }
-                  changes.add(new NodeChange.Moved<N>(
-                     from.getNode(),
-                     to.getNode(),
-                     previous != null ? previous.getNode() : null,
-                     moved.getNode()));
 
                   //
                   break;
@@ -409,14 +405,14 @@ public class NavigationServiceImpl implements NavigationService
                   }
 
                   //
-                  if (changes.isEmpty()) {
-                     changes = new LinkedList<NodeChange<N>>();
+                  if (listener != null)
+                  {
+                     listener.onAdd(new NodeChange.Added<N>(
+                        parent.getNode(),
+                        previous != null ? previous.getNode() : null,
+                        added.getNode(),
+                        added.getName()));
                   }
-                  changes.add(new NodeChange.Added<N>(
-                     parent.getNode(),
-                     previous != null ? previous.getNode() : null,
-                     added.getNode(),
-                     added.getName()));
 
                   //
                   break;
@@ -430,12 +426,12 @@ public class NavigationServiceImpl implements NavigationService
                   removed.remove();
 
                   //
-                  if (changes.isEmpty()) {
-                     changes = new LinkedList<NodeChange<N>>();
+                  if (listener != null)
+                  {
+                     listener.onRemove(new NodeChange.Removed<N>(
+                        parent.getNode(),
+                        removed.getNode()));
                   }
-                  changes.add(new NodeChange.Removed<N>(
-                     parent.getNode(),
-                     removed.getNode()));
 
                   //
                   break;
@@ -452,18 +448,15 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       // Now expand
-      changes = expand(session, root, scope != null ? scope.get() : null, 0, changes);
-
-      //
-      return changes.iterator();
+      expand(session, root, scope != null ? scope.get() : null, 0, listener);
    }
 
-   private <N> List<NodeChange<N>> expand(
+   private <N> void expand(
       POMSession session,
       NodeContext<N> context,
       Scope.Visitor visitor,
       int depth,
-      List<NodeChange<N>> changes)
+      NodeChangeListener<N> listener)
    {
       // Obtain most actual data
       NodeData cachedData = dataCache.getNodeData(session, context.data.id);
@@ -472,13 +465,9 @@ public class NavigationServiceImpl implements NavigationService
       if (!context.data.state.equals(cachedData.state))
       {
          context.data = cachedData;
-         if (changes != null)
+         if (listener != null)
          {
-            if (changes.isEmpty())
-            {
-               changes = new LinkedList<NodeChange<N>>();
-            }
-            changes.add(new NodeChange.Updated<N>(context.node, cachedData.state));
+            listener.onUpdate(new NodeChange.Updated<N>(context.node, cachedData.state));
          }
       }
 
@@ -487,7 +476,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
          {
-            changes = expand(session, current, visitor, depth + 1, changes);
+            expand(session, current, visitor, depth + 1, listener);
          }
       }
       else
@@ -507,13 +496,9 @@ public class NavigationServiceImpl implements NavigationService
                      NodeContext<N> childContext = new NodeContext<N>(context.tree, childData);
 
                      // Generate event
-                     if (changes != null)
+                     if (listener != null)
                      {
-                        if (changes.isEmpty())
-                        {
-                           changes = new LinkedList<NodeChange<N>>();
-                        }
-                        changes.add(new NodeChange.Added<N>(context.node, previous, childContext.node, childContext.data.name));
+                        listener.onAdd(new NodeChange.Added<N>(context.node, previous, childContext.node, childContext.data.name));
                         previous = childContext.node;
                      }
 
@@ -521,7 +506,7 @@ public class NavigationServiceImpl implements NavigationService
                      children.add(childContext);
 
                      //
-                     changes = expand(session, childContext, visitor, depth + 1, changes);
+                     expand(session, childContext, visitor, depth + 1, listener);
                   }
                   else
                   {
@@ -535,9 +520,6 @@ public class NavigationServiceImpl implements NavigationService
          //
          context.data = cachedData;
       }
-
-      //
-      return changes;
    }
 
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
