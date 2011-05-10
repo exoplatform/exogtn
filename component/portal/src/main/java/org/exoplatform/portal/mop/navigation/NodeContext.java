@@ -52,7 +52,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
    private int hiddenCount;
 
    /** . */
-   private String name;
+   String name;
 
    /** . */
    private boolean hasContexts;

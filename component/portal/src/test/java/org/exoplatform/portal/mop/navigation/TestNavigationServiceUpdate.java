@@ -385,6 +385,32 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals("foo2", root1.getChild("foo").getState().getLabel());
    }
 
+   public void testRename() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_rename");
+      portal.getRootNavigation().addChild("default").addChild("foo");
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_rename"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+      root2.getChild("foo").setName("bar");
+      service.saveNode(root2.context);
+      sync(true);
+
+      //
+      Iterator<NodeChange<Node>> it = root1.update(service, null);
+      Node bar = root1.getChild(0);
+      assertEquals("bar", bar.getName());
+      NodeChange.Renamed<Node> renamed = (NodeChange.Renamed<Node>)it.next();
+      assertEquals("bar", renamed.getName());
+      assertSame(bar, renamed.getNode());
+   }
+
    public void testState() throws NullPointerException, NavigationServiceException
    {
       MOPService mop = mgr.getPOMService();

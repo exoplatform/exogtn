@@ -471,6 +471,16 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
 
+      // Update name and generate event
+      if (!context.data.name.equals(cachedData.name))
+      {
+         context.name = cachedData.name;
+         if (listener != null)
+         {
+            listener.onRename(new NodeChange.Renamed<N>(context.node, cachedData.name));
+         }
+      }
+
       //
       if (context.hasContexts())
       {
