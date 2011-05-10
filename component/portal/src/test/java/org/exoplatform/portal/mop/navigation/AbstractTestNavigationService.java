@@ -99,7 +99,7 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
       try
       {
          begin();
-         service.start();
+         service.clearCache();
          end();
       }
       catch (Exception e)
@@ -113,7 +113,7 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
    private void stopService()
    {
       begin();
-      service.stop();
+      service.clearCache();
       end();
    }
 }

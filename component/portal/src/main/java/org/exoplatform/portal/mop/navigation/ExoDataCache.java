@@ -20,35 +20,38 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A simple implementation for unit testing purpose.
+ * An implementation using the cache service.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SimpleDataCache extends DataCache
+public class ExoDataCache extends DataCache
 {
 
    /** . */
-   protected Map<SiteKey, NavigationData> navigations;
+   protected ExoCache<SiteKey, NavigationData> navigations;
 
    /** . */
-   protected Map<String, NodeData> nodes;
+   protected ExoCache<String, NodeData> nodes;
 
-   public SimpleDataCache()
+   public ExoDataCache(CacheService cacheService)
    {
-      this.navigations = new ConcurrentHashMap<SiteKey, NavigationData>();
-      this.nodes = new ConcurrentHashMap<String, NodeData>();
+      this.navigations = cacheService.getCacheInstance(ExoDataCache.class + ".navigations");
+      this.nodes = cacheService.getCacheInstance(ExoDataCache.class + ".nodes");
    }
 
    @Override
    protected void removeNodes(Collection<String> keys)
    {
-      nodes.keySet().removeAll(keys);
+      for (String key : keys)
+      {
+         nodes.remove(key);
+      }
    }
 
    @Override
@@ -84,7 +87,7 @@ public class SimpleDataCache extends DataCache
    @Override
    protected void clear()
    {
-      navigations.clear();
-      nodes.clear();
+      navigations.clearCache();
+      nodes.clearCache();
    }
 }

@@ -19,25 +19,22 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.listener.ListenerService;
-import org.exoplatform.services.organization.OrganizationService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
-import org.picocontainer.Startable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationServiceWrapper implements Startable, NavigationService
+public class NavigationServiceWrapper implements NavigationService
 {
 
    /** . */
@@ -49,40 +46,16 @@ public class NavigationServiceWrapper implements Startable, NavigationService
    /** . */
    private ListenerService listenerService;
 
-   public NavigationServiceWrapper(POMSessionManager manager, OrganizationService organization, ListenerService listenerService)
+   public NavigationServiceWrapper(POMSessionManager manager, ListenerService listenerService)
    {
       this.service = new NavigationServiceImpl(manager);
       this.listenerService = listenerService;
    }
 
-   public void start()
+   public NavigationServiceWrapper(POMSessionManager manager, ListenerService listenerService, CacheService cacheService)
    {
-      RequestLifeCycle.begin(PortalContainer.getInstance());
-      try
-      {
-         service.start();
-      }
-      catch (Exception e)
-      {
-         service.log.error("Could not start navigation service", e);
-      }
-      finally
-      {
-         RequestLifeCycle.end();
-      }
-   }
-
-   public void stop()
-   {
-      RequestLifeCycle.begin(PortalContainer.getInstance());
-      try
-      {
-         service.stop();
-      }
-      finally
-      {
-         RequestLifeCycle.end();
-      }
+      this.service = new NavigationServiceImpl(manager, new ExoDataCache(cacheService));
+      this.listenerService = listenerService;
    }
 
    public NavigationContext loadNavigation(SiteKey key)

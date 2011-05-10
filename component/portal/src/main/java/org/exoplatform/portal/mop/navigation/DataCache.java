@@ -48,6 +48,8 @@ abstract class DataCache
 
    protected abstract void removeNavigation(SiteKey key);
 
+   protected abstract void clear();
+
    final NodeData getNodeData(POMSession session, String nodeId)
    {
       NodeData data;
