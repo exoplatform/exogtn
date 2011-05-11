@@ -44,13 +44,10 @@ import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
@@ -775,145 +772,6 @@ public class NavigationServiceImpl implements NavigationService
          {
             update(child);
          }
-      }
-   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   // Code to remove soon below
-
-   private <N> NodeContext<N> load(
-      TreeContext<N> tree,
-      POMSession session,
-      NodeData data,
-      Scope.Visitor visitor,
-      int depth)
-   {
-      VisitMode visitMode = visitor.visit(depth, data.id, data.name, data.state);
-
-      //
-      NodeContext<N> context;
-      if (visitMode == VisitMode.ALL_CHILDREN)
-      {
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
-         for (String childId : data.children)
-         {
-            NodeData childData = dataCache.getNodeData(session, childId);
-            if (childData != null)
-            {
-               NodeContext<N> childContext = load(tree, session, childData, visitor, depth + 1);
-               children.add(childContext);
-            }
-            else
-            {
-               throw new UnsupportedOperationException("Handle me gracefully");
-            }
-         }
-
-         //
-         context = new NodeContext<N>(tree, data);
-         context.setContexts(children);
-      }
-      else if (visitMode == VisitMode.NO_CHILDREN)
-      {
-         context = new NodeContext<N>(tree, data);
-      }
-      else
-      {
-         context = new NodeContext<N>(tree, data);
-      }
-
-      //
-      return context;
-   }
-
-   private <N> void visit(
-      POMSession session,
-      NodeContext<N> context,
-      Scope.Visitor visitor,
-      int depth)
-   {
-      NodeData data = context.data;
-
-      //
-      VisitMode visitMode;
-      if (context.hasContexts())
-      {
-         visitMode = VisitMode.ALL_CHILDREN;
-      }
-      else
-      {
-         visitMode = visitor.visit(depth, data.id, data.name, data.state);
-      }
-
-      //
-      if (visitMode == VisitMode.ALL_CHILDREN)
-      {
-         Map<String, NodeContext<N>> previous = Collections.emptyMap();
-         if (context.hasContexts())
-         {
-            previous = new HashMap<String, NodeContext<N>>();
-            for (NodeContext<N> a : context.getContexts())
-            {
-               if (a.data != null)
-               {
-                  previous.put(a.getId(), a);
-               }
-            }
-            context.setContexts(null);
-         }
-
-         //
-         ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(data.children.length);
-         for (String childId : data.children)
-         {
-            NodeData childData = dataCache.getNodeData(session, childId);
-            if (childData != null)
-            {
-               NodeContext<N> childContext = previous.get(childId);
-               if (childContext != null)
-               {
-                  childContext.data = childData;
-                  visit(session, childContext, visitor, depth + 1);
-               }
-               else
-               {
-                  childContext = load(context.tree, session, childData, visitor, depth + 1);
-               }
-               children.add(childContext);
-            }
-            else
-            {
-               throw new UnsupportedOperationException("Handle me gracefully");
-            }
-         }
-
-         //
-         context.setContexts(children);
-      }
-      else if (visitMode == VisitMode.NO_CHILDREN)
-      {
-         if (context.hasContexts())
-         {
-            context.setContexts(null);
-         }
-      }
-      else
-      {
-         throw new AssertionError();
       }
    }
 
