@@ -355,6 +355,31 @@ public class NavigationServiceImpl implements NavigationService
                   break;
                case LEAVE:
                   last = stack.poll();
+                  NodeData lastData = it.getDestination();
+                  if (last != null && lastData != null)
+                  {
+                     // Generate node change event (that will occur below)
+                     if (!last.data.state.equals(lastData.state))
+                     {
+                        if (listener != null)
+                        {
+                           listener.onUpdate(new NodeChange.Updated<N>(last.node, lastData.state));
+                        }
+                     }
+
+                     // Update name and generate event
+                     if (!last.data.name.equals(lastData.name))
+                     {
+                        last.name = lastData.name;
+                        if (listener != null)
+                        {
+                           listener.onRename(new NodeChange.Renamed<N>(last.node, lastData.name));
+                        }
+                     }
+
+                     //
+                     last.data = lastData;
+                  }
                   break;
                case MOVED_OUT:
                   break;
@@ -461,26 +486,6 @@ public class NavigationServiceImpl implements NavigationService
       // Obtain most actual data
       NodeData cachedData = dataCache.getNodeData(session, context.data.id);
 
-      // Generate node change event (that will occur below)
-      if (!context.data.state.equals(cachedData.state))
-      {
-         context.data = cachedData;
-         if (listener != null)
-         {
-            listener.onUpdate(new NodeChange.Updated<N>(context.node, cachedData.state));
-         }
-      }
-
-      // Update name and generate event
-      if (!context.data.name.equals(cachedData.name))
-      {
-         context.name = cachedData.name;
-         if (listener != null)
-         {
-            listener.onRename(new NodeChange.Renamed<N>(context.node, cachedData.name));
-         }
-      }
-
       //
       if (context.hasContexts())
       {
@@ -524,11 +529,11 @@ public class NavigationServiceImpl implements NavigationService
                   }
                }
                context.setContexts(children);
+
+               //
+               context.data = cachedData;
             }
          }
-
-         //
-         context.data = cachedData;
       }
    }
 

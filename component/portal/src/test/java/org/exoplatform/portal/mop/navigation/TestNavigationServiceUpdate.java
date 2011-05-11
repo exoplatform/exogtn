@@ -554,4 +554,31 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertSame(bar2, added3.getNode());
       assertFalse(changes.hasNext());
    }
+
+   public void testUpdateTwice2() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_twice2");
+      portal.getRootNavigation().addChild("default").addChild("foo").addChild("bar");
+      sync(true);
+
+      //Browser 1 : Expand the "foo" node
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_twice2"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+      Node foo = root.getChild("foo");
+      //If this line is commented, the test is passed
+      service.updateNode(foo.context, Scope.CHILDREN, null);
+      sync(true);
+
+      //Browser 2: Change the "foo" node
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      root1.getChild("foo").removeChild("bar");
+      service.saveNode(root1.context);
+      sync(true);
+
+      //Browser 1: Try to expand the "foo" node 2 times ---> NPE after the 2nd updateNode method
+      service.updateNode(foo.context, Scope.CHILDREN, null);
+      service.updateNode(foo.context, Scope.CHILDREN, null);
+   }
+
 }
