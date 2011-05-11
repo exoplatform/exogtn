@@ -34,13 +34,13 @@
    <version>5.1.1-epp-CR01-SNAPSHOT</version>
    <packaging>pom</packaging>
 
-   <name>GateIn - Portal</name>
+   <name>EPP GateIn - Portal</name>
 
    <properties>
       <org.exoplatform.kernel.version>2.2.8-GA</org.exoplatform.kernel.version>
       <org.exoplatform.core.version>2.3.8-GA</org.exoplatform.core.version>
       <org.exoplatform.ws.version>2.1.8-GA</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.12.8-GA</org.exoplatform.jcr.version>
+      <org.exoplatform.jcr.version>1.12.8_CP01</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch04</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
@@ -981,6 +981,16 @@
 
    <!-- To be removed and replaced by settings in user config -->
    <repositories>
+      <repository>
+           <id>mead</id>
+           <url>http://download.devel.redhat.com/brewroot/repos/jboss-epp-5-build/latest/maven/</url>
+           <releases>
+               <enabled>true</enabled>
+           </releases>
+           <snapshots>
+               <enabled>false</enabled>
+           </snapshots>
+      </repository>
       <repository>
         <id>jboss-public-repository-group</id>
         <name>JBoss Public Maven Repository Group</name>
