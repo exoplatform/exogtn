@@ -143,7 +143,7 @@ public class UINavigationManagement extends UIContainer
          }
          catch (NavigationServiceException ex)
          {           
-            prContext.getUIApplication().addMessage(new ApplicationMessage("UIPortalForm.msg." + ex.getError().name(), null));            
+            prContext.getUIApplication().addMessage(new ApplicationMessage("UINavigationManagement.msg." + ex.getError().name(), null));            
          }
       }
    }
@@ -173,7 +173,7 @@ public class UINavigationManagement extends UIContainer
                   staleData = true;         
                }
             } 
-            catch (Exception e) 
+            catch (NavigationServiceException e) 
             {
                context.getUIApplication().addMessage(new ApplicationMessage("UINavigationManagement.msg.fail.add", null));
                UIPopupWindow popup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
