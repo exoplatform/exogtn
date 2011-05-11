@@ -98,7 +98,6 @@ public interface NavigationService
     * @param context the context to update
     * @param scope the optional scope
     * @param listener the optional node change listener
-    * @return an iterator over the changes that were applied to the context
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     * @throws IllegalArgumentException if the context argument has pending changes
