@@ -818,25 +818,6 @@ public class NavigationServiceImpl implements NavigationService
       return context;
    }
 
-   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
-   {
-      POMSession session = manager.getSession();
-      Scope.Visitor visitor = scope.get();
-
-      //
-      String nodeId = context.getId();
-      NodeData data = dataCache.getNodeData(session, nodeId);
-
-      //
-      if (data != null)
-      {
-         context.data = data;
-         visit(session, context, visitor, 0);
-         return context;
-      }
-      return null;
-   }
-
    private <N> void visit(
       POMSession session,
       NodeContext<N> context,

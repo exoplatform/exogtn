@@ -68,9 +68,10 @@ public class UIPageNodeSelector extends UIContainer
       navigation = nav;      
    }
 
-   private UserNode load(UserNode node) throws Exception
+   private void load(UserNode node) throws Exception
    {
-      return userPortal.getNode(node, Scope.GRANDCHILDREN).filter(NODE_SELECTOR_FILTER);
+      userPortal.updateNode(node, Scope.GRANDCHILDREN, null);
+      node.filter(NODE_SELECTOR_FILTER);
    }
    
    public void setSelectedNode(UserNode node) throws Exception
@@ -80,12 +81,13 @@ public class UIPageNodeSelector extends UIContainer
          return;
       }
       UITree tree = getChild(UITree.class);
-      if (node.getParent() != null)
+      UserNode parent = node.getParent();
+      if (parent != null)
       {
-         node = load(node);
+         load(node);
          tree.setSelected(node);
          tree.setChildren(node.getChildren());
-         UserNode parent = load(node.getParent());
+         load(node.getParent());
          tree.setSibbling(parent.getChildren());
          tree.setParentSelected(parent);
       }

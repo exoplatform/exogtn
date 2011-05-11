@@ -100,11 +100,6 @@ public class NavigationServiceWrapper implements NavigationService
       return service.loadNode(model, navigation, scope, listener);
    }
 
-   public <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope)
-   {
-      return service.loadNode(context, scope);
-   }
-
    public <N> void saveNode(NodeContext<N> context) throws NavigationServiceException
    {
       service.saveNode(context);

@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -139,9 +140,15 @@ public class UITabPaneDashboard extends UIContainer
       if (parent != null)
       {
          UserPortal userPortal = getUserPortal();
-         //Reload to get new data
-         parent = userPortal.getNode(parent, TAB_PANE_DASHBOARD_SCOPE);
-         if (parent != null) parent.filter(TAB_PANE_DASHBOARD_FILTER);
+         try
+         {
+            userPortal.updateNode(parent, TAB_PANE_DASHBOARD_SCOPE, null);
+            parent.filter(TAB_PANE_DASHBOARD_FILTER);
+         }
+         catch (NavigationServiceException e)
+         {
+            parent = null;
+         }
       }      
       this.cachedParent = parent;      
       return parent;

@@ -149,7 +149,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       if (navPath != null)
       {         
          UserNode userNode = navPath.getTarget();
-         userNode = userPortal.getNode(userNode, TOOLBAR_GROUP_SCOPE);
+         userPortal.updateNode(userNode, TOOLBAR_GROUP_SCOPE, null);
          userNode.filter(TOOLBAR_GROUP_FILTER);
          childs = userNode.getChildren();         
       }

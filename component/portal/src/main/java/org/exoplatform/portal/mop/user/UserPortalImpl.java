@@ -199,11 +199,6 @@ public class UserPortalImpl implements UserPortal
       return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, listener).getNode();
    }
 
-   public UserNode getNode(UserNode node, Scope scope) throws Exception
-   {
-      return navigationService.loadNode(node.context, scope).getNode();
-   }
-
    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
    {
       navigationService.updateNode(node.context, scope, listener);

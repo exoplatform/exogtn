@@ -21,8 +21,6 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
 
-import java.util.Iterator;
-
 /**
  * <p>The navigation service takes care of managing the various portal navigations and their nodes.</p>
  *
@@ -84,19 +82,6 @@ public interface NavigationService
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException;
-
-   /**
-    * Load a navigation node from a specified node. It will affect the node argument as well as all its descendants
-    * when they are loaded according to the specified scope. The returned node is either the same node or null
-    * if the node was skipped precisely.
-    *
-    * @param context the context to load
-    * @param scope the scope
-    * @return the loaded node context
-    * @throws NullPointerException if any argument is null
-    * @throws NavigationServiceException anything that would prevent the operation to succeed
-    */
-   <N> NodeContext<N> loadNode(NodeContext<N> context, Scope scope) throws NullPointerException, NavigationServiceException;
 
    /**
     * Save the specified context state to the persistent storage.

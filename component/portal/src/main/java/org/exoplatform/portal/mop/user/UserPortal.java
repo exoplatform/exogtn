@@ -22,12 +22,10 @@ package org.exoplatform.portal.mop.user;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -75,17 +73,6 @@ public interface UserPortal
     * @throws Exception any exception
     */
    UserNode getNode(UserNavigation navigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception;
-
-   /**
-    * Load a user node from a specified user node with a custom scope. The node argument will be modified according
-    * to the scope. The returned node is either the same node argument or null if the node was discarded.
-    *
-    * @param node the user node
-    * @param scope the scope
-    * @return the user node
-    * @throws Exception any exception
-    */
-   UserNode getNode(UserNode node, Scope scope) throws Exception;
 
    /**
     * Update the specified content with the most recent state.

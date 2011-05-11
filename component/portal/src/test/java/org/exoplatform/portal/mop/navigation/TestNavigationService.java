@@ -141,7 +141,7 @@ public class TestNavigationService extends AbstractTestNavigationService
       assertNull(d.getChild("e").getChildren());
    }
 
-   public void testLoadNode() throws Exception
+   public void testUpdateNode() throws Exception
    {
       NavigationContext nav = service.loadNavigation(SiteKey.portal("large"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
@@ -154,7 +154,7 @@ public class TestNavigationService extends AbstractTestNavigationService
       Node c = a.getChild("c");
       assertEquals("c", c.getName());
       assertSame(a, c.getParent());
-      service.loadNode(a.context, Scope.SINGLE);
+      service.updateNode(a.context, Scope.SINGLE, null);
       assertNotNull(a.getChildren());
       assertEquals(1, a.getChildren().size());
       assertSame(c, a.getChild("c"));

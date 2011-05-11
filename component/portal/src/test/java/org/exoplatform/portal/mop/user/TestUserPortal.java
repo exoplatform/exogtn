@@ -522,7 +522,7 @@ public class TestUserPortal extends AbstractPortalTest
             assertFalse(administration.hasChildrenRelationship());
 
             //
-            administration = userPortal.getNode(administration, Scope.CHILDREN);
+            userPortal.updateNode(administration, Scope.CHILDREN, null);
             assertEquals("administration", administration.getName());
             assertEquals(5, administration.getChildrenCount());
             assertEquals(5, administration.getChildren().size());
@@ -648,37 +648,45 @@ public class TestUserPortal extends AbstractPortalTest
             Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "node_extension");
             site.getRootNavigation().addChild("default");
             end(true);
-
+            
             begin();
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("node_extension", getUserId());
             UserPortal userPortal = userPortalCfg.getUserPortal();
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("node_extension"));
-            UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null);
-            root.addChild("foo");
-            root.save();
+            UserNode root1 = userPortal.getNode(navigation, Scope.CHILDREN, null);
+            end(true);
+            
+            begin();
+            UserNode root2 = userPortal.getNode(navigation, Scope.CHILDREN, null);
+            UserNode foo2 = root2.addChild("foo");
+            root2.save();
             end(true);
 
             begin();
-            assertSame(root, userPortal.getNode(root, Scope.GRANDCHILDREN));
-            UserNode foo = root.getChild("foo");
-            assertNotNull(foo);
-            foo.addChild("foo1");
-            root.save();
+            UserNode foo1 = root1.getChild("foo");
+            assertNull(foo1);
+            userPortal.updateNode(root1, Scope.GRANDCHILDREN, null);
+            foo1 = root1.getChild("foo");
+            assertNotNull(foo1);
+            foo1.addChild("bar");
+            root1.save();
             end(true);
             
             begin();
-            assertSame(foo, userPortal.getNode(foo, Scope.GRANDCHILDREN));
-            UserNode foo1 = foo.getChild("foo1");
-            assertNotNull(foo1);
-            foo1.addChild("foo2");
-            root.save();
+            UserNode bar2 = foo2.getChild("bar");
+            assertNull(foo2.getChild("bar"));
+            userPortal.updateNode(foo2, Scope.GRANDCHILDREN, null);
+            bar2 = foo2.getChild("bar");
+            assertNotNull(bar2);
+            bar2.addChild("foo_bar");
+            root2.save();
             end(true);
             
             begin();
-            root = userPortal.getNode(navigation, Scope.ALL, null);
-            foo1 = root.getChild("foo").getChild("foo1");
-            assertNotNull(foo1);
-            assertNotNull(foo1.getChild("foo2"));
+            root1 = userPortal.getNode(navigation, Scope.ALL, null);
+            UserNode bar1 = root1.getChild("foo").getChild("bar");
+            assertNotNull(bar1);
+            assertNotNull(bar1.getChild("foo_bar"));
          }
       }.execute("root");
    }
@@ -726,7 +734,7 @@ public class TestUserPortal extends AbstractPortalTest
 
             //
             UserNode root = portal.getNode(nav, Scope.GRANDCHILDREN, null);
-            root = portal.getNode(root, Scope.GRANDCHILDREN);
+            portal.updateNode(root, Scope.GRANDCHILDREN, null); //Re-update the root node
             Collection<UserNode> children = root.getChildren();
             int level = 0;
             for (UserNode child : children)
@@ -737,14 +745,12 @@ public class TestUserPortal extends AbstractPortalTest
 
          private void println(UserNode node, int level)
          {
-            System.out.println(level + " ====> " + node.getURI());
             Collection<UserNode> children = node.getChildren();
             UserNode temp = null;
             Iterator<UserNode> it = children.iterator();
             while (it.hasNext())
             {
                UserNode child = it.next();
-               System.out.println(child.getName());
                if (child == temp)
                {
                   child = it.next();

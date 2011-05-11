@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -178,12 +178,15 @@ public class UIPortalNavigation extends UIComponent
    public UserNode updateNode(UserNode node) throws Exception
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNode userNode = userPortal.getNode(node, NAVIGATION_SCOPE);
-      if (userNode != null)
+      try
       {
-         userNode.filter(NAVIGATION_FILTER);         
+         userPortal.updateNode(node, NAVIGATION_SCOPE, null);
+         return node;
       }
-      return userNode;
+      catch (NavigationServiceException e)
+      {
+         return null;
+      }
    }
       
    /**
@@ -288,8 +291,9 @@ public class UIPortalNavigation extends UIComponent
 
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-         UserNode expandNode = userPortal.getNode(expandTree.getNode(), NAVIGATION_SCOPE);
-         if (expandNode == null)
+         UserNode node = expandTree.getNode();
+         userPortal.updateNode(node, NAVIGATION_SCOPE, null);
+         if (node == null)
          {
             event.getSource().loadTreeNodes();
             event.getRequestContext().getUIApplication().addMessage(new
@@ -297,8 +301,8 @@ public class UIPortalNavigation extends UIComponent
          }
          else
          {
-            expandNode.filter(event.getSource().NAVIGATION_FILTER);
-            expandTree.setChildren(expandNode.getChildren());
+            node.filter(event.getSource().NAVIGATION_FILTER);
+            expandTree.setChildren(node.getChildren());
             expandTree.setExpanded(true);
          }
                                
@@ -341,7 +345,6 @@ public class UIPortalNavigation extends UIComponent
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
       {
-         PortalRequestContext prContext = Util.getPortalRequestContext();
          UIPortalNavigation uiNavigation = event.getSource();
          // reload TreeNodes
          uiNavigation.loadTreeNodes();
