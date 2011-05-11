@@ -316,7 +316,27 @@ public class NavigationServiceImpl implements NavigationService
          }
          public NodeData getDescendant(NodeData node, String handle)
          {
-            return dataCache.getNodeData(session, handle);
+            NodeData data = dataCache.getNodeData(session, handle);
+            NodeData current = data;
+            while (current != null)
+            {
+               if (node.id.equals(current.id))
+               {
+                  return data;
+               }
+               else
+               {
+                  if (current.parentId != null)
+                  {
+                     current = dataCache.getNodeData(session, current.parentId);
+                  }
+                  else
+                  {
+                     current = null;
+                  }
+               }
+            }
+            return null;
          }
       }
 

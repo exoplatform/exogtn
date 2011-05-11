@@ -581,4 +581,60 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       service.updateNode(foo.context, Scope.CHILDREN, null);
    }
 
+   public void testMove2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_move2");
+      portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
+      portal.getRootNavigation().getChild("default").addChild("c");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_move2"));
+      NodeContext<Node> root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+      Node a = root.getNode("a");
+      Node b = a.getChild("b");
+      Node c = root.getNode("c");
+
+      //Browser 2 : move the node "b" from "a" to "c"
+      NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+      root1.getNode("c").addChild(root1.getNode("a").getChild("b"));
+      service.saveNode(root1.getNode().context);
+      //
+      sync(true);
+
+      //Browser 1: need NodeChange event to update UI
+      NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
+      //If update "root1"  --> NodeChange.Moved  --> ok
+      //If update "b"        --> NodeChange.Add      --> ok
+      //update "a"             --> no NodeChange, we need an event here (NodeChange.Remove) so UI can be updated
+      service.updateNode(a.context, Scope.CHILDREN, queue);
+      Iterator<NodeChange<Node>> changes = queue.iterator();
+      assertTrue(changes.hasNext());
+   }
+
+   public void _testPendingChange() throws NullPointerException, NavigationServiceException
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_pending_change");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("foo");
+      def.addChild("bar");
+      sync(true);
+
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_pending_change"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+      Node foo = root.getChild("foo");
+      Node bar = root.getChild("bar");
+
+      //Expand and change the "bar" node
+      service.updateNode(bar.context, Scope.CHILDREN, null);
+      bar.addChild("juu");
+
+      //--->  IllegalArgumentException
+      //Can't expand the "foo" node, even it doesn't have any pending changes
+      service.updateNode(foo.context, Scope.CHILDREN, null);
+   }
 }

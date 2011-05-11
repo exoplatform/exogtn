@@ -83,6 +83,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    NodeData toData()
    {
+      String parentId = data.parentId;
       String id = data.id;
       String name = getName();
       NodeState state = this.state != null ? this.state : data.state;
@@ -100,7 +101,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          children = data.children;
       }
-      return new NodeData(id, name, state, children);
+      return new NodeData(parentId, id, name, state, children);
    }
 
    /**
