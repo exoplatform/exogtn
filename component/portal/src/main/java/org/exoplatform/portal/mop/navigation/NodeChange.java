@@ -184,7 +184,7 @@ public class NodeChange<N>
    {
 
       /** . */
-      private final NodeState state;
+      final NodeState state;
 
       public Updated(N node, NodeState state)
       {
@@ -202,7 +202,7 @@ public class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Remove[node" + node + ",state=" + state + "]";
+         return "NodeChange.Updated[node" + node + ",state=" + state + "]";
       }
    }
 }

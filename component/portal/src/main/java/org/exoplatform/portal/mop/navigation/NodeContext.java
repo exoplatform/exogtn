@@ -399,6 +399,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          throw new NullPointerException("No null state accepted");
       }
+
+      //
+      tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
+
+      //
       this.state = state;
    }
 

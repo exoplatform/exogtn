@@ -672,7 +672,7 @@ public class NavigationServiceImpl implements NavigationService
             ids.add(src.getObjectId());
             ids.add(dst.getObjectId());
          }
-         else if (change instanceof NodeChange.Renamed)
+         else if (change instanceof NodeChange.Renamed<?>)
          {
             NodeChange.Renamed<NodeContext<N>> rename = (NodeChange.Renamed<NodeContext<N>>)change;
             Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
@@ -698,89 +698,86 @@ public class NavigationServiceImpl implements NavigationService
             ids.add(parent.getObjectId());
             ids.add(renamed.getObjectId());
          }
+         else if (change instanceof NodeChange.Updated<?>)
+         {
+            NodeChange.Updated<NodeContext<N>> updated = (NodeChange.Updated<NodeContext<N>>)change;
+
+            //
+            NodeState state = updated.state;
+
+            //
+            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, updated.node.data.id);
+
+            //
+            if (navigation == null)
+            {
+               throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+            }
+
+            //
+            Workspace workspace = navigation.getSite().getWorkspace();
+            String reference = state.getPageRef();
+            if (reference != null)
+            {
+               String[] pageChunks = split("::", reference);
+               ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+               Site site = workspace.getSite(siteType, pageChunks[1]);
+               org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+               link.setPage(target);
+            }
+            else
+            {
+               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
+               link.setPage(null);
+            }
+
+            //
+            Described described = navigation.adapt(Described.class);
+            described.setName(state.getLabel());
+
+            //
+            Visible visible = navigation.adapt(Visible.class);
+            visible.setVisibility(state.getVisibility());
+
+            //
+            visible.setStartPublicationDate(state.getStartPublicationDate());
+            visible.setEndPublicationDate(state.getEndPublicationDate());
+
+            //
+            Attributes attrs = navigation.getAttributes();
+            attrs.setValue(MappedAttributes.URI, state.getURI());
+            attrs.setValue(MappedAttributes.ICON, state.getIcon());
+
+            //
+            ids.add(navigation.getObjectId());
+         }
          else
          {
             throw new AssertionError("Cannot execute " + change);
          }
       }
 
-      // Update state
-      saveState(session, context, ids);
+      // Make consistent
+      update(context);
 
       //
       dataCache.removeNodeData(session, ids);
    }
 
-   private <N> void saveState(POMSession session, NodeContext<N> context, Set<String> ids) throws NavigationServiceException
+   private <N> void update(NodeContext<N> context) throws NavigationServiceException
    {
-      NodeState state = context.state;
-
-      // For now we just do a reference comparison but it would make sense
-      // to use an equals instead
-      if (state != null && !state.equals(context.data.state))
-      {
-         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, context.data.id);
-
-         //
-         if (navigation == null)
-         {
-            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
-         }
-
-         //
-         Workspace workspace = navigation.getSite().getWorkspace();
-         String reference = state.getPageRef();
-         if (reference != null)
-         {
-            String[] pageChunks = split("::", reference);
-            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-            Site site = workspace.getSite(siteType, pageChunks[1]);
-            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
-            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-            link.setPage(target);
-         }
-         else
-         {
-            PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-            link.setPage(null);
-         }
-
-         //
-         Described described = navigation.adapt(Described.class);
-         described.setName(state.getLabel());
-
-         //
-         Visible visible = navigation.adapt(Visible.class);
-         visible.setVisibility(state.getVisibility());
-
-         //
-         visible.setStartPublicationDate(state.getStartPublicationDate());
-         visible.setEndPublicationDate(state.getEndPublicationDate());
-
-         //
-         Attributes attrs = navigation.getAttributes();
-         attrs.setValue(MappedAttributes.URI, state.getURI());
-         attrs.setValue(MappedAttributes.ICON, state.getIcon());
-
-         //
-         ids.add(navigation.getObjectId());
-      }
-
-      //
       context.data = context.toData();
-
-      //
       context.state = null;
-
-      //
       if (context.hasContexts())
       {
          for (NodeContext<N> child : context.getContexts())
          {
-            saveState(session, child, ids);
+            update(child);
          }
       }
    }
+
 
 
 
