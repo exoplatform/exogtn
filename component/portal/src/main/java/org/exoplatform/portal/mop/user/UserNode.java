@@ -285,17 +285,17 @@ public class UserNode
 
    public void addChild(UserNode child)
    {
-      context.addNode(null, child);
+      context.add(null, child);
    }
 
    public void addChild(int index, UserNode child)
    {
-      context.addNode(index, child);
+      context.add(index, child);
    }
 
    public UserNode addChild(String childName)
    {
-      return context.addNode(null, childName);
+      return context.add(null, childName).getNode();
    }
 
    public boolean removeChild(String childName)

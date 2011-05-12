@@ -524,7 +524,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     * @throws IllegalStateException if the children relationship does not exist
     */
-   public N addNode(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
+   public NodeContext<N> add(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
    {
       if (name == null)
       {
@@ -534,8 +534,8 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       //
       NodeContext<N> nodeContext = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
       nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
-      addNode(index, nodeContext);
-      return nodeContext.node;
+      add(index, nodeContext);
+      return nodeContext;
    }
 
    /**
@@ -549,7 +549,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     * @throws IllegalStateException if the children relationship does not exist
     */
-   public void addNode(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
+   public void add(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
    {
       if (node == null)
       {
@@ -560,10 +560,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       NodeContext<N> nodeContext = tree.model.getContext(node);
 
       //
-      addNode(index, nodeContext);
+      add(index, nodeContext);
    }
 
-   private void addNode(final Integer index, NodeContext<N> child)
+   private void add(final Integer index, NodeContext<N> child)
    {
       NodeContext<N> previousParent = child.getParent();
 
