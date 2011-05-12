@@ -961,6 +961,33 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       root1.assertEquals(root2);
    }
 
+   public void testRemoveAdded() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_added");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("remove_added"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
+      root.addChild("foo");
+      root.removeChild("foo");
+      service.saveNode(root.context);
+
+      //
+      root.assertConsistent();
+
+      //
+      sync(true);
+
+      //
+      root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
+      assertEquals(0, root.getChildren().size());
+   }
+
    public void testConcurrentAddToRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();
