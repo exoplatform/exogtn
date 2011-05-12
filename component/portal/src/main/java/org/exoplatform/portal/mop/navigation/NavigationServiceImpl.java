@@ -20,13 +20,10 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.commons.utils.Queues;
-import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.exoplatform.portal.pom.data.Mapper;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
@@ -36,14 +33,13 @@ import org.exoplatform.portal.tree.diff.HierarchyDiff;
 import org.exoplatform.portal.tree.diff.ListAdapter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
-import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -51,8 +47,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
-
-import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -557,203 +551,9 @@ public class NavigationServiceImpl implements NavigationService
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
    {
       POMSession session = manager.getSession();
-      TreeContext<N> tree = context.tree;
 
       //
-      List<NodeChange<N>> changes = tree.popChanges();
-
-      // The ids to remove from the cache
-      Set<String> ids = new HashSet<String>();
-
-      // First pass we update persistent store
-      for (NodeChange<N> change : changes)
-      {
-         if (change instanceof NodeChange.Added<?>)
-         {
-            NodeChange.Added<NodeContext<N>> add = (NodeChange.Added<NodeContext<N>>)change;
-
-            //
-            Navigation parent = session.findObjectById(ObjectType.NAVIGATION, add.parent.data.id);
-            if (parent == null)
-            {
-               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
-            }
-
-            //
-            Navigation added = parent.getChild(add.name);
-            if (added != null)
-            {
-               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
-            }
-            else
-            {
-               added = parent.addChild(add.name);
-               int index = 0;
-               if (add.previous != null)
-               {
-                  Navigation previous = session.findObjectById(ObjectType.NAVIGATION, add.previous.data.id);
-                  if (previous == null)
-                  {
-                     throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-                  }
-                  index = parent.getChildren().indexOf(previous) + 1;
-               }
-               parent.getChildren().add(index, added);
-               add.source.data = new NodeData(added);
-               ids.add(parent.getObjectId());
-            }
-         }
-         else if (change instanceof NodeChange.Removed<?>)
-         {
-            NodeChange.Removed<NodeContext<N>> remove = (NodeChange.Removed<NodeContext<N>>)change;
-            Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.source.data.id);
-            if (removed != null)
-            {
-               Navigation parent = removed.getParent();
-               String removedId = removed.getObjectId();
-               removed.destroy();
-               remove.source.data = null;
-
-               //
-               ids.add(removedId);
-               ids.add(parent.getObjectId());
-            }
-            else
-            {
-               // It was already removed concurrently
-            }
-         }
-         else if (change instanceof NodeChange.Moved<?>)
-         {
-            NodeChange.Moved<NodeContext<N>> move = (NodeChange.Moved<NodeContext<N>>)change;
-            Navigation src = session.findObjectById(ObjectType.NAVIGATION, move.from.data.id);
-            if (src == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
-            }
-
-            //
-            Navigation dst = session.findObjectById(ObjectType.NAVIGATION, move.to.data.id);
-            if (dst == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
-            }
-
-            //
-            Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.source.data.id);
-            if (moved == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
-            }
-
-            //
-            if (src != moved.getParent())
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
-            }
-
-            //
-            int index = 0;
-            if (move.previous != null)
-            {
-               Navigation previous = session.findObjectById(ObjectType.NAVIGATION, move.previous.data.id);
-               if (previous == null)
-               {
-                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-               }
-               index = dst.getChildren().indexOf(previous) + 1;
-            }
-            dst.getChildren().add(index, moved);
-
-            //
-            ids.add(src.getObjectId());
-            ids.add(dst.getObjectId());
-         }
-         else if (change instanceof NodeChange.Renamed<?>)
-         {
-            NodeChange.Renamed<NodeContext<N>> rename = (NodeChange.Renamed<NodeContext<N>>)change;
-            Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.source.data.id);
-            if (renamed == null)
-            {
-               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
-            }
-
-            //
-            Navigation parent = renamed.getParent();
-            if (parent.getChild(rename.name) != null)
-            {
-               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
-            }
-
-            // We rename and reorder to compensate the move from the rename
-            List<Navigation> children = parent.getChildren();
-            int index = children.indexOf(renamed);
-            renamed.setName(rename.name);
-            children.add(index, renamed);
-
-            //
-            ids.add(parent.getObjectId());
-            ids.add(renamed.getObjectId());
-         }
-         else if (change instanceof NodeChange.Updated<?>)
-         {
-            NodeChange.Updated<NodeContext<N>> updated = (NodeChange.Updated<NodeContext<N>>)change;
-
-            //
-            NodeState state = updated.state;
-
-            //
-            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, updated.source.data.id);
-
-            //
-            if (navigation == null)
-            {
-               throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
-            }
-
-            //
-            Workspace workspace = navigation.getSite().getWorkspace();
-            String reference = state.getPageRef();
-            if (reference != null)
-            {
-               String[] pageChunks = split("::", reference);
-               ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-               Site site = workspace.getSite(siteType, pageChunks[1]);
-               org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
-               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-               link.setPage(target);
-            }
-            else
-            {
-               PageLink link = navigation.linkTo(ObjectType.PAGE_LINK);
-               link.setPage(null);
-            }
-
-            //
-            Described described = navigation.adapt(Described.class);
-            described.setName(state.getLabel());
-
-            //
-            Visible visible = navigation.adapt(Visible.class);
-            visible.setVisibility(state.getVisibility());
-
-            //
-            visible.setStartPublicationDate(state.getStartPublicationDate());
-            visible.setEndPublicationDate(state.getEndPublicationDate());
-
-            //
-            Attributes attrs = navigation.getAttributes();
-            attrs.setValue(MappedAttributes.URI, state.getURI());
-            attrs.setValue(MappedAttributes.ICON, state.getIcon());
-
-            //
-            ids.add(navigation.getObjectId());
-         }
-         else
-         {
-            throw new AssertionError("Cannot execute " + change);
-         }
-      }
+      Collection<String> ids = save(context, session, HierarchyManager.MOP);
 
       // Make consistent
       update(context);
@@ -773,6 +573,173 @@ public class NavigationServiceImpl implements NavigationService
             update(child);
          }
       }
+   }
+
+   private <S, C, D> Collection<String> save(NodeContext<S> node, C context, HierarchyManager<C, D> manager) throws NullPointerException, NavigationServiceException
+   {
+      TreeContext<S> tree = node.tree;
+      List<NodeChange<S>> changes = tree.popChanges();
+
+      // The ids to remove from the cache
+      Set<String> ids = new HashSet<String>();
+
+      // First pass we update persistent store
+      for (NodeChange<S> change : changes)
+      {
+         if (change instanceof NodeChange.Added<?>)
+         {
+            NodeChange.Added<NodeContext<S>> add = (NodeChange.Added<NodeContext<S>>)change;
+
+            //
+            D parent = manager.getNode(context, add.parent.data.id);
+            if (parent == null)
+            {
+               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
+            }
+
+            //
+            D added = manager.getChild(context, parent, add.name);
+            if (added != null)
+            {
+               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
+            }
+            else
+            {
+               int index = 0;
+               if (add.previous != null)
+               {
+                  D previous = manager.getNode(context, add.previous.data.id);
+                  if (previous == null)
+                  {
+                     throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+                  }
+                  index = manager.getChildIndex(context, parent, previous) + 1;
+               }
+               added = manager.addChild(context, parent, index, add.name);
+               NodeData data = manager.getData(context, added);
+               add.source.data = data;
+               ids.add(manager.getId(context, parent));
+            }
+         }
+         else if (change instanceof NodeChange.Removed<?>)
+         {
+            NodeChange.Removed<NodeContext<S>> remove = (NodeChange.Removed<NodeContext<S>>)change;
+            D removed = manager.getNode(context, remove.source.data.id);
+            if (removed != null)
+            {
+               D parent = manager.getParent(context, removed);
+               String removedId = manager.getId(context, removed);
+               manager.destroy(context, removed);
+               remove.source.data = null;
+
+               //
+               ids.add(removedId);
+               ids.add(manager.getId(context, parent));
+            }
+            else
+            {
+               // It was already removed concurrently
+            }
+         }
+         else if (change instanceof NodeChange.Moved<?>)
+         {
+            NodeChange.Moved<NodeContext<S>> move = (NodeChange.Moved<NodeContext<S>>)change;
+            D src = manager.getNode(context, move.from.data.id);
+            if (src == null)
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
+            }
+
+            //
+            D dst = manager.getNode(context, move.to.data.id);
+            if (dst == null)
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
+            }
+
+            //
+            D moved = manager.getNode(context, move.source.data.id);
+            if (moved == null)
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
+            }
+
+            //
+            if (src != manager.getParent(context, moved))
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
+            }
+
+            //
+            int index = 0;
+            if (move.previous != null)
+            {
+               D previous = manager.getNode(context, move.previous.data.id);
+               if (previous == null)
+               {
+                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+               }
+               index = manager.getChildIndex(context, dst, previous) + 1;
+            }
+            manager.addChild(context, dst, index, moved);
+
+            //
+            ids.add(manager.getId(context, src));
+            ids.add(manager.getId(context, dst));
+         }
+         else if (change instanceof NodeChange.Renamed<?>)
+         {
+            NodeChange.Renamed<NodeContext<S>> rename = (NodeChange.Renamed<NodeContext<S>>)change;
+            D renamed = manager.getNode(context, rename.source.data.id);
+            if (renamed == null)
+            {
+               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
+            }
+
+            //
+            D parent = manager.getParent(context, renamed);
+            if (manager.getChild(context, parent, rename.name) != null)
+            {
+               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
+            }
+
+            // We rename and reorder to compensate the move from the rename
+            manager.setName(context, renamed, rename.name);
+
+            //
+            ids.add(manager.getId(context, parent));
+            ids.add(manager.getId(context, renamed));
+         }
+         else if (change instanceof NodeChange.Updated<?>)
+         {
+            NodeChange.Updated<NodeContext<S>> updated = (NodeChange.Updated<NodeContext<S>>)change;
+
+            //
+            NodeState state = updated.state;
+
+            //
+            D navigation = manager.getNode(context, updated.source.data.id);
+
+            //
+            if (navigation == null)
+            {
+               throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+            }
+
+            //
+            manager.setState(context, navigation, state);
+
+            //
+            ids.add(manager.getId(context, navigation));
+         }
+         else
+         {
+            throw new AssertionError("Cannot execute " + change);
+         }
+      }
+
+      //
+      return ids;
    }
 
    public void clearCache()
