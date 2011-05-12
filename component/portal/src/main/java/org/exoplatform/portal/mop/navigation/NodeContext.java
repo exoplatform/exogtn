@@ -23,7 +23,6 @@ import org.exoplatform.portal.tree.list.ListTree;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -38,6 +37,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    /** . */
    final N node;
+
+   /** The internal id, either the persistent id or a sequence id. */
+   String id;
 
    /** node data representing persistent state. */
    NodeData data;
@@ -55,10 +57,24 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
    String name;
 
    /** . */
-   private boolean hasContexts;
+   private boolean expanded;
 
-   NodeContext(TreeContext<N> tree, NodeData data)
+   NodeContext(NodeModel<N> model, NodeData data)
    {
+      this.id = data.id;
+      this.name = data.getName();
+      this.tree = new TreeContext<N>(model, this);
+      this.node = tree.model.create(this);
+      this.data = data;
+      this.state = null;
+      this.hidden = false;
+      this.hiddenCount = 0;
+      this.expanded = false;
+   }
+
+   private NodeContext(TreeContext<N> tree, NodeData data)
+   {
+      this.id = data.id;
       this.name = data.getName();
       this.tree = tree;
       this.node = tree.model.create(this);
@@ -66,11 +82,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.state = null;
       this.hidden = false;
       this.hiddenCount = 0;
-      this.hasContexts = false;
+      this.expanded = false;
    }
 
    private NodeContext(TreeContext<N> tree, String name, NodeState state)
    {
+      this.id = Integer.toString(tree.sequence++);
       this.name = name;
       this.tree = tree;
       this.node = tree.model.create(this);
@@ -78,7 +95,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.state = state;
       this.hidden = false;
       this.hiddenCount = 0;
-      this.hasContexts = false;
+      this.expanded = false;
    }
 
    NodeData toData()
@@ -88,7 +105,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       String name = getName();
       NodeState state = this.state != null ? this.state : data.state;
       String[] children;
-      if (hasContexts)
+      if (expanded)
       {
          children = new String[getSize()];
          int index = 0;
@@ -152,13 +169,13 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
       //
       NodeContext<N> found = null;
-      if (data != null && data.id.equals(id))
+      if (this.id.equals(id))
       {
          found = this;
       }
       else
       {
-         if (hasContexts)
+         if (expanded)
          {
             for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
             {
@@ -223,7 +240,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
    {
       boolean accept = filter.accept(depth, getId(), name, getState());
       setHidden(!accept);
-      if (hasContexts)
+      if (expanded)
       {
          for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
          {
@@ -315,7 +332,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          throw new NullPointerException();
       }
-      if (!hasContexts)
+      if (!expanded)
       {
          throw new IllegalStateException("No children relationship");
       }
@@ -340,7 +357,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
     */
    public int getNodeSize()
    {
-      if (hasContexts)
+      if (expanded)
       {
          return getSize();
       }
@@ -361,7 +378,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
     */
    public int getNodeCount()
    {
-      if (hasContexts)
+      if (expanded)
       {
          return getSize() - hiddenCount;
       }
@@ -425,7 +442,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
       }
-      if (!hasContexts)
+      if (!expanded)
       {
          throw new IllegalStateException("No children relationship");
       }
@@ -488,7 +505,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    public Collection<N> getNodes()
    {
-      if (hasContexts)
+      if (expanded)
       {
          if (nodes == null)
          {
@@ -533,37 +550,73 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
       //
       NodeContext<N> nodeContext = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
-      nodeContext.setContexts(Collections.<NodeContext<N>>emptyList());
-      add(index, nodeContext);
+      nodeContext.expand();
+      _add(index, nodeContext);
       return nodeContext;
    }
 
    /**
-    * Move a node as a child node of this node at the specified index. If the index argument
-    * is null then the node is added at the last position among the children otherwise
-    * the node is added at the specified index.
+    * Move a context as a child context of this context at the specified index. If the index argument
+    * is null then the context is added at the last position among the children otherwise
+    * the context is added at the specified index.
     *
     * @param index the index
-    * @param node the node to move
-    * @throws NullPointerException if the model or the node is null
+    * @param context the context to move
+    * @throws NullPointerException if the model or the context is null
     * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
     * @throws IllegalStateException if the children relationship does not exist
     */
-   public void add(Integer index, N node) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
+   public void add(Integer index, NodeContext<N> context) throws NullPointerException, IndexOutOfBoundsException, IllegalStateException
    {
-      if (node == null)
+      if (context == null)
       {
-         throw new NullPointerException("No null node argument accepted");
+         throw new NullPointerException("No null context argument accepted");
       }
 
       //
-      NodeContext<N> nodeContext = tree.model.getContext(node);
-
-      //
-      add(index, nodeContext);
+      _add(index, context);
    }
 
-   private void add(final Integer index, NodeContext<N> child)
+   public NodeContext<N> insertLast(NodeData data)
+   {
+      if (data == null)
+      {
+         throw new NullPointerException("No null data argument accepted");
+      }
+
+      //
+      NodeContext<N> context = new NodeContext<N>(tree, data);
+      insertLast(context);
+      return context;
+   }
+
+   public NodeContext<N> insertAt(Integer index, NodeData data)
+   {
+      if (data == null)
+      {
+         throw new NullPointerException("No null data argument accepted");
+      }
+
+      //
+      NodeContext<N> context = new NodeContext<N>(tree, data);
+      insertAt(index, context);
+      return context;
+   }
+
+   public NodeContext<N> insertAfter(NodeData data)
+   {
+      if (data == null)
+      {
+         throw new NullPointerException("No null data argument accepted");
+      }
+
+      //
+      NodeContext<N> context = new NodeContext<N>(tree, data);
+      insertAfter(context);
+      return context;
+   }
+
+   private void _add(final Integer index, NodeContext<N> child)
    {
       NodeContext<N> previousParent = child.getParent();
 
@@ -655,14 +708,26 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   public boolean hasContexts()
+   public boolean isExpanded()
    {
-      return hasContexts;
+      return expanded;
+   }
+
+   void expand()
+   {
+      if (!expanded)
+      {
+         this.expanded = true;
+      }
+      else
+      {
+         throw new IllegalStateException("Context is already expanded");
+      }
    }
 
    Iterable<NodeContext<N>> getContexts()
    {
-      if (hasContexts)
+      if (expanded)
       {
          return new Iterable<NodeContext<N>>()
          {
@@ -678,43 +743,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
-   void setContexts(Iterable<NodeContext<N>> contexts)
-   {
-      if (contexts == null)
-      {
-         if (!hasContexts)
-         {
-            throw new IllegalStateException();
-         }
-         else
-         {
-            while (getFirst() != null)
-            {
-               getFirst().remove();
-            }
-            this.hasContexts = false;
-         }
-      }
-      else
-      {
-         if (!hasContexts)
-         {
-            this.hasContexts = true;
-            for (NodeContext<N> context : contexts)
-            {
-               insertLast(context);
-            }
-         }
-         else
-         {
-            throw new IllegalStateException();
-         }
-      }
-   }
-
    protected void beforeRemove(NodeContext<N> context)
    {
-      if (!hasContexts)
+      if (!expanded)
       {
          throw new IllegalStateException();
       }
@@ -722,7 +753,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    protected void beforeInsert(NodeContext<N> context)
    {
-      if (!hasContexts)
+      if (!expanded)
       {
          throw new IllegalStateException("No children relationship");
       }

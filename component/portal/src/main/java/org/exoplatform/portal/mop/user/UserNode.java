@@ -222,7 +222,7 @@ public class UserNode
     */
    public boolean hasChildrenRelationship()
    {
-      return context.hasContexts();
+      return context.isExpanded();
    }
 
    /**
@@ -242,7 +242,7 @@ public class UserNode
 
    public Collection<UserNode> getChildren()
    {
-      return context.hasContexts() ? context.getNodes() : Collections.<UserNode>emptyList();
+      return context.isExpanded() ? context.getNodes() : Collections.<UserNode>emptyList();
    }
 
    /**
@@ -254,7 +254,7 @@ public class UserNode
     */
    public UserNode getChild(String childName) throws NullPointerException
    {
-      if (context.hasContexts())
+      if (context.isExpanded())
       {
          return context.getNode(childName);
       }
@@ -273,7 +273,7 @@ public class UserNode
     */
    public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
    {
-      if (context.hasContexts())
+      if (context.isExpanded())
       {
          return context.getNode(childIndex);
       }
@@ -285,12 +285,12 @@ public class UserNode
 
    public void addChild(UserNode child)
    {
-      context.add(null, child);
+      context.add(null, child.context);
    }
 
    public void addChild(int index, UserNode child)
    {
-      context.add(index, child);
+      context.add(index, child.context);
    }
 
    public UserNode addChild(String childName)

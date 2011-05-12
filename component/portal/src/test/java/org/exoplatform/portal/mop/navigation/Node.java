@@ -110,12 +110,12 @@ public class Node
 
    public void addChild(Node child)
    {
-      context.add(null, child);
+      context.add(null, child.context);
    }
 
    public void addChild(int index, Node child)
    {
-      context.add(index, child);
+      context.add(index, child.context);
    }
 
    public Node addChild(String childName)
@@ -160,7 +160,7 @@ public class Node
 
    public void assertConsistent()
    {
-      if (context.hasContexts())
+      if (context.isExpanded())
       {
          List<String> a = new ArrayList<String>();
          for (NodeContext<Node> b = context.getFirst();b != null;b = b.getNext()) {
@@ -239,7 +239,7 @@ public class Node
          throw new IllegalArgumentException("Depth cannot be negative " + depth);
       }
       sb.append("Node[id=").append(getId()).append(",name=").append(getName());
-      if (context.hasContexts() && depth > 0) {
+      if (context.isExpanded() && depth > 0) {
          sb.append(",children={");
          for (Node node : context.getNodes()) {
             if (node.context.getPrevious() != null) {

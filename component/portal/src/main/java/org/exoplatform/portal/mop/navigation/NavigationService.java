@@ -77,6 +77,7 @@ public interface NavigationService
     * @param navigation the navigation
     * @param scope the scope
     * @param listener the optional listener
+    * @param <N> the node generic type
     * @return the loaded node
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
@@ -87,6 +88,7 @@ public interface NavigationService
     * Save the specified context state to the persistent storage.
     *
     * @param context the context to save
+    * @param <N> the node generic type
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
@@ -98,10 +100,22 @@ public interface NavigationService
     * @param context the context to update
     * @param scope the optional scope
     * @param listener the optional node change listener
+    * @param <N> the node generic type
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     * @throws IllegalArgumentException if the context argument has pending changes
     */
    <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
+   /**
+    * Rebase the specified context with the most recent state.
+    *
+    * @param context the context to rebase
+    * @param scope the optional scope
+    * @param listener the option node change listener  @throws NullPointerException if the context argument is null
+    * @param <N> the node generic type
+    * @throws NullPointerException if the context argument is null
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
+    */
+   <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException;
 }

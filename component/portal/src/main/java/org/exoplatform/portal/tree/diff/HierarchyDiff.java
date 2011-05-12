@@ -26,6 +26,16 @@ import java.util.Comparator;
  */
 public class HierarchyDiff<L1, N1, L2, N2, H> {
 
+   public static <L1, N1, L2, N2, H> HierarchyDiff<L1, N1, L2, N2, H> create(
+      ListAdapter<L1, H> listAdapter1,
+      HierarchyAdapter<L1, N1, H> hierarchyAdapter1,
+      ListAdapter<L2, H> listAdapter2,
+      HierarchyAdapter<L2, N2, H> hierarchyAdapter2,
+      Comparator<H> comparator)
+   {
+      return new HierarchyDiff<L1, N1, L2, N2, H>(listAdapter1, hierarchyAdapter1, listAdapter2, hierarchyAdapter2, comparator);
+   }
+
    /** . */
    final ListAdapter<L1, H> listAdapter1;
 

@@ -114,6 +114,11 @@ public class NavigationServiceWrapper implements NavigationService
       service.updateNode(context, scope, listener);
    }
 
+   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException
+   {
+      service.rebaseNode(context, scope, listener);
+   }
+
    private void notify(String name, SiteKey key)
    {
       try

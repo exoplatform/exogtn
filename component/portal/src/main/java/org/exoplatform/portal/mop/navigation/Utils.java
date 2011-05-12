@@ -23,6 +23,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,9 @@ import java.util.Map;
  */
 class Utils
 {
+
+   /** . */
+   private static final ComparableComparator INSTANCE = new ComparableComparator();
 
    /** . */
    private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
@@ -58,5 +62,21 @@ class Utils
    static SiteType siteType(ObjectType objectType)
    {
       return b.get(objectType);
+   }
+
+   static <T extends Comparable<T>> Comparator<T> comparator()
+   {
+      // Not totally good but well... should we pass the class to the caller ?
+      @SuppressWarnings("unchecked")
+      ComparableComparator instance = INSTANCE;
+      return instance;
+   }
+
+   private static class ComparableComparator<T extends Comparable<T>> implements Comparator<T>
+   {
+      public int compare(T o1, T o2)
+      {
+         return o1.compareTo(o2);
+      }
    }
 }

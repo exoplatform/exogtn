@@ -22,7 +22,6 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * The context of a tree.
@@ -41,10 +40,18 @@ class TreeContext<N>
    /** . */
    boolean editMode;
 
-   TreeContext(NodeModel<N> model)
+   /** . */
+   int sequence;
+
+   /** . */
+   NodeContext<N> root;
+
+   TreeContext(NodeModel<N> model, NodeContext<N> root)
    {
       this.model = model;
       this.editMode = false;
+      this.sequence =  0;
+      this.root = root;
    }
 
    void addChange(NodeChange<N> change)
@@ -62,6 +69,18 @@ class TreeContext<N>
 
    boolean hasChanges() {
       return changes != null && changes.size() > 0;
+   }
+
+   List<NodeChange<N>> peekChanges()
+   {
+      if (hasChanges())
+      {
+         return changes;
+      }
+      else
+      {
+         return Collections.emptyList();
+      }
    }
 
    List<NodeChange<N>> popChanges()
