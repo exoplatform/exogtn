@@ -51,6 +51,8 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -85,6 +87,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UINavigationNodeSelector.PasteNodeActionListener.class)})})
 public class UINavigationNodeSelector extends UIContainer
 {
+   private Log log = ExoLogger.getExoLogger(UINavigationNodeSelector.class);
    
    private UserNavigation edittedNavigation;
 
@@ -280,6 +283,7 @@ public class UINavigationNodeSelector extends UIContainer
       catch (IllegalArgumentException ex)
       {
          //Temporary catch : workaround for pending change exception from navivation service        
+         log.warn("workaround for pending change exception from navivation service", ex);
       }
       catch (NavigationServiceException ex) 
       {
@@ -612,7 +616,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNodeData node = uiNodeSelector.searchNode(nodeID);         
          try 
          {            
-            if (node == null || uiNodeSelector.updateNode(node, Scope.SINGLE) == null)
+            //Temporary use Scope.ALL until bug with move UserNode is fixed, we should use Scope.SINGLE            
+            if (node == null || uiNodeSelector.updateNode(node, Scope.ALL) == null)
             {
                uiNodeSelector.selectNode(uiNodeSelector.getRootNode());
                context.getUIApplication().addMessage(new ApplicationMessage("UINavigationManagement.msg.staleData", null));
@@ -708,14 +713,13 @@ public class UINavigationNodeSelector extends UIContainer
 
          if (sourceNode.isDeleteNode())
          {
-            targetNode.addChild(sourceNode);
+            sourceNode.getParent().removeChild(sourceNode);
          }
-         else 
-         {
-            service = uiNodeSelector.getApplicationComponent(UserPortalConfigService.class);
-            dataStorage = uiNodeSelector.getApplicationComponent(DataStorage.class);            
-            pasteNode(sourceNode, targetNode, sourceNode.isCloneNode());            
-         }
+         
+         service = uiNodeSelector.getApplicationComponent(UserPortalConfigService.class);
+         dataStorage = uiNodeSelector.getApplicationComponent(DataStorage.class);            
+         pasteNode(sourceNode, targetNode, sourceNode.isCloneNode());
+         
          uiNodeSelector.setCopyNode(null);         
          uiNodeSelector.selectNode(targetNode);
       }
@@ -829,8 +833,7 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }
          parentNode.addChild(k + i, targetNode);
-
-         uiNodeSelector.selectNode(targetNode);
+         uiNodeSelector.selectNode(parentNode);
       }
    }
 
@@ -1037,11 +1040,8 @@ public class UINavigationNodeSelector extends UIContainer
 
       public String getEncodedResolvedLabel()
       {
-         if (node.getParent() == null)
-         {
-            return "";
-         }
-         return node.getResolvedLabel();
+         String encodedLabel = node.getEncodedResolvedLabel();
+         return encodedLabel == null ? "" : encodedLabel;
       }
 
       public String getName()
@@ -1102,7 +1102,6 @@ public class UINavigationNodeSelector extends UIContainer
       public String getResolvedLabel()
       {
          String resolvedLabel = node.getResolvedLabel();
-
          return resolvedLabel == null ? "" : resolvedLabel;
       }
 
@@ -1133,9 +1132,11 @@ public class UINavigationNodeSelector extends UIContainer
          return selector.addToCached(new TreeNodeData(nav, child, selector));
       }
       
-      public void addChild(TreeNodeData node)
+      public void addChild(TreeNodeData child)
       {
-         addChild(getChildrenCount(), node);
+         wrappedChilds = null;         
+         node.addChild(child.getNode());
+         selector.addToCached(child);
       }
 
       public void addChild(int index, TreeNodeData child)

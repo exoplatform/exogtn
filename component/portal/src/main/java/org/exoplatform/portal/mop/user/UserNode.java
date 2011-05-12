@@ -192,7 +192,7 @@ public class UserNode
          //
          if (resolvedLabel == null)
          {
-            resolvedLabel = getLabel();
+            resolvedLabel = getName();
          }
 
          //
