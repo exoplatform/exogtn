@@ -28,25 +28,25 @@ public class NodeChange<N>
 {
 
    /** . */
-   final N node;
+   final NodeContext<N> source;
 
-   private NodeChange(N node)
+   private NodeChange(NodeContext<N> source)
    {
-      this.node = node;
+      this.source = source;
    }
 
    public final N getNode()
    {
-      return node;
+      return source.node;
    }
 
    public final static class Removed<N> extends NodeChange<N>
    {
 
       /** . */
-      final N parent;
+      final NodeContext<N> parent;
 
-      Removed(N parent, N node)
+      Removed(NodeContext<N> parent, NodeContext<N> node)
       {
          super(node);
 
@@ -56,13 +56,13 @@ public class NodeChange<N>
 
       public N getParent()
       {
-         return parent;
+         return parent.node;
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Removed[node" + node + ",parent=" +  parent + "]";
+         return "NodeChange.Removed[node" + source + ",parent=" +  parent + "]";
       }
    }
 
@@ -70,15 +70,15 @@ public class NodeChange<N>
    {
 
       /** . */
-      final N parent;
+      final NodeContext<N> parent;
 
       /** . */
-      final N previous;
+      final NodeContext<N> previous;
 
       /** . */
       final String name;
 
-      Added(N parent, N previous, N node, String name)
+      Added(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node, String name)
       {
          super(node);
 
@@ -90,12 +90,12 @@ public class NodeChange<N>
 
       public N getParent()
       {
-         return parent;
+         return parent.node;
       }
 
       public N getPrevious()
       {
-         return previous;
+         return previous != null ? previous.node : null;
       }
 
       public String getName()
@@ -106,7 +106,7 @@ public class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Added[node" + node + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
+         return "NodeChange.Added[node" + source + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
       }
    }
 
@@ -114,15 +114,15 @@ public class NodeChange<N>
    {
       
       /** . */
-      final N from;
+      final NodeContext<N> from;
 
       /** . */
-      final N to;
+      final NodeContext<N> to;
 
       /** . */
-      final N previous;
+      final NodeContext<N> previous;
 
-      Moved(N from, N to, N previous, N node)
+      Moved(NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous, NodeContext<N> node)
       {
          super(node);
 
@@ -134,23 +134,23 @@ public class NodeChange<N>
 
       public N getFrom()
       {
-         return from;
+         return from.node;
       }
 
       public N getTo()
       {
-         return to;
+         return to.node;
       }
 
       public N getPrevious()
       {
-         return previous;
+         return previous != null ? previous.node : null;
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Moved[node" + node + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
+         return "NodeChange.Moved[node" + source + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
       }
    }
 
@@ -160,7 +160,7 @@ public class NodeChange<N>
       /** . */
       final String name;
 
-      Renamed(N node, String name)
+      Renamed(NodeContext<N> node, String name)
       {
          super(node);
 
@@ -176,7 +176,7 @@ public class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Renamed[node" + node + ",name=" + name + "]";
+         return "NodeChange.Renamed[node" + source + ",name=" + name + "]";
       }
    }
 
@@ -186,7 +186,7 @@ public class NodeChange<N>
       /** . */
       final NodeState state;
 
-      public Updated(N node, NodeState state)
+      public Updated(NodeContext<N> node, NodeState state)
       {
          super(node);
 
@@ -202,7 +202,7 @@ public class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Updated[node" + node + ",state=" + state + "]";
+         return "NodeChange.Updated[node" + source + ",state=" + state + "]";
       }
    }
 }

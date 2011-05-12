@@ -33,7 +33,7 @@ class TreeContext<N>
 {
 
    /** . */
-   private LinkedList<NodeChange<NodeContext<N>>> changes;
+   private LinkedList<NodeChange<N>> changes;
 
    /** . */
    final NodeModel<N> model;
@@ -47,7 +47,7 @@ class TreeContext<N>
       this.editMode = false;
    }
 
-   void addChange(NodeChange<NodeContext<N>> change)
+   void addChange(NodeChange<N> change)
    {
       if (editMode)
       {
@@ -55,7 +55,7 @@ class TreeContext<N>
       }
       if (changes == null)
       {
-         changes = new LinkedList<NodeChange<NodeContext<N>>>();
+         changes = new LinkedList<NodeChange<N>>();
       }
       changes.addLast(change);
    }
@@ -64,11 +64,11 @@ class TreeContext<N>
       return changes != null && changes.size() > 0;
    }
 
-   List<NodeChange<NodeContext<N>>> popChanges()
+   List<NodeChange<N>> popChanges()
    {
       if (hasChanges())
       {
-         LinkedList<NodeChange<NodeContext<N>>> tmp = changes;
+         LinkedList<NodeChange<N>> tmp = changes;
          changes = null;
          return tmp;
       }

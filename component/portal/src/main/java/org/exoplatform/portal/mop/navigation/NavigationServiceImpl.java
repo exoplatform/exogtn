@@ -380,7 +380,7 @@ public class NavigationServiceImpl implements NavigationService
                      {
                         if (listener != null)
                         {
-                           listener.onUpdate(new NodeChange.Updated<N>(last.node, lastData.state));
+                           listener.onUpdate(new NodeChange.Updated<N>(last, lastData.state));
                         }
                      }
 
@@ -390,7 +390,7 @@ public class NavigationServiceImpl implements NavigationService
                         last.name = lastData.name;
                         if (listener != null)
                         {
-                           listener.onRename(new NodeChange.Renamed<N>(last.node, lastData.name));
+                           listener.onRename(new NodeChange.Renamed<N>(last, lastData.name));
                         }
                      }
 
@@ -421,10 +421,10 @@ public class NavigationServiceImpl implements NavigationService
                   if (listener != null)
                   {
                      listener.onMove(new NodeChange.Moved<N>(
-                        from.getNode(),
-                        to.getNode(),
-                        previous != null ? previous.getNode() : null,
-                        moved.getNode()));
+                        from,
+                        to,
+                        previous != null ? previous : null,
+                        moved));
                   }
 
                   //
@@ -450,9 +450,9 @@ public class NavigationServiceImpl implements NavigationService
                   if (listener != null)
                   {
                      listener.onAdd(new NodeChange.Added<N>(
-                        parent.getNode(),
-                        previous != null ? previous.getNode() : null,
-                        added.getNode(),
+                        parent,
+                        previous != null ? previous : null,
+                        added,
                         added.getName()));
                   }
 
@@ -471,8 +471,8 @@ public class NavigationServiceImpl implements NavigationService
                   if (listener != null)
                   {
                      listener.onRemove(new NodeChange.Removed<N>(
-                        parent.getNode(),
-                        removed.getNode()));
+                        parent,
+                        removed));
                   }
 
                   //
@@ -519,7 +519,7 @@ public class NavigationServiceImpl implements NavigationService
             if (visitMode == VisitMode.ALL_CHILDREN)
             {
                ArrayList<NodeContext<N>> children = new ArrayList<NodeContext<N>>(cachedData.children.length);
-               N previous = null;
+               NodeContext<N> previous = null;
                for (String childId : cachedData.children)
                {
                   NodeData childData = dataCache.getNodeData(session, childId);
@@ -530,8 +530,8 @@ public class NavigationServiceImpl implements NavigationService
                      // Generate event
                      if (listener != null)
                      {
-                        listener.onAdd(new NodeChange.Added<N>(context.node, previous, childContext.node, childContext.data.name));
-                        previous = childContext.node;
+                        listener.onAdd(new NodeChange.Added<N>(context, previous, childContext, childContext.data.name));
+                        previous = childContext;
                      }
 
                      //
@@ -560,13 +560,13 @@ public class NavigationServiceImpl implements NavigationService
       TreeContext<N> tree = context.tree;
 
       //
-      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
+      List<NodeChange<N>> changes = tree.popChanges();
 
       // The ids to remove from the cache
       Set<String> ids = new HashSet<String>();
 
       // First pass we update persistent store
-      for (NodeChange<NodeContext<N>> change : changes)
+      for (NodeChange<N> change : changes)
       {
          if (change instanceof NodeChange.Added<?>)
          {
@@ -599,20 +599,20 @@ public class NavigationServiceImpl implements NavigationService
                   index = parent.getChildren().indexOf(previous) + 1;
                }
                parent.getChildren().add(index, added);
-               add.node.data = new NodeData(added);
+               add.source.data = new NodeData(added);
                ids.add(parent.getObjectId());
             }
          }
          else if (change instanceof NodeChange.Removed<?>)
          {
             NodeChange.Removed<NodeContext<N>> remove = (NodeChange.Removed<NodeContext<N>>)change;
-            Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.node.data.id);
+            Navigation removed = session.findObjectById(ObjectType.NAVIGATION, remove.source.data.id);
             if (removed != null)
             {
                Navigation parent = removed.getParent();
                String removedId = removed.getObjectId();
                removed.destroy();
-               remove.node.data = null;
+               remove.source.data = null;
 
                //
                ids.add(removedId);
@@ -640,7 +640,7 @@ public class NavigationServiceImpl implements NavigationService
             }
 
             //
-            Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.node.data.id);
+            Navigation moved = session.findObjectById(ObjectType.NAVIGATION, move.source.data.id);
             if (moved == null)
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
@@ -672,7 +672,7 @@ public class NavigationServiceImpl implements NavigationService
          else if (change instanceof NodeChange.Renamed<?>)
          {
             NodeChange.Renamed<NodeContext<N>> rename = (NodeChange.Renamed<NodeContext<N>>)change;
-            Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.node.data.id);
+            Navigation renamed = session.findObjectById(ObjectType.NAVIGATION, rename.source.data.id);
             if (renamed == null)
             {
                throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
@@ -703,7 +703,7 @@ public class NavigationServiceImpl implements NavigationService
             NodeState state = updated.state;
 
             //
-            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, updated.node.data.id);
+            Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, updated.source.data.id);
 
             //
             if (navigation == null)
