@@ -25,8 +25,6 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
-import java.util.Iterator;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -39,25 +37,33 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase1");
       Navigation def = portal.getRootNavigation().addChild("default");
       def.addChild("a");
-      def.addChild("b");
+      def.addChild("d");
 
       //
       sync(true);
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase1"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
-      Node n1 = root.addChild(1, "1");
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      Node a = root1.getChild("a");
+      Node d = root1.getChild("d");
+      Node b = root1.addChild(1, "b");
 
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
-      Node n2 = root2.addChild(1, "2");
+      Node c2 = root2.addChild(1, "c");
       service.saveNode(root2.context);
       sync(true);
 
       //
-      service.rebaseNode(root.context, null, null);
-      System.out.println("root.toString(3) = " + root.toString(3));
+      service.rebaseNode(root1.context, null, null);
+      assertEquals(4, root1.getNodeCount());
+      assertSame(a, root1.getChild(0));
+      assertSame(b, root1.getChild(1));
+      Node c1 = root1.getChild(2);
+      assertEquals("c", c1.getName());
+      assertEquals(c2.getId(), c1.getId());
+      assertSame(d, root1.getChild(3));
 
    }
 
@@ -74,8 +80,10 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
 
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase2"));
-      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
-      root.getChild("a").addChild("foo");
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      Node a = root1.getChild("a");
+      Node b = root1.getChild("b");
+      Node c = a.addChild("c");
 
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
@@ -84,9 +92,14 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       sync(true);
 
       //
-      service.rebaseNode(root.context, null, null);
-      System.out.println("root.toString(3) = " + root.toString(3));
-
+      service.rebaseNode(root1.context, null, null);
+      assertEquals(null, root1.getChild("a"));
+      assertSame(b, root1.getChild("b"));
+      assertEquals(root1, b.getParent());
+      assertSame(a, b.getChild("a"));
+      assertEquals(b, a.getParent());
+      assertSame(c, a.getChild("c"));
+      assertEquals(a, c.getParent());
    }
 
    public void testRebase3() throws Exception
