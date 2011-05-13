@@ -26,6 +26,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 
+import org.exoplatform.portal.tree.diff.Adapters;
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
 import org.exoplatform.portal.tree.diff.HierarchyChangeType;
@@ -239,41 +240,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      ListAdapter<String[], String> a1 = new ListAdapter<String[], String>()
-      {
-         public int size(String[] list)
-         {
-            return list.length;
-         }
-         public Iterator<String> iterator(final String[] list, final boolean reverse)
-         {
-            return new Iterator<String>()
-            {
-               int count = 0;
-               public boolean hasNext()
-               {
-                  return count < list.length;
-               }
-               public String next()
-               {
-                  if (!hasNext())
-                  {
-                     throw new NoSuchElementException();
-                  }
-                  int index = count++;
-                  if (reverse)
-                  {
-                     index = list.length - index - 1;
-                  }
-                  return list[index];
-               }
-               public void remove()
-               {
-                  throw new UnsupportedOperationException();
-               }
-            };
-         }
-      };
+      ListAdapter<String[], String> a1 = Adapters.list();
 
       //
       class M1 implements HierarchyAdapter<String[], NodeContext<N>, String>
