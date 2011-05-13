@@ -24,11 +24,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The context of a tree.
+ * <p>The context of a tree, that performs:
+ * <ul>
+ *    <li>holding the list of pending changes</li>
+ *    <li>keep a reference to the {@link NodeModel}</li>
+ *    <li>hold a sequence for providing id for transient contexts</li>
+ *    <li>hold the root context</li>
+ * </ul>
+ * </p>
+ *
+ * <p>The class implements the {@link Scope.Visitor} and defines a scope describing the actual content
+ * of the context tree.</p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeContext<N>
+class TreeContext<N> implements Scope.Visitor
 {
 
    /** . */
@@ -44,7 +54,7 @@ class TreeContext<N>
    int sequence;
 
    /** . */
-   NodeContext<N> root;
+   final NodeContext<N> root;
 
    TreeContext(NodeModel<N> model, NodeContext<N> root)
    {
@@ -94,6 +104,19 @@ class TreeContext<N>
       else
       {
          return Collections.emptyList();
+      }
+   }
+
+   public VisitMode visit(int depth, String id, String name, NodeState state)
+   {
+      NodeContext<N> descendant = root.getDescendant(id);
+      if (descendant != null)
+      {
+         return descendant.isExpanded() ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
+      }
+      else
+      {
+         return VisitMode.NO_CHILDREN;
       }
    }
 }

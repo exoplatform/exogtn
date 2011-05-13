@@ -413,10 +413,20 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<N> listener) throws NavigationServiceException
    {
+      // No changes -> do an update operation instead as it's simpler and cheaper
+      if (!root.tree.hasChanges())
+      {
+         updateNode(root, scope, listener);
+      }
+
+      //
       POMSession session = manager.getSession();
       NodeData data = dataCache.getNodeData(session, root.id);
       NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
-      load(session, context, root);
+
+      // Expand
+      expand(session, context, root.tree, 0, null  );
+
       List<NodeChange<N>> changes = root.tree.peekChanges();
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
@@ -467,23 +477,6 @@ public class NavigationServiceImpl implements NavigationService
                return node.data;
             }
          });
-   }
-
-   // perhaps this can be avoided and use instead the normal load
-   private <N> void load(POMSession session, NodeContext<N> context, NodeContext<N> root)
-   {
-      NodeData data = context.data;
-      NodeContext<N> other = root.getDescendant(data.id);
-      if (other != null && other.isExpanded())
-      {
-         context.expand();
-         for (String childId : data.children)
-         {
-            NodeData childData = dataCache.getNodeData(session, childId);
-            NodeContext<N> child = context.insertLast(childData);
-            load(session, child, root);
-         }
-      }
    }
 
    public void clearCache()
