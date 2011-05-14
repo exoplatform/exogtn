@@ -305,13 +305,13 @@ public class NavigationServiceImpl implements NavigationService
       try
       {
 
-         Update.update(
+         Update.perform(
             root,
             toto,
-            new NodeDataAdapter(root.tree, session),
             dataRoot,
-            listener,
-            Update.Manager.NODE_DATA);
+            new NodeDataAdapter(root.tree, session),
+            Update.Adapter.NODE_DATA,
+            listener);
       }
       finally
       {
@@ -464,19 +464,19 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      Update.update(
+      Update.perform(
          root,
          aaa,
-         aaa,
          context,
-         listener,
-         new Update.Manager<NodeContext<N>>()
+         aaa,
+         new Update.Adapter<NodeContext<N>>()
          {
             public NodeData getData(NodeContext<N> node)
             {
                return node.data;
             }
-         });
+         },
+         listener);
    }
 
    public void clearCache()

@@ -29,19 +29,33 @@ import org.exoplatform.portal.tree.diff.HierarchyDiff;
 import java.util.Queue;
 
 /**
- * Gather various operations.
+ * The update operation.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 class Update
 {
 
-   interface Manager<N>
+   /**
+    * Adapter for the update operation.
+    *
+    * @param <N> the node generic type
+    */
+   interface Adapter<N>
    {
 
+      /**
+       * Returns the data associated with the node or null if such data does not exist.
+       *
+       * @param node the node
+       * @return the node data
+       */
       NodeData getData(N node);
 
-      Manager<NodeData> NODE_DATA = new Manager<NodeData>()
+      /**
+       * The trivial adapter for {@link NodeData} objects.
+       */
+      Adapter<NodeData> NODE_DATA = new Adapter<NodeData>()
       {
          public NodeData getData(NodeData node)
          {
@@ -51,26 +65,31 @@ class Update
 
    }
 
-   static <N, N2> void update(
-      NodeContext<N> context,
-      HierarchyAdapter<String[], NodeContext<N>, String> blah,
-      HierarchyAdapter<String[], N2, String> hierarchyAdapter,
-      N2 root,
-      NodeChangeListener<N> listener,
-      Manager<N2> ndAdapter)
+   static <N1, N2> void perform(
+      NodeContext<N1> src,
+      HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
+      N2 dst,
+      HierarchyAdapter<String[], N2, String> dstAdapter,
+      Adapter<N2> updateAdapter,
+      NodeChangeListener<N1> listener
+      )
    {
-      //
-      HierarchyDiff<String[], NodeContext<N>, String[], N2, String> diff = HierarchyDiff.create(
+      // We create the diff object
+      HierarchyDiff<String[], NodeContext<N1>, String[], N2, String> diff = HierarchyDiff.create(
          Adapters.<String>list(),
-         blah,
+         srcAdatper,
          Adapters.<String>list(),
-         hierarchyAdapter,
+         dstAdapter,
          Utils.<String>comparator());
 
-      //
-      HierarchyChangeIterator<String[], NodeContext<N>, String[], N2, String> it = diff.iterator(context, root);
-      Queue<NodeContext<N>> stack = Queues.lifo();
-      NodeContext<N> last = null;
+      // We obtain the iterator
+      HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it = diff.iterator(src, dst);
+
+      // The queue will contain the last encountered element
+      Queue<NodeContext<N1>> stack = Queues.lifo();
+
+      // The last browsed context
+      NodeContext<N1> lastCtx = null;
 
       //
       while (it.hasNext())
@@ -79,67 +98,72 @@ class Update
          switch (change)
          {
             case ENTER:
+            {
                stack.add(it.getSource());
                break;
+            }
             case LEAVE:
-               last = stack.poll();
-               N2 lastData = it.getDestination();
-               if (last != null && lastData != null)
+            {
+               // Update last context
+               lastCtx = stack.poll();
+
+               //
+               N2 leftDst = it.getDestination();
+               if (lastCtx != null && leftDst != null)
                {
                   // Generate node change event (that will occur below)
-                  NodeData lastDataData = ndAdapter.getData(lastData);
+                  NodeData leftDstData = updateAdapter.getData(leftDst);
 
                   // Data can be null for transient nodes
-                  if (lastDataData != null)
+                  if (leftDstData != null)
                   {
-                     NodeState lastDataState = lastDataData.state;
-                     String lastDataName = lastDataData.name;
-                     if (!last.data.state.equals(lastDataState))
+                     if (!lastCtx.data.state.equals(leftDstData.state))
                      {
                         if (listener != null)
                         {
-                           listener.onUpdate(new NodeChange.Updated<N>(last, lastDataState));
+                           listener.onUpdate(new NodeChange.Updated<N1>(lastCtx, leftDstData.state));
                         }
                      }
 
                      // Update name and generate event
-                     if (!last.data.name.equals(lastDataName))
+                     if (!lastCtx.data.name.equals(leftDstData.name))
                      {
-                        last.name = lastDataName;
+                        lastCtx.name = leftDstData.name;
                         if (listener != null)
                         {
-                           listener.onRename(new NodeChange.Renamed<N>(last, lastDataName));
+                           listener.onRename(new NodeChange.Renamed<N1>(lastCtx, leftDstData.name));
                         }
                      }
 
                      //
-                     last.data = lastDataData;
+                     lastCtx.data = leftDstData;
                   }
                }
                break;
+            }
             case MOVED_OUT:
                break;
             case MOVED_IN:
             {
-               NodeContext<N> to = stack.peek();
-               NodeContext<N> moved = it.getSource();
-               NodeContext<N> from = moved.getParent();
-               NodeContext<N> previous;
-               if (last == null || last.getParent() != to)
+               NodeContext<N1> to = stack.peek();
+               NodeContext<N1> moved = it.getSource();
+               NodeContext<N1> from = moved.getParent();
+               NodeContext<N1> previous;
+               if (lastCtx == null || lastCtx.getParent() != to)
                {
                   previous = null;
                   to.insertAt(0, moved);
                }
                else
                {
-                  previous = last;
-                  last.insertAfter(moved);
+                  previous = lastCtx;
+                  lastCtx.insertAfter(moved);
                }
 
                //
                if (listener != null)
                {
-                  listener.onMove(new NodeChange.Moved<N>(
+                  listener.onMove(new NodeChange.Moved<N1>(
                      from,
                      to,
                      previous != null ? previous : null,
@@ -151,30 +175,30 @@ class Update
             }
             case ADDED:
             {
-               NodeContext<N> parent = stack.peek();
-               NodeContext<N> added;
-               NodeContext<N> previous;
-               N2 destination = it.getDestination();
-               NodeData desData = ndAdapter.getData(destination);
-               if (last == null || last.getParent() != parent)
+               NodeContext<N1> parentCtx = stack.peek();
+               NodeContext<N1> addedCtx;
+               NodeContext<N1> previousCtx;
+               N2 added = it.getDestination();
+               NodeData addedData = updateAdapter.getData(added);
+               if (lastCtx == null || lastCtx.getParent() != parentCtx)
                {
-                  previous = null;
-                  added = parent.insertAt(0, desData);
+                  previousCtx = null;
+                  addedCtx = parentCtx.insertAt(0, addedData);
                }
                else
                {
-                  previous = last;
-                  added = last.insertAfter(desData);
+                  previousCtx = lastCtx;
+                  addedCtx = lastCtx.insertAfter(addedData);
                }
 
                //
                if (listener != null)
                {
-                  listener.onAdd(new NodeChange.Added<N>(
-                     parent,
-                     previous != null ? previous : null,
-                     added,
-                     added.getName()));
+                  listener.onAdd(new NodeChange.Added<N1>(
+                     parentCtx,
+                     previousCtx,
+                     addedCtx,
+                     addedCtx.getName()));
                }
 
                //
@@ -182,18 +206,18 @@ class Update
             }
             case REMOVED:
             {
-               NodeContext<N> removed = it.getSource();
-               NodeContext<N> parent = removed.getParent();
+               NodeContext<N1> removedCtx = it.getSource();
+               NodeContext<N1> parentCtx = removedCtx.getParent();
 
                //
-               removed.remove();
+               removedCtx.remove();
 
                //
                if (listener != null)
                {
-                  listener.onRemove(new NodeChange.Removed<N>(
-                     parent,
-                     removed));
+                  listener.onRemove(new NodeChange.Removed<N1>(
+                     parentCtx,
+                     removedCtx));
                }
 
                //
