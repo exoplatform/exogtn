@@ -258,6 +258,16 @@ public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<Hier
       return frame.dst;
    }
 
+   public N1 peekSourceRoot()
+   {
+      return frame.srcRoot;
+   }
+
+   public N2 peekDestinationRoot()
+   {
+      return frame.dstRoot;
+   }
+
    public void remove() {
       throw new UnsupportedOperationException();
    }

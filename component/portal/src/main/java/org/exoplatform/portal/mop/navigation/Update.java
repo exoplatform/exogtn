@@ -85,9 +85,6 @@ class Update
       // We obtain the iterator
       HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it = diff.iterator(src, dst);
 
-      // The queue will contain the last encountered element
-      Queue<NodeContext<N1>> stack = Queues.lifo();
-
       // The last browsed context
       NodeContext<N1> lastCtx = null;
 
@@ -99,13 +96,12 @@ class Update
          {
             case ENTER:
             {
-               stack.add(it.getSource());
                break;
             }
             case LEAVE:
             {
                // Update last context
-               lastCtx = stack.poll();
+               lastCtx = it.peekSourceRoot();
 
                //
                N2 leftDst = it.getDestination();
@@ -145,7 +141,7 @@ class Update
                break;
             case MOVED_IN:
             {
-               NodeContext<N1> to = stack.peek();
+               NodeContext<N1> to = it.peekSourceRoot();
                NodeContext<N1> moved = it.getSource();
                NodeContext<N1> from = moved.getParent();
                NodeContext<N1> previous;
@@ -175,7 +171,7 @@ class Update
             }
             case ADDED:
             {
-               NodeContext<N1> parentCtx = stack.peek();
+               NodeContext<N1> parentCtx = it.peekSourceRoot();
                NodeContext<N1> addedCtx;
                NodeContext<N1> previousCtx;
                N2 added = it.getDestination();
