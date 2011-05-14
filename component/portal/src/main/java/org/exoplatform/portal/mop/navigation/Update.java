@@ -19,14 +19,11 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.commons.utils.Queues;
 import org.exoplatform.portal.tree.diff.Adapters;
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
 import org.exoplatform.portal.tree.diff.HierarchyChangeType;
 import org.exoplatform.portal.tree.diff.HierarchyDiff;
-
-import java.util.Queue;
 
 /**
  * The update operation.
@@ -95,9 +92,7 @@ class Update
          switch (change)
          {
             case ENTER:
-            {
                break;
-            }
             case LEAVE:
             {
                // Update last context
