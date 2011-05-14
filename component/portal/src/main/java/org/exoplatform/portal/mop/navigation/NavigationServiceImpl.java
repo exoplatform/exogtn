@@ -231,7 +231,7 @@ public class NavigationServiceImpl implements NavigationService
       public String[] getChildren(NodeData node)
       {
          NodeContext<?> context = tree.root.getDescendant(node.getId());
-         return context != null && context.isExpanded() ? node.children : new String[0];
+         return context != null && context.isExpanded() ? node.children : Utils.EMPTY_STRING_ARRAY;
       }
 
       public NodeData getDescendant(NodeData node, String handle)
@@ -292,7 +292,7 @@ public class NavigationServiceImpl implements NavigationService
 
          public String[] getChildren(NodeContext<N> node)
          {
-            return node.isExpanded() ? node.data.children : new String[0];
+            return node.isExpanded() ? node.data.children : Utils.EMPTY_STRING_ARRAY;
          }
 
          public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
@@ -453,7 +453,7 @@ public class NavigationServiceImpl implements NavigationService
                return blah.toArray(new String[blah.size()]);
             } else
             {
-               return new String[0];
+               return Utils.EMPTY_STRING_ARRAY;
             }
          }
 

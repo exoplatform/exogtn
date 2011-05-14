@@ -73,7 +73,7 @@ class NodeData implements Serializable
       List<Navigation> _children = navigation.getChildren();
       if (_children == null)
       {
-         children = new String[0];
+         children = Utils.EMPTY_STRING_ARRAY;
       }
       else
       {
