@@ -67,6 +67,8 @@ class Save
 
       abstract void setName(C context, N node, String name);
 
+      abstract String getName(C context, N node);
+
       abstract void setState(C context, N node, NodeState state);
 
       Adapter<TreeContext<Object>, NodeContext<Object>> CONTEXT = new Adapter<TreeContext<Object>, NodeContext<Object>>()
@@ -133,6 +135,11 @@ class Save
             node.setName(name);
          }
 
+         public String getName(TreeContext<Object> context, NodeContext<Object> node)
+         {
+            return node.getName();
+         }
+
          public void setState(TreeContext<Object> context, NodeContext<Object> node, NodeState state)
          {
             node.setState(state);
@@ -194,6 +201,11 @@ class Save
             int index = children.indexOf(node);
             node.setName(name);
             children.add(index, node);
+         }
+
+         public String getName(POMSession context, Navigation node)
+         {
+            return node.getName();
          }
 
          public void setState(POMSession context, Navigation node, NodeState state)
@@ -371,6 +383,17 @@ class Save
             if (src != manager.getParent(context, moved))
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
+            }
+
+            //
+            if (src != dst)
+            {
+               String name = manager.getName(context, moved);
+               D existing = manager.getChild(context, dst, name);
+               if (existing != null)
+               {
+                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME);
+               }
             }
 
             //

@@ -136,4 +136,71 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       }
 
    }
+
+   public void testRebaseAddDuplicate() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_add_duplicate");
+      Navigation def = portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_add_duplicate"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root.addChild("a");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root2.addChild("a");
+      service.saveNode(root2.context);
+      sync(true);
+
+      //
+      try
+      {
+         service.rebaseNode(root.context, null, null);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.ADD_CONCURRENTLY_ADDED_NODE, e.getError());
+      }
+
+   }
+
+   public void testRebaseMoveDuplicate() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_move_duplicate");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a").addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_move_duplicate"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root.addChild(root.getChild("a").getChild("b"));
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root2.addChild("b");
+      service.saveNode(root2.context);
+      sync(true);
+
+      //
+      try
+      {
+         service.rebaseNode(root.context, null, null);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME, e.getError());
+      }
+
+   }
 }
