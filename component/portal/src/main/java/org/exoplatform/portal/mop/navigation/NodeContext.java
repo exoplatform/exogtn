@@ -670,7 +670,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
       else
       {
-         tree.addChange(new NodeChange.Added<N>(this, child.getPrevious(), child, child.name));
+         tree.addChange(new NodeChange.Created<N>(this, child.getPrevious(), child, child.name));
       }
    }
 
@@ -701,7 +701,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          node.remove();
 
          //
-         tree.addChange(new NodeChange.Removed<N>(this, node));
+         tree.addChange(new NodeChange.Destroyed<N>(this, node));
 
          //
          return true;

@@ -362,7 +362,7 @@ public class NavigationServiceImpl implements NavigationService
                      // Generate event
                      if (listener != null)
                      {
-                        listener.onAdd(new NodeChange.Added<N>(context, previous, childContext, childContext.data.name));
+                        listener.onAdd(new NodeChange.Added<N>(context, previous, childContext));
                         previous = childContext;
                      }
 

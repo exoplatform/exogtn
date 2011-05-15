@@ -440,7 +440,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertEquals("bar", added.getNode().getName());
       assertEquals(null, added.previous);
-      assertEquals("bar", added.name);
+      assertEquals("bar", added.source.name);
       assertFalse(changes.hasNext());
 
       //

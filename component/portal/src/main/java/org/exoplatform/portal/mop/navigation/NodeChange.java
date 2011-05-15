@@ -24,7 +24,7 @@ package org.exoplatform.portal.mop.navigation;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NodeChange<N>
+public abstract class NodeChange<N>
 {
 
    /** . */
@@ -38,6 +38,32 @@ public class NodeChange<N>
    public final N getNode()
    {
       return source.node;
+   }
+
+   public final static class Destroyed<N> extends NodeChange<N>
+   {
+
+      /** . */
+      final NodeContext<N> parent;
+
+      Destroyed(NodeContext<N> parent, NodeContext<N> node)
+      {
+         super(node);
+
+         //
+         this.parent = parent;
+      }
+
+      public N getParent()
+      {
+         return parent.node;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Destroyed[node" + source + ",parent=" +  parent + "]";
+      }
    }
 
    public final static class Removed<N> extends NodeChange<N>
@@ -66,7 +92,7 @@ public class NodeChange<N>
       }
    }
 
-   public final static class Added<N> extends NodeChange<N>
+   public final static class Created<N> extends NodeChange<N>
    {
 
       /** . */
@@ -78,7 +104,7 @@ public class NodeChange<N>
       /** . */
       final String name;
 
-      Added(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node, String name)
+      Created(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node, String name)
       {
          super(node);
 
@@ -106,7 +132,42 @@ public class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Added[node" + source + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
+         return "NodeChange.Created[node" + source + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
+      }
+   }
+
+   public final static class Added<N> extends NodeChange<N>
+   {
+
+      /** . */
+      final NodeContext<N> parent;
+
+      /** . */
+      final NodeContext<N> previous;
+
+      Added(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node)
+      {
+         super(node);
+
+         //
+         this.parent = parent;
+         this.previous = previous;
+      }
+
+      public N getParent()
+      {
+         return parent.node;
+      }
+
+      public N getPrevious()
+      {
+         return previous != null ? previous.node : null;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "NodeChange.Added[node" + source + ",previous" + previous + ",parent=" + parent + "]";
       }
    }
 

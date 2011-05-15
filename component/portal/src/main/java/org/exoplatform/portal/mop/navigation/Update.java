@@ -188,8 +188,7 @@ class Update
                   listener.onAdd(new NodeChange.Added<N1>(
                      parentCtx,
                      previousCtx,
-                     addedCtx,
-                     addedCtx.getName()));
+                     addedCtx));
                }
 
                //

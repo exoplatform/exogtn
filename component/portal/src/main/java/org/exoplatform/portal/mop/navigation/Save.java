@@ -259,9 +259,9 @@ class Save
       // First pass we update persistent store
       for (NodeChange<S> change : changes)
       {
-         if (change instanceof NodeChange.Added<?>)
+         if (change instanceof NodeChange.Created<?>)
          {
-            NodeChange.Added<S> add = (NodeChange.Added<S>)change;
+            NodeChange.Created<S> add = (NodeChange.Created<S>)change;
 
             //
             D parent = manager.getNode(context, add.parent.data.id);
@@ -307,9 +307,9 @@ class Save
             add.source.id = manager.getId(context, added);
             ids.add(manager.getId(context, parent));
          }
-         else if (change instanceof NodeChange.Removed<?>)
+         else if (change instanceof NodeChange.Destroyed<?>)
          {
-            NodeChange.Removed<S> remove = (NodeChange.Removed<S>)change;
+            NodeChange.Destroyed<S> remove = (NodeChange.Destroyed<S>)change;
             D removed = manager.getNode(context, remove.source.data.id);
 
             //
