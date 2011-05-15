@@ -85,7 +85,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.expanded = false;
    }
 
-   private NodeContext(TreeContext<N> tree, String name, NodeState state)
+   NodeContext(TreeContext<N> tree, String name, NodeState state)
    {
       this.handle = Integer.toString(tree.sequence++);
       this.name = name;
@@ -320,8 +320,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          }
          else
          {
-            this.name = name;
-            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, this, name));
+            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(getParent(), this, name));
          }
       }
    }
@@ -419,9 +418,6 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
       //
       tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
-
-      //
-      this.state = state;
    }
 
    public N getParentNode()
@@ -621,6 +617,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       NodeContext<N> previousParent = child.getParent();
 
       //
+      NodeContext<N> previous;
       if (index == null)
       {
          NodeContext<N> before = getLast();
@@ -630,11 +627,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          }
          if (before == null)
          {
-            insertAt(0, child);
+            previous = null;
          }
          else
          {
-            before.insertAfter(child);
+            previous = before;
          }
       }
       else if (index < 0)
@@ -643,7 +640,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
       else if (index == 0)
       {
-         insertAt(0, child);
+         previous = null;
       }
       else
       {
@@ -660,17 +657,17 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
                throw new IndexOutOfBoundsException("Index " + index + " is greater than the number of children " + (index - count));
             }
          }
-         before.insertAfter(child);
+         previous = before;
       }
 
       //
       if (previousParent != null)
       {
-         tree.addChange(new NodeChange.Moved<NodeContext<N>>(previousParent, this, child.getPrevious(), child));
+         tree.addChange(new NodeChange.Moved<NodeContext<N>>(previousParent, this, previous, child));
       }
       else
       {
-         tree.addChange(new NodeChange.Created<NodeContext<N>>(this, child.getPrevious(), child, child.name));
+         tree.addChange(new NodeChange.Created<NodeContext<N>>(this, previous, child, child.name));
       }
    }
 
@@ -698,9 +695,6 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
       else
       {
-         node.remove();
-
-         //
          tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(this, node));
 
          //

@@ -79,10 +79,13 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
    public void onDestroy(NodeContext<S> _source, NodeContext<S> _parent)
    {
       D removed = manager.getNode(context, _source.data.id);
-      D parent = manager.getNode(context, _parent.data.id);
 
       //
-      next.onDestroy(removed, parent);
+      if (removed != null)
+      {
+         D parent = manager.getNode(context, _parent.data.id);
+         next.onDestroy(removed, parent);
+      }
    }
 
    public void onRename(NodeContext<S> _source, NodeContext<S> _parent, String _name) throws NavigationServiceException

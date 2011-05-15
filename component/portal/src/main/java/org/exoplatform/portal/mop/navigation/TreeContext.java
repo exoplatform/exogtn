@@ -74,6 +74,56 @@ class TreeContext<N> implements Scope.Visitor
       {
          changes = new LinkedList<NodeChange<NodeContext<N>>>();
       }
+
+      //
+      if (change.source.tree != this)
+      {
+         // Normally should be done for all arguments depending on the change type
+         throw new AssertionError("Ensure we are not mixing badly things");
+      }
+
+      // Perform state modification here
+      if (change instanceof NodeChange.Renamed<?>)
+      {
+         NodeChange.Renamed<NodeContext<N>> renamed = (NodeChange.Renamed<NodeContext<N>>)change;
+         renamed.source.name = renamed.name;
+      }
+      else if (change instanceof NodeChange.Created<?>)
+      {
+         NodeChange.Created<NodeContext<N>> added = (NodeChange.Created<NodeContext<N>>)change;
+         if (added.previous != null)
+         {
+            added.previous.insertAfter(added.source);
+         }
+         else
+         {
+            added.parent.insertAt(0, added.source);
+         }
+      }
+      else if (change instanceof NodeChange.Moved<?>)
+      {
+         NodeChange.Moved<NodeContext<N>> moved = (NodeChange.Moved<NodeContext<N>>)change;
+         if (moved.previous != null)
+         {
+            moved.previous.insertAfter(moved.source);
+         }
+         else
+         {
+            moved.to.insertAt(0, moved.source);
+         }
+      }
+      else if (change instanceof NodeChange.Destroyed<?>)
+      {
+         NodeChange.Destroyed<NodeContext<N>> removed = (NodeChange.Destroyed<NodeContext<N>>)change;
+         removed.source.remove();
+      }
+      else if (change instanceof NodeChange.Updated<?>)
+      {
+         NodeChange.Updated<NodeContext<N>> updated = (NodeChange.Updated<NodeContext<N>>)change;
+         updated.source.state = updated.state;
+      }
+
+      //
       changes.addLast(change);
    }
 
