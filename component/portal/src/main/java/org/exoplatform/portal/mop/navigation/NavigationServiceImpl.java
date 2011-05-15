@@ -35,7 +35,9 @@ import org.gatein.mop.api.workspace.Workspace;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -389,7 +391,51 @@ public class NavigationServiceImpl implements NavigationService
       List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
 
       //
-      Collection<String> ids = Save.save(changes, session, Save.Adapter.MOP);
+      // Collection<String> ids = Save.save(changes, session, Save.Adapter.MOP);
+      NodeChangeFilter<NodeContext<N>, String> save = new Save.Filter<NodeContext<N>, POMSession, Navigation>(
+         session,
+         Save.Adapter.MOP
+      );
+
+      // Compute set of ids to invalidate
+      Set<String> ids = new HashSet<String>();
+      for (NodeChange<NodeContext<N>> src : changes)
+      {
+         NodeChange<String> dst = save.filter(src);
+         if (dst instanceof NodeChange.Created<?>)
+         {
+            NodeChange.Created<String> created = (NodeChange.Created<String>)dst;
+            Navigation nav = Save.Adapter.MOP.getNode(session, created.source);
+            NodeData data = Save.Adapter.MOP.getData(session, nav);
+            src.source.handle = created.source;
+            src.source.data = data;
+            ids.add(created.parent);
+         }
+         else if (dst instanceof NodeChange.Destroyed<?>)
+         {
+            NodeChange.Destroyed<String> destroyed = (NodeChange.Destroyed<String>)dst;
+            ids.add(destroyed.source);
+            ids.add(destroyed.parent);
+         }
+         else if (dst instanceof NodeChange.Moved<?>)
+         {
+            NodeChange.Moved<String> moved = (NodeChange.Moved<String>)dst;
+            ids.add(moved.source);
+            ids.add(moved.source);
+            ids.add(moved.to);
+         }
+         else if (dst instanceof NodeChange.Renamed<?>)
+         {
+            NodeChange.Renamed<String> removed = (NodeChange.Renamed<String>)dst;
+            ids.add(removed.source);
+            ids.add(removed.parent);
+         }
+         else if (dst instanceof NodeChange.Updated<?>)
+         {
+            NodeChange.Updated<String> updated = (NodeChange.Updated<String>)dst;
+            ids.add(updated.source);
+         }
+      }
 
       // Make consistent
       update(context);
@@ -431,7 +477,13 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //
-      Save.save(changes, baba.tree, Save.Adapter.CONTEXT);
+      NodeChangeFilter<NodeContext<N>, String> filter = new Save.Filter<NodeContext<N>, Object, NodeContext<N>>(baba.tree, (Save.Adapter)Save.Adapter.CONTEXT);
+
+      //
+      for (NodeChange<NodeContext<N>> change : changes)
+      {
+         filter.filter(change);
+      }
 
       //
       HierarchyAdapter<String[], NodeContext<N>, String> aaa = new HierarchyAdapter<String[], NodeContext<N>, String>()
