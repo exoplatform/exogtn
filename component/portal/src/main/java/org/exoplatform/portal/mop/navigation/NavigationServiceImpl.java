@@ -385,62 +385,76 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
    {
-      POMSession session = manager.getSession();
+      final POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
       List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
 
       //
-      // Collection<String> ids = Save.save(changes, session, Save.Adapter.MOP);
-      NodeChangeFilter<NodeContext<N>, String> save = new Save.Filter<NodeContext<N>, POMSession, Navigation>(
-         session,
-         Save.Adapter.MOP
-      );
-
-      // Compute set of ids to invalidate
-      Set<String> ids = new HashSet<String>();
-      for (NodeChange<NodeContext<N>> src : changes)
+      class Finisher extends NodeChangeListener.Base<String>
       {
-         NodeChange<String> dst = save.filter(src);
-         if (dst instanceof NodeChange.Created<?>)
+
+         /** . */
+         Set<String> ids = new HashSet<String>();
+
+         /** . */
+         NodeContext<N> node;
+
+         public void onCreate(String source, String parent, String previous, String name) throws NavigationServiceException
          {
-            NodeChange.Created<String> created = (NodeChange.Created<String>)dst;
-            Navigation nav = Save.Adapter.MOP.getNode(session, created.source);
+            Navigation nav = Save.Adapter.MOP.getNode(session, source);
             NodeData data = Save.Adapter.MOP.getData(session, nav);
-            src.source.handle = created.source;
-            src.source.data = data;
-            ids.add(created.parent);
+            node.handle = source;
+            node.data = data;
+            ids.add(parent);
          }
-         else if (dst instanceof NodeChange.Destroyed<?>)
+
+         public void onDestroy(String source, String parent)
          {
-            NodeChange.Destroyed<String> destroyed = (NodeChange.Destroyed<String>)dst;
-            ids.add(destroyed.source);
-            ids.add(destroyed.parent);
+            ids.add(source);
+            ids.add(parent);
          }
-         else if (dst instanceof NodeChange.Moved<?>)
+
+         public void onRename(String source, String parent, String name) throws NavigationServiceException
          {
-            NodeChange.Moved<String> moved = (NodeChange.Moved<String>)dst;
-            ids.add(moved.source);
-            ids.add(moved.source);
-            ids.add(moved.to);
+            ids.add(source);
+            ids.add(parent);
          }
-         else if (dst instanceof NodeChange.Renamed<?>)
+
+         public void onUpdate(String source, NodeState state) throws NavigationServiceException
          {
-            NodeChange.Renamed<String> removed = (NodeChange.Renamed<String>)dst;
-            ids.add(removed.source);
-            ids.add(removed.parent);
+            ids.add(source);
          }
-         else if (dst instanceof NodeChange.Updated<?>)
+
+         public void onMove(String source, String from, String to, String previous) throws NavigationServiceException
          {
-            NodeChange.Updated<String> updated = (NodeChange.Updated<String>)dst;
-            ids.add(updated.source);
+            ids.add(source);
+            ids.add(source);
+            ids.add(to);
          }
+      }
+
+      //
+      Finisher finisher = new Finisher();
+
+      //
+      NodeChangeListener<NodeContext<N>> save = new Save.Listener<N, POMSession, Navigation>(
+         session,
+         Save.Adapter.MOP,
+         finisher
+      );
+      
+      // Compute set of ids to invalidate
+      for (final NodeChange<NodeContext<N>> src : changes)
+      {
+         finisher.node = src.source;
+         src.dispatch(save);
       }
 
       // Make consistent
       update(context);
 
       //
-      dataCache.removeNodeData(session, ids);
+      dataCache.removeNodeData(session, finisher.ids);
    }
 
    private <N> void update(NodeContext<N> context) throws NavigationServiceException
@@ -472,16 +486,21 @@ public class NavigationServiceImpl implements NavigationService
       // Expand
       expand(session, context, root.tree, 0, null  );
 
+      //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //
-      NodeChangeFilter<NodeContext<N>, String> filter = new Save.Filter<NodeContext<N>, Object, NodeContext<N>>(baba.tree, (Save.Adapter)Save.Adapter.CONTEXT);
+      NodeChangeListener<NodeContext<N>> save = new Save.Listener<N, Object, NodeContext<N>>(
+         baba.tree,
+         (Save.Adapter)Save.Adapter.CONTEXT,
+         NodeChangeListener.Base.<String>noop()
+      );
 
       //
       for (NodeChange<NodeContext<N>> change : changes)
       {
-         filter.filter(change);
+         change.dispatch(save);
       }
 
       //

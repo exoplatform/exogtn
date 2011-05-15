@@ -19,13 +19,11 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.regex.Pattern;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationServiceException extends Exception
+public class NavigationServiceException extends RuntimeException
 {
 
    /** . */

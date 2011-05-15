@@ -41,4 +41,43 @@ public interface NodeChangeListener<N>
 
    void onMove(N source, N from, N to, N previous);
 
+   class Base<N> implements NodeChangeListener<N>
+   {
+
+      /** A instance that does nothing. */
+      private static Base NOOP = new Base();
+
+      public static <N> Base<N> noop()
+      {
+         return NOOP;
+      }
+
+      public void onAdd(N source, N parent, N previous)
+      {
+      }
+
+      public void onCreate(N source, N parent, N previous, String name) throws NavigationServiceException
+      {
+      }
+
+      public void onRemove(N source, N parent)
+      {
+      }
+
+      public void onDestroy(N source, N parent)
+      {
+      }
+
+      public void onRename(N source, N parent, String name) throws NavigationServiceException
+      {
+      }
+
+      public void onUpdate(N source, NodeState state) throws NavigationServiceException
+      {
+      }
+
+      public void onMove(N source, N from, N to, N previous) throws NavigationServiceException
+      {
+      }
+   }
 }

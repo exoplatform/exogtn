@@ -243,239 +243,214 @@ class Save
          }
       };
    }
-
-   static class Filter<S, C, D> implements NodeChangeFilter<S, String>
+   
+   static class Listener<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
    {
 
+      /** . */
       private final C context;
 
+      /** . */
       private final Adapter<C, D> manager;
 
-      Filter(C context, Adapter<C, D> manager)
+      /** . */
+      private final NodeChangeListener<String> next;
+
+      Listener(C context, Adapter<C, D> manager, NodeChangeListener<String> next)
       {
          this.context = context;
          this.manager = manager;
+         this.next = next;
       }
 
-      public NodeChange<String> filter(NodeChange<S> change) throws NavigationServiceException
+      public void onCreate(NodeContext<S> _source, NodeContext<S> _parent, NodeContext<S> _previous, String name) throws NavigationServiceException
       {
-         if (change instanceof NodeChange.Created<?>)
+         String parentHandle = _parent.data.id;
+         D parent = manager.getNode(context, parentHandle);
+         if (parent == null)
          {
-            NodeChange.Created<NodeContext<S>> add = (NodeChange.Created<NodeContext<S>>)change;
-
-            //
-            String parentHandle = add.parent.data.id;
-            D parent = manager.getNode(context, parentHandle);
-            if (parent == null)
-            {
-               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
-            }
-
-            //
-            D previous;
-            String previousHandle;
-            if (add.previous != null)
-            {
-               previousHandle = add.previous.data.id;
-               previous = manager.getNode(context, previousHandle);
-               if (previous == null)
-               {
-                  throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-               }
-            }
-            else
-            {
-               previous = null;
-               previousHandle = null;
-            }
-
-            //
-            D added = manager.getChild(context, parent, add.name);
-            if (added != null)
-            {
-               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
-            }
-
-            //
-            int index;
-            if (previous != null)
-            {
-               index = manager.getChildIndex(context, parent, previous) + 1;
-            }
-            else
-            {
-               index = 0;
-            }
-            added = manager.addChild(context, parent, index, add.name);
-            String addedHandle = manager.getHandle(context, added);
-            return new NodeChange.Created<String>(
-               parentHandle,
-               previousHandle,
-               addedHandle,
-               add.name
-            );
+            throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
          }
-         else if (change instanceof NodeChange.Destroyed<?>)
+
+         //
+         D previous;
+         String previousHandle;
+         if (_previous != null)
          {
-            NodeChange.Destroyed<NodeContext<S>> remove = (NodeChange.Destroyed<NodeContext<S>>)change;
-            D removed = manager.getNode(context, remove.source.data.id);
-
-            //
-            if (removed != null)
+            previousHandle = _previous.data.id;
+            previous = manager.getNode(context, previousHandle);
+            if (previous == null)
             {
-               D parent = manager.getParent(context, removed);
-               String parentHandle = manager.getHandle(context, parent);
-               String removedId = manager.getHandle(context, removed);
-               manager.destroy(context, removed);
-               remove.source.data = null;
-
-               //
-               return new NodeChange.Destroyed<String>(
-                  parentHandle,
-                  removedId
-               );
+               throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
             }
-            else
-            {
-               // It was already removed concurrently
-               return null;
-            }
-         }
-         else if (change instanceof NodeChange.Moved<?>)
-         {
-            NodeChange.Moved<NodeContext<S>> move = (NodeChange.Moved<NodeContext<S>>)change;
-            String srcHandle = move.from.data.id;
-            D src = manager.getNode(context, srcHandle);
-            if (src == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
-            }
-
-            //
-            String dstHandle = move.to.data.id;
-            D dst = manager.getNode(context, dstHandle);
-            if (dst == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
-            }
-
-            //
-            String movedHandle = move.source.data.id;
-            D moved = manager.getNode(context, movedHandle);
-            if (moved == null)
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
-            }
-
-            //
-            D previous;
-            String previousHandle;
-            if (move.previous != null)
-            {
-               previousHandle = move.previous.data.id;
-               previous = manager.getNode(context, previousHandle);
-               if (previous == null)
-               {
-                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-               }
-            }
-            else
-            {
-               previous = null;
-               previousHandle = null;
-            }
-
-            //
-            if (src != manager.getParent(context, moved))
-            {
-               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
-            }
-
-            //
-            if (src != dst)
-            {
-               String name = manager.getName(context, moved);
-               D existing = manager.getChild(context, dst, name);
-               if (existing != null)
-               {
-                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME);
-               }
-            }
-
-            //
-            int index;
-            if (previous != null)
-            {
-               index = manager.getChildIndex(context, dst, previous) + 1;
-            }
-            else
-            {
-               index = 0;
-            }
-            manager.addChild(context, dst, index, moved);
-
-            //
-            return new NodeChange.Moved<String>(
-               srcHandle,
-               dstHandle,
-               previousHandle,
-               movedHandle);
-         }
-         else if (change instanceof NodeChange.Renamed<?>)
-         {
-            NodeChange.Renamed<NodeContext<S>> rename = (NodeChange.Renamed<NodeContext<S>>)change;
-
-            //
-            String renamedHandle = rename.source.data.id;
-            D renamed = manager.getNode(context, renamedHandle);
-            if (renamed == null)
-            {
-               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
-            }
-
-            //
-            D parent = manager.getParent(context, renamed);
-            String parentHandle = manager.getHandle(context, parent);
-            if (manager.getChild(context, parent, rename.name) != null)
-            {
-               throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
-            }
-
-            // We rename and reorder to compensate the move from the rename
-            manager.setName(context, renamed, rename.name);
-
-            //
-            return new NodeChange.Renamed<String>(
-               parentHandle,
-               renamedHandle,
-               rename.name
-            );
-         }
-         else if (change instanceof NodeChange.Updated<?>)
-         {
-            NodeChange.Updated<NodeContext<S>> updated = (NodeChange.Updated<NodeContext<S>>)change;
-
-            //
-            String updatedHandle = updated.source.data.id;
-            D navigation = manager.getNode(context, updatedHandle);
-            if (navigation == null)
-            {
-               throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
-            }
-
-            //
-            manager.setState(context, navigation, updated.state);
-
-            //
-            return new NodeChange.Updated<String>(
-               updatedHandle,
-               updated.state
-            );
          }
          else
          {
-            throw new AssertionError("Cannot execute " + change);
+            previous = null;
+            previousHandle = null;
          }
+
+         //
+         D added = manager.getChild(context, parent, name);
+         if (added != null)
+         {
+            throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
+         }
+
+         //
+         int index;
+         if (previous != null)
+         {
+            index = manager.getChildIndex(context, parent, previous) + 1;
+         }
+         else
+         {
+            index = 0;
+         }
+         added = manager.addChild(context, parent, index, name);
+         String addedHandle = manager.getHandle(context, added);
+
+         //
+         next.onCreate(addedHandle, parentHandle, previousHandle, name);
+      }
+
+      public void onDestroy(NodeContext<S> _source, NodeContext<S> _parent)
+      {
+         D removed = manager.getNode(context, _source.data.id);
+
+         //
+         if (removed != null)
+         {
+            D parent = manager.getParent(context, removed);
+            String parentHandle = manager.getHandle(context, parent);
+            String removedId = manager.getHandle(context, removed);
+            manager.destroy(context, removed);
+            _source.data = null;
+
+            //
+            next.onDestroy(removedId, parentHandle);
+         }
+         else
+         {
+            // It was already removed concurrently
+         }
+      }
+
+      public void onRename(NodeContext<S> _source, NodeContext<S> _parent, String _name) throws NavigationServiceException
+      {
+         //
+         String renamedHandle = _source.data.id;
+         D renamed = manager.getNode(context, renamedHandle);
+         if (renamed == null)
+         {
+            throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
+         }
+
+         //
+         D parent = manager.getParent(context, renamed);
+         String parentHandle = manager.getHandle(context, parent);
+         if (manager.getChild(context, parent, _name) != null)
+         {
+            throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
+         }
+
+         // We rename and reorder to compensate the move from the rename
+         manager.setName(context, renamed, _name);
+
+         //
+         next.onRename(renamedHandle, parentHandle, _name);
+      }
+
+      public void onUpdate(NodeContext<S> _source, NodeState state) throws NavigationServiceException
+      {
+         String updatedHandle = _source.data.id;
+         D navigation = manager.getNode(context, updatedHandle);
+         if (navigation == null)
+         {
+            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+         }
+
+         //
+         manager.setState(context, navigation, state);
+
+         //
+         next.onUpdate(updatedHandle, state);
+      }
+
+      public void onMove(NodeContext<S> _source, NodeContext<S> _from, NodeContext<S> _to, NodeContext<S> _previous) throws NavigationServiceException
+      {
+         String srcHandle = _from.data.id;
+         D src = manager.getNode(context, srcHandle);
+         if (src == null)
+         {
+            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
+         }
+
+         //
+         String dstHandle = _to.data.id;
+         D dst = manager.getNode(context, dstHandle);
+         if (dst == null)
+         {
+            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
+         }
+
+         //
+         String movedHandle = _source.data.id;
+         D moved = manager.getNode(context, movedHandle);
+         if (moved == null)
+         {
+            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
+         }
+
+         //
+         D previous;
+         String previousHandle;
+         if (_previous != null)
+         {
+            previousHandle = _previous.data.id;
+            previous = manager.getNode(context, previousHandle);
+            if (previous == null)
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+            }
+         }
+         else
+         {
+            previous = null;
+            previousHandle = null;
+         }
+
+         //
+         if (src != manager.getParent(context, moved))
+         {
+            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
+         }
+
+         //
+         if (src != dst)
+         {
+            String name = manager.getName(context, moved);
+            D existing = manager.getChild(context, dst, name);
+            if (existing != null)
+            {
+               throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME);
+            }
+         }
+
+         //
+         int index;
+         if (previous != null)
+         {
+            index = manager.getChildIndex(context, dst, previous) + 1;
+         }
+         else
+         {
+            index = 0;
+         }
+         manager.addChild(context, dst, index, moved);
+
+         //
+         next.onMove(movedHandle, srcHandle, dstHandle, previousHandle);
       }
    }
 }
