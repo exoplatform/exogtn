@@ -203,4 +203,38 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       }
 
    }
+
+   public void testRebaseRenameDuplicate() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_rename_duplicate");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_rename_duplicate"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root.getChild("a").setName("b");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root2.addChild("b");
+      service.saveNode(root2.context);
+      sync(true);
+
+      //
+      try
+      {
+         service.rebaseNode(root.context, null, null);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
+      }
+
+   }
 }
