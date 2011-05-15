@@ -112,7 +112,7 @@ class Update
                      {
                         if (listener != null)
                         {
-                           listener.onUpdate(new NodeChange.Updated<NodeContext<N1>>(lastCtx, leftDstData.state));
+                           listener.onUpdate(lastCtx,  leftDstData.state);
                         }
                      }
 
@@ -122,7 +122,7 @@ class Update
                         lastCtx.name = leftDstData.name;
                         if (listener != null)
                         {
-                           listener.onRename(new NodeChange.Renamed<NodeContext<N1>>(lastCtx.getParent(), lastCtx, leftDstData.name));
+                           listener.onRename(lastCtx, lastCtx.getParent(), leftDstData.name);
                         }
                      }
 
@@ -154,11 +154,11 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onMove(new NodeChange.Moved<NodeContext<N1>>(
+                  listener.onMove(
+                     moved,
                      from,
                      to,
-                     previous != null ? previous : null,
-                     moved));
+                     previous != null ? previous : null);
                }
 
                //
@@ -185,10 +185,10 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onAdd(new NodeChange.Added<NodeContext<N1>>(
+                  listener.onAdd(
                      parentCtx,
                      previousCtx,
-                     addedCtx));
+                     addedCtx);
                }
 
                //
@@ -205,9 +205,9 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onRemove(new NodeChange.Removed<NodeContext<N1>>(
-                     parentCtx,
-                     removedCtx));
+                  listener.onRemove(
+                     removedCtx,
+                     parentCtx);
                }
 
                //

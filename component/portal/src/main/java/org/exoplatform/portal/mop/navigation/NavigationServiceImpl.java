@@ -34,7 +34,6 @@ import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -364,7 +363,7 @@ public class NavigationServiceImpl implements NavigationService
                      // Generate event
                      if (listener != null)
                      {
-                        listener.onAdd(new NodeChange.Added<NodeContext<N>>(context, previous, childContext));
+                        listener.onAdd(context, previous, childContext);
                         previous = childContext;
                      }
 

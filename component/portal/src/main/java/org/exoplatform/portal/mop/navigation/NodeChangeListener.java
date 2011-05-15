@@ -27,14 +27,18 @@ package org.exoplatform.portal.mop.navigation;
 public interface NodeChangeListener<N>
 {
 
-   void onAdd(NodeChange.Added<N> added);
+   void onAdd(N source, N parent, N previous);
 
-   void onRemove(NodeChange.Removed<N> removed);
+   void onCreate(N source, N parent, N previous, String name);
 
-   void onRename(NodeChange.Renamed<N> renamed);
+   void onRemove(N source, N parent);
 
-   void onUpdate(NodeChange.Updated<N> updated);
+   void onDestroy(N source, N parent);
 
-   void onMove(NodeChange.Moved<N> moved);
+   void onRename(N source, N parent, String name);
+
+   void onUpdate(N source, NodeState state);
+
+   void onMove(N source, N from, N to, N previous);
 
 }

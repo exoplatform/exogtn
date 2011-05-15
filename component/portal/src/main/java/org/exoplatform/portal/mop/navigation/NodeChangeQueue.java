@@ -63,7 +63,7 @@ public class NodeChangeQueue<N> implements NodeChangeListener<N>, Iterable<NodeC
       }
    }
 
-   protected void onChange(NodeChange<N> change)
+   private void onChange(NodeChange<N> change)
    {
       if (changes == null)
       {
@@ -72,28 +72,38 @@ public class NodeChangeQueue<N> implements NodeChangeListener<N>, Iterable<NodeC
       changes.add(change);
    }
 
-   public void onAdd(NodeChange.Added<N> added)
+   public void onAdd(N source, N parent, N previous)
    {
-      onChange(added);
+      onChange(new NodeChange.Added<N>(source, parent, previous));
    }
 
-   public void onRemove(NodeChange.Removed<N> removed)
+   public void onCreate(N source, N parent, N previous, String name)
    {
-      onChange(removed);
+      onChange(new NodeChange.Created<N>(parent, previous, source, name));
    }
 
-   public void onRename(NodeChange.Renamed<N> renamed)
+   public void onRemove(N source, N parent)
    {
-      onChange(renamed);
+      onChange(new NodeChange.Removed<N>(parent, source));
    }
 
-   public void onUpdate(NodeChange.Updated<N> updated)
+   public void onDestroy(N source, N parent)
    {
-      onChange(updated);
+      onChange(new NodeChange.Destroyed<N>(parent, source));
    }
 
-   public void onMove(NodeChange.Moved<N> moved)
+   public void onRename(N source, N parent, String name)
    {
-      onChange(moved);
+      onChange(new NodeChange.Renamed<N>(parent, source, name));
+   }
+
+   public void onUpdate(N source, NodeState state)
+   {
+      onChange(new NodeChange.Updated<N>(source, state));
+   }
+
+   public void onMove(N source, N from, N to, N previous)
+   {
+      onChange(new NodeChange.Moved<N>(from, to, previous, source));
    }
 }

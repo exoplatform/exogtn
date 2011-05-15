@@ -40,6 +40,8 @@ public abstract class NodeChange<N>
       return source;
    }
 
+   protected abstract void dispatch(NodeChangeListener<N> listener);
+
    public final static class Destroyed<N> extends NodeChange<N>
    {
 
@@ -57,6 +59,12 @@ public abstract class NodeChange<N>
       public N getParent()
       {
          return parent;
+      }
+
+      @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onDestroy(source, parent);
       }
 
       @Override
@@ -83,6 +91,12 @@ public abstract class NodeChange<N>
       public N getParent()
       {
          return parent;
+      }
+
+      @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onRemove(source, parent);
       }
 
       @Override
@@ -130,6 +144,12 @@ public abstract class NodeChange<N>
       }
 
       @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onCreate(source, parent, previous, name);
+      }
+
+      @Override
       public String toString()
       {
          return "NodeChange.Created[node" + source + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
@@ -162,6 +182,12 @@ public abstract class NodeChange<N>
       public N getPrevious()
       {
          return previous != null ? previous : null;
+      }
+
+      @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onAdd(source, parent, previous);
       }
 
       @Override
@@ -209,6 +235,12 @@ public abstract class NodeChange<N>
       }
 
       @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onMove(source, from, to, previous);
+      }
+
+      @Override
       public String toString()
       {
          return "NodeChange.Moved[node" + source + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
@@ -244,6 +276,12 @@ public abstract class NodeChange<N>
       }
 
       @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onRename(source, parent, name);
+      }
+
+      @Override
       public String toString()
       {
          return "NodeChange.Renamed[node" + source + ",name=" + name + "]";
@@ -267,6 +305,12 @@ public abstract class NodeChange<N>
       public NodeState getState()
       {
          return state;
+      }
+
+      @Override
+      protected void dispatch(NodeChangeListener<N> listener)
+      {
+         listener.onUpdate(source, state);
       }
 
       @Override
