@@ -321,7 +321,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          else
          {
             this.name = name;
-            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(this, name));
+            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, this, name));
          }
       }
    }

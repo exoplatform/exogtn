@@ -122,7 +122,7 @@ class Update
                         lastCtx.name = leftDstData.name;
                         if (listener != null)
                         {
-                           listener.onRename(new NodeChange.Renamed<NodeContext<N1>>(lastCtx, leftDstData.name));
+                           listener.onRename(new NodeChange.Renamed<NodeContext<N1>>(lastCtx.getParent(), lastCtx, leftDstData.name));
                         }
                      }
 

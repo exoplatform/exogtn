@@ -63,6 +63,7 @@ public class NodeContextUnwrapperListener<N> implements NodeChangeListener<NodeC
    public void onRename(NodeChange.Renamed<NodeContext<N>> nodeContextRenamed)
    {
       delegate.onRename(new NodeChange.Renamed<N>(
+         unwrap(nodeContextRenamed.getParent()),
          unwrap(nodeContextRenamed.getNode()),
          nodeContextRenamed.name
       ));

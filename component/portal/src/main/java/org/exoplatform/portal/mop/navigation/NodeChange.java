@@ -219,14 +219,23 @@ public abstract class NodeChange<N>
    {
 
       /** . */
+      final N parent;
+
+      /** . */
       final String name;
 
-      Renamed(N node, String name)
+      Renamed(N parent, N node, String name)
       {
          super(node);
 
          //
+         this.parent = parent;
          this.name = name;
+      }
+
+      public N getParent()
+      {
+         return parent;
       }
 
       public String getName()
