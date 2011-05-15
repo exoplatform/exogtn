@@ -271,33 +271,48 @@ class Save
             }
 
             //
+            D previous;
+            if (add.previous != null)
+            {
+               previous = manager.getNode(context, add.previous.data.id);
+               if (previous == null)
+               {
+                  throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+               }
+            }
+            else
+            {
+               previous = null;
+            }
+
+            //
             D added = manager.getChild(context, parent, add.name);
             if (added != null)
             {
                throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
             }
+
+            //
+            int index;
+            if (previous != null)
+            {
+               index = manager.getChildIndex(context, parent, previous) + 1;
+            }
             else
             {
-               int index = 0;
-               if (add.previous != null)
-               {
-                  D previous = manager.getNode(context, add.previous.data.id);
-                  if (previous == null)
-                  {
-                     throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-                  }
-                  index = manager.getChildIndex(context, parent, previous) + 1;
-               }
-               added = manager.addChild(context, parent, index, add.name);
-               add.source.data = manager.getData(context, added);
-               add.source.id = manager.getId(context, added);
-               ids.add(manager.getId(context, parent));
+               index = 0;
             }
+            added = manager.addChild(context, parent, index, add.name);
+            add.source.data = manager.getData(context, added);
+            add.source.id = manager.getId(context, added);
+            ids.add(manager.getId(context, parent));
          }
          else if (change instanceof NodeChange.Removed<?>)
          {
             NodeChange.Removed<S> remove = (NodeChange.Removed<S>)change;
             D removed = manager.getNode(context, remove.source.data.id);
+
+            //
             if (removed != null)
             {
                D parent = manager.getParent(context, removed);
@@ -338,21 +353,35 @@ class Save
             }
 
             //
+            D previous;
+            if (move.previous != null)
+            {
+               previous = manager.getNode(context, move.previous.data.id);
+               if (previous == null)
+               {
+                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+               }
+            }
+            else
+            {
+               previous = null;
+            }
+
+            //
             if (src != manager.getParent(context, moved))
             {
                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
             }
 
             //
-            int index = 0;
-            if (move.previous != null)
+            int index;
+            if (previous != null)
             {
-               D previous = manager.getNode(context, move.previous.data.id);
-               if (previous == null)
-               {
-                  throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
-               }
                index = manager.getChildIndex(context, dst, previous) + 1;
+            }
+            else
+            {
+               index = 0;
             }
             manager.addChild(context, dst, index, moved);
 
@@ -363,6 +392,8 @@ class Save
          else if (change instanceof NodeChange.Renamed<?>)
          {
             NodeChange.Renamed<S> rename = (NodeChange.Renamed<S>)change;
+
+            //
             D renamed = manager.getNode(context, rename.source.data.id);
             if (renamed == null)
             {
@@ -388,19 +419,14 @@ class Save
             NodeChange.Updated<S> updated = (NodeChange.Updated<S>)change;
 
             //
-            NodeState state = updated.state;
-
-            //
             D navigation = manager.getNode(context, updated.source.data.id);
-
-            //
             if (navigation == null)
             {
                throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
 
             //
-            manager.setState(context, navigation, state);
+            manager.setState(context, navigation, updated.state);
 
             //
             ids.add(manager.getId(context, navigation));
