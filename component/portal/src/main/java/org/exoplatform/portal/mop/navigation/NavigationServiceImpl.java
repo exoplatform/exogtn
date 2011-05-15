@@ -390,7 +390,7 @@ public class NavigationServiceImpl implements NavigationService
       List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
 
       //
-      class Finisher extends NodeChangeListener.Base<String>
+      class Updater extends NodeChangeListener.Base<String>
       {
 
          /** . */
@@ -401,8 +401,8 @@ public class NavigationServiceImpl implements NavigationService
 
          public void onCreate(String source, String parent, String previous, String name) throws NavigationServiceException
          {
-            Navigation nav = Save.Adapter.MOP.getNode(session, source);
-            NodeData data = Save.Adapter.MOP.getData(session, nav);
+            Navigation nav = HierarchyManager.MOP.getNode(session, source);
+            NodeData data = HierarchyManager.MOP.getData(session, nav);
             node.handle = source;
             node.data = data;
             ids.add(parent);
@@ -428,33 +428,40 @@ public class NavigationServiceImpl implements NavigationService
          public void onMove(String source, String from, String to, String previous) throws NavigationServiceException
          {
             ids.add(source);
-            ids.add(source);
+            ids.add(from);
             ids.add(to);
          }
       }
 
       //
-      Finisher finisher = new Finisher();
+      Updater updater = new Updater();
 
       //
-      NodeChangeListener<NodeContext<N>> save = new Save.Listener<N, POMSession, Navigation>(
+      NodeChangeListener<Navigation> persister = new NodeChangePersister<POMSession, Navigation>(
          session,
-         Save.Adapter.MOP,
-         finisher
+         HierarchyManager.MOP,
+         updater
       );
-      
+
+      //
+      NodeChangeListener<NodeContext<N>> merger = new NodeChangeMerger<N, POMSession, Navigation>(
+         session,
+         HierarchyManager.MOP,
+         persister
+      );
+
       // Compute set of ids to invalidate
       for (final NodeChange<NodeContext<N>> src : changes)
       {
-         finisher.node = src.source;
-         src.dispatch(save);
+         updater.node = src.source;
+         src.dispatch(merger);
       }
 
       // Make consistent
       update(context);
 
       //
-      dataCache.removeNodeData(session, finisher.ids);
+      dataCache.removeNodeData(session, updater.ids);
    }
 
    private <N> void update(NodeContext<N> context) throws NavigationServiceException
@@ -491,16 +498,23 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //
-      NodeChangeListener<NodeContext<N>> save = new Save.Listener<N, Object, NodeContext<N>>(
+      NodeChangeListener<NodeContext<N>> persister = new NodeChangePersister<Object, NodeContext<N>>(
          baba.tree,
-         (Save.Adapter)Save.Adapter.CONTEXT,
+         (HierarchyManager) HierarchyManager.CONTEXT,
          NodeChangeListener.Base.<String>noop()
+      );
+
+      //
+      NodeChangeListener<NodeContext<N>> merger = new NodeChangeMerger<N, Object, NodeContext<N>>(
+         baba.tree,
+         (HierarchyManager) HierarchyManager.CONTEXT,
+         persister
       );
 
       //
       for (NodeChange<NodeContext<N>> change : changes)
       {
-         change.dispatch(save);
+         change.dispatch(merger);
       }
 
       //
