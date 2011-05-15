@@ -49,7 +49,7 @@ class Save
 
       abstract N getParent(C context, N node);
 
-      abstract N getNode(C context, String id);
+      abstract N getNode(C context, String handle);
 
       abstract N getChild(C context, N node, String name);
 
@@ -61,7 +61,7 @@ class Save
 
       abstract NodeData getData(C context, N node);
 
-      abstract String getId(C context, N node);
+      abstract String getHandle(C context, N node);
 
       abstract void destroy(C context, N node);
 
@@ -76,9 +76,9 @@ class Save
             return node.getParent();
          }
 
-         public NodeContext<Object> getNode(TreeContext<Object> context, String id)
+         public NodeContext<Object> getNode(TreeContext<Object> context, String handle)
          {
-            return context.root.getDescendant(id);
+            return context.root.getDescendant(handle);
          }
 
          public NodeContext<Object> getChild(TreeContext<Object> context, NodeContext<Object> node, String name)
@@ -118,9 +118,9 @@ class Save
             return node.data;
          }
 
-         public String getId(TreeContext<Object> context, NodeContext<Object> node)
+         public String getHandle(TreeContext<Object> context, NodeContext<Object> node)
          {
-            return node.id;
+            return node.handle;
          }
 
          public void destroy(TreeContext<Object> context, NodeContext<Object> node)
@@ -146,9 +146,9 @@ class Save
             return node.getParent();
          }
 
-         public Navigation getNode(POMSession context, String id)
+         public Navigation getNode(POMSession context, String handle)
          {
-            return context.findObjectById(ObjectType.NAVIGATION, id);
+            return context.findObjectById(ObjectType.NAVIGATION, handle);
          }
 
          public Navigation getChild(POMSession context, Navigation node, String name)
@@ -178,7 +178,7 @@ class Save
             return new NodeData(node);
          }
 
-         public String getId(POMSession context, Navigation node)
+         public String getHandle(POMSession context, Navigation node)
          {
             return node.getObjectId();
          }
@@ -304,8 +304,8 @@ class Save
             }
             added = manager.addChild(context, parent, index, add.name);
             add.source.data = manager.getData(context, added);
-            add.source.id = manager.getId(context, added);
-            ids.add(manager.getId(context, parent));
+            add.source.handle = manager.getHandle(context, added);
+            ids.add(manager.getHandle(context, parent));
          }
          else if (change instanceof NodeChange.Destroyed<?>)
          {
@@ -316,13 +316,13 @@ class Save
             if (removed != null)
             {
                D parent = manager.getParent(context, removed);
-               String removedId = manager.getId(context, removed);
+               String removedId = manager.getHandle(context, removed);
                manager.destroy(context, removed);
                remove.source.data = null;
 
                //
                ids.add(removedId);
-               ids.add(manager.getId(context, parent));
+               ids.add(manager.getHandle(context, parent));
             }
             else
             {
@@ -386,8 +386,8 @@ class Save
             manager.addChild(context, dst, index, moved);
 
             //
-            ids.add(manager.getId(context, src));
-            ids.add(manager.getId(context, dst));
+            ids.add(manager.getHandle(context, src));
+            ids.add(manager.getHandle(context, dst));
          }
          else if (change instanceof NodeChange.Renamed<?>)
          {
@@ -411,8 +411,8 @@ class Save
             manager.setName(context, renamed, rename.name);
 
             //
-            ids.add(manager.getId(context, parent));
-            ids.add(manager.getId(context, renamed));
+            ids.add(manager.getHandle(context, parent));
+            ids.add(manager.getHandle(context, renamed));
          }
          else if (change instanceof NodeChange.Updated<?>)
          {
@@ -429,7 +429,7 @@ class Save
             manager.setState(context, navigation, updated.state);
 
             //
-            ids.add(manager.getId(context, navigation));
+            ids.add(manager.getHandle(context, navigation));
          }
          else
          {

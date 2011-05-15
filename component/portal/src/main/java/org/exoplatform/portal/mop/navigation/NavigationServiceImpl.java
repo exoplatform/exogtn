@@ -421,7 +421,7 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       POMSession session = manager.getSession();
-      NodeData data = dataCache.getNodeData(session, root.id);
+      NodeData data = dataCache.getNodeData(session, root.getId());
       NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
 
       // Expand
@@ -438,7 +438,7 @@ public class NavigationServiceImpl implements NavigationService
       {
          public String getHandle(NodeContext<N> node)
          {
-            return node.id;
+            return node.handle;
          }
 
          public String[] getChildren(NodeContext<N> node)
@@ -448,7 +448,7 @@ public class NavigationServiceImpl implements NavigationService
                ArrayList<String> blah = new ArrayList<String>();
                for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
                {
-                  blah.add(current.id);
+                  blah.add(current.handle);
                }
                return blah.toArray(new String[blah.size()]);
             } else

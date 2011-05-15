@@ -38,8 +38,8 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
    /** . */
    final N node;
 
-   /** The internal id, either the persistent id or a sequence id. */
-   String id;
+   /** The handle: either the persistent id or a sequence id. */
+   String handle;
 
    /** node data representing persistent state. */
    NodeData data;
@@ -61,7 +61,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    NodeContext(NodeModel<N> model, NodeData data)
    {
-      this.id = data.id;
+      this.handle = data.id;
       this.name = data.getName();
       this.tree = new TreeContext<N>(model, this);
       this.node = tree.model.create(this);
@@ -74,7 +74,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    private NodeContext(TreeContext<N> tree, NodeData data)
    {
-      this.id = data.id;
+      this.handle = data.id;
       this.name = data.getName();
       this.tree = tree;
       this.node = tree.model.create(this);
@@ -87,7 +87,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    private NodeContext(TreeContext<N> tree, String name, NodeState state)
    {
-      this.id = Integer.toString(tree.sequence++);
+      this.handle = Integer.toString(tree.sequence++);
       this.name = name;
       this.tree = tree;
       this.node = tree.model.create(this);
@@ -160,16 +160,16 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       throw new IllegalArgumentException("Context " + ancestor + " is not an ancestor of " + this);
    }
 
-   public NodeContext<N> getDescendant(String id) throws NullPointerException
+   public NodeContext<N> getDescendant(String handle) throws NullPointerException
    {
-      if (id == null)
+      if (handle == null)
       {
          throw new NullPointerException();
       }
 
       //
       NodeContext<N> found = null;
-      if (this.id.equals(id))
+      if (this.handle.equals(handle))
       {
          found = this;
       }
@@ -179,7 +179,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          {
             for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
             {
-               found = current.getDescendant(id);
+               found = current.getDescendant(handle);
                if (found != null)
                {
                   break;
