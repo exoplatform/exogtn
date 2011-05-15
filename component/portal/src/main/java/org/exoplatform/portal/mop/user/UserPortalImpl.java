@@ -28,6 +28,7 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
+import org.exoplatform.portal.mop.navigation.NodeContextUnwrapperListener;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -196,12 +197,12 @@ public class UserPortalImpl implements UserPortal
 
    public UserNode getNode(UserNavigation userNavigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
    {
-      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, listener).getNode();
+      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, NodeContextUnwrapperListener.safeWrap(listener)).getNode();
    }
 
    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
    {
-      navigationService.updateNode(node.context, scope, listener);
+      navigationService.updateNode(node.context, scope, NodeContextUnwrapperListener.safeWrap(listener));
    }
    
    private class MatchingScope implements Scope

@@ -68,7 +68,7 @@ class Update
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
       Adapter<N2> updateAdapter,
-      NodeChangeListener<N1> listener
+      NodeChangeListener<NodeContext<N1>> listener
       )
    {
       // We create the diff object
@@ -112,7 +112,7 @@ class Update
                      {
                         if (listener != null)
                         {
-                           listener.onUpdate(new NodeChange.Updated<N1>(lastCtx, leftDstData.state));
+                           listener.onUpdate(new NodeChange.Updated<NodeContext<N1>>(lastCtx, leftDstData.state));
                         }
                      }
 
@@ -122,7 +122,7 @@ class Update
                         lastCtx.name = leftDstData.name;
                         if (listener != null)
                         {
-                           listener.onRename(new NodeChange.Renamed<N1>(lastCtx, leftDstData.name));
+                           listener.onRename(new NodeChange.Renamed<NodeContext<N1>>(lastCtx, leftDstData.name));
                         }
                      }
 
@@ -154,7 +154,7 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onMove(new NodeChange.Moved<N1>(
+                  listener.onMove(new NodeChange.Moved<NodeContext<N1>>(
                      from,
                      to,
                      previous != null ? previous : null,
@@ -185,7 +185,7 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onAdd(new NodeChange.Added<N1>(
+                  listener.onAdd(new NodeChange.Added<NodeContext<N1>>(
                      parentCtx,
                      previousCtx,
                      addedCtx));
@@ -205,7 +205,7 @@ class Update
                //
                if (listener != null)
                {
-                  listener.onRemove(new NodeChange.Removed<N1>(
+                  listener.onRemove(new NodeChange.Removed<NodeContext<N1>>(
                      parentCtx,
                      removedCtx));
                }

@@ -214,7 +214,7 @@ public class Node
    public Iterator<NodeChange<Node>> update(NavigationService service, Scope scope) throws NavigationServiceException
    {
       NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
-      service.updateNode(context, scope, queue);
+      service.updateNode(context, scope, NodeContextUnwrapperListener.safeWrap(queue));
       return queue.iterator();
    }
 

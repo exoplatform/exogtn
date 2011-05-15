@@ -95,7 +95,7 @@ public class NavigationServiceWrapper implements NavigationService
       return destroyed;
    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener)
    {
       return service.loadNode(model, navigation, scope, listener);
    }
@@ -109,12 +109,12 @@ public class NavigationServiceWrapper implements NavigationService
       notify(EventType.NAVIGATION_UPDATED, key);
    }
 
-   public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException
+   public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
    {
       service.updateNode(context, scope, listener);
    }
 
-   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException
+   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
    {
       service.rebaseNode(context, scope, listener);
    }

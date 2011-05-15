@@ -440,7 +440,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertEquals("bar", added.getNode().getName());
       assertEquals(null, added.previous);
-      assertEquals("bar", added.source.name);
+      assertEquals("bar", added.source.getName());
       assertFalse(changes.hasNext());
 
       //
@@ -606,12 +606,12 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //Browser 1: need NodeChange event to update UI
-      NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
+      NodeChangeQueue<NodeContext<Node>> queue = new NodeChangeQueue<NodeContext<Node>>();
       //If update "root1"  --> NodeChange.Moved  --> ok
       //If update "b"        --> NodeChange.Add      --> ok
       //update "a"             --> no NodeChange, we need an event here (NodeChange.Remove) so UI can be updated
       service.updateNode(a.context, Scope.CHILDREN, queue);
-      Iterator<NodeChange<Node>> changes = queue.iterator();
+      Iterator<NodeChange<NodeContext<Node>>> changes = queue.iterator();
       assertTrue(changes.hasNext());
    }
 

@@ -42,7 +42,7 @@ class TreeContext<N> implements Scope.Visitor
 {
 
    /** . */
-   private LinkedList<NodeChange<N>> changes;
+   private LinkedList<NodeChange<NodeContext<N>>> changes;
 
    /** . */
    final NodeModel<N> model;
@@ -64,7 +64,7 @@ class TreeContext<N> implements Scope.Visitor
       this.root = root;
    }
 
-   void addChange(NodeChange<N> change)
+   void addChange(NodeChange<NodeContext<N>> change)
    {
       if (editMode)
       {
@@ -72,7 +72,7 @@ class TreeContext<N> implements Scope.Visitor
       }
       if (changes == null)
       {
-         changes = new LinkedList<NodeChange<N>>();
+         changes = new LinkedList<NodeChange<NodeContext<N>>>();
       }
       changes.addLast(change);
    }
@@ -81,7 +81,7 @@ class TreeContext<N> implements Scope.Visitor
       return changes != null && changes.size() > 0;
    }
 
-   List<NodeChange<N>> peekChanges()
+   List<NodeChange<NodeContext<N>>> peekChanges()
    {
       if (hasChanges())
       {
@@ -93,11 +93,11 @@ class TreeContext<N> implements Scope.Visitor
       }
    }
 
-   List<NodeChange<N>> popChanges()
+   List<NodeChange<NodeContext<N>>> popChanges()
    {
       if (hasChanges())
       {
-         LinkedList<NodeChange<N>> tmp = changes;
+         LinkedList<NodeChange<NodeContext<N>>> tmp = changes;
          changes = null;
          return tmp;
       }

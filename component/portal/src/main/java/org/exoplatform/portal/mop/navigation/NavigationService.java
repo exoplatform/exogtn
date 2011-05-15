@@ -82,7 +82,7 @@ public interface NavigationService
     * @throws NullPointerException if any argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException;
+   <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
 
    /**
     * Save the specified context state to the persistent storage.
@@ -105,7 +105,7 @@ public interface NavigationService
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     * @throws IllegalArgumentException if the context argument has pending changes
     */
-   <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
+   <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
    /**
     * Rebase the specified context with the most recent state.
@@ -117,5 +117,5 @@ public interface NavigationService
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, NavigationServiceException;
+   <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
 }

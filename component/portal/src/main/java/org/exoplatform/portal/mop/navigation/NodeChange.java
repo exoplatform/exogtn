@@ -28,25 +28,25 @@ public abstract class NodeChange<N>
 {
 
    /** . */
-   final NodeContext<N> source;
+   final N source;
 
-   private NodeChange(NodeContext<N> source)
+   private NodeChange(N source)
    {
       this.source = source;
    }
 
    public final N getNode()
    {
-      return source.node;
+      return source;
    }
 
    public final static class Destroyed<N> extends NodeChange<N>
    {
 
       /** . */
-      final NodeContext<N> parent;
+      final N parent;
 
-      Destroyed(NodeContext<N> parent, NodeContext<N> node)
+      Destroyed(N parent, N node)
       {
          super(node);
 
@@ -56,7 +56,7 @@ public abstract class NodeChange<N>
 
       public N getParent()
       {
-         return parent.node;
+         return parent;
       }
 
       @Override
@@ -70,9 +70,9 @@ public abstract class NodeChange<N>
    {
 
       /** . */
-      final NodeContext<N> parent;
+      final N parent;
 
-      Removed(NodeContext<N> parent, NodeContext<N> node)
+      Removed(N parent, N node)
       {
          super(node);
 
@@ -82,7 +82,7 @@ public abstract class NodeChange<N>
 
       public N getParent()
       {
-         return parent.node;
+         return parent;
       }
 
       @Override
@@ -96,15 +96,15 @@ public abstract class NodeChange<N>
    {
 
       /** . */
-      final NodeContext<N> parent;
+      final N parent;
 
       /** . */
-      final NodeContext<N> previous;
+      final N previous;
 
       /** . */
       final String name;
 
-      Created(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node, String name)
+      Created(N parent, N previous, N node, String name)
       {
          super(node);
 
@@ -116,12 +116,12 @@ public abstract class NodeChange<N>
 
       public N getParent()
       {
-         return parent.node;
+         return parent;
       }
 
       public N getPrevious()
       {
-         return previous != null ? previous.node : null;
+         return previous;
       }
 
       public String getName()
@@ -140,12 +140,12 @@ public abstract class NodeChange<N>
    {
 
       /** . */
-      final NodeContext<N> parent;
+      final N parent;
 
       /** . */
-      final NodeContext<N> previous;
+      final N previous;
 
-      Added(NodeContext<N> parent, NodeContext<N> previous, NodeContext<N> node)
+      Added(N parent, N previous, N node)
       {
          super(node);
 
@@ -156,12 +156,12 @@ public abstract class NodeChange<N>
 
       public N getParent()
       {
-         return parent.node;
+         return parent;
       }
 
       public N getPrevious()
       {
-         return previous != null ? previous.node : null;
+         return previous != null ? previous : null;
       }
 
       @Override
@@ -175,15 +175,15 @@ public abstract class NodeChange<N>
    {
       
       /** . */
-      final NodeContext<N> from;
+      final N from;
 
       /** . */
-      final NodeContext<N> to;
+      final N to;
 
       /** . */
-      final NodeContext<N> previous;
+      final N previous;
 
-      Moved(NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous, NodeContext<N> node)
+      Moved(N from, N to, N previous, N node)
       {
          super(node);
 
@@ -195,17 +195,17 @@ public abstract class NodeChange<N>
 
       public N getFrom()
       {
-         return from.node;
+         return from;
       }
 
       public N getTo()
       {
-         return to.node;
+         return to;
       }
 
       public N getPrevious()
       {
-         return previous != null ? previous.node : null;
+         return previous != null ? previous : null;
       }
 
       @Override
@@ -221,7 +221,7 @@ public abstract class NodeChange<N>
       /** . */
       final String name;
 
-      Renamed(NodeContext<N> node, String name)
+      Renamed(N node, String name)
       {
          super(node);
 
@@ -247,7 +247,7 @@ public abstract class NodeChange<N>
       /** . */
       final NodeState state;
 
-      public Updated(NodeContext<N> node, NodeState state)
+      public Updated(N node, NodeState state)
       {
          super(node);
 

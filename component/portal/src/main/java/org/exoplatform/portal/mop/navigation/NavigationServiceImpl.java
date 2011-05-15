@@ -171,7 +171,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<N> listener)
+   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener)
    {
       if (model == null)
       {
@@ -260,7 +260,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void updateNode(final NodeContext<N> root, Scope scope, NodeChangeListener<N> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
+   public <N> void updateNode(final NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
@@ -328,7 +328,7 @@ public class NavigationServiceImpl implements NavigationService
       NodeContext<N> context,
       Scope.Visitor visitor,
       int depth,
-      NodeChangeListener<N> listener)
+      NodeChangeListener<NodeContext<N>> listener)
    {
       // Obtain most actual data
       NodeData cachedData = dataCache.getNodeData(session, context.data.id);
@@ -362,7 +362,7 @@ public class NavigationServiceImpl implements NavigationService
                      // Generate event
                      if (listener != null)
                      {
-                        listener.onAdd(new NodeChange.Added<N>(context, previous, childContext));
+                        listener.onAdd(new NodeChange.Added<NodeContext<N>>(context, previous, childContext));
                         previous = childContext;
                      }
 
@@ -386,7 +386,7 @@ public class NavigationServiceImpl implements NavigationService
    {
       POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
-      List<NodeChange<N>> changes = tree.popChanges();
+      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
 
       //
       Collection<String> ids = Save.save(changes, session, Save.Adapter.MOP);
@@ -411,7 +411,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<N> listener) throws NavigationServiceException
+   public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
    {
       // No changes -> do an update operation instead as it's simpler and cheaper
       if (!root.tree.hasChanges())
@@ -427,7 +427,7 @@ public class NavigationServiceImpl implements NavigationService
       // Expand
       expand(session, context, root.tree, 0, null  );
 
-      List<NodeChange<N>> changes = root.tree.peekChanges();
+      List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //

@@ -321,7 +321,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          else
          {
             this.name = name;
-            tree.addChange(new NodeChange.Renamed<N>(this, name));
+            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(this, name));
          }
       }
    }
@@ -418,7 +418,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      tree.addChange(new NodeChange.Updated<N>(this, state));
+      tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
 
       //
       this.state = state;
@@ -666,11 +666,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       //
       if (previousParent != null)
       {
-         tree.addChange(new NodeChange.Moved<N>(previousParent, this, child.getPrevious(), child));
+         tree.addChange(new NodeChange.Moved<NodeContext<N>>(previousParent, this, child.getPrevious(), child));
       }
       else
       {
-         tree.addChange(new NodeChange.Created<N>(this, child.getPrevious(), child, child.name));
+         tree.addChange(new NodeChange.Created<NodeContext<N>>(this, child.getPrevious(), child, child.name));
       }
    }
 
@@ -701,7 +701,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
          node.remove();
 
          //
-         tree.addChange(new NodeChange.Destroyed<N>(this, node));
+         tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(this, node));
 
          //
          return true;

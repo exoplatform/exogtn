@@ -260,7 +260,7 @@ class Save
     * @throws org.exoplatform.portal.mop.navigation.NavigationServiceException any navigation exception
     */
    static <S, C, D> Collection<String> save(
-      Iterable<NodeChange<S>> changes,
+      Iterable<NodeChange<NodeContext<S>>> changes,
       C context,
       Adapter<C, D> manager) throws NavigationServiceException
    {
@@ -269,11 +269,11 @@ class Save
       Set<String> ids = new HashSet<String>();
 
       // First pass we update persistent store
-      for (NodeChange<S> change : changes)
+      for (NodeChange<NodeContext<S>> change : changes)
       {
          if (change instanceof NodeChange.Created<?>)
          {
-            NodeChange.Created<S> add = (NodeChange.Created<S>)change;
+            NodeChange.Created<NodeContext<S>> add = (NodeChange.Created<NodeContext<S>>)change;
 
             //
             D parent = manager.getNode(context, add.parent.data.id);
@@ -321,7 +321,7 @@ class Save
          }
          else if (change instanceof NodeChange.Destroyed<?>)
          {
-            NodeChange.Destroyed<S> remove = (NodeChange.Destroyed<S>)change;
+            NodeChange.Destroyed<NodeContext<S>> remove = (NodeChange.Destroyed<NodeContext<S>>)change;
             D removed = manager.getNode(context, remove.source.data.id);
 
             //
@@ -343,7 +343,7 @@ class Save
          }
          else if (change instanceof NodeChange.Moved<?>)
          {
-            NodeChange.Moved<S> move = (NodeChange.Moved<S>)change;
+            NodeChange.Moved<NodeContext<S>> move = (NodeChange.Moved<NodeContext<S>>)change;
             D src = manager.getNode(context, move.from.data.id);
             if (src == null)
             {
@@ -414,7 +414,7 @@ class Save
          }
          else if (change instanceof NodeChange.Renamed<?>)
          {
-            NodeChange.Renamed<S> rename = (NodeChange.Renamed<S>)change;
+            NodeChange.Renamed<NodeContext<S>> rename = (NodeChange.Renamed<NodeContext<S>>)change;
 
             //
             D renamed = manager.getNode(context, rename.source.data.id);
@@ -439,7 +439,7 @@ class Save
          }
          else if (change instanceof NodeChange.Updated<?>)
          {
-            NodeChange.Updated<S> updated = (NodeChange.Updated<S>)change;
+            NodeChange.Updated<NodeContext<S>> updated = (NodeChange.Updated<NodeContext<S>>)change;
 
             //
             D navigation = manager.getNode(context, updated.source.data.id);
