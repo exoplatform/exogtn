@@ -225,7 +225,19 @@ public class NavigationServiceImpl implements NavigationService
 
       public String[] getChildren(NodeContext<N> node)
       {
-         return node.data.children;
+         if (node.isExpanded())
+         {
+            ArrayList<String> array = new ArrayList<String>();
+            for (NodeContext<N> current = node.getFirst();current != null;current = current.getNext())
+            {
+               array.add(current.data.id);
+            }
+            return array.toArray(new String[array.size()]);
+         }
+         else
+         {
+            return Utils.EMPTY_STRING_ARRAY;
+         }
       }
 
       public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
@@ -295,32 +307,19 @@ public class NavigationServiceImpl implements NavigationService
 
       //
       Scope.Visitor visitor;
-
-      //
+      if (scope != null)
+      {
+         visitor = new FederatedVisitor<N>(root.tree, root, scope);
+      }
+      else
+      {
+         visitor = root.tree;
+      }
 
       //
       if (root.tree.root != root)
       {
-         if (scope != null)
-         {
-            visitor = new FederatedVisitor<N>(root, scope);
-         }
-         else
-         {
-            visitor = null;
-         }
          root = root.tree.root;
-      }
-      else
-      {
-         if (scope != null)
-         {
-            visitor = scope.get();
-         }
-         else
-         {
-            visitor = null;
-         }
       }
 
       //
@@ -337,14 +336,14 @@ public class NavigationServiceImpl implements NavigationService
       try
       {
 
-         Update.perform(
+         Update2.perform(
             root,
             new SrcAdapter<N>(),
             data,
             new DstAdapter(session),
             Update.Adapter.NODE_DATA,
             listener,
-            root.tree);
+            visitor);
       }
       finally
       {
@@ -353,7 +352,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       // Now expand
-      expand(session, root, visitor, 0, listener);
+      // expand(session, root, visitor, 0, listener);
    }
 
    private <N> void expand(
@@ -558,12 +557,29 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
+      Scope.Visitor visitor;
+      if (scope != null)
+      {
+         visitor = new FederatedVisitor<N>(root.tree.origin(), root, scope);
+      }
+      else
+      {
+         visitor = root.tree.origin();
+      }
+
+      //
+      if (root.tree.root != root)
+      {
+         root = root.tree.root;
+      }
+
+      //
       POMSession session = manager.getSession();
       NodeData data = dataCache.getNodeData(session, root.getId());
       final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
 
       // Expand
-      expand(session, context, root.tree.origin(), 0, null);
+      expand(session, context, visitor, 0, null);
 
       //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
@@ -643,7 +659,7 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      Update.perform(
+      Update2.perform(
          root,
          aaa,
          context,
@@ -656,7 +672,7 @@ public class NavigationServiceImpl implements NavigationService
             }
          },
          listener,
-         root.tree);
+         context.tree);
    }
 
    public void clearCache()
@@ -666,6 +682,9 @@ public class NavigationServiceImpl implements NavigationService
 
    private static class FederatedVisitor<N> implements Scope.Visitor
    {
+
+      /** . */
+      private final Scope.Visitor visitor;
 
       /** . */
       private final NodeContext<N> federationRoot;
@@ -679,8 +698,9 @@ public class NavigationServiceImpl implements NavigationService
       /** . */
       private Scope.Visitor federated;
 
-      private FederatedVisitor(NodeContext<N> federationRoot, Scope federatedScope)
+      private FederatedVisitor(Scope.Visitor visitor, NodeContext<N> federationRoot, Scope federatedScope)
       {
+         this.visitor = visitor;
          this.federationRoot = federationRoot;
          this.federatedScope = federatedScope;
          this.federated = null;
@@ -706,8 +726,8 @@ public class NavigationServiceImpl implements NavigationService
          }
 
          // Override
-         NodeContext<N> descendant = federationRoot.tree.root.getDescendant(id);
-         if (descendant != null && descendant.isExpanded())
+         VisitMode override = visitor.enter(depth, id, name, state);
+         if (override == VisitMode.ALL_CHILDREN)
          {
             visit = VisitMode.ALL_CHILDREN;
          }

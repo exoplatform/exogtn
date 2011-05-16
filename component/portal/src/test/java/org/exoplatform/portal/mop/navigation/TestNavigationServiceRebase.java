@@ -260,6 +260,35 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       {
          assertEquals(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
       }
+   }
 
+   public void testFederation() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_federation");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a").addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_federation"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).node;
+      final Node a = root1.getChild("a");
+      final Node c = root1.addChild("c");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root2.addChild("d").addChild("e");
+      service.saveNode(root2.context);
+      sync(true);
+
+      //
+      service.rebaseNode(a.context, Scope.CHILDREN, null);
+      System.out.println("root1 = " + root1.toString(10));
+      //service.rebaseNode(a.context, Scope.CHILDREN, null);
+//      assertNotNull(a.getChild("b"));
+//      assertEquals(3, root1.getSize());
    }
 }

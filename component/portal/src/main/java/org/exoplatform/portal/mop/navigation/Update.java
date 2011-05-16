@@ -19,11 +19,14 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.commons.utils.Queues;
 import org.exoplatform.portal.tree.diff.Adapters;
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
 import org.exoplatform.portal.tree.diff.HierarchyChangeType;
 import org.exoplatform.portal.tree.diff.HierarchyDiff;
+
+import java.util.Queue;
 
 /**
  * The update operation.
@@ -84,7 +87,12 @@ class Update
 
       // The last browsed context
       NodeContext<N1> lastCtx = null;
-      HierarchyChangeType previousChange = HierarchyChangeType.KEEP;
+
+      // This is a not great hack but for now it's ok
+      Queue<NodeContext<N1>> addQ = Queues.lifo();
+
+      //
+      int depth = 0;
 
       //
       while (it.hasNext())
@@ -95,23 +103,44 @@ class Update
             case KEEP:
                break;
             case ENTER:
-
-               // Maintain scope
-
-               // Cut the tree if necessary
-               if (previousChange == HierarchyChangeType.KEEP || previousChange == HierarchyChangeType.MOVED_IN)
+            {
+               // Compute visit
+               VisitMode visit = null;
+               N2 d = it.getDestination();
+               if (d != null)
                {
-                  NodeContext<N1> context = it.getSource();
-                  if (!context.isExpanded())
+                  NodeData data = updateAdapter.getData(d);
+                  if (data != null)
                   {
-                     it.skip();
+                     visit = visitor.enter(depth, data.id, data.name, data.state);
                   }
                }
-               else
+
+               // Cut the tree if necessary
+               if (visit != VisitMode.ALL_CHILDREN)
                {
                   it.skip();
                }
+               else
+               {
+                  NodeContext<N1> aaa = it.getSource();
+                  if (aaa != null)
+                  {
+                     if (!aaa.isExpanded())
+                     {
+                        aaa.expand();
+                     }
+                  }
+                  else
+                  {
+                     addQ.peek().expand();
+                  }
+               }
+
+               //
+               depth++;
                break;
+            }
             case LEAVE:
             {
                // Update last context
@@ -149,6 +178,26 @@ class Update
                      lastCtx.data = leftDstData;
                   }
                }
+
+               //
+               N2 d = it.getDestination();
+               if (d != null)
+               {
+                  NodeData data = updateAdapter.getData(d);
+                  if (data != null)
+                  {
+                     visitor.leave(depth, data.id, data.name, data.state);
+                  }
+               }
+
+               //
+               if (addQ.size() > 0)
+               {
+                  addQ.poll();
+               }
+
+               //
+               depth--;
                break;
             }
             case MOVED_OUT:
@@ -186,6 +235,12 @@ class Update
             case ADDED:
             {
                NodeContext<N1> parentCtx = it.peekSourceRoot();
+               if (parentCtx == null)
+               {
+                  parentCtx = addQ.peek();
+               }
+
+               //
                NodeContext<N1> addedCtx;
                NodeContext<N1> previousCtx;
                N2 added = it.getDestination();
@@ -209,6 +264,9 @@ class Update
                      previousCtx,
                      addedCtx);
                }
+
+               //
+               addQ.add(addedCtx);
 
                //
                break;
@@ -235,9 +293,6 @@ class Update
             default:
                throw new UnsupportedOperationException("todo : " + change);
          }
-
-         // Save for next iteration
-         previousChange = change;
       }
    }
 }

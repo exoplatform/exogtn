@@ -434,13 +434,13 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Iterator<NodeChange<Node>> changes = root1.update(service, Scope.GRANDCHILDREN);
       Node foo = root1.getChild("foo");
       assertEquals("foo", foo.getState().getLabel());
-      NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>)changes.next();
-      assertSame(foo, updated.getNode());
-      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
       assertEquals("bar", added.getNode().getName());
       assertEquals(null, added.previous);
       assertEquals("bar", added.source.getName());
+      NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>)changes.next();
+      assertSame(foo, updated.getNode());
+      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
       assertFalse(changes.hasNext());
 
       //
