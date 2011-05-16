@@ -20,8 +20,11 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * <p>The context of a tree, that performs:
@@ -62,6 +65,60 @@ class TreeContext<N> implements Scope.Visitor
       this.editMode = false;
       this.sequence =  0;
       this.root = root;
+   }
+
+   // Improve that method if we can
+   Scope.Visitor origin()
+   {
+
+      final Map<String, Boolean> map = new HashMap<String, Boolean>();
+
+      //
+      populate(map, root);
+
+      //
+      if (changes != null)
+      {
+         ListIterator<NodeChange<NodeContext<N>>> it = changes.listIterator(changes.size());
+         while (it.hasPrevious())
+         {
+            NodeChange<NodeContext<N>> change = it.previous();
+            if (change instanceof NodeChange.Created<?>)
+            {
+               NodeChange.Created<NodeContext<N>> created = (NodeChange.Created<NodeContext<N>>)change;
+               map.remove(created.source.handle);
+            }
+            else if (change instanceof NodeChange.Destroyed<?>)
+            {
+               NodeChange.Destroyed<NodeContext<N>> destroyed = (NodeChange.Destroyed<NodeContext<N>>)change;
+               map.put(destroyed.source.handle, Boolean.TRUE);
+            }
+         }
+      }
+
+      //
+      return new Scope.Visitor()
+      {
+         public VisitMode enter(int depth, String id, String name, NodeState state)
+         {
+            return map.containsKey(id) ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
+         }
+         public void leave(int depth, String id, String name, NodeState state)
+         {
+         }
+      };
+   }
+
+   private void populate(Map<String, Boolean> map, NodeContext<N> ctx)
+   {
+      if (ctx.isExpanded())
+      {
+         map.put(ctx.handle, Boolean.TRUE);
+         for (NodeContext<N> current = ctx.getFirst();current != null;current = current.getNext())
+         {
+            populate(map, current);
+         }
+      }
    }
 
    void addChange(NodeChange<NodeContext<N>> change)

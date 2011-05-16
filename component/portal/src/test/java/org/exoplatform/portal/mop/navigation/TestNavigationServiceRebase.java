@@ -137,6 +137,31 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
 
    }
 
+   /**
+    * This test is quite important as it ensures that the copy tree during the rebase operation
+    * is rebuild from the initial state. Indeed the move / destroy operations would fail otherwise
+    * as the move operation would not find its source.
+    */
+   public void testRebase4()
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase4");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a").addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase4"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root.addChild(root.getChild("a").getChild("b"));
+      root.removeChild("a");
+
+      //
+      service.rebaseNode(root.context, null, null);
+   }
+
    public void testRebaseAddDuplicate() throws Exception
    {
       MOPService mop = mgr.getPOMService();

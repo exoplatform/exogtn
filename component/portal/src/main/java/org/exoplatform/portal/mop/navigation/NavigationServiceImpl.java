@@ -563,7 +563,7 @@ public class NavigationServiceImpl implements NavigationService
       final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
 
       // Expand
-      expand(session, context, root.tree, 0, null);
+      expand(session, context, root.tree.origin(), 0, null);
 
       //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();

@@ -31,6 +31,7 @@ public class NavigationServiceException extends RuntimeException
 
    public NavigationServiceException(NavigationError error)
    {
+      super(error.toString());
       this.error = error;
    }
 
