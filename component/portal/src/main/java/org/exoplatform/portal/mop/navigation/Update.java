@@ -68,7 +68,8 @@ class Update
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
       Adapter<N2> updateAdapter,
-      NodeChangeListener<NodeContext<N1>> listener
+      NodeChangeListener<NodeContext<N1>> listener,
+      Scope.Visitor visitor
       )
    {
       // We create the diff object
@@ -94,6 +95,11 @@ class Update
             case KEEP:
                break;
             case ENTER:
+               NodeContext<N1> context = it.getSource();
+               if (context == null || !context.isExpanded())
+               {
+                  it.skip();
+               }
                break;
             case LEAVE:
             {

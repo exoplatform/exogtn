@@ -225,7 +225,7 @@ public class NavigationServiceImpl implements NavigationService
 
       public String[] getChildren(NodeContext<N> node)
       {
-         return node.isExpanded() ? node.data.children : Utils.EMPTY_STRING_ARRAY;
+         return node.data.children;
       }
 
       public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
@@ -238,14 +238,10 @@ public class NavigationServiceImpl implements NavigationService
    {
 
       /** . */
-      private final TreeContext<?> tree;
-
-      /** . */
       private final POMSession session;
 
-      DstAdapter(TreeContext<?> tree, POMSession session)
+      DstAdapter(POMSession session)
       {
-         this.tree = tree;
          this.session = session;
       }
 
@@ -256,8 +252,7 @@ public class NavigationServiceImpl implements NavigationService
 
       public String[] getChildren(NodeData node)
       {
-         NodeContext<?> context = tree.root.getDescendant(node.getId());
-         return context != null && context.isExpanded() ? node.children : Utils.EMPTY_STRING_ARRAY;
+         return node.children;
       }
 
       public NodeData getDescendant(NodeData node, String handle)
@@ -316,9 +311,10 @@ public class NavigationServiceImpl implements NavigationService
             root,
             new SrcAdapter<N>(),
             data,
-            new DstAdapter(root.tree, session),
+            new DstAdapter(session),
             Update.Adapter.NODE_DATA,
-            listener);
+            listener,
+            root.tree);
       }
       finally
       {
@@ -604,18 +600,12 @@ public class NavigationServiceImpl implements NavigationService
 
          public String[] getChildren(NodeContext<N> node)
          {
-            if (node.isExpanded() && node.getFirst() != null)
+            ArrayList<String> blah = new ArrayList<String>();
+            for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
             {
-               ArrayList<String> blah = new ArrayList<String>();
-               for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
-               {
-                  blah.add(current.handle);
-               }
-               return blah.toArray(new String[blah.size()]);
-            } else
-            {
-               return Utils.EMPTY_STRING_ARRAY;
+               blah.add(current.handle);
             }
+            return blah.toArray(new String[blah.size()]);
          }
 
          public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
@@ -637,7 +627,8 @@ public class NavigationServiceImpl implements NavigationService
                return node.data;
             }
          },
-         listener);
+         listener,
+         root.tree);
    }
 
    public void clearCache()
