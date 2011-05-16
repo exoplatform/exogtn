@@ -281,7 +281,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void updateNode(final NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
+   public <N> void updateNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
       final POMSession session = manager.getSession();
@@ -291,6 +291,36 @@ public class NavigationServiceImpl implements NavigationService
       if (tree.hasChanges())
       {
          throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
+      }
+
+      //
+      Scope.Visitor visitor;
+
+      //
+
+      //
+      if (root.tree.root != root)
+      {
+         if (scope != null)
+         {
+            visitor = new FederatedVisitor<N>(root, scope);
+         }
+         else
+         {
+            visitor = null;
+         }
+         root = root.tree.root;
+      }
+      else
+      {
+         if (scope != null)
+         {
+            visitor = scope.get();
+         }
+         else
+         {
+            visitor = null;
+         }
       }
 
       //
@@ -323,7 +353,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       // Now expand
-      expand(session, root, scope != null ? scope.get() : null, 0, listener);
+      expand(session, root, visitor, 0, listener);
    }
 
    private <N> void expand(

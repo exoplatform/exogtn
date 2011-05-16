@@ -510,15 +510,10 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      try
-      {
-         bar.update(service, Scope.CHILDREN);
-         fail();
-      }
-      catch (NavigationServiceException e)
-      {
-         assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
-      }
+      Iterator<NodeChange<Node>>  changes = bar.update(service, Scope.CHILDREN);
+      NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>)changes.next();
+      assertSame(bar, removed.getNode());
+      assertFalse(changes.hasNext());
    }
 
    public void testLoadEvents() throws Exception
@@ -613,6 +608,42 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       service.updateNode(a.context, Scope.CHILDREN, queue);
       Iterator<NodeChange<NodeContext<Node>>> changes = queue.iterator();
       assertTrue(changes.hasNext());
+   }
+
+   public void testScope() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_scope");
+      portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
+      portal.getRootNavigation().getChild("default").addChild("c").addChild("d");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_scope"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).node;
+      Node a = root1.getChild("a");
+      Node c = root1.getChild("c");
+      assertFalse(a.context.isExpanded());
+      assertFalse(c.context.isExpanded());
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+      root2.addChild("e");
+      service.saveNode(root2.context);
+
+      //
+      sync(true);
+
+      //
+      service.updateNode(a.context, Scope.CHILDREN, null);
+      assertSame(a, root1.getChild("a"));
+      assertSame(c, root1.getChild("c"));
+      assertNotNull(root1.getChild("e"));
+      assertTrue(a.context.isExpanded());
+      assertFalse(c.context.isExpanded());
+      assertNotNull(a.getChild("b"));
    }
 
    public void _testPendingChange() throws NullPointerException, NavigationServiceException
