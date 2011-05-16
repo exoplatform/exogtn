@@ -216,7 +216,25 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   class NodeDataAdapter implements HierarchyAdapter<String[], NodeData, String>
+   class SrcAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
+   {
+      public String getHandle(NodeContext<N> node)
+      {
+         return node.data.id;
+      }
+
+      public String[] getChildren(NodeContext<N> node)
+      {
+         return node.isExpanded() ? node.data.children : Utils.EMPTY_STRING_ARRAY;
+      }
+
+      public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
+      {
+         return node.getDescendant(handle);
+      }
+   }
+
+   class DstAdapter implements HierarchyAdapter<String[], NodeData, String>
    {
 
       /** . */
@@ -225,7 +243,7 @@ public class NavigationServiceImpl implements NavigationService
       /** . */
       private final POMSession session;
 
-      NodeDataAdapter(TreeContext<?> tree, POMSession session)
+      DstAdapter(TreeContext<?> tree, POMSession session)
       {
          this.tree = tree;
          this.session = session;
@@ -281,8 +299,8 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      NodeData dataRoot = dataCache.getNodeData(session, root.data.id);
-      if (dataRoot == null)
+      NodeData data = dataCache.getNodeData(session, root.data.id);
+      if (data == null)
       {
          throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
       }
@@ -290,34 +308,15 @@ public class NavigationServiceImpl implements NavigationService
       // Switch to edit mode
       tree.editMode = true;
 
-      //
-      HierarchyAdapter<String[], NodeContext<N>, String> toto = new HierarchyAdapter<String[], NodeContext<N>, String>()
-      {
-         public String getHandle(NodeContext<N> node)
-         {
-            return node.data.id;
-         }
-
-         public String[] getChildren(NodeContext<N> node)
-         {
-            return node.isExpanded() ? node.data.children : Utils.EMPTY_STRING_ARRAY;
-         }
-
-         public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
-         {
-            return node.getDescendant(handle);
-         }
-      };
-
       // Apply diff changes to the model
       try
       {
 
          Update.perform(
             root,
-            toto,
-            dataRoot,
-            new NodeDataAdapter(root.tree, session),
+            new SrcAdapter<N>(),
+            data,
+            new DstAdapter(root.tree, session),
             Update.Adapter.NODE_DATA,
             listener);
       }
