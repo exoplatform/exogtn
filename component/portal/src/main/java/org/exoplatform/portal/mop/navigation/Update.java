@@ -69,8 +69,7 @@ class Update
       HierarchyAdapter<String[], N2, String> dstAdapter,
       Adapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
-      Scope.Visitor visitor
-      )
+      Scope.Visitor visitor)
    {
       // We create the diff object
       HierarchyDiff<String[], NodeContext<N1>, String[], N2, String> diff = HierarchyDiff.create(
@@ -85,6 +84,7 @@ class Update
 
       // The last browsed context
       NodeContext<N1> lastCtx = null;
+      HierarchyChangeType previousChange = HierarchyChangeType.KEEP;
 
       //
       while (it.hasNext())
@@ -95,8 +95,19 @@ class Update
             case KEEP:
                break;
             case ENTER:
-               NodeContext<N1> context = it.getSource();
-               if (context == null || !context.isExpanded())
+
+               // Maintain scope
+
+               // Cut the tree if necessary
+               if (previousChange == HierarchyChangeType.KEEP || previousChange == HierarchyChangeType.MOVED_IN)
+               {
+                  NodeContext<N1> context = it.getSource();
+                  if (!context.isExpanded())
+                  {
+                     it.skip();
+                  }
+               }
+               else
                {
                   it.skip();
                }
@@ -224,6 +235,9 @@ class Update
             default:
                throw new UnsupportedOperationException("todo : " + change);
          }
+
+         // Save for next iteration
+         previousChange = change;
       }
    }
 }
