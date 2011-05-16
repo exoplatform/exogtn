@@ -91,6 +91,8 @@ class Update
          HierarchyChangeType change = it.next();
          switch (change)
          {
+            case KEEP:
+               break;
             case ENTER:
                break;
             case LEAVE:

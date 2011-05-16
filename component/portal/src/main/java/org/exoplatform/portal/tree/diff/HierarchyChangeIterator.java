@@ -25,8 +25,7 @@ import java.util.NoSuchElementException;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<HierarchyChangeType>
-{
+public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<HierarchyChangeType> {
 
    /** . */
    private final HierarchyDiff<L1, N1, L2, N2, H> diff;
@@ -62,6 +61,8 @@ public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<Hier
       INIT(null),
 
       ENTER(HierarchyChangeType.ENTER),
+
+      KEEP(HierarchyChangeType.KEEP),
 
       ADDED(HierarchyChangeType.ADDED),
 
@@ -161,6 +162,9 @@ public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<Hier
                } else {
                   break;
                }
+            } else if (frame.previous == Status.KEEP) {
+               frame = new Frame(frame, frame.src, frame.dst);
+               continue;
             } else if (frame.previous == Status.MOVED_IN) {
                frame = new Frame(frame, frame.src, frame.dst);
                continue;
@@ -190,8 +194,10 @@ public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<Hier
                   case SAME:
                      N1 next1 = context1.findByHandle(frame.srcIt.next());
                      N2 next2 = context2.findByHandle(frame.dstIt.next());
-                     frame = new Frame(frame, next1, next2);
-                     continue;
+                     frame.next = Status.KEEP;
+                     frame.src = next1;
+                     frame.dst = next2;
+                     break;
                   case ADD:
                      frame.dstIt.next();
                      H addedHandle = frame.it.getElement();
@@ -247,6 +253,22 @@ public class HierarchyChangeIterator<L1, N1, L2, N2, H> implements Iterator<Hier
          frame.previous = frame.next;
          frame.next = null;
          return frame.previous.changeType;
+      }
+   }
+
+   public void skip() {
+      if (frame.previous == HierarchyChangeIterator.Status.ENTER) {
+
+         // A bit hackish as it bypass the main loop
+         // the proper way to do it would be to introduce a SKIP status
+         // and properly react to it to update the state machine
+         // but for now it will do
+
+         frame.next = Status.LEAVE;
+         frame.src = frame.srcRoot;
+         frame.dst = frame.dstRoot;
+      } else {
+         throw new IllegalStateException("Cannot skip when in state " + frame.previous);
       }
    }
 

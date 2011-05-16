@@ -26,6 +26,8 @@ public enum HierarchyChangeType {
 
    ENTER,
 
+   KEEP,
+
    ADDED,
 
    REMOVED,
