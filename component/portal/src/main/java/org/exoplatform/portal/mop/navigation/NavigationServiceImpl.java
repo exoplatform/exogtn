@@ -528,20 +528,13 @@ public class NavigationServiceImpl implements NavigationService
       final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
 
       // Expand
-      expand(session, context, root.tree, 0, null  );
+      expand(session, context, root.tree, 0, null);
 
       //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
       NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //
-/*
-      NodeChangeListener<NodeContext<N>> persister = new NodeChangePersister<Object, NodeContext<N>>(
-         baba.tree,
-         (HierarchyManager) HierarchyManager.CONTEXT,
-         NodeChangeListener.Base.<String>noop()
-      );
-*/
       NodeChangeListener<NodeContext<N>> persister = new NodeChangeListener.Base<NodeContext<N>>()
       {
          @Override
