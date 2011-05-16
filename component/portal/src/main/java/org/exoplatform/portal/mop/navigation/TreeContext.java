@@ -157,7 +157,7 @@ class TreeContext<N> implements Scope.Visitor
       }
    }
 
-   public VisitMode visit(int depth, String id, String name, NodeState state)
+   public VisitMode enter(int depth, String id, String name, NodeState state)
    {
       NodeContext<N> descendant = root.getDescendant(id);
       if (descendant != null)
@@ -168,5 +168,9 @@ class TreeContext<N> implements Scope.Visitor
       {
          return VisitMode.NO_CHILDREN;
       }
+   }
+
+   public void leave(int depth, String id, String name, NodeState state)
+   {
    }
 }

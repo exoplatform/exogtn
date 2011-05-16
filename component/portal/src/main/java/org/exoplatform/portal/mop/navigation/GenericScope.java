@@ -77,7 +77,7 @@ public class GenericScope implements Scope
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, String id, String name, NodeState state)
+               public VisitMode enter(int depth, String id, String name, NodeState state)
                {
                   if (depth == 0)
                   {
@@ -100,7 +100,7 @@ public class GenericScope implements Scope
                      {
                         if ((name.equals(path.get(path.size() - 1))))
                         {
-                           return federated.get().visit(0, id, name, state);
+                           return federated.get().enter(0, id, name, state);
                         }
                         else
                         {
@@ -109,10 +109,14 @@ public class GenericScope implements Scope
                      }
                      else
                      {
-                        return federated.get().visit(depth - path.size(), id, name, state);
+                        return federated.get().enter(depth - path.size(), id, name, state);
                      }
                   }
                   throw new AssertionError();
+               }
+
+               public void leave(int depth, String id, String name, NodeState state)
+               {
                }
             };
          }
@@ -133,7 +137,7 @@ public class GenericScope implements Scope
    {
       this.visitor = new Visitor()
       {
-         public VisitMode visit(int depth, String id, String name, NodeState state)
+         public VisitMode enter(int depth, String id, String name, NodeState state)
          {
             if (height < 0 || depth < height)
             {
@@ -143,6 +147,10 @@ public class GenericScope implements Scope
             {
                return VisitMode.NO_CHILDREN;
             }
+         }
+
+         public void leave(int depth, String id, String name, NodeState state)
+         {
          }
       };
    }

@@ -333,22 +333,24 @@ public class NavigationServiceImpl implements NavigationService
       int depth,
       NodeChangeListener<NodeContext<N>> listener)
    {
-      // Obtain most actual data
-      NodeData cachedData = dataCache.getNodeData(session, context.data.id);
+      if (visitor != null)
+      {
+         // Obtain most actual data
+         NodeData cachedData = dataCache.getNodeData(session, context.data.id);
 
-      //
-      if (context.isExpanded())
-      {
-         for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
+         //
+         VisitMode visitMode = visitor.enter(depth, cachedData.id, cachedData.name, cachedData.state);
+
+         //
+         if (context.isExpanded())
          {
-            expand(session, current, visitor, depth + 1, listener);
+            for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
+            {
+               expand(session, current, visitor, depth + 1, listener);
+            }
          }
-      }
-      else
-      {
-         if (visitor != null)
+         else
          {
-            VisitMode visitMode = visitor.visit(depth, cachedData.id, cachedData.name, cachedData.state);
             if (visitMode == VisitMode.ALL_CHILDREN)
             {
                context.expand();
@@ -382,6 +384,9 @@ public class NavigationServiceImpl implements NavigationService
                context.data = cachedData;
             }
          }
+
+         //
+         visitor.leave(depth, cachedData.id, cachedData.name, cachedData.state);
       }
    }
 
@@ -627,5 +632,72 @@ public class NavigationServiceImpl implements NavigationService
    public void clearCache()
    {
       dataCache.clear();
+   }
+
+   private static class FederatedVisitor<N> implements Scope.Visitor
+   {
+
+      /** . */
+      private final NodeContext<N> federationRoot;
+
+      /** . */
+      private final int federationDepth;
+
+      /** . */
+      private final Scope federatedScope;
+
+      /** . */
+      private Scope.Visitor federated;
+
+      private FederatedVisitor(NodeContext<N> federationRoot, Scope federatedScope)
+      {
+         this.federationRoot = federationRoot;
+         this.federatedScope = federatedScope;
+         this.federated = null;
+         this.federationDepth = federationRoot.getDepth(federationRoot.tree.root);
+      }
+
+      public VisitMode enter(int depth, String id, String name, NodeState state)
+      {
+         if (federationRoot.handle.equals(id))
+         {
+            federated = federatedScope.get();
+         }
+
+         //
+         VisitMode visit;
+         if (federated != null)
+         {
+            visit = federated.enter(depth - federationDepth, id, name, state);
+         }
+         else
+         {
+            visit = VisitMode.NO_CHILDREN;
+         }
+
+         // Override
+         NodeContext<N> descendant = federationRoot.tree.root.getDescendant(id);
+         if (descendant != null && descendant.isExpanded())
+         {
+            visit = VisitMode.ALL_CHILDREN;
+         }
+
+         //
+         return visit;
+      }
+
+      public void leave(int depth, String id, String name, NodeState state)
+      {
+         if (federationRoot.handle.equals(id))
+         {
+            federated = null;
+         }
+
+         //
+         if (federated != null)
+         {
+            federated.leave(depth - federationDepth, id, name, state);
+         }
+      }
    }
 }

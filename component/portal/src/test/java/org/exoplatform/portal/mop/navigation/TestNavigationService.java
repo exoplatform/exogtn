@@ -115,7 +115,7 @@ public class TestNavigationService extends AbstractTestNavigationService
          {
             return new Visitor()
             {
-               public VisitMode visit(int depth, String id, String name, NodeState state)
+               public VisitMode enter(int depth, String id, String name, NodeState state)
                {
                   boolean use = false;
                   switch (depth)
@@ -131,6 +131,9 @@ public class TestNavigationService extends AbstractTestNavigationService
                         break;
                   }
                   return use ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
+               }
+               public void leave(int depth, String id, String name, NodeState state)
+               {
                }
             };
          }

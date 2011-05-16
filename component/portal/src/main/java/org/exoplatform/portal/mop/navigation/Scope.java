@@ -69,6 +69,8 @@ public interface Scope
        * @param state the node state
        * @return the visit mode
        */
-      VisitMode visit(int depth, String id, String name, NodeState state);
+      VisitMode enter(int depth, String id, String name, NodeState state);
+
+      void leave(int depth, String id, String name, NodeState state);
    }
 }

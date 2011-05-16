@@ -238,7 +238,7 @@ public class UserPortalImpl implements UserPortal
       {
          return new Visitor()
          {
-            public VisitMode visit(int depth, String id, String name, NodeState state)
+            public VisitMode enter(int depth, String id, String name, NodeState state)
             {
                if (depth == 0 && "default".equals(name))
                {
@@ -256,6 +256,10 @@ public class UserPortalImpl implements UserPortal
                {
                   return VisitMode.NO_CHILDREN;
                }
+            }
+
+            public void leave(int depth, String id, String name, NodeState state)
+            {
             }
          };
       }
