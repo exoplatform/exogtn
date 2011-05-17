@@ -25,6 +25,8 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Iterator;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -285,10 +287,27 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       sync(true);
 
       //
-      service.rebaseNode(a.context, Scope.CHILDREN, null);
-      System.out.println("root1 = " + root1.toString(10));
-      //service.rebaseNode(a.context, Scope.CHILDREN, null);
-//      assertNotNull(a.getChild("b"));
-//      assertEquals(3, root1.getSize());
+      Iterator<NodeChange<Node>> changes =  a.rebase(service, Scope.CHILDREN);
+      Iterator<Node> children = root1.getChildren().iterator();
+      assertSame(a, children.next());
+      assertSame(c, children.next());
+      Node d = children.next();
+      assertEquals("d", d.getName());
+      assertFalse(children.hasNext());
+      assertFalse(d.context.isExpanded());
+      children = a.getChildren().iterator();
+      Node b = children.next();
+      assertEquals("b", b.getName());
+      assertFalse(children.hasNext());
+      assertFalse(b.context.isExpanded());
+      NodeChange.Added<Node> added1 = (NodeChange.Added<Node>)changes.next();
+      assertSame(b, added1.getNode());
+      assertSame(null, added1.getPrevious());
+      assertSame(a, added1.getParent());
+      NodeChange.Added<Node> added2 = (NodeChange.Added<Node>)changes.next();
+      assertSame(d, added2.getNode());
+      assertSame(c, added2.getPrevious());
+      assertSame(root1, added2.getParent());
+      assertFalse(changes.hasNext());
    }
 }

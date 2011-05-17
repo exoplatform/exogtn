@@ -218,6 +218,13 @@ public class Node
       return queue.iterator();
    }
 
+   public Iterator<NodeChange<Node>> rebase(NavigationService service, Scope scope) throws NavigationServiceException
+   {
+      NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
+      service.rebaseNode(context, scope, new NodeContextChangeAdapter<Node>(queue));
+      return queue.iterator();
+   }
+
    @Override
    public String toString()
    {
