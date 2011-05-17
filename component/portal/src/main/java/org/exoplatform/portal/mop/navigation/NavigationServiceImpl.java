@@ -308,7 +308,7 @@ public class NavigationServiceImpl implements NavigationService
       Scope.Visitor visitor;
       if (scope != null)
       {
-         visitor = new FederatedVisitor<N>(root.tree, root, scope);
+         visitor = new FederatingVisitor<N>(root.tree, root, scope);
       }
       else
       {
@@ -523,7 +523,7 @@ public class NavigationServiceImpl implements NavigationService
       Scope.Visitor visitor;
       if (scope != null)
       {
-         visitor = new FederatedVisitor<N>(root.tree.origin(), root, scope);
+         visitor = new FederatingVisitor<N>(root.tree.origin(), root, scope);
       }
       else
       {
@@ -618,76 +618,5 @@ public class NavigationServiceImpl implements NavigationService
    public void clearCache()
    {
       dataCache.clear();
-   }
-
-   private static class FederatedVisitor<N> implements Scope.Visitor
-   {
-
-      /** . */
-      private final Scope.Visitor visitor;
-
-      /** . */
-      private final NodeContext<N> federationRoot;
-
-      /** . */
-      private final int federationDepth;
-
-      /** . */
-      private final Scope federatedScope;
-
-      /** . */
-      private Scope.Visitor federated;
-
-      private FederatedVisitor(Scope.Visitor visitor, NodeContext<N> federationRoot, Scope federatedScope)
-      {
-         this.visitor = visitor;
-         this.federationRoot = federationRoot;
-         this.federatedScope = federatedScope;
-         this.federated = null;
-         this.federationDepth = federationRoot.getDepth(federationRoot.tree.root);
-      }
-
-      public VisitMode enter(int depth, String id, String name, NodeState state)
-      {
-         if (federationRoot.handle.equals(id))
-         {
-            federated = federatedScope.get();
-         }
-
-         //
-         VisitMode visit;
-         if (federated != null)
-         {
-            visit = federated.enter(depth - federationDepth, id, name, state);
-         }
-         else
-         {
-            visit = VisitMode.NO_CHILDREN;
-         }
-
-         // Override
-         VisitMode override = visitor.enter(depth, id, name, state);
-         if (override == VisitMode.ALL_CHILDREN)
-         {
-            visit = VisitMode.ALL_CHILDREN;
-         }
-
-         //
-         return visit;
-      }
-
-      public void leave(int depth, String id, String name, NodeState state)
-      {
-         if (federationRoot.handle.equals(id))
-         {
-            federated = null;
-         }
-
-         //
-         if (federated != null)
-         {
-            federated.leave(depth - federationDepth, id, name, state);
-         }
-      }
    }
 }
