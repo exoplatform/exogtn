@@ -548,6 +548,29 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
+   HierarchyAdapter aaa = new HierarchyAdapter<String[], NodeContext<Object>, String>()
+   {
+      public String getHandle(NodeContext<Object> node)
+      {
+         return node.handle;
+      }
+
+      public String[] getChildren(NodeContext<Object> node)
+      {
+         ArrayList<String> blah = new ArrayList<String>();
+         for (NodeContext<Object> current = node.getFirst(); current != null; current = current.getNext())
+         {
+            blah.add(current.handle);
+         }
+         return blah.toArray(new String[blah.size()]);
+      }
+
+      public NodeContext<Object> getDescendant(NodeContext<Object> node, String handle)
+      {
+         return node.getDescendant(handle);
+      }
+   };
+
    public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
    {
       // No changes -> do an update operation instead as it's simpler and cheaper
@@ -635,28 +658,6 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      HierarchyAdapter<String[], NodeContext<N>, String> aaa = new HierarchyAdapter<String[], NodeContext<N>, String>()
-      {
-         public String getHandle(NodeContext<N> node)
-         {
-            return node.handle;
-         }
-
-         public String[] getChildren(NodeContext<N> node)
-         {
-            ArrayList<String> blah = new ArrayList<String>();
-            for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
-            {
-               blah.add(current.handle);
-            }
-            return blah.toArray(new String[blah.size()]);
-         }
-
-         public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
-         {
-            return node.getDescendant(handle);
-         }
-      };
 
       //
       Update.perform(
