@@ -215,36 +215,6 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   class SrcAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
-   {
-      public String getHandle(NodeContext<N> node)
-      {
-         return node.data.id;
-      }
-
-      public String[] getChildren(NodeContext<N> node)
-      {
-         if (node.isExpanded())
-         {
-            ArrayList<String> array = new ArrayList<String>();
-            for (NodeContext<N> current = node.getFirst();current != null;current = current.getNext())
-            {
-               array.add(current.data.id);
-            }
-            return array.toArray(new String[array.size()]);
-         }
-         else
-         {
-            return Utils.EMPTY_STRING_ARRAY;
-         }
-      }
-
-      public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
-      {
-         return node.getDescendant(handle);
-      }
-   }
-
    class DstAdapter implements HierarchyAdapter<String[], NodeData, String>
    {
 
@@ -337,7 +307,7 @@ public class NavigationServiceImpl implements NavigationService
 
          Update.perform(
             root,
-            new SrcAdapter<N>(),
+            aaa,
             data,
             new DstAdapter(session),
             Update.Adapter.NODE_DATA,
