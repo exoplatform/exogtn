@@ -336,7 +336,7 @@ public class NavigationServiceImpl implements NavigationService
       try
       {
 
-         Update2.perform(
+         Update.perform(
             root,
             new SrcAdapter<N>(),
             data,
@@ -659,7 +659,7 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      Update2.perform(
+      Update.perform(
          root,
          aaa,
          context,
