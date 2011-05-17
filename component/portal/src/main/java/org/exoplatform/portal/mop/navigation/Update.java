@@ -142,7 +142,6 @@ class Update<N1, N2>
       }
       else
       {
-         //
          depth++;
 
          // Expand if needed
@@ -263,6 +262,9 @@ class Update<N1, N2>
                }
             }
          }
+
+         //
+         depth--;
       }
 
       //
@@ -298,7 +300,6 @@ class Update<N1, N2>
 
       //
       last = parent;
-      depth--;
    }
 
 

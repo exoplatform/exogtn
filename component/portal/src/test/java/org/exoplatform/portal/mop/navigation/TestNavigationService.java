@@ -100,7 +100,9 @@ public class TestNavigationService extends AbstractTestNavigationService
       assertEquals("home", home.getName());
       assertTrue(i.hasNext());
       Node webexplorer = i.next();
+
       assertNull(webexplorer.getChildren());
+
       assertSame(webexplorer, root.getChild(1));
       assertEquals("webexplorer", webexplorer.getName());
       assertFalse(i.hasNext());

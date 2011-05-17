@@ -201,8 +201,7 @@ public class NavigationServiceImpl implements NavigationService
          if (data != null)
          {
             NodeContext<N> context = new NodeContext<N>(model, data);
-            Scope.Visitor visitor = scope.get();
-            expand(session, context, visitor, 0, listener);
+            updateNode(context, scope, listener);
             return context;
          }
          else
@@ -349,73 +348,6 @@ public class NavigationServiceImpl implements NavigationService
       {
          // Disable edit mode
          tree.editMode = false;
-      }
-
-      // Now expand
-      // expand(session, root, visitor, 0, listener);
-   }
-
-   private <N> void expand(
-      POMSession session,
-      NodeContext<N> context,
-      Scope.Visitor visitor,
-      int depth,
-      NodeChangeListener<NodeContext<N>> listener)
-   {
-      if (visitor != null)
-      {
-         // Obtain most actual data
-         NodeData cachedData = dataCache.getNodeData(session, context.data.id);
-
-         //
-         VisitMode visitMode = visitor.enter(depth, cachedData.id, cachedData.name, cachedData.state);
-
-         //
-         if (context.isExpanded())
-         {
-            for (NodeContext<N> current = context.getFirst();current != null;current = current.getNext())
-            {
-               expand(session, current, visitor, depth + 1, listener);
-            }
-         }
-         else
-         {
-            if (visitMode == VisitMode.ALL_CHILDREN)
-            {
-               context.expand();
-
-               NodeContext<N> previous = null;
-
-               for (String childId : cachedData.children)
-               {
-                  NodeData childData = dataCache.getNodeData(session, childId);
-                  if (childData != null)
-                  {
-                     NodeContext<N> childContext = context.insertLast(childData);
-
-                     // Generate event
-                     if (listener != null)
-                     {
-                        listener.onAdd(context, previous, childContext);
-                        previous = childContext;
-                     }
-
-                     //
-                     expand(session, childContext, visitor, depth + 1, listener);
-                  }
-                  else
-                  {
-                     throw new UnsupportedOperationException("Handle me gracefully");
-                  }
-               }
-
-               //
-               context.data = cachedData;
-            }
-         }
-
-         //
-         visitor.leave(depth, cachedData.id, cachedData.name, cachedData.state);
       }
    }
 
