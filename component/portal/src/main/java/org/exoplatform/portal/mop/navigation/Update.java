@@ -41,7 +41,7 @@ class Update<N1, N2>
       Scope.Visitor visitor)
    {
 
-      Update update = new Update(
+      Update<N1, N2> update = new Update<N1, N2>(
          src,
          srcAdatper,
          dst,
@@ -53,7 +53,6 @@ class Update<N1, N2>
 
       //
       update.perform();
-
    }
 
    private Update(
@@ -112,7 +111,6 @@ class Update<N1, N2>
 
       // Start recursion
       perform(it.getSource());
-
    }
 
    private void perform(NodeContext<N1> parent)
