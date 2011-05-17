@@ -142,6 +142,9 @@ class Update2<N1, N2>
       }
       else
       {
+         //
+         depth++;
+
          // Expand if needed
          if (!parent.isExpanded())
          {
@@ -295,6 +298,7 @@ class Update2<N1, N2>
 
       //
       last = parent;
+      depth--;
    }
 
 
