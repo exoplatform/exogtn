@@ -214,6 +214,8 @@ class TreeContext<N> implements Scope.Visitor, MergeAdapter<NodeContext<N>>
       }
    }
 
+   // Scope.Visitor implementation -------------------------------------------------------------------------------------
+
    public VisitMode enter(int depth, String id, String name, NodeState state)
    {
       NodeContext<N> descendant = root.getDescendant(id);
