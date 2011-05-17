@@ -20,41 +20,37 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
-* @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
-*/
-class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
+class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
 {
 
    /** . */
-   private final C context;
+   private final MergeAdapter<N2> adapter;
 
    /** . */
-   private final HierarchyManager<C, D> manager;
+   private final NodeChangeListener<N2> next;
 
-   /** . */
-   private final NodeChangeListener<D> next;
-
-   NodeChangeMerger(C context, HierarchyManager<C, D> manager, NodeChangeListener<D> next)
+   Merge(MergeAdapter<N2> adapter, NodeChangeListener<N2> next)
    {
-      this.context = context;
-      this.manager = manager;
+      this.adapter = adapter;
       this.next = next;
    }
 
-   public void onCreate(NodeContext<S> _source, NodeContext<S> _parent, NodeContext<S> _previous, String name) throws NavigationServiceException
+   public void onCreate(NodeContext<N1> _source, NodeContext<N1> _parent, NodeContext<N1> _previous, String name) throws NavigationServiceException
    {
       String parentHandle = _parent.data.id;
-      D parent = manager.getNode(context, parentHandle);
+      N2 parent = adapter.getNode(parentHandle);
       if (parent == null)
       {
          throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
       }
 
       //
-      D previous;
+      N2 previous;
       if (_previous != null)
       {
-         previous = manager.getNode(context, _previous.data.id);
+         previous = adapter.getNode(_previous.data.id);
          if (previous == null)
          {
             throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
@@ -66,7 +62,7 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       }
 
       //
-      D added = manager.getChild(context, parent, name);
+      N2 added = adapter.getChild(parent, name);
       if (added != null)
       {
          throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
@@ -76,31 +72,31 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       next.onCreate(null, parent, previous, name);
    }
 
-   public void onDestroy(NodeContext<S> _source, NodeContext<S> _parent)
+   public void onDestroy(NodeContext<N1> _source, NodeContext<N1> _parent)
    {
-      D removed = manager.getNode(context, _source.data.id);
+      N2 removed = adapter.getNode(_source.data.id);
 
       //
       if (removed != null)
       {
-         D parent = manager.getNode(context, _parent.data.id);
+         N2 parent = adapter.getNode(_parent.data.id);
          next.onDestroy(removed, parent);
       }
    }
 
-   public void onRename(NodeContext<S> _source, NodeContext<S> _parent, String _name) throws NavigationServiceException
+   public void onRename(NodeContext<N1> _source, NodeContext<N1> _parent, String _name) throws NavigationServiceException
    {
       //
       String renamedHandle = _source.data.id;
-      D renamed = manager.getNode(context, renamedHandle);
+      N2 renamed = adapter.getNode(renamedHandle);
       if (renamed == null)
       {
          throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
       }
 
       //
-      D parent = manager.getParent(context, renamed);
-      if (manager.getChild(context, parent, _name) != null)
+      N2 parent = adapter.getParent(renamed);
+      if (adapter.getChild(parent, _name) != null)
       {
          throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
       }
@@ -109,10 +105,10 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       next.onRename(renamed, parent, _name);
    }
 
-   public void onUpdate(NodeContext<S> _source, NodeState state) throws NavigationServiceException
+   public void onUpdate(NodeContext<N1> _source, NodeState state) throws NavigationServiceException
    {
       String updatedHandle = _source.data.id;
-      D navigation = manager.getNode(context, updatedHandle);
+      N2 navigation = adapter.getNode(updatedHandle);
       if (navigation == null)
       {
          throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
@@ -122,10 +118,10 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       next.onUpdate(navigation, state);
    }
 
-   public void onMove(NodeContext<S> _source, NodeContext<S> _from, NodeContext<S> _to, NodeContext<S> _previous) throws NavigationServiceException
+   public void onMove(NodeContext<N1> _source, NodeContext<N1> _from, NodeContext<N1> _to, NodeContext<N1> _previous) throws NavigationServiceException
    {
       String srcHandle = _from.data.id;
-      D src = manager.getNode(context, srcHandle);
+      N2 src = adapter.getNode(srcHandle);
       if (src == null)
       {
          throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
@@ -133,7 +129,7 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
 
       //
       String dstHandle = _to.data.id;
-      D dst = manager.getNode(context, dstHandle);
+      N2 dst = adapter.getNode(dstHandle);
       if (dst == null)
       {
          throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
@@ -141,17 +137,17 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
 
       //
       String movedHandle = _source.data.id;
-      D moved = manager.getNode(context, movedHandle);
+      N2 moved = adapter.getNode(movedHandle);
       if (moved == null)
       {
          throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
       }
 
       //
-      D previous;
+      N2 previous;
       if (_previous != null)
       {
-         previous = manager.getNode(context, _previous.data.id);
+         previous = adapter.getNode(_previous.data.id);
          if (previous == null)
          {
             throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
@@ -163,7 +159,7 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       }
 
       //
-      if (src != manager.getParent(context, moved))
+      if (src != adapter.getParent(moved))
       {
          throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
       }
@@ -171,8 +167,8 @@ class NodeChangeMerger<S, C, D> extends NodeChangeListener.Base<NodeContext<S>>
       //
       if (src != dst)
       {
-         String name = manager.getName(context, moved);
-         D existing = manager.getChild(context, dst, name);
+         String name = adapter.getName(moved);
+         N2 existing = adapter.getChild(dst, name);
          if (existing != null)
          {
             throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME);

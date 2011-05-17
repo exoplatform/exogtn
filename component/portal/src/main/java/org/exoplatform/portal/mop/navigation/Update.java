@@ -36,7 +36,7 @@ class Update<N1, N2>
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
-      Adapter<N2> updateAdapter,
+      UpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
    {
@@ -61,7 +61,7 @@ class Update<N1, N2>
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
-      Adapter<N2> updateAdapter,
+      UpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
    {
@@ -90,7 +90,7 @@ class Update<N1, N2>
    private final HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it;
 
    /** . */
-   private final Adapter<N2> updateAdapter;
+   private final UpdateAdapter<N2> updateAdapter;
 
    /** . */
    private final Scope.Visitor visitor;
@@ -303,32 +303,4 @@ class Update<N1, N2>
    }
 
 
-   /**
-    * Adapter for the update operation.
-    *
-    * @param <N> the node generic type
-    */
-   interface Adapter<N>
-   {
-
-      /**
-       * Returns the data associated with the node or null if such data does not exist.
-       *
-       * @param node the node
-       * @return the node data
-       */
-      NodeData getData(N node);
-
-      /**
-       * The trivial adapter for {@link org.exoplatform.portal.mop.navigation.NodeData} objects.
-       */
-      Adapter<NodeData> NODE_DATA = new Adapter<NodeData>()
-      {
-         public NodeData getData(NodeData node)
-         {
-            return node;
-         }
-      };
-
-   }
 }

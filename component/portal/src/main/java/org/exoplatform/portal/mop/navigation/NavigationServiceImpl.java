@@ -310,7 +310,7 @@ public class NavigationServiceImpl implements NavigationService
             aaa,
             data,
             new DstAdapter(session),
-            Update.Adapter.NODE_DATA,
+            UpdateAdapter.NODE_DATA,
             listener,
             visitor);
       }
@@ -417,11 +417,7 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new NodeChangeMerger<N, POMSession, Navigation>(
-         session,
-         HierarchyManager.MOP,
-         persister
-      );
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N, Navigation>(new MOPMergeAdapter(session), persister);
 
       // Compute set of ids to invalidate
       for (final NodeChange<NodeContext<N>> src : changes)
@@ -450,6 +446,38 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
+   private static class MOPMergeAdapter implements MergeAdapter<Navigation>
+   {
+
+      /** . */
+      private final POMSession session;
+
+      MOPMergeAdapter(POMSession session)
+      {
+         this.session = session;
+      }
+
+      public Navigation getParent(Navigation node)
+      {
+         return node.getParent();
+      }
+
+      public Navigation getNode(String handle)
+      {
+         return session.findObjectById(ObjectType.NAVIGATION, handle);
+      }
+
+      public Navigation getChild(Navigation node, String name)
+      {
+         return node.getChild(name);
+      }
+
+      public String getName(Navigation node)
+      {
+         return node.getName();
+      }
+   };
+
    private static final HierarchyAdapter aaa = new HierarchyAdapter<String[], NodeContext<Object>, String>()
    {
       public String getHandle(NodeContext<Object> node)
@@ -473,7 +501,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    };
 
-   private static final Update.Adapter bbb = new Update.Adapter<NodeContext<Object>>()
+   private static final UpdateAdapter bbb = new UpdateAdapter<NodeContext<Object>>()
    {
       public NodeData getData(NodeContext<Object> node)
       {
@@ -517,13 +545,12 @@ public class NavigationServiceImpl implements NavigationService
          aaa,
          data,
          new DstAdapter(session),
-         Update.Adapter.NODE_DATA,
+         UpdateAdapter.NODE_DATA,
          null,
          visitor);
 
       //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
-      NodeContext<Object> baba = (NodeContext<Object>)context;
 
       //
       NodeChangeListener<NodeContext<N>> persister = new NodeChangeListener.Base<NodeContext<N>>()
@@ -562,9 +589,8 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new NodeChangeMerger<N, Object, NodeContext<N>>(
-         baba.tree,
-         (HierarchyManager) HierarchyManager.CONTEXT,
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(
+         context.tree,
          persister
       );
 
