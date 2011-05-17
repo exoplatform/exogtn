@@ -548,7 +548,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   HierarchyAdapter aaa = new HierarchyAdapter<String[], NodeContext<Object>, String>()
+   private static final HierarchyAdapter aaa = new HierarchyAdapter<String[], NodeContext<Object>, String>()
    {
       public String getHandle(NodeContext<Object> node)
       {
@@ -568,6 +568,14 @@ public class NavigationServiceImpl implements NavigationService
       public NodeContext<Object> getDescendant(NodeContext<Object> node, String handle)
       {
          return node.getDescendant(handle);
+      }
+   };
+
+   private static final Update.Adapter bbb = new Update.Adapter<NodeContext<Object>>()
+   {
+      public NodeData getData(NodeContext<Object> node)
+      {
+         return node.data;
       }
    };
 
@@ -658,20 +666,12 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-
-      //
       Update.perform(
          root,
          aaa,
          context,
          aaa,
-         new Update.Adapter<NodeContext<N>>()
-         {
-            public NodeData getData(NodeContext<N> node)
-            {
-               return node.data;
-            }
-         },
+         bbb,
          listener,
          context.tree);
    }
