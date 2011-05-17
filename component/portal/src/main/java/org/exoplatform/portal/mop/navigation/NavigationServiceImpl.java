@@ -609,8 +609,15 @@ public class NavigationServiceImpl implements NavigationService
       NodeData data = dataCache.getNodeData(session, root.getId());
       final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
 
-      // Expand
-      expand(session, context, visitor, 0, null);
+      //
+      Update.perform(
+         context,
+         aaa,
+         data,
+         new DstAdapter(session),
+         Update.Adapter.NODE_DATA,
+         null,
+         visitor);
 
       //
       List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
