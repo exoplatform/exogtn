@@ -511,104 +511,105 @@ public class NavigationServiceImpl implements NavigationService
 
    public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
    {
-      // No changes -> do an update operation instead as it's simpler and cheaper
+      // No changes -> do an update operation instead as it's cheaper
       if (!root.tree.hasChanges())
       {
          updateNode(root, scope, listener);
       }
-
-      //
-      Scope.Visitor visitor;
-      if (scope != null)
-      {
-         visitor = new FederatingVisitor<N>(root.tree.origin(), root, scope);
-      }
       else
       {
-         visitor = root.tree.origin();
+         Scope.Visitor visitor;
+         if (scope != null)
+         {
+            visitor = new FederatingVisitor<N>(root.tree.origin(), root, scope);
+         }
+         else
+         {
+            visitor = root.tree.origin();
+         }
+
+         //
+         if (root.tree.root != root)
+         {
+            root = root.tree.root;
+         }
+
+         //
+         POMSession session = manager.getSession();
+         NodeData data = dataCache.getNodeData(session, root.getId());
+         final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
+
+         //
+         Update.perform(
+            context,
+            aaa,
+            data,
+            new DstAdapter(session),
+            UpdateAdapter.NODE_DATA,
+            null,
+            visitor);
+
+         //
+         List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
+
+         //
+         NodeChangeListener<NodeContext<N>> persister = new NodeChangeListener.Base<NodeContext<N>>()
+         {
+            @Override
+            public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+            {
+               source = new NodeContext<N>(context.tree, name, new NodeState.Builder().capture());
+               source.expand();
+               context.tree.addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
+            }
+
+            @Override
+            public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+            {
+               context.tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
+            }
+
+            @Override
+            public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+            {
+               context.tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
+            }
+
+            @Override
+            public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
+            {
+               context.tree.addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
+            }
+
+            @Override
+            public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+            {
+               context.tree.addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
+            }
+         };
+
+         //
+         NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(
+            context.tree,
+            persister
+         );
+
+         //
+         for (NodeChange<NodeContext<N>> change : changes)
+         {
+            change.dispatch(merger);
+         }
+
+         //
+         Update.perform(
+            root,
+            aaa,
+            context,
+            aaa,
+            bbb,
+            listener,
+            context.tree);
       }
-
-      //
-      if (root.tree.root != root)
-      {
-         root = root.tree.root;
-      }
-
-      //
-      POMSession session = manager.getSession();
-      NodeData data = dataCache.getNodeData(session, root.getId());
-      final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
-
-      //
-      Update.perform(
-         context,
-         aaa,
-         data,
-         new DstAdapter(session),
-         UpdateAdapter.NODE_DATA,
-         null,
-         visitor);
-
-      //
-      List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
-
-      //
-      NodeChangeListener<NodeContext<N>> persister = new NodeChangeListener.Base<NodeContext<N>>()
-      {
-         @Override
-         public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
-         {
-            source = new NodeContext<N>(context.tree, name, new NodeState.Builder().capture());
-            source.expand();
-            context.tree.addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
-         }
-
-         @Override
-         public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
-         {
-            context.tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
-         }
-
-         @Override
-         public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
-         {
-            context.tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
-         }
-
-         @Override
-         public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
-         {
-            context.tree.addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
-         }
-
-         @Override
-         public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
-         {
-            context.tree.addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
-         }
-      };
-
-      //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(
-         context.tree,
-         persister
-      );
-
-      //
-      for (NodeChange<NodeContext<N>> change : changes)
-      {
-         change.dispatch(merger);
-      }
-
-      //
-      Update.perform(
-         root,
-         aaa,
-         context,
-         aaa,
-         bbb,
-         listener,
-         context.tree);
    }
 
    public void clearCache()
