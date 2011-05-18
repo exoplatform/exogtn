@@ -191,9 +191,9 @@ class Update<N1, N2>
                   if (listener != null)
                   {
                      listener.onAdd(
+                        added,
                         parent,
-                        previous,
-                        added);
+                        previous);
                   }
 
                   // Recurse

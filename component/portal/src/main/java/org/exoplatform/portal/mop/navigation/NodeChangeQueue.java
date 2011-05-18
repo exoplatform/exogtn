@@ -74,7 +74,7 @@ public class NodeChangeQueue<N> implements NodeChangeListener<N>, Iterable<NodeC
 
    public void onAdd(N source, N parent, N previous)
    {
-      onChange(new NodeChange.Added<N>(source, parent, previous));
+      onChange(new NodeChange.Added<N>(parent, previous, source));
    }
 
    public void onCreate(N source, N parent, N previous, String name)
