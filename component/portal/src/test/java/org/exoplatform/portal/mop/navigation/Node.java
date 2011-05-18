@@ -228,35 +228,11 @@ public class Node
    @Override
    public String toString()
    {
-      StringBuilder sb = new StringBuilder();
-      toString(1, sb);
-      return sb.toString();
+      return toString(1);
    }
 
    public String toString(int depth)
    {
-      StringBuilder sb = new StringBuilder();
-      toString(depth, sb);
-      return sb.toString();
-   }
-
-   private void toString(int depth, StringBuilder sb)
-   {
-      if (depth < 0) {
-         throw new IllegalArgumentException("Depth cannot be negative " + depth);
-      }
-      sb.append("Node[id=").append(getId()).append(",name=").append(getName());
-      if (context.isExpanded() && depth > 0) {
-         sb.append(",children={");
-         for (Node node : context.getNodes()) {
-            if (node.context.getPrevious() != null) {
-               sb.append(',');
-            }
-            node.toString(depth - 1, sb);
-         }
-         sb.append("}");
-      } else {
-         sb.append("]");
-      }
+      return context.toString(depth, new StringBuilder("Node[")).append("]").toString();
    }
 }

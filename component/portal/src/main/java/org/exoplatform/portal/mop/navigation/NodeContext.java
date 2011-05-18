@@ -784,4 +784,35 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       //
       super.afterRemove(context);
    }
+
+   @Override
+   public String toString()
+   {
+      return toString(1, new StringBuilder()).toString();
+   }
+
+   public StringBuilder toString(int depth, StringBuilder sb)
+   {
+      if (sb == null)
+      {
+         throw new NullPointerException();
+      }
+      if (depth < 0) {
+         throw new IllegalArgumentException("Depth cannot be negative " + depth);
+      }
+      sb.append("NodeContext[id=").append(getId()).append(",name=").append(getName());
+      if (expanded && depth > 0) {
+         sb.append(",children={");
+         for (NodeContext<N> current = getFirst();current != null;current = current.getNext()) {
+            if (current.getPrevious() != null) {
+               sb.append(',');
+            }
+            current.toString(depth - 1, sb);
+         }
+         sb.append("}");
+      } else {
+         sb.append("]");
+      }
+      return sb;
+   }
 }

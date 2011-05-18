@@ -314,4 +314,14 @@ public class UserNode
       NodeContext<UserNode> found = context.getDescendant(nodeId);
       return found != null ? found.getNode() : null;
    }
+
+   public String toString()
+   {
+      return toString(1);
+   }
+
+   public String toString(int depth)
+   {
+      return context.toString(depth, new StringBuilder("UserNode[")).append("]").toString();
+   }
 }
