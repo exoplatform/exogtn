@@ -22,10 +22,9 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.portal.mop.SiteKey;
 
 /**
- * <p>The navigation service takes care of managing the various portal navigations and their nodes.</p>
- *
- * <p>In order to manage an efficient loading of the nodes, a {@link Scope} is used to describe the set of nodes
- * that should be retrieved when a loading operation is performed.</p>
+ * <p>The navigation service takes care of managing the various portal navigations and their nodes. In order to manage
+ * an efficient loading of the nodes, a {@link Scope} is used to describe the set of nodes that should be retrieved
+ * when a loading operation is performed.</p>
  *
  * <p>The node operations does not provide a model per se, but instead use the {@link NodeModel} interface to plug
  * an API model. Various node operations are quite complex and any API in front of this service would need to perform
@@ -85,7 +84,9 @@ public interface NavigationService
    <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
 
    /**
-    * Save the specified context state to the persistent storage.
+    * Save the specified context state to the persistent storage. The operation takes the pending changes done to
+    * the tree and attempt to save them to the persistent storage. When conflicts happens, a merge will be attempted
+    * however it can lead to a failure.</p>
     *
     * @param context the context to save
     * @param <N> the node generic type
@@ -95,7 +96,19 @@ public interface NavigationService
    <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
 
    /**
-    * Update the specified content with the most recent state.
+    * <p>Update the specified <code>context</code> argument with the most recent state. The update operation will
+    * affect the entire tree even if the <code>context</code> argument is not the root of the tree. The <code>context</code>
+    * argument determines the root from which the <code>scope</code> argument applies to.</p>
+    *
+    * <p>The update operation compares the actual tree and the most recent version of the same tree. When the
+    * <code>scope</scope> argument is not null, it will be used to augment the tree with new nodes. During the
+    * operation, any modification done to the tree wil be reported as a change to the optional <code>listener</code>
+    * argument.</p>
+    *
+    * <p>The update operates recursively by doing a comparison of the node intrisic state (name or state) and its
+    * structural state (the children). The comparison between the children of two nodes is done thanks to the
+    * Longest Common Subsequence algorithm to minimize the number of changes to perform. The operation assumes
+    * that no changes have been performed on the actual tree.</p>
     *
     * @param context the context to update
     * @param scope the optional scope
@@ -108,7 +121,20 @@ public interface NavigationService
    <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
    /**
-    * Rebase the specified context with the most recent state.
+    * <p>Rebase the specified <code>context</code> argument with the most recent state. The rebase operation will
+    * affect the entire tree even if the <code>context</code> argument is not the root of the tree. The <code>context</code>
+    * argument determines the root from which the <code>scope</code> argument applies to.</p>
+    *
+    * <p>The rebase operation compares the actual tree and the most recent version of the same tree. When the
+    * <code>scope</scope> argument is not null, it will be used to augment the tree with new nodes. During the
+    * operation, any modification done to the tree wil be reported as a change to the optional <code>listener</code>
+    * argument.</p>
+    *
+    * <p>The rebase operates in a similar way of the update operation, however it assumes that it can have pending changes
+    * done to the tree (i.e changes that have not been saved). Actually a rebase operation with no changes will do the
+    * same than an update operation. The rebase operation attempts to bring the most recent changes to the tree, by
+    * doing a rebase of the pending operations on the actual tree. When conflicting changes exist, a merge will be
+    * attempted, however it could fail and lead to a non resolvable situation.</p>
     *
     * @param context the context to rebase
     * @param scope the optional scope
