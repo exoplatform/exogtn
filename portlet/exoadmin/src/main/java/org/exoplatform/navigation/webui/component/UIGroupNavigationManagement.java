@@ -295,14 +295,15 @@ public class UIGroupNavigationManagement extends UIContainer
          
          UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
          UINavigationNodeSelector.TreeNodeData selectedParent = (UINavigationNodeSelector.TreeNodeData)uiPageNodeForm.getSelectedParent();
-         selector.selectNode(selectedParent);
+         selector.selectNode(selectedParent);                 
 
          UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);
          uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);
          uiNavigationPopup.setRendered(true);
-
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
+         
+         selector.createEvent("NodeModified", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 
    }

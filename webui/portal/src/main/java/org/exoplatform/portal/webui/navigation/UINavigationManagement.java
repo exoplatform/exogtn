@@ -134,14 +134,7 @@ public class UINavigationManagement extends UIContainer
             return;
          }         
 
-         try 
-         {
-            uiNodeSelector.getRootNode().save();            
-         }
-         catch (NavigationServiceException ex)
-         {           
-            prContext.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg." + ex.getError().name(), null));            
-         }
+         uiNodeSelector.save();
       }
    }
 

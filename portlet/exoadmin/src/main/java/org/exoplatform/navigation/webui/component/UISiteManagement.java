@@ -33,6 +33,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
+import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
 import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -405,10 +406,13 @@ public class UISiteManagement extends UIContainer
          UINavigationNodeSelector.TreeNodeData selectedParent = (UINavigationNodeSelector.TreeNodeData)uiPageNodeForm.getSelectedParent();
          selector.selectNode(selectedParent);
 
+         WebuiRequestContext context = event.getRequestContext();
          UIPopupWindow uiNavigationPopup = uiSiteManagement.getChild(UIPopupWindow.class);
          uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
+         context.addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
+         
+         selector.createEvent("NodeModified", Phase.PROCESS, context).broadcast();
       }
 
    }
