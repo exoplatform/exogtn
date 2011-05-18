@@ -148,7 +148,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       ConsumerSPI consumer = super.internalCreateConsumer(consumerId, consumerName);
 
       ChromatticSession session = persister.getSession();
-      mappings = session.findByPath(ConsumersAndGroupsMapping.class, ConsumersAndGroupsMapping.NODE_NAME); // todo: needed?
+      mappings = session.findByPath(ConsumersAndGroupsMapping.class, ConsumersAndGroupsMapping.NODE_NAME);
       try
       {
          ConsumerMapping cm = mappings.createConsumer(consumerId);
@@ -236,6 +236,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       ConsumerGroupSPI group = super.internalCreateConsumerGroup(name);
 
       ChromatticSession session = persister.getSession();
+      mappings = session.findByPath(ConsumersAndGroupsMapping.class, ConsumersAndGroupsMapping.NODE_NAME);
       try
       {
          ConsumerGroupMapping cgm = mappings.createConsumerGroup(name);
