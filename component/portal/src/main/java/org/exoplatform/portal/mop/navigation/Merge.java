@@ -39,7 +39,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
 
    public void onCreate(NodeContext<N1> _source, NodeContext<N1> _parent, NodeContext<N1> _previous, String name) throws NavigationServiceException
    {
-      String parentHandle = _parent.data.id;
+      String parentHandle = _parent.handle;
       N2 parent = adapter.getNode(parentHandle);
       if (parent == null)
       {
@@ -50,7 +50,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
       N2 previous;
       if (_previous != null)
       {
-         previous = adapter.getNode(_previous.data.id);
+         previous = adapter.getNode(_previous.handle);
          if (previous == null)
          {
             throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
@@ -74,12 +74,12 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
 
    public void onDestroy(NodeContext<N1> _source, NodeContext<N1> _parent)
    {
-      N2 removed = adapter.getNode(_source.data.id);
+      N2 removed = adapter.getNode(_source.handle);
 
       //
       if (removed != null)
       {
-         N2 parent = adapter.getNode(_parent.data.id);
+         N2 parent = adapter.getNode(_parent.handle);
          next.onDestroy(removed, parent);
       }
    }
@@ -87,7 +87,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
    public void onRename(NodeContext<N1> _source, NodeContext<N1> _parent, String _name) throws NavigationServiceException
    {
       //
-      String renamedHandle = _source.data.id;
+      String renamedHandle = _source.handle;
       N2 renamed = adapter.getNode(renamedHandle);
       if (renamed == null)
       {
@@ -107,7 +107,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
 
    public void onUpdate(NodeContext<N1> _source, NodeState state) throws NavigationServiceException
    {
-      String updatedHandle = _source.data.id;
+      String updatedHandle = _source.handle;
       N2 navigation = adapter.getNode(updatedHandle);
       if (navigation == null)
       {
@@ -120,7 +120,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
 
    public void onMove(NodeContext<N1> _source, NodeContext<N1> _from, NodeContext<N1> _to, NodeContext<N1> _previous) throws NavigationServiceException
    {
-      String srcHandle = _from.data.id;
+      String srcHandle = _from.handle;
       N2 src = adapter.getNode(srcHandle);
       if (src == null)
       {
@@ -128,7 +128,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
       }
 
       //
-      String dstHandle = _to.data.id;
+      String dstHandle = _to.handle;
       N2 dst = adapter.getNode(dstHandle);
       if (dst == null)
       {
@@ -136,7 +136,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
       }
 
       //
-      String movedHandle = _source.data.id;
+      String movedHandle = _source.handle;
       N2 moved = adapter.getNode(movedHandle);
       if (moved == null)
       {
@@ -147,7 +147,7 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
       N2 previous;
       if (_previous != null)
       {
-         previous = adapter.getNode(_previous.data.id);
+         previous = adapter.getNode(_previous.handle);
          if (previous == null)
          {
             throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);

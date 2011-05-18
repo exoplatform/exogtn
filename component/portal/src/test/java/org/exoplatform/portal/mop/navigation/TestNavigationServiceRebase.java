@@ -310,4 +310,22 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       assertSame(root1, added2.getParent());
       assertFalse(changes.hasNext());
    }
-}
+
+   public void testTransientParent() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_transient_parent");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_transient_parent"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).node;
+      Node a = root.addChild("a");
+      Node b = root.addChild("b"); // It is only failed if we add more than one transient node
+
+      //
+      service.rebaseNode(a.context, Scope.CHILDREN, null);
+   }}
