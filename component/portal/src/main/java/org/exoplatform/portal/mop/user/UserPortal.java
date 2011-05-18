@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.mop.user;
 
+import java.util.List;
+
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -84,7 +84,7 @@ public interface UserPortal
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception;
+   void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
    
    /**
     * Returns the default navigation path.
@@ -121,4 +121,15 @@ public interface UserPortal
     */
    NodeFilter createFilter(UserNodePredicate predicate);
 
+  /**
+   * Rebase the specified context with the most recent state.
+   *
+   * @param node - UserNode that will be rebased
+   * @param scope the optional scope
+   * @param listener the option node change listener  @throws NullPointerException if the context argument is null
+   * @param <N> the node generic type
+   * @throws NullPointerException if the context argument is null
+   * @throws NavigationServiceException anything that would prevent the operation to succeed
+   */
+   void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException, NavigationServiceException;
 }

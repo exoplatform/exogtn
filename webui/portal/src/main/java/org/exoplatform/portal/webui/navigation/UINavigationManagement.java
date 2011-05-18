@@ -26,22 +26,20 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
-import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UINavigationManagement.gtmpl", events = {
    @EventConfig(listeners = UINavigationManagement.SaveActionListener.class),
@@ -53,7 +51,6 @@ public class UINavigationManagement extends UIContainer
 
    private String ownerType;
 
-   @SuppressWarnings("unused")
    public UINavigationManagement() throws Exception
    {
       addChild(UINavigationNodeSelector.class, null, null);
@@ -154,50 +151,10 @@ public class UINavigationManagement extends UIContainer
       @Override
       public void execute(Event<UINavigationManagement> event) throws Exception
       {
-         WebuiRequestContext context = event.getRequestContext();
          UINavigationManagement uiManagement = event.getSource();
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
-
-         TreeNodeData node = uiNodeSelector.getSelectedNode();
-         boolean staleData = false;
-         if (node == null) 
-         {
-            staleData = true;
-         }
-         else 
-         {
-            try 
-            {
-               if (uiNodeSelector.updateNode(node) == null)
-               {
-                  staleData = true;         
-               }
-            } 
-            catch (NavigationServiceException e) 
-            {
-               context.getUIApplication().addMessage(new ApplicationMessage("UINavigationManagement.msg.fail.add", null));
-               UIPopupWindow popup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
-               popup.createEvent("ClosePopup", Phase.PROCESS, context).broadcast();
-               return;
-            }
-         }
-         if (staleData)
-         {
-            uiNodeSelector.selectNode(uiNodeSelector.getRootNode());
-            context.getUIApplication().addMessage(new ApplicationMessage("Stale data, need refresh", null));
-            context.addUIComponentToUpdateByAjax(uiNodeSelector);
-            return;
-         }
-         
-         UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
-         UIPageNodeForm uiNodeForm = uiManagementPopup.createUIComponent(UIPageNodeForm.class, null, null);
-         uiNodeForm.setValues(null);
-         uiManagementPopup.setUIComponent(uiNodeForm);
-         uiNodeForm.setSelectedParent(node);
-         uiNodeForm.setContextPageNavigation(uiNodeSelector.getEdittedNavigation());
-
-         uiManagementPopup.setWindowSize(800, 500);
-         context.addUIComponentToUpdateByAjax(uiManagementPopup.getParent());
+         UIRightClickPopupMenu menu = uiNodeSelector.getChild(UIRightClickPopupMenu.class);
+         menu.createEvent("AddNode", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 
    }

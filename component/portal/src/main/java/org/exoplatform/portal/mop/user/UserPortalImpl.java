@@ -19,14 +19,20 @@
 
 package org.exoplatform.portal.mop.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeContextChangeAdapter;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
@@ -35,12 +41,6 @@ import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -200,9 +200,16 @@ public class UserPortalImpl implements UserPortal
       return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener)).getNode();
    }
 
-   public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
+   public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) 
+      throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
       navigationService.updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+   }
+   
+   public void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
+      throws NullPointerException, NavigationServiceException
+   {
+      navigationService.rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
    }
 
    private class MatchingScope implements Scope
