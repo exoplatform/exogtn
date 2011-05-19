@@ -101,7 +101,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private NodeFilter nodeFilter;
 
-   private static final Scope NODE_SCOPE = Scope.CHILDREN;
+   private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
    public UINavigationNodeSelector() throws Exception
    {
@@ -1184,6 +1184,10 @@ public class UINavigationNodeSelector extends UIContainer
       @Override
       public void onMove(UserNode source, UserNode from, UserNode to, UserNode previous)
       {
+         TreeNodeData fromTreeNode = searchNode(from.getId());
+         TreeNodeData toTreeNode = searchNode(to.getId());
+         fromTreeNode.wrappedChilds = null;
+         toTreeNode.wrappedChilds = null;
       }
    }
 }
