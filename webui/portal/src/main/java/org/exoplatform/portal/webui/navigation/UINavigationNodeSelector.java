@@ -548,7 +548,7 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNodeData node = uiNodeSelector.searchNode(nodeID);
          try
          {
-            uiNodeSelector.rebaseNode(node, Scope.ALL);
+            uiNodeSelector.rebaseNode(node, Scope.SINGLE);
          }
          catch (NavigationServiceException ex)
          {
@@ -634,6 +634,7 @@ public class UINavigationNodeSelector extends UIContainer
          UIRightClickPopupMenu popup = uitree.getUIRightClickPopupMenu();
          popup.setActions(new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CutNode",
             "CloneNode", "DeleteNode", "MoveUp", "MoveDown"});
+         uiNodeSelector.setCopyNode(null);         
 
          if (uiNodeSelector.searchNode(sourceNode.getId()) == null)
          {
@@ -641,17 +642,17 @@ public class UINavigationNodeSelector extends UIContainer
                new ApplicationMessage("UIPageNodeSelector.msg.copiedNode.deleted", null, ApplicationMessage.WARNING));
             return;
          }
-
+         
          if (sourceNode.isDeleteNode())
          {
-            sourceNode.getParent().removeChild(sourceNode);
+            targetNode.addChild(sourceNode);
+            uiNodeSelector.selectNode(targetNode);
+            return;
          }
 
          service = uiNodeSelector.getApplicationComponent(UserPortalConfigService.class);
          dataStorage = uiNodeSelector.getApplicationComponent(DataStorage.class);
          pasteNode(sourceNode, targetNode, sourceNode.isCloneNode());
-
-         uiNodeSelector.setCopyNode(null);
          uiNodeSelector.selectNode(targetNode);
       }
 
@@ -924,6 +925,18 @@ public class UINavigationNodeSelector extends UIContainer
          return addToCached(new TreeNodeData(nav, child, this.rootNode));
       }
 
+      public void addChild(TreeNodeData child)
+      {
+         TreeNodeData oldParent = child.getParent();
+         if (oldParent != null)
+         {
+            oldParent.wrappedChilds = null;
+         }
+         wrappedChilds = null; 
+         this.node.addChild(child.getNode());
+         addToCached(child);
+      }
+      
       public void addChild(int index, TreeNodeData child)
       {
          wrappedChilds = null;
