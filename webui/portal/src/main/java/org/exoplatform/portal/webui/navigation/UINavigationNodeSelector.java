@@ -64,6 +64,7 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.util.ParameterValidation;
 
 /** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
@@ -345,7 +346,16 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = uiPopupMenu.getAncestorOfType(UINavigationNodeSelector.class);
 
          String nodeID = context.getRequestParameter(UIComponent.OBJECTID);
-         TreeNodeData node = uiNodeSelector.searchNode(nodeID);
+         TreeNodeData node;
+         if (ParameterValidation.isNullOrEmpty(nodeID))
+         {
+            node = uiNodeSelector.getRootNode();
+         }
+         else
+         {
+            node = uiNodeSelector.searchNode(nodeID);            
+         }
+         
          try
          {
             node = rebaseNode(node, uiNodeSelector);
@@ -639,7 +649,7 @@ public class UINavigationNodeSelector extends UIContainer
          if (uiNodeSelector.searchNode(sourceNode.getId()) == null)
          {
             context.getUIApplication().addMessage(
-               new ApplicationMessage("UIPageNodeSelector.msg.copiedNode.deleted", null, ApplicationMessage.WARNING));
+               new ApplicationMessage("UINavigationNodeSelector.msg.copiedNode.deleted", null, ApplicationMessage.WARNING));
             return;
          }
          
