@@ -20,6 +20,7 @@
 package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.mop.SiteKey;
@@ -29,10 +30,7 @@ import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
-import org.exoplatform.portal.webui.navigation.UINavigationManagement;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
 import org.exoplatform.portal.webui.navigation.UIPageNavigationForm;
-import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -294,7 +292,7 @@ public class UIGroupNavigationManagement extends UIContainer
          UINavigationManagement navigationManager = uiGroupNavigation.naviManager;
          
          UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
-         UINavigationNodeSelector.TreeNodeData selectedParent = (UINavigationNodeSelector.TreeNodeData)uiPageNodeForm.getSelectedParent();
+         TreeNode selectedParent = (TreeNode)uiPageNodeForm.getSelectedParent();
          selector.selectNode(selectedParent);                 
 
          UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);

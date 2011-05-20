@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.webui.navigation;
+package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -41,7 +41,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 
-@ComponentConfig(template = "system:/groovy/portal/webui/navigation/UINavigationManagement.gtmpl", events = {
+@ComponentConfig(template = "app:/groovy/navigation/webui/component/UINavigationManagement.gtmpl", events = {
    @EventConfig(listeners = UINavigationManagement.SaveActionListener.class),
    @EventConfig(listeners = UINavigationManagement.AddRootNodeActionListener.class)})
 public class UINavigationManagement extends UIContainer

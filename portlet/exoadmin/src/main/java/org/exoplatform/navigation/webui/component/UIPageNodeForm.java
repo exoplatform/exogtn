@@ -17,8 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.webui.page;
+package org.exoplatform.navigation.webui.component;
 
+import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
@@ -27,7 +28,8 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
+import org.exoplatform.portal.webui.page.UIPageSelector;
+import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -65,7 +67,7 @@ import java.util.List;
 public class UIPageNodeForm extends UIFormTabPane
 {
 
-   private TreeNodeData pageNode_;
+   private TreeNode pageNode_;
 
    private Object selectedParent;
    
@@ -113,12 +115,12 @@ public class UIPageNodeForm extends UIFormTabPane
       setActions(new String[]{"Save", "Back"});
    }
 
-   public TreeNodeData getPageNode()
+   public TreeNode getPageNode()
    {
       return pageNode_;
    }
 
-   public void setValues(TreeNodeData pageNode) throws Exception
+   public void setValues(TreeNode pageNode) throws Exception
    {
       pageNode_ = pageNode;
       if (pageNode == null)
@@ -135,7 +137,7 @@ public class UIPageNodeForm extends UIFormTabPane
    public void invokeGetBindingBean(Object bean) throws Exception
    {
       super.invokeGetBindingBean(bean);
-      TreeNodeData pageNode = (TreeNodeData)bean;
+      TreeNode pageNode = (TreeNode)bean;
 
       String icon = pageNode.getIcon();
       if (icon == null || icon.length() < 0)
@@ -178,8 +180,7 @@ public class UIPageNodeForm extends UIFormTabPane
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       super.invokeSetBindingBean(bean);
-
-      TreeNodeData node = (TreeNodeData) bean;      
+      TreeNode node = (TreeNode) bean;      
 
       if (node.getVisibility() != Visibility.SYSTEM)
       {
@@ -268,7 +269,7 @@ public class UIPageNodeForm extends UIFormTabPane
          WebuiRequestContext ctx = event.getRequestContext();
          UIPageNodeForm uiPageNodeForm = event.getSource();
          UIApplication uiPortalApp = ctx.getUIApplication();
-         TreeNodeData pageNode = uiPageNodeForm.getPageNode();
+         TreeNode pageNode = uiPageNodeForm.getPageNode();
          
          if (pageNode == null || (pageNode.getVisibility() != Visibility.SYSTEM &&
             uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked()))
@@ -311,7 +312,7 @@ public class UIPageNodeForm extends UIFormTabPane
          UIFormStringInput nameInput = uiPageNodeForm.getUIStringInput("name");
          String nodeName = nameInput.getValue();
 
-         TreeNodeData selectedParent = (TreeNodeData)uiPageNodeForm.getSelectedParent();
+         TreeNode selectedParent = (TreeNode)uiPageNodeForm.getSelectedParent();
          if (pageNode == null && selectedParent.getChild(nodeName) != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));

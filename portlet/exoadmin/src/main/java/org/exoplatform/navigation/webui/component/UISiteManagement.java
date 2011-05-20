@@ -21,6 +21,7 @@ package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
@@ -31,10 +32,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.navigation.UINavigationManagement;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector.TreeNodeData;
-import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -403,7 +400,7 @@ public class UISiteManagement extends UIContainer
          UINavigationManagement navigationManager = uiSiteManagement.naviManager;
 
          UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
-         UINavigationNodeSelector.TreeNodeData selectedParent = (UINavigationNodeSelector.TreeNodeData)uiPageNodeForm.getSelectedParent();
+         TreeNode selectedParent = (TreeNode)uiPageNodeForm.getSelectedParent();
          selector.selectNode(selectedParent);
 
          WebuiRequestContext context = event.getRequestContext();
