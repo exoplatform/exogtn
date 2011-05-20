@@ -668,4 +668,32 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //Can't expand the "foo" node, even it doesn't have any pending changes
       service.updateNode(foo.context, Scope.CHILDREN, null);
    }
+
+   public void testRemovedNavigation() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_removed_navigation");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_removed_navigation"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      service.destroyNavigation(navigation);
+
+      //
+      sync(true);
+
+      //
+      try
+      {
+         service.updateNode(root.context, null, null);
+      }
+      catch (NavigationServiceException e)
+      {
+         assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
+   }
 }

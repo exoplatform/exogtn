@@ -328,4 +328,33 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
 
       //
       service.rebaseNode(a.context, Scope.CHILDREN, null);
-   }}
+   }
+
+   public void testRemovedNavigation() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_removed_navigation");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_removed_navigation"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      service.destroyNavigation(navigation);
+
+      //
+      sync(true);
+
+      //
+      try
+      {
+         service.rebaseNode(root.context, null, null);
+      }
+      catch (NavigationServiceException e)
+      {
+         assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
+   }
+}

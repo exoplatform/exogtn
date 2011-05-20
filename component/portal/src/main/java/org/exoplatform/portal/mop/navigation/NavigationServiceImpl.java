@@ -142,7 +142,7 @@ public class NavigationServiceImpl implements NavigationService
    {
       if (navigation == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null navigation argument");
       }
       if (navigation.data == null)
       {
@@ -326,6 +326,13 @@ public class NavigationServiceImpl implements NavigationService
       final POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
       List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
+
+      //
+      NodeData data = dataCache.getNodeData(session, context.tree.root.data.id);
+      if (data == null)
+      {
+         throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+      }
 
       //
       final AtomicReference<NodeContext<N>> node = new AtomicReference<NodeContext<N>>();
@@ -538,6 +545,12 @@ public class NavigationServiceImpl implements NavigationService
          POMSession session = manager.getSession();
          NodeData data = dataCache.getNodeData(session, root.getId());
          final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
+
+         //
+         if (data == null)
+         {
+            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+         }
 
          //
          Update.perform(

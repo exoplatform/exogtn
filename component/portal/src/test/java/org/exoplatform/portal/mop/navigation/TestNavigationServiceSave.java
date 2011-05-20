@@ -84,6 +84,25 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Integer p = state.getPriority();
       assertEquals(5, (int) p);
       assertNotNull(nav.data.rootId);
+   }
+
+   public void testDestroyNavigation() throws Exception
+   {
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("destroy_navigation"));
+      assertNull(nav);
+
+      //
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "destroy_navigation").getRootNavigation().addChild("default").addChild("a");
+
+      //
+      sync(true);
+
+      //
+      nav = service.loadNavigation(SiteKey.portal("destroy_navigation"));
+      assertNotNull(nav);
+
+      //
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
 
       //
       assertTrue(service.destroyNavigation(nav));
@@ -100,19 +119,18 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       }
 
       //
-      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      nav = service.loadNavigation(SiteKey.portal("destroy_navigation"));
       assertNull(nav);
 
       //
       sync(true);
 
       //
-      nav = service.loadNavigation(SiteKey.portal("save_navigation"));
+      nav = service.loadNavigation(SiteKey.portal("destroy_navigation"));
       assertNull(nav);
    }
 
-
-    public void testPendingChangesBypassCache() throws Exception
+   public void testPendingChangesBypassCache() throws Exception
    {
       MOPService mop = mgr.getPOMService();
       Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
@@ -1552,5 +1570,33 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       service.saveNode(root1.context);
+   }
+
+   public void testRemovedNavigation() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_removed_navigation");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("save_removed_navigation"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      service.destroyNavigation(navigation);
+
+      //
+      sync(true);
+
+      //
+      try
+      {
+         service.saveNode(root.context);
+      }
+      catch (NavigationServiceException e)
+      {
+         assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
    }
 }
