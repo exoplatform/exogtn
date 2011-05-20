@@ -35,15 +35,4 @@ interface UpdateAdapter<N>
     */
    NodeData getData(N node);
 
-   /**
-    * The trivial adapter for {@link NodeData} objects.
-    */
-   UpdateAdapter<NodeData> NODE_DATA = new UpdateAdapter<NodeData>()
-   {
-      public NodeData getData(NodeData node)
-      {
-         return node;
-      }
-   };
-
 }

@@ -143,7 +143,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       NavigationContext nav = service.loadNavigation(SiteKey.portal("pending_changes_bypass_cache"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
       root.addChild("foo");
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
@@ -198,7 +198,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals("foo", foo.getName());
       assertSame(foo, root1.getChild("foo"));
       assertEquals(1, root1.getNodeCount());
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -257,7 +257,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       assertTrue(root1.removeChild("foo"));
       assertNull(root1.getChild("foo"));
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -294,7 +294,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       assertTrue(root1.removeChild("foo"));
       assertNull(root1.getChild("foo"));
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -358,7 +358,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       a1.setName("c");
       assertEquals("c", a1.getName());
       assertEquals(0, a1.context.getIndex());
-      service.saveNode(a1.context);
+      service.saveNode(a1.context, null);
 
       //
       root1.assertConsistent();
@@ -431,7 +431,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       root1.addChild(1, juu1);
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -457,7 +457,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       root2.addChild(0, bar2);
 
       //
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       root2.assertConsistent();
@@ -497,7 +497,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
       assertEquals("bar", root.getChild(1).getName());
       assertTrue(root.removeChild("bar"));
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       sync(true);
@@ -507,7 +507,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       root.addChild("daa");
       Node tab3 = root.getChild(2);
       assertEquals("daa", tab3.getName());
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       sync(true);
@@ -626,7 +626,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node bar1 = root1.getChild("bar");
       Node juu1 = foo1.getChild("juu");
       bar1.addChild(juu1);
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -669,7 +669,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertSame(a, root.getChild(0));
       assertSame(b, root.getChild(1));
       assertSame(c, root.getChild(2));
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       root.assertConsistent();
@@ -712,7 +712,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertSame(b, root.getChild(0));
       assertSame(a, root.getChild(1));
       assertSame(c, root.getChild(2));
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       root.assertConsistent();
@@ -748,7 +748,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node root1 = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
       Node foo1 = root1.getChild("foo");
       foo1.setName("foo");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -768,7 +768,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       foo2.setName("bar");
       assertEquals("bar", foo2.getName());
       assertSame(foo2, root2.getChild("bar"));
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       assertEquals("bar", foo2.getName());
       assertSame(foo2, root2.getChild("bar"));
 
@@ -820,7 +820,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       root1.removeChild("2");
       root1.addChild(0, root1.getChild("3"));
       root1.addChild(1, root1.addChild("."));
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       Iterator<Node> i = root1.getChildren().iterator();
       assertEquals("3", i.next().getName());
       assertEquals(".", i.next().getName());
@@ -863,7 +863,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node foo1 = root1.getChild("foo");
       Node bar1 = foo1.addChild("bar");
       bar1.addChild("juu");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -902,7 +902,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals(-1, state.getEndPublicationTime());
       long now = System.currentTimeMillis();
       root1.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -936,14 +936,14 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_state_overwrite"));
       Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
       root.addChild("foo");
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       sync(true);
 
       //
       root.addChild("bar");
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       sync(true);
@@ -969,7 +969,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       String fooId = root1.getChild("foo").getId();
       assertTrue(root1.removeChild("foo"));
       assertNull(root1.addChild("foo").getId());
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -1003,7 +1003,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node b1 = a1.getChild("b");
       Node c1 = root1.addChild("c");
       c1.addChild(b1);
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -1044,7 +1044,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node c1 = a1.getChild("c");
       b1.addChild(c1);
       root1.removeChild("a");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertConsistent();
@@ -1079,7 +1079,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
       root.addChild("foo");
       root.removeChild("foo");
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
 
       //
       root.assertConsistent();
@@ -1109,7 +1109,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1117,7 +1117,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1148,18 +1148,18 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
       root2.addChild(1, root2.addChild("2"));
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
 
       //
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       root1.assertConsistent();
 
       //
       root1.addChild(1, root1.addChild("1"));
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       root1.assertConsistent();
    }
 
@@ -1180,13 +1180,13 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
 
       //
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       root1.assertEquals(root2);
@@ -1209,7 +1209,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.getChild("a").removeChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1217,7 +1217,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1244,7 +1244,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1252,7 +1252,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1280,7 +1280,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.getChild("c").addChild(root2.getChild("a"));
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1288,7 +1288,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1313,7 +1313,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.addChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1322,7 +1322,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       root1.addChild("a");
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1348,7 +1348,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1356,7 +1356,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1384,7 +1384,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("c");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1392,7 +1392,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1419,7 +1419,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1427,7 +1427,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1453,7 +1453,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1461,7 +1461,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1487,7 +1487,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.addChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1495,7 +1495,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1517,7 +1517,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("concurrent_save"));
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root1.addChild("a");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       sync(true);
@@ -1532,7 +1532,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Edit navigation in another browser
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -1540,7 +1540,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Now click Save button in the first browser
       try
       {
-         service.saveNode(root1.context);
+         service.saveNode(root1.context, null);
          fail();
       }
       catch (NavigationServiceException e)
@@ -1563,13 +1563,13 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
 
       //
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
    }
 
    public void testRemovedNavigation() throws Exception
@@ -1592,11 +1592,55 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       try
       {
-         service.saveNode(root.context);
+         service.saveNode(root.context, null);
+         fail();
       }
       catch (NavigationServiceException e)
       {
          assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
       }
+   }
+
+   public void testAtomic() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_atomic");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+      def.addChild("b");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("save_atomic"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      root1.getChild("a").addChild("c");
+      root1.getChild("b").addChild("d");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      root2.removeChild("b");
+      service.saveNode(root2.context, null);
+
+      //
+      sync(true);
+
+      //
+      assertFalse(mgr.getSession().isModified());
+
+      //
+      try
+      {
+         service.saveNode(root1.context, null);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertSame(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
+      }
+
+      //
+      assertFalse(mgr.getSession().isModified());
    }
 }

@@ -82,7 +82,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 
       //
       assertTrue(root.context.hasChanges());
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
       assertFalse(root.context.hasChanges());
 
       //
@@ -105,7 +105,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals(0, root1.getNodeSize());
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.addChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -134,7 +134,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals(1, root1.getSize());
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.addChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -167,7 +167,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node a = root1.getNode("a");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -200,7 +200,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node c = root1.getNode("c");
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -231,7 +231,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root1.addChild("a").addChild("b");
       root1.addChild("c");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       sync(true);
@@ -246,7 +246,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
       Node b2 = root2.getChild("a").addChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       Iterator<NodeChange<Node>> changes = root1.update(service, null);
@@ -288,7 +288,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       b1.addChild("f");
       b1.addChild("g");
       b1.addChild("h");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
 
       //
       sync(true);
@@ -312,7 +312,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       b2.addChild(2, a2.getChild("d"));
       a2.addChild(1, "d");
       b2.removeChild("g");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);
@@ -367,7 +367,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       root2.removeChild("foo");
       Node foo = root2.addChild("foo");
       foo.setState(new NodeState.Builder().setLabel("foo2").capture());
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       String foo2Id = foo.getId();
       sync(true);
 
@@ -399,7 +399,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
       root2.getChild("foo").setName("bar");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -427,7 +427,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
       root.getChild("foo").setState(new NodeState.Builder().setLabel("foo").capture());
-      service.saveNode(root.context);
+      service.saveNode(root.context, null);
       sync(true);
 
       //
@@ -478,7 +478,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root1.getChild("foo").removeChild("bar");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       sync(true);
 
       //
@@ -506,7 +506,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root1.getChild("foo").removeChild("bar");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       sync(true);
 
       //
@@ -568,7 +568,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //Browser 2: Change the "foo" node
       Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
       root1.getChild("foo").removeChild("bar");
-      service.saveNode(root1.context);
+      service.saveNode(root1.context, null);
       sync(true);
 
       //Browser 1: Try to expand the "foo" node 2 times ---> NPE after the 2nd updateNode method
@@ -596,7 +596,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //Browser 2 : move the node "b" from "a" to "c"
       NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
       root1.getNode("c").addChild(root1.getNode("a").getChild("b"));
-      service.saveNode(root1.getNode().context);
+      service.saveNode(root1.getNode().context, null);
       //
       sync(true);
 
@@ -631,7 +631,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.addChild("e");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
 
       //
       sync(true);

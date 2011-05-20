@@ -215,57 +215,11 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   class DstAdapter implements HierarchyAdapter<String[], NodeData, String>
-   {
-
-      /** . */
-      private final POMSession session;
-
-      DstAdapter(POMSession session)
-      {
-         this.session = session;
-      }
-
-      public String getHandle(NodeData node)
-      {
-         return node.id;
-      }
-
-      public String[] getChildren(NodeData node)
-      {
-         return node.children;
-      }
-
-      public NodeData getDescendant(NodeData node, String handle)
-      {
-         NodeData data = dataCache.getNodeData(session, handle);
-         NodeData current = data;
-         while (current != null)
-         {
-            if (node.id.equals(current.id))
-            {
-               return data;
-            }
-            else
-            {
-               if (current.parentId != null)
-               {
-                  current = dataCache.getNodeData(session, current.parentId);
-               }
-               else
-               {
-                  current = null;
-               }
-            }
-         }
-         return null;
-      }
-   }
-
    public <N> void updateNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
-      final POMSession session = manager.getSession();
+
+      //
       TreeContext<N> tree = root.tree;
 
       //
@@ -292,6 +246,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
+      final POMSession session = manager.getSession();
       NodeData data = dataCache.getNodeData(session, root.data.id);
       if (data == null)
       {
@@ -307,10 +262,10 @@ public class NavigationServiceImpl implements NavigationService
 
          Update.perform(
             root,
-            aaa,
+            ContextHierarchyAdapter.<N>create(),
             data,
-            new DstAdapter(session),
-            UpdateAdapter.NODE_DATA,
+            DataHierarchyAdapter.create(dataCache, session),
+            DataUpdateAdapter.create(),
             listener,
             visitor);
       }
@@ -321,11 +276,20 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   public <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException
+
+
+
+
+
+
+
+
+
+
+   public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
    {
       final POMSession session = manager.getSession();
       TreeContext<N> tree = context.tree;
-      List<NodeChange<NodeContext<N>>> changes = tree.popChanges();
 
       //
       NodeData data = dataCache.getNodeData(session, context.tree.root.data.id);
@@ -333,6 +297,9 @@ public class NavigationServiceImpl implements NavigationService
       {
          throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
       }
+
+      // Attempt to rebase
+      TreeContext<N> rebased = rebase(tree, tree.origin());
 
       //
       final AtomicReference<NodeContext<N>> node = new AtomicReference<NodeContext<N>>();
@@ -424,10 +391,10 @@ public class NavigationServiceImpl implements NavigationService
       };
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N, Navigation>(new MOPMergeAdapter(session), persister);
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N, Navigation>(new NavigationMergeAdapter(session), persister);
 
       // Compute set of ids to invalidate
-      for (final NodeChange<NodeContext<N>> src : changes)
+      for (NodeChange<NodeContext<N>> src : tree.popChanges())
       {
          node.set(src.source);
          src.dispatch(merger);
@@ -453,13 +420,98 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private static class MOPMergeAdapter implements MergeAdapter<Navigation>
+   private <N> TreeContext<N> rebase(TreeContext<N> tree, Scope.Visitor visitor) throws NavigationServiceException
+   {
+      POMSession session = manager.getSession();
+      NodeData data = dataCache.getNodeData(session, tree.root.getId());
+      if (data == null)
+      {
+         throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+      }
+
+      //
+      NodeContext<N> rebased = new NodeContext<N>(tree.model, data);
+
+      //
+      Update.perform(
+         rebased,
+         ContextHierarchyAdapter.<N>create(),
+         data,
+         DataHierarchyAdapter.create(dataCache, session),
+         DataUpdateAdapter.create(),
+         null,
+         visitor);
+
+      //
+      List<NodeChange<NodeContext<N>>> changes = tree.peekChanges();
+
+      //
+      NodeChangeListener<NodeContext<N>> persister = new NodeContextSynchronizer<N>(rebased.tree);
+
+      //
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(rebased.tree, persister);
+
+      //
+      for (NodeChange<NodeContext<N>> change : changes)
+      {
+         change.dispatch(merger);
+      }
+
+      return rebased.tree;
+   }
+
+   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
+   {
+      // No changes -> do an update operation instead as it's cheaper
+      if (!context.tree.hasChanges())
+      {
+         updateNode(context, scope, listener);
+      }
+      else
+      {
+         Scope.Visitor visitor;
+         if (scope != null)
+         {
+            visitor = new FederatingVisitor<N>(context.tree.origin(), context, scope);
+         }
+         else
+         {
+            visitor = context.tree.origin();
+         }
+
+         //
+         if (context.tree.root != context)
+         {
+            context = context.tree.root;
+         }
+
+         //
+         TreeContext<N> rebased = rebase(context.tree, visitor);
+
+         //
+         Update.perform(
+            context,
+            ContextHierarchyAdapter.<N>create(),
+            rebased.root,
+            ContextHierarchyAdapter.<N>create(),
+            ContextUpdateAdapter.<N>create(),
+            listener,
+            rebased);
+      }
+   }
+
+   public void clearCache()
+   {
+      dataCache.clear();
+   }
+
+   private static class NavigationMergeAdapter implements MergeAdapter<Navigation>
    {
 
       /** . */
       private final POMSession session;
 
-      MOPMergeAdapter(POMSession session)
+      NavigationMergeAdapter(POMSession session)
       {
          this.session = session;
       }
@@ -483,150 +535,179 @@ public class NavigationServiceImpl implements NavigationService
       {
          return node.getName();
       }
-   };
+   }
 
-   private static final HierarchyAdapter aaa = new HierarchyAdapter<String[], NodeContext<Object>, String>()
+   private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
    {
-      public String getHandle(NodeContext<Object> node)
+
+      /** . */
+      private static final ContextHierarchyAdapter<?> _instance = new ContextHierarchyAdapter();
+
+      static <N> ContextHierarchyAdapter<N> create()
+      {
+         @SuppressWarnings("unchecked")
+         ContextHierarchyAdapter<N> instance = (ContextHierarchyAdapter<N>)_instance;
+         return instance;
+      }
+
+      public String getHandle(NodeContext<N> node)
       {
          return node.handle;
       }
 
-      public String[] getChildren(NodeContext<Object> node)
+      public String[] getChildren(NodeContext<N> node)
       {
          ArrayList<String> blah = new ArrayList<String>();
-         for (NodeContext<Object> current = node.getFirst(); current != null; current = current.getNext())
+         for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
          {
             blah.add(current.handle);
          }
          return blah.toArray(new String[blah.size()]);
       }
 
-      public NodeContext<Object> getDescendant(NodeContext<Object> node, String handle)
+      public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
       {
          return node.getDescendant(handle);
       }
-   };
+   }
 
-   private static final UpdateAdapter bbb = new UpdateAdapter<NodeContext<Object>>()
+   static class DataHierarchyAdapter implements HierarchyAdapter<String[], NodeData, String>
    {
-      public NodeData getData(NodeContext<Object> node)
+
+      static DataHierarchyAdapter create(DataCache dataCache, POMSession session)
       {
-         return node.data;
+         return new DataHierarchyAdapter(dataCache, session);
       }
-   };
 
-   public <N> void rebaseNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
-   {
-      // No changes -> do an update operation instead as it's cheaper
-      if (!root.tree.hasChanges())
+      /** . */
+      private final DataCache dataCache;
+
+      /** . */
+      private final POMSession session;
+
+      private DataHierarchyAdapter(DataCache dataCache, POMSession session)
       {
-         updateNode(root, scope, listener);
+         this.dataCache = dataCache;
+         this.session = session;
       }
-      else
+
+      public String getHandle(NodeData node)
       {
-         Scope.Visitor visitor;
-         if (scope != null)
+         return node.id;
+      }
+
+      public String[] getChildren(NodeData node)
+      {
+         return node.children;
+      }
+
+      public NodeData getDescendant(NodeData node, String handle)
+      {
+         NodeData data = dataCache.getNodeData(session, handle);
+         NodeData current = data;
+         while (current != null)
          {
-            visitor = new FederatingVisitor<N>(root.tree.origin(), root, scope);
-         }
-         else
-         {
-            visitor = root.tree.origin();
-         }
-
-         //
-         if (root.tree.root != root)
-         {
-            root = root.tree.root;
-         }
-
-         //
-         POMSession session = manager.getSession();
-         NodeData data = dataCache.getNodeData(session, root.getId());
-         final NodeContext<N> context = new NodeContext<N>(root.tree.model, data);
-
-         //
-         if (data == null)
-         {
-            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
-         }
-
-         //
-         Update.perform(
-            context,
-            aaa,
-            data,
-            new DstAdapter(session),
-            UpdateAdapter.NODE_DATA,
-            null,
-            visitor);
-
-         //
-         List<NodeChange<NodeContext<N>>> changes = root.tree.peekChanges();
-
-         //
-         NodeChangeListener<NodeContext<N>> persister = new NodeChangeListener.Base<NodeContext<N>>()
-         {
-            @Override
-            public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+            if (node.id.equals(current.id))
             {
-               source = new NodeContext<N>(context.tree, name, new NodeState.Builder().capture());
-               source.expand();
-               context.tree.addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
+               return data;
             }
-
-            @Override
-            public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+            else
             {
-               context.tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
+               if (current.parentId != null)
+               {
+                  current = dataCache.getNodeData(session, current.parentId);
+               }
+               else
+               {
+                  current = null;
+               }
             }
-
-            @Override
-            public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
-            {
-               context.tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
-            }
-
-            @Override
-            public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
-            {
-               context.tree.addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
-            }
-
-            @Override
-            public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
-            {
-               context.tree.addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
-            }
-         };
-
-         //
-         NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(
-            context.tree,
-            persister
-         );
-
-         //
-         for (NodeChange<NodeContext<N>> change : changes)
-         {
-            change.dispatch(merger);
          }
-
-         //
-         Update.perform(
-            root,
-            aaa,
-            context,
-            aaa,
-            bbb,
-            listener,
-            context.tree);
+         return null;
       }
    }
 
-   public void clearCache()
+   private static class ContextUpdateAdapter<N> implements UpdateAdapter<NodeContext<N>>
    {
-      dataCache.clear();
+
+      /** . */
+      private static final ContextUpdateAdapter _instance = new ContextUpdateAdapter();
+
+      static <N> ContextUpdateAdapter<N> create()
+      {
+         @SuppressWarnings("unchecked")
+         ContextUpdateAdapter<N> instance = (ContextUpdateAdapter<N>)_instance;
+         return instance;
+      }
+
+      public NodeData getData(NodeContext<N> node)
+      {
+         return node.data;
+      }
+   }
+
+   private static class DataUpdateAdapter implements UpdateAdapter<NodeData>
+   {
+
+      /** . */
+      private static final DataUpdateAdapter instance = new DataUpdateAdapter();
+
+      static DataUpdateAdapter create()
+      {
+         return instance;
+      }
+
+      public NodeData getData(NodeData node)
+      {
+         return node;
+      }
+   }
+
+   private static class NodeContextSynchronizer<N> extends NodeChangeListener.Base<NodeContext<N>>
+   {
+
+      /** . */
+      private final TreeContext<N> tree;
+
+      private NodeContextSynchronizer(TreeContext<N> tree)
+      {
+         this.tree = tree;
+      }
+
+      @Override
+      public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+      {
+         source = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
+
+         // Expand the node if needed
+         source.expand();
+
+         //
+         tree.addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
+      }
+
+      @Override
+      public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+      {
+         tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
+      }
+
+      @Override
+      public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+      {
+         tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
+      }
+
+      @Override
+      public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
+      {
+         tree.addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
+      }
+
+      @Override
+      public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+      {
+         tree.addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
+      }
    }
 }

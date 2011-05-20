@@ -84,16 +84,16 @@ public interface NavigationService
    <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
 
    /**
-    * Save the specified context state to the persistent storage. The operation takes the pending changes done to
+    * <p>Save the specified context state to the persistent storage. The operation takes the pending changes done to
     * the tree and attempt to save them to the persistent storage. When conflicts happens, a merge will be attempted
     * however it can lead to a failure.</p>
     *
     * @param context the context to save
-    * @param <N> the node generic type
+    * @param listener the optional listener
     * @throws NullPointerException if the context argument is null
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   <N> void saveNode(NodeContext<N> context) throws NullPointerException, NavigationServiceException;
+   <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
 
    /**
     * <p>Update the specified <code>context</code> argument with the most recent state. The update operation will

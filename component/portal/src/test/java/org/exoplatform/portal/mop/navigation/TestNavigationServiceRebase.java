@@ -54,7 +54,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       Node c2 = root2.addChild(1, "c");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -90,7 +90,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.getChild("b").addChild(root2.getChild("a"));
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -123,7 +123,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.removeChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -181,7 +181,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.addChild("a");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -215,7 +215,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.addChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -249,7 +249,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.addChild("b");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //
@@ -283,7 +283,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
       root2.addChild("d").addChild("e");
-      service.saveNode(root2.context);
+      service.saveNode(root2.context, null);
       sync(true);
 
       //

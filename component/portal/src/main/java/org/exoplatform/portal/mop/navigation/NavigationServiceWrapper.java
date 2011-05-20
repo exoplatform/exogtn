@@ -100,9 +100,9 @@ public class NavigationServiceWrapper implements NavigationService
       return service.loadNode(model, navigation, scope, listener);
    }
 
-   public <N> void saveNode(NodeContext<N> context) throws NavigationServiceException
+   public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
    {
-      service.saveNode(context);
+      service.saveNode(context, listener);
       org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION, context.data.id);
       Site site = nav.getSite();
       SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());

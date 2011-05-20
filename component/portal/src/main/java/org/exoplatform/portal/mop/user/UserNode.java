@@ -305,7 +305,7 @@ public class UserNode
 
    public void save() throws NavigationServiceException
    {
-      navigation.portal.navigationService.saveNode(context);
+      navigation.portal.navigationService.saveNode(context, null);
    }
 
    // Keep this internal for now
