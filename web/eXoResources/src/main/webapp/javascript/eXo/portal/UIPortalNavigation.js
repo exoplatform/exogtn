@@ -149,10 +149,11 @@ UIPortalNavigation.prototype.generateContainer = function(data) {
 		htmlFrags += ("<div class='" + (node.hasChild ? "ArrowIcon" : "") + "' title='" + node.label + "'>");
 		htmlFrags += ("<div class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'>");
 		htmlFrags += ("<a href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
-		htmlFrags += ("</div></div></div>");
+		htmlFrags += ("</div></div>");
 		if (node.childs.length) {
 			htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);			
 		}
+		htmlFrags += "</div>";
 	}
 	htmlFrags += "</div></div></div><div class='LeftBottomMenuDecorator'><div class='RightBottomMenuDecorator'>";
 	htmlFrags += "<div class='CenterBottomMenuDecorator'><span></span></div></div></div></div></div>";

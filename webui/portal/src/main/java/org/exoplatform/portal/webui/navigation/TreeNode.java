@@ -53,11 +53,12 @@ public class TreeNode
       rootNode = this;
    }
 
-   private TreeNode(UserNode node, TreeNode rootNode)
+   private TreeNode(UserNode node, TreeNode rootNode) throws Exception
    {
       node_ = node;
       isExpanded_ = false;
       this.rootNode = rootNode; 
+      setChildren(node.getChildren());
    }
 
    public boolean isExpanded()
@@ -95,7 +96,7 @@ public class TreeNode
       {
          TreeNode node = new TreeNode(child, rootNode);
          children_.add(node);
-         rootNode.cachedTreeNodes_.put(child.getId(), node);
+         rootNode.cachedTreeNodes_.put(child.getId(), node);         
       }
    }
 

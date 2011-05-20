@@ -60,7 +60,7 @@ public class UIPortalNavigation extends UIComponent
 
    private final NodeFilter NAVIGATION_FILTER;
    
-   private static final Scope NAVIGATION_SCOPE = Scope.CHILDREN;
+   private Scope navigationScope;
 
    public UIPortalNavigation()
    {
@@ -140,7 +140,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, NAVIGATION_SCOPE, null);
+            UserNode rootNode = userPortal.getNode(userNav, navigationScope, null);
             if (rootNode != null)
             {
                rootNode.filter(NAVIGATION_FILTER);
@@ -165,7 +165,7 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, NAVIGATION_SCOPE, null);
+         UserNode rootNode = userPortal.getNode(nav, navigationScope, null);
          if (rootNode != null)
          {
             rootNode.filter(NAVIGATION_FILTER);
@@ -180,7 +180,7 @@ public class UIPortalNavigation extends UIComponent
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       try
       {
-         userPortal.updateNode(node, NAVIGATION_SCOPE, null);
+         userPortal.updateNode(node, navigationScope, null);
          return node;
       }
       catch (NavigationServiceException e)
@@ -245,13 +245,18 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      UserNode rootNode = userPortal.getNode(userNavigation, NAVIGATION_SCOPE, null);
+      UserNode rootNode = userPortal.getNode(userNavigation, navigationScope, null);
       if (rootNode != null)
       {
          rootNode.filter(NAVIGATION_FILTER);
       }
       return rootNode;
    }
+   
+   public void setScope(Scope scope)
+   {
+      this.navigationScope = scope;
+   }   
    
    static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>
    {
@@ -292,7 +297,7 @@ public class UIPortalNavigation extends UIComponent
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
          UserNode node = expandTree.getNode();
-         userPortal.updateNode(node, NAVIGATION_SCOPE, null);
+         userPortal.updateNode(node, event.getSource().navigationScope, null);
          if (node == null)
          {
             event.getSource().loadTreeNodes();
@@ -376,5 +381,7 @@ public class UIPortalNavigation extends UIComponent
             }
          }
       }
-   }   
+   }
+
+
 }

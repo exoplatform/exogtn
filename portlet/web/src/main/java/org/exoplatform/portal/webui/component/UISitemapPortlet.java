@@ -27,6 +27,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
+import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
@@ -58,6 +60,8 @@ import org.json.JSONObject;
 public class UISitemapPortlet extends UIPortletApplication
 {
 
+   public static final int DEFAULT_LEVEL = 2;
+   
    public UISitemapPortlet() throws Exception
    {
 
@@ -69,6 +73,25 @@ public class UISitemapPortlet extends UIPortletApplication
       UIPortalNavigation uiPortalNavigation = addChild(UIPortalNavigation.class, "UISiteMap", null);
       uiPortalNavigation.setTemplate(template);
       uiPortalNavigation.setUseAjax(isUseAjax());
+      
+      int level = DEFAULT_LEVEL; 
+      try 
+      {
+         level = Integer.valueOf(prefers.getValue("level", String.valueOf(DEFAULT_LEVEL)));       
+      }
+      catch (Exception ex) 
+      {
+         log.warn("Preference for navigation level can only be integer");
+      }
+      
+      if (level <= 0)
+      {
+         uiPortalNavigation.setScope(Scope.ALL);                     
+      }
+      else
+      {
+         uiPortalNavigation.setScope(new GenericScope(level));
+      }
    }
 
    @Override

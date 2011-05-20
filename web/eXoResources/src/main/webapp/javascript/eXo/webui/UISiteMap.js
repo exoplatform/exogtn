@@ -24,7 +24,7 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	
 	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(nodeToUpdate.parentNode, "div", "ChildrenContainer") ;
 	if (!subGroup || subGroup.innerHTML.trim() !== "") return;	
-	
+		
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
 		var data = eXo.core.JSON.parse(jsChilds);		
@@ -49,13 +49,16 @@ UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {
 				str += "<div class='CollapseIcon ClearFix' onclick='eXo.portal.UIPortal.collapseExpand(this); " + actionCollapse + "'>";
 				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
 				str += "</div><div class='ChildrenContainer' style='display: block'>";
-				for (var idx = 0; idx < node.childs.length; i++) {
+				for (var idx = 0; idx < node.childs.length; idx++) {
 					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
 				}				
 			} else {
 				str += "<div class='ExpandIcon ClearFix' onclick='eXo.portal.UIPortal.collapseExpand(this); " + actionExpand + "'>";
 				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
 				str += "</div><div class='ChildrenContainer' style='display: none'>";
+				for (var idx = 0; idx < node.childs.length; idx++) {
+					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
+				}	
 			}
 			str += "</div></div>";
 		} else {

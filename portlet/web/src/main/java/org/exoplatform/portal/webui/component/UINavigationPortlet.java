@@ -27,6 +27,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
+import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -47,6 +49,8 @@ import org.json.JSONObject;
    @ComponentConfig(type = UIPortalNavigation.class, id = "UIHorizontalNavigation", events = @EventConfig(listeners = UIPortalNavigation.SelectNodeActionListener.class))})
 public class UINavigationPortlet extends UIPortletApplication
 {
+   public static final int DEFAULT_LEVEL = 2;
+   
    public UINavigationPortlet() throws Exception
    {
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
@@ -60,6 +64,25 @@ public class UINavigationPortlet extends UIPortletApplication
       portalNavigation.setTemplate(template);
 
       portalNavigation.setCssClassName(prefers.getValue("CSSClassName", ""));
+      
+      int level = DEFAULT_LEVEL; 
+      try 
+      {
+         level = Integer.valueOf(prefers.getValue("level", String.valueOf(DEFAULT_LEVEL)));       
+      }
+      catch (Exception ex) 
+      {
+         log.warn("Preference for navigation level can only be integer");
+      }
+
+      if (level <= 0)
+      {
+         portalNavigation.setScope(Scope.ALL);                     
+      }
+      else
+      {
+         portalNavigation.setScope(new GenericScope(level));
+      }
    }
 
    @Override
