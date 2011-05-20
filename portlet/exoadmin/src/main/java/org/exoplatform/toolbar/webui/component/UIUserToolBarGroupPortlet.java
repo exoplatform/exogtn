@@ -25,12 +25,15 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.MimeResponse;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.NavigationPath;
@@ -41,6 +44,7 @@ import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -66,7 +70,8 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
 {
 
    private final NodeFilter TOOLBAR_GROUP_FILTER;
-   private static final Scope TOOLBAR_GROUP_SCOPE = Scope.CHILDREN;
+   private final Scope TOOLBAR_GROUP_SCOPE;
+   private static final int DEFAULT_LEVEL = 2;
    private static final String SPLITTER_STRING = "::";
 
    public UIUserToolBarGroupPortlet() throws Exception
@@ -75,6 +80,29 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
       TOOLBAR_GROUP_FILTER = getUserPortal().createFilter(scopeBuilder.build());
+      
+      int level = DEFAULT_LEVEL; 
+      try 
+      {
+         PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+         PortletRequest prequest = context.getRequest();
+         PortletPreferences prefers = prequest.getPreferences();
+         
+         level = Integer.valueOf(prefers.getValue("level", String.valueOf(DEFAULT_LEVEL)));       
+      }
+      catch (Exception ex) 
+      {
+         log.warn("Preference for navigation level can only be integer");
+      }
+
+      if (level <= 0)
+      {
+         TOOLBAR_GROUP_SCOPE = Scope.ALL;           
+      }
+      else
+      {
+         TOOLBAR_GROUP_SCOPE = new GenericScope(level);
+      }
    }
 
    public List<UserNavigation> getGroupNavigations() throws Exception
