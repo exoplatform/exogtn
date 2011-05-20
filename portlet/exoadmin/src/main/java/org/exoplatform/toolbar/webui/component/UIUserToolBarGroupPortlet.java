@@ -76,10 +76,10 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
 
    public UIUserToolBarGroupPortlet() throws Exception
    {                  
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
-      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-      scopeBuilder.withTemporalCheck();
-      TOOLBAR_GROUP_FILTER = getUserPortal().createFilter(scopeBuilder.build());
+      UserNodePredicate.Builder builder = UserNodePredicate.builder();
+      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withTemporalCheck();
+      TOOLBAR_GROUP_FILTER = getUserPortal().createFilter(builder.build());
       
       int level = DEFAULT_LEVEL; 
       try 

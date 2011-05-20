@@ -72,10 +72,10 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
-      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-      scopeBuilder.withTemporalCheck();
-      TOOLBAR_SITE_FILTER = userPortal.createFilter(scopeBuilder.build());
+      UserNodePredicate.Builder builder = UserNodePredicate.builder();
+      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withTemporalCheck();
+      TOOLBAR_SITE_FILTER = userPortal.createFilter(builder.build());
       
       int level = DEFAULT_LEVEL; 
       try 
