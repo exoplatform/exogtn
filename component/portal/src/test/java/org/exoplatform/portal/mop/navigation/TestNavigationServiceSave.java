@@ -149,7 +149,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       // Test what happens when null is added
       try
       {
-         root1.addChild((String)null);
+         root1.addChild((String) null);
          fail();
       }
       catch (NullPointerException ignore)
@@ -627,6 +627,92 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       //
       root1.assertEquals(root2);
+   }
+
+   public void testMoveAfter1() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_move_after_1");
+      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("a");
+      rootNavigation.addChild("b");
+      rootNavigation.addChild("c");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("save_move_after_1"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+      Node a = root.getChild("a");
+      Node b = root.getChild("b");
+      Node c = root.getChild("c");
+      root.addChild(1, a);
+      assertSame(a, root.getChild(0));
+      assertSame(b, root.getChild(1));
+      assertSame(c, root.getChild(2));
+      service.saveNode(root.context);
+
+      //
+      root.assertConsistent();
+      assertSame(a, root.getChild(0));
+      assertSame(b, root.getChild(1));
+      assertSame(c, root.getChild(2));
+
+      //
+      sync(true);
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      assertSame(a, root.getChild(0));
+      assertSame(b, root.getChild(1));
+      assertSame(c, root.getChild(2));
+   }
+
+   public void testMoveAfter2() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_move_after_2");
+      Navigation rootNavigation = portal.getRootNavigation().addChild("default");
+      rootNavigation.addChild("a");
+      rootNavigation.addChild("b");
+      rootNavigation.addChild("c");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("save_move_after_2"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+      Node a = root.getChild("a");
+      Node b = root.getChild("b");
+      Node c = root.getChild("c");
+      root.addChild(2, a);
+      assertSame(b, root.getChild(0));
+      assertSame(a, root.getChild(1));
+      assertSame(c, root.getChild(2));
+      service.saveNode(root.context);
+
+      //
+      root.assertConsistent();
+      assertSame(b, root.getChild(0));
+      assertSame(a, root.getChild(1));
+      assertSame(c, root.getChild(2));
+
+      //
+      sync(true);
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+      a = root.getChild("a");
+      b = root.getChild("b");
+      c = root.getChild("c");
+      assertSame(b, root.getChild(0));
+      assertSame(a, root.getChild(1));
+      assertSame(c, root.getChild(2));
    }
 
    public void testRenameNode() throws Exception
