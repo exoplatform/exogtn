@@ -312,10 +312,8 @@ public class NavigationServiceImpl implements NavigationService
          public void onCreate(Navigation source, Navigation parent, Navigation previous, String name) throws NavigationServiceException
          {
             ids.add(parent.getObjectId());
-            source = parent.addChild(name);
-            List<Navigation> children = parent.getChildren();
-            int index = previous != null ? children.indexOf(previous) + 1 : 0;
-            children.add(index, source);
+            int index = previous != null ? previous.getIndex() + 1 : 0;
+            source = parent.addChild(index, name);
             node.get().data = new NodeData(source);
             node.get().handle = node.get().data.id;
          }
@@ -333,10 +331,7 @@ public class NavigationServiceImpl implements NavigationService
          {
             ids.add(source.getObjectId());
             ids.add(parent.getObjectId());
-            List<Navigation> children = parent.getChildren();
-            int index = children.indexOf(source);
             source.setName(name);
-            children.add(index, source);
          }
 
          @Override
@@ -384,9 +379,8 @@ public class NavigationServiceImpl implements NavigationService
             ids.add(source.getObjectId());
             ids.add(from.getObjectId());
             ids.add(to.getObjectId());
-            List<Navigation> children = to.getChildren();
-            int index = previous != null ? children.indexOf(previous) + 1 : 0;
-            children.add(index, source);
+            int index = previous != null ? previous.getIndex() + 1 : 0;
+            to.getChildren().add(index, source);
          }
       };
 
