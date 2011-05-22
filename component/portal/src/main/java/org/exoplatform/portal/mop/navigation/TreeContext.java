@@ -254,4 +254,9 @@ class TreeContext<N> implements Scope.Visitor, MergeAdapter<NodeContext<N>>
    {
       return node.getName();
    }
+
+   public NodeContext<N> create(String handle, String name, NodeState state)
+   {
+      return new NodeContext<N>(this, handle, name, state);
+   }
 }

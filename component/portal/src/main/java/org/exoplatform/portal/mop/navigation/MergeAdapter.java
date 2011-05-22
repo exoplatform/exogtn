@@ -60,4 +60,6 @@ interface MergeAdapter<N>
     */
    String getName(N node);
 
+   N create(String handle, String name, NodeState state);
+
 }

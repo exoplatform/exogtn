@@ -85,9 +85,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.expanded = false;
    }
 
-   NodeContext(TreeContext<N> tree, String name, NodeState state)
+   NodeContext(TreeContext<N> tree, String handle, String name, NodeState state)
    {
-      this.handle = Integer.toString(tree.sequence++);
+      this.handle = handle;
       this.name = name;
       this.tree = tree;
       this.node = tree.model.create(this);
@@ -545,7 +545,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
+      NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, new NodeState.Builder().capture());
       nodeContext.expand();
       _add(index, nodeContext);
       return nodeContext;

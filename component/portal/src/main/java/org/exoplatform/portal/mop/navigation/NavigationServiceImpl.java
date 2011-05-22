@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import com.sun.xml.internal.bind.v2.model.nav.Navigator;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visible;
@@ -40,8 +41,10 @@ import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -289,7 +292,7 @@ public class NavigationServiceImpl implements NavigationService
    public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
    {
       final POMSession session = manager.getSession();
-      TreeContext<N> tree = context.tree;
+      final TreeContext<N> tree = context.tree;
 
       //
       NodeData data = dataCache.getNodeData(session, context.tree.root.data.id);
@@ -302,103 +305,160 @@ public class NavigationServiceImpl implements NavigationService
       TreeContext<N> rebased = rebase(tree, tree.origin());
 
       //
-      final AtomicReference<NodeContext<N>> node = new AtomicReference<NodeContext<N>>();
-      final Set<String> ids = new HashSet<String>();
+      final Set<String> ids2 = new HashSet<String>();
+      final Map<String, NodeData> dataMap = new HashMap<String, NodeData>();
 
       //
-      NodeChangeListener<Navigation> persister = new NodeChangeListener.Base<Navigation>()
+      for (NodeChange<NodeContext<N>> change : rebased.popChanges())
       {
-         @Override
-         public void onCreate(Navigation source, Navigation parent, Navigation previous, String name) throws NavigationServiceException
+         change.dispatch(new NodeChangeListener.Base<NodeContext<N>>()
          {
-            ids.add(parent.getObjectId());
-            int index = previous != null ? previous.getIndex() + 1 : 0;
-            source = parent.addChild(index, name);
-            node.get().data = new NodeData(source);
-            node.get().handle = node.get().data.id;
-         }
-
-         @Override
-         public void onDestroy(Navigation source, Navigation parent)
-         {
-            ids.add(source.getObjectId());
-            ids.add(parent.getObjectId());
-            source.destroy();
-         }
-
-         @Override
-         public void onRename(Navigation source, Navigation parent, String name) throws NavigationServiceException
-         {
-            ids.add(source.getObjectId());
-            ids.add(parent.getObjectId());
-            source.setName(name);
-         }
-
-         @Override
-         public void onUpdate(Navigation source, NodeState state) throws NavigationServiceException
-         {
-            ids.add(source.getObjectId());
-            Workspace workspace = source.getSite().getWorkspace();
-            String reference = state.getPageRef();
-            if (reference != null)
+            @Override
+            public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
             {
-               String[] pageChunks = split("::", reference);
-               ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-               Site site = workspace.getSite(siteType, pageChunks[1]);
-               org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
-               PageLink link = source.linkTo(ObjectType.PAGE_LINK);
-               link.setPage(target);
+               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
+               ids2.add(parentNav.getObjectId());
+               int index = 0;
+               if (previous != null)
+               {
+                  Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
+                  index = previousNav.getIndex() + 1;
+               }
+               Navigation sourceNav = parentNav.addChild(index, name);
+
+               //
+               NodeData data = new NodeData(sourceNav);
+
+               //
+               dataMap.put(source.handle, data);
+
+               //
+               source.data = data;
+               source.handle = source.data.id;
             }
-            else
+            @Override
+            public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
             {
-               PageLink link = source.linkTo(ObjectType.PAGE_LINK);
-               link.setPage(null);
+               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
+               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+
+               //
+               ids2.add(sourceNav.getObjectId());
+               ids2.add(parentNav.getObjectId());
+               sourceNav.destroy();
             }
+            @Override
+            public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
+            {
+               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
 
-            //
-            Described described = source.adapt(Described.class);
-            described.setName(state.getLabel());
+               //
+               ids2.add(sourceNav.getObjectId());
+               Workspace workspace = sourceNav.getSite().getWorkspace();
+               String reference = state.getPageRef();
+               if (reference != null)
+               {
+                  String[] pageChunks = split("::", reference);
+                  ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+                  Site site = workspace.getSite(siteType, pageChunks[1]);
+                  org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+                  PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
+                  link.setPage(target);
+               }
+               else
+               {
+                  PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
+                  link.setPage(null);
+               }
 
-            //
-            Visible visible = source.adapt(Visible.class);
-            visible.setVisibility(state.getVisibility());
+               //
+               Described described = sourceNav.adapt(Described.class);
+               described.setName(state.getLabel());
 
-            //
-            visible.setStartPublicationDate(state.getStartPublicationDate());
-            visible.setEndPublicationDate(state.getEndPublicationDate());
+               //
+               Visible visible = sourceNav.adapt(Visible.class);
+               visible.setVisibility(state.getVisibility());
 
-            //
-            Attributes attrs = source.getAttributes();
-            attrs.setValue(MappedAttributes.URI, state.getURI());
-            attrs.setValue(MappedAttributes.ICON, state.getIcon());
-         }
+               //
+               visible.setStartPublicationDate(state.getStartPublicationDate());
+               visible.setEndPublicationDate(state.getEndPublicationDate());
 
-         @Override
-         public void onMove(Navigation source, Navigation from, Navigation to, Navigation previous) throws NavigationServiceException
-         {
-            ids.add(source.getObjectId());
-            ids.add(from.getObjectId());
-            ids.add(to.getObjectId());
-            int index = previous != null ? previous.getIndex() + 1 : 0;
-            to.getChildren().add(index, source);
-         }
-      };
+               //
+               Attributes attrs = sourceNav.getAttributes();
+               attrs.setValue(MappedAttributes.URI, state.getURI());
+               attrs.setValue(MappedAttributes.ICON, state.getIcon());
+            }
+            @Override
+            public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+            {
+               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+               Navigation fromNav = session.findObjectById(ObjectType.NAVIGATION, from.data.id);
+               Navigation toNav = session.findObjectById(ObjectType.NAVIGATION, to.data.id);
 
-      //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N, Navigation>(new NavigationMergeAdapter(session), persister);
+               //
+               ids2.add(sourceNav.getObjectId());
+               ids2.add(fromNav.getObjectId());
+               ids2.add(toNav.getObjectId());
+               int index;
+               if (previous != null)
+               {
+                  Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
+                  index = previousNav.getIndex() + 1;
+               }
+               else
+               {
+                  index = 0;
+               }
+               toNav.getChildren().add(index, sourceNav);
+            }
+            public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+            {
+               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
 
-      // Compute set of ids to invalidate
-      for (NodeChange<NodeContext<N>> src : tree.popChanges())
-      {
-         node.set(src.source);
-         src.dispatch(merger);
+               //
+               ids2.add(sourceNav.getObjectId());
+               ids2.add(parentNav.getObjectId());
+               sourceNav.setName(name);
+            }
+         });
       }
 
+      // Need to pop changes now they have been applied
+      tree.popChanges();
+
+      //
+      for (Map.Entry<String, NodeData> entry : dataMap.entrySet())
+      {
+         NodeContext<N> a = tree.getNode(entry.getKey());
+         if (a != null)
+         {
+            NodeData d = entry.getValue();
+            a.handle = d.id;
+            a.data = d;
+         }
+         else
+         {
+            // The node may be removed
+            // find a better way to handle that
+         }
+      }
+
+      Update.perform(
+         tree.root,
+         ContextHierarchyAdapter.<N>create(),
+         rebased.root,
+         ContextHierarchyAdapter.<N>create(),
+         ContextUpdateAdapter.<N>create(),
+         listener,
+         rebased);
+
       // Make consistent
+      // should we still use that ????
       update(context);
 
       //
-      dataCache.removeNodeData(session, ids);
+      dataCache.removeNodeData(session, ids2);
    }
 
    private <N> void update(NodeContext<N> context) throws NavigationServiceException
@@ -499,10 +559,13 @@ public class NavigationServiceImpl implements NavigationService
       dataCache.clear();
    }
 
+/*
    private static class NavigationMergeAdapter implements MergeAdapter<Navigation>
    {
 
-      /** . */
+      */
+/** . *//*
+
       private final POMSession session;
 
       NavigationMergeAdapter(POMSession session)
@@ -530,6 +593,7 @@ public class NavigationServiceImpl implements NavigationService
          return node.getName();
       }
    }
+*/
 
    private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
    {
@@ -671,8 +735,6 @@ public class NavigationServiceImpl implements NavigationService
       @Override
       public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
       {
-         source = new NodeContext<N>(tree, name, new NodeState.Builder().capture());
-
          // Expand the node if needed
          source.expand();
 

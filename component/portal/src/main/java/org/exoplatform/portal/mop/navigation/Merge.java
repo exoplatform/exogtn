@@ -69,7 +69,10 @@ class Merge<N1, N2> extends NodeChangeListener.Base<NodeContext<N1>>
       }
 
       //
-      next.onCreate(null, parent, previous, name);
+      N2 source = adapter.create(_source.handle, _source.getName(), _source.getState());
+
+      //
+      next.onCreate(source, parent, previous, name);
    }
 
    public void onDestroy(NodeContext<N1> _source, NodeContext<N1> _parent)

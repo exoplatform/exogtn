@@ -130,26 +130,6 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertNull(nav);
    }
 
-   public void testPendingChangesBypassCache() throws Exception
-   {
-      MOPService mop = mgr.getPOMService();
-      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
-      portal.getRootNavigation().addChild("default");
-
-      //
-      sync(true);
-
-      //
-      NavigationContext nav = service.loadNavigation(SiteKey.portal("pending_changes_bypass_cache"));
-      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
-      root.addChild("foo");
-      service.saveNode(root.context, null);
-
-      //
-      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
-      assertNotNull(root.getChild("foo"));
-   }
-
    public void testAddChild() throws Exception
    {
       MOPService mop = mgr.getPOMService();
@@ -1599,6 +1579,26 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       {
          assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
       }
+   }
+
+   public void testPendingChangesBypassCache() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("pending_changes_bypass_cache"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+      root.addChild("foo");
+      service.saveNode(root.context, null);
+
+      //
+      root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+      assertNotNull(root.getChild("foo"));
    }
 
    public void testAtomic() throws Exception
