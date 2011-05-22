@@ -1,16 +1,16 @@
 package org.exoplatform.navigation.webui;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A wrapper class of {@link UserNode} for manipulation in WebUI part
@@ -55,15 +55,14 @@ public class TreeNode implements NodeChangeListener<UserNode>
    {
       if (children == null)
       {
-         children = new ArrayList<TreeNode>();
+         children = new LinkedList<TreeNode>();
          for (UserNode child : node.getChildren())
          {
             String key = child.getId() == null ? String.valueOf(child.hashCode()) : child.getId();
             TreeNode node = findNode(key);
-            // This is for the first time a node is loaded
             if (node == null)
             {
-               node = new TreeNode(nav, child, this.rootNode);
+               throw new IllegalStateException("Can' find node " + child.getURI() + " in the cache");
             }
             children.add(node);
          }
@@ -88,7 +87,7 @@ public class TreeNode implements NodeChangeListener<UserNode>
       {
          return false;
       }
-      removeFromCached(child);
+      removeFromCached(child); 
       return node.removeChild(child.getName());
    }
 
@@ -127,14 +126,17 @@ public class TreeNode implements NodeChangeListener<UserNode>
       }
       children = null; 
       this.node.addChild(child.getNode());
-      addToCached(child);
    }
    
    public void addChild(int index, TreeNode child)
    {
+      TreeNode oldParent = child.getParent();
+      if (oldParent != null)
+      {
+         oldParent.children = null;
+      }
       children = null;
       node.addChild(index, child.getNode());
-      addToCached(child);
    }
 
    public void save() throws NavigationServiceException
@@ -151,16 +153,6 @@ public class TreeNode implements NodeChangeListener<UserNode>
    public UserNode getNode()
    {
       return node;
-   }
-
-   public void setNode(UserNode node)
-   {
-      if (node == null)
-      {
-         throw new IllegalArgumentException("node can't be null");
-      }
-      children = null;
-      this.node = node;
    }
 
    public UserNavigation getPageNavigation()
@@ -301,13 +293,15 @@ public class TreeNode implements NodeChangeListener<UserNode>
          return null;
       }
 
-      this.rootNode.caches.put(node.getId(), node);
-      if (node.hasChildrenRelationship())
+      if (findNode(node.getId()) != null)
       {
-         for (TreeNode child : node.getChildren())
-         {
-            addToCached(child);
-         }
+         return node;
+      }
+      
+      this.rootNode.caches.put(node.getId(), node);
+      for (UserNode child : node.getNode().getChildren())
+      {
+         addToCached(new TreeNode(nav, child, this.rootNode));
       }
       return node;
    }
@@ -334,7 +328,7 @@ public class TreeNode implements NodeChangeListener<UserNode>
    public void onAdd(UserNode source, UserNode parent, UserNode previous)
    {
       addToCached(new TreeNode(this.nav, source, this.rootNode));
-      findNode(parent.getId()).setNode(parent);
+      findNode(parent.getId()).children = null;
    }
 
    @Override
@@ -346,7 +340,7 @@ public class TreeNode implements NodeChangeListener<UserNode>
    public void onRemove(UserNode source, UserNode parent)
    {
       removeFromCached(findNode(source.getId()));
-      findNode(parent.getId()).setNode(parent);
+      findNode(parent.getId()).children = null;
    }
 
    @Override

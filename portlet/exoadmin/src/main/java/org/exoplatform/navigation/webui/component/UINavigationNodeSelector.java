@@ -157,7 +157,7 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode node = this.rootNode;
          if (this.rootNode.getChildren().size() > 0)
          {
-            node = rebaseNode(this.rootNode.getChild(0));
+            node = rebaseNode(this.rootNode.getChild(0), NODE_SCOPE);
             if (node == null)
             {
                initTreeData();
@@ -196,11 +196,6 @@ public class UINavigationNodeSelector extends UIContainer
          tree.setParentSelected(parentNode);
       }
       return node;
-   }
-
-   public TreeNode rebaseNode(TreeNode treeNode) throws Exception
-   {
-      return rebaseNode(treeNode, NODE_SCOPE);
    }
 
    public TreeNode rebaseNode(TreeNode treeNode, Scope scope) throws Exception
@@ -285,8 +280,13 @@ public class UINavigationNodeSelector extends UIContainer
    {
       protected TreeNode rebaseNode(TreeNode node, UINavigationNodeSelector selector) throws Exception
       {
+         return rebaseNode(node, UINavigationNodeSelector.NODE_SCOPE, selector);
+      }
+      
+      protected TreeNode rebaseNode(TreeNode node, Scope scope, UINavigationNodeSelector selector) throws Exception
+      {
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-         TreeNode rebased = selector.rebaseNode(node);
+         TreeNode rebased = selector.rebaseNode(node, scope);
          if (rebased == null)
          {
             context.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.staleData", null,
@@ -524,7 +524,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode node = uiNodeSelector.findNode(nodeID);
          try
          {
-            uiNodeSelector.rebaseNode(node, Scope.ALL);
+            node = rebaseNode(node, Scope.ALL, uiNodeSelector);
+            if (node == null) return;
          }
          catch (NavigationServiceException ex)
          {
@@ -552,7 +553,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode node = uiNodeSelector.findNode(nodeID);
          try
          {
-            uiNodeSelector.rebaseNode(node, Scope.SINGLE);
+            node = rebaseNode(node, Scope.SINGLE, uiNodeSelector);
+            if (node == null) return;
          }
          catch (NavigationServiceException ex)
          {
@@ -644,6 +646,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             context.getUIApplication().addMessage(
                new ApplicationMessage("UINavigationNodeSelector.msg.copiedNode.deleted", null, ApplicationMessage.WARNING));
+            uiNodeSelector.selectNode(uiNodeSelector.getRootNode());
             return;
          }
          
@@ -733,7 +736,8 @@ public class UINavigationNodeSelector extends UIContainer
             parentNode = rebaseNode(parentNode, uiNodeSelector);
             if (parentNode == null) return;
             // After update the parentNode, maybe targetNode has been deleted or moved
-            if (parentNode.getChild(targetNode.getName()) == null)
+            TreeNode temp = parentNode.getChild(targetNode.getName()); 
+            if (temp == null || !temp.getId().equals(targetNode.getId()))
             {
                context.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.staleData", null,
                   ApplicationMessage.WARNING));
@@ -758,21 +762,19 @@ public class UINavigationNodeSelector extends UIContainer
                break;
             }
          }
-         if (k >= children.size())
-         {
-            return;
-         }
+
          if (k == 0 && i == -1)
          {
             return;
          }
-         if (k == children.size() - 1 && i == 1)
+         if (k == children.size() - 1 && i == 2)
          {
             return;
          }
+          
          parentNode.addChild(k + i, targetNode);
          
-         //This help to refresh the tree
+         //These lines help to refresh the tree
          TreeNode selectedNode = uiNodeSelector.getSelectedNode();
          uiNodeSelector.selectNode(parentNode);
          uiNodeSelector.selectNode(selectedNode);
@@ -783,7 +785,7 @@ public class UINavigationNodeSelector extends UIContainer
    {
       public void execute(Event<UIRightClickPopupMenu> event) throws Exception
       {
-         super.moveNode(event, 1);
+         super.moveNode(event, 2);
       }
    }
 
