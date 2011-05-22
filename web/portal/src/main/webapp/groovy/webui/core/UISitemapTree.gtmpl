@@ -79,6 +79,8 @@
 							</div>
 							<div class="ChildrenContainer" style="display: none">
 					""";
+					
+				    renderNodes(treeNode, portalUri, useAjax);
 				}
 
 

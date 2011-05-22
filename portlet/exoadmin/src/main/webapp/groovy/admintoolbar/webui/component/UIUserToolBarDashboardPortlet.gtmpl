@@ -97,7 +97,7 @@
 %>
 
 <%
-	def userNodes = uicomponent.getUserNodes();
+	def userNodes = uicomponent.getNavigationNodes(uicomponent.getCurrentUserNavigation());
 	String defaultDashboardPage;				
 	if(userNodes.size() < 1) {
 		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;

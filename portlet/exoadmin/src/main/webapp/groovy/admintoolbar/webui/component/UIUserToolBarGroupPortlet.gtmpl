@@ -17,7 +17,7 @@
 	def groupNavigations = uicomponent.getGroupNavigations();
 	def portalURI = Util.getPortalRequestContext().getPortalURI();
 	void renderGroupPageNavigation(UserNavigation navigation) {
-			def nodes = uicomponent.getNodes(navigation);
+			def nodes = uicomponent.getNavigationNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
 			def ownerId = navigation.getKey().getName();

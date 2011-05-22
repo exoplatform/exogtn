@@ -7,16 +7,18 @@
 	import java.util.Collection;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
+	import org.exoplatform.portal.mop.SiteKey;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation') ;
 	jsmanager.importJavascript('eXo.portal.UIAdminToolbar') ;
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
-	def portalURI = Util.getPortalRequestContext().getPortalURI();
+	def portalURI = Util.getPortalRequestContext().getPortalURI();	
 
 	void renderPortalNavigations() {
-			def nodes = uicomponent.getNavigationNodes();
+	   		def currentPortal = uicomponent.getCurrentPortal()
+			def nodes = uicomponent.getNavigationNodes(uicomponent.getNavigation(SiteKey.portal(currentPortal)));
 			print """
 					<div style="position: absolute; display:none" class="MenuItemContainer">
 						<div class="SubBlock">
@@ -27,7 +29,7 @@
 				
 			for(int i = 0; i < uicomponent.getAllPortalNames().size(); i++) {
 				String portal = uicomponent.getAllPortalNames().get(i);
- 				if(portal.equals(uicomponent.getCurrentPortal())) {
+ 				if(portal.equals(currentPortal)) {
 					isCurrent = true;
 			 	} else isCurrent = false; 				 				
  				

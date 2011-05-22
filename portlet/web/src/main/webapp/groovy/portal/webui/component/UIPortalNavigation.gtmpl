@@ -15,7 +15,7 @@
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
 	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
-	public void renderChildrenContainer(UserNode parentNode, UserNode node) {
+	public void renderChildrenContainer(UserNode node) {
 	   print """
 	   <div class="MenuItemContainer" style="display: none;">
           <div class="MenuItemDecorator">
@@ -29,7 +29,7 @@
                                   <div class="CenterMiddleMenuDecorator">
         """;
                                     for(child in node.getChildren()) {
-                                            renderChildNode(parentNode, child);
+                                            renderChildNode(child);
                                     }
         print """
                                    </div>
@@ -45,7 +45,7 @@
         """;
 	}  
 	
-	public void renderChildNode(UserNode parentNode, UserNode node) {
+	public void renderChildNode(UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
@@ -106,7 +106,7 @@
 		}
 		
 		if (node.getChildren().size() > 0) {
-			renderChildrenContainer(parentNode, node);
+			renderChildrenContainer(node);
 		}		
 		print "</div>";					
 	}
@@ -184,7 +184,7 @@
 											<%
                                                /*Render Popup Menu*/
                                                if (node.getChildren().size() > 0) {
-                                                       renderChildrenContainer(nav, node);
+                                                       renderChildrenContainer(node);
                                                }
                                              %>											
 										</div>									
