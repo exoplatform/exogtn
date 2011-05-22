@@ -503,7 +503,7 @@ public class NavigationServiceImpl implements NavigationService
       NodeChangeListener<NodeContext<N>> persister = new NodeContextSynchronizer<N>(rebased.tree);
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N, NodeContext<N>>(rebased.tree, persister);
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N>(rebased.tree, persister);
 
       //
       for (NodeChange<NodeContext<N>> change : changes)
@@ -558,42 +558,6 @@ public class NavigationServiceImpl implements NavigationService
    {
       dataCache.clear();
    }
-
-/*
-   private static class NavigationMergeAdapter implements MergeAdapter<Navigation>
-   {
-
-      */
-/** . *//*
-
-      private final POMSession session;
-
-      NavigationMergeAdapter(POMSession session)
-      {
-         this.session = session;
-      }
-
-      public Navigation getParent(Navigation node)
-      {
-         return node.getParent();
-      }
-
-      public Navigation getNode(String handle)
-      {
-         return session.findObjectById(ObjectType.NAVIGATION, handle);
-      }
-
-      public Navigation getChild(Navigation node, String name)
-      {
-         return node.getChild(name);
-      }
-
-      public String getName(Navigation node)
-      {
-         return node.getName();
-      }
-   }
-*/
 
    private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
    {

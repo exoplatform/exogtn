@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeContext<N> implements Scope.Visitor, MergeAdapter<NodeContext<N>>
+class TreeContext<N> implements Scope.Visitor
 {
 
    /** . */
@@ -214,6 +214,15 @@ class TreeContext<N> implements Scope.Visitor, MergeAdapter<NodeContext<N>>
       }
    }
 
+   NodeContext<N> getNode(String handle)
+   {
+      return root.getDescendant(handle);
+   }
+
+   NodeContext<N> create(String handle, String name, NodeState state)
+   {
+      return new NodeContext<N>(this, handle, name, state);
+   }
    // Scope.Visitor implementation -------------------------------------------------------------------------------------
 
    public VisitMode enter(int depth, String id, String name, NodeState state)
@@ -231,32 +240,5 @@ class TreeContext<N> implements Scope.Visitor, MergeAdapter<NodeContext<N>>
 
    public void leave(int depth, String id, String name, NodeState state)
    {
-   }
-
-   // MergeAdapter implementation --------------------------------------------------------------------------------------
-
-   public NodeContext<N> getParent(NodeContext<N> node)
-   {
-      return node.getParent();
-   }
-
-   public NodeContext<N> getNode(String handle)
-   {
-      return root.getDescendant(handle);
-   }
-
-   public NodeContext<N> getChild(NodeContext<N> node, String name)
-   {
-      return node.get(name);
-   }
-
-   public String getName(NodeContext<N> node)
-   {
-      return node.getName();
-   }
-
-   public NodeContext<N> create(String handle, String name, NodeState state)
-   {
-      return new NodeContext<N>(this, handle, name, state);
    }
 }
