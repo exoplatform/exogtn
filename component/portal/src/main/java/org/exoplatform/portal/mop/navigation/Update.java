@@ -288,6 +288,7 @@ class Update<N1, N2>
 
          //
          parent.data = data;
+         parent.state = null;
       }
 
       //
@@ -299,6 +300,4 @@ class Update<N1, N2>
       //
       last = parent;
    }
-
-
 }

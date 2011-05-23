@@ -45,7 +45,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -323,15 +322,17 @@ public class NavigationServiceImpl implements NavigationService
                   Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
                   index = previousNav.getIndex() + 1;
                }
+
+               //
                Navigation sourceNav = parentNav.addChild(index, name);
 
                //
+               parent.data = new NodeData(parentNav);
+               parent.handle = parent.data.id;
+
+               //
                NodeData data = new NodeData(sourceNav);
-
-               //
                dataMap.put(source.handle, data);
-
-               //
                source.data = data;
                source.handle = source.data.id;
             }
@@ -345,6 +346,10 @@ public class NavigationServiceImpl implements NavigationService
                ids2.add(sourceNav.getObjectId());
                ids2.add(parentNav.getObjectId());
                sourceNav.destroy();
+
+               //
+               parent.data = new NodeData(parentNav);
+               parent.handle = parent.data.id;
             }
             @Override
             public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
@@ -386,6 +391,10 @@ public class NavigationServiceImpl implements NavigationService
                Attributes attrs = sourceNav.getAttributes();
                attrs.setValue(MappedAttributes.URI, state.getURI());
                attrs.setValue(MappedAttributes.ICON, state.getIcon());
+
+               //
+               source.data = new NodeData(sourceNav);
+               source.handle = source.data.id;
             }
             @Override
             public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
@@ -409,6 +418,18 @@ public class NavigationServiceImpl implements NavigationService
                   index = 0;
                }
                toNav.getChildren().add(index, sourceNav);
+
+               //
+               from.data = new NodeData(fromNav);
+               from.handle = from.data.id;
+
+               //
+               to.data = new NodeData(toNav);
+               to.handle = to.data.id;
+
+               //
+               source.data = new NodeData(sourceNav);
+               source.handle = source.data.id;
             }
             public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
             {
@@ -419,6 +440,14 @@ public class NavigationServiceImpl implements NavigationService
                ids2.add(sourceNav.getObjectId());
                ids2.add(parentNav.getObjectId());
                sourceNav.setName(name);
+
+               //
+               source.data = new NodeData(sourceNav);
+               source.handle = source.data.id;
+
+               //
+               parent.data = new NodeData(parentNav);
+               parent.handle = parent.data.id;
             }
          });
       }
@@ -435,6 +464,7 @@ public class NavigationServiceImpl implements NavigationService
             NodeData d = entry.getValue();
             a.handle = d.id;
             a.data = d;
+            a.state = null;
          }
          else
          {
@@ -452,25 +482,8 @@ public class NavigationServiceImpl implements NavigationService
          listener,
          rebased);
 
-      // Make consistent
-      // should we still use that ????
-      update(context);
-
       //
       dataCache.removeNodeData(session, ids2);
-   }
-
-   private <N> void update(NodeContext<N> context) throws NavigationServiceException
-   {
-      context.data = context.toData();
-      context.state = null;
-      if (context.isExpanded())
-      {
-         for (NodeContext<N> child : context.getContexts())
-         {
-            update(child);
-         }
-      }
    }
 
    private <N> TreeContext<N> rebase(TreeContext<N> tree, Scope.Visitor visitor) throws NavigationServiceException
