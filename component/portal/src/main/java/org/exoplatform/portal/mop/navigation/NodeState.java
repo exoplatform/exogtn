@@ -33,6 +33,9 @@ import java.util.Date;
 public final class NodeState
 {
 
+   /**
+    * Builder class.
+    */
    public static class Builder
    {
 
@@ -89,84 +92,49 @@ public final class NodeState
          this.pageRef = state.pageRef;
       }
 
-      public String getURI()
-      {
-         return uri;
-      }
-
-      public Builder setURI(String uri)
+      public Builder URI(String uri)
       {
          this.uri = uri;
          return this;
       }
 
-      public String getLabel()
-      {
-         return label;
-      }
-
-      public Builder setLabel(String label)
+      public Builder label(String label)
       {
          this.label = label;
          return this;
       }
 
-      public String getIcon()
-      {
-         return icon;
-      }
-
-      public Builder setIcon(String icon)
+      public Builder icon(String icon)
       {
          this.icon = icon;
          return this;
       }
 
-      public long getStartPublicationTime()
-      {
-         return startPublicationTime;
-      }
-
-      public Builder setStartPublicationTime(long startPublicationTime)
+      public Builder startPublicationTime(long startPublicationTime)
       {
          this.startPublicationTime = startPublicationTime;
          return this;
       }
 
-      public long getEndPublicationTime()
-      {
-         return endPublicationTime;
-      }
-
-      public Builder setEndPublicationTime(long endPublicationTime)
+      public Builder endPublicationTime(long endPublicationTime)
       {
          this.endPublicationTime = endPublicationTime;
          return this;
       }
 
-      public Visibility getVisibility()
-      {
-         return visibility;
-      }
-
-      public Builder setVisibility(Visibility visibility)
+      public Builder visibility(Visibility visibility)
       {
          this.visibility = visibility;
          return this;
       }
 
-      public String getPageRef()
-      {
-         return pageRef;
-      }
-
-      public Builder setPageRef(String pageRef)
+      public Builder pageRef(String pageRef)
       {
          this.pageRef = pageRef;
          return this;
       }
 
-      public NodeState capture()
+      public NodeState build()
       {
          return new NodeState(
             uri,

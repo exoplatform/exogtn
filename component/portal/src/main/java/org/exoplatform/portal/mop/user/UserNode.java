@@ -122,7 +122,7 @@ public class UserNode
       this.encodedResolvedLabel = null;
 
       //
-      context.setState(new NodeState.Builder(context.getState()).setLabel(label).capture());
+      context.setState(new NodeState.Builder(context.getState()).label(label).build());
    }
 
    public String getIcon()
@@ -132,7 +132,7 @@ public class UserNode
 
    public void setIcon(String icon)
    {
-      context.setState(new NodeState.Builder(context.getState()).setIcon(icon).capture());
+      context.setState(new NodeState.Builder(context.getState()).icon(icon).build());
    }
 
    public long getStartPublicationTime()
@@ -142,7 +142,7 @@ public class UserNode
 
    public void setStartPublicationTime(long startPublicationTime)
    {
-      context.setState(new NodeState.Builder(context.getState()).setStartPublicationTime(startPublicationTime).capture());
+      context.setState(new NodeState.Builder(context.getState()).startPublicationTime(startPublicationTime).build());
    }
 
    public long getEndPublicationTime()
@@ -152,7 +152,7 @@ public class UserNode
 
    public void setEndPublicationTime(long endPublicationTime)
    {
-      context.setState(new NodeState.Builder(context.getState()).setEndPublicationTime(endPublicationTime).capture());
+      context.setState(new NodeState.Builder(context.getState()).endPublicationTime(endPublicationTime).build());
    }
 
    public Visibility getVisibility()
@@ -162,7 +162,7 @@ public class UserNode
 
    public void setVisibility(Visibility visibility)
    {
-      context.setState(new NodeState.Builder(context.getState()).setVisibility(visibility).capture());
+      context.setState(new NodeState.Builder(context.getState()).visibility(visibility).build());
    }
 
    public String getPageRef()
@@ -172,7 +172,7 @@ public class UserNode
 
    public void setPageRef(String pageRef)
    {
-      context.setState(new NodeState.Builder(context.getState()).setPageRef(pageRef).capture());
+      context.setState(new NodeState.Builder(context.getState()).pageRef(pageRef).build());
    }
 
    public String getResolvedLabel()

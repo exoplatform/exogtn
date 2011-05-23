@@ -522,7 +522,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, new NodeState.Builder().capture(), true);
+      NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, new NodeState.Builder().build(), true);
       _add(index, nodeContext);
       return nodeContext;
    }

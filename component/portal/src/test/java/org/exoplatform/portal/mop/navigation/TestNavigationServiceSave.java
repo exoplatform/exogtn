@@ -881,7 +881,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(-1, state.getEndPublicationTime());
       long now = System.currentTimeMillis();
-      root1.setState(new NodeState.Builder().setURI("foo").setEndPublicationTime(now).setLabel("bar").capture());
+      root1.setState(new NodeState.Builder().URI("foo").endPublicationTime(now).label("bar").build());
       service.saveNode(root1.context, null);
 
       //
@@ -1504,7 +1504,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
 
       // Reload the root node and modify it
       root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
-      root1.getChild("a").setState(root1.getState().builder().setLabel("foo").capture());
+      root1.getChild("a").setState(root1.getState().builder().label("foo").build());
 
       //
       sync(true);

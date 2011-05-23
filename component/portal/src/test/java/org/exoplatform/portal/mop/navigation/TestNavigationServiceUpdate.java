@@ -366,7 +366,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
       root2.removeChild("foo");
       Node foo = root2.addChild("foo");
-      foo.setState(new NodeState.Builder().setLabel("foo2").capture());
+      foo.setState(new NodeState.Builder().label("foo2").build());
       service.saveNode(root2.context, null);
       String foo2Id = foo.getId();
       sync(true);
@@ -426,7 +426,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
 
       //
       Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
-      root.getChild("foo").setState(new NodeState.Builder().setLabel("foo").capture());
+      root.getChild("foo").setState(new NodeState.Builder().label("foo").build());
       service.saveNode(root.context, null);
       sync(true);
 
@@ -440,7 +440,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals("bar", added.source.getName());
       NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>)changes.next();
       assertSame(foo, updated.getNode());
-      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
       assertFalse(changes.hasNext());
 
       //
@@ -449,7 +449,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals("foo", foo.getState().getLabel());
       updated = (NodeChange.Updated<Node>)changes.next();
       assertSame(foo, updated.getNode());
-      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
       assertFalse(changes.hasNext());
 
       //
@@ -458,7 +458,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       assertEquals("foo", foo.getState().getLabel());
       updated = (NodeChange.Updated<Node>)changes.next();
       assertSame(foo, updated.getNode());
-      assertEquals(new NodeState.Builder().setLabel("foo").capture(), updated.getState());
+      assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
       assertFalse(changes.hasNext());
    }
 
