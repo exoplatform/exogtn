@@ -225,6 +225,13 @@ public class Node
       return queue.iterator();
    }
 
+   public Iterator<NodeChange<Node>> save(NavigationService service) throws NavigationServiceException
+   {
+      NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
+      service.saveNode(context, new NodeContextChangeAdapter<Node>(queue));
+      return queue.iterator();
+   }
+
    @Override
    public String toString()
    {

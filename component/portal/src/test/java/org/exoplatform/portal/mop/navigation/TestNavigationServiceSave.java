@@ -1643,4 +1643,36 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       assertFalse(mgr.getSession().isModified());
    }
+
+   public void testRebase() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_rebase");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("save_rebase"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      Node a = root1.getChild("a");
+      Node b = root1.addChild("b");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      root2.addChild("c");
+      service.saveNode(root2.context, null);
+
+      //
+      Iterator<NodeChange<Node>> changes = root1.save(service);
+      NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
+      Node c = added.getNode();
+      assertEquals("c", c.getName());
+      assertFalse(changes.hasNext());
+      assertSame(a, root1.getChild(0));
+      assertSame(b, root1.getChild(1));
+      assertSame(c, root1.getChild(2));
+   }
 }
