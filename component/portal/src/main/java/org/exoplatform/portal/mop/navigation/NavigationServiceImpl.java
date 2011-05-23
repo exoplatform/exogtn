@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -290,8 +289,8 @@ public class NavigationServiceImpl implements NavigationService
       try
       {
 
-         Update.perform(
-            tree.root,
+         TreeUpdate.perform(
+            tree,
             ContextHierarchyAdapter.<N>create(),
             data,
             DataHierarchyAdapter.create(dataCache, session),
@@ -355,8 +354,8 @@ public class NavigationServiceImpl implements NavigationService
          }
       }
 
-      Update.perform(
-         tree.root,
+      TreeUpdate.perform(
+         tree,
          ContextHierarchyAdapter.<N>create(),
          rebased.root,
          ContextHierarchyAdapter.<N>create(),
@@ -379,8 +378,8 @@ public class NavigationServiceImpl implements NavigationService
          TreeContext<N> rebased = rebase(tree, visitor);
 
          //
-         Update.perform(
-            tree.root,
+         TreeUpdate.perform(
+            tree,
             ContextHierarchyAdapter.<N>create(),
             rebased.root,
             ContextHierarchyAdapter.<N>create(),
@@ -400,10 +399,10 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      NodeContext<N> rebased = new NodeContext<N>(tree.model, data);
+      TreeContext<N> rebased = new NodeContext<N>(tree.model, data).tree;
 
       //
-      Update.perform(
+      TreeUpdate.perform(
          rebased,
          ContextHierarchyAdapter.<N>create(),
          data,
@@ -416,7 +415,7 @@ public class NavigationServiceImpl implements NavigationService
       NodeChangeQueue<NodeContext<N>> changes = tree.getChanges();
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N>(rebased.tree, rebased.tree);
+      NodeChangeListener<NodeContext<N>> merger = new TreeMerge<N>(rebased, rebased);
 
       //
       if (changes != null)
@@ -425,7 +424,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      return rebased.tree;
+      return rebased;
    }
 
    private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
@@ -525,7 +524,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private static class ContextUpdateAdapter<N> implements UpdateAdapter<NodeContext<N>>
+   private static class ContextUpdateAdapter<N> implements TreeUpdateAdapter<NodeContext<N>>
    {
 
       /** . */
@@ -544,7 +543,7 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private static class DataUpdateAdapter implements UpdateAdapter<NodeData>
+   private static class DataUpdateAdapter implements TreeUpdateAdapter<NodeData>
    {
 
       /** . */

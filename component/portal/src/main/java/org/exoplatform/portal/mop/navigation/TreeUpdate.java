@@ -28,20 +28,20 @@ import org.exoplatform.portal.tree.diff.HierarchyDiff;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class Update<N1, N2>
+class TreeUpdate<N1, N2>
 {
 
    static <N1, N2> void perform(
-      NodeContext<N1> src,
+      TreeContext<N1> src,
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
-      UpdateAdapter<N2> updateAdapter,
+      TreeUpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
    {
 
-      Update<N1, N2> update = new Update<N1, N2>(
+      TreeUpdate<N1, N2> update = new TreeUpdate<N1, N2>(
          src,
          srcAdatper,
          dst,
@@ -55,12 +55,12 @@ class Update<N1, N2>
       update.perform();
    }
 
-   private Update(
-      NodeContext<N1> src,
+   private TreeUpdate(
+      TreeContext<N1> src,
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
       HierarchyAdapter<String[], N2, String> dstAdapter,
-      UpdateAdapter<N2> updateAdapter,
+      TreeUpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
    {
@@ -74,7 +74,7 @@ class Update<N1, N2>
          Utils.<String>comparator());
 
       // We obtain the iterator
-      HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it = diff.iterator(src, dst);
+      HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it = diff.iterator(src.root, dst);
 
       //
       this.it = it;
@@ -89,7 +89,7 @@ class Update<N1, N2>
    private final HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it;
 
    /** . */
-   private final UpdateAdapter<N2> updateAdapter;
+   private final TreeUpdateAdapter<N2> updateAdapter;
 
    /** . */
    private final Scope.Visitor visitor;

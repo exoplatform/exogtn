@@ -22,7 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class Merge<N> extends NodeChangeListener.Base<NodeContext<N>>
+class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
 {
 
    /** . */
@@ -31,7 +31,7 @@ class Merge<N> extends NodeChangeListener.Base<NodeContext<N>>
    /** . */
    private final NodeChangeListener<NodeContext<N>> next;
 
-   Merge(TreeContext<N> merged, NodeChangeListener<NodeContext<N>> next)
+   TreeMerge(TreeContext<N> merged, NodeChangeListener<NodeContext<N>> next)
    {
       this.merged = merged;
       this.next = next;

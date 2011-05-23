@@ -24,7 +24,7 @@ package org.exoplatform.portal.mop.navigation;
  *
  * @param <N> the node generic type
  */
-interface UpdateAdapter<N>
+interface TreeUpdateAdapter<N>
 {
 
    /**
