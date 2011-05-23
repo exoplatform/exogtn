@@ -65,7 +65,7 @@ public class UserPortalImpl implements UserPortal
    private final PortalConfig portal;
 
    /** . */
-   final UserPortalContext bundleResolver;
+   final UserPortalContext context;
 
    /** . */
    final String userName;
@@ -84,12 +84,12 @@ public class UserPortalImpl implements UserPortal
       String portalName,
       PortalConfig portal,
       String userName,
-      UserPortalContext bundleResolver)
+      UserPortalContext context)
    {
       // So we don't care about testing nullity
-      if (bundleResolver == null)
+      if (context == null)
       {
-         bundleResolver = UserPortalContext.NULL_CONTEXT;
+         context = UserPortalContext.NULL_CONTEXT;
       }
 
       //
@@ -100,17 +100,9 @@ public class UserPortalImpl implements UserPortal
       this.portalName = portalName;
       this.portal = portal;
       this.userName = userName;
-      this.bundleResolver = bundleResolver;
+      this.context = context;
       this.navigations = null;
    }
-
-   //
-
-   public UserPortalContext getBundleResolver()
-   {
-      return bundleResolver;
-   }
-
    /**
     * Returns an immutable sorted list of the valid navigations related to the user.
     *

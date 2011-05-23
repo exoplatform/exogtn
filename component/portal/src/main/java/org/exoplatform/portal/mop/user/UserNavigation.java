@@ -58,7 +58,7 @@ public class UserNavigation
       {
          if (bundle == null)
          {
-            bundle = portal.bundleResolver.getBundle(UserNavigation.this);
+            bundle = portal.context.getBundle(UserNavigation.this);
             if (bundle == null)
             {
                bundle = EmptyResourceBundle.INSTANCE;
