@@ -31,6 +31,9 @@ import org.gatein.mop.api.workspace.Navigation;
 public class NavigationData
 {
 
+   /** Useful. */
+   static final NavigationData EMPTY = new NavigationData();
+
    /** . */
    final SiteKey key;
 
@@ -39,6 +42,13 @@ public class NavigationData
 
    /** . */
    final String rootId;
+
+   private NavigationData()
+   {
+      this.key = null;
+      this.state = null;
+      this.rootId = null;
+   }
 
    NavigationData(SiteKey key, Navigation node)
    {

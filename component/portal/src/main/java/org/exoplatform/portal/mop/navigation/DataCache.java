@@ -114,12 +114,12 @@ abstract class DataCache
          }
          else
          {
-            return null;
+            return NavigationData.EMPTY;
          }
       }
       else
       {
-         return null;
+         return NavigationData.EMPTY;
       }
    }
 }

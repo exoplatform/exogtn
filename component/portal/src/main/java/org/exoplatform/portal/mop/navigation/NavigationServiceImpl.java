@@ -91,7 +91,7 @@ public class NavigationServiceImpl implements NavigationService
       //
       POMSession session = manager.getSession();
       NavigationData data = dataCache.getNavigationData(session, key);
-      return data != null ? new NavigationContext(data) : null;
+      return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
    }
 
    public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
