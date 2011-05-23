@@ -50,6 +50,10 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       service = new NavigationServiceImpl(mgr);
       dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+
+      // Clear the cache for each test
+      service.clearCache();
+
       //
       begin();
    }
@@ -99,7 +103,6 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
       try
       {
          begin();
-         service.clearCache();
          end();
       }
       catch (Exception e)
@@ -113,7 +116,6 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
    private void stopService()
    {
       begin();
-      service.clearCache();
       end();
    }
 }

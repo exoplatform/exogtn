@@ -40,6 +40,7 @@ import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -169,9 +170,21 @@ public class NavigationServiceImpl implements NavigationService
       //
       if (defaultNode != null)
       {
+         // Invalidate cache
          dataCache.removeNavigation(navigation.key);
+         String rootId = navigation.data.rootId;
+         if (rootId != null)
+         {
+            dataCache.removeNodes(Collections.singleton(rootId));
+         }
+
+         // Destroy nav
          defaultNode.destroy();
+
+         // Update state
          navigation.data = null;
+
+         //
          return true;
       }
       else
