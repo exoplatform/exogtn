@@ -99,8 +99,8 @@ public class UINavigationManagement extends UIContainer
          UserPortalConfigService portalConfigService = uiManagement.getApplicationComponent(UserPortalConfigService.class);
 
          UIPopupWindow uiPopup = uiManagement.getParent();
-         uiPopup.setShow(false);
-         uiPopup.setUIComponent(null);
+         uiPopup.createEvent("ClosePopup", Phase.PROCESS, event.getRequestContext()).broadcast();
+         
          UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -115,10 +115,10 @@ public class UINavigationManagement extends UIContainer
          if (PortalConfig.PORTAL_TYPE.equals(siteKey.getTypeName()))
          {
             userPortalConfig = portalConfigService.getUserPortalConfig(editedOwnerId, event.getRequestContext().getRemoteUser());
-
             if (userPortalConfig == null)
             {
-               prContext.getUIApplication().addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
+               prContext.getUIApplication().addMessage(
+                  new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null, ApplicationMessage.ERROR));
                return;
             }
          }
@@ -130,7 +130,8 @@ public class UINavigationManagement extends UIContainer
          UserNavigation persistNavigation =  userPortalConfig.getUserPortal().getNavigation(siteKey);
          if (persistNavigation == null)
          {
-            prContext.getUIApplication().addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
+            prContext.getUIApplication().addMessage(
+               new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null, ApplicationMessage.ERROR));
             return;
          }         
 

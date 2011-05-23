@@ -20,6 +20,7 @@
 package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.navigation.webui.TreeNode;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -118,23 +119,6 @@ public class UINavigationNodeSelector extends UIContainer
       uiTree.setUIRightClickPopupMenu(uiPopupMenu);
    }
 
-   @Override
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      // Navigation deleted --> close the editor
-      if (this.rootNode == null)
-      {
-         context.getUIApplication().addMessage(
-            new ApplicationMessage("UINavigationNodeSelector.msg." + NavigationError.NAVIGATION_NO_SITE.name(), null,
-               ApplicationMessage.ERROR));
-
-         UIPopupWindow popup = getAncestorOfType(UIPopupWindow.class);
-         popup.createEvent("ClosePopup", Phase.PROCESS, context).broadcast();
-         return;
-      }
-      super.processRender(context);
-   }
-
    /**
     * Init the UITree wrapped in UINavigationNodeSelector
     * 
@@ -167,8 +151,21 @@ public class UINavigationNodeSelector extends UIContainer
       }
       catch (Exception ex)
       {
-         // Navigation is deleted
+         // Navigation deleted --> close the editor
          this.rootNode = null;
+         
+         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+         context.getUIApplication().addMessage(
+            new ApplicationMessage("UINavigationNodeSelector.msg." + NavigationError.NAVIGATION_NO_SITE.name(), null,
+               ApplicationMessage.ERROR));
+
+         UIPopupWindow popup = getAncestorOfType(UIPopupWindow.class);
+         popup.createEvent("ClosePopup", Phase.PROCESS, context).broadcast();
+         
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+         prContext.setFullRender(true);
       }      
    }
 
