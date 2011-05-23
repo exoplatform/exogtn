@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import com.sun.xml.internal.bind.v2.model.nav.Navigator;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visible;
