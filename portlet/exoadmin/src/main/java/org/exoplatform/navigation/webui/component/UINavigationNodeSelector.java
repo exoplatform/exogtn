@@ -212,6 +212,7 @@ public class UINavigationNodeSelector extends UIContainer
       }
 
       userPortal.rebaseNode(userNode, scope, getRootNode());           
+      getRootNode().getNode().filter(nodeFilter);
       //this line return null if node has been deleted
       return findNode(treeNode.getId());
    }

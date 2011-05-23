@@ -194,12 +194,9 @@ public class UIGroupNavigationManagement extends UIContainer
          SiteKey siteKey = nav.getKey();
 
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
-         UINavigationManagement naviManager = uicomp.naviManager;
-         if (naviManager == null)
-         {
-            naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
-            uicomp.naviManager = naviManager;
-         }
+         UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+         uicomp.naviManager = naviManager;
+         
          naviManager.setOwner(siteKey.getName());
          naviManager.setOwnerType(siteKey.getTypeName());
 
@@ -312,6 +309,10 @@ public class UIGroupNavigationManagement extends UIContainer
       {
          UIPopupWindow popWindow = event.getSource();
          popWindow.setUIComponent(null);
+         
+         UIGroupNavigationManagement grpMan = popWindow.getAncestorOfType(UIGroupNavigationManagement.class);
+         grpMan.naviManager = null;
+         
          super.execute(event);
       }
    }

@@ -367,12 +367,9 @@ public class UISiteManagement extends UIContainer
          */
          
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
-         UINavigationManagement naviManager = uicomp.naviManager;
-         if (naviManager == null)
-         {
-            naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
-            uicomp.naviManager = naviManager;
-         }
+         UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+         uicomp.naviManager = naviManager;
+
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
@@ -420,6 +417,10 @@ public class UISiteManagement extends UIContainer
       {
          UIPopupWindow popWindow = event.getSource();
          popWindow.setUIComponent(null);
+         
+         UISiteManagement siteMan = popWindow.getAncestorOfType(UISiteManagement.class);
+         siteMan.naviManager = null;
+         
          super.execute(event);
       }
    }
