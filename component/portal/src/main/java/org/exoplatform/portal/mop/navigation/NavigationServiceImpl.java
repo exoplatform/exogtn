@@ -448,12 +448,19 @@ public class NavigationServiceImpl implements NavigationService
 
       public String[] getChildren(NodeContext<N> node)
       {
-         ArrayList<String> blah = new ArrayList<String>();
-         for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
+         if (node.getFirst() != null)
          {
-            blah.add(current.handle);
+            ArrayList<String> tmp = new ArrayList<String>();
+            for (NodeContext<N> current = node.getFirst(); current != null; current = current.getNext())
+            {
+               tmp.add(current.handle);
+            }
+            return tmp.toArray(new String[tmp.size()]);
          }
-         return blah.toArray(new String[blah.size()]);
+         else
+         {
+            return Utils.EMPTY_STRING_ARRAY;
+         }
       }
 
       public NodeContext<N> getDescendant(NodeContext<N> node, String handle)
