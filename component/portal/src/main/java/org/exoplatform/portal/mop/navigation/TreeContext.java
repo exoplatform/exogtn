@@ -41,11 +41,11 @@ import java.util.Map;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeContext<N> implements Scope.Visitor
+class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>>
 {
 
    /** . */
-   private LinkedList<NodeChange<NodeContext<N>>> changes;
+   private NodeChangeQueue<NodeContext<N>> changes;
 
    /** . */
    final NodeModel<N> model;
@@ -65,6 +65,11 @@ class TreeContext<N> implements Scope.Visitor
       this.editMode = false;
       this.sequence =  0;
       this.root = root;
+   }
+
+   public NodeChangeQueue<NodeContext<N>> getChanges()
+   {
+      return changes;
    }
 
    // Improve that method if we can
@@ -129,7 +134,7 @@ class TreeContext<N> implements Scope.Visitor
       }
       if (changes == null)
       {
-         changes = new LinkedList<NodeChange<NodeContext<N>>>();
+         changes = new NodeChangeQueue<NodeContext<N>>();
       }
 
       //
@@ -221,7 +226,7 @@ class TreeContext<N> implements Scope.Visitor
 
    NodeContext<N> create(String handle, String name, NodeState state)
    {
-      return new NodeContext<N>(this, handle, name, state);
+      return new NodeContext<N>(this, handle, name, state, true);
    }
    // Scope.Visitor implementation -------------------------------------------------------------------------------------
 
@@ -240,5 +245,43 @@ class TreeContext<N> implements Scope.Visitor
 
    public void leave(int depth, String id, String name, NodeState state)
    {
+   }
+   
+   //
+
+
+   public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+   {
+      addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
+   }
+
+   public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+   {
+      addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
+   }
+
+   public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+   {
+      addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
+   }
+
+   public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
+   {
+      addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
+   }
+
+   public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+   {
+      addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
+   }
+
+   public void onAdd(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous)
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   public void onRemove(NodeContext<N> source, NodeContext<N> parent)
+   {
+      throw new UnsupportedOperationException();
    }
 }

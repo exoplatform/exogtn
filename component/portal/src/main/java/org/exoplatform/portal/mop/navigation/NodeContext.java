@@ -85,7 +85,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.expanded = false;
    }
 
-   NodeContext(TreeContext<N> tree, String handle, String name, NodeState state)
+   NodeContext(TreeContext<N> tree, String handle, String name, NodeState state, boolean expanded)
    {
       this.handle = handle;
       this.name = name;
@@ -95,30 +95,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       this.state = state;
       this.hidden = false;
       this.hiddenCount = 0;
-      this.expanded = false;
-   }
-
-   NodeData toData()
-   {
-      String parentId = data.parentId;
-      String id = data.id;
-      String name = getName();
-      NodeState state = this.state != null ? this.state : data.state;
-      String[] children;
-      if (expanded)
-      {
-         children = new String[getSize()];
-         int index = 0;
-         for (NodeContext<N> current = getFirst();current != null;current = current.getNext())
-         {
-            children[index++] = current.data.id;
-         }
-      }
-      else
-      {
-         children = data.children;
-      }
-      return new NodeData(parentId, id, name, state, children);
+      this.expanded = expanded;
    }
 
    /**
@@ -545,8 +522,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, new NodeState.Builder().capture());
-      nodeContext.expand();
+      NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, new NodeState.Builder().capture(), true);
       _add(index, nodeContext);
       return nodeContext;
    }

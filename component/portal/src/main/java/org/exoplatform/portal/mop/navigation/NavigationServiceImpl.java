@@ -232,17 +232,6 @@ public class NavigationServiceImpl implements NavigationService
    public <N> void updateNode(NodeContext<N> root, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
 
-
-      //
-      TreeContext<N> tree = root.tree;
-
-      //
-      if (tree.hasChanges())
-      {
-         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
-      }
-
-      //
       Scope.Visitor visitor;
       if (scope != null)
       {
@@ -254,14 +243,41 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       //
-      if (root.tree.root != root)
+      updateTree(root.tree, visitor, listener);
+   }
+
+   public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
+   {
+      saveTree(context.tree, listener);
+   }
+
+
+   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
+   {
+      Scope.Visitor visitor;
+      if (scope != null)
       {
-         root = root.tree.root;
+         visitor = new FederatingVisitor<N>(context.tree.origin(), context, scope);
+      }
+      else
+      {
+         visitor = context.tree.origin();
       }
 
       //
-      final POMSession session = manager.getSession();
-      NodeData data = dataCache.getNodeData(session, root.data.id);
+      rebaseTree(context.tree, visitor, listener);
+   }
+
+   private <N> void updateTree(TreeContext<N> tree, Scope.Visitor visitor, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException
+   {
+      if (tree.hasChanges())
+      {
+         throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
+      }
+
+      //
+      POMSession session = manager.getSession();
+      NodeData data = dataCache.getNodeData(session, tree.root.data.id);
       if (data == null)
       {
          throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
@@ -275,7 +291,7 @@ public class NavigationServiceImpl implements NavigationService
       {
 
          Update.perform(
-            root,
+            tree.root,
             ContextHierarchyAdapter.<N>create(),
             data,
             DataHierarchyAdapter.create(dataCache, session),
@@ -290,23 +306,17 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-
-
-
-
-
-
-
-
-
-
-   public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
+   public void clearCache()
    {
-      final POMSession session = manager.getSession();
-      final TreeContext<N> tree = context.tree;
+      dataCache.clear();
+   }
+
+   private <N> void saveTree(TreeContext<N> tree, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
+   {
+      POMSession session = manager.getSession();
 
       //
-      NodeData data = dataCache.getNodeData(session, context.tree.root.data.id);
+      NodeData data = dataCache.getNodeData(session, tree.root.data.id);
       if (data == null)
       {
          throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
@@ -316,160 +326,19 @@ public class NavigationServiceImpl implements NavigationService
       TreeContext<N> rebased = rebase(tree, tree.origin());
 
       //
-      final Set<String> ids2 = new HashSet<String>();
-      final Map<String, NodeData> dataMap = new HashMap<String, NodeData>();
+      NavigationPersister<N> persister = new NavigationPersister<N>(session);
 
       //
-      for (NodeChange<NodeContext<N>> change : rebased.popChanges())
+      NodeChangeQueue<NodeContext<N>> changes = rebased.getChanges();
+      if (changes != null)
       {
-         change.dispatch(new NodeChangeListener.Base<NodeContext<N>>()
-         {
-            @Override
-            public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
-            {
-               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
-               ids2.add(parentNav.getObjectId());
-               int index = 0;
-               if (previous != null)
-               {
-                  Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
-                  index = previousNav.getIndex() + 1;
-               }
-
-               //
-               Navigation sourceNav = parentNav.addChild(index, name);
-
-               //
-               parent.data = new NodeData(parentNav);
-               parent.handle = parent.data.id;
-
-               //
-               NodeData data = new NodeData(sourceNav);
-               dataMap.put(source.handle, data);
-               source.data = data;
-               source.handle = source.data.id;
-            }
-            @Override
-            public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
-            {
-               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
-               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
-
-               //
-               ids2.add(sourceNav.getObjectId());
-               ids2.add(parentNav.getObjectId());
-               sourceNav.destroy();
-
-               //
-               parent.data = new NodeData(parentNav);
-               parent.handle = parent.data.id;
-            }
-            @Override
-            public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
-            {
-               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
-
-               //
-               ids2.add(sourceNav.getObjectId());
-               Workspace workspace = sourceNav.getSite().getWorkspace();
-               String reference = state.getPageRef();
-               if (reference != null)
-               {
-                  String[] pageChunks = split("::", reference);
-                  ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-                  Site site = workspace.getSite(siteType, pageChunks[1]);
-                  org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
-                  PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
-                  link.setPage(target);
-               }
-               else
-               {
-                  PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
-                  link.setPage(null);
-               }
-
-               //
-               Described described = sourceNav.adapt(Described.class);
-               described.setName(state.getLabel());
-
-               //
-               Visible visible = sourceNav.adapt(Visible.class);
-               visible.setVisibility(state.getVisibility());
-
-               //
-               visible.setStartPublicationDate(state.getStartPublicationDate());
-               visible.setEndPublicationDate(state.getEndPublicationDate());
-
-               //
-               Attributes attrs = sourceNav.getAttributes();
-               attrs.setValue(MappedAttributes.URI, state.getURI());
-               attrs.setValue(MappedAttributes.ICON, state.getIcon());
-
-               //
-               source.data = new NodeData(sourceNav);
-               source.handle = source.data.id;
-            }
-            @Override
-            public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
-            {
-               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
-               Navigation fromNav = session.findObjectById(ObjectType.NAVIGATION, from.data.id);
-               Navigation toNav = session.findObjectById(ObjectType.NAVIGATION, to.data.id);
-
-               //
-               ids2.add(sourceNav.getObjectId());
-               ids2.add(fromNav.getObjectId());
-               ids2.add(toNav.getObjectId());
-               int index;
-               if (previous != null)
-               {
-                  Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
-                  index = previousNav.getIndex() + 1;
-               }
-               else
-               {
-                  index = 0;
-               }
-               toNav.getChildren().add(index, sourceNav);
-
-               //
-               from.data = new NodeData(fromNav);
-               from.handle = from.data.id;
-
-               //
-               to.data = new NodeData(toNav);
-               to.handle = to.data.id;
-
-               //
-               source.data = new NodeData(sourceNav);
-               source.handle = source.data.id;
-            }
-            public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
-            {
-               Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
-               Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
-
-               //
-               ids2.add(sourceNav.getObjectId());
-               ids2.add(parentNav.getObjectId());
-               sourceNav.setName(name);
-
-               //
-               source.data = new NodeData(sourceNav);
-               source.handle = source.data.id;
-
-               //
-               parent.data = new NodeData(parentNav);
-               parent.handle = parent.data.id;
-            }
-         });
+         changes.broadcast(persister);
+         changes.clear();
+         tree.getChanges().clear();
       }
 
-      // Need to pop changes now they have been applied
-      tree.popChanges();
-
       //
-      for (Map.Entry<String, NodeData> entry : dataMap.entrySet())
+      for (Map.Entry<String, NodeData> entry : persister.dataMap.entrySet())
       {
          NodeContext<N> a = tree.getNode(entry.getKey());
          if (a != null)
@@ -496,7 +365,29 @@ public class NavigationServiceImpl implements NavigationService
          rebased);
 
       //
-      dataCache.removeNodeData(session, ids2);
+      dataCache.removeNodeData(session, persister.ids);
+   }
+
+   private <N> void rebaseTree(TreeContext<N> tree, Scope.Visitor visitor, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
+   {
+      if (!tree.hasChanges())
+      {
+         updateTree(tree, visitor, listener);
+      }
+      else
+      {
+         TreeContext<N> rebased = rebase(tree, visitor);
+
+         //
+         Update.perform(
+            tree.root,
+            ContextHierarchyAdapter.<N>create(),
+            rebased.root,
+            ContextHierarchyAdapter.<N>create(),
+            ContextUpdateAdapter.<N>create(),
+            listener,
+            rebased);
+      }
    }
 
    private <N> TreeContext<N> rebase(TreeContext<N> tree, Scope.Visitor visitor) throws NavigationServiceException
@@ -522,66 +413,19 @@ public class NavigationServiceImpl implements NavigationService
          visitor);
 
       //
-      List<NodeChange<NodeContext<N>>> changes = tree.peekChanges();
+      NodeChangeQueue<NodeContext<N>> changes = tree.getChanges();
 
       //
-      NodeChangeListener<NodeContext<N>> persister = new NodeContextSynchronizer<N>(rebased.tree);
+      NodeChangeListener<NodeContext<N>> merger = new Merge<N>(rebased.tree, rebased.tree);
 
       //
-      NodeChangeListener<NodeContext<N>> merger = new Merge<N>(rebased.tree, persister);
-
-      //
-      for (NodeChange<NodeContext<N>> change : changes)
+      if (changes != null)
       {
-         change.dispatch(merger);
+         changes.broadcast(merger);
       }
 
+      //
       return rebased.tree;
-   }
-
-   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
-   {
-      // No changes -> do an update operation instead as it's cheaper
-      if (!context.tree.hasChanges())
-      {
-         updateNode(context, scope, listener);
-      }
-      else
-      {
-         Scope.Visitor visitor;
-         if (scope != null)
-         {
-            visitor = new FederatingVisitor<N>(context.tree.origin(), context, scope);
-         }
-         else
-         {
-            visitor = context.tree.origin();
-         }
-
-         //
-         if (context.tree.root != context)
-         {
-            context = context.tree.root;
-         }
-
-         //
-         TreeContext<N> rebased = rebase(context.tree, visitor);
-
-         //
-         Update.perform(
-            context,
-            ContextHierarchyAdapter.<N>create(),
-            rebased.root,
-            ContextHierarchyAdapter.<N>create(),
-            ContextUpdateAdapter.<N>create(),
-            listener,
-            rebased);
-      }
-   }
-
-   public void clearCache()
-   {
-      dataCache.clear();
    }
 
    private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
@@ -710,49 +554,162 @@ public class NavigationServiceImpl implements NavigationService
       }
    }
 
-   private static class NodeContextSynchronizer<N> extends NodeChangeListener.Base<NodeContext<N>>
+   private static class NavigationPersister<N> extends NodeChangeListener.Base<NodeContext<N>>
    {
 
       /** . */
-      private final TreeContext<N> tree;
+      private final Map<String, NodeData> dataMap;
 
-      private NodeContextSynchronizer(TreeContext<N> tree)
+      /** . */
+      private final POMSession session;
+
+      /** . */
+      private final Set<String> ids;
+
+      private NavigationPersister(POMSession session)
       {
-         this.tree = tree;
+         this.dataMap = new HashMap<String, NodeData>();
+         this.session = session;
+         this.ids = new HashSet<String>();
       }
 
       @Override
       public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
       {
-         // Expand the node if needed
-         source.expand();
+         Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
+         ids.add(parentNav.getObjectId());
+         int index = 0;
+         if (previous != null)
+         {
+            Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
+            index = previousNav.getIndex() + 1;
+         }
 
          //
-         tree.addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
-      }
+         Navigation sourceNav = parentNav.addChild(index, name);
 
+         //
+         parent.data = new NodeData(parentNav);
+         parent.handle = parent.data.id;
+
+         //
+         NodeData data = new NodeData(sourceNav);
+         dataMap.put(source.handle, data);
+         source.data = data;
+         source.handle = source.data.id;
+      }
       @Override
       public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
       {
-         tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
-      }
+         Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
 
-      @Override
-      public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
-      {
-         tree.addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
-      }
+         //
+         ids.add(sourceNav.getObjectId());
+         ids.add(parentNav.getObjectId());
+         sourceNav.destroy();
 
+         //
+         parent.data = new NodeData(parentNav);
+         parent.handle = parent.data.id;
+      }
       @Override
       public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
       {
-         tree.addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
-      }
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
 
+         //
+         ids.add(sourceNav.getObjectId());
+         Workspace workspace = sourceNav.getSite().getWorkspace();
+         String reference = state.getPageRef();
+         if (reference != null)
+         {
+            String[] pageChunks = split("::", reference);
+            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
+            Site site = workspace.getSite(siteType, pageChunks[1]);
+            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+            PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(target);
+         }
+         else
+         {
+            PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(null);
+         }
+
+         //
+         Described described = sourceNav.adapt(Described.class);
+         described.setName(state.getLabel());
+
+         //
+         Visible visible = sourceNav.adapt(Visible.class);
+         visible.setVisibility(state.getVisibility());
+
+         //
+         visible.setStartPublicationDate(state.getStartPublicationDate());
+         visible.setEndPublicationDate(state.getEndPublicationDate());
+
+         //
+         Attributes attrs = sourceNav.getAttributes();
+         attrs.setValue(MappedAttributes.URI, state.getURI());
+         attrs.setValue(MappedAttributes.ICON, state.getIcon());
+
+         //
+         source.data = new NodeData(sourceNav);
+         source.handle = source.data.id;
+      }
       @Override
       public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
       {
-         tree.addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+         Navigation fromNav = session.findObjectById(ObjectType.NAVIGATION, from.data.id);
+         Navigation toNav = session.findObjectById(ObjectType.NAVIGATION, to.data.id);
+
+         //
+         ids.add(sourceNav.getObjectId());
+         ids.add(fromNav.getObjectId());
+         ids.add(toNav.getObjectId());
+         int index;
+         if (previous != null)
+         {
+            Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previous.data.id);
+            index = previousNav.getIndex() + 1;
+         }
+         else
+         {
+            index = 0;
+         }
+         toNav.getChildren().add(index, sourceNav);
+
+         //
+         from.data = new NodeData(fromNav);
+         from.handle = from.data.id;
+
+         //
+         to.data = new NodeData(toNav);
+         to.handle = to.data.id;
+
+         //
+         source.data = new NodeData(sourceNav);
+         source.handle = source.data.id;
+      }
+      public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+      {
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+         Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
+
+         //
+         ids.add(sourceNav.getObjectId());
+         ids.add(parentNav.getObjectId());
+         sourceNav.setName(name);
+
+         //
+         source.data = new NodeData(sourceNav);
+         source.handle = source.data.id;
+
+         //
+         parent.data = new NodeData(parentNav);
+         parent.handle = parent.data.id;
       }
    }
 }

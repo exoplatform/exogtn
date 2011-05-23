@@ -20,8 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -29,81 +27,58 @@ import java.util.LinkedList;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NodeChangeQueue<N> implements NodeChangeListener<N>, Iterable<NodeChange<N>>
+public class NodeChangeQueue<N> extends LinkedList<NodeChange<N>> implements NodeChangeListener<N>
 {
-
-   /** . */
-   private Collection<NodeChange<N>> changes;
-
-   public NodeChangeQueue(Collection<NodeChange<N>> changes)
-   {
-      this.changes = changes;
-   }
 
    public NodeChangeQueue()
    {
-      this(null);
    }
 
-   public Iterator<NodeChange<N>> iterator()
+   public NodeChangeQueue(Collection<? extends NodeChange<N>> c)
    {
-      return changes == null ? Collections.<NodeChange<N>>emptyList().iterator() : changes.iterator();
+      super(c);
    }
 
-   protected Collection<NodeChange<N>> create()
+   public void broadcast(NodeChangeListener<N> listener)
    {
-      return new LinkedList<NodeChange<N>>();
-   }
-
-   public void clear()
-   {
-      if (changes != null)
+      for (NodeChange<N> change : this)
       {
-         changes.clear();
+         change.dispatch(listener);
       }
-   }
-
-   private void onChange(NodeChange<N> change)
-   {
-      if (changes == null)
-      {
-         changes = create();
-      }
-      changes.add(change);
    }
 
    public void onAdd(N source, N parent, N previous)
    {
-      onChange(new NodeChange.Added<N>(parent, previous, source));
+      add(new NodeChange.Added<N>(parent, previous, source));
    }
 
    public void onCreate(N source, N parent, N previous, String name)
    {
-      onChange(new NodeChange.Created<N>(parent, previous, source, name));
+      add(new NodeChange.Created<N>(parent, previous, source, name));
    }
 
    public void onRemove(N source, N parent)
    {
-      onChange(new NodeChange.Removed<N>(parent, source));
+      add(new NodeChange.Removed<N>(parent, source));
    }
 
    public void onDestroy(N source, N parent)
    {
-      onChange(new NodeChange.Destroyed<N>(parent, source));
+      add(new NodeChange.Destroyed<N>(parent, source));
    }
 
    public void onRename(N source, N parent, String name)
    {
-      onChange(new NodeChange.Renamed<N>(parent, source, name));
+      add(new NodeChange.Renamed<N>(parent, source, name));
    }
 
    public void onUpdate(N source, NodeState state)
    {
-      onChange(new NodeChange.Updated<N>(source, state));
+      add(new NodeChange.Updated<N>(source, state));
    }
 
    public void onMove(N source, N from, N to, N previous)
    {
-      onChange(new NodeChange.Moved<N>(from, to, previous, source));
+      add(new NodeChange.Moved<N>(from, to, previous, source));
    }
 }
