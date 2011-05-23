@@ -121,8 +121,7 @@ public class UINavigationNodeSelector extends UIContainer
    @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      // Navigation deleted --> close the editor because we can't do anything
-      // else
+      // Navigation deleted --> close the editor
       if (this.rootNode == null)
       {
          context.getUIApplication().addMessage(
@@ -212,7 +211,7 @@ public class UINavigationNodeSelector extends UIContainer
          return treeNode;
       }
 
-      userPortal.rebaseNode(userNode, scope, getRootNode());     
+      userPortal.rebaseNode(userNode, scope, getRootNode());           
       //this line return null if node has been deleted
       return findNode(treeNode.getId());
    }
@@ -299,10 +298,14 @@ public class UINavigationNodeSelector extends UIContainer
       
       protected void handleError(NavigationError error, UINavigationNodeSelector selector) throws Exception
       {
-         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-         UIApplication uiApp = context.getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg." + error.name(), null,
-            ApplicationMessage.ERROR));
+         selector.initTreeData();
+         if (selector.getRootNode() != null)
+         {
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            UIApplication uiApp = context.getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg." + error.name(), null,
+               ApplicationMessage.ERROR));
+         }                 
       }
    }
 
