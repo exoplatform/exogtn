@@ -33,7 +33,6 @@ import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -127,14 +126,13 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       res.getWriter().write(jsChilds.toString());
    }
    
-   private JSONArray getChildrenAsJSON(NavigationPath navPath) throws Exception
+   private JSONArray getChildrenAsJSON(UserNode userNode) throws Exception
    {           
-      if (navPath == null)
+      if (userNode == null)
       {
          return null;
       }
 
-      UserNode userNode = navPath.getTarget();
       getUserPortal().updateNode(userNode, toolbarScope, null);
       userNode.filter(toolbarFilter);
       Collection<UserNode> childs = userNode.getChildren();         
@@ -144,7 +142,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       MimeResponse res = context.getResponse();
       for (UserNode child : childs)
       {
-         jsChilds.put(toJSON(child, navPath.getNavigation().getKey().getName(), res));
+         jsChilds.put(toJSON(child, userNode.getNavigation().getKey().getName(), res));
       }
       return jsChilds;
    }
@@ -182,10 +180,10 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
    
    protected UserNode getSelectedNode() throws Exception
    {
-      return Util.getUIPortal().getNavPath().getTarget();
+      return Util.getUIPortal().getSelectedUserNode();
    }
    
    protected abstract String getResourceIdFromNode(UserNode node, String navId) throws Exception;
    
-   protected abstract NavigationPath getPathFromResourceID(String resourceId) throws Exception;
+   protected abstract UserNode getPathFromResourceID(String resourceId) throws Exception;
 }

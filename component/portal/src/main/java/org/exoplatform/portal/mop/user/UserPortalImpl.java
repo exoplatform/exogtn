@@ -259,7 +259,6 @@ public class UserPortalImpl implements UserPortal
       int score;
       String id;
       UserNode userNode;
-      private NavigationPath path;
 
       MatchingScope(UserNavigation userNavigation, UserNodeFilterConfig filterConfig, String[] match)
       {
@@ -277,16 +276,7 @@ public class UserPortalImpl implements UserPortal
             if (score > 0)
             {
                userNode = nodeContext.getNode().filter().find(id);
-               path = new NavigationPath(userNavigation, userNode);
             }
-            else
-            {
-               path = new NavigationPath(userNavigation, null);
-            }
-         }
-         else
-         {
-            path = new NavigationPath(userNavigation, null);
          }
       }
 
@@ -321,7 +311,7 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws UserPortalException, NavigationServiceException
+   public UserNode getDefaultPath(UserNodeFilterConfig filterConfig) throws UserPortalException, NavigationServiceException
    {
       for (UserNavigation userNavigation : getNavigations())
       {
@@ -335,7 +325,7 @@ public class UserPortalImpl implements UserPortal
                UserNode root = nodeContext.getNode().filter();
                for (UserNode node : root.getChildren())
                {
-                  return new NavigationPath(userNavigation, node);
+                  return node;
                }
             }
          }
@@ -345,7 +335,7 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path)
+   public UserNode resolvePath(UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException
    {
       if (path == null)
@@ -399,7 +389,7 @@ public class UserPortalImpl implements UserPortal
       //
       if (best != null && best.score > 0)
       {
-         return new NavigationPath(best.userNavigation,  best.userNode);
+         return best.userNode;
       }
       else
       {
@@ -407,7 +397,7 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
+   public UserNode resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException
    {
       if (navigation == null)
@@ -437,7 +427,7 @@ public class UserPortalImpl implements UserPortal
       //
       if (scope.score > 0)
       {
-         return scope.path;
+         return scope.userNode;
       }
       else
       {

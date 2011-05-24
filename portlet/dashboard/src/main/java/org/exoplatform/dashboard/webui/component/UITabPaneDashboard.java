@@ -28,7 +28,6 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -131,8 +130,7 @@ public class UITabPaneDashboard extends UIContainer
 
    public UserNode getParentTab() throws Exception
    {
-      NavigationPath navPath = uiPortal.getNavPath();
-      UserNode selectedNode =  navPath.getTarget();      
+      UserNode selectedNode =  uiPortal.getSelectedUserNode();
       //parent can be null if child has been removed, and the parent is reloaded
       UserNode parent = selectedNode.getParent() == null ? this.cachedParent : selectedNode.getParent();      
             
@@ -226,7 +224,7 @@ public class UITabPaneDashboard extends UIContainer
             return null;
          }
 
-         UserNode selectedNode = uiPortal.getNavPath().getTarget();
+         UserNode selectedNode = uiPortal.getSelectedUserNode();
          if (nodeName.equals(selectedNode.getName()))
          {
             selectedNode = prevNode != null ? prevNode : parentNode.getChildren().iterator().next();
@@ -517,7 +515,7 @@ public class UITabPaneDashboard extends UIContainer
       UserNode parentTab = getParentTab();      
       if (parentTab != null)
       {
-         UserNode currNode = Util.getUIPortal().getNavPath().getTarget();
+         UserNode currNode = Util.getUIPortal().getSelectedUserNode();
          if (parentTab.getChildren().size() == 0 && parentTab.getURI() != null)
          {
             return parentTab.getURI();
@@ -533,6 +531,6 @@ public class UITabPaneDashboard extends UIContainer
          }
       }   
 
-      return getUserPortal().getDefaultPath(null).getTarget().getURI();
+      return getUserPortal().getDefaultPath(null).getURI();
    }
 }

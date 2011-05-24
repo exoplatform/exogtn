@@ -64,6 +64,11 @@ public class UserNode
       this.uri = null;
    }
 
+   public UserNavigation getNavigation()
+   {
+      return owner.navigation;
+   }
+
    public String getId()
    {
       return context.getId();

@@ -29,7 +29,6 @@ import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
@@ -113,7 +112,7 @@ public class UINavigationPortlet extends UIPortletApplication
       UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);      
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       
-      NavigationPath navPath;
+      UserNode navPath;
       if (context.getRemoteUser() != null)
       {
          navPath = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), null, nodeURI);
@@ -125,7 +124,7 @@ public class UINavigationPortlet extends UIPortletApplication
       
       if (navPath != null)
       {
-         UserNode userNode = uiPortalNavigation.updateNode(navPath.getTarget());
+         UserNode userNode = uiPortalNavigation.updateNode(navPath);
          if (userNode != null)
          {
             childs = userNode.getChildren();
@@ -153,7 +152,7 @@ public class UINavigationPortlet extends UIPortletApplication
       json.put("label", node.getEncodedResolvedLabel());      
       json.put("hasChild", node.getChildrenCount() > 0);            
       
-      UserNode selectedNode = Util.getUIPortal().getNavPath().getTarget();
+      UserNode selectedNode = Util.getUIPortal().getNavPath();
       json.put("isSelected", nodeId.equals(selectedNode.getId()));
       json.put("icon", node.getIcon());      
       

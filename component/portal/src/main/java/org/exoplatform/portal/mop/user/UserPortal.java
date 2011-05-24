@@ -119,7 +119,7 @@ public interface UserPortal
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig)
+   UserNode getDefaultPath(UserNodeFilterConfig filterConfig)
       throws UserPortalException, NavigationServiceException;
 
    /**
@@ -132,7 +132,7 @@ public interface UserPortal
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path)
+   UserNode resolvePath(UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
@@ -146,7 +146,7 @@ public interface UserPortal
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
+   UserNode resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**

@@ -236,7 +236,7 @@ public class UIPortalNavigation extends UIComponent
       UIPortal uiPortal = Util.getUIPortal();
       if (uiPortal != null)
       {
-         return uiPortal.getNavPath().getTarget();
+         return uiPortal.getSelectedUserNode();
       }
       return null;
    }

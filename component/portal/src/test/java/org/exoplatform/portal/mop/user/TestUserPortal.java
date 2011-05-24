@@ -29,7 +29,6 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -405,37 +404,33 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
-            NavigationPath nav = userPortal.resolvePath(null, "/");
+            UserNode nav = userPortal.resolvePath(null, "/");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
-            UserNode target = nav.getTarget();
-            assertEquals("home", target.getName());
-            assertEquals("default", target.getParent().getName());
-            assertNull(target.getParent().getParent());
+            assertEquals("home", nav.getName());
+            assertEquals("default", nav.getParent().getName());
+            assertNull(nav.getParent().getParent());
 
             //
             nav = userPortal.resolvePath(null, "/foo");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
-            target = nav.getTarget();
-            assertEquals("home", target.getName());
-            assertEquals("default", target.getParent().getName());
-            assertNull(target.getParent().getParent());
+            assertEquals("home", nav.getName());
+            assertEquals("default", nav.getParent().getName());
+            assertNull(nav.getParent().getParent());
 
             //
             nav = userPortal.resolvePath(null, "/home");
             assertEquals(SiteKey.portal("classic"), nav.getNavigation().getKey());
-            target = nav.getTarget();
-            assertEquals("home", target.getName());
-            assertEquals("default", target.getParent().getName());
-            assertNull(target.getParent().getParent());
+            assertEquals("home", nav.getName());
+            assertEquals("default", nav.getParent().getName());
+            assertNull(nav.getParent().getParent());
 
             //
             nav = userPortal.resolvePath(null, "/administration/communityManagement");
             assertEquals(SiteKey.group("/platform/administrators"), nav.getNavigation().getKey());
-            target = nav.getTarget();
-            assertEquals("communityManagement", target.getName());
-            assertEquals("administration", target.getParent().getName());
-            assertEquals("default", target.getParent().getParent().getName());
-            assertNull(target.getParent().getParent().getParent());
+            assertEquals("communityManagement", nav.getName());
+            assertEquals("administration", nav.getParent().getName());
+            assertEquals("default", nav.getParent().getParent().getName());
+            assertNull(nav.getParent().getParent().getParent());
          }
       }.execute("root");
    }
@@ -451,7 +446,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation navigation = userPortal.getNavigation(SiteKey.group("/platform/administrators"));
 
             //
-            NavigationPath path = userPortal.resolvePath(navigation, null, "/");
+            UserNode path = userPortal.resolvePath(navigation, null, "/");
             assertNull(path);
 
             //
@@ -461,12 +456,12 @@ public class TestUserPortal extends AbstractPortalTest
             //
             path = userPortal.resolvePath(navigation, null, "/administration");
             assertNotNull(path);
-            assertEquals("administration", path.getTarget().getName());
+            assertEquals("administration", path.getName());
 
             //
             path = userPortal.resolvePath(navigation, null, "/administration/communityManagement");
             assertNotNull(path);
-            assertEquals("communityManagement", path.getTarget().getName());
+            assertEquals("communityManagement", path.getName());
          }
       }.execute("root");
    }
@@ -497,14 +492,14 @@ public class TestUserPortal extends AbstractPortalTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
-            NavigationPath path = userPortal.resolvePath(null, "/home");
-            assertEquals("#{portal.classic.home}", path.getTarget().getLabel());
-            assertEquals("foo", path.getTarget().getResolvedLabel());
+            UserNode path = userPortal.resolvePath(null, "/home");
+            assertEquals("#{portal.classic.home}", path.getLabel());
+            assertEquals("foo", path.getResolvedLabel());
 
             // Note that we don't save otherwise that may affect other tests
             // this is fine for this test I think
-            path.getTarget().setLabel("#{portal.classic.emoh}");
-            assertEquals("bar", path.getTarget().getResolvedLabel());
+            path.setLabel("#{portal.classic.emoh}");
+            assertEquals("bar", path.getResolvedLabel());
          }
       }.execute("root");
    }

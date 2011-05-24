@@ -24,7 +24,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -95,7 +94,7 @@ public class UIPortal extends UIContainer
 
    private Properties properties;
 
-   private NavigationPath navPath;
+   private UserNode navPath;
 
    private Map<String, UIPage> all_UIPages;
    
@@ -168,7 +167,7 @@ public class UIPortal extends UIContainer
       publicParameters_ = publicParams;
    }
 
-   public NavigationPath getNavPath() throws Exception
+   public UserNode getNavPath() throws Exception
    {
       if (navPath == null)
       {
@@ -178,7 +177,7 @@ public class UIPortal extends UIContainer
       return navPath;
    }
    
-   public void setNavPath(NavigationPath nav)
+   public void setNavPath(UserNode nav)
    {
       this.navPath = nav;
    }
@@ -245,7 +244,7 @@ public class UIPortal extends UIContainer
    
    public UserNode getSelectedUserNode() throws Exception
    {
-      return getNavPath().getTarget();
+      return getNavPath();
    }
 
    public UIComponent getMaximizedUIComponent()

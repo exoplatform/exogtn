@@ -20,8 +20,8 @@
 package org.exoplatform.portal.webui.component;
 
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
@@ -55,7 +55,7 @@ public class UILogoPortlet extends UIPortletApplication
 
    public String getNavigationTitle() throws Exception
    {
-      NavigationPath navPath = Util.getUIPortal().getNavPath();
+      UserNode navPath = Util.getUIPortal().getNavPath();
       UserNavigation nav = navPath.getNavigation();
       if (nav.getKey().getType().equals(SiteType.GROUP))
       {
