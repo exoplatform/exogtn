@@ -358,18 +358,21 @@ public class UserPortalImpl implements UserPortal
       // Get navigations
       List<UserNavigation> navigations = getNavigations();
 
-      // Split into segments
+      //  Remove any leading /
       if (path.length() > 0 && path.charAt(0) == '/')
       {
          path = path.substring(1);
       }
-      String[] segments = path.split("/");
 
       // Find the first navigation available or return null
       if (path.length() == 0)
       {
          return getDefaultPath(null);
       }
+
+      // Split into segments
+      String[] segments = path.split("/");
+
 
       //
       MatchingScope best = null;
