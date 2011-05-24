@@ -91,14 +91,25 @@ public interface UserPortal
     *
     * @param node the user node that will be rebased
     * @param scope the optional scope
-    * @param listener the option node change listener
+    * @param listener the optional node change listener
     * @throws NullPointerException if the context argument is null
-    * @throws IllegalArgumentException if the node has pending changes
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
     void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
-       throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException;
+       throws NullPointerException, UserPortalException, NavigationServiceException;
+
+   /**
+    * Save the specified context to the persistent storage.
+    *
+    * @param node the user node that will be rebased
+    * @param listener the optional node change listener
+    * @throws NullPointerException if the node argument is null
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException anything that would prevent the operation to succeed
+    */
+    void saveNode(UserNode node, NodeChangeListener<UserNode> listener)
+       throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
     * Returns the default navigation path.

@@ -222,6 +222,10 @@ public class UserPortalImpl implements UserPortal
    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) 
       throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException
    {
+      if (node == null)
+      {
+         throw new NullPointerException("No null node accepted");
+      }
       navigationService.updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
@@ -229,7 +233,21 @@ public class UserPortalImpl implements UserPortal
    public void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
       throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException
    {
+      if (node == null)
+      {
+         throw new NullPointerException("No null node accepted");
+      }
       navigationService.rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      node.filter();
+   }
+
+   public void saveNode(UserNode node, NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException
+   {
+      if (node == null)
+      {
+         throw new NullPointerException("No null node accepted");
+      }
+      navigationService.saveNode(node.context, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
 

@@ -217,7 +217,7 @@ public class UITabPaneDashboard extends UIContainer
                // Remove from cache
                uiPortal.setUIPage(pageRef, null);
             }
-            parentNode.save();
+            getUserPortal().saveNode(parentNode, null);
          }
          else
          {
@@ -273,7 +273,7 @@ public class UITabPaneDashboard extends UIContainer
          tabNode.setLabel(nodeLabel);
          tabNode.setPageRef(page.getPageId());
 
-         parentNode.save();
+         getUserPortal().saveNode(parentNode, null);
 
          return tabNode.getURI();
       }
@@ -333,7 +333,7 @@ public class UITabPaneDashboard extends UIContainer
             dataService.save(page);
          }
 
-         parentNode.save();
+         getUserPortal().saveNode(parentNode, null);
          return renamedNode.getURI();
       }
       catch (Exception ex)
@@ -362,7 +362,7 @@ public class UITabPaneDashboard extends UIContainer
          UserNode firstNode = siblings.get(firstIndex);
          parentNode.addChild(secondIndex, firstNode);
 
-         parentNode.save();
+         getUserPortal().saveNode(parentNode, null);
          return true;
       }
       catch (Exception ex)

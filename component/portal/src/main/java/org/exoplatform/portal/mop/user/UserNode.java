@@ -315,10 +315,14 @@ public class UserNode
       return context.removeNode(childName);
    }
 
+   /**
+    * REMOVE ME
+    *
+    * @deprecated
+    */
    public void save() throws NavigationServiceException
    {
-      owner.navigation.portal.navigationService.saveNode(context, null);
-      filter();
+      owner.navigation.portal.saveNode(this, null);
    }
 
    // Keep this internal for now
