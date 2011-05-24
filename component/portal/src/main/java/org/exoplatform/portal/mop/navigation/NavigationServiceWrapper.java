@@ -19,22 +19,29 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
+import org.picocontainer.Startable;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationServiceWrapper implements NavigationService
+public class NavigationServiceWrapper implements NavigationService, Startable
 {
 
    /** . */
@@ -46,16 +53,47 @@ public class NavigationServiceWrapper implements NavigationService
    /** . */
    private ListenerService listenerService;
 
-   public NavigationServiceWrapper(POMSessionManager manager, ListenerService listenerService)
+   /** . */
+   private final POMSessionManager manager;
+
+   /** . */
+   private Session session;
+
+   /** . */
+   private final RepositoryService repositoryService;
+
+   /** . */
+   private final InvalidationBridge bridge;
+
+   public NavigationServiceWrapper(
+      RepositoryService repositoryService,
+      POMSessionManager manager,
+      ListenerService listenerService)
    {
-      this.service = new NavigationServiceImpl(manager);
+      SimpleDataCache cache = new SimpleDataCache();
+
+      //
+      this.repositoryService = repositoryService;
+      this.manager = manager;
+      this.service = new NavigationServiceImpl(manager, cache);
       this.listenerService = listenerService;
+      this.bridge = new InvalidationBridge(cache);
    }
 
-   public NavigationServiceWrapper(POMSessionManager manager, ListenerService listenerService, CacheService cacheService)
+   public NavigationServiceWrapper(
+      RepositoryService repositoryService,
+      POMSessionManager manager,
+      ListenerService listenerService,
+      CacheService cacheService)
    {
-      this.service = new NavigationServiceImpl(manager, new ExoDataCache(cacheService));
+      ExoDataCache cache = new ExoDataCache(cacheService);
+
+      //
+      this.repositoryService = repositoryService;
+      this.manager = manager;
+      this.service = new NavigationServiceImpl(manager, cache);
       this.listenerService = listenerService;
+      this.bridge = new InvalidationBridge(cache);
    }
 
    public NavigationContext loadNavigation(SiteKey key)
@@ -128,6 +166,32 @@ public class NavigationServiceWrapper implements NavigationService
       catch (Exception e)
       {
          log.error("Error when delivering notification " + name + " for navigation " + key, e);
+      }
+   }
+
+   public void start()
+   {
+      try
+      {
+         String workspaceName = manager.getLifeCycle().getWorkspaceName();
+         ManageableRepository repo = repositoryService.getCurrentRepository();
+         session = repo.getSystemSession(workspaceName);
+         bridge.start(session);
+      }
+      catch (RepositoryException e)
+      {
+         throw new UndeclaredRepositoryException(e);
+      }
+   }
+
+   public void stop()
+   {
+      bridge.stop();
+
+      //
+      if (session != null)
+      {
+         session.logout();
       }
    }
 }

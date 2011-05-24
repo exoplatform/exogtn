@@ -140,4 +140,30 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       //
       end();
    }
+
+   public void testCacheInvalidation() throws Exception
+   {
+      SiteKey key = SiteKey.portal("wrapper_cache_invalidation");
+
+      //
+      begin();
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation");
+      end(true);
+
+      //
+      begin();
+      navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+      assertNotNull(navigationService.loadNavigation(key));
+      end(true);
+
+      //
+      begin();
+      mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation").destroy();
+      end(true);
+
+      //
+      begin();
+      assertNull(navigationService.loadNavigation(key));
+      end();
+   }
 }
