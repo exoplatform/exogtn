@@ -128,11 +128,10 @@ public class UserPortalImpl implements UserPortal
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
          NavigationContext portalNav = navigationService.loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
-         navigations.add(new UserNavigation(
-            this,
-            portalNav,
-            acl.hasEditPermissionOnNavigation(portalNav.getKey())));
-
+         if (portalNav != null && portalNav.getState() != null)
+         {
+            navigations.add(new UserNavigation(this, portalNav, acl.hasEditPermissionOnNavigation(portalNav.getKey())));
+         }
          //
          if (userName != null)
          {
