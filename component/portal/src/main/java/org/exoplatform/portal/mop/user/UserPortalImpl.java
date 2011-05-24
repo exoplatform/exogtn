@@ -108,9 +108,9 @@ public class UserPortalImpl implements UserPortal
     * Returns an immutable sorted list of the valid navigations related to the user.
     *
     * @return the navigations
-    * @throws Exception any exception
+    * @throws UserPortalException any user portal exception
     */
-   public List<UserNavigation> getNavigations() throws Exception
+   public List<UserNavigation> getNavigations() throws UserPortalException, NavigationServiceException
    {
       if (navigations == null)
       {
@@ -133,14 +133,23 @@ public class UserPortalImpl implements UserPortal
 
             //
             Collection<?> groups;
-            if (acl.getSuperUser().equals(userName))
+            try
             {
-               groups = organizationService.getGroupHandler().getAllGroups();
+               if (acl.getSuperUser().equals(userName))
+               {
+                  groups = organizationService.getGroupHandler().getAllGroups();
+               }
+               else
+               {
+                  groups = organizationService.getGroupHandler().findGroupsOfUser(userName);
+               }
             }
-            else
+            catch (Exception e)
             {
-               groups = organizationService.getGroupHandler().findGroupsOfUser(userName);
+               throw new UserPortalException("Could not retrieve groups", e);
             }
+
+            //
             for (Object group : groups)
             {
                Group m = (Group)group;
@@ -174,8 +183,12 @@ public class UserPortalImpl implements UserPortal
       return navigations;
    }
 
-   public UserNavigation getNavigation(SiteKey key) throws Exception
+   public UserNavigation getNavigation(SiteKey key) throws NullPointerException, UserPortalException, NavigationServiceException
    {
+      if (key == null)
+      {
+         throw new NullPointerException("No null key accepted");
+      }
       for (UserNavigation navigation : getNavigations())
       {
          if (navigation.getKey().equals(key))
@@ -188,7 +201,11 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public UserNode getNode(UserNavigation userNavigation, Scope scope, UserNodeFilterConfig filterConfig, NodeChangeListener<UserNode> listener) throws Exception
+   public UserNode getNode(
+      UserNavigation userNavigation,
+      Scope scope,
+      UserNodeFilterConfig filterConfig,
+      NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException
    {
       UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
       NodeContext<UserNode> nodeContext = navigationService.loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
@@ -203,14 +220,14 @@ public class UserPortalImpl implements UserPortal
    }
 
    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) 
-      throws NullPointerException, IllegalArgumentException, NavigationServiceException
+      throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException
    {
       navigationService.updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
    
    public void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
-      throws NullPointerException, NavigationServiceException
+      throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException
    {
       navigationService.rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
@@ -286,7 +303,7 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws Exception
+   public NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws UserPortalException, NavigationServiceException
    {
       for (UserNavigation userNavigation : getNavigations())
       {
@@ -310,7 +327,8 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path) throws Exception
+   public NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path)
+      throws NullPointerException, UserPortalException, NavigationServiceException
    {
       if (path == null)
       {
@@ -325,7 +343,7 @@ public class UserPortalImpl implements UserPortal
       {
          path = path.substring(1);
       }
-      final String[] segments = path.split("/");
+      String[] segments = path.split("/");
 
       // Find the first navigation available or return null
       if (path.length() == 0)
@@ -371,8 +389,13 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path) throws Exception
+   public NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
+      throws NullPointerException, UserPortalException, NavigationServiceException
    {
+      if (navigation == null)
+      {
+         throw new NullPointerException("No null navigation accepted");
+      }
       if (path == null)
       {
          throw new NullPointerException("No null path accepted");
@@ -387,9 +410,7 @@ public class UserPortalImpl implements UserPortal
       {
          return null;
       }
-      final String[] segments = path.split("/");
-
-      //
+      String[] segments = path.split("/");
 
       //
       MatchingScope scope = new MatchingScope(navigation, filterConfig, segments);

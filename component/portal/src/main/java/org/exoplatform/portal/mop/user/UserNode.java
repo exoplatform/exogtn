@@ -75,6 +75,10 @@ public class UserNode
       return this;
    }
 
+   /**
+    * TO REMOVE
+    * @deprecated
+    */
    public UserNode filter(NodeFilter filter)
    {
       context.filter(filter);

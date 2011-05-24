@@ -38,18 +38,23 @@ public interface UserPortal
     * Returns the sorted list of current user navigations.
     *
     * @return the current user navigations
-    * @throws Exception any exception
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   List<UserNavigation> getNavigations() throws Exception;
+   List<UserNavigation> getNavigations()
+      throws UserPortalException, NavigationServiceException;
 
    /**
     * Returns a user navigation for a specified site key, null is returned when such navigation does not exist.
     *
     * @param key the site key
     * @return the corresponding user navigation
-    * @throws Exception any exception
+    * @throws NullPointerException when the provided key is null
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   UserNavigation getNavigation(SiteKey key) throws Exception;
+   UserNavigation getNavigation(SiteKey key)
+      throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
     * Load a user node from a specified user navigation with a custom scope.
@@ -60,9 +65,12 @@ public interface UserPortal
     * @param filterConfig an optional filter
     * @param listener an optional listener  @return the user node
     * @return the user node
-    * @throws Exception any exception
+    * @throws NullPointerException if the navigation argument is null
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   UserNode getNode(UserNavigation navigation, Scope scope, UserNodeFilterConfig filterConfig, NodeChangeListener<UserNode> listener) throws Exception;
+   UserNode getNode(UserNavigation navigation, Scope scope, UserNodeFilterConfig filterConfig, NodeChangeListener<UserNode> listener)
+      throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
     * Update the specified content with the most recent state.
@@ -72,9 +80,11 @@ public interface UserPortal
     * @param listener an optional listener
     * @throws NullPointerException if the context argument is null
     * @throws IllegalArgumentException if the node has pending changes
+    * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-   void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException, IllegalArgumentException, NavigationServiceException;
+   void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
+      throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException;
    
    /**
     * Rebase the specified context with the most recent state.
@@ -83,18 +93,23 @@ public interface UserPortal
     * @param scope the optional scope
     * @param listener the option node change listener
     * @throws NullPointerException if the context argument is null
+    * @throws IllegalArgumentException if the node has pending changes
+    * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
-    void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException, NavigationServiceException;
+    void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
+       throws NullPointerException, IllegalArgumentException, UserPortalException, NavigationServiceException;
 
    /**
     * Returns the default navigation path.
     *
     * @param filterConfig an optional filter
     * @return the default navigation path
-    * @throws Exception any exception
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws Exception;
+   NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig)
+      throws UserPortalException, NavigationServiceException;
 
    /**
     * Resolves and returns a navigation path among all user navigations for a specified path.
@@ -102,9 +117,12 @@ public interface UserPortal
     * @param filterConfig an optional filter
     * @param path the path
     * @return the navigation path
-    * @throws Exception any exception
+    * @throws NullPointerException if the navigation or path argument is null
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path) throws Exception;
+   NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path)
+      throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
     * Resolves and returns a navigation path for the specified navigation and for a specified path.
@@ -113,15 +131,19 @@ public interface UserPortal
     * @param filterConfig an optional filter
     * @param path the path  @return the navigation path
     * @return the navigation path
-    * @throws Exception any exception
+    * @throws NullPointerException if the navigation or path argument is null
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
     */
-   NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path) throws Exception;
+   NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
+      throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
-    * Create a filter for the current user with the specified predicate.
+    * TO REMOVE
     *
     * @param predicate the predicate to use
     * @return the scope
+    * @deprecated
     */
    NodeFilter createFilter(UserNodeFilterConfig predicate);
 
