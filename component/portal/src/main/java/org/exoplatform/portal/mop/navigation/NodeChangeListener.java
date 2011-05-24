@@ -44,14 +44,6 @@ public interface NodeChangeListener<N>
    class Base<N> implements NodeChangeListener<N>
    {
 
-      /** A instance that does nothing. */
-      private static Base NOOP = new Base();
-
-      public static <N> Base<N> noop()
-      {
-         return NOOP;
-      }
-
       public void onAdd(N source, N parent, N previous)
       {
       }
