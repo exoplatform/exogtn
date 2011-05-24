@@ -74,7 +74,7 @@ public class UserNode
       return context.getId();
    }
 
-   public UserNode filter()
+   UserNode filter()
    {
       owner.filter(this);
       return this;
