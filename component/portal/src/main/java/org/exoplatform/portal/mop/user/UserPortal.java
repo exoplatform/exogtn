@@ -28,6 +28,8 @@ import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
 /**
+ * The user portal establish the relationship between a user and the portal.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -112,7 +114,7 @@ public interface UserPortal
        throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
-    * Returns the default navigation path.
+    * Returns the user node for the default path.
     *
     * @param filterConfig an optional filter
     * @return the default navigation path
@@ -123,7 +125,7 @@ public interface UserPortal
       throws UserPortalException, NavigationServiceException;
 
    /**
-    * Resolves and returns a navigation path among all user navigations for a specified path.
+    * Resolves and returns a node among all user navigations for a specified path.
     *
     * @param filterConfig an optional filter
     * @param path the path
@@ -136,7 +138,7 @@ public interface UserPortal
       throws NullPointerException, UserPortalException, NavigationServiceException;
 
    /**
-    * Resolves and returns a navigation path for the specified navigation and for a specified path.
+    * Resolves and returns a node for the specified navigation and for a specified path.
     *
     * @param navigation the navigation
     * @param filterConfig an optional filter

@@ -31,17 +31,6 @@ public interface UserPortalContext
 {
 
    /**
-    * A context that always return null.
-    */
-   UserPortalContext NULL_CONTEXT = new UserPortalContext()
-   {
-      public ResourceBundle getBundle(UserNavigation navigation)
-      {
-         return null;
-      }
-   };
-
-   /**
     * Provide an opportunity to use a resource bundle for a specified navigation. It no such bundle can be found then null
     * can be returned.
     *

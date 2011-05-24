@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -49,6 +50,17 @@ import org.exoplatform.services.organization.OrganizationService;
  */
 public class UserPortalImpl implements UserPortal
 {
+
+   /**
+    * A context that always return null.
+    */
+   private static final UserPortalContext NULL_CONTEXT = new UserPortalContext()
+   {
+      public ResourceBundle getBundle(UserNavigation navigation)
+      {
+         return null;
+      }
+   };
 
    /** . */
    final UserPortalConfigService service;
@@ -90,7 +102,7 @@ public class UserPortalImpl implements UserPortal
       // So we don't care about testing nullity
       if (context == null)
       {
-         context = UserPortalContext.NULL_CONTEXT;
+         context = NULL_CONTEXT;
       }
 
       //
