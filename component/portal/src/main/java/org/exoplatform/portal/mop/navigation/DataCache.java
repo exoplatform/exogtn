@@ -31,6 +31,8 @@ import java.util.Collection;
 import static org.exoplatform.portal.mop.navigation.Utils.objectType;
 
 /**
+ * todo : see if it makes sense to use a bloom filter for not found site black list
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 abstract class DataCache
