@@ -25,14 +25,13 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -102,7 +101,7 @@ public class UITabPaneDashboard extends UIContainer
       dataService = getApplicationComponent(DataStorage.class);
       uiPortal = Util.getUIPortal();
 
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
       TAB_PANE_DASHBOARD_FILTER = getUserPortal().createFilter(scopeBuilder.build());
@@ -534,6 +533,6 @@ public class UITabPaneDashboard extends UIContainer
          }
       }   
 
-      return getUserPortal().getDefaultPath().getTarget().getURI();
+      return getUserPortal().getDefaultPath(null).getTarget().getURI();
    }
 }

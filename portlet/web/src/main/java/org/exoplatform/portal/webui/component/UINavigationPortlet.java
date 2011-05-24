@@ -116,11 +116,11 @@ public class UINavigationPortlet extends UIPortletApplication
       NavigationPath navPath;
       if (context.getRemoteUser() != null)
       {
-         navPath = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), nodeURI);
+         navPath = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), null, nodeURI);
       }
       else
       {
-         navPath = userPortal.resolvePath(nodeURI);
+         navPath = userPortal.resolvePath(null, nodeURI);
       }
       
       if (navPath != null)

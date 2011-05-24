@@ -56,12 +56,13 @@ public interface UserPortal
     * The returned node is the root node of the navigation.
     *
     * @param navigation the user navigation
-    * @param scope the scope
-    * @param listener an optional listener
+    * @param scope an optional scope
+    * @param filterConfig an optional filter
+    * @param listener an optional listener  @return the user node
     * @return the user node
     * @throws Exception any exception
     */
-   UserNode getNode(UserNavigation navigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception;
+   UserNode getNode(UserNavigation navigation, Scope scope, UserNodeFilterConfig filterConfig, NodeChangeListener<UserNode> listener) throws Exception;
 
    /**
     * Update the specified content with the most recent state.
@@ -89,29 +90,32 @@ public interface UserPortal
    /**
     * Returns the default navigation path.
     *
+    * @param filterConfig an optional filter
     * @return the default navigation path
     * @throws Exception any exception
     */
-   NavigationPath getDefaultPath() throws Exception;
+   NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws Exception;
 
    /**
     * Resolves and returns a navigation path among all user navigations for a specified path.
     *
+    * @param filterConfig an optional filter
     * @param path the path
     * @return the navigation path
     * @throws Exception any exception
     */
-   NavigationPath resolvePath(String path) throws Exception;
+   NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path) throws Exception;
 
    /**
     * Resolves and returns a navigation path for the specified navigation and for a specified path.
     *
     * @param navigation the navigation
-    * @param path the path
+    * @param filterConfig an optional filter
+    * @param path the path  @return the navigation path
     * @return the navigation path
     * @throws Exception any exception
     */
-   NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception;
+   NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path) throws Exception;
 
    /**
     * Create a filter for the current user with the specified predicate.
@@ -119,6 +123,6 @@ public interface UserPortal
     * @param predicate the predicate to use
     * @return the scope
     */
-   NodeFilter createFilter(UserNodePredicate predicate);
+   NodeFilter createFilter(UserNodeFilterConfig predicate);
 
 }

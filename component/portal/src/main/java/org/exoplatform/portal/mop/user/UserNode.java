@@ -29,6 +29,7 @@ import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 /**
  * A navigation node as seen by a user.
@@ -40,7 +41,7 @@ public class UserNode
 {
 
    /** . */
-   final UserNavigation navigation;
+   final UserNodeContext owner;
 
    /** . */
    final NodeContext<UserNode> context;
@@ -54,9 +55,9 @@ public class UserNode
    /** . */
    private String uri;
 
-   UserNode(UserNavigation navigation, NodeContext<UserNode> context)
+   UserNode(UserNodeContext owner, NodeContext<UserNode> context)
    {
-      this.navigation = navigation;
+      this.owner = owner;
       this.context = context;
       this.resolvedLabel = null;
       this.encodedResolvedLabel = null;
@@ -66,6 +67,12 @@ public class UserNode
    public String getId()
    {
       return context.getId();
+   }
+
+   public UserNode filter()
+   {
+      owner.filter(this);
+      return this;
    }
 
    public UserNode filter(NodeFilter filter)
@@ -180,9 +187,10 @@ public class UserNode
       if (resolvedLabel == null)
       {
          String resolvedLabel;
-         if (navigation.bundle != null && context.getState().getLabel() != null)
+         if (context.getState().getLabel() != null)
          {
-            resolvedLabel = ExpressionUtil.getExpressionValue(navigation.bundle, context.getState().getLabel());
+            ResourceBundle bundle = owner.navigation.getBundle();
+            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
          }
          else
          {
@@ -305,7 +313,8 @@ public class UserNode
 
    public void save() throws NavigationServiceException
    {
-      navigation.portal.navigationService.saveNode(context, null);
+      owner.navigation.portal.navigationService.saveNode(context, null);
+      filter();
    }
 
    // Keep this internal for now

@@ -90,7 +90,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       {
          try 
          {
-            UserNode rootNodes =  userPortal.getNode(nav, toolbarScope, null);
+            UserNode rootNodes =  userPortal.getNode(nav, toolbarScope, null, null);
             rootNodes.filter(toolbarFilter);
             return rootNodes.getChildren();
          } 

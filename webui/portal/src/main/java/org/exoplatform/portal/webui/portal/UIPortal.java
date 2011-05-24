@@ -173,7 +173,7 @@ public class UIPortal extends UIContainer
       if (navPath == null)
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         navPath = uiApp.getUserPortalConfig().getUserPortal().getDefaultPath(); 
+         navPath = uiApp.getUserPortalConfig().getUserPortal().getDefaultPath(null);
       }
       return navPath;
    }

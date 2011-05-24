@@ -34,6 +34,7 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
+import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeContextChangeAdapter;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
@@ -187,45 +188,66 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public UserNode getNode(UserNavigation userNavigation, Scope scope, NodeChangeListener<UserNode> listener) throws Exception
+   public UserNode getNode(UserNavigation userNavigation, Scope scope, UserNodeFilterConfig filterConfig, NodeChangeListener<UserNode> listener) throws Exception
    {
-      return navigationService.loadNode(userNavigation.model, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener)).getNode();
+      UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
+      NodeContext<UserNode> nodeContext = navigationService.loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
+      if (nodeContext != null)
+      {
+         return nodeContext.getNode().filter();
+      }
+      else
+      {
+         return null;
+      }
    }
 
    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) 
       throws NullPointerException, IllegalArgumentException, NavigationServiceException
    {
       navigationService.updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      node.filter();
    }
    
    public void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener)
       throws NullPointerException, NavigationServiceException
    {
       navigationService.rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      node.filter();
    }
 
    private class MatchingScope implements Scope
    {
       final UserNavigation userNavigation;
+      final UserNodeFilterConfig filterConfig;
       final String[] match;
       int score;
       String id;
       UserNode userNode;
       private NavigationPath path;
 
-      MatchingScope(UserNavigation userNavigation, String[] match)
+      MatchingScope(UserNavigation userNavigation, UserNodeFilterConfig filterConfig, String[] match)
       {
          this.userNavigation = userNavigation;
+         this.filterConfig = filterConfig;
          this.match = match;
       }
 
       void resolve() throws NavigationServiceException
       {
-         UserNode node = navigationService.loadNode(userNavigation.model, userNavigation.navigation, this, null).getNode();
-         if (score > 0)
+         UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
+         NodeContext<UserNode> nodeContext = navigationService.loadNode(context, userNavigation.navigation, this, null);
+         if (context != null)
          {
-            userNode = node.find(id);
-            path = new NavigationPath(userNavigation, userNode);
+            if (score > 0)
+            {
+               userNode = nodeContext.getNode().filter().find(id);
+               path = new NavigationPath(userNavigation, userNode);
+            }
+            else
+            {
+               path = new NavigationPath(userNavigation, null);
+            }
          }
          else
          {
@@ -264,17 +286,22 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NavigationPath getDefaultPath() throws Exception
+   public NavigationPath getDefaultPath(UserNodeFilterConfig filterConfig) throws Exception
    {
       for (UserNavigation userNavigation : getNavigations())
       {
          NavigationContext navigation = userNavigation.navigation;
          if (navigation.getState() != null)
          {
-            UserNode root = navigationService.loadNode(userNavigation.model, navigation, Scope.CHILDREN, null).getNode();
-            for (UserNode node : root.getChildren())
+            UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
+            NodeContext<UserNode> nodeContext = navigationService.loadNode(context, navigation, Scope.CHILDREN, null);
+            if (nodeContext != null)
             {
-               return new NavigationPath(userNavigation, node);
+               UserNode root = nodeContext.getNode().filter();
+               for (UserNode node : root.getChildren())
+               {
+                  return new NavigationPath(userNavigation, node);
+               }
             }
          }
       }
@@ -283,7 +310,7 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public NavigationPath resolvePath(String path) throws Exception
+   public NavigationPath resolvePath(UserNodeFilterConfig filterConfig, String path) throws Exception
    {
       if (path == null)
       {
@@ -303,14 +330,14 @@ public class UserPortalImpl implements UserPortal
       // Find the first navigation available or return null
       if (path.length() == 0)
       {
-         return getDefaultPath();
+         return getDefaultPath(null);
       }
 
       //
       MatchingScope best = null;
       for (UserNavigation navigation : navigations)
       {
-         MatchingScope scope = new MatchingScope(navigation, segments);
+         MatchingScope scope = new MatchingScope(navigation, filterConfig, segments);
          scope.resolve();
          if (scope.score == segments.length)
          {
@@ -340,11 +367,11 @@ public class UserPortalImpl implements UserPortal
       }
       else
       {
-         return getDefaultPath();
+         return getDefaultPath(null);
       }
    }
 
-   public NavigationPath resolvePath(UserNavigation navigation, String path) throws Exception
+   public NavigationPath resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path) throws Exception
    {
       if (path == null)
       {
@@ -365,7 +392,7 @@ public class UserPortalImpl implements UserPortal
       //
 
       //
-      MatchingScope scope = new MatchingScope(navigation, segments);
+      MatchingScope scope = new MatchingScope(navigation, filterConfig, segments);
       scope.resolve();
 
       //
@@ -379,7 +406,7 @@ public class UserPortalImpl implements UserPortal
       }
    }
 
-   public NodeFilter createFilter(UserNodePredicate predicate)
+   public NodeFilter createFilter(UserNodeFilterConfig predicate)
    {
       return new UserNodeFilter(this, predicate);
    }

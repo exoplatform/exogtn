@@ -28,7 +28,7 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.NavigationPath;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,7 +55,7 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
 
    public UIUserToolBarGroupPortlet() throws Exception
    {                  
-      UserNodePredicate.Builder builder = UserNodePredicate.builder();
+      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
       builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
       toolbarFilter = getUserPortal().createFilter(builder.build());
@@ -97,7 +97,7 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
       UserNavigation grpNav = getNavigation(SiteKey.group(groupId));
       if (grpNav == null) return null;
       
-      return getUserPortal().resolvePath(grpNav, nodeURI);
+      return getUserPortal().resolvePath(grpNav, null, nodeURI);
    }   
    
    private String[] parseResourceId(String resourceId)

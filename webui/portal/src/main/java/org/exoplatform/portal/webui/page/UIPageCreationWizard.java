@@ -85,7 +85,7 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          nodeSelector.setRendered(false);
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, null);
+         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
       }
       else
       {

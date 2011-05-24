@@ -29,7 +29,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class UserNodePredicate
+public class UserNodeFilterConfig
 {
 
    /** . */
@@ -41,7 +41,7 @@ public class UserNodePredicate
    /** . */
    final boolean temporalCheck;
 
-   public UserNodePredicate(Builder builder)
+   public UserNodeFilterConfig(Builder builder)
    {
       if (builder == null)
       {
@@ -74,7 +74,7 @@ public class UserNodePredicate
       return new Builder();
    }
 
-   public static Builder builder(UserNodePredicate predicate)
+   public static Builder builder(UserNodeFilterConfig predicate)
    {
       return new Builder(predicate);
    }
@@ -98,7 +98,7 @@ public class UserNodePredicate
          this.withTemporalCheck = false;
       }
 
-      private Builder(UserNodePredicate predicate)
+      private Builder(UserNodeFilterConfig predicate)
       {
          this.withVisibility = predicate.visibility;
          this.withAuthorizationCheck = predicate.authorizationCheck;
@@ -147,9 +147,9 @@ public class UserNodePredicate
          return this;
       }
 
-      public UserNodePredicate build()
+      public UserNodeFilterConfig build()
       {
-         return new UserNodePredicate(this);
+         return new UserNodeFilterConfig(this);
       }
    }
 }

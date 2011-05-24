@@ -33,7 +33,7 @@ import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -134,7 +134,7 @@ public class UINavigationNodeSelector extends UIContainer
       try
       {
          this.rootNode =
-            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, null).filter(
+            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, null, null).filter(
                nodeFilter));
          
          TreeNode node = this.rootNode;
@@ -246,7 +246,7 @@ public class UINavigationNodeSelector extends UIContainer
    public void setUserPortal(UserPortal userPortal) throws Exception
    {
       this.userPortal = userPortal;
-      setNodeFilter(userPortal.createFilter(UserNodePredicate.builder().withAuthorizationCheck().build()));
+      setNodeFilter(userPortal.createFilter(UserNodeFilterConfig.builder().withAuthorizationCheck().build()));
    }
 
    private void setNodeFilter(NodeFilter nodeFilter)

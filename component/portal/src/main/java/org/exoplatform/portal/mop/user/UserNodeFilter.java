@@ -36,22 +36,22 @@ class UserNodeFilter implements NodeFilter
    private final UserPortalImpl userPortal;
 
    /** . */
-   private final UserNodePredicate predicate;
+   private final UserNodeFilterConfig config;
 
-   public UserNodeFilter(UserPortalImpl userPortal, UserNodePredicate predicate)
+   public UserNodeFilter(UserPortalImpl userPortal, UserNodeFilterConfig config)
    {
       if (userPortal == null)
       {
          throw new NullPointerException();
       }
-      if (predicate == null)
+      if (config == null)
       {
          throw new NullPointerException();
       }
 
       //
       this.userPortal = userPortal;
-      this.predicate = predicate;
+      this.config = config;
    }
 
    public boolean accept(int depth, String id, String name, NodeState state)
@@ -65,13 +65,13 @@ class UserNodeFilter implements NodeFilter
       }
 
       // If a visibility is specified then we use it
-      if (predicate.visibility != null && !predicate.visibility.contains(visibility))
+      if (config.visibility != null && !config.visibility.contains(visibility))
       {
          return false;
       }
 
       //
-      if (predicate.authorizationCheck)
+      if (config.authorizationCheck)
       {
          if (visibility == Visibility.SYSTEM)
          {
@@ -110,7 +110,7 @@ class UserNodeFilter implements NodeFilter
          case SYSTEM:
             break;
          case TEMPORAL:
-            if (predicate.temporalCheck)
+            if (config.temporalCheck)
             {
                long now = System.currentTimeMillis();
                if (state.getStartPublicationTime() != -1 && now < state.getStartPublicationTime())

@@ -22,8 +22,6 @@ package org.exoplatform.portal.mop.user;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationState;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.gatein.common.util.EmptyResourceBundle;
 
 import java.util.ResourceBundle;
@@ -45,28 +43,7 @@ public class UserNavigation
    private final boolean modifiable;
 
    /** . */
-   ResourceBundle bundle;
-
-   /** . */
-   final NodeModel<UserNode> model = new NodeModel<UserNode>()
-   {
-      public NodeContext<UserNode> getContext(UserNode node)
-      {
-         return node.context;
-      }
-      public UserNode create(NodeContext<UserNode> context)
-      {
-         if (bundle == null)
-         {
-            bundle = portal.context.getBundle(UserNavigation.this);
-            if (bundle == null)
-            {
-               bundle = EmptyResourceBundle.INSTANCE;
-            }
-         }
-         return new UserNode(UserNavigation.this, context);
-      }
-   };
+   private ResourceBundle bundle;
 
    UserNavigation(UserPortalImpl portal, NavigationContext navigation, boolean modifiable)
    {
@@ -83,6 +60,19 @@ public class UserNavigation
       this.portal = portal;
       this.navigation = navigation;
       this.modifiable = modifiable;
+   }
+
+   public ResourceBundle getBundle()
+   {
+      if (bundle == null)
+      {
+         bundle = portal.context.getBundle(this);
+         if (bundle == null)
+         {
+            bundle = EmptyResourceBundle.INSTANCE;
+         }
+      }
+      return bundle;
    }
 
    public SiteKey getKey()

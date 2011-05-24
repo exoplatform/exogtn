@@ -23,7 +23,7 @@ import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -58,7 +58,7 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanChildCountField("childrenCount");
 
       userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
       scopeBuilder.withAuthorizationCheck();
       NODE_SELECTOR_FILTER = userPortal.createFilter(scopeBuilder.build());
    }

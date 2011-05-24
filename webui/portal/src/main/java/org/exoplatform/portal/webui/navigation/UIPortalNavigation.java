@@ -31,7 +31,7 @@ import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodePredicate;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -65,7 +65,7 @@ public class UIPortalNavigation extends UIComponent
    public UIPortalNavigation()
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNodePredicate.Builder scopeBuilder = UserNodePredicate.builder();
+      UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
       NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
@@ -140,7 +140,7 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, navigationScope, null);
+            UserNode rootNode = userPortal.getNode(userNav, navigationScope, null, null);
             if (rootNode != null)
             {
                rootNode.filter(NAVIGATION_FILTER);
@@ -165,7 +165,7 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, navigationScope, null);
+         UserNode rootNode = userPortal.getNode(nav, navigationScope, null, null);
          if (rootNode != null)
          {
             rootNode.filter(NAVIGATION_FILTER);
@@ -245,7 +245,7 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      UserNode rootNode = userPortal.getNode(userNavigation, navigationScope, null);
+      UserNode rootNode = userPortal.getNode(userNavigation, navigationScope, null, null);
       if (rootNode != null)
       {
          rootNode.filter(NAVIGATION_FILTER);
