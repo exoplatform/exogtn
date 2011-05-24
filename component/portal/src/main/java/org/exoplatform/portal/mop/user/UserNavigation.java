@@ -21,7 +21,6 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.gatein.common.util.EmptyResourceBundle;
 
 import java.util.ResourceBundle;
@@ -86,11 +85,6 @@ public class UserNavigation
       return priority != null ? priority : 1;
    }
    
-   public NavigationState getState()
-   {
-      return navigation.getState();
-   }
-
    public boolean isModifiable()
    {
       return modifiable;
