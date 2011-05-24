@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.chromattic.api.UndeclaredRepositoryException;
-import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 
 import javax.jcr.RepositoryException;
@@ -54,9 +52,9 @@ class InvalidationBridge
    public InvalidationBridge(DataCache cache)
    {
       this.cache = cache;
-      this.portalBridge = new EventListenerImpl("mop:portalsite", SiteType.PORTAL);
-      this.groupBridge = new EventListenerImpl("mop:groupsite", SiteType.GROUP);
-      this.userBridge = new EventListenerImpl("mop:usersite", SiteType.USER);
+      this.portalBridge = new EventListenerImpl("mop:portalsites", SiteType.PORTAL);
+      this.groupBridge = new EventListenerImpl("mop:groupsites", SiteType.GROUP);
+      this.userBridge = new EventListenerImpl("mop:usersites", SiteType.USER);
    }
 
    void start(Session session) throws RepositoryException
@@ -96,7 +94,7 @@ class InvalidationBridge
 
       void register(ObservationManager mgr) throws RepositoryException
       {
-         mgr.addEventListener(portalBridge, Event.NODE_REMOVED, null, true, null, new String[]{nodeType}, false);
+         mgr.addEventListener(this, Event.NODE_REMOVED, "/", true, null, new String[]{nodeType}, false);
 
          //
          this.mgr = mgr;
@@ -118,22 +116,8 @@ class InvalidationBridge
 
       public void onEvent(EventIterator events)
       {
-         while (events.hasNext())
-         {
-            try
-            {
-               Event event = events.nextEvent();
-               String path = event.getPath();
-               int pos = path.lastIndexOf('/');
-               String name = path.substring(pos + 1);
-               SiteKey key = new SiteKey(type, name);
-               cache.removeNavigation(key);
-            }
-            catch (RepositoryException e)
-            {
-               e.printStackTrace();
-            }
-         }
+         // We clear the cache when a site is removed in order to remove all the related navigations
+         cache.clear();
       }
    }
 }

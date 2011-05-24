@@ -762,6 +762,7 @@ public class TestUserPortal extends AbstractPortalTest
          }
       }.execute("root");
    }
+
 /*
    public void testCreateUserPortalConfig()
    {

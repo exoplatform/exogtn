@@ -147,13 +147,20 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
 
       //
       begin();
-      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation");
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation").getRootNavigation().addChild("default");
       end(true);
 
       //
       begin();
       navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
-      assertNotNull(navigationService.loadNavigation(key));
+      end(true);
+
+      //
+      begin();
+      NavigationContext nav = navigationService.loadNavigation(key);
+      assertNotNull(nav);
+      NodeContext<Node> root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null);
+      assertNotNull(root);
       end(true);
 
       //
@@ -164,6 +171,15 @@ public class TestNavigationServiceWrapper extends AbstractPortalTest
       //
       begin();
       assertNull(navigationService.loadNavigation(key));
+      try
+      {
+         navigationService.rebaseNode(root, null, null);
+         fail();
+      }
+      catch (NavigationServiceException e)
+      {
+         assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+      }
       end();
    }
 }
