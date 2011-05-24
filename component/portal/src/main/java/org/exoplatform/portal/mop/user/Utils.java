@@ -20,12 +20,32 @@
 package org.exoplatform.portal.mop.user;
 
 /**
+ * A set of utils for this package.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 class Utils
 {
 
-   static String[] parsePath(String path)
+   /**
+    * Parse the path with the following algorithm:
+    *
+    * <ul>
+    *    <li>The one char <code>/</code> string returns the null array</li>
+    *    <li>Any leading <code>/<code> char is ommited</li>
+    *    <li>Any trailing </code>/</code> chars are ommited</li>
+    *    <li>All the substrings obtained by slicing the remaining string by the <code>/</code> char are returned
+    *    as an array, even the empty strings</li>
+    * </ul>
+    *
+    * <p>Note that this is a reimplementation of a previous method that was using regex splitting, this reimplementation
+    * was done in order to minimize the created object count in mind and attempt to create the minimum required.</p>
+    *
+    * @param path the path
+    * @return the parse result
+    * @throws NullPointerException if the path argument is null
+    */
+   static String[] parsePath(String path) throws NullPointerException
    {
       // Where we start
       final int start = 0 < path.length() && path.charAt(0) == '/' ? 1 : 0;
@@ -69,7 +89,7 @@ class Utils
          }
       }
 
-      //
+      // Now fill the array
       String[] names = new String[count];
       i = start;
       int index = 0;
@@ -105,5 +125,4 @@ class Utils
       //
       return names;
    }
-
 }

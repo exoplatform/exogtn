@@ -355,24 +355,17 @@ public class UserPortalImpl implements UserPortal
          throw new NullPointerException("No null path accepted");
       }
 
-      // Get navigations
-      List<UserNavigation> navigations = getNavigations();
-
-      //  Remove any leading /
-      if (path.length() > 0 && path.charAt(0) == '/')
-      {
-         path = path.substring(1);
-      }
+      //  Parse path
+      String[] segments = Utils.parsePath(path);
 
       // Find the first navigation available or return null
-      if (path.length() == 0)
+      if (segments == null)
       {
          return getDefaultPath(null);
       }
 
-      // Split into segments
-      String[] segments = path.split("/");
-
+      // Get navigations
+      List<UserNavigation> navigations = getNavigations();
 
       //
       MatchingScope best = null;
@@ -425,15 +418,13 @@ public class UserPortalImpl implements UserPortal
       }
 
       //
-      if (path.length() > 0 && path.charAt(0) == '/')
-      {
-         path = path.substring(1);
-      }
-      if (path.length() == 0)
+      String[] segments = Utils.parsePath(path);
+
+      //
+      if (segments == null)
       {
          return null;
       }
-      String[] segments = path.split("/");
 
       //
       MatchingScope scope = new MatchingScope(navigation, filterConfig, segments);
