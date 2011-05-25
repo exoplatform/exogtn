@@ -135,10 +135,9 @@ public class UITabPaneDashboard extends UIContainer
       UserNode currParent = selectedNode.getParent();
       
       UserNode parent = this.cachedParent;    
-      if ((currParent != null && !currParent.getId().equals(parent.getId())) ||
-               parent == null)
+      if (parent == null || (currParent != null && !currParent.getId().equals(parent.getId())))
       {         
-         if (currParent.getURI() == null)
+         if ("".equals(currParent.getURI()))
          {
             this.cachedParent = userPortal.getNode(currParent.getNavigation(), TAB_PANE_DASHBOARD_SCOPE, filterConfig, null);
          }
