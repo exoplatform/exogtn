@@ -57,7 +57,7 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
       builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
-      toolbarFilter = getUserPortal().createFilter(builder.build());
+      toolbarFilterConfig = builder.build();
    }
 
    public List<UserNavigation> getGroupNavigations() throws Exception
@@ -83,7 +83,7 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
    }
 
    @Override
-   protected UserNode getPathFromResourceID(String resourceId) throws Exception
+   protected UserNode getNodeFromResourceID(String resourceId) throws Exception
    {
       String[] parsedId = parseResourceId(resourceId); 
       if (parsedId == null)
@@ -96,7 +96,7 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
       UserNavigation grpNav = getNavigation(SiteKey.group(groupId));
       if (grpNav == null) return null;
       
-      return getUserPortal().resolvePath(grpNav, null, nodeURI);
+      return getUserPortal().resolvePath(grpNav, toolbarFilterConfig, nodeURI);
    }   
    
    private String[] parseResourceId(String resourceId)

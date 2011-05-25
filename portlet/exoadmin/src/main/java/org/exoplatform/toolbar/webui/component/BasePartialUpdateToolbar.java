@@ -30,11 +30,10 @@ import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.GenericScope;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -52,7 +51,7 @@ import org.json.JSONObject;
 public abstract class BasePartialUpdateToolbar extends UIPortletApplication
 {
 
-   protected NodeFilter toolbarFilter;
+   protected UserNodeFilterConfig toolbarFilterConfig;
    protected Scope toolbarScope;
    protected static final int DEFAULT_LEVEL = 2;
 
@@ -89,11 +88,10 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       {
          try 
          {
-            UserNode rootNodes =  userPortal.getNode(nav, toolbarScope, null, null);
-            rootNodes.filter(toolbarFilter);
+            UserNode rootNodes =  userPortal.getNode(nav, toolbarScope, toolbarFilterConfig, null);
             return rootNodes.getChildren();
          } 
-         catch (NavigationServiceException ex)
+         catch (Exception ex)
          {
             log.warn(nav.getKey().getName() + " has been deleted");
          }
@@ -115,7 +113,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       ResourceRequest req = context.getRequest();
       String id = req.getResourceID();
       
-      JSONArray jsChilds = getChildrenAsJSON(getPathFromResourceID(id));
+      JSONArray jsChilds = getChildrenAsJSON(getNodeFromResourceID(id));
       if (jsChilds == null)
       {
          return;
@@ -133,8 +131,14 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
          return null;
       }
 
-      getUserPortal().updateNode(userNode, toolbarScope, null);
-      userNode.filter(toolbarFilter);
+      try 
+      {
+         getUserPortal().updateNode(userNode, toolbarScope, null);         
+      } 
+      catch (Exception ex)
+      {
+         return  null;
+      }
       Collection<UserNode> childs = userNode.getChildren();         
       
       JSONArray jsChilds = new JSONArray();       
@@ -185,5 +189,5 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
    
    protected abstract String getResourceIdFromNode(UserNode node, String navId) throws Exception;
    
-   protected abstract UserNode getPathFromResourceID(String resourceId) throws Exception;
+   protected abstract UserNode getNodeFromResourceID(String resourceId) throws Exception;
 }

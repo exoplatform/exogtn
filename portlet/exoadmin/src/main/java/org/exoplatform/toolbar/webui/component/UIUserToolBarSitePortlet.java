@@ -49,7 +49,7 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
       builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
-      toolbarFilter = getUserPortal().createFilter(builder.build());
+      toolbarFilterConfig = builder.build();
    }
 
    public List<String> getAllPortalNames() throws Exception
@@ -83,13 +83,13 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
    } 
 
    @Override
-   protected UserNode getPathFromResourceID(String resourceId) throws Exception
+   protected UserNode getNodeFromResourceID(String resourceId) throws Exception
    {      
       UserNavigation currNav = getNavigation(SiteKey.portal(getCurrentPortal()));
       if (currNav == null) return null;
     
       UserPortal userPortal = getUserPortal(); 
-      return userPortal.resolvePath(currNav, null, resourceId);
+      return userPortal.resolvePath(currNav, toolbarFilterConfig, resourceId);
    }
 
    @Override
