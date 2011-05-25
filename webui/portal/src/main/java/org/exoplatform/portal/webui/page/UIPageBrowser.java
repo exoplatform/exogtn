@@ -40,7 +40,6 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -345,7 +344,6 @@ public class UIPageBrowser extends UISearch
          {
             return;
          }
-         rootNode.filter(userPortal.createFilter(UserNodeFilterConfig.builder().build()));
 
          for (UserNode userNode : rootNode.getChildren())
          {
@@ -353,7 +351,7 @@ public class UIPageBrowser extends UISearch
             {
                // Remove pageNode
                rootNode.removeChild(userNode.getName());
-               rootNode.save();
+               userPortal.saveNode(rootNode, null);
 
                // Update navigation and UserToolbarGroupPortlet
 

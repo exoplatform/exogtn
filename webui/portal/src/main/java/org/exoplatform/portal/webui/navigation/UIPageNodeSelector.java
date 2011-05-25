@@ -19,11 +19,11 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import org.exoplatform.portal.mop.navigation.NodeFilter;
+import java.util.Iterator;
+
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -31,8 +31,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
-
-import java.util.Iterator;
 
 @ComponentConfig(
    template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl"
@@ -42,8 +40,6 @@ public class UIPageNodeSelector extends UIContainer
    private UserNavigation navigation;
 
    private UserNode selectedNode;
-
-   private final NodeFilter NODE_SELECTOR_FILTER;
 
    private UserPortal userPortal;
 
@@ -57,10 +53,7 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanIconField("icon");
       uiTree.setBeanChildCountField("childrenCount");
 
-      userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
-      scopeBuilder.withAuthorizationCheck();
-      NODE_SELECTOR_FILTER = userPortal.createFilter(scopeBuilder.build());
+      userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();      
    }
 
    public void setNavigation(UserNavigation nav) throws Exception
@@ -71,7 +64,6 @@ public class UIPageNodeSelector extends UIContainer
    private void load(UserNode node) throws Exception
    {
       userPortal.updateNode(node, Scope.GRANDCHILDREN, null);
-      node.filter(NODE_SELECTOR_FILTER);
    }
    
    public void setSelectedNode(UserNode node) throws Exception

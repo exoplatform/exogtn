@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -80,17 +81,23 @@ public class UIPageCreationWizard extends UIPageWizard
       UserNavigation navigation = Util.getUIPortal().getNavPath().getNavigation();      
       nodeSelector.setNavigation(navigation);
 
+      UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
+      filterConfigBuilder.withAuthorizationCheck();
+      UserNodeFilterConfig filterConfig = filterConfigBuilder.build();
+      
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNode selectedNode;
       if (isUserNav)
       {
          nodeSelector.setRendered(false);
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
+         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, filterConfig, null);
       }
       else
       {
-         selectedNode = Util.getUIPortal().getSelectedUserNode();
-      }
+         UserNode currSelected = Util.getUIPortal().getSelectedUserNode();
+         selectedNode = userPortal.resolvePath(currSelected.getNavigation(), filterConfig, currSelected.getURI());
+      }                 
+      
       nodeSelector.setSelectedNode(selectedNode);
    }
 
@@ -104,17 +111,19 @@ public class UIPageCreationWizard extends UIPageWizard
       UserNode selectedNode = uiNodeSelector.getSelectedNode();
 
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-      UserNode pageNode = uiPageInfo.createUserNode(selectedNode);
+      UserNode createdNode = uiPageInfo.createUserNode(selectedNode);
       
-      pageNode.setPageRef(page.getPageId());
+      createdNode.setPageRef(page.getPageId());
       if (selectedNode != null)
       {
-         selectedNode.addChild(pageNode);
+         selectedNode.addChild(createdNode);
       }
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
-      selectedNode.save();
-      return pageNode;
+      
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      userPortal.saveNode(selectedNode, null);
+      return createdNode;
 
    }
 
