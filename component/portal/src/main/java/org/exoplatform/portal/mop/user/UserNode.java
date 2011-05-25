@@ -80,16 +80,6 @@ public class UserNode
       return this;
    }
 
-   /**
-    * TO REMOVE
-    * @deprecated
-    */
-   public UserNode filter(NodeFilter filter)
-   {
-      context.filter(filter);
-      return this;
-   }
-
    public String getName()
    {
       return context.getName();
@@ -318,16 +308,6 @@ public class UserNode
    public boolean removeChild(String childName)
    {
       return context.removeNode(childName);
-   }
-
-   /**
-    * REMOVE ME
-    *
-    * @deprecated
-    */
-   public void save() throws NavigationServiceException
-   {
-      owner.navigation.portal.saveNode(this, null);
    }
 
    // Keep this internal for now

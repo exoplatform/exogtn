@@ -611,7 +611,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_recursive"));
             UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
             root.addChild("foo");
-            root.save();
+            userPortal.saveNode(root, null);
             end(true);
 
             //
@@ -619,7 +619,7 @@ public class TestUserPortal extends AbstractPortalTest
             root = userPortal.getNode(navigation, Scope.ALL, null, null);
             root.addChild("bar");
             root.getChild("foo").addChild("juu");
-            root.save();
+            userPortal.saveNode(root, null);
             end(true);
 
             //
@@ -634,7 +634,7 @@ public class TestUserPortal extends AbstractPortalTest
             
             root.removeChild("foo");
             root.addChild("foo");
-            root.save();
+            userPortal.saveNode(root, null);
             end(true);
             
             begin();
@@ -670,7 +670,7 @@ public class TestUserPortal extends AbstractPortalTest
             begin();
             UserNode root2 = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
             UserNode foo2 = root2.addChild("foo");
-            root2.save();
+            userPortal.saveNode(root2, null);
             end(true);
 
             begin();
@@ -680,7 +680,7 @@ public class TestUserPortal extends AbstractPortalTest
             foo1 = root1.getChild("foo");
             assertNotNull(foo1);
             foo1.addChild("bar");
-            root1.save();
+            userPortal.saveNode(root1, null);
             end(true);
             
             begin();
@@ -690,7 +690,7 @@ public class TestUserPortal extends AbstractPortalTest
             bar2 = foo2.getChild("bar");
             assertNotNull(bar2);
             bar2.addChild("foo_bar");
-            root2.save();
+            userPortal.saveNode(root2, null);
             end(true);
             
             begin();
@@ -725,7 +725,7 @@ public class TestUserPortal extends AbstractPortalTest
             UserNode root = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
             root.addChild("foo");
 
-            root.save();
+            userPortal.saveNode(root, null);
             root = userPortal.getNode(navigation, Scope.CHILDREN, null, null);
             assertNotNull(root.getChild("foo")); // should Cache be invalidated right after save()
          }
