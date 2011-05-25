@@ -139,12 +139,6 @@ public class TreeNode implements NodeChangeListener<UserNode>
       node.addChild(index, child.getNode());
    }
 
-   public void save() throws NavigationServiceException
-   {
-      this.rootNode.caches.clear();
-      node.save();
-   }
-
    public TreeNode findNode(String nodeID)
    {
       return this.rootNode.caches.get(nodeID);

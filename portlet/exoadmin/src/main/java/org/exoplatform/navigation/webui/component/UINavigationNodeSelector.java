@@ -19,6 +19,8 @@
 
 package org.exoplatform.navigation.webui.component;
 
+import java.util.Collection;
+
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
@@ -29,7 +31,6 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -58,8 +59,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.ParameterValidation;
-
-import java.util.Collection;
 
 /** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
@@ -94,7 +93,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private UserPortal userPortal;
 
-   private NodeFilter nodeFilter;
+   private UserNodeFilterConfig filterConfig;
 
    private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
@@ -134,8 +133,7 @@ public class UINavigationNodeSelector extends UIContainer
       try
       {
          this.rootNode =
-            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, null, null).filter(
-               nodeFilter));
+            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, filterConfig, null));
          
          TreeNode node = this.rootNode;
          if (this.rootNode.getChildren().size() > 0)
@@ -209,7 +207,6 @@ public class UINavigationNodeSelector extends UIContainer
       }
 
       userPortal.rebaseNode(userNode, scope, getRootNode());           
-      getRootNode().getNode().filter(nodeFilter);
       //this line return null if node has been deleted
       return findNode(treeNode.getId());
    }
@@ -219,7 +216,7 @@ public class UINavigationNodeSelector extends UIContainer
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       try 
       {
-         getRootNode().save();            
+         userPortal.saveNode(getRootNode().getNode(), null);
       }
       catch (NavigationServiceException ex)
       {           
@@ -246,12 +243,12 @@ public class UINavigationNodeSelector extends UIContainer
    public void setUserPortal(UserPortal userPortal) throws Exception
    {
       this.userPortal = userPortal;
-      setNodeFilter(userPortal.createFilter(UserNodeFilterConfig.builder().withAuthorizationCheck().build()));
+      setFilterConfig(UserNodeFilterConfig.builder().withAuthorizationCheck().build());
    }
 
-   private void setNodeFilter(NodeFilter nodeFilter)
+   private void setFilterConfig(UserNodeFilterConfig config)
    {
-      this.nodeFilter = nodeFilter;
+      this.filterConfig = config;
    }
 
    public void setEdittedNavigation(UserNavigation nav) throws Exception
