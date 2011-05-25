@@ -19,6 +19,13 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -26,7 +33,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -47,12 +53,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * 
@@ -91,7 +91,7 @@ public class UITabPaneDashboard extends UIContainer
 
    final public static String PAGE_TEMPLATE = "dashboard";
 
-   final private NodeFilter TAB_PANE_DASHBOARD_FILTER;
+   final private UserNodeFilterConfig filterConfig;
    static final private Scope TAB_PANE_DASHBOARD_SCOPE = Scope.CHILDREN;
 
    public UITabPaneDashboard() throws Exception
@@ -103,7 +103,7 @@ public class UITabPaneDashboard extends UIContainer
       UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
       scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
-      TAB_PANE_DASHBOARD_FILTER = getUserPortal().createFilter(scopeBuilder.build());
+      filterConfig = scopeBuilder.build();
    }
 
    public int getCurrentNumberOfTabs() throws Exception
@@ -130,17 +130,30 @@ public class UITabPaneDashboard extends UIContainer
 
    public UserNode getParentTab() throws Exception
    {
+      UserPortal userPortal = getUserPortal();
       UserNode selectedNode =  uiPortal.getSelectedUserNode();
-      //parent can be null if child has been removed, and the parent is reloaded
-      UserNode parent = selectedNode.getParent() == null ? this.cachedParent : selectedNode.getParent();      
+      UserNode currParent = selectedNode.getParent();
+      
+      UserNode parent = this.cachedParent;    
+      if ((currParent != null && !currParent.getId().equals(parent.getId())) ||
+               parent == null)
+      {         
+         if (currParent.getURI() == null)
+         {
+            this.cachedParent = userPortal.getNode(currParent.getNavigation(), TAB_PANE_DASHBOARD_SCOPE, filterConfig, null);
+         }
+         else
+         {
+            this.cachedParent = userPortal.resolvePath(currParent.getNavigation(), filterConfig, currParent.getURI());            
+         }
+         parent = this.cachedParent;
+      }
             
       if (parent != null)
       {
-         UserPortal userPortal = getUserPortal();
          try
-         {
+         {            
             userPortal.updateNode(parent, TAB_PANE_DASHBOARD_SCOPE, null);
-            parent.filter(TAB_PANE_DASHBOARD_FILTER);
          }
          catch (NavigationServiceException e)
          {
