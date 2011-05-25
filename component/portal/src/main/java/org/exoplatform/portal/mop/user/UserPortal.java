@@ -24,7 +24,6 @@ import java.util.List;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 
 /**
@@ -150,14 +149,5 @@ public interface UserPortal
     */
    UserNode resolvePath(UserNavigation navigation, UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException;
-
-   /**
-    * TO REMOVE
-    *
-    * @param predicate the predicate to use
-    * @return the scope
-    * @deprecated
-    */
-   NodeFilter createFilter(UserNodeFilterConfig predicate);
 
 }

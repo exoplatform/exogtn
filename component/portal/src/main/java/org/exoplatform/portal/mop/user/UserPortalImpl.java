@@ -439,9 +439,4 @@ public class UserPortalImpl implements UserPortal
          return null;
       }
    }
-
-   public NodeFilter createFilter(UserNodeFilterConfig predicate)
-   {
-      return new UserNodeFilter(this, predicate);
-   }
 }
