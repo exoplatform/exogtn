@@ -119,7 +119,12 @@ public class UIWizardPageSetInfo extends UIForm
 
    public void invokeSetBindingBean(Object bean) throws Exception
    {
+      UIFormStringInput nameTextBox = getUIStringInput(PAGE_NAME);
+      //this help to ignore name textbox
+      nameTextBox.setEditable(false);
       super.invokeSetBindingBean(bean);
+      nameTextBox.setEditable(true);
+
       UserNode node = (UserNode)bean;
       
       Visibility visibility;
@@ -143,8 +148,11 @@ public class UIWizardPageSetInfo extends UIForm
    }
 
    public UserNode createUserNode(UserNode parent) throws Exception
-   {
-      UserNode child = parent.addChild("temp");
+   {      
+      UIFormStringInput nameTextBox = getUIStringInput(PAGE_NAME);
+      String nodeName = nameTextBox.getValue();   
+      
+      UserNode child = parent.addChild(nodeName);
       invokeSetBindingBean(child);
       if (child.getLabel() == null || child.getLabel().trim().length() == 0)
       {

@@ -114,10 +114,6 @@ public class UIPageCreationWizard extends UIPageWizard
       UserNode createdNode = uiPageInfo.createUserNode(selectedNode);
       
       createdNode.setPageRef(page.getPageId());
-      if (selectedNode != null)
-      {
-         selectedNode.addChild(createdNode);
-      }
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       
