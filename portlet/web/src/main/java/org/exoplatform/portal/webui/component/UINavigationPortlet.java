@@ -107,28 +107,13 @@ public class UINavigationPortlet extends UIPortletApplication
    public JSONArray getChildrenAsJSON(String nodeURI) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();          
-      Collection<UserNode> childs = null;
+      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);
       
-      UIPortalNavigation uiPortalNavigation = getChild(UIPortalNavigation.class);      
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      
-      UserNode navPath;
-      if (context.getRemoteUser() != null)
+      Collection<UserNode> childs = null;      
+      UserNode userNode = uiPortalNavigation.resolvePath(nodeURI);
+      if (userNode != null)
       {
-         navPath = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), null, nodeURI);
-      }
-      else
-      {
-         navPath = userPortal.resolvePath(null, nodeURI);
-      }
-      
-      if (navPath != null)
-      {
-         UserNode userNode = uiPortalNavigation.updateNode(navPath);
-         if (userNode != null)
-         {
-            childs = userNode.getChildren();
-         }
+         childs = userNode.getChildren();
       }
       
       JSONArray jsChilds = new JSONArray();

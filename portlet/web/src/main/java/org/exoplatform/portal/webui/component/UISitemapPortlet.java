@@ -53,10 +53,10 @@ import org.json.JSONObject;
    @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "system:/groovy/webui/core/UISitemap.gtmpl"),
    @ComponentConfig(type = UIPortalNavigation.class, id = "UISiteMap", events = {
       @EventConfig(listeners = UIPortalNavigation.SelectNodeActionListener.class),
-      @EventConfig(listeners = UIPortalNavigation.ExpandAllNodeActionListener.class),
+//      @EventConfig(listeners = UIPortalNavigation.ExpandAllNodeActionListener.class),
       @EventConfig(listeners = UIPortalNavigation.CollapseAllNodeActionListener.class),
-      @EventConfig(listeners = UIPortalNavigation.CollapseNodeActionListener.class),
-      @EventConfig(listeners = UIPortalNavigation.ExpandNodeActionListener.class)})})
+      @EventConfig(listeners = UIPortalNavigation.CollapseNodeActionListener.class)})})
+//      @EventConfig(listeners = UIPortalNavigation.ExpandNodeActionListener.class)
 public class UISitemapPortlet extends UIPortletApplication
 {
 

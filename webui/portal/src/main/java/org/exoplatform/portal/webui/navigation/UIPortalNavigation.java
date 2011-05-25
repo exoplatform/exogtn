@@ -27,16 +27,17 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.mop.user.UserPortalException;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
@@ -58,17 +59,18 @@ public class UIPortalNavigation extends UIComponent
 
    private String template;
 
-   private final NodeFilter NAVIGATION_FILTER;
+   private final UserNodeFilterConfig NAVIGATION_FILTER_CONFIG;
    
    private Scope navigationScope;
+   
+   private Log log = ExoLogger.getExoLogger(UIPortalNavigation.class);
 
    public UIPortalNavigation()
    {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
-      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-      scopeBuilder.withTemporalCheck();
-      NAVIGATION_FILTER = userPortal.createFilter(scopeBuilder.build());
+      UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
+      filterConfigBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      filterConfigBuilder.withTemporalCheck();
+      NAVIGATION_FILTER_CONFIG = filterConfigBuilder.build();
    }
 
    @Override
@@ -140,10 +142,9 @@ public class UIPortalNavigation extends UIComponent
                continue;
             }
 
-            UserNode rootNode = userPortal.getNode(userNav, navigationScope, null, null);
+            UserNode rootNode = userPortal.getNode(userNav, navigationScope, NAVIGATION_FILTER_CONFIG, null);
             if (rootNode != null)
             {
-               rootNode.filter(NAVIGATION_FILTER);
                nodes.add(rootNode);
             }
          }
@@ -165,18 +166,46 @@ public class UIPortalNavigation extends UIComponent
          {
             continue;
          }
-         UserNode rootNode = userPortal.getNode(nav, navigationScope, null, null);
-         if (rootNode != null)
+         try 
          {
-            rootNode.filter(NAVIGATION_FILTER);
-            childNodes.addAll(rootNode.getChildren());
+            UserNode rootNode = userPortal.getNode(nav, navigationScope, NAVIGATION_FILTER_CONFIG, null);
+            if (rootNode != null)
+            {
+               childNodes.addAll(rootNode.getChildren());
+            }            
+         }
+         catch (Exception ex)
+         {            
+            log.error(ex.getMessage(), ex);
          }
       }
       treeNode_.setChildren(childNodes);
    }
    
+   public UserNode resolvePath(String path) throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      
+      UserNode node;
+      if (context.getRemoteUser() != null)
+      {
+         node = userPortal.resolvePath(Util.getUIPortal().getUserNavigation(), NAVIGATION_FILTER_CONFIG, path);
+      }
+      else
+      {
+         node = userPortal.resolvePath(NAVIGATION_FILTER_CONFIG, path);
+      }
+      
+      return updateNode(node);
+   }
+   
    public UserNode updateNode(UserNode node) throws Exception
    {
+      if (node == null)
+      {
+         return null;
+      }
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       try
       {
@@ -245,12 +274,16 @@ public class UIPortalNavigation extends UIComponent
    {
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
-      UserNode rootNode = userPortal.getNode(userNavigation, navigationScope, null, null);
-      if (rootNode != null)
+      try 
       {
-         rootNode.filter(NAVIGATION_FILTER);
+         UserNode rootNode = userPortal.getNode(userNavigation, navigationScope, NAVIGATION_FILTER_CONFIG, null);      
+         return rootNode;
+      } 
+      catch (Exception ex)
+      {
+         log.error(ex.getMessage(), ex);
       }
-      return rootNode;
+      return null;
    }
    
    public void setScope(Scope scope)
@@ -279,6 +312,8 @@ public class UIPortalNavigation extends UIComponent
       }
    }
 
+   //Now we use serveSource method to expand a node
+/*   
    static public class ExpandNodeActionListener extends EventListener<UIPortalNavigation>
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
@@ -306,7 +341,7 @@ public class UIPortalNavigation extends UIComponent
          }
          else
          {
-            node.filter(event.getSource().NAVIGATION_FILTER);
+            node.filter(event.getSource().NAVIGATION_FILTER_CONFIG);
             expandTree.setChildren(node.getChildren());
             expandTree.setExpanded(true);
          }
@@ -314,7 +349,8 @@ public class UIPortalNavigation extends UIComponent
          event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
       }
    }
-
+*/
+   
    static public class CollapseNodeActionListener extends EventListener<UIPortalNavigation>
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
@@ -346,6 +382,8 @@ public class UIPortalNavigation extends UIComponent
       }
    }
 
+   //Expand all will not be allowed - The nodes are lazy loaded now
+/*   
    static public class ExpandAllNodeActionListener extends EventListener<UIPortalNavigation>
    {
       public void execute(Event<UIPortalNavigation> event) throws Exception
@@ -382,6 +420,6 @@ public class UIPortalNavigation extends UIComponent
          }
       }
    }
-
+*/
 
 }
