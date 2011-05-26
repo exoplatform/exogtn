@@ -96,7 +96,12 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
       UserNavigation grpNav = getNavigation(SiteKey.group(groupId));
       if (grpNav == null) return null;
       
-      return getUserPortal().resolvePath(grpNav, toolbarFilterConfig, nodeURI);
+      UserNode node = getUserPortal().resolvePath(grpNav, toolbarFilterConfig, nodeURI);
+      if (node != null && node.getURI().equals(nodeURI))
+      {
+         return node;
+      }
+      return null;
    }   
    
    private String[] parseResourceId(String resourceId)

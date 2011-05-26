@@ -27,10 +27,15 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 		
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
-		var data = eXo.core.JSON.parse(jsChilds);		
-		eXo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
+		var data = eXo.core.JSON.parse(jsChilds);				
 	} catch (e) {		
-	}					
+	}	
+	if (data && data.length) {
+		eXo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
+		return;
+	}
+	eXo.core.DOMUtil.removeClass(nodeToUpdate, "CollapseIcon");
+	eXo.core.DOMUtil.addClass(nodeToUpdate, "NullItem");
 };
 
 UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {						

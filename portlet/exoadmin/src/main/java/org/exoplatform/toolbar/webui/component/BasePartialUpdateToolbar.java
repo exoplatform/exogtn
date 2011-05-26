@@ -131,13 +131,11 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
          return null;
       }
 
-      try 
+      getUserPortal().updateNode(userNode, toolbarScope, null);         
+      if (userNode.getParent() == null)
       {
-         getUserPortal().updateNode(userNode, toolbarScope, null);         
-      } 
-      catch (Exception ex)
-      {
-         return  null;
+         //Node has been deleted
+         return null;
       }
       Collection<UserNode> childs = userNode.getChildren();         
       

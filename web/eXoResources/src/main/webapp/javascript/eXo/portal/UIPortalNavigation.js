@@ -173,16 +173,15 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
   if (getNodeURL && !menuItemContainer) {
 	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
 	  try {
-		  var data = eXo.core.JSON.parse(jsChilds);
-		  if (isNaN(data.length)) {
-			  return;
-		  }
-		  var temp = document.createElement("div");
-		  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-		  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+		  var data = eXo.core.JSON.parse(jsChilds);		  
 	  } catch (e) {
-		  return;
 	  }				  
+	  if (!data || !data.length) {
+		  return;
+	  }
+	  var temp = document.createElement("div");
+	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
+	  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
   }
   
   if (!eXo.portal.UIPortalNavigation.menuVisible) {    
@@ -375,16 +374,18 @@ UIPortalNavigation.prototype.onMenuItemOver = function(menuItem) {
   if (getNodeURL && !subContainer) {
 	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
 	  try {
-		  var data = eXo.core.JSON.parse(jsChilds);
-		  if (isNaN(data.length)) {
-			  return;
-		  }
-		  var temp = document.createElement("div");
-		  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-		  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+		  var data = eXo.core.JSON.parse(jsChilds);		  		  
 	  } catch (e) {
-		  return;
 	  }	
+	  if (!data || !data.length) {
+		  var arrow = DOMUtil.findFirstChildByClass(menuItem, "div", "ArrowIcon");
+		  DOMUtil.removeClass(arrow, "ArrowIcon");
+		  menuItem.removeAttribute("exo:getNodeURL");
+		  return;
+	  }
+	  var temp = document.createElement("div");
+	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
+	  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
   }
     
   subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);

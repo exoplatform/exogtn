@@ -90,7 +90,12 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
       if (currNav == null) return null;
     
       UserPortal userPortal = getUserPortal(); 
-      return userPortal.resolvePath(currNav, toolbarFilterConfig, resourceId);
+      UserNode node = userPortal.resolvePath(currNav, toolbarFilterConfig, resourceId);
+      if (node != null && node.getURI().equals(resourceId))
+      {
+         return node;
+      }
+      return null;
    }
    
    static public class NavigationChangeActionListener extends EventListener<UIUserToolBarDashboardPortlet>

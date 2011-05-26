@@ -197,6 +197,11 @@ public class UIPortalNavigation extends UIComponent
          node = userPortal.resolvePath(NAVIGATION_FILTER_CONFIG, path);
       }
       
+      if (!node.getURI().equals(path))
+      {
+         //Node has been deleted
+         return null;
+      }
       return updateNode(node);
    }
    
@@ -207,15 +212,13 @@ public class UIPortalNavigation extends UIComponent
          return null;
       }
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      try
+      userPortal.updateNode(node, navigationScope, null);
+      if (node.getParent() == null)
       {
-         userPortal.updateNode(node, navigationScope, null);
-         return node;
-      }
-      catch (NavigationServiceException e)
-      {
+         //Node has been deleted
          return null;
       }
+      return node;      
    }
       
    /**
