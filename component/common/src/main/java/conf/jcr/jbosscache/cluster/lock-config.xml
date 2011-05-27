@@ -23,7 +23,6 @@
 
   <clustering mode="replication" clusterName="${jbosscache-cluster-name}">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
-    <jgroupsConfig multiplexerStack="jcr.stack" />
     <sync />
   </clustering>
 
@@ -44,7 +43,7 @@
         cache.jdbc.node.type=${jbosscache-cl-cache.jdbc.node.type}
         cache.jdbc.parent.column=${jbosscache-cl-cache.jdbc.parent.column}
         cache.jdbc.datasource=${jbosscache-cl-cache.jdbc.datasource}
-			</properties>
+      </properties>
     </loader>
   </loaders>
 </jbosscache>
