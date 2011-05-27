@@ -77,7 +77,7 @@
 										}
 								%>																								
 								<a class="$cssClass" onclick="$submitEvent">
-									<div	class="Icon <%=icon%>" title="Click to select this icon"><span></span></div>
+									<div	class="Icon <%=icon%>" title="<%=_ctx.appRes("UIFormInputIconSelector.tooltip.SelectIcon")%>"><span></span></div>
 								</a>
 								<%}%> 
 							</div>
