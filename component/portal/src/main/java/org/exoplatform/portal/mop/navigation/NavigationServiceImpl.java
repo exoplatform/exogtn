@@ -332,28 +332,39 @@ public class NavigationServiceImpl implements NavigationService
       if (changes != null)
       {
          changes.broadcast(persister);
+
+         // Update the tree handles to the persistent values
+         for (Map.Entry<String, String> entry : persister.toPersist.entrySet())
+         {
+            NodeContext<N> a = tree.getNode(entry.getKey());
+            a.handle = entry.getValue();
+         }
+
+         // Update data
+         for (String ddd : persister.toUpdate)
+         {
+            NodeContext<N> a = tree.getNode(ddd);
+            ArrayList<String> tmp = new ArrayList<String>();
+            for (NodeContext<N> current = a.getFirst();current != null;current = current.getNext())
+            {
+               tmp.add(current.handle);
+            }
+            a.data = new NodeData(
+               a.getParent() != null ? a.getParent().handle : null,
+               a.handle,
+               a.name,
+               a.state != null ? a.state : a.data.state,
+               tmp.toArray(new String[tmp.size()])
+            );
+         }
+
+         // Clear changes
          changes.clear();
          tree.getChanges().clear();
       }
 
-      //
-      for (Map.Entry<String, NodeData> entry : persister.dataMap.entrySet())
-      {
-         NodeContext<N> a = tree.getNode(entry.getKey());
-         if (a != null)
-         {
-            NodeData d = entry.getValue();
-            a.handle = d.id;
-            a.data = d;
-            a.state = null;
-         }
-         else
-         {
-            // The node may be removed
-            // find a better way to handle that
-         }
-      }
 
+      // Update
       TreeUpdate.perform(
          tree,
          ContextHierarchyAdapter.<N>create(),
@@ -364,7 +375,7 @@ public class NavigationServiceImpl implements NavigationService
          rebased);
 
       //
-      dataCache.removeNodeData(session, persister.ids);
+      dataCache.removeNodeData(session, persister.toEvict);
    }
 
    private <N> void rebaseTree(TreeContext<N> tree, Scope.Visitor visitor, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
@@ -563,27 +574,31 @@ public class NavigationServiceImpl implements NavigationService
    private static class NavigationPersister<N> extends NodeChangeListener.Base<NodeContext<N>>
    {
 
-      /** . */
-      private final Map<String, NodeData> dataMap;
+      /** The persisted handles to assign. */
+      private final Map<String, String> toPersist;
+
+      /** The handles to update. */
+      private final Set<String> toUpdate;
+
+      /** The handles to evict. */
+      private final Set<String> toEvict;
 
       /** . */
       private final POMSession session;
 
-      /** . */
-      private final Set<String> ids;
-
       private NavigationPersister(POMSession session)
       {
-         this.dataMap = new HashMap<String, NodeData>();
+         this.toPersist = new HashMap<String, String>();
+         this.toUpdate = new HashSet<String>();
          this.session = session;
-         this.ids = new HashSet<String>();
+         this.toEvict = new HashSet<String>();
       }
 
       @Override
       public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
       {
          Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
-         ids.add(parentNav.getObjectId());
+         toEvict.add(parentNav.getObjectId());
          int index = 0;
          if (previous != null)
          {
@@ -596,13 +611,17 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          parent.data = new NodeData(parentNav);
-         parent.handle = parent.data.id;
+
+         // Save the handle
+         toPersist.put(source.handle, sourceNav.getObjectId());
 
          //
-         NodeData data = new NodeData(sourceNav);
-         dataMap.put(source.handle, data);
-         source.data = data;
+         source.data = new NodeData(sourceNav);
          source.handle = source.data.id;
+
+         //
+         toUpdate.add(parent.handle);
+         toUpdate.add(source.handle);
       }
       @Override
       public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
@@ -611,13 +630,25 @@ public class NavigationServiceImpl implements NavigationService
          Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
 
          //
-         ids.add(sourceNav.getObjectId());
-         ids.add(parentNav.getObjectId());
+         String objectId = sourceNav.getObjectId();
+
+         //
+         toEvict.add(objectId);
+         toEvict.add(parentNav.getObjectId());
          sourceNav.destroy();
 
          //
          parent.data = new NodeData(parentNav);
-         parent.handle = parent.data.id;
+
+         //
+         toUpdate.add(parent.handle);
+
+         //
+         if (toPersist.values().contains(objectId))
+         {
+            toPersist.values().remove(objectId);
+         }
+         toUpdate.remove(objectId);
       }
       @Override
       public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
@@ -625,7 +656,7 @@ public class NavigationServiceImpl implements NavigationService
          Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
 
          //
-         ids.add(sourceNav.getObjectId());
+         toEvict.add(sourceNav.getObjectId());
          Workspace workspace = sourceNav.getSite().getWorkspace();
          String reference = state.getPageRef();
          if (reference != null)
@@ -662,7 +693,10 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          source.data = new NodeData(sourceNav);
-         source.handle = source.data.id;
+         source.state = null;
+
+         //
+         toUpdate.add(source.handle);
       }
       @Override
       public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
@@ -672,9 +706,9 @@ public class NavigationServiceImpl implements NavigationService
          Navigation toNav = session.findObjectById(ObjectType.NAVIGATION, to.data.id);
 
          //
-         ids.add(sourceNav.getObjectId());
-         ids.add(fromNav.getObjectId());
-         ids.add(toNav.getObjectId());
+         toEvict.add(sourceNav.getObjectId());
+         toEvict.add(fromNav.getObjectId());
+         toEvict.add(toNav.getObjectId());
          int index;
          if (previous != null)
          {
@@ -689,15 +723,17 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          from.data = new NodeData(fromNav);
-         from.handle = from.data.id;
 
          //
          to.data = new NodeData(toNav);
-         to.handle = to.data.id;
 
          //
          source.data = new NodeData(sourceNav);
-         source.handle = source.data.id;
+
+         //
+         toUpdate.add(source.handle);
+         toUpdate.add(from.handle);
+         toUpdate.add(to.handle);
       }
       public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
       {
@@ -705,17 +741,19 @@ public class NavigationServiceImpl implements NavigationService
          Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
 
          //
-         ids.add(sourceNav.getObjectId());
-         ids.add(parentNav.getObjectId());
+         toEvict.add(sourceNav.getObjectId());
+         toEvict.add(parentNav.getObjectId());
          sourceNav.setName(name);
 
          //
          source.data = new NodeData(sourceNav);
-         source.handle = source.data.id;
 
          //
          parent.data = new NodeData(parentNav);
-         parent.handle = parent.data.id;
+
+         //
+         toUpdate.add(parent.handle);
+         toUpdate.add(source.handle);
       }
    }
 }

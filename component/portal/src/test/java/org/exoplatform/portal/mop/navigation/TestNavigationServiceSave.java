@@ -1073,6 +1073,24 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       assertEquals(0, root.getChildren().size());
    }
 
+   public void testRenameCreatedNode() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_rename_created");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("save_rename_created"));
+      Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+      Node temp = root.addChild("temp");
+      temp.setName("bar");
+      Iterator<NodeChange<Node>> changes = root.save(service);
+      assertFalse(changes.hasNext());
+   }
+
    public void testConcurrentAddToRemoved() throws Exception
    {
       MOPService mop = mgr.getPOMService();

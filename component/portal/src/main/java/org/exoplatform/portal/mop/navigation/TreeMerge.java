@@ -69,7 +69,7 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       }
 
       //
-      NodeContext<N> source = merged.create(_source.handle, _source.getName(), _source.getState());
+      NodeContext<N> source = merged.create(_source.handle, name, _source.getState());
 
       //
       next.onCreate(source, parent, previous, name);
