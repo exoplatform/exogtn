@@ -59,6 +59,12 @@ public abstract class NodeChange<N>
          super(node);
 
          //
+         if (parent == null)
+         {
+            throw new NullPointerException("No null parent accepted");
+         }
+
+         //
          this.parent = parent;
       }
 
@@ -89,6 +95,12 @@ public abstract class NodeChange<N>
       Removed(N parent, N node)
       {
          super(node);
+
+         //
+         if (parent == null)
+         {
+            throw new NullPointerException("No null parent accepted");
+         }
 
          //
          this.parent = parent;
@@ -124,9 +136,19 @@ public abstract class NodeChange<N>
       /** . */
       final String name;
 
-      Created(N parent, N previous, N node, String name)
+      Created(N parent, N previous, N node, String name) throws NullPointerException
       {
          super(node);
+
+         //
+         if (parent == null)
+         {
+            throw new NullPointerException("No null parent accepted");
+         }
+         if (name == null)
+         {
+            throw new NullPointerException("No null name accepted");
+         }
 
          //
          this.parent = parent;
@@ -176,6 +198,12 @@ public abstract class NodeChange<N>
          super(node);
 
          //
+         if (parent == null)
+         {
+            throw new NullPointerException("No null parent accepted");
+         }
+
+         //
          this.parent = parent;
          this.previous = previous;
       }
@@ -218,6 +246,17 @@ public abstract class NodeChange<N>
       Moved(N from, N to, N previous, N node)
       {
          super(node);
+
+         //
+         if (from == null)
+         {
+            throw new NullPointerException("No null from accepted");
+         }
+         //
+         if (to == null)
+         {
+            throw new NullPointerException("No null to accepted");
+         }
 
          //
          this.from = from;
@@ -265,6 +304,16 @@ public abstract class NodeChange<N>
       Renamed(N parent, N node, String name)
       {
          super(node);
+
+         //
+         if (parent == null)
+         {
+            throw new NullPointerException("No null parent accepted");
+         }
+         if (name == null)
+         {
+            throw new NullPointerException("No null name accepted");
+         }
 
          //
          this.parent = parent;

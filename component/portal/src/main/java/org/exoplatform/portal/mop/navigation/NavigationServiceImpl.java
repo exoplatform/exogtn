@@ -345,6 +345,8 @@ public class NavigationServiceImpl implements NavigationService
          {
             NodeContext<N> a = tree.getNode(ddd);
             a.data = new NodeData(a);
+            a.name =  null;
+            a.state = null;
          }
 
          // Clear changes
@@ -606,6 +608,8 @@ public class NavigationServiceImpl implements NavigationService
          //
          source.data = new NodeData(sourceNav);
          source.handle = source.data.id;
+         source.name = null;
+         source.state = null;
 
          //
          toUpdate.add(parent.handle);
@@ -735,6 +739,7 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          source.data = new NodeData(sourceNav);
+         source.name = null;
 
          //
          parent.data = new NodeData(parentNav);

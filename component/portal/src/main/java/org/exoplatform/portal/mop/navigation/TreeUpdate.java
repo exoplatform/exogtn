@@ -289,6 +289,7 @@ class TreeUpdate<N1, N2>
          //
          parent.data = data;
          parent.state = null;
+         parent.name = null;
       }
 
       //

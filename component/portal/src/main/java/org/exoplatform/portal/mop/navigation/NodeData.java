@@ -159,8 +159,8 @@ class NodeData implements Serializable
       }
       String parentId = context.getParent() != null ? context.getParent().handle : null;
       String id = context.handle;
-      String name = context.name;
-      NodeState state = context.state != null ? context.state : context.data.state;
+      String name = context.getName();
+      NodeState state = context.getState();
 
       //
       this.parentId = parentId;

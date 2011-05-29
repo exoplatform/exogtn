@@ -32,37 +32,43 @@ import java.util.NoSuchElementException;
 public final class NodeContext<N> extends ListTree<NodeContext<N>>
 {
 
-   /** . */
+   /** The owner tree. */
    final TreeContext<N> tree;
 
-   /** . */
+   /** The related model node. */
    final N node;
 
    /** The handle: either the persistent id or a sequence id. */
    String handle;
 
-   /** node data representing persistent state. */
+   /** A data snapshot. */
    NodeData data;
+
+   /** The new name if any. */
+   String name;
 
    /** The new state if any. */
    NodeState state;
 
-   /** . */
+   /** Whether or not this node is hidden. */
    private boolean hidden;
 
-   /** . */
+   /** The number of hidden children. */
    private int hiddenCount;
 
-   /** . */
-   String name;
-
-   /** . */
+   /** The expension value. */
    private boolean expanded;
 
    NodeContext(NodeModel<N> model, NodeData data)
    {
+      if (data == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
       this.handle = data.id;
-      this.name = data.getName();
+      this.name = null;
       this.tree = new TreeContext<N>(model, this);
       this.node = tree.model.create(this);
       this.data = data;
@@ -74,8 +80,14 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    private NodeContext(TreeContext<N> tree, NodeData data)
    {
+      if (data == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
       this.handle = data.id;
-      this.name = data.getName();
+      this.name = null;
       this.tree = tree;
       this.node = tree.model.create(this);
       this.data = data;
@@ -87,6 +99,20 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    NodeContext(TreeContext<N> tree, String handle, String name, NodeState state, boolean expanded)
    {
+      if (handle == null)
+      {
+         throw new NullPointerException();
+      }
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      if (state == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
       this.handle = handle;
       this.name = name;
       this.tree = tree;
@@ -263,7 +289,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
    public String getName()
    {
-      return name;
+      return name != null ? name : data.name;
    }
 
    /**
@@ -316,7 +342,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       //
       for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
       {
-         if (node.name.equals(name))
+         if (node.getName().equals(name))
          {
             return node;
          }
@@ -370,13 +396,9 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       {
          return state;
       }
-      else if (data != null)
-      {
-         return data.getState();
-      }
       else
       {
-         return null;
+         return data.getState();
       }
    }
 
@@ -643,6 +665,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
       else
       {
+         // The name should never be null as it's a newly created node
          tree.addChange(new NodeChange.Created<NodeContext<N>>(this, previous, child, child.name));
       }
    }
@@ -731,10 +754,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       //
       if (!tree.editMode)
       {
-         NodeContext<N> existing = get(context.name);
+         NodeContext<N> existing = get(context.getName());
          if (existing != null && existing != context)
          {
-            throw new IllegalArgumentException("Tree " + context.name + " already in the map");
+            throw new IllegalArgumentException("Tree " + context.getName() + " already in the map");
          }
       }
    }
