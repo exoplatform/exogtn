@@ -96,7 +96,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Destroyed[node" + target + ",parent=" +  parent + "]";
+         return "NodeChange.Destroyed[target" + target + ",parent=" +  parent + "]";
       }
    }
 
@@ -134,7 +134,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Removed[node" + target + ",parent=" +  parent + "]";
+         return "NodeChange.Removed[target" + target + ",parent=" +  parent + "]";
       }
    }
 
@@ -194,7 +194,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Created[node" + target + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
+         return "NodeChange.Created[target" + target + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
       }
    }
 
@@ -241,7 +241,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Added[node" + target + ",previous" + previous + ",parent=" + parent + "]";
+         return "NodeChange.Added[target" + target + ",previous" + previous + ",parent=" + parent + "]";
       }
    }
 
@@ -302,7 +302,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Moved[node" + target + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
+         return "NodeChange.Moved[target" + target + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
       }
    }
 
@@ -353,7 +353,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Renamed[node" + target + ",name=" + name + "]";
+         return "NodeChange.Renamed[target" + target + ",name=" + name + "]";
       }
    }
 
@@ -385,7 +385,7 @@ public abstract class NodeChange<N>
       @Override
       public String toString()
       {
-         return "NodeChange.Updated[node" + target + ",state=" + state + "]";
+         return "NodeChange.Updated[target" + target + ",state=" + state + "]";
       }
    }
 }
