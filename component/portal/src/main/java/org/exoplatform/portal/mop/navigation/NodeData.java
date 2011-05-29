@@ -58,15 +58,6 @@ class NodeData implements Serializable
    /** . */
    final String[] children;
 
-   NodeData(String parentId, String id, String name, NodeState state, String[] children)
-   {
-      this.parentId = parentId;
-      this.id = id;
-      this.name = name;
-      this.state = state;
-      this.children = children;
-   }
-
    NodeData(Navigation navigation)
    {
       String[] children;
@@ -150,6 +141,31 @@ class NodeData implements Serializable
       this.parentId = parentId;
       this.id = navigation.getObjectId();
       this.name = navigation.getName();
+      this.state = state;
+      this.children = children;
+   }
+
+   NodeData(NodeContext<?> context)
+   {
+      int size = 0;
+      for (NodeContext<?> current = context.getFirst();current != null;current = current.getNext())
+      {
+         size++;
+      }
+      String[] children = new String[size];
+      for (NodeContext<?> current = context.getFirst();current != null;current = current.getNext())
+      {
+         children[children.length - size--] = current.handle;
+      }
+      String parentId = context.getParent() != null ? context.getParent().handle : null;
+      String id = context.handle;
+      String name = context.name;
+      NodeState state = context.state != null ? context.state : context.data.state;
+
+      //
+      this.parentId = parentId;
+      this.id = id;
+      this.name = name;
       this.state = state;
       this.children = children;
    }

@@ -344,25 +344,13 @@ public class NavigationServiceImpl implements NavigationService
          for (String ddd : persister.toUpdate)
          {
             NodeContext<N> a = tree.getNode(ddd);
-            ArrayList<String> tmp = new ArrayList<String>();
-            for (NodeContext<N> current = a.getFirst();current != null;current = current.getNext())
-            {
-               tmp.add(current.handle);
-            }
-            a.data = new NodeData(
-               a.getParent() != null ? a.getParent().handle : null,
-               a.handle,
-               a.name,
-               a.state != null ? a.state : a.data.state,
-               tmp.toArray(new String[tmp.size()])
-            );
+            a.data = new NodeData(a);
          }
 
          // Clear changes
          changes.clear();
          tree.getChanges().clear();
       }
-
 
       // Update
       TreeUpdate.perform(
