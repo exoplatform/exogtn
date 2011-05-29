@@ -30,6 +30,8 @@ import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -131,11 +133,18 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
          return null;
       }
 
-      getUserPortal().updateNode(userNode, toolbarScope, null);         
-      if (userNode.getParent() == null)
+      NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+      getUserPortal().updateNode(userNode, toolbarScope, queue);         
+      for (NodeChange<UserNode> change : queue)
       {
-         //Node has been deleted
-         return null;
+         if (change instanceof NodeChange.Removed)
+         {
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            if (hasRelationship(deletedNode, userNode))
+            {
+               return null;
+            }
+         }
       }
       Collection<UserNode> childs = userNode.getChildren();         
       
@@ -183,6 +192,22 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
    protected UserNode getSelectedNode() throws Exception
    {
       return Util.getUIPortal().getSelectedUserNode();
+   }
+   
+   private boolean hasRelationship(UserNode parent, UserNode userNode)
+   {
+      if (parent.getId().equals(userNode.getId()))
+      {
+         return true;
+      }
+      for (UserNode child : parent.getChildren())
+      {
+         if (hasRelationship(child, userNode))
+         {
+            return true;
+         }
+      }
+      return false;
    }
    
    protected abstract String getResourceIdFromNode(UserNode node, String navId) throws Exception;

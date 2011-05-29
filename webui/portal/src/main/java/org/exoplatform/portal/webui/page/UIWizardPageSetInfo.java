@@ -20,11 +20,14 @@
 package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.config.model.PortalConfig;
+import java.util.Calendar;
+
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -42,8 +45,6 @@ import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-
-import java.util.Calendar;
 
 /**
  * Created by The eXo Platform SARL
@@ -94,7 +95,7 @@ public class UIWizardPageSetInfo extends UIForm
       addUIFormInput(startPubDateInput);
       addUIFormInput(endPubDateInput);
 
-      boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      boolean isUserNav = Util.getUIPortal().getOwnerType().equals(PortalConfig.USER_TYPE);
       if (isUserNav)
       {
          uiVisibleCheck.setRendered(false);
@@ -202,13 +203,27 @@ public class UIWizardPageSetInfo extends UIForm
    {
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
-         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+         WebuiRequestContext context = event.getRequestContext();
+         UIWizardPageSetInfo pageSetInfo = event.getSource();
+         UIPageCreationWizard uiWizard = (UIPageCreationWizard)pageSetInfo.getAncestorOfType(UIPageCreationWizard.class);
+         
+         String uri = context.getRequestParameter(OBJECTID);
+         UIPageNodeSelector uiPageNodeSelector = pageSetInfo.getChild(UIPageNodeSelector.class);
+         try 
+         {
+            uiPageNodeSelector.setSelectedURI(uri);            
+            if (!uiPageNodeSelector.getSelectedNode().getURI().equals(uri))
+            {
+               context.getUIApplication().addMessage(new ApplicationMessage("UIWizardPageSetInfo.msg.node.deleted", null));
+            }
+         }
+         catch (NavigationServiceException ex)
+         {
+            context.getUIApplication().addMessage(new ApplicationMessage("UIWizardPageSetInfo.msg.navigation.deleted", null));
+            uiWizard.createEvent("Abort", Phase.PROCESS, context).broadcast();
+            return;
+         }
 
-         UIPageNodeSelector uiPageNodeSelector = event.getSource().getChild(UIPageNodeSelector.class);
-         uiPageNodeSelector.setSelectedURI(uri);
-
-         UIPortalApplication uiPortalApp = uiPageNodeSelector.getAncestorOfType(UIPortalApplication.class);
-         UIWizard uiWizard = uiPortalApp.findFirstComponentOfType(UIWizard.class);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWizard);
       }
    }

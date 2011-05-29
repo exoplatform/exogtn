@@ -19,15 +19,17 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -45,9 +47,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormStringInput;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
@@ -69,38 +68,24 @@ public class UIPageCreationWizard extends UIPageWizard
 
    public UIPageCreationWizard() throws Exception
    {
-      UIWizardPageSetInfo uiPageInfo = addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
-      UIPageNodeSelector nodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class); 
+      addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
       addChild(UIWizardPageSelectLayoutForm.class, null, null).setRendered(false);
       addChild(UIPagePreview.class, null, null).setRendered(false);
       setNumberSteps(NUMBER_OF_STEPs);
       viewStep(FIRST_STEP);
       setShowWelcomeComponent(false);
-      
-      boolean isUserNav = Util.getUIPortal().getSiteKey().getTypeName().equals(PortalConfig.USER_TYPE);
-      UserNavigation navigation = Util.getUIPortal().getNavPath().getNavigation();      
-      nodeSelector.setNavigation(navigation);
-
-      UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
-      filterConfigBuilder.withAuthorizationCheck();
-      UserNodeFilterConfig filterConfig = filterConfigBuilder.build();
-      
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      UserNode selectedNode;
-      if (isUserNav)
-      {
-         nodeSelector.setRendered(false);
-         selectedNode = userPortal.getNode(navigation, Scope.CHILDREN, filterConfig, null);
-      }
-      else
-      {
-         UserNode currSelected = Util.getUIPortal().getSelectedUserNode();
-         selectedNode = userPortal.resolvePath(currSelected.getNavigation(), filterConfig, currSelected.getURI());
-      }                 
-      
-      nodeSelector.setSelectedNode(selectedNode);
    }
 
+   public void configure(UserNode node) throws Exception
+   {            
+      UIPageNodeSelector nodeSelector = findFirstComponentOfType(UIPageNodeSelector.class);
+      nodeSelector.configure(node);      
+      if (node.getNavigation().getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+      {
+         nodeSelector.setRendered(false);         
+      }
+   }
+   
    private UserNode saveData() throws Exception
    {
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
@@ -116,9 +101,9 @@ public class UIPageCreationWizard extends UIPageWizard
       createdNode.setPageRef(page.getPageId());
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
-      
+
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      userPortal.saveNode(selectedNode, null);
+      userPortal.saveNode(selectedNode, null);      
       return createdNode;
 
    }
@@ -347,13 +332,24 @@ public class UIPageCreationWizard extends UIPageWizard
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         UserNode newNode = uiWizard.saveData();
-         UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         toolPanel.setUIComponent(null);
-         uiWizard.updateUIPortal(event);
          
          PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String uri = pcontext.getPortalURI() + newNode.getURI();
+         String uri = pcontext.getPortalURI();
+
+         try
+         {
+            UserNode newNode = uiWizard.saveData();
+            uri += newNode.getURI();
+         }
+         catch (NavigationServiceException ex)
+         {
+            pcontext.getUIApplication().addMessage(
+               new ApplicationMessage("UIPageCreationWizard.msg." + ex.getError().name(), null));
+         }
+         
+         UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+         toolPanel.setUIComponent(null);
+         uiWizard.updateUIPortal(event);         
          pcontext.getResponse().sendRedirect(uri);
       }
    }

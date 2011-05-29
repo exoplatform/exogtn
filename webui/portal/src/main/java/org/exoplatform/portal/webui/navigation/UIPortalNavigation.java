@@ -26,13 +26,13 @@ import java.util.List;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.mop.user.UserPortalException;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -197,7 +197,7 @@ public class UIPortalNavigation extends UIComponent
          node = userPortal.resolvePath(NAVIGATION_FILTER_CONFIG, path);
       }
       
-      if (!node.getURI().equals(path))
+      if (node != null && !node.getURI().equals(path))
       {
          //Node has been deleted
          return null;
@@ -212,15 +212,39 @@ public class UIPortalNavigation extends UIComponent
          return null;
       }
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      userPortal.updateNode(node, navigationScope, null);
-      if (node.getParent() == null)
+      NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+      userPortal.updateNode(node, navigationScope, queue);
+      for (NodeChange<UserNode> change : queue)
       {
-         //Node has been deleted
-         return null;
+         if (change instanceof NodeChange.Removed)
+         {
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            if (hasRelationship(deletedNode, node))
+            {
+               //Node has been deleted
+               return null;
+            }
+         }
       }
       return node;      
    }
       
+   private boolean hasRelationship(UserNode parent, UserNode userNode)
+   {
+      if (parent.getId().equals(userNode.getId()))
+      {
+         return true;
+      }
+      for (UserNode child : parent.getChildren())
+      {
+         if (hasRelationship(child, userNode))
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+   
    /**
     * 
     * @param listNavigation
@@ -284,7 +308,7 @@ public class UIPortalNavigation extends UIComponent
       } 
       catch (Exception ex)
       {
-         log.error(ex.getMessage(), ex);
+         log.error("Navigation has been deleted");
       }
       return null;
    }

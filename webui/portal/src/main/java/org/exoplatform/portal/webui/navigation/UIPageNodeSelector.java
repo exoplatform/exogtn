@@ -21,6 +21,8 @@ package org.exoplatform.portal.webui.navigation;
 
 import java.util.Iterator;
 
+import org.exoplatform.portal.mop.navigation.NodeChange;
+import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -37,10 +39,10 @@ import org.exoplatform.webui.core.UITree;
 )
 public class UIPageNodeSelector extends UIContainer
 {
-   private UserNavigation navigation;
-
+   private UserNode rootNode;
+   
    private UserNode selectedNode;
-
+   
    private UserPortal userPortal;
 
    public UIPageNodeSelector() throws Exception
@@ -54,45 +56,82 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanChildCountField("childrenCount");
 
       userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();      
-   }
-
-   public void setNavigation(UserNavigation nav) throws Exception
-   {
-      navigation = nav;      
-   }
-
-   private void load(UserNode node) throws Exception
-   {
-      userPortal.updateNode(node, Scope.GRANDCHILDREN, null);
-   }
+   }  
    
-   public void setSelectedNode(UserNode node) throws Exception
+   public void configure(UserNode node) throws Exception
    {
       if (node == null)
       {
-         return;
+         throw new IllegalArgumentException("node can't be null");
       }
+      
+      this.rootNode = node;
+      while (rootNode.getParent() != null)
+      {
+         this.rootNode = rootNode.getParent();
+      }
+      setSelectedNode(node);
+   }
+   
+   private void setSelectedNode(UserNode node) throws Exception
+   {
+      //If node is root node, and it's been deleted --> throw NavigationServiceException
+      node = updateNode(node);
+      
+      //If node has been deleted --> select root node
+      if(node == null)
+      {
+         node = getRootNode();
+      }
+      
       UITree tree = getChild(UITree.class);
+      tree.setSelected(node);
       UserNode parent = node.getParent();
       if (parent != null)
-      {
-         load(node);
-         tree.setSelected(node);
+      {        
          tree.setChildren(node.getChildren());
-         load(node.getParent());
          tree.setSibbling(parent.getChildren());
          tree.setParentSelected(parent);
       }
       else
       {
-         tree.setSelected(null);
          tree.setChildren(null);
+         tree.setSibbling(node.getChildren());
+         tree.setParentSelected(node);
       }
       selectedNode = node;
    }
    
+   private UserNode updateNode(UserNode node) throws Exception
+   {
+      if (node == null) 
+      {
+         return null;
+      }
+      
+      NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+      userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
+      for (NodeChange<UserNode> change : queue)
+      {
+         if (change instanceof NodeChange.Removed)
+         {
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            if (findUserNodeByURI(deletedNode, node.getURI()) != null)
+            {
+               return null;
+            }
+         }
+      }
+      return node;
+   }
+   
    public void setSelectedURI(String uri) throws Exception
    {
+      if (selectedNode == null)
+      {
+         throw new IllegalStateException("selectedNode is null, configure method must be called first");
+      }
+      
       UserNode node;
       if (selectedNode.getParent() != null)
       {
@@ -134,7 +173,12 @@ public class UIPageNodeSelector extends UIContainer
       }
       super.processRender(context);
    }
-
+   
+   private UserNode getRootNode()
+   {
+      return this.rootNode;
+   }
+   
    public UserNode getSelectedNode()
    {
       return selectedNode;
@@ -142,6 +186,6 @@ public class UIPageNodeSelector extends UIContainer
 
    public UserNavigation getNavigation()
    {
-      return navigation;
-   }
+      return selectedNode.getNavigation();
+   }   
 }
