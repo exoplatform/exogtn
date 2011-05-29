@@ -49,39 +49,39 @@ public class NodeContextChangeAdapter<N> implements NodeChangeListener<NodeConte
       this.wrapped = wrapped;
    }
 
-   public void onAdd(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous)
+   public void onAdd(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous)
    {
-      wrapped.onAdd(unwrap(source), unwrap(parent), unwrap(previous));
+      wrapped.onAdd(unwrap(target), unwrap(parent), unwrap(previous));
    }
 
-   public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name)
+   public void onCreate(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous, String name)
    {
-      wrapped.onCreate(unwrap(source), unwrap(parent), unwrap(previous), name);
+      wrapped.onCreate(unwrap(target), unwrap(parent), unwrap(previous), name);
    }
 
-   public void onRemove(NodeContext<N> source, NodeContext<N> parent)
+   public void onRemove(NodeContext<N> target, NodeContext<N> parent)
    {
-      wrapped.onRemove(unwrap(source), unwrap(parent));
+      wrapped.onRemove(unwrap(target), unwrap(parent));
    }
 
-   public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+   public void onDestroy(NodeContext<N> target, NodeContext<N> parent)
    {
-      wrapped.onDestroy(unwrap(source), unwrap(parent));
+      wrapped.onDestroy(unwrap(target), unwrap(parent));
    }
 
-   public void onRename(NodeContext<N> source, NodeContext<N> parent, String name)
+   public void onRename(NodeContext<N> target, NodeContext<N> parent, String name)
    {
-      wrapped.onRename(unwrap(source), unwrap(parent), name);
+      wrapped.onRename(unwrap(target), unwrap(parent), name);
    }
 
-   public void onUpdate(NodeContext<N> source, NodeState state)
+   public void onUpdate(NodeContext<N> target, NodeState state)
    {
-      wrapped.onUpdate(unwrap(source), state);
+      wrapped.onUpdate(unwrap(target), state);
    }
 
-   public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous)
+   public void onMove(NodeContext<N> target, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous)
    {
-      wrapped.onMove(unwrap(source), unwrap(from), unwrap(to), unwrap(previous));
+      wrapped.onMove(unwrap(target), unwrap(from), unwrap(to), unwrap(previous));
    }
 
    private N unwrap(NodeContext<N> context)

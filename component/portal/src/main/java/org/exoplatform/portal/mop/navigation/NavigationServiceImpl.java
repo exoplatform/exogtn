@@ -585,7 +585,7 @@ public class NavigationServiceImpl implements NavigationService
       }
 
       @Override
-      public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+      public void onCreate(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
       {
          Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
          toEvict.add(parentNav.getObjectId());
@@ -603,23 +603,23 @@ public class NavigationServiceImpl implements NavigationService
          parent.data = new NodeData(parentNav);
 
          // Save the handle
-         toPersist.put(source.handle, sourceNav.getObjectId());
+         toPersist.put(target.handle, sourceNav.getObjectId());
 
          //
-         source.data = new NodeData(sourceNav);
-         source.handle = source.data.id;
-         source.name = null;
-         source.state = null;
+         target.data = new NodeData(sourceNav);
+         target.handle = target.data.id;
+         target.name = null;
+         target.state = null;
 
          //
          toUpdate.add(parent.handle);
-         toUpdate.add(source.handle);
+         toUpdate.add(target.handle);
       }
       @Override
-      public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+      public void onDestroy(NodeContext<N> target, NodeContext<N> parent)
       {
          Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
-         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, target.data.id);
 
          //
          String objectId = sourceNav.getObjectId();
@@ -691,9 +691,9 @@ public class NavigationServiceImpl implements NavigationService
          toUpdate.add(source.handle);
       }
       @Override
-      public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+      public void onMove(NodeContext<N> target, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
       {
-         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, target.data.id);
          Navigation fromNav = session.findObjectById(ObjectType.NAVIGATION, from.data.id);
          Navigation toNav = session.findObjectById(ObjectType.NAVIGATION, to.data.id);
 
@@ -720,16 +720,16 @@ public class NavigationServiceImpl implements NavigationService
          to.data = new NodeData(toNav);
 
          //
-         source.data = new NodeData(sourceNav);
+         target.data = new NodeData(sourceNav);
 
          //
-         toUpdate.add(source.handle);
+         toUpdate.add(target.handle);
          toUpdate.add(from.handle);
          toUpdate.add(to.handle);
       }
-      public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+      public void onRename(NodeContext<N> target, NodeContext<N> parent, String name) throws NavigationServiceException
       {
-         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, source.data.id);
+         Navigation sourceNav = session.findObjectById(ObjectType.NAVIGATION, target.data.id);
          Navigation parentNav = session.findObjectById(ObjectType.NAVIGATION, parent.data.id);
 
          //
@@ -738,15 +738,15 @@ public class NavigationServiceImpl implements NavigationService
          sourceNav.setName(name);
 
          //
-         source.data = new NodeData(sourceNav);
-         source.name = null;
+         target.data = new NodeData(sourceNav);
+         target.name = null;
 
          //
          parent.data = new NodeData(parentNav);
 
          //
          toUpdate.add(parent.handle);
-         toUpdate.add(source.handle);
+         toUpdate.add(target.handle);
       }
    }
 }

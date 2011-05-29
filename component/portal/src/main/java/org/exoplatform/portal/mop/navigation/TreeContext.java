@@ -250,37 +250,37 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
    //
 
 
-   public void onCreate(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
+   public void onCreate(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous, String name) throws NavigationServiceException
    {
-      addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, source, name));
+      addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, target, name));
    }
 
-   public void onDestroy(NodeContext<N> source, NodeContext<N> parent)
+   public void onDestroy(NodeContext<N> target, NodeContext<N> parent)
    {
-      addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, source));
+      addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, target));
    }
 
-   public void onRename(NodeContext<N> source, NodeContext<N> parent, String name) throws NavigationServiceException
+   public void onRename(NodeContext<N> target, NodeContext<N> parent, String name) throws NavigationServiceException
    {
-      addChange(new NodeChange.Renamed<NodeContext<N>>(parent, source, name));
+      addChange(new NodeChange.Renamed<NodeContext<N>>(parent, target, name));
    }
 
-   public void onUpdate(NodeContext<N> source, NodeState state) throws NavigationServiceException
+   public void onUpdate(NodeContext<N> target, NodeState state) throws NavigationServiceException
    {
-      addChange(new NodeChange.Updated<NodeContext<N>>(source, state));
+      addChange(new NodeChange.Updated<NodeContext<N>>(target, state));
    }
 
-   public void onMove(NodeContext<N> source, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
+   public void onMove(NodeContext<N> target, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) throws NavigationServiceException
    {
-      addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, source));
+      addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, target));
    }
 
-   public void onAdd(NodeContext<N> source, NodeContext<N> parent, NodeContext<N> previous)
+   public void onAdd(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous)
    {
       throw new UnsupportedOperationException();
    }
 
-   public void onRemove(NodeContext<N> source, NodeContext<N> parent)
+   public void onRemove(NodeContext<N> target, NodeContext<N> parent)
    {
       throw new UnsupportedOperationException();
    }

@@ -46,6 +46,20 @@ public abstract class NodeChange<N>
       return target;
    }
 
+   /**
+    * Dispatch the change to the proper listener method:
+    * <ul>
+    *    <li>{@link Created} dispatches to {@link NodeChangeListener#onCreate(Object, Object, Object, String)}</li>
+    *    <li>{@link Added} dispatches to {@link NodeChangeListener#onAdd(Object, Object, Object)}</li>
+    *    <li>{@link Destroyed} dispatches to {@link NodeChangeListener#onDestroy(Object, Object)}</li>
+    *    <li>{@link Moved} dispatches to {@link NodeChangeListener#onMove(Object, Object, Object, Object)}</li>
+    *    <li>{@link Removed} dispatches to {@link NodeChangeListener#onRemove(Object, Object)}</li>
+    *    <li>{@link Renamed} dispatches to {@link NodeChangeListener#onRename(Object, Object, String)}</li>
+    *    <li>{@link Updated} dispatches to {@link NodeChangeListener#onUpdate(Object, NodeState)}</li>
+    * </ul>
+    *
+    * @param listener the listener
+    */
    protected abstract void dispatch(NodeChangeListener<N> listener);
 
    public final static class Destroyed<N> extends NodeChange<N>

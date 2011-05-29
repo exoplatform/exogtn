@@ -37,7 +37,7 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       this.next = next;
    }
 
-   public void onCreate(NodeContext<N> _source, NodeContext<N> _parent, NodeContext<N> _previous, String name) throws NavigationServiceException
+   public void onCreate(NodeContext<N> target, NodeContext<N> _parent, NodeContext<N> _previous, String name) throws NavigationServiceException
    {
       String parentHandle = _parent.handle;
       NodeContext<N> parent = merged.getNode(parentHandle);
@@ -69,15 +69,15 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       }
 
       //
-      NodeContext<N> source = merged.create(_source.handle, name, _source.getState());
+      NodeContext<N> source = merged.create(target.handle, name, target.getState());
 
       //
       next.onCreate(source, parent, previous, name);
    }
 
-   public void onDestroy(NodeContext<N> _source, NodeContext<N> _parent)
+   public void onDestroy(NodeContext<N> target, NodeContext<N> _parent)
    {
-      NodeContext<N> removed = merged.getNode(_source.handle);
+      NodeContext<N> removed = merged.getNode(target.handle);
 
       //
       if (removed != null)
@@ -87,10 +87,10 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       }
    }
 
-   public void onRename(NodeContext<N> _source, NodeContext<N> _parent, String _name) throws NavigationServiceException
+   public void onRename(NodeContext<N> target, NodeContext<N> _parent, String _name) throws NavigationServiceException
    {
       //
-      String renamedHandle = _source.handle;
+      String renamedHandle = target.handle;
       NodeContext<N> renamed = merged.getNode(renamedHandle);
       if (renamed == null)
       {
@@ -108,9 +108,9 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       next.onRename(renamed, parent, _name);
    }
 
-   public void onUpdate(NodeContext<N> _source, NodeState state) throws NavigationServiceException
+   public void onUpdate(NodeContext<N> target, NodeState state) throws NavigationServiceException
    {
-      String updatedHandle = _source.handle;
+      String updatedHandle = target.handle;
       NodeContext<N> navigation = merged.getNode(updatedHandle);
       if (navigation == null)
       {
@@ -121,7 +121,7 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       next.onUpdate(navigation, state);
    }
 
-   public void onMove(NodeContext<N> _source, NodeContext<N> _from, NodeContext<N> _to, NodeContext<N> _previous) throws NavigationServiceException
+   public void onMove(NodeContext<N> target, NodeContext<N> _from, NodeContext<N> _to, NodeContext<N> _previous) throws NavigationServiceException
    {
       String srcHandle = _from.handle;
       NodeContext<N> src = merged.getNode(srcHandle);
@@ -139,7 +139,7 @@ class TreeMerge<N> extends NodeChangeListener.Base<NodeContext<N>>
       }
 
       //
-      String movedHandle = _source.handle;
+      String movedHandle = target.handle;
       NodeContext<N> moved = merged.getNode(movedHandle);
       if (moved == null)
       {

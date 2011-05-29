@@ -319,41 +319,41 @@ public class TreeNode implements NodeChangeListener<UserNode>
    }
 
    @Override
-   public void onAdd(UserNode source, UserNode parent, UserNode previous)
+   public void onAdd(UserNode target, UserNode parent, UserNode previous)
    {
-      addToCached(new TreeNode(this.nav, source, this.rootNode));
+      addToCached(new TreeNode(this.nav, target, this.rootNode));
       findNode(parent.getId()).children = null;
    }
 
    @Override
-   public void onCreate(UserNode source, UserNode parent, UserNode previous, String name)
+   public void onCreate(UserNode target, UserNode parent, UserNode previous, String name)
    {
    }
 
    @Override
-   public void onRemove(UserNode source, UserNode parent)
+   public void onRemove(UserNode target, UserNode parent)
    {
-      removeFromCached(findNode(source.getId()));
+      removeFromCached(findNode(target.getId()));
       findNode(parent.getId()).children = null;
    }
 
    @Override
-   public void onDestroy(UserNode source, UserNode parent)
+   public void onDestroy(UserNode target, UserNode parent)
    {
    }
 
    @Override
-   public void onRename(UserNode source, UserNode parent, String name)
+   public void onRename(UserNode target, UserNode parent, String name)
    {
    }
 
    @Override
-   public void onUpdate(UserNode source, NodeState state)
+   public void onUpdate(UserNode target, NodeState state)
    {
    }
 
    @Override
-   public void onMove(UserNode source, UserNode from, UserNode to, UserNode previous)
+   public void onMove(UserNode target, UserNode from, UserNode to, UserNode previous)
    {
       TreeNode fromTreeNode = findNode(from.getId());
       TreeNode toTreeNode = findNode(to.getId());

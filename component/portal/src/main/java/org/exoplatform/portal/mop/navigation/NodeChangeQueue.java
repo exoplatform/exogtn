@@ -47,38 +47,38 @@ public class NodeChangeQueue<N> extends LinkedList<NodeChange<N>> implements Nod
       }
    }
 
-   public void onAdd(N source, N parent, N previous)
+   public void onAdd(N target, N parent, N previous)
    {
-      add(new NodeChange.Added<N>(parent, previous, source));
+      add(new NodeChange.Added<N>(parent, previous, target));
    }
 
-   public void onCreate(N source, N parent, N previous, String name)
+   public void onCreate(N target, N parent, N previous, String name)
    {
-      add(new NodeChange.Created<N>(parent, previous, source, name));
+      add(new NodeChange.Created<N>(parent, previous, target, name));
    }
 
-   public void onRemove(N source, N parent)
+   public void onRemove(N target, N parent)
    {
-      add(new NodeChange.Removed<N>(parent, source));
+      add(new NodeChange.Removed<N>(parent, target));
    }
 
-   public void onDestroy(N source, N parent)
+   public void onDestroy(N target, N parent)
    {
-      add(new NodeChange.Destroyed<N>(parent, source));
+      add(new NodeChange.Destroyed<N>(parent, target));
    }
 
-   public void onRename(N source, N parent, String name)
+   public void onRename(N target, N parent, String name)
    {
-      add(new NodeChange.Renamed<N>(parent, source, name));
+      add(new NodeChange.Renamed<N>(parent, target, name));
    }
 
-   public void onUpdate(N source, NodeState state)
+   public void onUpdate(N target, NodeState state)
    {
-      add(new NodeChange.Updated<N>(source, state));
+      add(new NodeChange.Updated<N>(target, state));
    }
 
-   public void onMove(N source, N from, N to, N previous)
+   public void onMove(N target, N from, N to, N previous)
    {
-      add(new NodeChange.Moved<N>(from, to, previous, source));
+      add(new NodeChange.Moved<N>(from, to, previous, target));
    }
 }
