@@ -139,7 +139,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       {
          if (change instanceof NodeChange.Removed)
          {
-            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getTarget();
             if (hasRelationship(deletedNode, userNode))
             {
                return null;

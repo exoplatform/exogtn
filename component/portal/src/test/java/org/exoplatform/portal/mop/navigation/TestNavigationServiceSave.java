@@ -1687,7 +1687,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Iterator<NodeChange<Node>> changes = root1.save(service);
       NodeChange.Added<Node> added = (NodeChange.Added<Node>)changes.next();
-      Node c = added.getNode();
+      Node c = added.getTarget();
       assertEquals("c", c.getName());
       assertFalse(changes.hasNext());
       assertSame(a, root1.getChild(0));

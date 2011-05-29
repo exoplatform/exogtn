@@ -27,17 +27,23 @@ package org.exoplatform.portal.mop.navigation;
 public abstract class NodeChange<N>
 {
 
-   /** . */
-   final N source;
+   /** The target. */
+   final N target;
 
-   private NodeChange(N source)
+   private NodeChange(N target)
    {
-      this.source = source;
+      if (target == null)
+      {
+         throw new NullPointerException("No null target accepted");
+      }
+
+      //
+      this.target = target;
    }
 
-   public final N getNode()
+   public final N getTarget()
    {
-      return source;
+      return target;
    }
 
    protected abstract void dispatch(NodeChangeListener<N> listener);
@@ -64,13 +70,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onDestroy(source, parent);
+         listener.onDestroy(target, parent);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Destroyed[node" + source + ",parent=" +  parent + "]";
+         return "NodeChange.Destroyed[node" + target + ",parent=" +  parent + "]";
       }
    }
 
@@ -96,13 +102,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onRemove(source, parent);
+         listener.onRemove(target, parent);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Removed[node" + source + ",parent=" +  parent + "]";
+         return "NodeChange.Removed[node" + target + ",parent=" +  parent + "]";
       }
    }
 
@@ -146,13 +152,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onCreate(source, parent, previous, name);
+         listener.onCreate(target, parent, previous, name);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Created[node" + source + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
+         return "NodeChange.Created[node" + target + ",previous" + previous + ",parent=" + parent + ",name=" + name + "]";
       }
    }
 
@@ -187,13 +193,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onAdd(source, parent, previous);
+         listener.onAdd(target, parent, previous);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Added[node" + source + ",previous" + previous + ",parent=" + parent + "]";
+         return "NodeChange.Added[node" + target + ",previous" + previous + ",parent=" + parent + "]";
       }
    }
 
@@ -237,13 +243,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onMove(source, from, to, previous);
+         listener.onMove(target, from, to, previous);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Moved[node" + source + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
+         return "NodeChange.Moved[node" + target + ",from=" + from + ",to=" + to + ",previous=" + previous +  "]";
       }
    }
 
@@ -278,13 +284,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onRename(source, parent, name);
+         listener.onRename(target, parent, name);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Renamed[node" + source + ",name=" + name + "]";
+         return "NodeChange.Renamed[node" + target + ",name=" + name + "]";
       }
    }
 
@@ -310,13 +316,13 @@ public abstract class NodeChange<N>
       @Override
       protected void dispatch(NodeChangeListener<N> listener)
       {
-         listener.onUpdate(source, state);
+         listener.onUpdate(target, state);
       }
 
       @Override
       public String toString()
       {
-         return "NodeChange.Updated[node" + source + ",state=" + state + "]";
+         return "NodeChange.Updated[node" + target + ",state=" + state + "]";
       }
    }
 }

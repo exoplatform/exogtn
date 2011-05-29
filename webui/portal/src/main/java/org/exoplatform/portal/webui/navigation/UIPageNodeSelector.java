@@ -115,7 +115,7 @@ public class UIPageNodeSelector extends UIContainer
       {
          if (change instanceof NodeChange.Removed)
          {
-            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getTarget();
             if (findUserNodeByURI(deletedNode, node.getURI()) != null)
             {
                return null;

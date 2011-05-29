@@ -218,7 +218,7 @@ public class UIPortalNavigation extends UIComponent
       {
          if (change instanceof NodeChange.Removed)
          {
-            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getNode();
+            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getTarget();
             if (hasRelationship(deletedNode, node))
             {
                //Node has been deleted

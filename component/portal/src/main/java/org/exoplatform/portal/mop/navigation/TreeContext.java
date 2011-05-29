@@ -91,12 +91,12 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
             if (change instanceof NodeChange.Created<?>)
             {
                NodeChange.Created<NodeContext<N>> created = (NodeChange.Created<NodeContext<N>>)change;
-               map.remove(created.source.handle);
+               map.remove(created.target.handle);
             }
             else if (change instanceof NodeChange.Destroyed<?>)
             {
                NodeChange.Destroyed<NodeContext<N>> destroyed = (NodeChange.Destroyed<NodeContext<N>>)change;
-               map.put(destroyed.source.handle, Boolean.TRUE);
+               map.put(destroyed.target.handle, Boolean.TRUE);
             }
          }
       }
@@ -138,7 +138,7 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
       }
 
       //
-      if (change.source.tree != this)
+      if (change.target.tree != this)
       {
          // Normally should be done for all arguments depending on the change type
          throw new AssertionError("Ensure we are not mixing badly things");
@@ -148,18 +148,18 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
       if (change instanceof NodeChange.Renamed<?>)
       {
          NodeChange.Renamed<NodeContext<N>> renamed = (NodeChange.Renamed<NodeContext<N>>)change;
-         renamed.source.name = renamed.name;
+         renamed.target.name = renamed.name;
       }
       else if (change instanceof NodeChange.Created<?>)
       {
          NodeChange.Created<NodeContext<N>> added = (NodeChange.Created<NodeContext<N>>)change;
          if (added.previous != null)
          {
-            added.previous.insertAfter(added.source);
+            added.previous.insertAfter(added.target);
          }
          else
          {
-            added.parent.insertAt(0, added.source);
+            added.parent.insertAt(0, added.target);
          }
       }
       else if (change instanceof NodeChange.Moved<?>)
@@ -167,22 +167,22 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
          NodeChange.Moved<NodeContext<N>> moved = (NodeChange.Moved<NodeContext<N>>)change;
          if (moved.previous != null)
          {
-            moved.previous.insertAfter(moved.source);
+            moved.previous.insertAfter(moved.target);
          }
          else
          {
-            moved.to.insertAt(0, moved.source);
+            moved.to.insertAt(0, moved.target);
          }
       }
       else if (change instanceof NodeChange.Destroyed<?>)
       {
          NodeChange.Destroyed<NodeContext<N>> removed = (NodeChange.Destroyed<NodeContext<N>>)change;
-         removed.source.remove();
+         removed.target.remove();
       }
       else if (change instanceof NodeChange.Updated<?>)
       {
          NodeChange.Updated<NodeContext<N>> updated = (NodeChange.Updated<NodeContext<N>>)change;
-         updated.source.state = updated.state;
+         updated.target.state = updated.state;
       }
 
       //

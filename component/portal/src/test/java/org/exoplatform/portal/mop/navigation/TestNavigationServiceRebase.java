@@ -301,11 +301,11 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
       assertFalse(children.hasNext());
       assertFalse(b.context.isExpanded());
       NodeChange.Added<Node> added1 = (NodeChange.Added<Node>)changes.next();
-      assertSame(b, added1.getNode());
+      assertSame(b, added1.getTarget());
       assertSame(null, added1.getPrevious());
       assertSame(a, added1.getParent());
       NodeChange.Added<Node> added2 = (NodeChange.Added<Node>)changes.next();
-      assertSame(d, added2.getNode());
+      assertSame(d, added2.getTarget());
       assertSame(c, added2.getPrevious());
       assertSame(root1, added2.getParent());
       assertFalse(changes.hasNext());
