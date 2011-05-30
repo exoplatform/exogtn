@@ -116,7 +116,6 @@ class NodeData implements Serializable
 
       //
       NodeState state = new NodeState(
-         attrs.getValue(MappedAttributes.URI),
          label,
          attrs.getValue(MappedAttributes.ICON),
          startPublicationDate != null ? startPublicationDate.getTime() : -1,

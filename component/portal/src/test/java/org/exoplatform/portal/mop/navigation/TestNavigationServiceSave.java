@@ -877,12 +877,11 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       NavigationContext nav = service.loadNavigation(SiteKey.portal("save_state"));
       Node root1 = service.loadNode(Node.MODEL, nav, Scope.SINGLE, null).getNode();
       NodeState state = root1.getState();
-      assertNull(state.getURI());
       assertNull(state.getLabel());
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(-1, state.getEndPublicationTime());
       long now = System.currentTimeMillis();
-      root1.setState(new NodeState.Builder().URI("foo").endPublicationTime(now).label("bar").build());
+      root1.setState(new NodeState.Builder().endPublicationTime(now).label("bar").build());
       service.saveNode(root1.context, null);
 
       //
@@ -894,7 +893,6 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       Node root2 = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
       state = root2.getState();
-      assertEquals("foo", state.getURI());
       assertEquals("bar", state.getLabel());
       assertEquals(-1, state.getStartPublicationTime());
       assertEquals(now, state.getEndPublicationTime());

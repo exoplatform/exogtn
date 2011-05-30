@@ -31,7 +31,7 @@ public class TestScope extends AbstractKernelTest
 
    public void testBranchShape()
    {
-      NodeState nodeState = new NodeState(null, "", null, -1, -1, Visibility.DISPLAYED, "portal::classic::home");
+      NodeState nodeState = new NodeState("", null, -1, -1, Visibility.DISPLAYED, "portal::classic::home");
 
       //
       Scope scope1 = GenericScope.branchShape(new String[]{"a"}, Scope.CHILDREN);

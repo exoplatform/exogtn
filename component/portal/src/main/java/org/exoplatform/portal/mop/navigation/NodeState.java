@@ -43,9 +43,6 @@ public final class NodeState
    {
 
       /** . */
-      private String uri;
-
-      /** . */
       private String label;
 
       /** . */
@@ -65,7 +62,6 @@ public final class NodeState
 
       public Builder()
       {
-         this.uri = null;
          this.icon = null;
          this.label = null;
          this.startPublicationTime = -1;
@@ -86,19 +82,12 @@ public final class NodeState
          {
             throw new NullPointerException();
          }
-         this.uri = state.uri;
          this.label = state.label;
          this.icon = state.icon;
          this.startPublicationTime = state.startPublicationTime;
          this.endPublicationTime = state.endPublicationTime;
          this.visibility = state.visibility;
          this.pageRef = state.pageRef;
-      }
-
-      public Builder URI(String uri)
-      {
-         this.uri = uri;
-         return this;
       }
 
       public Builder label(String label)
@@ -140,7 +129,6 @@ public final class NodeState
       public NodeState build()
       {
          return new NodeState(
-            uri,
             label,
             icon,
             startPublicationTime,
@@ -150,9 +138,6 @@ public final class NodeState
          );
       }
    }
-
-   /** . */
-   private final String uri;
 
    /** . */
    private final String label;
@@ -173,7 +158,6 @@ public final class NodeState
    private final String pageRef;
 
    public NodeState(
-      String uri,
       String label,
       String icon,
       long startPublicationTime,
@@ -181,18 +165,12 @@ public final class NodeState
       Visibility visibility,
       String pageRef)
    {
-      this.uri = uri;
       this.label = label;
       this.icon = icon;
       this.startPublicationTime = startPublicationTime;
       this.endPublicationTime = endPublicationTime;
       this.visibility = visibility;
       this.pageRef = pageRef;
-   }
-
-   public String getURI()
-   {
-      return uri;
    }
 
    public String getLabel()
@@ -245,8 +223,7 @@ public final class NodeState
       if (o instanceof NodeState)
       {
          NodeState that = (NodeState)o;
-         return Safe.equals(uri, that.uri)
-            && Safe.equals(label, that.label)
+         return Safe.equals(label, that.label)
             && Safe.equals(icon, that.icon)
             && Safe.equals(startPublicationTime, that.startPublicationTime)
             && Safe.equals(endPublicationTime, that.endPublicationTime)
@@ -259,7 +236,7 @@ public final class NodeState
    @Override
    public String toString()
    {
-      return "NodeState[uri=" + uri + ",label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime +
+      return "NodeState[label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime +
          ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef + "]";
    }
 

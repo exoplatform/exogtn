@@ -680,7 +680,6 @@ public class NavigationServiceImpl implements NavigationService
 
          //
          Attributes attrs = sourceNav.getAttributes();
-         attrs.setValue(MappedAttributes.URI, state.getURI());
          attrs.setValue(MappedAttributes.ICON, state.getIcon());
 
          //
