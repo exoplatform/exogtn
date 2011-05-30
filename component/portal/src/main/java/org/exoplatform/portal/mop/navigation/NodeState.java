@@ -33,6 +33,9 @@ import java.util.Date;
 public final class NodeState
 {
 
+   /** . */
+   public static final NodeState INITIAL = new NodeState.Builder().build();
+
    /**
     * Builder class.
     */
