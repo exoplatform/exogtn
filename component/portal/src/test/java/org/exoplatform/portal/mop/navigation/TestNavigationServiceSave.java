@@ -1571,6 +1571,33 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       service.saveNode(root1.context, null);
    }
 
+   public void testConcurrentRename() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_concurrent_rename");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("save_concurrent_rename"));
+      Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      Node a = root1.getChild("a");
+      a.setName("b");
+
+      //
+      Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+      Node a2 = root2.getChild("a");
+      a2.setName("c");
+      service.saveNode(root2.context, null);
+
+      //
+      Iterator<NodeChange<Node>> changes = root1.save(service);
+      assertFalse(changes.hasNext());
+   }
+
    public void testRemovedNavigation() throws Exception
    {
       MOPService mop = mgr.getPOMService();
