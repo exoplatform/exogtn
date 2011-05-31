@@ -44,6 +44,16 @@ public abstract class PageNodeContainer extends ModelObject
 
    public abstract List<PageNode> getNodes();
 
+   public PageNode getNode(String name)
+   {
+      for (PageNode node : getNodes())
+      {
+         if (node.getName().equals(name))
+            return node;
+      }
+      return null;
+   }
+
    protected List<NavigationNodeData> buildNavigationChildren()
    {
       List<PageNode> nodes = getNodes();

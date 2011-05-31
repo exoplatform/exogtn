@@ -28,12 +28,15 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
+import org.exoplatform.portal.config.importer.ImportMode;
+import org.exoplatform.portal.config.importer.NavigationImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Page.PageSet;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -97,11 +100,15 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    /** . */
    private final POMSessionManager pomMgr;
 
-   public NewPortalConfigListener(POMSessionManager pomMgr, DataStorage dataStorage, ConfigurationManager cmanager, InitParams params)
+   /** . */
+   private NavigationService navigationService_;
+
+   public NewPortalConfigListener(POMSessionManager pomMgr, DataStorage dataStorage, ConfigurationManager cmanager, InitParams params, NavigationService navigationService)
       throws Exception
    {
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
+      navigationService_ = navigationService;
 
       ValueParam valueParam = params.getValueParam("page.templates.location");
       if (valueParam != null)
@@ -527,24 +534,15 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       {
          return;
       }
-      PageNavigation currentNavigation = dataStorage_.getPageNavigation(navigation.getOwner());
-      if (currentNavigation == null)
-      {
-         dataStorage_.create(navigation);
-      }
-      else
-      {
-         if(overrideExistingData)
-         {
-            dataStorage_.remove(currentNavigation);
-            dataStorage_.create(navigation);
-         }
-         else
-         {
-            navigation.merge(currentNavigation);
-            dataStorage_.save(navigation);
-         }         
-      }
+
+      //
+      ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
+
+      //
+      NavigationImporter merge =new NavigationImporter(importMode, navigation, navigationService_);
+
+      //
+      merge.perform();
    }
 
    public void createPortletPreferences(NewPortalConfig config, String owner) throws Exception

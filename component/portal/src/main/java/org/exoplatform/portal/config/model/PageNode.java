@@ -385,4 +385,10 @@ public class PageNode extends PageNodeContainer
          children
       );
    }
+
+   @Override
+   public String toString()
+   {
+      return "PageNode[" + name + "]";
+   }
 }

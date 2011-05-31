@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,44 +17,29 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.config.importer;
 
 /**
+ * The import mode.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public interface NodeModel<N>
+public enum ImportMode
 {
 
    /**
-    * A model based on itself.
+    * Import data when it does not exist, otherwise do nothing.
     */
-   NodeModel<NodeContext<?>> SELF_MODEL = new NodeModel<NodeContext<?>>()
-   {
-      public NodeContext<NodeContext<?>> getContext(NodeContext<?> node)
-      {
-         throw new UnsupportedOperationException();
-      }
-      public NodeContext<?> create(NodeContext<NodeContext<?>> context)
-      {
-         return context;
-      }
-   };
+   CONSERVE,
 
    /**
-    * Returns the context of a node.
-    *
-    * @param node the node
-    * @return the node context
+    * Import data when it does not exist, otherwise try a merge strategy that adds new data but ignore other modifications.
     */
-   NodeContext<N> getContext(N node);
+   MERGE,
 
    /**
-    * Create a node wrapping a context.
-    *
-    * @param context the node context
-    * @return the node instance
+    * Reimport data whatsoever.
     */
-   N create(NodeContext<N> context);
+   REIMPORT
 
 }
