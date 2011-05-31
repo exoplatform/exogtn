@@ -26,6 +26,7 @@ import org.gatein.common.logging.LoggerFactory;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -105,7 +106,7 @@ public class ServletLocalImporter extends LocalImporter
    public Iterable<String> getChildren(String folderPath) throws IOException
    {
       @SuppressWarnings("unchecked") Set resourcePaths = servletContext.getResourcePaths(folderPath);
-      return resourcePaths;
+      return (resourcePaths != null ? resourcePaths : Collections.EMPTY_SET);
    }
 
    @Override
