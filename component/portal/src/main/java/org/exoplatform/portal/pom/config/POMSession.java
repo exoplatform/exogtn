@@ -287,36 +287,7 @@ public class POMSession
 
       //
       String statement;
-      if (siteType != null)
-      {
-         try
-         {
-            if (type == ObjectType.PAGE)
-            {
-               statement =
-                  "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%'";
-            }
-            else
-            {
-               statement =
-                  "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootnavigation/mop:children/mop:default'";
-            }
-         }
-         catch (IllegalArgumentException e)
-         {
-            if (type == ObjectType.PAGE)
-            {
-               statement = "jcr:path LIKE ''";
-            }
-            else
-            {
-               statement = "jcr:path LIKE ''";
-            }
-         }
-      }
-      else
+      try
       {
          if (title != null)
          {
@@ -348,6 +319,17 @@ public class POMSession
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
                      + "/mop:rootnavigation/mop:children/mop:default'";
             }
+         }
+      }
+      catch (IllegalArgumentException e)
+      {
+         if (type == ObjectType.PAGE)
+         {
+            statement = "jcr:path LIKE ''";
+         }
+         else
+         {
+            statement = "jcr:path LIKE ''";
          }
       }
 
