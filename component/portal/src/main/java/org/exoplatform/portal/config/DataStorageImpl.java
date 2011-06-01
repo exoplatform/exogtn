@@ -76,12 +76,6 @@ public class DataStorageImpl implements DataStorage
       return new Page(delegate.clonePage(key, cloneKey));
    }
 
-   public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
-   {
-      NavigationData data = delegate.getPageNavigation(new NavigationKey(ownerType, id));
-      return data != null ? new PageNavigation(data) : null;
-   }
-
    public void create(PortalConfig config) throws Exception
    {
       delegate.create(config.build());
@@ -125,18 +119,6 @@ public class DataStorageImpl implements DataStorage
       listenerServ_.broadcast(EventType.NAVIGATION_CREATED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
    }
 
-   public void save(PageNavigation navigation) throws Exception
-   {
-      delegate.save(navigation.build());
-      listenerServ_.broadcast(EventType.NAVIGATION_UPDATED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
-   }
-
-   public void remove(PageNavigation navigation) throws Exception
-   {
-      delegate.remove(navigation.build());
-      listenerServ_.broadcast(EventType.NAVIGATION_DESTROYED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
-   }
-
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
    {
       return delegate.load(state, type);
@@ -160,13 +142,6 @@ public class DataStorageImpl implements DataStorage
    public PortalConfig getPortalConfig(String portalName) throws Exception
    {
       return getPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
-   }
-
-   public PageNavigation getPageNavigation(String fullId) throws Exception
-   {
-      NavigationKey key = NavigationKey.create(fullId);
-      NavigationData data = delegate.getPageNavigation(key);
-      return data != null ? new PageNavigation(data) : null;
    }
 
    public Page getPage(String pageId) throws Exception

@@ -125,9 +125,6 @@ public class TestUserPortal extends AbstractPortalTest
          listenerService.addListener(DataStorage.PAGE_CREATED, listener);
          listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
          listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_CREATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_REMOVED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_UPDATED, listener);
       }
    }
 
