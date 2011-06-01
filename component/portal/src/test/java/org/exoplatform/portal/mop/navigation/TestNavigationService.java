@@ -19,11 +19,8 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
@@ -750,30 +747,6 @@ public class TestNavigationService extends AbstractTestNavigationService
       assertEquals("mop:juu", it.nextNode().getName());
       assertEquals("mop:daa", it.nextNode().getName());
       assertFalse(it.hasNext());
-   }
-
-   public void testDelayBetweenServices() throws Exception
-   {
-      PortalConfig portalConfig = new PortalConfig();
-      portalConfig.setName("testPortalNavigation");
-      dataStorage.create(portalConfig);
-
-      PageNavigation pageNav = new PageNavigation();
-      pageNav.setOwnerType("portal");
-      pageNav.setOwnerId("testPortalNavigation");
-
-      dataStorage.create(pageNav);
-
-      pageNav = dataStorage.getPageNavigation("portal", "testPortalNavigation");
-      assertNotNull(pageNav);
-      assertEquals("portal", pageNav.getOwnerType());
-      assertEquals("testPortalNavigation", pageNav.getOwnerId());
-
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("testPortalNavigation"));
-
-      assertNotNull(navigation);
-      assertEquals(SiteType.PORTAL, navigation.getKey().getType());
-      assertEquals("testPortalNavigation", navigation.getKey().getName());
    }
 
    public void testCount()

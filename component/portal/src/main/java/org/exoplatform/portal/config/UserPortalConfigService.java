@@ -20,18 +20,17 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.services.log.ExoLogger;
@@ -70,6 +69,16 @@ public class UserPortalConfigService implements Startable
       this.orgService_ = orgService;
       this.userACL_ = userACL;
       this.navService = navService;
+   }
+
+   /**
+    * Returns the navigation service associated with this service.
+    *
+    * @return the navigation service;
+    */
+   public NavigationService getNavigationService()
+   {
+      return navService;
    }
 
    /**
@@ -195,15 +204,12 @@ public class UserPortalConfigService implements Startable
       }
 
       // Create a blank navigation if needed
-      PageNavigation navigation = storage_.getPageNavigation(PortalConfig.USER_TYPE, userName);
-      if (navigation == null)
+      SiteKey key = SiteKey.user(userName);
+      NavigationContext nav = navService.loadNavigation(key);
+      if (nav == null)
       {
-         PageNavigation pageNav = new PageNavigation();
-         pageNav.setOwnerType(PortalConfig.USER_TYPE);
-         pageNav.setOwnerId(userName);
-         pageNav.setPriority(5);
-         pageNav.setNodes(new ArrayList<PageNode>());
-         storage_.create(pageNav);
+         nav = new NavigationContext(key, new NavigationState(5));
+         navService.saveNavigation(nav);
       }
    }
 
@@ -390,96 +396,6 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * Creates a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_NAVIGATION_EVENT}
-    * when the creation is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#create(PageNavigation)}
-    *
-    * @param navigation the navigation to create
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public void create(PageNavigation navigation) throws Exception
-   {
-      storage_.create(navigation);
-   }
-
-   /**
-    * Updates a page navigation broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_UPDATED}
-    * when the creation is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#save(PageNavigation)}
-    *
-    * @param navigation the navigation to update
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public void update(PageNavigation navigation) throws Exception
-   {
-      storage_.save(navigation);
-   }
-
-   /**
-    * Removes a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_REMOVED}
-    * when the removal is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#remove(PageNavigation)}
-    *
-    * @param navigation the navigation to remove
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public void remove(PageNavigation navigation) throws Exception
-   {
-      storage_.remove(navigation);
-   }
-
-   /**
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#getPageNavigation(String, String)}
-    * 
-    * @param ownerType
-    * @param id
-    * @return
-    * @throws Exception
-    */
-   @Deprecated
-   public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
-   {
-      PageNavigation navigation = storage_.getPageNavigation(ownerType, id);
-      return navigation;
-   }
-
-   /**
-    * This method creates new page from an existing page and links new page to a PageNode.
-    *
-    * @param nodeName
-    * @param nodeLabel
-    * @param pageId
-    * @param ownerType
-    * @param ownerId
-    * @return
-    * @throws Exception
-    */
-   public PageNode createNodeFromPageTemplate(String nodeName, String nodeLabel, String pageId, String ownerType,
-                                              String ownerId) throws Exception
-   {
-      Page page = storage_.clonePage(pageId, nodeName, ownerType, ownerId);
-      PageNode pageNode = new PageNode();
-      if (nodeLabel == null || nodeLabel.trim().length() < 1)
-      {
-         nodeLabel = nodeName;
-      }
-      pageNode.setName(nodeName);
-      pageNode.setLabel(nodeLabel);
-      pageNode.setPageReference(page.getPageId());
-      return pageNode;
-   }
-
-   /**
     * Clones a page.
     * 
     * @deprecated This method is not useful anymore. The preferred way to do this is 
@@ -512,53 +428,6 @@ public class UserPortalConfigService implements Startable
       Page page = newPortalConfigListener_.createPageFromTemplate(ownerType, ownerId, temp);
       updateOwnership(page, ownerType, ownerId);
       return page;
-   }
-
-   /**
-    * Load all navigation that user has edit permission.
-    *
-    * @return the navigation the user can edit
-    * @throws Exception any exception
-    */
-   public List<PageNavigation> loadEditableNavigations() throws Exception
-   {
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-      List<PageNavigation> navis = storage_.find(query, new Comparator<PageNavigation>()
-      {
-         public int compare(PageNavigation pconfig1, PageNavigation pconfig2)
-         {
-            return pconfig1.getOwnerId().compareTo(pconfig2.getOwnerId());
-         }
-      }).getAll();
-
-      //
-      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      for (PageNavigation ele : navis)
-      {
-         if (userACL_.hasEditPermission(ele))
-         {
-            navigations.add(ele);
-         }
-      }
-      return navigations;
-   }
-
-   /**
-    * Returns the list of group ids having navigation.
-    *
-    * @return the group id having navigation
-    * @throws Exception any exception
-    */
-   public Set<String> findGroupHavingNavigation() throws Exception
-   {
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-      Set<String> groupIds = new HashSet<String>();
-      List<PageNavigation> navis = storage_.find(query).getAll();
-      for (PageNavigation ele : navis)
-      {
-         groupIds.add(ele.getOwnerId());
-      }
-      return groupIds;
    }
 
    /**

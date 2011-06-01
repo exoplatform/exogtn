@@ -37,6 +37,13 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationState;
+import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeModel;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -72,6 +79,9 @@ public class TestDataStorage extends AbstractPortalTest
    private DataStorage storage_;
 
    /** . */
+   private NavigationService navService;
+
+   /** . */
    private POMSessionManager mgr;
 
    private LinkedList<Event> events;
@@ -99,6 +109,7 @@ public class TestDataStorage extends AbstractPortalTest
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
 
@@ -238,56 +249,6 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals(true, page2.isShowMaxWindow());
    }
    
-   public void testRenameNode() throws Exception
-   {
-      //Create node
-      PageNode pageNode = new PageNode();
-      String name = "MyPageNode";
-      pageNode.setName(name);
-      pageNode.setUri(name);
-      pageNode.setLabel(name);
-      
-      //add node to page navigation
-      String ownerId = "root";
-      String ownerType = "user";
-      PageNavigation nav = storage_.getPageNavigation(ownerType, ownerId);
-      assertNotNull(nav);
-      assertEquals(ownerId, nav.getOwnerId());
-      assertEquals(ownerType, nav.getOwnerType());
-      nav.addNode(pageNode);
-      storage_.save(nav);
-      
-      //Rename node
-      PageNavigation nav2 = storage_.getPageNavigation(ownerType, ownerId);
-      assertNotNull(nav2);
-      assertEquals(ownerId, nav2.getOwnerId());
-      assertEquals(ownerType, nav2.getOwnerType());
-      
-      PageNode pageNode2 = nav2.getNode(name);
-      assertNotNull(pageNode2);
-      assertEquals(name, pageNode2.getName());
-      assertEquals(name, pageNode2.getLabel());
-      assertEquals(name, pageNode2.getUri());
-
-      String newName = "NewMyPageNode";
-      pageNode2.setName(newName);
-      pageNode2.setUri(newName);
-      pageNode2.setLabel(newName);
-      storage_.save(nav2);
-      
-      //Get and compare
-      PageNavigation nav3 = storage_.getPageNavigation(ownerType, ownerId);
-      assertNotNull(nav3);
-      assertEquals(ownerId, nav3.getOwnerId());
-      assertEquals(ownerType, nav3.getOwnerType());
-      
-      PageNode pageNode3 = nav3.getNode(newName);
-      assertNotNull(pageNode3);
-      assertEquals(newName, pageNode3.getName());
-      assertEquals(newName, pageNode3.getLabel());
-      assertEquals(newName, pageNode3.getUri());
-   }
-   
    public void testChangingPortletThemeInPage() throws Exception {
       Page page;
       Application<?> app;
@@ -388,36 +349,6 @@ public class TestDataStorage extends AbstractPortalTest
 
    // Need to make window move 3 unit test
 
-   public void testCreateNavigation() throws Exception
-   {
-      PortalConfig portal = new PortalConfig();
-      portal.setName("foo");
-      portal.setLocale("en");
-      portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
-      storage_.create(portal);
-      assertEquals(1, events.size());
-
-      //
-      PageNavigation navigation = new PageNavigation();
-      navigation.setOwnerId("foo");
-      navigation.setOwnerType("portal");
-      storage_.create(navigation);
-      assertEquals(2, events.size());
-   }
-
-   public void testSaveNavigation() throws Exception
-   {
-      PageNavigation pageNavi = storage_.getPageNavigation("portal", "test");
-      assertNotNull(pageNavi);
-
-      //
-      storage_.save(pageNavi);
-      assertEquals(1, events.size());
-
-      //
-      PageNavigation newPageNavi = storage_.getPageNavigation(pageNavi.getOwnerType(), pageNavi.getOwnerId());
-   }
-
    /**
     * Test that setting a page reference to null will actually remove the page reference from the PageNode
     * @throws Exception
@@ -445,83 +376,26 @@ public class TestDataStorage extends AbstractPortalTest
       pageNode.build();
       
       // create a new page navigation and add node
-      PageNavigation navigation = new PageNavigation();
-      navigation.setOwnerId("foo");
-      navigation.setOwnerType("portal");
-      navigation.addNode(pageNode);
-      storage_.create(navigation);
-      
+      NavigationContext nav = new NavigationContext(SiteKey.portal("foo"), new NavigationState(0));
+      navService.saveNavigation(nav);
+      NodeContext<?> node = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
+      NodeContext<?> test = node.add(null, "testPage");
+      test.setState(test.getState().builder().pageRef(page.getPageId()).build());
+      navService.saveNode(node, null);
+
       // get the page reference from the created page and check that it exists
-      PageNavigation pageNavigationWithPageReference = storage_.getPageNavigation("portal", navigation.getOwnerId());
-      assertNotNull("Expected page reference should not be null.", pageNavigationWithPageReference.getNodes().get(0).getPageReference());
+      NodeContext<?> pageNavigationWithPageReference = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
+      assertNotNull("Expected page reference should not be null.", pageNavigationWithPageReference.get(0).getState().getPageRef());
       
       // set the page reference to null and save.
-      ArrayList<PageNode> nodes = navigation.getNodes();
-      nodes.get(0).setPageReference(null);
-      navigation.setNodes(nodes);
-      storage_.save(navigation);
-      
+      test.setState(test.getState().builder().pageRef(null).build());
+      navService.saveNode(node, null);
+
       // check that setting the page reference to null actually removes the page reference
-      PageNavigation pageNavigationWithoutPageReference = storage_.getPageNavigation("portal", navigation.getOwnerId());
-      assertNull("Expected page reference should be null.", pageNavigationWithoutPageReference.getNodes().get(0).getPageReference());
+      NodeContext<?> pageNavigationWithoutPageReference = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
+      assertNull("Expected page reference should be null.", pageNavigationWithoutPageReference.get(0).getState().getPageRef());
    }
    
-   public void testRemoveNavigation() throws Exception
-   {
-      PageNavigation navigation = storage_.getPageNavigation("portal", "test");
-      assertNotNull(navigation);
-
-      //
-      storage_.remove(navigation);
-      assertEquals(1, events.size());
-
-      //
-      navigation = storage_.getPageNavigation("portal", "test");
-      assertNull(navigation);
-   }
-
-   public void testNavigationOrder() throws Exception
-   {
-      PortalConfig portal = new PortalConfig("portal");
-      portal.setName("test_nav");
-      storage_.create(portal);
-
-      //
-      PageNavigation nav = new PageNavigation();
-      nav.setOwnerType("portal");
-      nav.setOwnerId("test_nav");
-      PageNode node1 = new PageNode();
-      node1.setName("n1");
-      PageNode node2 = new PageNode();
-      node2.setName("n2");
-      PageNode node3 = new PageNode();
-      node3.setName("n3");
-      nav.addNode(node1);
-      nav.addNode(node2);
-      nav.addNode(node3);
-
-      //
-      storage_.save(nav);
-
-      //
-      nav = storage_.getPageNavigation("portal", "test_nav");
-      assertEquals(3, nav.getNodes().size());
-      assertEquals("n1", nav.getNodes().get(0).getName());
-      assertEquals("n2", nav.getNodes().get(1).getName());
-      assertEquals("n3", nav.getNodes().get(2).getName());
-
-      //
-      nav.getNodes().add(0, nav.getNodes().remove(1));
-      storage_.save(nav);
-
-      //
-      nav = storage_.getPageNavigation("portal", "test_nav");
-      assertEquals(3, nav.getNodes().size());
-      assertEquals("n2", nav.getNodes().get(0).getName());
-      assertEquals("n1", nav.getNodes().get(1).getName());
-      assertEquals("n3", nav.getNodes().get(2).getName());
-   }
-
    public void testCreatePortletPreferences() throws Exception
    {
       ArrayList<Preference> prefs = new ArrayList<Preference>();
