@@ -32,8 +32,6 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
@@ -368,13 +366,7 @@ public class TestDataStorage extends AbstractPortalTest
       page.setOwnerId("test");
       page.setName("foo");
       storage_.create(page);
-      
-      //create a page node and add page
-      PageNode pageNode = new PageNode();
-      pageNode.setName("testPage");
-      pageNode.setPageReference(page.getPageId());
-      pageNode.build();
-      
+
       // create a new page navigation and add node
       NavigationContext nav = new NavigationContext(SiteKey.portal("foo"), new NavigationState(0));
       navService.saveNavigation(nav);

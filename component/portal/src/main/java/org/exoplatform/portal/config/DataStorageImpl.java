@@ -35,17 +35,12 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
@@ -111,12 +106,6 @@ public class DataStorageImpl implements DataStorage
    {
       delegate.remove(page.build());
       listenerServ_.broadcast(PAGE_REMOVED, this, page);
-   }
-
-   public void create(PageNavigation navigation) throws Exception
-   {
-      delegate.create(navigation.build());
-      listenerServ_.broadcast(EventType.NAVIGATION_CREATED, this, new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
    }
 
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
@@ -261,18 +250,6 @@ public class DataStorageImpl implements DataStorage
             protected Page create(PageData pageData)
             {
                return new Page(pageData);
-            }
-         };
-         return (ListAccess<T>)bilto.execute();
-      }
-      else if (type == PageNavigation.class)
-      {
-         Bilto<PageNavigation, NavigationData> bilto = new Bilto<PageNavigation, NavigationData>((Query<PageNavigation>)q, NavigationData.class, (Comparator<PageNavigation>)sortComparator)
-         {
-            @Override
-            protected PageNavigation create(NavigationData page)
-            {
-               return new PageNavigation(page);
             }
          };
          return (ListAccess<T>)bilto.execute();

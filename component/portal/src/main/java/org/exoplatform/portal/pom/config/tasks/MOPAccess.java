@@ -26,9 +26,7 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.PageData;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.Site;
@@ -154,33 +152,6 @@ public abstract class MOPAccess<E, I> implements ListAccess<E>
       protected PageData[] createT(int length)
       {
          return new PageData[length];
-      }
-   }
-
-   public static class NavigationAccess extends MOPAccess<NavigationData, Navigation>
-   {
-
-      public NavigationAccess(POMSessionManager mgr, Query<NavigationData> navigationDataQuery)
-      {
-         super(mgr, navigationDataQuery);
-      }
-
-      @Override
-      protected QueryResult<Navigation> findW(POMSession session, ObjectType<Site> siteType, String ownerId, String title, int offset, int limit)
-      {
-         return session.findObjects(ObjectType.NAVIGATION, siteType, ownerId, title, offset, limit);
-      }
-
-      @Override
-      protected NavigationData[] createT(int length)
-      {
-         return new NavigationData[length];
-      }
-
-      @Override
-      protected NavigationData convert(POMSession session, Navigation internal)
-      {
-         return new Mapper(session).load(internal);
       }
    }
 }

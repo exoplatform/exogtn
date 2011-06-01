@@ -245,24 +245,6 @@ public class TestLoadedPOM extends AbstractPortalTest
    }
 */
 
-   public void testFindNavigation() throws Exception
-   {
-      Query<PageNavigation> query = new Query<PageNavigation>("group", null, null, null, PageNavigation.class);
-      List<PageNavigation> list = storage.find(query).getAll();
-      assertEquals("Expected 6 results instead of " + list, 6, list.size());
-      Set<String> names = new HashSet<String>();
-      for (PageNavigation navigation : list)
-      {
-         assertEquals("group", navigation.getOwnerType());
-         names.add(navigation.getOwnerId());
-      }
-      HashSet<String> expectedNames =
-         new HashSet<String>(Arrays.asList("/platform/test/legacy", "/platform/test/normalized",
-            "/platform/administrators", "/platform/guests", "/platform/users",
-            "/organization/management/executive-board"));
-      assertEquals(expectedNames, names);
-   }
-
 /*
    public void testFindPageByName() throws Exception
    {

@@ -819,9 +819,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          pageRef = type + "::" + owner + "::" + name;
          pageNode.setPageReference(pageRef);
       }
-      if (pageNode.getChildren() != null)
+      if (pageNode.getNodes() != null)
       {
-         for (PageNode childPageNode : pageNode.getChildren())
+         for (PageNode childPageNode : pageNode.getNodes())
          {
             fixOwnerName(childPageNode);
          }

@@ -21,7 +21,6 @@ package org.exoplatform.portal.pom.data;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -77,21 +76,6 @@ public interface ModelDataStorage
     * @throws Exception any exception
     */
    public List<ModelChange> save(PageData page) throws Exception;
-
-   public NavigationData getPageNavigation(NavigationKey key) throws Exception;
-
-   public void save(NavigationData navigation) throws Exception;
-
-   public void create(NavigationData navigation) throws Exception;
-
-   public void remove(NavigationData navigation) throws Exception;
-
-
-
-   public NodeData loadNode(NavigationKey key) throws Exception;
-
-   public NodeData loadNode(String key) throws Exception;
-
 
 
    public void save(PortletPreferences portletPreferences) throws Exception;

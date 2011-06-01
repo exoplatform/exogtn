@@ -19,24 +19,14 @@
 
 package org.exoplatform.portal.config.model;
 
-import org.exoplatform.portal.pom.data.NavigationNodeContainerData;
-import org.exoplatform.portal.pom.data.NavigationNodeData;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageNodeContainer extends ModelObject
+public abstract class PageNodeContainer
 {
-
-   public PageNodeContainer(String storageId)
-   {
-      super(storageId);
-   }
 
    public PageNodeContainer()
    {
@@ -53,27 +43,4 @@ public abstract class PageNodeContainer extends ModelObject
       }
       return null;
    }
-
-   protected List<NavigationNodeData> buildNavigationChildren()
-   {
-      List<PageNode> nodes = getNodes();
-      if (nodes != null)
-      {
-         ArrayList<NavigationNodeData> children = new ArrayList<NavigationNodeData>();
-         for (int i = 0;i < nodes.size();i++)
-         {
-            PageNode node = nodes.get(i);
-            NavigationNodeData child = node.build();
-            children.add(child);
-         }
-         return Collections.unmodifiableList(children);
-      }
-      else
-      {
-         return Collections.emptyList();
-      }
-   }
-
-   public abstract NavigationNodeContainerData build();
-
 }

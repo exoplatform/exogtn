@@ -43,8 +43,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.MOPAccess;
-import org.exoplatform.portal.pom.config.tasks.NodeTask;
-import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
@@ -56,9 +54,6 @@ import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
-import org.exoplatform.portal.pom.data.NodeData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
@@ -136,37 +131,6 @@ public class POMDataStorage implements ModelDataStorage
       PageTask.Save task = new PageTask.Save(page);
       pomMgr.execute(task);
       return task.getChanges();
-   }
-
-   public NavigationData getPageNavigation(NavigationKey key) throws Exception
-   {
-      return pomMgr.execute(new PageNavigationTask.Load(key));
-   }
-
-   public void save(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Save(navigation, true));
-   }
-
-   public void create(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Save(navigation, false));
-   }
-
-   public void remove(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Remove(navigation));
-   }
-
-
-   public NodeData loadNode(NavigationKey key) throws Exception
-   {
-      return pomMgr.execute(new NodeTask.Load<NavigationKey>(NodeTask.KeyType.NAVIGATION, key));
-   }
-
-   public NodeData loadNode(String key) throws Exception
-   {
-      return pomMgr.execute(new NodeTask.Load<String>(NodeTask.KeyType.STRING, key));
    }
 
    public void save(PortletPreferences portletPreferences) throws Exception
@@ -285,10 +249,6 @@ public class POMDataStorage implements ModelDataStorage
             };
          }
          return (LazyPageList<T>)new LazyPageList<PageData>(pageAccess, 10);
-      }
-      else if (NavigationData.class.equals(type))
-      {
-         return (LazyPageList<T>)new LazyPageList<NavigationData>(new MOPAccess.NavigationAccess(pomMgr, (Query<NavigationData>)q), 10);
       }
       else if (PortletPreferences.class.equals(type))
       {
