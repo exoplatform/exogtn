@@ -23,12 +23,14 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 
+import java.io.Serializable;
+
 /**
  * An immutable navigation data class.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationData
+public class NavigationData implements Serializable
 {
 
    /** Useful. */
@@ -56,6 +58,13 @@ public class NavigationData
       NavigationState state = new NavigationState(node.getAttributes().getValue(MappedAttributes.PRIORITY, 1));
 
       //
+      this.key = key;
+      this.state = state;
+      this.rootId = rootId;
+   }
+
+   NavigationData(SiteKey key, NavigationState state, String rootId)
+   {
       this.key = key;
       this.state = state;
       this.rootId = rootId;

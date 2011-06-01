@@ -169,6 +169,15 @@ class NodeData implements Serializable
       this.children = children;
    }
 
+   NodeData(String parentId, String id, String name, NodeState state, String[] children)
+   {
+      this.parentId = parentId;
+      this.id = id;
+      this.name = name;
+      this.state = state;
+      this.children = children;
+   }
+
    public Iterator<String> iterator(boolean reverse)
    {
       if (reverse)

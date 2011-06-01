@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class NodeState
+public final class NodeState implements Serializable
 {
 
    /** . */
