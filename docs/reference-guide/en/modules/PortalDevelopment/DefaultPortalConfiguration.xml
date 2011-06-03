@@ -27,7 +27,7 @@
 			The following example configuration can be found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting language="xml">&#60;component&#62;
+<programlisting role="XML">&#60;component&#62;
     &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
     &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
     &#60;component-plugins&#62;           
@@ -60,7 +60,60 @@
          </para>
       </note>
 	</section>
-
+    <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips">
+    <title>Tips</title>
+    <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">
+      <title>Delete Portals Definition by Configuration</title>
+        <para>
+            In some cases, some portal definitions are defined but not used any more. If you want to delete them, you can add some configurations to
+            <emphasis>portal.war/WEB-INF/conf/portal/portal-configuration.xml</emphasis>.
+        </para>
+        <para>
+            To delete a portal definition or a portal template definition, you need to define a component plug-in as the example below:
+        </para>
+        <programlisting role="XML"><![CDATA[
+<external-component-plugins>
+    <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
+	<component-plugin>
+	  <name>new.portal.config.user.listener</name>
+	  <set-method>deleteListenerElements</set-method>
+	  <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+	  <description>this listener delete some predefined portal and templates configuration</description>
+	  <init-params>
+		<object-param>
+		  <name>site.templates.location</name>
+		  <description>description</description>
+		  <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+			<field name="portalTemplates">
+			  <collection type="java.util.HashSet">
+				<value>
+				  <string>basic</string>
+				</value>
+				<value>
+				  <string>classic</string>
+				</value>
+			  </collection>
+			</field>
+		  </object>
+		</object-param>
+		<object-param>
+		  <name>portal.configuration</name>
+		  <description>description</description>
+		  <object type="org.exoplatform.portal.config.NewPortalConfig">
+			<field  name="predefinedOwner">
+			  <collection type="java.util.HashSet">
+				<value><string>classic</string></value>
+			  </collection>
+			</field>
+			<field name="ownerType"><string>portal</string></field>
+		  </object>
+		</object-param>
+	  </init-params>
+	</component-plugin>
+</external-component-plugins>
+         ]]></programlisting>
+        </section>
+    </section>
 </section>
 
 
