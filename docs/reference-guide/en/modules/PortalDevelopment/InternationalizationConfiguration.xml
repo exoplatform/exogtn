@@ -313,7 +313,7 @@ organization.management=Management
 		</section>
 
 	</section>
-	<section>
+	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">
         <title>Translating the language selection form</title>	
 	    <mediaobject>
            <imageobject>

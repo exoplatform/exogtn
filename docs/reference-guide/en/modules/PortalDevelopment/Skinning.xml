@@ -221,7 +221,7 @@ common graphic resource reuse and ease of development
     portal.
     </para>
 
-    <section>
+    <section id="sect-Reference_Guid-Skin_Configuration-Skin_Service-Skin_configuration">
       <title>Skin configuration</title>
 
       <para>&PRODUCT; automatically discovers web archives that contain a
@@ -256,8 +256,7 @@ common graphic resource reuse and ease of development
       </programlisting>
     </section>
 
-  <section
-    id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
+  <section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
     <title>Resource Request Filter</title>
 
     <para>Because of the Right-To-Left support, all CSS files need to be
@@ -404,7 +403,7 @@ skin/Stylesheet.css</programlisting>
         means that ResourceRequestFilter and gatein-resources.xml should be configured properly.
       </para>
 
-      <section>
+      <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal-skin-configuration">
         <title>Portal Skin Configuration</title>
         <para>
         The gatein-resources.xml needs to specify the new portal skin. This includes specifying the name
@@ -430,7 +429,7 @@ skin/Stylesheet.css</programlisting>
       </note>
       </section>
     
-      <section>
+      <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal_skin_preview_icon">
         <title>Portal Skin Preview Icon</title>
          <para>
          When selecting a skin, it is possible to preview it. The current skin needs to
@@ -492,7 +491,7 @@ skin/Stylesheet.css</programlisting>
         </imageobject>
       </mediaobject></para>
 
-	<section>
+	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_configuration">
 	<title>Window Style Configuration</title>
 	<para>
 	Window Styles are defined within the gatein-resources.xml file which is used by the skin service to 
@@ -525,7 +524,7 @@ skin/Stylesheet.css</programlisting>
 
     </section>
 
-	<section>
+	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_css">
 	<title>Window Style CSS</title>
 	<para>
 	To display the window decorators for the skin service, it must have the CSS classes with specific
@@ -668,7 +667,7 @@ skin/Stylesheet.css</programlisting>
 }
 </programlisting>
 </section>
-<section>
+<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Set_default_window_style">
 <title>How to Set the Default Window Style</title>
 To set the default window style to be used for a portal, you need to specify the CSS classes
 for a theme called <literal>DefaultTheme</literal>.
