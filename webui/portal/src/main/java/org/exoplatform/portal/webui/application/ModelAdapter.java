@@ -125,9 +125,9 @@ public abstract class ModelAdapter<S, C extends Serializable>
       @Override
       public PortletContext getProducerOfferedPortletContext(String applicationState)
       {
-         String[] chunks = Utils.split("/", applicationState);
-         String appName = chunks[0];
-         String portletName = chunks[1];
+         int indexOfSeparator = applicationState.lastIndexOf("/");
+         String appName = applicationState.substring(0, indexOfSeparator);
+         String portletName = applicationState.substring(indexOfSeparator + 1);
          return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "."
             + portletName);
       }
