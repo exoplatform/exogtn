@@ -43,7 +43,6 @@ import org.gatein.mop.core.api.workspace.PageImpl;
 
 import javax.jcr.RepositoryException;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -334,17 +333,7 @@ public class POMSession
       }
 
       // Temporary work around, to fix in MOP and then remove
-      ChromatticSession session;
-      try
-      {
-         Field f = ModelImpl.class.getDeclaredField("session");
-         f.setAccessible(true);
-         session = (ChromatticSession)f.get(model);
-      }
-      catch (Exception e)
-      {
-         throw new Error(e);
-      }
+      ChromatticSession session = context.getSession();
       Class<O> mappedClass = (Class<O>)mapping.get(type);
       return session.createQueryBuilder(mappedClass).where(statement).get().objects((long)offset, (long)limit);
    }
