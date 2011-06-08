@@ -17,14 +17,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/control/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/widget/Stylesheet.css);
-@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css);
-@import url(UIBreadcumb/Stylesheet.css);
-@import url(UIToolbarContainer/Stylesheet.css);
-@import url(UITabPaneDashboard/Stylesheet.css);
+
+@import url(view/Stylesheet.css);
 
 div {
 	padding: 0px; margin: 0px;

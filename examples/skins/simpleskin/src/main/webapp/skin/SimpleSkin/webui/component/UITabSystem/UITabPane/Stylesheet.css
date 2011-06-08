@@ -17,8 +17,34 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css);
-@import url(SimpleSkin/portal/webui/component/UIPortalApplicationSkin.css);
-@import url(SimpleSkin/webui/component/Stylesheet.css);
-@import url(PortletThemes/Stylesheet.css);
-@import url(Portlet/Stylesheet.css);
+.UITabPane {
+	height: 100%;
+}
+
+.UITabPane .TabPaneContent {
+	padding: 8px;
+}
+
+.UITabPane .UITabContentContainer {
+	border: solid 1px #cecece; 
+	border-top: none;
+	background: white;
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+	background: #f3f3f3;
+	border: solid 1px white; border-top: none;
+	padding: 10px;
+}
+
+.UITabPane .UIForm .HorizontalLayout {
+	border: none;
+	background: none;
+	padding: 0px;
+}
+
+.UITabPane .UIFormWithTitle .HorizontalLayout {
+	border: 1px solid #b7b7b7;
+	border-top: none;
+	padding: 10px;
+}
