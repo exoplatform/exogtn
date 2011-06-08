@@ -6,7 +6,7 @@
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
 
-   <sect1>
+   <sect1 id="wsrp-Introduction">
       <title>Introduction</title>
       <para>The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with interactive presentation-oriented web services. It has been produced through the efforts of
@@ -76,7 +76,7 @@
       </note>
    </sect1>
 
-   <sect1>
+   <sect1 id="wsrp-Deploy_GateIn_wsrp_services">
       <title>Deploying &PRODUCT_NAME;'s WSRP services</title>
       <para>
          &PRODUCT_NAME; provides a complete support of WSRP 1.0 standard interfaces and offers both consumer and
@@ -172,7 +172,7 @@
          </para>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-Deploy_GateIn_wsrp_services-Considerations_to_use_wsrp_with_SSL">
          <title>Considerations to use WSRP with SSL</title>
          <para>It is possible to use WSRP over SSL for secure exchange of data. Please refer to the
             <ulink url="http://community.jboss.org/wiki/ConfiguringWSRPforuseoverSSL">instructions</ulink>
@@ -182,7 +182,7 @@
       </sect2>
    </sect1>
 
-   <sect1>
+   <sect1 id="wsrp-Make_portlet_remotable">
       <title>Making a portlet remotable</title>
       <note>
          <para>
@@ -297,7 +297,7 @@
       </para>
    </sect1>
 
-   <sect1>
+   <sect1 id="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">
       <title>Consuming &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</title>
       <para>WSRP Consumers vary a lot as far as how they are configured. Most of them require that you specify
          the URL for the Producer's WSDL definition. Please refer to your Consumer's documentation for specific
@@ -315,9 +315,9 @@
       </para>
    </sect1>
 
-   <sect1 id="consumer_configuration">
+   <sect1 id="wsrp-consumer_configuration">
       <title>Consuming remote WSRP portlets in &PRODUCT_NAME;</title>
-      <sect2>
+      <sect2 id="wsrp-consumer_configuration-Overview">
          <title>Overview</title>
          <para>
             To be able to consume WSRP portlets exposed by a remote producer, &PRODUCT_NAME;'s WSRP consumer needs to
@@ -336,7 +336,7 @@
          </para>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-consumer_configuration-Configure_remote_producer_walkthrough">
          <title>Configuring a remote producer walk-through</title>
          <para>
             Let's work through the steps of defining access to a remote producer so that its portlets can be
@@ -463,7 +463,7 @@
             </para>
          </sect3>
 
-         <sect3>
+         <sect3 id="wsrp-consumer_configuration-Configure_remote_producer_walkthrough-Use_XML">
             <title>Using XML</title>
 
             <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
@@ -506,7 +506,7 @@
             <para>We will look at the details of the meaning of elements later on.</para>
          </sect3>
 
-         <sect3>
+         <sect3 id="wsrp-consumer_configuration-Configure_remote_producer_walkthrough-Configure_access_to_remote_portlet">
             <title>Configuring access to a remote portlet</title>
             <para>
                If we go back to the Application Registry and examine the available portlets by clicking on the
@@ -542,7 +542,7 @@
          </sect3>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML">
          <title>Configuring access to remote producers via XML</title>
 
          <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
@@ -578,7 +578,7 @@
             </note>
          </para>
 
-         <sect3>
+         <sect3 id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Required_configuration_information">
             <title>Required configuration information</title>
 
             <para>Let's now look at which information needs to be provided to configure access to a remote producer.
@@ -607,7 +607,7 @@
             </para>
          </sect3>
 
-         <sect3>
+         <sect3 id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Optional_configuration">
             <title>Optional configuration</title>
             <para>It is also possible to provide addtional configuration, which, in some cases, might be important to
                establish a proper connection to the remote producer.
@@ -666,7 +666,7 @@
          </sect3>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-consumer_configuration-Example">
          <title>Examples</title>
 
          <para>
@@ -725,13 +725,13 @@
       </sect2>
    </sect1>
 
-   <sect1>
+   <sect1 id="wsrp-Consumers_maintenance">
       <title>Consumers maintenance</title>
 
-      <sect2>
+      <sect2 id="wsrp-Consumers_maintenance-Modify_currently_held_registration">
          <title>Modifying a currently held registration</title>
 
-         <sect3>
+         <sect3 id="wsrp-Consumers_maintenance-Modify_currently_held_registration-Registration_modification_for_service_upgrade">
             <title>Registration modification for service upgrade</title>
             <para>
                Producers often offer several levels of service depending on consumers' subscription levels (for
@@ -856,7 +856,7 @@
          </sect3>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-Consumers_maintenance-Consumer_operations">
          <title>Consumer operations</title>
          <para>
             Several operations are available from the consumer list view of the WSRP configuration portlet:
@@ -896,7 +896,7 @@
          </para>
       </sect2>
 
-      <sect2>
+      <sect2 id="wsrp-Consumers_maintenance-Erase_local_registration_data">
          <title>Erasing local registration data</title>
          <para>
             There are rare cases where it might be required to erase the local information without being able to
@@ -927,7 +927,7 @@
 
    <sect1 id="producer_config">
       <title>Configuring &PRODUCT_NAME;'s WSRP Producer</title>
-      <sect2>
+      <sect2 id="producer_config-Overview">
          <title>Overview</title>
          <para>
             You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
@@ -940,7 +940,7 @@
             </filename>.
          </para>
       </sect2>
-      <sect2>
+      <sect2 id="producer_config-Default_configuration">
          <title>Default configuration</title>
          <para>
             The default producer configuration is to require that consumers register with it before providing access its

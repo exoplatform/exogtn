@@ -1000,7 +1000,7 @@ realmName=gatein-domain
 			</step>
 		</procedure>
 
-		<section>
+		<section id="sect-Reference_Guide-Single_Sign_On-SPNEGO-Configuration">
 			<title>Configuration</title>
 			<para>GateIn uses JBoss Negotiation to enable SPNEGO based desktop
 				SSO for the Portal. Here are the steps to integrate SPNEGO with
