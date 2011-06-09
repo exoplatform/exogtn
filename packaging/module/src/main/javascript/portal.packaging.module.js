@@ -62,7 +62,6 @@ function getModule(params)
    new Project("org.exoplatform.portal", "exo.portal.component.pc", "jar", module.version).
       addDependency(new Project("javax.portlet", "portlet-api", "jar", "2.0")).
       addDependency(new Project("javax.ccpp", "ccpp", "jar", "1.0")).
-      addDependency(new Project("javax.xml.bind", "jaxb-api", "jar", "2.1")).
       addDependency(new Project("org.gatein.pc", "pc-api", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-bridge", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-portlet", "jar", pcVersion)).
@@ -222,13 +221,11 @@ function getModule(params)
 
    module.eXoGadgetServer =
    new Project("org.exoplatform.portal", "exo.portal.gadgets-server", "war", module.version).
-      addDependency(new Project("commons-io", "commons-io", "jar", "1.3.2")).
       addDependency(new Project("commons-codec", "commons-codec", "jar", "1.3")).
       addDependency(new Project("net.oauth", "core", "jar", "20080621")).
       addDependency(new Project("com.google.collections", "google-collections", "jar", "1.0-rc2")).
       addDependency(new Project("com.google.code.guice", "guice", "jar", "2.0")).
       addDependency(new Project("com.google.code.guice", "guice-jmx", "jar", "2.0")).
-      addDependency(new Project("commons-lang", "commons-lang", "jar", "2.6")).
       addDependency(new Project("rome", "rome", "jar", "0.9")).
       addDependency(new Project("joda-time", "joda-time", "jar", "1.6")).
       addDependency(new Project("org.json", "json", "jar", "20070829")).
@@ -238,10 +235,9 @@ function getModule(params)
       addDependency(new Project("org.gatein.shindig", "shindig-social-api", "jar", shindigVersion)).
       addDependency(new Project("jdom", "jdom", "jar", "1.0")).
       addDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.1")).
-      addDependency(new Project("commons-collections", "commons-collections", "jar", "3.2.1")).
       addDependency(new Project("net.sf.ehcache", "ehcache", "jar", "1.6.0")).
       addDependency(new Project("com.ibm.icu", "icu4j", "jar", "3.8")).
-      addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.9")).
+      addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.12")).
       addDependency(new Project("xerces", "xercesImpl", "jar", "2.9.1")).
       addDependency(new Project("com.thoughtworks.xstream", "xstream", "jar", "1.3.1")).
       addDependency(new Project("caja", "caja", "jar", "r3375")).
