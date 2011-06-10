@@ -136,16 +136,13 @@ public class UploadService
    {
       UploadResource upResource = new UploadResource(uploadId);
       RequestStreamReader reader = new RequestStreamReader(upResource);
-      int limitMB = uploadLimitsMB_.get(uploadId).intValue();
-      int estimatedSizeMB = (int)contentLength / 1024 / 1024;
-      if (limitMB > 0 && estimatedSizeMB > limitMB)
-      { // a limit set to 0 means unlimited
+      uploadResources.put(upResource.getUploadId(), upResource);
+      if (isLimited(upResource, contentLength))
+      {
          upResource.setStatus(UploadResource.FAILED_STATUS);
-         uploadResources.put(uploadId, upResource);
-         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
-            + limitMB + " MB");
          return;
       }
+      
       Map<String, String> headers = reader.parseHeaders(inputStream, encoding);
 
       String fileName = reader.getFileName(headers);
@@ -156,8 +153,7 @@ public class UploadService
       upResource.setFileName(fileName);
       upResource.setMimeType(headers.get(RequestStreamReader.CONTENT_TYPE));
       upResource.setStoreLocation(uploadLocation_ + "/" + uploadId + "." + fileName);
-      upResource.setEstimatedSize(contentLength);
-      uploadResources.put(upResource.getUploadId(), upResource);
+      upResource.setEstimatedSize(contentLength);      
       File fileStore = new File(upResource.getStoreLocation());
       if (!fileStore.exists())
          fileStore.createNewFile();
@@ -314,7 +310,7 @@ public class UploadService
          limitMB = uploadLimitsMB_.get(upResource.getUploadId()).intValue();
       }
 
-      int estimatedSizeMB = (int)((contentLength / 1024) / 1024);
+      double estimatedSizeMB = (contentLength / 1024) / 1024;
       if (limitMB > 0 && estimatedSizeMB > limitMB)
       { // a limit set to 0 means unlimited         
          if (log.isDebugEnabled())
