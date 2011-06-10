@@ -25,9 +25,7 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.mop.i18n.I18NFramework;
 import org.exoplatform.portal.mop.i18n.Injector;
-import org.exoplatform.portal.mop.i18n.Language;
 
 import org.chromattic.api.ChromatticSession;
 
@@ -77,6 +75,7 @@ public class TestI18NFramework extends AbstractKernelTest
       return session;
    }
 
+/*
    public void testI18N()
    {
       String homepage_en = "Homepage";
@@ -161,6 +160,7 @@ public class TestI18NFramework extends AbstractKernelTest
       assertNotNull(described);
       assertEquals(described.getName(), name_vi);
    }
+*/
 
    @Override
    protected void tearDown() throws Exception

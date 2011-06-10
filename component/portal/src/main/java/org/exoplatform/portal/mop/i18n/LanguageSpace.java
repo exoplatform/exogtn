@@ -36,7 +36,6 @@ import org.chromattic.api.annotations.PrimaryType;
 @PrimaryType(name = "gtn:languages")
 public abstract class LanguageSpace
 {
-   public ChromatticSession session;
 
    @Create
    public abstract Language createLanguage();
@@ -44,9 +43,9 @@ public abstract class LanguageSpace
    @OneToMany
    public abstract Map<String, Language> getChildren();
 
-   protected <E> E getLanguage(Class<E> classType, String locale, boolean create)
+   protected <E> E getLanguage(Class<E> mixinType, String locale, boolean create)
    {
-      Language language = null;
+      Language language;
       Map<String, Language> children = getChildren();
       if (children.containsKey(locale))
       {
@@ -54,7 +53,7 @@ public abstract class LanguageSpace
       }
       else if (create)
       {
-         language = session.create(Language.class);
+         language = createLanguage();
          children.put(locale, language);
       }
       else
@@ -62,15 +61,7 @@ public abstract class LanguageSpace
          return null;
       }
 
-      E e = session.getEmbedded(language, classType);
-      if (e == null)
-      {
-         e = session.create(classType);
-         session.setEmbedded(language, classType, e);
-      }
-
-      e = session.getEmbedded(language, classType);
-
-      return e;
+      //
+      return language.getMixin(mixinType, create);
    }
 }

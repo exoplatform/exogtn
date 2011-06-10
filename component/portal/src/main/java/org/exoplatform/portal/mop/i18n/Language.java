@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.mop.i18n;
 
+import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.annotations.PrimaryType;
 
 /**
@@ -33,4 +34,26 @@ import org.chromattic.api.annotations.PrimaryType;
 public class Language
 {
 
+   /** . */
+   public ChromatticSession session;
+
+   <M> M getMixin(Class<M> mixinType, boolean create)
+   {
+      M mixin = session.getEmbedded(this, mixinType);
+      if (mixin == null && create)
+      {
+         mixin = session.create(mixinType);
+         session.setEmbedded(this, mixinType, mixin);
+      }
+      return mixin;
+   }
+
+   <M> void removeMixin(Class<M> mixinType)
+   {
+      M mixin = session.getEmbedded(this, mixinType);
+      if (mixin != null)
+      {
+         session.setEmbedded(this, mixinType, null);
+      }
+   }
 }

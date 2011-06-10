@@ -46,27 +46,27 @@ public class Injector implements LifeCycleListener
    @Override
    public void loaded(String id, String path, String name, Object o)
    {
-      if (o instanceof LanguageSpace)
+      if (o instanceof Language)
       {
-         ((LanguageSpace)o).session = this.session;
+         ((Language)o).session = this.session;
       }
    }
 
    @Override
    public void added(String id, String path, String name, Object o)
    {
-      if (o instanceof LanguageSpace)
+      if (o instanceof Language)
       {
-         ((LanguageSpace)o).session = this.session;
+         ((Language)o).session = this.session;
       }
    }
 
    @Override
    public void removed(String id, String path, String name, Object o)
    {
-      if (o instanceof LanguageSpace)
+      if (o instanceof Language)
       {
-         ((LanguageSpace)o).session = null;
+         ((Language)o).session = null;
       }
    }
 }
