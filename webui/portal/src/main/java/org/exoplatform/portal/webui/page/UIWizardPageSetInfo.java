@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -38,19 +41,17 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by The eXo Platform SARL
@@ -96,8 +97,19 @@ public class UIWizardPageSetInfo extends UIForm
       		.setMaxLength(255).addValidator(StringLengthValidator.class, 3, 120));
       addUIFormInput(uiVisibleCheck.setChecked(true));
       addUIFormInput(uiDateInputCheck);
-      addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
-      addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
+      UIFormInputBase<String> startPubDateInput = new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class);
+      UIFormInputBase<String> endPubDateInput = new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class);
+      addUIFormInput(startPubDateInput);
+      addUIFormInput(endPubDateInput);
+
+      boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      if (isUserNav)
+      {
+         uiVisibleCheck.setRendered(false);
+         uiDateInputCheck.setRendered(false);
+         startPubDateInput.setRendered(false);
+         endPubDateInput.setRendered(false);
+      }
    }
 
    public void setEditMode() throws Exception
