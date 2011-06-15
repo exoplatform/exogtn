@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.testsuite</artifactId>
-      <version>3.1.9-PLF</version>
+      <version>3.1.10-PLF-SNAPSHOT</version>
    </parent>
 
    <artifactId>exo.webui.based.samples</artifactId>
