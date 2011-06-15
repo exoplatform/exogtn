@@ -22,13 +22,16 @@ package org.exoplatform.portal.config;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
+import org.gatein.common.util.Tools;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -36,6 +39,8 @@ import org.jibx.runtime.IUnmarshallingContext;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Thu, May 15, 2003 @   
@@ -86,12 +91,14 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       PageNavigation pageNavigation = (PageNavigation)obj;
       assertEquals("portal::classic::homepage", pageNavigation.getNode("home").getPageReference());
 
+/*
       IMarshallingContext mctx = bfact.createMarshallingContext();
       mctx.setIndent(2);
       mctx.marshalDocument(obj, "UTF-8", null, new FileOutputStream("target/navigation.xml"));
 
       obj = uctx.unmarshalDocument(new FileInputStream("target/navigation.xml"), null);
       assertEquals(PageNavigation.class, obj.getClass());
+*/
    }
 
    public void testPortletPreferencesMapping() throws Exception
@@ -121,5 +128,47 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals("web/BannerPortlet", portletState.getContentId());
       Portlet preferences = (Portlet)portletState.getContentState();
       assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
+   }
+
+   public void testI18NnMapping() throws Exception
+   {
+      IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
+      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+      PageNavigation nav =
+         (PageNavigation)uctx.unmarshalDocument(new FileInputStream(
+            "src/test/resources/jibx/i18n.xml"), null);
+
+      //
+      PageNode foo = nav.getNode("foo");
+      assertEquals("foo_label", foo.getLabel());
+
+      //
+      ArrayList<LocalizedValue> fooLabels =  foo.getLabels();
+      assertNotNull(fooLabels);
+      assertEquals(3, fooLabels.size());
+      assertEquals("foo_label_en", fooLabels.get(0).getValue());
+      assertEquals(Locale.ENGLISH, fooLabels.get(0).getLang());
+      assertEquals("foo_label", fooLabels.get(1).getValue());
+      assertEquals(null, fooLabels.get(1).getLang());
+      assertEquals("foo_label_fr", fooLabels.get(2).getValue());
+      assertEquals(Locale.FRENCH, fooLabels.get(2).getLang());
+
+      //
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLocalizedLabel(Locale.ENGLISH).keySet());
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLocalizedLabel(Locale.GERMAN).keySet());
+
+      //
+      PageNode bar = nav.getNode("bar");
+      assertEquals("bar_label", bar.getLabel());
+
+      //
+      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      assertNotNull(barLabels);
+      assertEquals(1, barLabels.size());
+      assertEquals("bar_label", barLabels.get(0).getValue());
+      assertEquals(null, barLabels.get(0).getLang());
+
+      //
+      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
    }
 }

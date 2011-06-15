@@ -22,8 +22,6 @@ package org.exoplatform.portal.mop.description;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.description.DescriptionServiceImpl;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
 import org.exoplatform.portal.pom.config.POMSessionManager;
