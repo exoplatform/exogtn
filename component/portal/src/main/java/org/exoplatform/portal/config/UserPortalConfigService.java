@@ -728,4 +728,14 @@ public class UserPortalConfigService implements Startable
    {
       return newPortalConfigListener_.getDefaultPortal();
    }
+   
+   public Set<String> getPortalTemplates()
+   {
+      return newPortalConfigListener_.getTemplateConfigs(PortalConfig.PORTAL_TYPE);
+   }
+   
+   public PortalConfig getPortalConfigFromTemplate(String templateName)
+   {
+      return newPortalConfigListener_.getPortalConfigFromTemplate(PortalConfig.PORTAL_TYPE, templateName);
+   }
 }

@@ -26,6 +26,8 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
   <portal-name>@owner@</portal-name>
   <locale>en</locale>
+  <label>Classic Portal</label>
+  <description>This is classic portal template</description>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
   <properties>

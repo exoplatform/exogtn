@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -608,6 +609,49 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             return tempConfig.getLocation();
       }
       return null;
+   }
+   
+   /**
+    * Get all template configurations
+    * @param siteType (portal, group, user)
+    * @return set of template name
+    */
+   public Set<String> getTemplateConfigs(String siteType)
+   {
+      Set<String> result = new HashSet<String>();      
+      for(SiteConfigTemplates tempConfig : templateConfigs)
+      {
+         Set<String> templates = tempConfig.getTemplates(siteType);
+         if(templates != null && templates.size() > 0)
+         {
+            result.addAll(templates);
+         }
+      }      
+      return result;
+   }
+   
+   /**
+    * Get detail configuration from a template file 
+    * @param siteType (portal, group, user)
+    * @param templateName name of template
+    * @return PortalConfig object
+    */
+   public PortalConfig getPortalConfigFromTemplate(String siteType, String templateName)
+   {
+      String templatePath = getTemplateConfig(siteType, templateName);
+      NewPortalConfig config = new NewPortalConfig(templatePath);
+      config.setTemplateName(templateName);
+      config.setOwnerType(siteType);
+      PortalConfig result = null;
+      try
+      {
+         result = getConfig(config, templateName, siteType, PortalConfig.class);
+      }
+      catch (Exception e)
+      {
+         log.warn("Cannot find configuration of template: " + templateName);
+      }
+      return result;
    }
 
    // Deserializing code
