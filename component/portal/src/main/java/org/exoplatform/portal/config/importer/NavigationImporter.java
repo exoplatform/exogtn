@@ -22,7 +22,9 @@ package org.exoplatform.portal.config.importer;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
@@ -37,11 +39,15 @@ import org.exoplatform.portal.tree.diff.ListAdapter;
 import org.exoplatform.portal.tree.diff.ListChangeIterator;
 import org.exoplatform.portal.tree.diff.ListChangeType;
 import org.exoplatform.portal.tree.diff.ListDiff;
+import org.gatein.common.i18n.LocaleFormat;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -112,11 +118,15 @@ public class NavigationImporter
    /** . */
    private final ImportMode mode;
 
-   public NavigationImporter(ImportMode mode, PageNavigation src, NavigationService service)
+   /** . */
+   private final DescriptionService descriptionService;
+
+   public NavigationImporter(ImportMode mode, PageNavigation src, NavigationService service, DescriptionService descriptionService)
    {
       this.mode = mode;
       this.src = src;
       this.service = service;
+      this.descriptionService = descriptionService;
    }
 
    public void perform()
@@ -166,12 +176,26 @@ public class NavigationImporter
       if (dst != null)
       {
          NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, dst, Scope.SINGLE, null).getNode();
-         perform(src, node);
+
+         // Collect labels
+         Map<NodeContext<?>, Map<Locale, Described.State>> labelMap = new HashMap<NodeContext<?>, Map<Locale, Described.State>>();
+
+         // Perform save
+         perform(src, node, labelMap);
+
+         // Save the node
          service.saveNode(node, null);
+
+         //
+         for (Map.Entry<NodeContext<?>, Map<Locale, Described.State>> entry : labelMap.entrySet())
+         {
+            String id = entry.getKey().getId();
+            descriptionService.setDescriptions(id, entry.getValue());
+         }
       }
    }
 
-   private void perform(PageNodeContainer src, final NodeContext<?> dst)
+   private void perform(PageNodeContainer src, final NodeContext<?> dst, final Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
    {
       service.rebaseNode(dst, Scope.CHILDREN, null);
 
@@ -197,7 +221,7 @@ public class NavigationImporter
          switch (changeType)
          {
             case SAME:
-               perform(srcChild, dstChild);
+               perform(srcChild, dstChild, labelMap);
                break;
             case REMOVE:
                if (dst.getNode(name) != null)
@@ -257,6 +281,18 @@ public class NavigationImporter
                target.getPageReference()
             );
             child.setState(state);
+
+            // For now hardcode ENGLISH
+            Map<Locale, String> label = target.getLocalizedLabel(Locale.ENGLISH);
+            if (label != null)
+            {
+               Map<Locale, Described.State> description = new HashMap<Locale, Described.State>(label.size());
+               for (Map.Entry<Locale, String> entry : label.entrySet())
+               {
+                  description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+               }
+               labelMap.put(child, description);
+            }
 
             //
             List<PageNode> targetChildren = target.getNodes();

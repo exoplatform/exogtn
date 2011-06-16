@@ -36,6 +36,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Page.PageSet;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
@@ -103,12 +104,22 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    /** . */
    private NavigationService navigationService_;
 
-   public NewPortalConfigListener(POMSessionManager pomMgr, DataStorage dataStorage, ConfigurationManager cmanager, InitParams params, NavigationService navigationService)
+   /** . */
+   private DescriptionService descriptionService_;
+
+   public NewPortalConfigListener(
+      POMSessionManager pomMgr,
+      DataStorage dataStorage,
+      ConfigurationManager cmanager,
+      InitParams params,
+      NavigationService navigationService,
+      DescriptionService descriptionService)
       throws Exception
    {
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
       navigationService_ = navigationService;
+      descriptionService_ = descriptionService;
 
       ValueParam valueParam = params.getValueParam("page.templates.location");
       if (valueParam != null)
@@ -539,7 +550,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
 
       //
-      NavigationImporter merge =new NavigationImporter(importMode, navigation, navigationService_);
+      NavigationImporter merge = new NavigationImporter(importMode, navigation, navigationService_, descriptionService_);
 
       //
       merge.perform();
