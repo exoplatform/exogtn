@@ -74,7 +74,7 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
       return createToken(gadgetURL, viewer, rUser, moduleId, "default");
    }
 
-   private BlobCrypter getBlobCrypter() throws IOException
+   protected BlobCrypter getBlobCrypter() throws IOException
    {
       String fileName = getKeyFilePath();
       BasicBlobCrypter c = new BasicBlobCrypter(new File(fileName));
@@ -85,7 +85,7 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
    /**
     * Method returns a path to the file containing the encryption key
     */
-   private String getKeyFilePath()
+   protected String getKeyFilePath()
    {
       String keyPath = ExoContainerConfig.getTokenKeyPath();
       File keyFile = null;
