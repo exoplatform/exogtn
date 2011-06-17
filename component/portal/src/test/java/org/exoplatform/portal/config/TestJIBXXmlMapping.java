@@ -36,6 +36,7 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.IUnmarshallingContext;
+import org.jibx.runtime.impl.UnmarshallingContext;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -132,17 +133,14 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
 
    public void testI18NnMapping() throws Exception
    {
-      IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
-      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      PageNavigation nav =
-         (PageNavigation)uctx.unmarshalDocument(new FileInputStream(
-            "src/test/resources/jibx/i18n.xml"), null);
+      IBindingFactory bfact = BindingDirectory.getFactory(PageNavigation.class);
+      UnmarshallingContext uctx = (UnmarshallingContext)bfact.createUnmarshallingContext();
+      uctx.setDocument(new FileInputStream("src/test/resources/jibx/i18n.xml"), null, "UTF-8", false);
+      PageNavigation nav = (PageNavigation)uctx.unmarshalElement();
 
       //
       PageNode foo = nav.getNode("foo");
       assertEquals("foo_label", foo.getLabel());
-
-      //
       ArrayList<LocalizedValue> fooLabels =  foo.getLabels();
       assertNotNull(fooLabels);
       assertEquals(3, fooLabels.size());
@@ -152,23 +150,30 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(null, fooLabels.get(1).getLang());
       assertEquals("foo_label_fr", fooLabels.get(2).getValue());
       assertEquals(Locale.FRENCH, fooLabels.get(2).getLang());
-
-      //
       assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLocalizedLabel(Locale.ENGLISH).keySet());
       assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLocalizedLabel(Locale.GERMAN).keySet());
 
       //
       PageNode bar = nav.getNode("bar");
       assertEquals("bar_label", bar.getLabel());
-
-      //
       ArrayList<LocalizedValue> barLabels =  bar.getLabels();
       assertNotNull(barLabels);
       assertEquals(1, barLabels.size());
       assertEquals("bar_label", barLabels.get(0).getValue());
       assertEquals(null, barLabels.get(0).getLang());
+      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
 
       //
-      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+      PageNode juu = nav.getNode("juu");
+      assertEquals(null, juu.getLabel());
+      ArrayList<LocalizedValue> juuLabels =  juu.getLabels();
+      assertNotNull(juuLabels);
+      assertEquals(3, juuLabels.size());
+      assertEquals("juu_label_en", juuLabels.get(0).getValue());
+      assertEquals(Locale.ENGLISH, juuLabels.get(0).getLang());
+      assertEquals("juu_label_fr", juuLabels.get(1).getValue());
+      assertEquals(Locale.FRENCH, juuLabels.get(1).getLang());
+      assertEquals("juu_label_fr_FR", juuLabels.get(2).getValue());
+      assertEquals(Locale.FRANCE, juuLabels.get(2).getLang());
    }
 }

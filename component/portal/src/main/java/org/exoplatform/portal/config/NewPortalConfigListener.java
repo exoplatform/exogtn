@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -550,7 +551,19 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
 
       //
-      NavigationImporter merge = new NavigationImporter(importMode, navigation, navigationService_, descriptionService_);
+      Locale locale;
+      PortalConfig portalConfig = dataStorage_.getPortalConfig(config.getOwnerType(), owner);
+      if (portalConfig != null && portalConfig.getLocale() != null)
+      {
+         locale = new Locale(portalConfig.getLocale());
+      }
+      else
+      {
+         locale = Locale.ENGLISH;
+      }
+
+      //
+      NavigationImporter merge = new NavigationImporter(locale, importMode, navigation, navigationService_, descriptionService_);
 
       //
       merge.perform();

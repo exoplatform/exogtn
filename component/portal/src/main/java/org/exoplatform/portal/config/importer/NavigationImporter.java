@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config.importer;
 
+import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
@@ -110,6 +111,9 @@ public class NavigationImporter
    };
 
    /** . */
+   private final Locale portalLocale;
+
+   /** . */
    private final PageNavigation src;
 
    /** . */
@@ -121,8 +125,9 @@ public class NavigationImporter
    /** . */
    private final DescriptionService descriptionService;
 
-   public NavigationImporter(ImportMode mode, PageNavigation src, NavigationService service, DescriptionService descriptionService)
+   public NavigationImporter(Locale portalLocale, ImportMode mode, PageNavigation src, NavigationService service, DescriptionService descriptionService)
    {
+      this.portalLocale = portalLocale;
       this.mode = mode;
       this.src = src;
       this.service = service;
@@ -263,6 +268,61 @@ public class NavigationImporter
 
          private void add(PageNode target, PageNode previous, NodeContext<?> dst)
          {
+
+            //
+            LocalizedValue unqualifiedLabel = null;
+            List<LocalizedValue> labels = target.getLabels();
+            Map<Locale, Described.State> description = null;
+            if (labels.size() > 0)
+            {
+               for (LocalizedValue label : labels)
+               {
+                  Locale lang = label.getLang();
+                  if (lang != null)
+                  {
+                     if (description == null)
+                     {
+                        description = new HashMap<Locale, Described.State>(labels.size());
+                     }
+                     description.put(lang, new Described.State(label.getValue(), null));
+                  }
+                  else
+                  {
+                     unqualifiedLabel = label;
+                  }
+               }
+            }
+
+            //
+            String label;
+            if (description != null)
+            {
+               // Don't insert legacy value
+               label = null;
+
+               // If it does not contain the portal locale
+               if (!description.containsKey(portalLocale))
+               {
+                  // We use the unqualified label
+                  if (unqualifiedLabel != null)
+                  {
+                     description.put(portalLocale, new Described.State(unqualifiedLabel.getValue(), null));
+                  }
+               }
+            }
+            else
+            {
+               if (unqualifiedLabel != null)
+               {
+                  label = unqualifiedLabel.getValue();
+               }
+               else
+               {
+                  label = null;
+               }
+            }
+
+            //
             String name = target.getName();
             int index = 0;
             if (previous != null)
@@ -273,7 +333,7 @@ public class NavigationImporter
             Date start = target.getStartPublicationDate();
             Date end = target.getEndPublicationDate();
             NodeState state = new NodeState(
-               target.getLabel(),
+               label,
                target.getIcon(),
                start == null ? -1 : start.getTime(),
                end == null ? -1 : end.getTime(),
@@ -282,15 +342,9 @@ public class NavigationImporter
             );
             child.setState(state);
 
-            // For now hardcode ENGLISH
-            Map<Locale, String> label = target.getLocalizedLabel(Locale.ENGLISH);
-            if (label != null)
+            //
+            if (description != null)
             {
-               Map<Locale, Described.State> description = new HashMap<Locale, Described.State>(label.size());
-               for (Map.Entry<Locale, String> entry : label.entrySet())
-               {
-                  description.put(entry.getKey(), new Described.State(entry.getValue(), null));
-               }
                labelMap.put(child, description);
             }
 

@@ -19,9 +19,9 @@
 
 -->
 
-<binding>  
+<binding>
 
-  <format type="java.lang.String[]" 
+  <format type="java.lang.String[]"
           serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializeStringArray"
           deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializeStringArray"/>
           
@@ -32,7 +32,8 @@
   <mapping class="org.exoplatform.portal.config.model.LocalizedValue"
            name="label"
            unmarshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper"
-           marshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper"/>
+           marshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper">
+  </mapping>
   
   <mapping
       name="application"

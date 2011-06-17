@@ -70,7 +70,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       PageNavigation src = navigation(name).build();
       src.setPriority(2);
       src.setOwnerId(name);
-      NavigationImporter merge = new NavigationImporter(mode, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, mode, src, service, descriptionService);
       merge.perform();
 
       //
@@ -93,7 +93,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = builder.build();
       src.setOwnerId("merge_create");
-      NavigationImporter merge = new NavigationImporter(ImportMode.MERGE, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -121,7 +121,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = builder.build();
       src.setOwnerId("merge_nested");
-      NavigationImporter merge = new NavigationImporter(ImportMode.MERGE, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -167,7 +167,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = builder.build();
       src.setOwnerId(name);
-      NavigationImporter merge = new NavigationImporter(ImportMode.CONSERVE, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -186,7 +186,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       builder = navigation(name).add(node("a").add(node("d"))).add(node("c"));
       src = builder.build();
       src.setOwnerId(name);
-      merge = new NavigationImporter(importMode, src, service, descriptionService);
+      merge = new NavigationImporter(Locale.ENGLISH, importMode, src, service, descriptionService);
       merge.perform();
 
       //
@@ -258,7 +258,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = navigation("merge_order").add(node("a"), node("b"), node("c")).build();
       src.setOwnerId("merge_order");
-      NavigationImporter merge = new NavigationImporter(ImportMode.MERGE, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -270,7 +270,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertEquals("c", node.get(2).getName());
    }
 
-   public void testI18N()
+   public void testLabelI18N()
    {
       MOPService mop = mgr.getPOMService();
       mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_i18n");
@@ -280,21 +280,40 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("importer_i18n")));
 
       //
-      PageNavigation src = navigation("merge_order").add(node("a")).build();
+      PageNavigation src = navigation("merge_order").add(node("a"), node("b"), node("c")).build();
       src.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
+      src.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
+      src.getNode("c").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("c_en"))));
       src.setOwnerId("importer_i18n");
-      NavigationImporter importer = new NavigationImporter(ImportMode.REIMPORT, src, service, descriptionService);
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
       importer.perform();
 
       //
       NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_i18n"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+
+      // The fully explicit case
       NodeContext<?> a = (NodeContext<?>)node.getNode("a");
-      String id = a.getId();
-      Map<Locale, Described.State> description = descriptionService.getDescriptions(id);
-      assertNotNull(description);
-      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), description.keySet());
-      assertEquals(new Described.State("a_en", null), description.get(Locale.ENGLISH));
-      assertEquals(new Described.State("a_fr", null), description.get(Locale.FRENCH));
+      Map<Locale, Described.State> aDesc = descriptionService.getDescriptions(a.getId());
+      assertNotNull(aDesc);
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
+      assertEquals(new Described.State("a_en", null), aDesc.get(Locale.ENGLISH));
+      assertEquals(new Described.State("a_fr", null), aDesc.get(Locale.FRENCH));
+      assertNull(a.getState().getLabel());
+
+      // No explicit language means to use the portal locale
+      NodeContext<?> b = (NodeContext<?>)node.getNode("b");
+      Map<Locale, Described.State> bDesc = descriptionService.getDescriptions(b.getId());
+      assertNotNull(bDesc);
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
+      assertEquals(new Described.State("b_en", null), bDesc.get(Locale.ENGLISH));
+      assertEquals(new Described.State("b_fr", null), bDesc.get(Locale.FRENCH));
+      assertNull(b.getState().getLabel());
+
+      // The classic use case : one single label without the xml:lang attribute
+      NodeContext<?> c = (NodeContext<?>)node.getNode("c");
+      Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
+      assertNull(descriptionService.getDescriptions(c.getId()));
+      assertEquals("c_en", c.getState().getLabel());
    }
 }

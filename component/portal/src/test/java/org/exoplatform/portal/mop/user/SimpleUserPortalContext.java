@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,31 +19,45 @@
 
 package org.exoplatform.portal.mop.user;
 
+import org.exoplatform.portal.mop.SiteKey;
+
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * The context of a user within its portal.
+ * A simple implementation for unit tests.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public interface UserPortalContext
+class SimpleUserPortalContext implements UserPortalContext
 {
 
-   /**
-    * Provide an opportunity to use a resource bundle for a specified navigation. It no such bundle can be found then null
-    * can be returned.
-    *
-    * @param navigation the navigation that will be localized
-    * @return the resource bundle to use
-    */
-   ResourceBundle getBundle(UserNavigation navigation);
+   /** . */
+   private final Map<SiteKey, ResourceBundle> bundles;
 
-   /**
-    * Returns the user locale.
-    *
-    * @return the user locale
-    */
-   Locale getUserLocale();
+   /** . */
+   private final Locale locale;
+
+   public SimpleUserPortalContext(Locale locale)
+   {
+      this.locale = locale;
+      this.bundles = new HashMap<SiteKey, ResourceBundle>();
+   }
+
+   void add(SiteKey key, ResourceBundle bundle)
+   {
+      bundles.put(key, bundle);
+   }
+
+   public ResourceBundle getBundle(UserNavigation navigation)
+   {
+      return bundles.get(navigation.getKey());
+   }
+
+   public Locale getUserLocale()
+   {
+      return locale;
+   }
 }

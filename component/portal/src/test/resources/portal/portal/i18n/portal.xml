@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
   ~ Copyright (C) 2011 eXo Platform SAS.
   ~
@@ -18,21 +18,11 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<node-navigation>
-  <owner-type>portal</owner-type>
-  <owner-id>i18n</owner-id>
-  <priority>1</priority>
-  <page-nodes>
-	  <node>
-      <uri>foo</uri>
-	    <name>foo</name>
-	    <label>foo_label</label>
-	  </node>
-    <node>
-      <uri>bar</uri>
-      <name>bar</name>
-      <label xml:lang="en">bar_label_en</label>
-      <label xml:lang="fr">bar_label_fr</label>
-    </node>
-  </page-nodes>
-</node-navigation>
+<portal-config>
+  <portal-name>classic</portal-name>
+  <locale>en</locale>
+  <access-permissions>Everyone</access-permissions>
+  <edit-permission>*:/platform/administrators</edit-permission>
+ 	<portal-layout>
+  </portal-layout>
+</portal-config>

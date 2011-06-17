@@ -128,11 +128,6 @@ public class PageNode extends PageNodeContainer
                return label.getValue();
             }
          }
-         for (LocalizedValue label : labels)
-         {
-            return label.getValue();
-         }
-
       }
       return null;
    }

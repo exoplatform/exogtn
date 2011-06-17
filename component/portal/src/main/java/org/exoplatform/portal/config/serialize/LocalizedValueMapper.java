@@ -32,6 +32,8 @@ import org.jibx.runtime.JiBXParseException;
 import org.jibx.runtime.impl.UnmarshallingContext;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -67,6 +69,8 @@ public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshal
       return ctx.isAt(marshalURI, marshallName);
    }
 
+   private static final Pattern RFC1766_PATTERN = Pattern.compile("^([a-zA-Z]{2})(?:-([a-zA-Z]{2}))?$");
+
    public Object unmarshal(Object o, IUnmarshallingContext ictx) throws JiBXException
    {
       UnmarshallingContext ctx = (UnmarshallingContext)ictx;
@@ -79,16 +83,26 @@ public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshal
       for (int i = 0;i < count;i++)
       {
          String attrName = ctx.getAttributeName(i);
-         if (attrName.equals("lang"))
+         if (attrName.equals("xml:lang"))
          {
             String attrValue= ctx.getAttributeValue(i).trim();
-            try
+            Matcher matcher = RFC1766_PATTERN.matcher(attrValue);
+            if (matcher.matches())
             {
-               lang = LocaleFormat.RFC3066_LANGUAGE_TAG_NO_CACHE.getLocale(attrValue);
+               String langISO = matcher.group(1);
+               String countryISO = matcher.group(2);
+               if (countryISO == null)
+               {
+                  lang = new Locale(langISO.toLowerCase());
+               }
+               else
+               {
+                  lang = new Locale(langISO.toLowerCase(), countryISO.toLowerCase());
+               }
             }
-            catch (ConversionException e)
+            else
             {
-               throw new JiBXParseException("The attribute lang does not represent a valid locale", attrValue, e);
+               throw new JiBXParseException("The attribute xml:lang " + attrValue + " does not represent a valid language as defined by RFC 1766", attrValue);
             }
             break;
          }
