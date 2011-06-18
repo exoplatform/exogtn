@@ -491,21 +491,21 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
 
-   public void testI18NLabel()
+   public void testExtendedLabel()
    {
       new UnitTest()
       {
          public void execute() throws Exception
          {
             UserPortalContext ctx = new SimpleUserPortalContext(Locale.ENGLISH);
-            UserPortal portal = userPortalConfigSer_.getUserPortalConfig("i18n", getUserId(), ctx).getUserPortal();
+            UserPortal portal = userPortalConfigSer_.getUserPortalConfig("extended", getUserId(), ctx).getUserPortal();
             UserNode path = portal.resolvePath(null, "/bar");
             assertEquals(null, path.getLabel());
             assertEquals("bar_label_en", path.getResolvedLabel());
 
             //
             ctx = new SimpleUserPortalContext(Locale.FRENCH);
-            portal = userPortalConfigSer_.getUserPortalConfig("i18n", getUserId(), ctx).getUserPortal();
+            portal = userPortalConfigSer_.getUserPortalConfig("extended", getUserId(), ctx).getUserPortal();
             path = portal.resolvePath(null, "/bar");
             assertEquals(null, path.getLabel());
             assertEquals("bar_label_fr", path.getResolvedLabel());

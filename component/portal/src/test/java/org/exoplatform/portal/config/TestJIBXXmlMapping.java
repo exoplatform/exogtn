@@ -23,12 +23,15 @@ import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
+import org.exoplatform.portal.config.model.UnmarshalledObject;
+import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.common.util.Tools;
@@ -131,12 +134,28 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
    }
 
-   public void testI18NnMapping() throws Exception
+   public void testClassicNavigationMapping() throws Exception
    {
-      IBindingFactory bfact = BindingDirectory.getFactory(PageNavigation.class);
-      UnmarshallingContext uctx = (UnmarshallingContext)bfact.createUnmarshallingContext();
-      uctx.setDocument(new FileInputStream("src/test/resources/jibx/i18n.xml"), null, "UTF-8", false);
-      PageNavigation nav = (PageNavigation)uctx.unmarshalElement();
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/classic-navigation.xml"));;
+      PageNavigation nav = obj.getObject();
+      assertEquals(Version.V_1_1, obj.getVersion());
+
+      //
+      PageNode bar = nav.getNode("bar");
+      assertEquals("bar_label", bar.getLabel());
+      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      assertNotNull(barLabels);
+      assertEquals(1, barLabels.size());
+      assertEquals("bar_label", barLabels.get(0).getValue());
+      assertEquals(null, barLabels.get(0).getLang());
+      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+   }
+
+   public void testExtendedNavigationMapping() throws Exception
+   {
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/extended-navigation.xml"));;
+      PageNavigation nav = obj.getObject();
+      assertEquals(Version.V_1_2, obj.getVersion());
 
       //
       PageNode foo = nav.getNode("foo");

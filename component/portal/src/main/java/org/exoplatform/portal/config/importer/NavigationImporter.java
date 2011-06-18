@@ -114,6 +114,9 @@ public class NavigationImporter
    private final Locale portalLocale;
 
    /** . */
+   private final boolean extendedNavigation;
+
+   /** . */
    private final PageNavigation src;
 
    /** . */
@@ -125,9 +128,16 @@ public class NavigationImporter
    /** . */
    private final DescriptionService descriptionService;
 
-   public NavigationImporter(Locale portalLocale, ImportMode mode, PageNavigation src, NavigationService service, DescriptionService descriptionService)
+   public NavigationImporter(
+      Locale portalLocale,
+      ImportMode mode,
+      boolean extendedNavigation,
+      PageNavigation src,
+      NavigationService service,
+      DescriptionService descriptionService)
    {
       this.portalLocale = portalLocale;
+      this.extendedNavigation = extendedNavigation;
       this.mode = mode;
       this.src = src;
       this.service = service;
@@ -295,20 +305,22 @@ public class NavigationImporter
 
             //
             String label;
-            if (description != null)
+            if (extendedNavigation)
             {
-               // Don't insert legacy value
-               label = null;
-
-               // If it does not contain the portal locale
+               if (description == null)
+               {
+                  description = new HashMap<Locale, Described.State>();
+               }
                if (!description.containsKey(portalLocale))
                {
-                  // We use the unqualified label
                   if (unqualifiedLabel != null)
                   {
                      description.put(portalLocale, new Described.State(unqualifiedLabel.getValue(), null));
                   }
                }
+
+               //
+               label = null;
             }
             else
             {
@@ -316,10 +328,17 @@ public class NavigationImporter
                {
                   label = unqualifiedLabel.getValue();
                }
+               else if (description != null && description.containsKey(portalLocale))
+               {
+                  label = description.get(portalLocale).getName();
+               }
                else
                {
                   label = null;
                }
+
+               //
+               description = null;
             }
 
             //
