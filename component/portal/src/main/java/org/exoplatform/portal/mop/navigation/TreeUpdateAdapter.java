@@ -19,12 +19,14 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.portal.tree.diff.HierarchyAdapter;
+
 /**
  * Adapter for the update operation.
  *
  * @param <N> the node generic type
  */
-interface TreeUpdateAdapter<N>
+interface TreeUpdateAdapter<N> extends HierarchyAdapter<String[], N, String>
 {
 
    /**

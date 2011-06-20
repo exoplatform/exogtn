@@ -35,7 +35,6 @@ class TreeUpdate<N1, N2>
       TreeContext<N1> src,
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
-      HierarchyAdapter<String[], N2, String> dstAdapter,
       TreeUpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
@@ -45,7 +44,6 @@ class TreeUpdate<N1, N2>
          src,
          srcAdatper,
          dst,
-         dstAdapter,
          updateAdapter,
          listener,
          visitor
@@ -59,7 +57,6 @@ class TreeUpdate<N1, N2>
       TreeContext<N1> src,
       HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper,
       N2 dst,
-      HierarchyAdapter<String[], N2, String> dstAdapter,
       TreeUpdateAdapter<N2> updateAdapter,
       NodeChangeListener<NodeContext<N1>> listener,
       Scope.Visitor visitor)
@@ -70,7 +67,7 @@ class TreeUpdate<N1, N2>
          Adapters.<String>list(),
          srcAdatper,
          Adapters.<String>list(),
-         dstAdapter,
+         updateAdapter,
          Utils.<String>comparator());
 
       // We obtain the iterator

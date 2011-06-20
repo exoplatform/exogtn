@@ -29,7 +29,6 @@ import static org.exoplatform.portal.mop.navigation.Utils.*;
 import static org.exoplatform.portal.pom.config.Utils.split;
 
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -291,10 +290,9 @@ public class NavigationServiceImpl implements NavigationService
 
          TreeUpdate.perform(
             tree,
-            ContextHierarchyAdapter.<N>create(),
+            NodeContextUpdateAdapter.<N>create(),
             data,
-            DataHierarchyAdapter.create(dataCache, session),
-            DataUpdateAdapter.create(),
+            NodeDataUpdateAdapter.create(dataCache, session),
             listener,
             visitor);
       }
@@ -357,10 +355,9 @@ public class NavigationServiceImpl implements NavigationService
       // Update
       TreeUpdate.perform(
          tree,
-         ContextHierarchyAdapter.<N>create(),
+         NodeContextUpdateAdapter.<N>create(),
          rebased.root,
-         ContextHierarchyAdapter.<N>create(),
-         ContextUpdateAdapter.<N>create(),
+         NodeContextUpdateAdapter.<N>create(),
          listener,
          rebased);
 
@@ -381,10 +378,9 @@ public class NavigationServiceImpl implements NavigationService
          //
          TreeUpdate.perform(
             tree,
-            ContextHierarchyAdapter.<N>create(),
+            NodeContextUpdateAdapter.<N>create(),
             rebased.root,
-            ContextHierarchyAdapter.<N>create(),
-            ContextUpdateAdapter.<N>create(),
+            NodeContextUpdateAdapter.<N>create(),
             listener,
             rebased);
       }
@@ -405,10 +401,9 @@ public class NavigationServiceImpl implements NavigationService
       //
       TreeUpdate.perform(
          rebased,
-         ContextHierarchyAdapter.<N>create(),
+         NodeContextUpdateAdapter.<N>create(),
          data,
-         DataHierarchyAdapter.create(dataCache, session),
-         DataUpdateAdapter.create(),
+         NodeDataUpdateAdapter.create(dataCache, session),
          null,
          visitor);
 
@@ -428,16 +423,16 @@ public class NavigationServiceImpl implements NavigationService
       return rebased;
    }
 
-   private static class ContextHierarchyAdapter<N> implements HierarchyAdapter<String[], NodeContext<N>, String>
+   private static class NodeContextUpdateAdapter<N> implements TreeUpdateAdapter<NodeContext<N>>
    {
 
       /** . */
-      private static final ContextHierarchyAdapter<?> _instance = new ContextHierarchyAdapter();
+      private static final NodeContextUpdateAdapter<?> _instance = new NodeContextUpdateAdapter();
 
-      static <N> ContextHierarchyAdapter<N> create()
+      static <N> NodeContextUpdateAdapter<N> create()
       {
          @SuppressWarnings("unchecked")
-         ContextHierarchyAdapter<N> instance = (ContextHierarchyAdapter<N>)_instance;
+         NodeContextUpdateAdapter<N> instance = (NodeContextUpdateAdapter<N>)_instance;
          return instance;
       }
 
@@ -467,14 +462,29 @@ public class NavigationServiceImpl implements NavigationService
       {
          return node.getDescendant(handle);
       }
+
+      public NodeData getData(NodeContext<N> node)
+      {
+         return node.data;
+      }
+
+      public NodeState getState(NodeContext<N> node)
+      {
+         return node.state;
+      }
+
+      public String getName(NodeContext<N> node)
+      {
+         return node.name;
+      }
    }
 
-   static class DataHierarchyAdapter implements HierarchyAdapter<String[], NodeData, String>
+   private static class NodeDataUpdateAdapter implements TreeUpdateAdapter<NodeData>
    {
 
-      static DataHierarchyAdapter create(DataCache dataCache, POMSession session)
+      static NodeDataUpdateAdapter create(DataCache dataCache, POMSession session)
       {
-         return new DataHierarchyAdapter(dataCache, session);
+         return new NodeDataUpdateAdapter(dataCache, session);
       }
 
       /** . */
@@ -483,7 +493,7 @@ public class NavigationServiceImpl implements NavigationService
       /** . */
       private final POMSession session;
 
-      private DataHierarchyAdapter(DataCache dataCache, POMSession session)
+      private NodeDataUpdateAdapter(DataCache dataCache, POMSession session)
       {
          this.dataCache = dataCache;
          this.session = session;
@@ -522,47 +532,6 @@ public class NavigationServiceImpl implements NavigationService
             }
          }
          return null;
-      }
-   }
-
-   private static class ContextUpdateAdapter<N> implements TreeUpdateAdapter<NodeContext<N>>
-   {
-
-      /** . */
-      private static final ContextUpdateAdapter _instance = new ContextUpdateAdapter();
-
-      static <N> ContextUpdateAdapter<N> create()
-      {
-         @SuppressWarnings("unchecked")
-         ContextUpdateAdapter<N> instance = (ContextUpdateAdapter<N>)_instance;
-         return instance;
-      }
-
-      public NodeData getData(NodeContext<N> node)
-      {
-         return node.data;
-      }
-
-      public NodeState getState(NodeContext<N> node)
-      {
-         return node.state;
-      }
-
-      public String getName(NodeContext<N> node)
-      {
-         return node.name;
-      }
-   }
-
-   private static class DataUpdateAdapter implements TreeUpdateAdapter<NodeData>
-   {
-
-      /** . */
-      private static final DataUpdateAdapter instance = new DataUpdateAdapter();
-
-      static DataUpdateAdapter create()
-      {
-         return instance;
       }
 
       public NodeData getData(NodeData node)
