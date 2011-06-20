@@ -310,7 +310,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertEquals(new Described.State("b_fr", null), bDesc.get(Locale.FRENCH));
       assertNull(b.getState().getLabel());
 
-      // The classic use case : one single label without the xml:lang attribute
+      // The simple use case : one single label without the xml:lang attribute
       NodeContext<?> c = (NodeContext<?>)node.getNode("c");
       Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
       assertNotNull(cDesc);
@@ -319,26 +319,26 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertEquals(null, c.getState().getLabel());
    }
 
-   public void testClassicLabel()
+   public void testSimpleLabel()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_classic_label");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_simple_label");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("importer_classic_label")));
+      assertNull(service.loadNavigation(SiteKey.portal("importer_simple_label")));
 
       //
-      PageNavigation src = navigation("importer_classic_label").add(node("a"), node("b"), node("c")).build();
+      PageNavigation src = navigation("importer_simple_label").add(node("a"), node("b"), node("c")).build();
       src.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
       src.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
       src.getNode("c").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("c_en"))));
-      src.setOwnerId("importer_classic_label");
+      src.setOwnerId("importer_simple_label");
       NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, false, src, service, descriptionService);
       importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_classic_label"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_simple_label"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
 
       // The fully explicit case
@@ -353,7 +353,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(bDesc);
       assertEquals("b_en", b.getState().getLabel());
 
-      // The classic use case : one single label without the xml:lang attribute
+      // The simple use case : one single label without the xml:lang attribute
       NodeContext<?> c = (NodeContext<?>)node.getNode("c");
       Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
       assertNull(cDesc);

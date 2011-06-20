@@ -19,7 +19,7 @@
   -->
 
 <portal-config>
-  <portal-name>classic</portal-name>
+  <portal-name>extended</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>

@@ -134,9 +134,9 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
    }
 
-   public void testClassicNavigationMapping() throws Exception
+   public void testSimpleNavigationMapping() throws Exception
    {
-      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/classic-navigation.xml"));;
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/simple-navigation.xml"));;
       PageNavigation nav = obj.getObject();
       assertEquals(Version.V_1_1, obj.getVersion());
 
