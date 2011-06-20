@@ -118,11 +118,7 @@ class TreeUpdate<N1, N2>
       // Compute visit
       VisitMode visit = null;
       N2 d = it.getDestination();
-      NodeData data = null;
-      if (d != null)
-      {
-         data = updateAdapter.getData(d);
-      }
+      NodeData data = updateAdapter.getData(d);
 
       //
       if (data != null)
@@ -287,14 +283,11 @@ class TreeUpdate<N1, N2>
          }
 
          //
+         parent.state = updateAdapter.getState(d);
+         parent.name = updateAdapter.getName(d);
          parent.data = data;
-         parent.state = null;
-         parent.name = null;
-      }
 
-      //
-      if (data != null)
-      {
+         //
          visitor.leave(depth, data.id, data.name, data.state);
       }
 

@@ -357,4 +357,58 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService
          assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
       }
    }
+
+   public void testStateRebase() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_state");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_state"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+
+      NodeState state = new NodeState.Builder().label("foo").build();
+      root.getChild("a").setState(state);
+      assertSame(state, root.getChild("a").getState());
+
+      //
+      sync(true);
+
+      //
+      Iterator<NodeChange<Node>> changes = root.rebase(service, null);
+      assertFalse(changes.hasNext());
+      assertSame(state, root.getChild("a").getState());
+   }
+
+   public void testNameRebase() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_name");
+      Navigation def = portal.getRootNavigation().addChild("default");
+      def.addChild("a");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_name"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+
+      Node a = root.getChild("a");
+      a.setName("b");
+      assertSame("b", a.getName());
+
+      //
+      sync(true);
+
+      //
+      Iterator<NodeChange<Node>> changes = root.rebase(service, null);
+      assertFalse(changes.hasNext());
+      assertSame("b", a.getName());
+   }
 }

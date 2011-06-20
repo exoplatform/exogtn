@@ -28,11 +28,27 @@ interface TreeUpdateAdapter<N>
 {
 
    /**
-    * Returns the data associated with the node or null if such data does not exist.
+    * Returns the persistent data associated with the node or null if such data does not exist.
     *
     * @param node the node
     * @return the node data
     */
    NodeData getData(N node);
+
+   /**
+    * Returns the transient state associated with the node.
+    *
+    * @param node the node
+    * @return the transient state
+    */
+   NodeState getState(N node);
+
+   /**
+    * Returns the transient name associated with the node.
+    *
+    * @param node the node
+    * @return the transient name
+    */
+   String getName(N node);
 
 }

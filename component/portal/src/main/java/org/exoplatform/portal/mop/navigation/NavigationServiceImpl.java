@@ -542,6 +542,16 @@ public class NavigationServiceImpl implements NavigationService
       {
          return node.data;
       }
+
+      public NodeState getState(NodeContext<N> node)
+      {
+         return node.state;
+      }
+
+      public String getName(NodeContext<N> node)
+      {
+         return node.name;
+      }
    }
 
    private static class DataUpdateAdapter implements TreeUpdateAdapter<NodeData>
@@ -558,6 +568,16 @@ public class NavigationServiceImpl implements NavigationService
       public NodeData getData(NodeData node)
       {
          return node;
+      }
+
+      public NodeState getState(NodeData node)
+      {
+         return null;
+      }
+
+      public String getName(NodeData node)
+      {
+         return null;
       }
    }
 
