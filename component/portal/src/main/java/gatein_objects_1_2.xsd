@@ -67,7 +67,7 @@
   <!-- The type of a navigation node -->
   <xs:complexType name="nodeType">
     <xs:sequence>
-      <xs:element name="uri" type="xs:string"/>
+      <xs:element name="uri" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="name" type="xs:string"/>
       <xs:element name="label" type="localizedString" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
