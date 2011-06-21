@@ -19,13 +19,18 @@
 
 package org.exoplatform.navigation.webui.component;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageSelector;
@@ -33,11 +38,13 @@ import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -57,9 +64,14 @@ import org.exoplatform.webui.form.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Author : Dang Van Minh, Pham Tuan minhdv81@yahoo.com Jun 14, 2006
@@ -84,10 +96,16 @@ public class UIPageNodeForm extends UIFormTabPane
    
    final private static String VISIBLE = "visible";
 
+   private static final String ENGLISH = "en";
+   
+   private static final String VIETNAMESE = "vi";
+   
+   private static final String FRANCE = "fr";
+
    public UIPageNodeForm() throws Exception
    {
       super("UIPageNodeForm");
-
+      
       UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");
       UIFormCheckBoxInput<Boolean> uiDateInputCheck =
          new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, null, false);
@@ -98,6 +116,9 @@ public class UIPageNodeForm extends UIFormTabPane
       uiSettingSet.addUIFormInput(new UIFormStringInput("URI", "URI", null).setEditable(false))
       				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class))
       				.addUIFormInput(new UIFormStringInput("label", "label", null).addValidator(StringLengthValidator.class, 3, 120))
+      				.addUIFormInput(new UIFormStringInput(ENGLISH, null, null))
+      				.addUIFormInput(new UIFormStringInput(VIETNAMESE, null, null))
+      				.addUIFormInput(new UIFormStringInput(FRANCE, null, null))
       				.addUIFormInput(uiVisibleCheck.setChecked(true))
       				.addUIFormInput(uiDateInputCheck)
       				.addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
@@ -114,7 +135,7 @@ public class UIPageNodeForm extends UIFormTabPane
       addUIFormInput(uiIconSelector);
       setActions(new String[]{"Save", "Back"});
    }
-
+   
    public TreeNode getPageNode()
    {
       return pageNode_;
@@ -134,9 +155,42 @@ public class UIPageNodeForm extends UIFormTabPane
       invokeGetBindingBean(pageNode_);
    }
 
+   private ResourceBundle getResourceBundle(Locale locale) throws Exception
+   {
+      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+      ResourceBundleService service =
+         (ResourceBundleService)appContainer.getComponentInstanceOfType(ResourceBundleService.class);
+      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+      return res;
+   }
+
+   private String capitalizeFirstLetter(String word)
+   {
+      if (word == null)
+      {
+         return null;
+      }
+      if (word.length() == 0)
+      {
+         return word;
+      }
+      StringBuilder result = new StringBuilder(word);
+      result.replace(0, 1, result.substring(0, 1).toUpperCase());
+      return result.toString();
+   }
+
+   private class LanguagesComparator implements Comparator<SelectItemOption>
+   {
+      public int compare(SelectItemOption o1, SelectItemOption o2)
+      {
+         return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+      }
+   }
+
    public void invokeGetBindingBean(Object bean) throws Exception
    {
       super.invokeGetBindingBean(bean);
+
       TreeNode pageNode = (TreeNode)bean;
 
       String icon = pageNode.getIcon();
@@ -144,6 +198,19 @@ public class UIPageNodeForm extends UIFormTabPane
          icon = "Default";
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
       getUIStringInput("label").setValue(pageNode.getLabel());
+      List<LocalizedValue> labels = pageNode.getI18nizedLabels();
+      if (labels != null)
+      {
+         for (LocalizedValue value : labels)
+         {
+            UIFormStringInput localize = getUIStringInput(value.getLang().getLanguage());
+            if (localize != null)
+            {
+               localize.setValue(value.getValue());
+            }
+         }
+      }
+      
       if(pageNode.getVisibility() == Visibility.SYSTEM)
       {
          UIFormInputSet uiSettingSet = getChildById("PageNodeSetting");
@@ -203,6 +270,19 @@ public class UIPageNodeForm extends UIFormTabPane
          date = (cal != null) ? cal.getTime() : null;
          node.setEndPublicationTime(date == null ? -1 : date.getTime());
       }
+      
+      String languages[] = {ENGLISH, VIETNAMESE, FRANCE};
+      List<LocalizedValue> labels = new ArrayList<LocalizedValue>();
+      for (String language : languages)
+      {
+         String value = this.getUIStringInput(language).getValue();
+         Locale locale = new Locale(language);
+         labels.add(new LocalizedValue(value, locale));
+      }
+      
+      node.setI18nizedLabels(labels);
+      if (node.getLabel() == null && labels.size() == 0)
+         node.setLabel(node.getName());
    }
 
    public void setShowCheckPublicationDate(boolean show)

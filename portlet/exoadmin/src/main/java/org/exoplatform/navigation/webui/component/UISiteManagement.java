@@ -29,7 +29,9 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -56,8 +58,12 @@ import org.exoplatform.webui.event.EventListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
@@ -406,6 +412,7 @@ public class UISiteManagement extends UIContainer
          uiNavigationPopup.setWindowSize(400, 400);
          context.addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
          
+         selector.getI18NizedLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
          selector.createEvent("NodeModified", Phase.PROCESS, context).broadcast();
       }
 

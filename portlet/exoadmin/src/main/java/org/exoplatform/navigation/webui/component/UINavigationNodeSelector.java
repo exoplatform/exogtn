@@ -19,16 +19,18 @@
 
 package org.exoplatform.navigation.webui.component;
 
-import java.util.Collection;
-
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -59,6 +61,13 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.ParameterValidation;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
@@ -94,6 +103,8 @@ public class UINavigationNodeSelector extends UIContainer
    private UserPortal userPortal;
 
    private UserNodeFilterConfig filterConfig;
+   
+   private Map<String, List<LocalizedValue>> i18nizedLabels;
 
    private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
@@ -116,8 +127,20 @@ public class UINavigationNodeSelector extends UIContainer
       uiPopupMenu.setActions(new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode",
          "CutNode", "DeleteNode", "MoveUp", "MoveDown"});
       uiTree.setUIRightClickPopupMenu(uiPopupMenu);
+      
+      i18nizedLabels = new HashMap<String, List<LocalizedValue>>();
    }
 
+   public void setI18NizedLabels(Map<String, List<LocalizedValue>> labels)
+   {
+      this.i18nizedLabels = labels;
+   }
+   
+   public Map<String, List<LocalizedValue>> getI18NizedLabels()
+   {
+      return this.i18nizedLabels;
+   }
+   
    /**
     * Init the UITree wrapped in UINavigationNodeSelector
     * 
@@ -217,6 +240,20 @@ public class UINavigationNodeSelector extends UIContainer
       try 
       {
          userPortal.saveNode(getRootNode().getNode(), null);
+         DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
+         Map<String, List<LocalizedValue>> i18nizedLabels = this.i18nizedLabels;
+         
+         for (String nodeId  : i18nizedLabels.keySet())
+         {
+            List<LocalizedValue> labels = i18nizedLabels.get(nodeId);
+            Map<Locale, Described.State> labelMap = new HashMap<Locale, Described.State>();
+            for (LocalizedValue localizedValue : labels)
+            {
+               labelMap.put(localizedValue.getLang(), new Described.State(localizedValue.getValue(), null));
+            }
+            
+            descriptionService.setDescriptions(nodeId, labelMap);
+         }
       }
       catch (NavigationServiceException ex)
       {           
@@ -496,7 +533,16 @@ public class UINavigationNodeSelector extends UIContainer
                return;
             }
          }
-
+         
+         DescriptionService descriptionService = popupMenu.getApplicationComponent(DescriptionService.class);
+         Map<Locale, State> labels = descriptionService.getDescriptions(nodeID);
+         List<LocalizedValue> localizedValues = new ArrayList<LocalizedValue>();
+         for (Locale locale  : labels.keySet())
+         {
+            localizedValues.add(new LocalizedValue(labels.get(locale).getName(), locale));
+         }
+         node.setI18nizedLabels(localizedValues);
+         
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm uiNodeForm = uiApp.createUIComponent(UIPageNodeForm.class, null, null);
          uiManagementPopup.setUIComponent(uiNodeForm);

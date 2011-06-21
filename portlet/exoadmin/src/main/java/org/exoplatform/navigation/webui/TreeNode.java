@@ -1,16 +1,19 @@
 package org.exoplatform.navigation.webui;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * A wrapper class of {@link UserNode} for manipulation in WebUI part
@@ -35,6 +38,8 @@ public class TreeNode implements NodeChangeListener<UserNode>
    private String id;
 
    private List<TreeNode> children;
+   
+   private List<LocalizedValue> i18nizedLabels;
 
    public TreeNode(UserNavigation nav, UserNode node)
    {
@@ -50,7 +55,7 @@ public class TreeNode implements NodeChangeListener<UserNode>
       this.nav = nav;
       this.node = node;
    }
-
+   
    public List<TreeNode> getChildren()
    {
       if (children == null)
@@ -359,5 +364,15 @@ public class TreeNode implements NodeChangeListener<UserNode>
       TreeNode toTreeNode = findNode(to.getId());
       fromTreeNode.children = null;
       toTreeNode.children = null;
+   }
+
+   public void setI18nizedLabels(List<LocalizedValue> i18nizedLabels)
+   {
+      this.i18nizedLabels = i18nizedLabels;
+   }
+
+   public List<LocalizedValue> getI18nizedLabels()
+   {
+      return i18nizedLabels;
    }
 }
