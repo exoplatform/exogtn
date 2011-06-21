@@ -40,6 +40,11 @@
       <label xml:lang="ne">&#x0917;&#x0943;&#x0939; &#x092a;&#x0943;&#x0937;&#x094d;&#x200d;&#x0920;</label>
       <label xml:lang="ru">Главная</label>
       <label xml:lang="uk">Додому</label>
+      <label xml:lang="ar">ترحيب</label>
+      <label xml:lang="ko">홈</label>
+      <label xml:lang="vi">Trang chủ</label>
+      <label xml:lang="zh">主页</label>
+      <label xml:lang="zh-TW">首頁</label>
 	    <page-reference>portal::classic::homepage</page-reference>
 	  </node>   
     <node>
@@ -55,6 +60,11 @@
       <label xml:lang="ja">&#x30b5;&#x30a4;&#x30c8;&#x30de;&#x30c3;&#x30d7;</label>
       <label xml:lang="ne">&#x0938;&#x093e;&#x0908;&#x091f;&#x092e;&#x094d;&#x092f;&#x093e;&#x092a;</label>
       <label xml:lang="ru">SiteMap</label>
+      <label xml:lang="ar">خريطة الموقع</label>
+      <label xml:lang="ko">사이트맵</label>
+      <label xml:lang="vi">Sơ đồ</label>
+      <label xml:lang="zh">网站地图</label>
+      <label xml:lang="zh-TW">網站導覽</label>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::sitemap</page-reference>
     </node>
@@ -72,6 +82,11 @@
       <label xml:lang="ne">&#x0938;&#x092e;&#x0941;&#x0939; &#x0928;&#x094d;&#x092f;&#x093e;&#x092d;&#x093f;&#x0917;&#x0947;&#x0938;&#x0928;</label>
       <label xml:lang="ru">Навигация по группам</label>
       <label xml:lang="uk">Навігація груп</label>
+      <label xml:lang="ar">مجموعة الملاحة</label>
+      <label xml:lang="ko">그룹 내비게이션</label>
+      <label xml:lang="vi">Group Navigation</label>
+      <label xml:lang="zh">组导航</label>
+      <label xml:lang="zh-TW">瀏覽群組</label>
       <visibility>SYSTEM</visibility>
 	    <page-reference>portal::classic::groupnavigation</page-reference>
 	  </node>
@@ -89,6 +104,11 @@
       <label xml:lang="ne">&#x092a;&#x094b;&#x0930;&#x094d;&#x091f;&#x0932; &#x0928;&#x094d;&#x092f;&#x093e;&#x092d;&#x093f;&#x0917;&#x0947;&#x0938;&#x0928;</label>
       <label xml:lang="ru">Навигация по порталу</label>
       <label xml:lang="uk">Навігація порталу</label>
+      <label xml:lang="ar">بوابة الملاحة</label>
+      <label xml:lang="ko">포탈 내비게이션</label>
+      <label xml:lang="vi">Portal Navigation</label>
+      <label xml:lang="zh">门户导航</label>
+      <label xml:lang="zh-TW">瀏覽入口網</label>
       <visibility>SYSTEM</visibility>
 	    <page-reference>portal::classic::portalnavigation</page-reference>
 	  </node>
@@ -103,6 +123,10 @@
       <label xml:lang="pt-BR">Cadastrar-se</label>
       <label xml:lang="ja">&#x767b;&#x9332;</label>
       <label xml:lang="ne">&#x0926;&#x0930;&#x094d;&#x0924;&#x093e;</label>
+      <label xml:lang="ko">등록</label>
+      <label xml:lang="vi">Đăng ký</label>
+      <label xml:lang="zh">注册</label>
+      <label xml:lang="zh-TW">註冊</label>
       <visibility>SYSTEM</visibility>
 	    <page-reference>portal::classic::register</page-reference>	    
 	  </node>
