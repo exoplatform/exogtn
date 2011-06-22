@@ -8,6 +8,7 @@ import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.webui.util.Util;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -210,6 +211,20 @@ public class TreeNode implements NodeChangeListener<UserNode>
 
    public String getEncodedResolvedLabel()
    {
+      if (getLabel() == null)
+      {
+         if (i18nizedLabels != null)
+         {
+            Locale locale = Util.getPortalRequestContext().getLocale();
+            for (Locale key  : i18nizedLabels.keySet())
+            {
+               if (key.equals(locale))
+               {
+                  return i18nizedLabels.get(key).getName();
+               }
+            }
+         }
+      }
       String encodedLabel = node.getEncodedResolvedLabel();
       return encodedLabel == null ? "" : encodedLabel;
    }
