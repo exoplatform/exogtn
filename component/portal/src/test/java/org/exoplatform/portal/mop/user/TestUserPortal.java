@@ -503,6 +503,11 @@ public class TestUserPortal extends AbstractPortalTest
             assertEquals(null, path.getLabel());
             assertEquals("bar_label_en", path.getResolvedLabel());
 
+            // Now test transient node
+            UserNode juu = path.addChild("juu");
+            assertEquals(null, juu.getLabel());
+            assertEquals("juu", juu.getResolvedLabel());
+
             //
             ctx = new SimpleUserPortalContext(Locale.FRENCH);
             portal = userPortalConfigSer_.getUserPortalConfig("extended", getUserId(), ctx).getUserPortal();

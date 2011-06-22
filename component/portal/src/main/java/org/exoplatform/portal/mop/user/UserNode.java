@@ -189,17 +189,20 @@ public class UserNode
          String resolvedLabel = null;
 
          //
+         String id = context.getId();
+
+         //
          if (context.getState().getLabel() != null)
          {
             ResourceBundle bundle = owner.navigation.getBundle();
             resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
          }
-         else
+         else if (id != null)
          {
             Locale userLocale = owner.navigation.portal.context.getUserLocale();
             Locale portalLocale = owner.navigation.portal.getLocale();
             DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
-            Described.State description = descriptionService.resolveDescription(context.getId(), portalLocale, userLocale);
+            Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
             if (description != null)
             {
                resolvedLabel = description.getName();
