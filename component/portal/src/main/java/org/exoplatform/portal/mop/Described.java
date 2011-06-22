@@ -142,7 +142,7 @@ public abstract class Described
       @Override
       public String toString()
       {
-         return "Description[name" + name + ",description=" + description + "]";
+         return "Description[name=" + name + ",description=" + description + "]";
       }
    }
 }

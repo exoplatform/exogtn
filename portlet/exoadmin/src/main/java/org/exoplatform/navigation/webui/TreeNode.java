@@ -39,7 +39,7 @@ public class TreeNode implements NodeChangeListener<UserNode>
 
    private List<TreeNode> children;
    
-   private List<LocalizedValue> i18nizedLabels;
+   private Map<Locale, State> i18nizedLabels;
 
    public TreeNode(UserNavigation nav, UserNode node)
    {
@@ -366,12 +366,12 @@ public class TreeNode implements NodeChangeListener<UserNode>
       toTreeNode.children = null;
    }
 
-   public void setI18nizedLabels(List<LocalizedValue> i18nizedLabels)
+   public void setI18nizedLabels(Map<Locale, State> labels)
    {
-      this.i18nizedLabels = i18nizedLabels;
+      this.i18nizedLabels = labels;
    }
 
-   public List<LocalizedValue> getI18nizedLabels()
+   public Map<Locale, State> getI18nizedLabels()
    {
       return i18nizedLabels;
    }

@@ -104,7 +104,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private UserNodeFilterConfig filterConfig;
    
-   private Map<String, List<LocalizedValue>> i18nizedLabels;
+   private Map<UserNode, Map<Locale, State>> i18nizedLabels;
 
    private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
@@ -128,15 +128,15 @@ public class UINavigationNodeSelector extends UIContainer
          "CutNode", "DeleteNode", "MoveUp", "MoveDown"});
       uiTree.setUIRightClickPopupMenu(uiPopupMenu);
       
-      i18nizedLabels = new HashMap<String, List<LocalizedValue>>();
+      i18nizedLabels = new HashMap<UserNode, Map<Locale,State>>();
    }
 
-   public void setI18NizedLabels(Map<String, List<LocalizedValue>> labels)
+   public void setI18NizedLabels(Map<UserNode, Map<Locale, State>> labels)
    {
       this.i18nizedLabels = labels;
    }
    
-   public Map<String, List<LocalizedValue>> getI18NizedLabels()
+   public Map<UserNode, Map<Locale, State>> getI18NizedLabels()
    {
       return this.i18nizedLabels;
    }
@@ -241,18 +241,13 @@ public class UINavigationNodeSelector extends UIContainer
       {
          userPortal.saveNode(getRootNode().getNode(), null);
          DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
-         Map<String, List<LocalizedValue>> i18nizedLabels = this.i18nizedLabels;
+         Map<UserNode, Map<Locale, State>> i18nizedLabels = this.i18nizedLabels;
          
-         for (String nodeId  : i18nizedLabels.keySet())
+         for (UserNode userNode  : i18nizedLabels.keySet())
          {
-            List<LocalizedValue> labels = i18nizedLabels.get(nodeId);
-            Map<Locale, Described.State> labelMap = new HashMap<Locale, Described.State>();
-            for (LocalizedValue localizedValue : labels)
-            {
-               labelMap.put(localizedValue.getLang(), new Described.State(localizedValue.getValue(), null));
-            }
+            Map<Locale, State> labels = i18nizedLabels.get(userNode);
             
-            descriptionService.setDescriptions(nodeId, labelMap);
+            descriptionService.setDescriptions(userNode.getId(), labels);
          }
       }
       catch (NavigationServiceException ex)
@@ -536,12 +531,8 @@ public class UINavigationNodeSelector extends UIContainer
          
          DescriptionService descriptionService = popupMenu.getApplicationComponent(DescriptionService.class);
          Map<Locale, State> labels = descriptionService.getDescriptions(nodeID);
-         List<LocalizedValue> localizedValues = new ArrayList<LocalizedValue>();
-         for (Locale locale  : labels.keySet())
-         {
-            localizedValues.add(new LocalizedValue(labels.get(locale).getName(), locale));
-         }
-         node.setI18nizedLabels(localizedValues);
+         
+         node.setI18nizedLabels(labels);
          
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm uiNodeForm = uiApp.createUIComponent(UIPageNodeForm.class, null, null);
