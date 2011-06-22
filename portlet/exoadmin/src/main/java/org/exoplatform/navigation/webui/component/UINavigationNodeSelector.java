@@ -530,9 +530,13 @@ public class UINavigationNodeSelector extends UIContainer
          }
          
          DescriptionService descriptionService = popupMenu.getApplicationComponent(DescriptionService.class);
-         Map<Locale, State> labels = descriptionService.getDescriptions(nodeID);
          
-         node.setI18nizedLabels(labels);
+         if (node.getI18nizedLabels() == null)
+         {
+            Map<Locale, State> labels = descriptionService.getDescriptions(nodeID);
+            
+            node.setI18nizedLabels(labels);
+         }
          
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm uiNodeForm = uiApp.createUIComponent(UIPageNodeForm.class, null, null);
