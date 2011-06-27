@@ -391,6 +391,9 @@ public class UIPageNodeForm extends UIFormTabPane
       }
       
       node.setI18nizedLabels(labels);
+      
+      if (getUIFormCheckBoxInput(SWITCH_MODE).getValue().toString().equals("true"))
+         node.setLabel(null);
    }
 
    public void setShowCheckPublicationDate(boolean show)
