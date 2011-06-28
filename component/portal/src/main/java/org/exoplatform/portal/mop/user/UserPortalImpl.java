@@ -112,7 +112,7 @@ public class UserPortalImpl implements UserPortal
          NavigationContext portalNav = service.getNavigationService().loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
          if (portalNav != null && portalNav.getState() != null)
          {
-            navigations.add(new UserNavigation(this, portalNav, service.getUserACL().hasEditPermissionOnNavigation(portalNav.getKey())));
+            navigations.add(new UserNavigation(this, portalNav, service.getUserACL().hasEditPermission(portal)));
          }
          //
          if (userName != null)
