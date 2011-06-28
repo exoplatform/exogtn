@@ -20,6 +20,7 @@
 package org.exoplatform.portal;
 
 import junit.framework.TestCase;
+
 import org.gatein.common.io.IOTools;
 
 import java.io.InputStream;
@@ -55,9 +56,10 @@ public class TestXSDCorruption extends TestCase
       assertEquals(expected, sb.toString());
    }
 
-   public void testGateInResources1_0() throws Exception
+   public void testGateInObjects1_x() throws Exception
    {
       assertHash("d0591b0a022a0c2929e1aed8979857cd", "gatein_objects_1_0.xsd");
       assertHash("99ae24c9bbfe1b59e066756a29ab6c79", "gatein_objects_1_1.xsd");
+      assertHash("8bb0cd234fc32e11149e38f689dd7cef", "gatein_objects_1_2.xsd");
    }
 }
