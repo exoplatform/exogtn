@@ -24,9 +24,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
@@ -62,10 +60,8 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.ParameterValidation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -315,6 +311,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode rebased = selector.rebaseNode(node, scope);
          if (rebased == null)
          {
+            selector.getI18NizedLabels().remove(node.getNode());
+            
             context.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.staleData", null,
                ApplicationMessage.WARNING));
             selector.selectNode(selector.getRootNode());
@@ -326,6 +324,7 @@ public class UINavigationNodeSelector extends UIContainer
       protected void handleError(NavigationError error, UINavigationNodeSelector selector) throws Exception
       {
          selector.initTreeData();
+         selector.getI18NizedLabels().clear();
          if (selector.getRootNode() != null)
          {
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
@@ -850,8 +849,8 @@ public class UINavigationNodeSelector extends UIContainer
             uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null));
             return;
          }
-
-         parentNode.removeChild(childNode);
+         parentNode.removeChild(childNode); 
+         uiNodeSelector.getI18NizedLabels().remove(childNode.getNode()); 
          uiNodeSelector.selectNode(parentNode);
       }
    }
