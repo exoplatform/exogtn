@@ -19,6 +19,7 @@
 package org.exoplatform.portal.mop.i18n;
 
 import org.chromattic.api.ChromatticSession;
+import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.PrimaryType;
 
 /**
@@ -31,11 +32,14 @@ import org.chromattic.api.annotations.PrimaryType;
  * This node is able to support data through addition of mixins
  */
 @PrimaryType(name = "gtn:language")
-public class Language
+public abstract class Language
 {
 
    /** . */
    public ChromatticSession session;
+
+   @Name
+   abstract String getName();
 
    <M> M getMixin(Class<M> mixinType, boolean create)
    {
@@ -48,12 +52,17 @@ public class Language
       return mixin;
    }
 
-   <M> void removeMixin(Class<M> mixinType)
+   <M> boolean removeMixin(Class<M> mixinType)
    {
       M mixin = session.getEmbedded(this, mixinType);
       if (mixin != null)
       {
          session.setEmbedded(this, mixinType, null);
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 }

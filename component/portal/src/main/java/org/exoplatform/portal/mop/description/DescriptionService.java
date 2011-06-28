@@ -33,26 +33,35 @@ public interface DescriptionService
 {
 
    /**
-    * <p>Resolve a description, the <code>wantedLocale</code> argument specifies which locale is relevant for retrieval,
-    * the <code>defaultLocale</code> specifies which locale should be defaulted to when the <code>wantedLocale</code>
-    * cannot provide any relevant match. The <code>defaultLocale</code> argument is optional.</p>
+    * <p>Resolve a description with the <code>locale</code> argument.</p>
+    *
+    * @param id the object id
+    * @param locale the locale to resolve
+    * @return the description
+    * @throws NullPointerException if the <code>id</code> or the <code>locale</code> argument is null
+    */
+   Described.State resolveDescription(String id, Locale locale) throws NullPointerException;
+
+   /**
+    * <p>Resolve a description, the <code>locale1</code> argument specifies which locale is relevant for retrieval,
+    * the <code>locale2</code> specifies which locale should be defaulted to when the <code>locale1</code>
+    * cannot provide any relevant match. The <code>locale2</code> argument is optional.</p>
     *
     * <p>The resolution follows those rules:
     * <ul>
-    *    <li>The resolution is performed against the wanted locale.</li>
-    *    <li>When the wanted locale does not resolve and a default locale is provided, a resolution
-    *    is performed on that default locale.</li>
+    *    <li>The resolution is performed against the locale1.</li>
+    *    <li>When the locale1 does not resolve and a locale2 is provided, a resolution is performed with locale2.</li>
     *    <li>Otherwise null is returned.<li>
     * </ul>
     * </p>
     *
     * @param id the object id
-    * @param defaultLocale the default locale
-    * @param wantedLocale the wanted locale
+    * @param locale2 the first locale
+    * @param locale1 the second locale
     * @return the description
-    * @throws NullPointerException if the id or the wanted locale argument is null
+    * @throws NullPointerException if the <code>id</code> or the <code>locale1</code> argument is null
     */
-   Described.State resolveDescription(String id, Locale defaultLocale, Locale wantedLocale) throws NullPointerException;
+   Described.State resolveDescription(String id, Locale locale2, Locale locale1) throws NullPointerException;
 
    /**
     * Returns the default description or null if it does not exist.

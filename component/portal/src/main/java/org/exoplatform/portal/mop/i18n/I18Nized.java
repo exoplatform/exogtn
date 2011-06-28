@@ -25,6 +25,9 @@ import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Owner;
 import org.gatein.common.util.ConversionException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -68,7 +71,7 @@ public abstract class I18Nized
    
    public abstract void setLanguageSpace(LanguageSpace languageSpace);
 
-   public <M> M resolveMixin(Class<M> mixinType, Locale wantedLocale)
+   public <M> Resolution<M> resolveMixin(Class<M> mixinType, Locale wantedLocale)
    {
       if (mixinType == null)
       {
@@ -83,7 +86,7 @@ public abstract class I18Nized
          M mixin = getMixin(mixinType, current, false);
          if (mixin != null)
          {
-            return mixin;
+            return new Resolution<M>(current, mixin);
          }
       }
       return null;
@@ -111,6 +114,7 @@ public abstract class I18Nized
                }
                catch (ConversionException e)
                {
+                  // Handle me gracefully
                   e.printStackTrace();
                }
             }
@@ -145,19 +149,38 @@ public abstract class I18Nized
       }
    }
 
-   public <M> void removeMixin(Class<M> mixinType)
+   public <M> Collection<Locale> removeMixin(Class<M> mixinType)
    {
       if (mixinType == null)
       {
          throw new NullPointerException("No null mixin type accepted");
       }
+      Collection<Locale> locales = Collections.emptyList();
       LanguageSpace languageSpace = getLanguageSpace();
       if (languageSpace != null)
       {
          for (Language language : languageSpace.getChildren().values())
          {
-            language.removeMixin(mixinType);
+            if (language.removeMixin(mixinType))
+            {
+               try
+               {
+                  String lang = language.getName();
+                  Locale locale = I18NAdapter.parseLocale(lang);
+                  if (locales.isEmpty())
+                  {
+                     locales = new ArrayList<Locale>();
+                  }
+                  locales.add(locale);
+               }
+               catch (ConversionException e)
+               {
+                  // Handle me gracefully
+                  e.printStackTrace();
+               }
+            }
          }
       }
+      return locales;
    }
 }

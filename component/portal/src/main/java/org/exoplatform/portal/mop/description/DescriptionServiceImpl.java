@@ -21,10 +21,12 @@ package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
+import org.exoplatform.portal.mop.i18n.Resolution;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -38,26 +40,62 @@ public class DescriptionServiceImpl implements DescriptionService
    /** . */
    private final POMSessionManager manager;
 
+   /** . */
+   private DataCache cache;
+
    public DescriptionServiceImpl(POMSessionManager manager)
    {
-      this.manager = manager;
+      this(manager, new SimpleDataCache());
    }
 
-   public Described.State resolveDescription(String id, Locale defaultLocale, Locale wantedLocale) throws NullPointerException
+   public DescriptionServiceImpl(POMSessionManager manager, DataCache cache)
+   {
+      this.manager = manager;
+      this.cache = cache;
+   }
+
+   public Described.State resolveDescription(String id, Locale locale) throws NullPointerException
+   {
+      return resolveDescription(id, null, locale);
+   }
+
+   public Described.State resolveDescription(String id, Locale locale2, Locale locale1) throws NullPointerException
    {
       if (id == null)
       {
          throw new NullPointerException("No null id accepted");
       }
-      if (wantedLocale == null)
+      if (locale1 == null)
       {
          throw new NullPointerException("No null locale accepted");
       }
+
+      //
       POMSession session = manager.getSession();
-      WorkspaceObject obj = session.findObjectById(id);
-      I18NAdapter able = obj.adapt(I18NAdapter.class);
-      Described desc = able.resolveI18NMixin(Described.class, defaultLocale, wantedLocale);
-      return desc != null ? desc.getState() : null;
+      Described.State state = resolveDescription(session, id, locale1);
+      if (state == null && locale2 != null)
+      {
+         state = resolveDescription(session, id, locale2);
+      }
+      return state;
+   }
+
+   private Described.State resolveDescription(POMSession session, String id, Locale locale) throws NullPointerException
+   {
+      CacheKey key = new CacheKey(locale, id);
+      Described.State state = cache.get(key);
+      if (state == null)
+      {
+         WorkspaceObject obj = session.findObjectById(key.id);
+         I18NAdapter able = obj.adapt(I18NAdapter.class);
+         Resolution<Described> res = able.resolveI18NMixin(Described.class, locale);
+         if (res != null)
+         {
+            state = res.getMixin().getState();
+            cache.put(key, res.getLocale(), state);
+         }
+      }
+      return state;
    }
 
    public Described.State getDescription(String id, Locale locale)
@@ -158,7 +196,11 @@ public class DescriptionServiceImpl implements DescriptionService
       POMSession session = manager.getSession();
       WorkspaceObject obj = session.findObjectById(id);
       I18NAdapter able = obj.adapt(I18NAdapter.class);
-      able.removeI18NMixin(Described.class);
+      Collection<Locale> locales = able.removeI18NMixin(Described.class);
+      for (Locale locale : locales)
+      {
+         cache.remove(new CacheKey(locale, id));
+      }
       for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet())
       {
          Described described = able.addI18NMixin(Described.class, entry.getKey());

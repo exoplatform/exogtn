@@ -24,6 +24,8 @@ import org.gatein.common.util.ConversionException;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 import org.gatein.mop.spi.AdapterLifeCycle;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
@@ -86,27 +88,25 @@ public class I18NAdapter
       }
    }
 
-   public <M> M resolveI18NMixin(Class<M> mixinType, Locale defaultLocale, Locale wantedLocale) throws NullPointerException
+   public <M> Resolution<M> resolveI18NMixin(Class<M> mixinType, Locale locale) throws NullPointerException
    {
       if (mixinType == null)
       {
          throw new NullPointerException("No null mixin type accepted");
       }
-      if (wantedLocale == null)
+      if (locale == null)
       {
          throw new NullPointerException("No null locale accepted");
       }
-      M mixin = null;
       if (obj.isAdapted(I18Nized.class))
       {
          I18Nized ized = obj.adapt(I18Nized.class);
-         mixin = ized.resolveMixin(mixinType, wantedLocale);
-         if (mixin == null && defaultLocale != null)
-         {
-            mixin = ized.resolveMixin(mixinType, defaultLocale);
-         }
+         return ized.resolveMixin(mixinType, locale);
       }
-      return mixin;
+      else
+      {
+         return null;
+      }
    }
 
    public <M> M getI18NMixin(Class<M> mixinType, Locale locale, boolean create) throws NullPointerException
@@ -174,7 +174,7 @@ public class I18NAdapter
       return ized.getMixin(mixinType, locale, true);
    }
 
-   public <M> void removeI18NMixin(Class<M> mixinType)
+   public <M> Collection<Locale> removeI18NMixin(Class<M> mixinType)
    {
       if (mixinType == null)
       {
@@ -183,7 +183,11 @@ public class I18NAdapter
       if (obj.isAdapted(I18Nized.class))
       {
          I18Nized ized = obj.adapt(I18Nized.class);
-         ized.removeMixin(mixinType);
+         return ized.removeMixin(mixinType);
+      }
+      else
+      {
+         return Collections.emptyList();
       }
    }
 
