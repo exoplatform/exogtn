@@ -300,7 +300,7 @@ public class UIGroupNavigationManagement extends UIContainer
          uiNavigationPopup.setRendered(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
          
-         selector.getI18NizedLabels().put(uiPageNodeForm.getPageNode().getNode(), uiPageNodeForm.getPageNode().getI18nizedLabels());
+         selector.getI18NizedLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
          selector.createEvent("NodeModified", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 

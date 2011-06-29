@@ -100,7 +100,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    private UserNodeFilterConfig filterConfig;
    
-   private Map<UserNode, Map<Locale, State>> i18nizedLabels;
+   private Map<String, Map<Locale, State>> i18nizedLabels;
 
    private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
@@ -124,15 +124,15 @@ public class UINavigationNodeSelector extends UIContainer
          "CutNode", "DeleteNode", "MoveUp", "MoveDown"});
       uiTree.setUIRightClickPopupMenu(uiPopupMenu);
       
-      i18nizedLabels = new HashMap<UserNode, Map<Locale,State>>();
+      i18nizedLabels = new HashMap<String, Map<Locale,State>>();
    }
 
-   public void setI18NizedLabels(Map<UserNode, Map<Locale, State>> labels)
+   public void setI18NizedLabels(Map<String, Map<Locale, State>> labels)
    {
       this.i18nizedLabels = labels;
    }
    
-   public Map<UserNode, Map<Locale, State>> getI18NizedLabels()
+   public Map<String, Map<Locale, State>> getI18NizedLabels()
    {
       return this.i18nizedLabels;
    }
@@ -235,15 +235,19 @@ public class UINavigationNodeSelector extends UIContainer
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       try 
       {
-         userPortal.saveNode(getRootNode().getNode(), null);
+         userPortal.saveNode(getRootNode().getNode(), getRootNode());
          DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
-         Map<UserNode, Map<Locale, State>> i18nizedLabels = this.i18nizedLabels;
+         Map<String, Map<Locale, State>> i18nizedLabels = this.i18nizedLabels;
          
-         for (UserNode userNode  : i18nizedLabels.keySet())
+         for (String treeNodeId : i18nizedLabels.keySet())
          {
-            Map<Locale, State> labels = i18nizedLabels.get(userNode);
+            TreeNode node = findNode(treeNodeId);
+            if (node != null)
+            {
+               Map<Locale, State> labels = i18nizedLabels.get(treeNodeId);
+               descriptionService.setDescriptions(node.getId(), labels);
+            }
             
-            descriptionService.setDescriptions(userNode.getId(), labels);
          }
       }
       catch (NavigationServiceException ex)
