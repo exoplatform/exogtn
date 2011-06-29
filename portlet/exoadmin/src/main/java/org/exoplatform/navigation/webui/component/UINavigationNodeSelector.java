@@ -245,7 +245,7 @@ public class UINavigationNodeSelector extends UIContainer
             if (node != null)
             {
                Map<Locale, State> labels = i18nizedLabels.get(treeNodeId);
-               descriptionService.setDescriptions(node.getId(), labels);
+               descriptionService.setDescriptions(node.getNode().getId(), labels);
             }
             
          }
@@ -315,7 +315,7 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode rebased = selector.rebaseNode(node, scope);
          if (rebased == null)
          {
-            selector.getI18NizedLabels().remove(node.getNode());
+            selector.getI18NizedLabels().remove(node.getId());
             
             context.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.staleData", null,
                ApplicationMessage.WARNING));
@@ -853,8 +853,8 @@ public class UINavigationNodeSelector extends UIContainer
             uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null));
             return;
          }
+         uiNodeSelector.getI18NizedLabels().remove(childNode.getId()); 
          parentNode.removeChild(childNode); 
-         uiNodeSelector.getI18NizedLabels().remove(childNode.getNode()); 
          uiNodeSelector.selectNode(parentNode);
       }
    }
