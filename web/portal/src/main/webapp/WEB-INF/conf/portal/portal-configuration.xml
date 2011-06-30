@@ -103,6 +103,10 @@
   </component>
 
   <component>
+    <key>org.exoplatform.portal.mop.description.DataCache</key>
+    <type>org.exoplatform.portal.mop.description.ExoDataCache</type>
+  </component>
+  <component>
     <key>org.exoplatform.portal.mop.description.DescriptionService</key>
     <type>org.exoplatform.portal.mop.description.DescriptionServiceImpl</type>
   </component>
@@ -299,6 +303,8 @@
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.cache.CacheService</target-component>
+
+    <!-- MOPSessionManager configuration -->
     <component-plugin>
       <name>addExoCacheConfig</name>
       <set-method>addExoCacheConfig</set-method>
@@ -348,6 +354,8 @@
         </object-param>
       </init-params>
     </component-plugin>
+
+    <!-- NavigationService configuration -->
     <component-plugin>
       <name>addExoCacheConfig</name>
       <set-method>addExoCacheConfig</set-method>
@@ -383,6 +391,57 @@
           <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
               <string>NavigationService</string>
+            </field>
+            <field name="expirationTimeout">
+              <long>600000</long>
+            </field>
+            <field name="maxNodes">
+             <int>5000</int>
+            </field>
+            <field name="distributed">
+              <boolean>true</boolean>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+
+    <!-- DescriptionService configuration -->
+    <component-plugin>
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
+          <name>cache.config.NavigationService</name>
+          <description>The JBoss Cache configuration for the dezcription service</description>
+          <object type="org.exoplatform.services.cache.ExoCacheConfig">
+            <field name="name">
+              <string>DescriptionService</string>
+            </field>
+            <field name="maxSize">
+              <int>5000</int>
+            </field>
+            <field name="liveTime">
+              <long>600</long>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+    <component-plugin profiles="cluster">
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
+          <name>cache.config.ConfigurationService</name>
+          <description>The JBoss Cache configuration for the description service</description>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
+            <field name="name">
+              <string>DescriptionService</string>
             </field>
             <field name="expirationTimeout">
               <long>600000</long>

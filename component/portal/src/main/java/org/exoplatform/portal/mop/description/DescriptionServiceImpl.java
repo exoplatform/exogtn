@@ -21,7 +21,6 @@ package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
-import org.exoplatform.portal.mop.i18n.Resolution;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.WorkspaceObject;
@@ -82,20 +81,7 @@ public class DescriptionServiceImpl implements DescriptionService
 
    private Described.State resolveDescription(POMSession session, String id, Locale locale) throws NullPointerException
    {
-      CacheKey key = new CacheKey(locale, id);
-      Described.State state = cache.get(key);
-      if (state == null)
-      {
-         WorkspaceObject obj = session.findObjectById(key.id);
-         I18NAdapter able = obj.adapt(I18NAdapter.class);
-         Resolution<Described> res = able.resolveI18NMixin(Described.class, locale);
-         if (res != null)
-         {
-            state = res.getMixin().getState();
-            cache.put(key, res.getLocale(), state);
-         }
-      }
-      return state;
+      return cache.getState(session, new CacheKey(locale, id));
    }
 
    public Described.State getDescription(String id, Locale locale)
@@ -199,7 +185,7 @@ public class DescriptionServiceImpl implements DescriptionService
       Collection<Locale> locales = able.removeI18NMixin(Described.class);
       for (Locale locale : locales)
       {
-         cache.remove(new CacheKey(locale, id));
+         cache.removeState(new CacheKey(locale, id));
       }
       for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet())
       {

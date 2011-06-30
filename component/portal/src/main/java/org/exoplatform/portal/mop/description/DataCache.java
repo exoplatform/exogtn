@@ -20,8 +20,10 @@
 package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
-
-import java.util.Locale;
+import org.exoplatform.portal.mop.i18n.I18NAdapter;
+import org.exoplatform.portal.mop.i18n.Resolution;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.gatein.mop.api.workspace.WorkspaceObject;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -29,44 +31,37 @@ import java.util.Locale;
 abstract class DataCache
 {
 
-   Described.State get(CacheKey key)
+   protected abstract void removeState(CacheKey key);
+
+   protected abstract Described.State getState(POMSession session, CacheKey key);
+
+   protected final CacheValue getValue(POMSession session, CacheKey key)
    {
-      CacheValue value = getState(key);
-      if (value != null)
+      WorkspaceObject obj = session.findObjectById(key.id);
+      I18NAdapter able = obj.adapt(I18NAdapter.class);
+      Resolution<Described> res = able.resolveI18NMixin(Described.class, key.locale);
+      if (res != null)
       {
-         if (value.origin != null)
+         Described.State state = res.getMixin().getState();
+         if (key.locale.equals(res.getLocale()))
          {
-            CacheValue origin = getState(value.origin);
-            if (origin == null || value.serial < origin.serial)
-            {
-               value = null;
-               remove(key);
-            }
+            CacheValue foo = new CacheValue(state);
+            putValue(key, foo);
+            return foo;
+         }
+         else
+         {
+            CacheValue origin = new CacheValue(state);
+            CacheKey originKey = new CacheKey(res.getLocale(), key.id);
+            putValue(originKey, origin);
+            CacheValue foo = new CacheValue(originKey, origin.serial, state);
+            putValue(key, foo);
+            return foo;
          }
       }
-      return value != null ? value.value : null;
+      return null;
    }
 
-   void put(CacheKey key, Locale resolvedLocale, Described.State state)
-   {
-      if (key.locale.equals(resolvedLocale))
-      {
-         putState(key, new CacheValue(state));
-      }
-      else
-      {
-         CacheValue origin = new CacheValue(state);
-         CacheKey originKey = new CacheKey(resolvedLocale, key.id);
-         putState(originKey, origin);
-         CacheValue foo = new CacheValue(originKey, origin.serial, state);
-         putState(key, foo);
-      }
-   }
-
-   protected abstract void remove(CacheKey key);
-
-   protected abstract CacheValue getState(CacheKey key);
-
-   protected abstract void putState(CacheKey key, CacheValue value);
+   protected abstract void putValue(CacheKey key, CacheValue value);
 
 }

@@ -39,19 +39,19 @@ public class CacheValue
    final long serial;
 
    /** . */
-   final Described.State value;
+   final Described.State state;
 
-   public CacheValue(CacheKey origin, long serial, Described.State value)
+   public CacheValue(CacheKey origin, long serial, Described.State state)
    {
       this.origin = origin;
       this.serial = serial;
-      this.value = value;
+      this.state = state;
    }
 
-   public CacheValue(Described.State value)
+   public CacheValue(Described.State state)
    {
       this.origin = null;
       this.serial = SEQUENCE.incrementAndGet();
-      this.value = value;
+      this.state = state;
    }
 }

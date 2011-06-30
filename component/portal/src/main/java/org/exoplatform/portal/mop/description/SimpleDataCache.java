@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.pom.config.POMSession;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,19 +39,24 @@ public class SimpleDataCache extends DataCache
    }
 
    @Override
-   protected CacheValue getState(CacheKey key)
+   protected Described.State getState(POMSession session, CacheKey key)
    {
-      return map.get(key);
+      CacheValue value = map.get(key);
+      if (value == null)
+      {
+         value = getValue(session, key);
+      }
+      return value != null ? value.state : null;
    }
 
    @Override
-   protected void remove(CacheKey key)
+   protected void removeState(CacheKey key)
    {
       map.remove(key);
    }
 
    @Override
-   protected void putState(CacheKey key, CacheValue value)
+   protected void putValue(CacheKey key, CacheValue value)
    {
       map.put(key, value);
    }
