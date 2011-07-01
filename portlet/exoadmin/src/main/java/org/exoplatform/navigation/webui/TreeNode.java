@@ -1,7 +1,5 @@
 package org.exoplatform.navigation.webui;
 
-import org.exoplatform.portal.config.model.LocalizedValue;
-import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;

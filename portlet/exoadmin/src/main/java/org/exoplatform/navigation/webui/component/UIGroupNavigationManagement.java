@@ -50,6 +50,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -300,7 +301,7 @@ public class UIGroupNavigationManagement extends UIContainer
          uiNavigationPopup.setRendered(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
          
-         selector.getI18NizedLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
+         selector.getUserNodeLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
          selector.createEvent("NodeModified", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 
