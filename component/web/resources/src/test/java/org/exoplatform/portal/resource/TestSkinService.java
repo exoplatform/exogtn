@@ -26,11 +26,13 @@ import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
+import org.exoplatform.services.resources.Orientation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +140,25 @@ public class TestSkinService extends AbstractKernelTest
       assertNotNull(themeStyles.get("VistaStyle"));
    }
 
+   public void testCompositeSkin()
+   {
+      SkinConfig fSkin = skinService.getSkin("mockwebapp/FirstPortlet", "TestSkin");
+      SkinConfig sSkin = skinService.getSkin("mockwebapp/SecondPortlet", "TestSkin");
+      assertNotNull(fSkin);
+      assertNotNull(sSkin);            
+      
+      Skin merged = skinService.merge(Arrays.asList(fSkin, sSkin));
+      SkinURL url = merged.createURL();
+      
+      url.setOrientation(Orientation.LT);      
+      assertEquals("@import url(/mockwebapp/skin/portlet/FirstPortlet/Stylesheet-lt.css);\n" +
+      		"@import url(/mockwebapp/skin/portlet/SecondPortlet/Stylesheet-lt.css);\n", skinService.getCSS(url.toString()));
+      
+      url.setOrientation(Orientation.RT);
+      assertEquals("@import url(/mockwebapp/skin/portlet/FirstPortlet/Stylesheet-rt.css);\n" +
+         "@import url(/mockwebapp/skin/portlet/SecondPortlet/Stylesheet-rt.css);\n", skinService.getCSS(url.toString()));            
+   }
+   
    public void testRenderer() throws Exception
    {
       ByteArrayOutputStream out = new ByteArrayOutputStream();

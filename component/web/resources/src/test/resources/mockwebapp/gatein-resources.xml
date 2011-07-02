@@ -42,6 +42,13 @@
 		<css-path>/skin/portlet/FirstPortlet/Stylesheet.css</css-path>
 	</portlet-skin>
 
+	<portlet-skin>
+		<application-name>mockwebapp</application-name>
+		<portlet-name>SecondPortlet</portlet-name>
+		<skin-name>TestSkin</skin-name>
+		<css-path>/skin/portlet/SecondPortlet/Stylesheet.css</css-path>
+	</portlet-skin>
+
 	<!-- Simple window style -->
 	<window-style>
 		<style-name>Simple</style-name>
