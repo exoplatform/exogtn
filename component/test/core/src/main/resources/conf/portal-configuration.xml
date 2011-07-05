@@ -36,6 +36,11 @@
     </init-params>
   </component>
 
+   <component>
+      <key>org.exoplatform.services.jdbc.DataSourceProvider</key>
+      <type>org.exoplatform.services.jdbc.impl.DataSourceProviderImpl</type>
+   </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
     <component-plugin>

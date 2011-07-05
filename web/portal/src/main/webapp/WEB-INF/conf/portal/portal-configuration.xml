@@ -40,6 +40,11 @@
     <type>org.exoplatform.portal.config.DataStorageImpl</type>
   </component>
 
+   <component>
+      <key>org.exoplatform.services.jdbc.DataSourceProvider</key>
+      <type>org.exoplatform.services.jdbc.impl.DataSourceProviderImpl</type>
+   </component>
+
   <component>
     <key>org.exoplatform.portal.config.UserACL</key>
     <type>org.exoplatform.portal.config.UserACL</type>   
