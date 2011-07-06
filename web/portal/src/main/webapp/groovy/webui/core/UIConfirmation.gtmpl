@@ -62,17 +62,7 @@
 	{
 		for(act in actions)
 		{
-			println "<td>";
-			println "	<div onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\">";
-			println "		<div class=\"ButtonLeft\">";
-			println "			<div class=\"ButtonRight\">";
-			println "				<div class=\"ButtonMiddle\">";
-			println "					<a href=\"javascript:void(0);\"> ${act.getActionKey()} </a>";
-			println "				</div>";
-			println "			</div>";
-			println "		</div>";
-			println "	</div>";
-			println "</td>";			
+			println "	<a href=\"javascript:void(0);\" onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\"> ${act.getActionKey()} </a>";
 		}
 	}
 %>
@@ -110,14 +100,10 @@
 										%>
 									</div>
 									<div class="MessageActionBar">
-										<div class="UIAction"> 
-											<table class="ActionContainer">
-												<tr>
-													<%
-														printAction(actions);
-													%>
-												</tr>
-									 		</table>
+										<div class="UIAction">
+											<%
+												printAction(actions);
+											%>
 										</div>
 									</div>
 								</div>

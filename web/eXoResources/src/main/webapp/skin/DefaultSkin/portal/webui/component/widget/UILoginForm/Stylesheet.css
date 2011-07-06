@@ -102,29 +102,6 @@
 	padding: 0px 0px 0px 10px; /* orientation=rt */
 }
 
-.UILoginForm .UIForm  .SimpleStyle .ButtonLeft {
-	background: url('background/Login.gif') no-repeat left -150px;
-	padding-left: 5px;
-}
-
-.UILoginForm .UIForm .SimpleStyle .ButtonRight {
-	background: url('background/Login.gif') no-repeat right -150px;
-	padding-right: 5px;
-}
-
-.UILoginForm .UIForm .SimpleStyle .ButtonMiddle {
-	background: url('background/Login.gif') repeat-x center -150px;
-	line-height: 22px;
-}
-
-.UILoginForm .UIForm .SimpleStyle .ButtonMiddle a {
-	color: #3f3f3f;
-}
-
-.UILoginForm .UIForm .SimpleStyle .ButtonMiddle a:hover {
-	color: #058EE6;
-}
-
 /* ============================End LoginDecorator============================== */
 /*
  * minh.js.exo
@@ -188,8 +165,20 @@
 .UILoginForm .UIForm .VerticalLayout .UIAction {
 	padding: 15px 0px 0px 56px; /* orientation=lt */
 	padding: 15px 56px 0px 0px; /* orientation=rt */
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 }
 
-.UILoginForm .UIForm .VerticalLayout .UIAction .ActionContainer {
-	margin: 0px;
+.UILoginForm .UIAction .SimpleStyle {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.UILoginForm .UIAction .SimpleStyle a {
+	color: #3f3f3f;
+}
+
+.UILoginForm .UIAction .SimpleStyle a:hover {
+	color: #058EE6;
 }

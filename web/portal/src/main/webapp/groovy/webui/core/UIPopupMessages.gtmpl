@@ -125,22 +125,8 @@
 									</div>
 									<div class="MessageActionBar">
 										
-										<div class="UIAction"> 
-											<table class="ActionContainer">
-												<tr>
-													<td>
-														<div onclick="<%=uicomponent.event("Close")%>" class="ActionButton LightBlueStyle">
-															<div class="ButtonLeft">
-																<div class="ButtonRight">
-																	<div class="ButtonMiddle">
-																		<a href="javascript:void(0);"><%=_ctx.appRes("UIPopupMessages.button.ok")%></a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-									 		</table>
+										<div class="UIAction">
+											<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPopupMessages.button.ok")%></a>
 										</div>
 										
 									</div>
