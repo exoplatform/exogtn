@@ -122,13 +122,34 @@ public class KernelBootstrap
       return new File(dir, fileName);
    }
 
+   public File getTargetDir()
+   {
+      return targetDir;
+   }
+
    public File getTmpDir()
    {
       return tmpDir;
    }
 
-   public void setTmpDir(File tmpDir)
+   /**
+    * Set the tmp dir of the test to a new file location. The new tmp dir must be a strict descendant of the
+    * {@link #targetDir} file.
+    *
+    * @param tmpDir the new tmp dir
+    * @throws IllegalArgumentException if the tmp dir is not a descendant of the target dir
+    */
+   public void setTmpDir(File tmpDir) throws IllegalArgumentException
    {
+      for (File parent = tmpDir.getParentFile();!targetDir.equals(parent);parent = parent.getParentFile())
+      {
+         if (parent == null)
+         {
+            throw new IllegalArgumentException("Wrong tmp dir " + tmpDir);
+         }
+      }
+
+      //
       this.tmpDir = tmpDir;
    }
 
@@ -153,9 +174,12 @@ public class KernelBootstrap
    {
       try
       {
-         if (!tmpDir.mkdirs())
+         if (!tmpDir.exists())
          {
-            throw new AssertionFailedError("Could not create directory " + tmpDir.getAbsolutePath());
+            if (!tmpDir.mkdirs())
+            {
+               throw new AssertionFailedError("Could not create directory " + tmpDir.getAbsolutePath());
+            }
          }
 
          // Set property globally available for configuration XML
