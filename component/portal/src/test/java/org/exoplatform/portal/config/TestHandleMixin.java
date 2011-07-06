@@ -29,7 +29,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * Aug 25, 2010
  */
 
-public class TestHandleMixin extends AbstractPortalTest
+public class TestHandleMixin extends AbstractConfigTest
 {
 
    private DataStorage dataStorage;

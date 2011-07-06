@@ -71,7 +71,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       IBindingFactory bfact = BindingDirectory.getFactory(PageSet.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
       Object obj =
-         uctx.unmarshalDocument(new FileInputStream("src/test/resources/portal/portal/classic/pages.xml"), null);
+         uctx.unmarshalDocument(new FileInputStream("src/test/resources/org/exoplatform/portal/config/portal/classic/pages.xml"), null);
       assertEquals(Page.PageSet.class, obj.getClass());
    }
 
@@ -80,7 +80,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
       Object obj =
-         uctx.unmarshalDocument(new FileInputStream("src/test/resources/portal/portal/classic/portal.xml"), null);
+         uctx.unmarshalDocument(new FileInputStream("src/test/resources/org/exoplatform/portal/config/portal/classic/portal.xml"), null);
       assertEquals(PortalConfig.class, obj.getClass());
    }
 
@@ -89,7 +89,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       IBindingFactory bfact = BindingDirectory.getFactory(PageNavigation.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
       Object obj =
-         uctx.unmarshalDocument(new FileInputStream("src/test/resources/portal/portal/classic/navigation.xml"), null);
+         uctx.unmarshalDocument(new FileInputStream("src/test/resources/org/exoplatform/portal/config/portal/classic/navigation.xml"), null);
       assertEquals(PageNavigation.class, obj.getClass());
       
       PageNavigation pageNavigation = (PageNavigation)obj;
@@ -111,7 +111,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
       Object obj =
          uctx.unmarshalDocument(
-            new FileInputStream("src/test/resources/portal/portal/classic/portlet-preferences.xml"), null);
+            new FileInputStream("src/test/resources/org/exoplatform/portal/config/portal/classic/portlet-preferences.xml"), null);
       assertEquals(PortletPreferencesSet.class, obj.getClass());
 
       IMarshallingContext mctx = bfact.createMarshallingContext();

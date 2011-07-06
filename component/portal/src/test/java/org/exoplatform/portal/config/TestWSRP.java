@@ -32,7 +32,7 @@ import org.exoplatform.portal.pom.spi.wsrp.WSRP;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestWSRP extends AbstractPortalTest
+public class TestWSRP extends AbstractConfigTest
 {
 
    /** . */

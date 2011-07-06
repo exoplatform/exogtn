@@ -32,7 +32,7 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestGadget extends AbstractPortalTest
+public class TestGadget extends AbstractConfigTest
 {
 
    /** . */

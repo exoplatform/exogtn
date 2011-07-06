@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Author : TrongTT
  */
-public class TestPortalConfig extends AbstractPortalTest
+public class TestPortalConfig extends AbstractConfigTest
 {
 
    private DataStorage storage;

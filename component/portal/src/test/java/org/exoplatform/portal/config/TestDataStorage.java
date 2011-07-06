@@ -64,7 +64,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestDataStorage extends AbstractPortalTest
+public class TestDataStorage extends AbstractConfigTest
 {
 
    /** . */

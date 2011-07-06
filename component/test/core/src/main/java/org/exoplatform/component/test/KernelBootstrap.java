@@ -20,10 +20,13 @@
 package org.exoplatform.component.test;
 
 import junit.framework.AssertionFailedError;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.Field;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -158,22 +161,58 @@ public class KernelBootstrap
       return container;
    }
 
+   public void addConfiguration(ContainerScope scope, String path)
+   {
+      configs.get(scope).add(path);
+   }
+
+   public void addConfiguration(ConfigurationUnit unit)
+   {
+      addConfiguration(unit.scope(), unit.path());
+   }
+
+   public void addConfiguration(ConfiguredBy configuredBy)
+   {
+      for (ConfigurationUnit unit : configuredBy.value())
+      {
+         addConfiguration(unit);
+      }
+   }
+
    public void addConfiguration(Class<?> clazz)
    {
       ConfiguredBy cfBy = clazz.getAnnotation(ConfiguredBy.class);
       if (cfBy != null)
       {
-         for (ConfigurationUnit src : cfBy.value())
-         {
-            configs.get(src.scope()).add(src.path());
-         }
+         addConfiguration(cfBy);
       }
    }
 
-   public void boot()
+   /**
+    * Boot the kernel.
+    *
+    * @throws IllegalStateException if the kernel is already booted
+    */
+   public void boot() throws IllegalStateException
    {
+      if (container != null)
+      {
+         throw new IllegalStateException("Already booted");
+      }
       try
       {
+         // Must clear the top container first otherwise it's not going to work well
+         // it's a bit ugly but I don't want to change anything in the ExoContainerContext class for now
+         // and this is for unit testing
+         Field topContainerField = ExoContainerContext.class.getDeclaredField("topContainer");
+         topContainerField.setAccessible(true);
+         topContainerField.set(null, null);
+
+         // Same remark than above
+         Field singletonField = RootContainer.class.getDeclaredField("singleton_");
+         singletonField.setAccessible(true);
+         singletonField.set(null, null);
+
          if (!tmpDir.exists())
          {
             if (!tmpDir.mkdirs())
@@ -193,7 +232,7 @@ public class KernelBootstrap
          Thread.currentThread().setContextClassLoader(testClassLoader);
 
          // Boot the container
-         container = PortalContainer.getInstance();
+         this.container = PortalContainer.getInstance();
       }
       catch (Exception e)
       {
@@ -201,13 +240,18 @@ public class KernelBootstrap
          afe.initCause(e);
          throw afe;
       }
+      finally
+      {
+         Thread.currentThread().setContextClassLoader(realClassLoader);
+      }
    }
 
    public void dispose()
    {
-      container = null;
-
-      //
-      Thread.currentThread().setContextClassLoader(realClassLoader);
+      if (container != null)
+      {
+         container = null;
+         ExoContainerContext.setCurrentContainer(null);
+      }
    }
 }

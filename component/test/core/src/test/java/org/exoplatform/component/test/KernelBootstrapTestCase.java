@@ -20,6 +20,7 @@
 package org.exoplatform.component.test;
 
 import junit.framework.TestCase;
+import org.exoplatform.container.PortalContainer;
 
 import java.io.File;
 
@@ -28,6 +29,17 @@ import java.io.File;
  */
 public class KernelBootstrapTestCase extends TestCase
 {
+
+   public void testReboot()
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.boot();
+      PortalContainer container1 = bootstrap.getContainer();
+      bootstrap.dispose();
+      bootstrap.boot();
+      PortalContainer container2 = bootstrap.getContainer();
+      assertNotSame(container1, container2);
+   }
 
    public void testGetTmpDir()
    {

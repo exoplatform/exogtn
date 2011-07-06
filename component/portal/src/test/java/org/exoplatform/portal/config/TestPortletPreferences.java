@@ -33,7 +33,7 @@ import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPortletPreferences extends AbstractPortalTest
+public class TestPortletPreferences extends AbstractConfigTest
 {
 
    public TestPortletPreferences(String name)

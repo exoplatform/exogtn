@@ -19,8 +19,13 @@
 
 package org.exoplatform.component.test;
 
+import junit.framework.TestSuite;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * An abstract test that takes care of running the unit tests with the semantic described by the
@@ -33,7 +38,10 @@ public class AbstractKernelTest extends AbstractGateInTest
 {
 
    /** . */
-   private KernelBootstrap bootstrap;
+   private static KernelBootstrap bootstrap;
+
+   /** . */
+   private static final Map<Class<?>, AtomicLong> counters = new HashMap<Class<?>, AtomicLong>();
 
    protected AbstractKernelTest()
    {
@@ -63,13 +71,22 @@ public class AbstractKernelTest extends AbstractGateInTest
    @Override
    protected void beforeRunBare() throws Exception
    {
-      bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
-
-      // Configure ourselves
-      bootstrap.addConfiguration(getClass());
+      Class<?> key = getClass();
 
       //
-      bootstrap.boot();
+      if (!counters.containsKey(key))
+      {
+         counters.put(key, new AtomicLong(new TestSuite(getClass()).testCount()));
+
+         //
+         bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
+
+         // Configure ourselves
+         bootstrap.addConfiguration(getClass());
+
+         //
+         bootstrap.boot();
+      }
 
       //
 //      List<Throwable> failures = new ArrayList<Throwable>();
@@ -78,7 +95,10 @@ public class AbstractKernelTest extends AbstractGateInTest
    @Override
    protected void afterRunBare()
    {
-      if (bootstrap != null)
+      Class<?> key = getClass();
+
+      //
+      if (counters.get(key).decrementAndGet() == 0)
       {
          bootstrap.dispose();
 

@@ -40,7 +40,7 @@ import java.util.*;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestSavedPOM extends AbstractPortalTest
+public class TestSavedPOM extends AbstractConfigTest
 {
 
    /** . */
