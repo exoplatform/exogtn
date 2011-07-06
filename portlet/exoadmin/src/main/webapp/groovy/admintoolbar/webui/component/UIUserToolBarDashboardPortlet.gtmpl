@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
