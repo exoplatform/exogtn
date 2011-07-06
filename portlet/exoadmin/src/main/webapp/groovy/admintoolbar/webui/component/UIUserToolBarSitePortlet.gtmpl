@@ -20,8 +20,8 @@
 	   		def currentPortal = uicomponent.getCurrentPortal()
 			def nodes = uicomponent.getNavigationNodes(uicomponent.getNavigation(SiteKey.portal(currentPortal)));
 			print """
-					<div style="position: absolute; display:none" class="MenuItemContainer">
-						<div class="SubBlock">
+					<ul style="position: absolute; display:none" class="MenuItemContainer">
+						
 			""";
 			boolean isCurrent = false;
 			String clazz = "";
@@ -33,43 +33,39 @@
 					isCurrent = true;
 			 	} else isCurrent = false; 				 				
  				
-				if(isCurrent && nodes.size() > 0) clazz = "class='ArrowIcon'";
+				if(isCurrent && nodes.size() > 0) clazz = "ArrowIcon";
 				else clazz = "";
 				href = uicomponent.getPortalURI(portal);
                 EntityEncoder entityEncoder = EntityEncoder.FULL;
             label = uicomponent.getPortalLabel(portal);
 				portal = entityEncoder.encode(portal);
 				print """
-					<div class="MenuItem">
-						<div $clazz>
-							<a href="$href" class="ItemIcon SiteIcon">$label</a>
-						</div>
+					<li class="MenuItem $clazz">
+						<a href="$href" class="ItemIcon SiteIcon">$label</a>						
 				""";
 						if(isCurrent) {
 							renderCurrentPortal(nodes);
 						}
 				print """
-					</div>
+					</li>
 				""";
 			}
 			print """
-					</div>
-				</div>
+				
+				</ul>
 			""";
 	}
 
 	void renderCurrentPortal(Collection nodes) {	    
 		print """
-			<div style="position: absolute; display:none" class="MenuItemContainer">
-				<div class="SubBlock">
+			<ul style="position: absolute; display:none" class="MenuItemContainer">
 		""";
 		int idx = 0;
 		for(UserNode node : nodes) {
 			renderPageNode(node, idx++ % 2 == 0);
 		}
 		print """
-				</div>
-			</div>
+			</ul>
 		""";
 	}
 	
@@ -103,8 +99,7 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation" $getNodeURL>
-				<div class="$clazz">
+			<li class="MenuItem $tabStyleNavigation $clazz" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
@@ -112,40 +107,32 @@
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
 		print """
-				</div>
+				
 		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer" style="position: absolute; display:none">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer" style="position: absolute; display:none">		
 			""" ;
 				int idx = 0;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, idx++ % 2 == 0);
 				}
 			print """
-					</div>
-				</div>
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
+			</li>
 		""" ;			
 	}
 %> 
 
-<div class="UIUserToolBarSitePortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-			<div class="TabsContainer">
-				<div class="UITab NormalToolbarTab">
-					<div class="">
-								<a class="SitesIcon TBIcon" href="<%= portalURI + "portalnavigation" %>">
-										<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
-								</a>
-					</div>
-					<% renderPortalNavigations() %>
-				</div>
-			</div>
-	</div>		
-</div>	
+<ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab NormalToolbarTab">
+		<a class="SitesIcon TBIcon" href="<%= portalURI + "portalnavigation" %>">
+			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
+		</a>		
+		<% renderPortalNavigations() %>
+	</li>
+</ul>	

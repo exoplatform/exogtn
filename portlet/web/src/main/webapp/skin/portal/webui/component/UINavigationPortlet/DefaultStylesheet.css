@@ -52,11 +52,10 @@
 .UINavigationPortlet .UINavigationBar  .UITab  {
 	float:left;/* orientation=lt */
 	float:right;/* orientation=rt */
-	margin: 6px 8px 0 0;	
+	margin: 6px 10px 0 0;	
 	font-weight:bold;
 	text-align:center;
 }
-
 .UINavigationPortlet  .UITab  > span {
 	padding: 0 6px;
 	color: #f57a00;
@@ -75,8 +74,8 @@
 
 .UINavigationPortlet .UITab a.TabIcon {
 	display:block;
-	padding:0 0 0 20px;/* orientation=lt */
-	padding:0 20px 0 0px;/* orientation=rt */
+	padding:0 0 0 21px;/* orientation=lt */
+	padding:0 21px 0 0px;/* orientation=rt */
 	background-position: right;/* orientation=rt */
 }
 
@@ -124,6 +123,7 @@
 
 .UINavigationPortlet  .HighlightNavigationTab > span {
 	background-color:#6D94C8;
+	margin-bottom: 5px;
 }
 
 
@@ -210,7 +210,8 @@
 	cursor:pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	height: 15px;
+	height: 15px;		
+	width: 20px;
 }
 
 .UINavigationPortlet .ScrollButtons a {
@@ -243,12 +244,12 @@
 	background: url('DefaultSkin/background/Button-rt.gif') no-repeat left -30px; /* orientation=rt */
 }
 
-.UINavigationPortlet .ScrollLeftButton:hover {
+.UINavigationPortlet .HighlightScrollLeftButton ,.UINavigationPortlet .ScrollLeftButton:hover{
 	background: url('DefaultSkin/background/Button.gif') no-repeat left top; /* orientation=lt */
 	background: url('DefaultSkin/background/Button-rt.gif') no-repeat right top; /* orientation=rt */
 }
 
-.UINavigationPortlet .ScrollRightButton:hover {
+.UINavigationPortlet .HighlightScrollRightButton,.UINavigationPortlet .ScrollRightButton:hover {
 	background: url('DefaultSkin/background/Button.gif') no-repeat right top; /* orientation=lt */
 	background: url('DefaultSkin/background/Button-rt.gif') no-repeat left top; /* orientation=rt */
 }
@@ -260,5 +261,10 @@
 }
 
 .UINavigationPortlet .GroupNavigation .HighlightNavigationTab  > span {
+<<<<<<< HEAD
 	background-color:#ffcf01;
 }
+=======
+	background-color:#ffcf01;
+}
+>>>>>>> 4765c2a... EXOGTN-427 [DOM] Admin Toolbar optimization

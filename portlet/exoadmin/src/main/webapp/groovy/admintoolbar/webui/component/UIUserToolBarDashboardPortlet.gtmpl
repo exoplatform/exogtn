@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
@@ -17,16 +18,14 @@
 		String clazz = "";
 		
 		print """
-			<div style="display:none" class="MenuItemContainer">
-				<div class="SubBlock">
+			<ul style="display:none" class="MenuItemContainer">
 		""";
 					int idx = 0;
 					for(UserNode node : nodes) {
 						renderPageNode(node, idx++ % 2 == 0);
 					}
 		print """
-				</div>
-			</div>
+			</ul>
 		""" ;
 	}
 	
@@ -64,34 +63,28 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation" $getNodeURL>
-				<div class="$clazz">
+			<li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
-		print """
-				</div>
-		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer">			
 			""" ;
 					int idx = 0;
 					for(UserNode child : node.getChildren()) {
 						renderPageNode(child, idx++ % 2 == 0);
 					}
 			print """
-					</div>
-				</div>
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
+			</li>
 		""" ;			
 	}	
 %>
@@ -102,31 +95,19 @@
 	if(userNodes.size() < 1) {
 		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;
 %>
-	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
-		<div class="UIHorizontalTabs">
-			<div class="TabsContainer">
-				<div class="UITab NormalToolbarTab">
-					<div class="">
-						<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>">Dashboard</a>
-					</div>
-				</div>
-			</div>
-		</div>	
-	</div>	
+	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id">
+		<li class="UITab NormalToolbarTab">
+			<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
+		</li>
+	</ul>	
 <% 
 	}else{
 		defaultDashboardPage =userNodes.iterator().next().getName();
 %>
-	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id" >	
-		<div class="UIHorizontalTabs">
-			<div class="TabsContainer" >
-				<div class="UITab NormalToolbarTab">
-						<div class="">
-								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>">Dashboard</a>
-						</div>
-						<% renderDashboards(userNodes); %>
-				</div>
-			</div>
-		</div>	
-	</div>		
+	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
+		<li class="UITab NormalToolbarTab">
+			<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
+				<% renderDashboards(userNodes); %>
+		</li>
+	</ul>
 <% } %>

@@ -81,7 +81,7 @@
 		print "</li>";					
 	}
 %>
-<ul class="UINavigationBar  <%=uicomponent.getCssClassName()%>" >	
+<ul class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >	
 	<%
 		MimeResponse res = _ctx.getRequestContext().getResponse();
 		
@@ -149,5 +149,3 @@
 		<a title="<%= _ctx.appRes("UIPortalNavigation.Label.Next") %>" class="ScrollRightButton"></a>	
 	</li>
 </ul>
-
-

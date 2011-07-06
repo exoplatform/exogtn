@@ -50,7 +50,7 @@ UIPortalNavigation.prototype.onLoad = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
   var uiNavPortlets = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UINavigationPortlet");
   if (uiNavPortlets.length) {
-		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "ul", "UINavigationBar");
+		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "ul", "UIHorizontalTabs");
  		eXo.portal.UIPortalNavigation.init(uiNavPortlets[0], mainContainer, 0, 0);
 		for (var i = 1; i < uiNavPortlets.length; ++i) {
 				uiNavPortlets[i].style.display = "none";
@@ -71,7 +71,7 @@ UIPortalNavigation.prototype.onLoad = function() {
  */
 UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
   var DOMUtil = eXo.core.DOMUtil;
-  var topContainer = DOMUtil.findFirstDescendantByClass(popupMenu, "ul", "UINavigationBar");
+  var topContainer = DOMUtil.findFirstDescendantByClass(popupMenu, "ul", "UIHorizontalTabs");
   topContainer.id = "PortalNavigationTopContainer";
   // Top menu items
   var topItems = DOMUtil.findDescendantsByClass(topContainer, "li", "UITab");
@@ -190,7 +190,7 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
 		    	for(var i = 0; i < uicomponents.length; i ++) {
 		      	var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
 		      	if(navPortlet && (navAncestor != navPortlet)) {
-		      		var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UINavigationBar");
+		      		var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
 		      		tabsContainer.style.position = "static" ;
 		      	}
 		    	}	
@@ -343,7 +343,7 @@ UIPortalNavigation.prototype.hideMenu = function() {
     for(var i = 0; i < uicomponents.length; i ++) {
       var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
       if(navPortlet) {
-      	var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UINavigationBar");
+      	var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
       	tabsContainer.style.position = "relative" ;
       }
     }

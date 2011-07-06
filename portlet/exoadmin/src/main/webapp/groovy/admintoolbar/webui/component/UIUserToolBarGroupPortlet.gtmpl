@@ -23,16 +23,12 @@
 			def ownerId = navigation.getKey().getName();
 			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(ownerId));
 			print """
-						<div class="TitleBar"><div style="width: 99%" title="$ownerId">$navTitle</div></div>
-						<div class="SubBlock">
-							""" ;
-							int idx = 0;
-							for(UserNode node : nodes) {
-								renderPageNode(node, ownerId, idx++ % 2 == 0);
-							}
-							print """
-						</div>
-			""" ;		
+						<li class="TitleBar" title="$ownerId">$navTitle</li>						
+			""" ;
+						int idx = 0;
+						for(UserNode node : nodes) {
+							renderPageNode(node, ownerId, idx++ % 2 == 0);
+						}	
 	}
 	
 	void renderPageNode(UserNode node, String groupId, boolean flag) {
@@ -65,54 +61,40 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation" $getNodeURL>
-				<div class="$clazz">
+		   <li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
-		print """
-				</div>
-		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer" style="position: absolute; display:none">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer" style="position: absolute; display:none">					
 			""" ;
 				int idx = 0;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, groupId, idx++ % 2 == 0);
 				}
-			print """
-					</div>
-				</div>
+			print """				
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
-		""" ;			
+	       </li>  						
+	    """ ;
 	}	
 %> 	
-<div class="UIUserToolBarGroupPortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-		<div class="TabsContainer">	
-			<div class="UITab NormalToolbarTab">
-				<div class="">
-							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
-				</div>
-				<% 
-					if (!groupNavigations.isEmpty()) {					   
-				%>
-				<div style="display:none" class="MenuItemContainer">
-				<% for(navigation in groupNavigations) {
-						renderGroupPageNavigation(navigation);
-				} %>
-				</div>
-				<% } %>
-			</div>
-		</div>
-	</div>	
-</div>
+<ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab NormalToolbarTab">
+		<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<% if (!groupNavigations.isEmpty()) { %>
+		<ul style="display:none" class="MenuItemContainer">
+		<% for(navigation in groupNavigations) {
+				renderGroupPageNavigation(navigation);
+		} %>
+		</ul>
+		<% } %>
+	</li>
+</ul>

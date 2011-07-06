@@ -33,14 +33,6 @@
 	color: #fff;
 }
 
-.UIToolbarContainer .UITab a:hover {
-	color: #9fc5ff;
-}
-
-.UIToolbarContainer .UIHorizontalTabs .TabsContainer {
-	height: 30px; /* orientation=lt */
-	height: auto; /* orientation=rt */
-}
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
 	line-height: 30px;
@@ -64,28 +56,23 @@
 }
 
 .UIToolbarContainer .MenuItem {	
-	background: none;
+	/*background: none;*/
 }
 
-.UIToolbarContainer .MenuItem .ArrowIcon {
+.UIToolbarContainer  .ArrowIcon {
 	background: url('background/ToolbarContainer.gif') no-repeat right bottom; /* orientation=lt */
 	background: url('background/ToolbarContainer-rt.gif') no-repeat -5px bottom; /* orientation=rt */
 }
 
 .UIToolbarContainer .MenuItem a {	
-	padding: 0px 25px 0px 30px; /* orientation=lt */
-	padding: 0px 30px 0px 25px; /* orientation=rt */
+	padding: 0px 25px 0px 32px; /* orientation=lt */
+	padding: 0px 32px 0px 25px; /* orientation=rt */
 	color: #232d36;
 }
 
-.UIToolbarContainer .MenuItem a:hover {
+.UIToolbarContainer .MenuItem:hover {
 	color: #000;
 	background-color: #d7d7d7;
-}
-
-.UIToolbarContainer .ItemIcon {	
-	background-position: 5px center; /* orientation=lt */
-	background-position: 95% center; /* orientation=rt */
 }
 
 /**********************************/
