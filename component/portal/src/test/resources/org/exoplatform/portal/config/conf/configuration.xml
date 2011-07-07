@@ -43,14 +43,14 @@
         <value-param>
           <name>page.templates.location</name>
           <description>the path to the location that contains Page templates</description>
-          <value>classpath:/org/exoplatform/portal/config/template/pages</value>
+          <value>classpath:/org/exoplatform/portal/config/conf/template/pages</value>
         </value-param>
 				<object-param>
           <name>site.templates.location</name>
           <description>description</description>
           <object type="org.exoplatform.portal.config.SiteConfigTemplates">
 						<field name="location">
-              <string>classpath:/org/exoplatform/portal/config</string>
+              <string>classpath:/org/exoplatform/portal/config/conf</string>
             </field>
             <field name="portalTemplates">
               <collection type="java.util.HashSet">
@@ -99,7 +99,7 @@
               <string>portal</string>
             </field>
             <field name="templateLocation">
-              <string>classpath:/org/exoplatform/portal/config</string>
+              <string>classpath:/org/exoplatform/portal/config/conf</string>
             </field>
           </object>
         </object-param>
@@ -133,7 +133,7 @@
               <string>group</string>
             </field>
             <field name="templateLocation">
-              <string>classpath:/org/exoplatform/portal/config</string>
+              <string>classpath:/org/exoplatform/portal/config/conf</string>
             </field>
           </object>
         </object-param>
@@ -152,7 +152,7 @@
               <string>user</string>
             </field>
             <field name="templateLocation">
-              <string>classpath:/org/exoplatform/portal/config</string>
+              <string>classpath:/org/exoplatform/portal/config/conf</string>
             </field>
           </object>
         </object-param>

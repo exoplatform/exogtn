@@ -29,6 +29,7 @@ import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
@@ -41,9 +42,11 @@ import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.mop.api.workspace.Workspace;
 import org.jibx.runtime.*;
 
 import java.io.IOException;
@@ -93,9 +96,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    /**
     * If true the portal clear portal metadata from data storage and replace
-    * it with new data created from .xml files
+    * it with new data created from .xml files.
     */
-   private boolean overrideExistingData;
+   private final boolean overrideExistingData;
+
+   /** The import mode. */
+   private final ImportMode importMode;
 
    /** . */
    private Logger log = LoggerFactory.getLogger(getClass());
@@ -168,24 +174,61 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          overrideExistingData = false;
       }
 
+      valueParam = params.getValueParam("import.mode");
+      if (valueParam != null)
+      {
+         importMode = ImportMode.valueOf(valueParam.getValue().trim().toUpperCase());
+      }
+      else
+      {
+         importMode = ImportMode.CONSERVE;
+      }
+
       this.pomMgr = pomMgr;
+   }
+
+   protected boolean performImport()
+   {
+      if (overrideExistingData)
+      {
+         return true;
+      }
+      else
+      {
+         POMSession session = pomMgr.getSession();
+
+         // Obtain the status
+         Workspace workspace = session.getWorkspace();
+         boolean perform = !workspace.isAdapted(Imported.class);
+
+         // We mark it
+         if (perform)
+         {
+            workspace.adapt(Imported.class);
+            session.save();
+         }
+
+         //
+         return perform;
+      }
    }
 
    public void run() throws Exception
    {
-      //DANGEROUS! If the user delete the defaultPortal (ie: classic), the next time he restarts
-      //the server. Data of predefined owners would be overriden      
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
-         if (dataStorage_.getPortalConfig(defaultPortal) != null && !overrideExistingData)
+         if (!performImport())
+         {
             return;
+         }
       }
       finally
       {
          RequestLifeCycle.end();
       }
 
+      //
       if (isUseTryCatch)
       {
          RequestLifeCycle.begin(PortalContainer.getInstance());
@@ -553,7 +596,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
       //
       PageNavigation navigation = obj.getObject();
-      ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
       boolean extendedNavigation = obj.getVersion() == Version.V_1_2;
 
       //

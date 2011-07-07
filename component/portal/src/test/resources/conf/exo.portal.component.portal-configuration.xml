@@ -175,6 +175,8 @@
         </value-param>
         <values-param>
           <name>entities</name>
+
+          <!-- The MOP node types -->
           <value>org.gatein.mop.core.api.workspace.WorkspaceImpl</value>
           <value>org.gatein.mop.core.api.workspace.UIContainerImpl</value>
           <value>org.gatein.mop.core.api.workspace.UIWindowImpl</value>
@@ -205,6 +207,8 @@
           <value>org.gatein.mop.core.api.workspace.content.ContextSpecialization</value>
           <value>org.gatein.mop.core.api.workspace.content.WorkspaceClone</value>
           <value>org.gatein.mop.core.api.workspace.content.WorkspaceSpecialization</value>
+
+          <!-- GateIn node types -->
           <value>org.exoplatform.portal.pom.spi.portlet.PortletState</value>
           <value>org.exoplatform.portal.pom.spi.portlet.PreferenceState</value>
           <value>org.exoplatform.portal.pom.spi.gadget.GadgetState</value>
@@ -212,10 +216,13 @@
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
           <value>org.exoplatform.portal.mop.Described</value>
           <value>org.exoplatform.portal.mop.Visible</value>
-          <value>org.exoplatform.portal.config.SampleMixin</value>
           <value>org.exoplatform.portal.mop.i18n.I18Nized</value>
           <value>org.exoplatform.portal.mop.i18n.LanguageSpace</value>
           <value>org.exoplatform.portal.mop.i18n.Language</value>
+          <value>org.exoplatform.portal.mop.importer.Imported</value>
+
+          <!-- For the unit test purpose -->
+          <value>org.exoplatform.portal.config.SampleMixin</value>
         </values-param>
       </init-params>
     </component-plugin>

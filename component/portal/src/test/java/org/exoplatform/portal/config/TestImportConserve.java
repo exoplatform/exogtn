@@ -19,29 +19,32 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.portal.AbstractPortalTest;
+import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.navigation.NodeContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/config/conf/configuration.xml")
-})
-public abstract class AbstractConfigTest extends AbstractPortalTest
+public class TestImportConserve extends AbstractImportTest
 {
 
-   protected AbstractConfigTest()
+   @Override
+   protected ImportMode getMode()
    {
+      return ImportMode.CONSERVE;
    }
 
-   protected AbstractConfigTest(String name)
+   @Override
+   protected void assertOverride(NodeContext<?> root)
    {
-      super(name);
+      assertEquals(1, root.getNodeCount());
+      assertNotNull(root.get("foo"));
+   }
+
+   @Override
+   protected void assertNoOverride(NodeContext<?> root)
+   {
+      assertEquals(1, root.getNodeCount());
+      assertNotNull(root.get("foo"));
    }
 }
