@@ -80,4 +80,9 @@ public class UserPortalConfig
    {
       this.portal = portal;
    }
+   
+   public String getPortalName()
+   {
+      return portalName;
+   }
 }

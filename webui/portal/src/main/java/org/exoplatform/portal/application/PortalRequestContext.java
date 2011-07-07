@@ -416,7 +416,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getPortalOwner()
    {
-      return ((UIPortalApplication)uiApplication_).getPortalName();
+      return ((UIPortalApplication)uiApplication_).getUserPortalConfig().getPortalName();
    }
    
    public String getNodePath()
