@@ -61,7 +61,7 @@ public class UIGadgetPortlet extends UIPortletApplication
    {
       PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
       PortletPreferences pref = pcontext.getRequest().getPreferences();
-      String urlPref = pref.getValue("url", "http://www.google.com/ig/modules/horoscope.xml");
+      String urlPref = pref.getValue("url", "local://Calendar");
       if (urlPref.startsWith(LOCAL_STRING))
       {
          try
