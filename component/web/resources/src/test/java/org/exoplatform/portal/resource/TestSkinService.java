@@ -184,8 +184,8 @@ public class TestSkinService extends AbstractKernelTest
       assertEquals("bbb;/*orientation=rt*/\n", skinService.getCSS(path + "-rt.css"));
 
       cssResolver.addFile(" aaa; /* orientation=lt */ bbb; /* orientation=rt */ ", path + ".css");
-      assertEquals(" aaa; \n", skinService.getCSS(path + "-lt.css"));
-      assertEquals(" bbb; /* orientation=rt */ \n", skinService.getCSS(path + "-rt.css"));
+      assertEquals("aaa;\n", skinService.getCSS(path + "-lt.css"));
+      assertEquals(" bbb; /* orientation=rt */\n", skinService.getCSS(path + "-rt.css"));
 
       cssResolver.addFile("{aaa;bbb;/*orientation=lt*/ccc;ddd;/*orientation=rt*/}", path + ".css");
       assertEquals("{aaa;bbb;/*orientation=lt*/ccc;}\n", skinService.getCSS(path + "-lt.css"));
@@ -245,7 +245,7 @@ public class TestSkinService extends AbstractKernelTest
    {
       String path = "path/to/file";
       cssResolver.addFile("/**#@%$!a'*/ background:url(bar.gif); /**#@%$!a'*/",  path + ".css");
-      assertEquals("/**#@%$!a'*/ background:url(path/to/bar.gif); /**#@%$!a'*/\n", skinService.getCSS(path + "-lt.css"));      
+      assertEquals("background:url(path/to/bar.gif);\n", skinService.getCSS(path + "-lt.css"));
       
       PropertyManager.setProperty(PropertyManager.DEVELOPING, "false");
       assertEquals("background:url(path/to/bar.gif);", skinService.getCSS(path + "-lt.css"));
