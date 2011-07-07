@@ -20,14 +20,9 @@ package org.exoplatform.portal.resource;
 
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.xml.DocumentSource;
-import org.exoplatform.component.test.AbstractKernelTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.exoplatform.services.resources.Orientation;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -37,16 +32,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.ServletContext;
 
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 6/29/11
  */
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/skin-service-configuration.xml"), 
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")})
-public class TestSkinService extends AbstractKernelTest
+public class TestSkinService extends AbstractWebResourceTest
 {
    private PortalContainer portalContainer;
 

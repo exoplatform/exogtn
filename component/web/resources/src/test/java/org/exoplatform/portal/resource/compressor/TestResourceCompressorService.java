@@ -22,6 +22,7 @@ import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.portal.resource.AbstractWebResourceTest;
 import org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
 
@@ -36,9 +37,7 @@ import java.io.Writer;
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
-
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")})
-public class TestResourceCompressorService extends AbstractKernelTest
+public class TestResourceCompressorService extends AbstractWebResourceTest
 {
    public void testInitializing()
    {
