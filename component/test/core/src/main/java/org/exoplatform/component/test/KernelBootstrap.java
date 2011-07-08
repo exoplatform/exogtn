@@ -23,6 +23,8 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoContainer;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -250,6 +252,7 @@ public class KernelBootstrap
    {
       if (container != null)
       {
+         RootContainer.getInstance().stop();
          container = null;
          ExoContainerContext.setCurrentContainer(null);
       }
