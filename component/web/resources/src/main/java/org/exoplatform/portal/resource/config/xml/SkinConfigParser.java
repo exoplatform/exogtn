@@ -83,6 +83,9 @@ public class SkinConfigParser
 
    /** . */
    final public static String CSS_PATH_TAG = "css-path";
+   
+   /** . */
+   final public static String CSS_PRIORITY_TAG = "css-priority";
 
    /** . */
    final public static String WINDOW_STYLE_TAG = "window-style";

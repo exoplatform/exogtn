@@ -55,9 +55,10 @@ public class TestXSDCorruption extends TestCase
       assertEquals(expected, sb.toString());
    }
 
-   public void testGateInResources1_0() throws Exception
+   public void testGateInResources1_x() throws Exception
    {
       assertHash("c68ea6831c3d24a242f63abd2db261a6", "gatein_resources_1_0.xsd");
       assertHash("c55b7e0dc8ae23e2d34430b38260cd96", "gatein_resources_1_1.xsd");
+      assertHash("42a79783c072eea1481b095b5a6992b9", "gatein_resources_1_2.xsd");
    }
 }
