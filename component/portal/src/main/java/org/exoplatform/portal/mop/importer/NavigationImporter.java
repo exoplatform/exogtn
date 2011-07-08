@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.importer;
+package org.exoplatform.portal.mop.importer;
 
 import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -40,7 +40,6 @@ import org.exoplatform.portal.tree.diff.ListAdapter;
 import org.exoplatform.portal.tree.diff.ListChangeIterator;
 import org.exoplatform.portal.tree.diff.ListChangeType;
 import org.exoplatform.portal.tree.diff.ListDiff;
-import org.gatein.common.i18n.LocaleFormat;
 
 import java.util.Collections;
 import java.util.Date;

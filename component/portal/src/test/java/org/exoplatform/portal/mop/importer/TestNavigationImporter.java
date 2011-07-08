@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.importer;
+package org.exoplatform.portal.mop.importer;
 
 import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.exoplatform.portal.config.importer.Builder.*;
+import static org.exoplatform.portal.mop.importer.Builder.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
