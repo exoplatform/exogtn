@@ -23,7 +23,7 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
