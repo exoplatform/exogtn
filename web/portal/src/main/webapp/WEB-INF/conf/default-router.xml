@@ -17,7 +17,7 @@
 
     <!-- The public access -->
     <route path="/public/{gtn:lang}{gtn:sitename}{gtn:path}">
-      <path-param qname="gtn:lang" pattern="([A-Za-z]{2}/)?" encoding="preserve-path"/>
+      <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2}/)?" encoding="preserve-path"/>
       <route-param qname="gtn:access" value="public"/>
       <route-param qname="gtn:sitetype" value="portal"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
@@ -25,7 +25,7 @@
 
     <!-- The private access -->
     <route path="/private/{gtn:lang}{gtn:sitename}{gtn:path}">
-      <path-param qname="gtn:lang" pattern="([A-Za-z]{2}/)?" encoding="preserve-path"/>
+      <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2}/)?" encoding="preserve-path"/>
       <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="portal"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
@@ -33,7 +33,7 @@
 
     <!-- The group access -->
     <route path="/groups/{gtn:lang}{gtn:sitename}{gtn:path}">
-      <path-param qname="gtn:lang" pattern="([A-Za-z]{2}/)?" encoding="preserve-path"/>
+      <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2}/)?" encoding="preserve-path"/>
       <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="group"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
@@ -41,7 +41,7 @@
 
     <!-- The user access -->
     <route path="/users/{gtn:lang}{gtn:sitename}{gtn:path}">
-      <path-param qname="gtn:lang" pattern="([A-Za-z]{2}/)?" encoding="preserve-path"/>
+      <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2}/)?" encoding="preserve-path"/>
       <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="user"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
