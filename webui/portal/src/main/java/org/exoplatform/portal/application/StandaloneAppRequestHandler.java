@@ -45,11 +45,10 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       }
    }
 
-   private String[] PATHS = {"/standalone"};
-
-   public String[] getPath()
+   @Override
+   public String getHandlerName()
    {
-      return PATHS;
+      return "standalone";
    }
 
    @Override
