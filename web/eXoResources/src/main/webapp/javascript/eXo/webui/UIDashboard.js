@@ -307,7 +307,7 @@ function UIDashboard() {
 			if (iframe) {
 				iframe.style.width = "99.9%" ;
 			}
-			var minimizeButton = DOMUtil.findFirstDescendantByClass(gadgetControls[j], "div", "MinimizeAction") ;
+			var minimizeButton = DOMUtil.findFirstDescendantByClass(gadgetControls[j], "span", "MinimizeAction") ;
 			if(canEdit) {
 				eXo.webui.UIDashboard.init(gadgetControls[j], uiGadget);
 				
