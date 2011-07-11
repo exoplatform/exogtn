@@ -24,6 +24,7 @@ import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesS
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.LocalizedValue;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
+import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -194,5 +195,22 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(Locale.FRENCH, juuLabels.get(1).getLang());
       assertEquals("juu_label_fr_FR", juuLabels.get(2).getValue());
       assertEquals(Locale.FRANCE, juuLabels.get(2).getLang());
+   }
+
+   public void testNavigationFragment() throws Exception
+   {
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/fragment-navigation.xml"));;
+      PageNavigation nav = obj.getObject();
+      assertEquals(Version.V_1_2, obj.getVersion());
+
+      //
+      ArrayList<NavigationFragment> fragments = nav.getFragments();
+      assertNotNull(fragments);
+      assertEquals(1, fragments.size());
+      NavigationFragment fragment = fragments.get(0);
+      assertEquals("foo", fragment.getParentURI());
+      assertEquals(1, fragment.getNodes().size());
+      PageNode bar = fragment.getNode("bar");
+      assertNotNull(bar);
    }
 }

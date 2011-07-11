@@ -38,6 +38,7 @@ public class PageNavigation
 
    public PageNavigation()
    {
+      this.fragments = new ArrayList<NavigationFragment>();
    }
 
    public String getOwnerId()
@@ -68,6 +69,11 @@ public class PageNavigation
    public void setPriority(int i)
    {
       priority = i;
+   }
+
+   public ArrayList<NavigationFragment> getFragments()
+   {
+      return fragments;
    }
 
    public NavigationFragment getFragment()
