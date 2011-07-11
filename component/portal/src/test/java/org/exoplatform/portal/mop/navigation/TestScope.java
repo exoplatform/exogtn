@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.mop.Visibility;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestScope extends AbstractKernelTest
+public class TestScope extends AbstractGateInTest
 {
 
    public void testBranchShape()

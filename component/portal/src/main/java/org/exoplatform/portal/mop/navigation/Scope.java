@@ -36,22 +36,22 @@ public interface Scope
    /**
     * The node without its children.
     */
-   Scope SINGLE = new GenericScope(0);
+   Scope SINGLE = GenericScope.treeShape(0);
 
    /**
     * A node and its chidren.
     */
-   Scope CHILDREN = new GenericScope(1);
+   Scope CHILDREN = GenericScope.treeShape(1);
 
    /**
     * A node, its chidren and grandchildren.
     */
-   Scope GRANDCHILDREN = new GenericScope(2);
+   Scope GRANDCHILDREN = GenericScope.treeShape(2);
 
    /**
     * The entire hierarchy, to use with care.
     */
-   Scope ALL = new GenericScope(-1);
+   Scope ALL = GenericScope.treeShape(-1);
 
    Visitor get();
 
