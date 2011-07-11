@@ -61,7 +61,7 @@ public interface Scope
    public interface Visitor
    {
       /**
-       * Returns the visit mode for the specified node.
+       * Signals a node is ented and returns the visit mode for that node.
        *
        * @param depth the relative depth to the root of the loading
        * @param id the node persistent id
@@ -71,6 +71,14 @@ public interface Scope
        */
       VisitMode enter(int depth, String id, String name, NodeState state);
 
+      /**
+       * Signals a node is left.
+       *
+       * @param depth the relative depth to the root of the loading
+       * @param id the node persistent id
+       * @param name the node name
+       * @param state the node state
+       */
       void leave(int depth, String id, String name, NodeState state);
    }
 }

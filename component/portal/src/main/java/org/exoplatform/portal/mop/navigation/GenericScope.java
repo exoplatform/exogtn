@@ -150,7 +150,7 @@ public class GenericScope
             }
             else if (depth == size)
             {
-               if ((name.equals(getName(size - 1))))
+               if (name.equals(getName(size - 1)) && visitor != null)
                {
                   visitor.leave(0, id, name, state);
                   visitor = null;
