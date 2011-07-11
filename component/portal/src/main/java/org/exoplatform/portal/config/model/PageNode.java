@@ -33,12 +33,6 @@ public class PageNode extends PageNodeContainer
 {
 
    /** . */
-   private ArrayList<PageNode> children;
-
-   /** . */
-   private String uri;
-
-   /** . */
    private ArrayList<LocalizedValue> labels;
 
    /** . */
@@ -61,17 +55,16 @@ public class PageNode extends PageNodeContainer
 
    public PageNode()
    {
-      this.children = new ArrayList<PageNode>();
    }
 
    public String getUri()
    {
-      return uri;
+      return null;
    }
 
    public void setUri(String s)
    {
-      uri = s;
+      // No op for back war compatibility during unmarshalling
    }
 
    public ArrayList<LocalizedValue> getLabels()
@@ -177,12 +170,12 @@ public class PageNode extends PageNodeContainer
 
    public List<PageNode> getChildren()
    {
-      return children;
+      return getNodes();
    }
 
-   public void setChildren(ArrayList<PageNode> list)
+   public void setChildren(ArrayList<PageNode> children)
    {
-      children = list;
+      setNodes(children);
    }
 
    public Date getStartPublicationDate()
@@ -217,19 +210,7 @@ public class PageNode extends PageNodeContainer
 
    public PageNode getChild(String name)
    {
-      if (children == null)
-         return null;
-      for (PageNode node : children)
-      {
-         if (node.getName().equals(name))
-            return node;
-      }
-      return null;
-   }
-
-   public List<PageNode> getNodes()
-   {
-      return children;
+      return getNode(name);
    }
 
    @Override

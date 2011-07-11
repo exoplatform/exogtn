@@ -31,14 +31,10 @@ public class PageNavigation extends PageNodeContainer
    private String ownerId;
 
    /** . */
-   private ArrayList<PageNode> pageNodes;
-
-   /** . */
    private int priority = 1;
 
    public PageNavigation()
    {
-      this.pageNodes = new ArrayList<PageNode>();
    }
 
    public String getOwnerId()
@@ -69,16 +65,6 @@ public class PageNavigation extends PageNodeContainer
    public void setPriority(int i)
    {
       priority = i;
-   }
-
-   public ArrayList<PageNode> getNodes()
-   {
-      return pageNodes;
-   }
-
-   public void setNodes(ArrayList<PageNode> nodes)
-   {
-      pageNodes = nodes;
    }
 
    @Override

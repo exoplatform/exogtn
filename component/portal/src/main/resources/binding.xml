@@ -96,7 +96,7 @@
   </mapping>
   
    <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
-    <value name="uri" field="uri" usage="optional"/>
+    <value name="uri" get-method="getUri" set-method="setUri" usage="optional"/>
     <value name="name" field="name"/>
     <collection field="labels" ordered="false">
       <structure map-as="org.exoplatform.portal.config.model.LocalizedValue" usage="optional"/>
@@ -107,7 +107,7 @@
     <value name="visibility" field="visibility" usage="optional" default="DISPLAYED"/>
     <value name="page-reference" field="pageReference" usage="optional" 
     	deserializer="org.exoplatform.portal.config.serialize.JibxStringSerialize.deserializeString"/>
-    <collection field="children" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <collection get-method="getNodes" set-method="setNodes" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>
   
   <mapping name="portal-config" class="org.exoplatform.portal.config.model.PortalConfig" ordered="false">
@@ -130,8 +130,7 @@
     <structure name="owner-type" usage="optional"/>
     <structure name="owner-id" usage="optional"/>
     <value name="priority" field="priority" usage="optional"/>
-    <collection name="page-nodes" field="pageNodes" usage="optional"
-                item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <collection name="page-nodes" get-method="getNodes" set-method="setNodes" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>
   
   
