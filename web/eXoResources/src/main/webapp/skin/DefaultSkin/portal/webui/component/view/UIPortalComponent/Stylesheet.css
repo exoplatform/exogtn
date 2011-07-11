@@ -164,9 +164,6 @@
 
 .PortletLayoutDecorator .CPortletLayoutDecorator {
 	background: url('background/PortletLayoutDecorator.gif') repeat-x center -89px;
-}
-
-.PortletLayoutDecorator .FixHeight {
 	height: 69px;
 	padding: 10px 0;
 }
