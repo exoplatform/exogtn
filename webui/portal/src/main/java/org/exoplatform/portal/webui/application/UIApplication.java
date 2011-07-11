@@ -33,7 +33,7 @@ public class UIApplication extends UIPortalComponent
 
    private Properties properties;
 
-   private boolean showInfoBar = true;
+   private boolean showInfoBar;
 
    private boolean showWindowState = true;
 

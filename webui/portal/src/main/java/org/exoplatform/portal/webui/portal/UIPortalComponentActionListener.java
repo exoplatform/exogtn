@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ApplicationState;
@@ -332,6 +333,12 @@ public class UIPortalComponentActionListener
                }
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
                uiPortlet.setShowEditControl(true);
+               
+               //TODO Wait to fix issue EXOGTN-213 and then
+               //we should get "showInfobar" from current UI portal instead of Storage service
+               UIPortal currentPortal = Util.getUIPortal();
+               DataStorage storage = uiApp.getApplicationComponent(DataStorage.class);
+               uiPortlet.setShowInfoBar(storage.getPortalConfig(currentPortal.getOwnerType(), currentPortal.getOwner()).isShowInfobar());
                uiSource = uiPortlet;
             }
             List<UIComponent> children = uiTarget.getChildren();
