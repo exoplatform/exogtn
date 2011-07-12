@@ -93,7 +93,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(PageNavigation.class, obj.getClass());
       
       PageNavigation pageNavigation = (PageNavigation)obj;
-      assertEquals("portal::classic::homepage", pageNavigation.getNode("home").getPageReference());
+      assertEquals("portal::classic::homepage", pageNavigation.getFragment().getNode("home").getPageReference());
 
 /*
       IMarshallingContext mctx = bfact.createMarshallingContext();
@@ -141,7 +141,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(Version.V_1_1, obj.getVersion());
 
       //
-      PageNode bar = nav.getNode("bar");
+      PageNode bar = nav.getFragment().getNode("bar");
       assertEquals("bar_label", bar.getLabel());
       ArrayList<LocalizedValue> barLabels =  bar.getLabels();
       assertNotNull(barLabels);
@@ -158,7 +158,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(Version.V_1_2, obj.getVersion());
 
       //
-      PageNode foo = nav.getNode("foo");
+      PageNode foo = nav.getFragment().getNode("foo");
       assertEquals("foo_label", foo.getLabel());
       ArrayList<LocalizedValue> fooLabels =  foo.getLabels();
       assertNotNull(fooLabels);
@@ -173,7 +173,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLocalizedLabel(Locale.GERMAN).keySet());
 
       //
-      PageNode bar = nav.getNode("bar");
+      PageNode bar = nav.getFragment().getNode("bar");
       assertEquals("bar_label", bar.getLabel());
       ArrayList<LocalizedValue> barLabels =  bar.getLabels();
       assertNotNull(barLabels);
@@ -183,7 +183,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
 
       //
-      PageNode juu = nav.getNode("juu");
+      PageNode juu = nav.getFragment().getNode("juu");
       assertEquals(null, juu.getLabel());
       ArrayList<LocalizedValue> juuLabels =  juu.getLabels();
       assertNotNull(juuLabels);

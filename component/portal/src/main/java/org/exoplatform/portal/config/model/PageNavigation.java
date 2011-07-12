@@ -21,7 +21,7 @@ package org.exoplatform.portal.config.model;
 
 import java.util.ArrayList;
 
-public class PageNavigation extends PageNodeContainer
+public class PageNavigation
 {
 
    /** . */
@@ -32,6 +32,9 @@ public class PageNavigation extends PageNodeContainer
 
    /** . */
    private int priority = 1;
+
+   /** . */
+   private ArrayList<NavigationFragment> fragments;
 
    public PageNavigation()
    {
@@ -65,6 +68,20 @@ public class PageNavigation extends PageNodeContainer
    public void setPriority(int i)
    {
       priority = i;
+   }
+
+   public NavigationFragment getFragment()
+   {
+      return fragments != null && fragments.size() > 0 ? fragments.get(0) : null;
+   }
+
+   public void addFragment(NavigationFragment fragment)
+   {
+      if (fragments == null)
+      {
+         fragments = new ArrayList<NavigationFragment>();
+      }
+      fragments.add(fragment);
    }
 
    @Override

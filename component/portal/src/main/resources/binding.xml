@@ -130,10 +130,18 @@
     <structure name="owner-type" usage="optional"/>
     <structure name="owner-id" usage="optional"/>
     <value name="priority" field="priority" usage="optional"/>
-    <collection name="page-nodes" get-method="getNodes" set-method="setNodes" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <collection field="fragments" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.NavigationFragment" usage="optional"/>
+    </collection>
   </mapping>
-  
-  
+
+  <mapping name="page-nodes" class="org.exoplatform.portal.config.model.NavigationFragment">
+    <value name="parent-uri" field="parentURI" usage="optional"/>
+    <collection get-method="getNodes" set-method="setNodes" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.PageNode" usage="optional"/>
+    </collection>
+  </mapping>
+
   <mapping name="portlet-preferences-set"
           class="org.exoplatform.portal.application.PortletPreferences$PortletPreferencesSet">
     <collection field="portlets" 

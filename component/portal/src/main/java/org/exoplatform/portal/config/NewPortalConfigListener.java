@@ -28,6 +28,7 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
+import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
@@ -873,9 +874,13 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private static void fixOwnerName(PageNavigation pageNav)
    {
       pageNav.setOwnerId(fixOwnerName(pageNav.getOwnerType(), pageNav.getOwnerId()));
-      for (PageNode pageNode : pageNav.getNodes())
+      NavigationFragment fragment = pageNav.getFragment();
+      if (fragment != null)
       {
-         fixOwnerName(pageNode);
+         for (PageNode pageNode : fragment.getNodes())
+         {
+            fixOwnerName(pageNode);
+         }
       }
    }
 

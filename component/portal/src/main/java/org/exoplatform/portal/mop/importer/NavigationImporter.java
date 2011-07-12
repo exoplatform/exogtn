@@ -195,7 +195,7 @@ public class NavigationImporter
          Map<NodeContext<?>, Map<Locale, Described.State>> labelMap = new HashMap<NodeContext<?>, Map<Locale, Described.State>>();
 
          // Perform save
-         perform(src, node, labelMap);
+         perform(src.getFragment(), node, labelMap);
 
          // Save the node
          service.saveNode(node, null);

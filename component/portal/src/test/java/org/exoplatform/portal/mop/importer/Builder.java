@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.importer;
 
+import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 
@@ -86,10 +87,12 @@ public class Builder
 
    public PageNavigation build()
    {
+      NavigationFragment fragment = new NavigationFragment();
+      fragment.setNodes(buildNodes());
       PageNavigation navigation = new PageNavigation();
       navigation.setOwnerType("portal");
       navigation.setOwnerId(value);
-      navigation.setNodes(buildNodes());
+      navigation.addFragment(fragment);
       return navigation;
    }
 
