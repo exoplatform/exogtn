@@ -33,7 +33,6 @@ import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeApplicationListActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeLanguageActionListener;
@@ -67,7 +66,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @ComponentConfig(lifecycle = UIPortalLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortal.gtmpl", events = {
-   @EventConfig(listeners = ChangePageNodeActionListener.class),
    @EventConfig(listeners = ChangeApplicationListActionListener.class),
    @EventConfig(listeners = MoveChildActionListener.class),
    @EventConfig(listeners = UIPortal.ChangeWindowStateActionListener.class),

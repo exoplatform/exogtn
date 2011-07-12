@@ -29,6 +29,8 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -416,9 +418,12 @@ public class UIPortalComposer extends UIContainer
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
          siteBody.setUIComponent(uiPortal);
 
-         String uri = uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null;
-         PageNodeEvent<UIPortalApplication> pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
+         PageNodeEvent<UIPortalApplication> pnevent =
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+         
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = prContext.getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -462,8 +467,6 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.setFullRender(true);
-
-         String uri = (uiPortal.getSelectedUserNode() != null)? (uiPortal.getSelectedUserNode().getURI()) : null;
         
          if (uiComposer.isPortalExist(editPortal))
          {
@@ -486,9 +489,12 @@ public class UIPortalComposer extends UIContainer
             //multiple UIPortal (already available) and concept of SiteConfig
             uiPortal.refreshUIPage();
             
+            UserNode currentNode = uiPortal.getSelectedUserNode();
+            SiteKey siteKey = currentNode.getNavigation().getKey();
             PageNodeEvent<UIPortalApplication> pnevent =
-               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+            uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+            
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
             JavascriptManager jsManager = prContext.getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -666,10 +672,11 @@ public class UIPortalComposer extends UIContainer
 
          uiPortal.refreshUIPage();
          
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
          PageNodeEvent<UIPortalApplication> pnevent =
-            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
-               ? uiPortal.getSelectedUserNode().getURI() : null));
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -710,10 +717,13 @@ public class UIPortalComposer extends UIContainer
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
             pContext.setFullRender(true);
+            
+            UserNode currentNode = uiPortal.getSelectedUserNode();
+            SiteKey siteKey = currentNode.getNavigation().getKey();
             PageNodeEvent<UIPortalApplication> pnevent =
-               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE,
-                  (uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null));
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+            uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+            
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
             return;
@@ -767,10 +777,12 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          pContext.setFullRender(true);
+         
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
          PageNodeEvent<UIPortalApplication> pnevent =
-            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
-               ? uiPortal.getSelectedUserNode().getURI() : null));
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");

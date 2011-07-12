@@ -25,8 +25,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -34,7 +32,7 @@ import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.application.UIPortlet;
-import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
+import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -82,7 +80,7 @@ import javax.servlet.http.HttpServletResponse;
  * that display or not
  */
 @ComponentConfig(lifecycle = UIPortalApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl", events = {
-      @EventConfig(listeners = ChangePageNodeActionListener.class)})
+      @EventConfig(listeners = ChangeNodeActionListener.class)})
 public class UIPortalApplication extends UIApplication
 {
    public static final int NORMAL_MODE = 0;
@@ -588,8 +586,9 @@ public class UIPortalApplication extends UIApplication
 
          pcontext.getJavascriptManager().addCustomizedOnLoadScript(baseUriInJS.toString());
 
+         SiteKey siteKey = new SiteKey(pcontext.getSiteType(), pcontext.getSiteName());
          PageNodeEvent<UIPortalApplication> pnevent =
-            new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_PAGE_NODE, requestURI);
+            new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_NODE, siteKey, pcontext.getNodePath());
          broadcast(pnevent, Event.Phase.PROCESS);
       }
 

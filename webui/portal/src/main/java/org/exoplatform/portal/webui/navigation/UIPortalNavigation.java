@@ -335,7 +335,7 @@ public class UIPortalNavigation extends UIComponent
          }
          
          PageNodeEvent<UIPortalApplication> pnevent;
-         pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getNode().getURI());
+         pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, null, selectedNode.getNode().getURI());
          uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
       }
    }

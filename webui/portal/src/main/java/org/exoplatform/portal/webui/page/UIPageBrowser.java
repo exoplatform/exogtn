@@ -299,8 +299,9 @@ public class UIPageBrowser extends UIContainer
 
          if (isDeleteCurrentPage)         
          {
+            SiteKey siteKey = userNode.getNavigation().getKey();
             PageNodeEvent<UIPortalApplication> pnevent =
-               new PageNodeEvent<UIPortalApplication>(Util.getUIPortalApplication(), PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
+               new PageNodeEvent<UIPortalApplication>(Util.getUIPortalApplication(), PageNodeEvent.CHANGE_NODE, siteKey, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else

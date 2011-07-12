@@ -54,7 +54,7 @@ import java.util.List;
  */
 public class UIPageActionListener
 {
-   static public class ChangePageNodeActionListener extends EventListener<UIPortalApplication>
+   static public class ChangeNodeActionListener extends EventListener<UIPortalApplication>
    {
       public void execute(Event<UIPortalApplication> event) throws Exception
       {
@@ -62,18 +62,31 @@ public class UIPageActionListener
          UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
          
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
-         
-         String uri = ((PageNodeEvent<UIPortalApplication>)event).getTargetNodeUri();
+   
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withReadCheck();
-         builder.withTemporalCheck();
-         UserNode targetNode = userPortal.resolvePath(builder.build(), uri);
+
+         PageNodeEvent<UIPortalApplication> pageNodeEvent = (PageNodeEvent<UIPortalApplication>)event;
+         String nodePath = pageNodeEvent.getTargetNodeUri();
+
+         UserNode targetNode = null;
+         SiteKey siteKey = pageNodeEvent.getSiteKey();
+         if (siteKey == null)
+         {
+            targetNode = userPortal.resolvePath(builder.build(), nodePath);
+         }
+         else 
+         {
+            targetNode = userPortal.resolvePath(userPortal.getNavigation(siteKey), builder.build(), nodePath);
+            targetNode = targetNode == null ? userPortal.getDefaultPath(builder.build()) : targetNode;
+         }
          if (targetNode == null)
          {
             UIPageBody uiPageBody = showedUIPortal.findFirstComponentOfType(UIPageBody.class);
             uiPageBody.setUIComponent(null);
             return;
-         }         
+         }
+         
          UserNavigation targetNav = targetNode.getNavigation();
          
          UserNode currentNavPath = showedUIPortal.getNavPath();         
