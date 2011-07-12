@@ -64,8 +64,7 @@ public class UIPageActionListener
          
          String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
-         builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-         builder.withTemporalCheck();
+         builder.withAuthorizationCheck();
          UserNode naviPath = userPortal.resolvePath(builder.build(), uri);
          UserNavigation targetNav = naviPath.getNavigation();
          
