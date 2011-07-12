@@ -874,10 +874,22 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private static void fixOwnerName(PageNavigation pageNav)
    {
       pageNav.setOwnerId(fixOwnerName(pageNav.getOwnerType(), pageNav.getOwnerId()));
-      NavigationFragment fragment = pageNav.getFragment();
-      if (fragment != null)
+      ArrayList<NavigationFragment> fragments = pageNav.getFragments();
+      if (fragments != null)
       {
-         for (PageNode pageNode : fragment.getNodes())
+         for (NavigationFragment fragment : fragments)
+         {
+            fixOwnerName(fragment);
+         }
+      }
+   }
+
+   private static void fixOwnerName(NavigationFragment fragment)
+   {
+      ArrayList<PageNode> nodes = fragment.getNodes();
+      if (nodes != null)
+      {
+         for (PageNode pageNode : nodes)
          {
             fixOwnerName(pageNode);
          }

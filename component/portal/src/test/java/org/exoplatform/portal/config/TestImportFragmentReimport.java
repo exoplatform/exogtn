@@ -25,26 +25,26 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestImportConserve extends AbstractImportTest
+public class TestImportFragmentReimport extends AbstractImportFragmentTest
 {
 
    @Override
    protected ImportMode getMode()
    {
-      return ImportMode.CONSERVE;
+      return ImportMode.REIMPORT;
    }
 
    @Override
-   protected void assertOverride(NodeContext<?> root)
+   protected void afterOverrideReboot(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      assertNotNull(root.get("bar"));
    }
 
    @Override
-   protected void assertNoOverride(NodeContext<?> root)
+   protected void afterNoOverrideReconfigure(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      assertNotNull(root.get("bar"));
    }
 }

@@ -19,35 +19,32 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.portal.config.AbstractImportTest;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestImportMerge extends AbstractImportTest
+public class TestImportFragmentConserve extends AbstractImportFragmentTest
 {
 
    @Override
    protected ImportMode getMode()
    {
-      return ImportMode.MERGE;
+      return ImportMode.CONSERVE;
    }
 
    @Override
-   protected void assertOverride(NodeContext<?> root)
+   protected void afterOverrideReboot(NodeContext<?> root)
    {
-      assertEquals(2, root.getNodeCount());
+      assertEquals(1, root.getNodeCount());
       assertNotNull(root.get("foo"));
-      assertNotNull(root.get("bar"));
    }
 
    @Override
-   protected void assertNoOverride(NodeContext<?> root)
+   protected void afterNoOverrideReconfigure(NodeContext<?> root)
    {
-      assertEquals(2, root.getNodeCount());
+      assertEquals(1, root.getNodeCount());
       assertNotNull(root.get("foo"));
-      assertNotNull(root.get("bar"));
    }
 }

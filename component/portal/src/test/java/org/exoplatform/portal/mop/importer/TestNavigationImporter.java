@@ -31,6 +31,7 @@ import org.gatein.mop.core.api.MOPService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -68,9 +69,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       assertNull(service.loadNavigation(SiteKey.portal(name)));
-      PageNavigation src = navigation(name).build();
+      PageNavigation src = new PageNavigation("portal", name);
       src.setPriority(2);
-      src.setOwnerId(name);
       NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, mode, false, src, service, descriptionService);
       merge.perform();
 
@@ -89,11 +89,10 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("merge_create")));
 
       //
-      Builder builder = navigation("merge_create").add(node("a"));
+      FragmentBuilder builder = fragment().add(node("a"));
 
       //
-      PageNavigation src = builder.build();
-      src.setOwnerId("merge_create");
+      PageNavigation src = new PageNavigation("portal", "merge_create").addFragment(builder.build());
       NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
       merge.perform();
 
@@ -117,11 +116,10 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("merge_nested")));
 
       //
-      Builder builder = navigation("merge_nested").add(node("a").add(node("b")));
+      FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
       //
-      PageNavigation src = builder.build();
-      src.setOwnerId("merge_nested");
+      PageNavigation src = new PageNavigation("portal", "merge_nested").addFragment(builder.build());
       NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
       merge.perform();
 
@@ -163,11 +161,10 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal(name)));
 
       //
-      Builder builder = navigation(name).add(node("a").add(node("b")));
+      FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
       //
-      PageNavigation src = builder.build();
-      src.setOwnerId(name);
+      PageNavigation src = new PageNavigation("portal", name).addFragment(builder.build());
       NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, false, src, service, descriptionService);
       merge.perform();
 
@@ -184,9 +181,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertEquals(0, b.getNodeCount());
 
       //
-      builder = navigation(name).add(node("a").add(node("d"))).add(node("c"));
-      src = builder.build();
-      src.setOwnerId(name);
+      builder = fragment().add(node("a").add(node("d"))).add(node("c"));
+      src = new PageNavigation("portal", name).addFragment(builder.build());
       merge = new NavigationImporter(Locale.ENGLISH, importMode, false, src, service, descriptionService);
       merge.perform();
 
@@ -257,8 +253,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("merge_order")));
 
       //
-      PageNavigation src = navigation("merge_order").add(node("a"), node("b"), node("c")).build();
-      src.setOwnerId("merge_order");
+      PageNavigation src = new PageNavigation("portal", "merge_order").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
       merge.perform();
 
@@ -281,7 +276,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("importer_extended_label")));
 
       //
-      PageNavigation src = navigation("importer_extended_label").add(node("a"), node("b"), node("c")).build();
+      PageNavigation src = new PageNavigation("portal", "importer_extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationFragment fragment = src.getFragment();
       fragment.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
       fragment.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
@@ -331,7 +326,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal("importer_simple_label")));
 
       //
-      PageNavigation src = navigation("importer_simple_label").add(node("a"), node("b"), node("c")).build();
+      PageNavigation src = new PageNavigation("portal", "importer_simple_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationFragment fragment = src.getFragment();
       fragment.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
       fragment.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
@@ -361,5 +356,36 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
       assertNull(cDesc);
       assertEquals("c_en", c.getState().getLabel());
+   }
+
+   public void testFullNavigation()
+   {
+      MOPService mop = mgr.getPOMService();
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_full_navigation");
+      sync(true);
+
+      //
+      assertNull(service.loadNavigation(SiteKey.portal("importer_full_navigation")));
+
+      //
+      PageNavigation src = new PageNavigation("portal", "importer_full_navigation").addFragment(fragment().add(node("a")).build());
+      src.addFragment(fragment().add(node("b")).build());
+      src.addFragment(fragment("a").add(node("c")).build());
+
+      //
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, false, src, service, descriptionService);
+      importer.perform();
+
+      //
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_full_navigation"));
+      NodeContext<NodeContext<?>> root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
+      assertEquals(2, root.getNodeSize());
+      Iterator<NodeContext<?>> i = root.iterator();
+      NodeContext<?> a = i.next();
+      assertEquals("a", a.getName());
+      assertEquals(1, a.getNodeSize());
+      NodeContext<?> b = i.next();
+      assertEquals("b", b.getName());
+      assertEquals(0, b.getNodeSize());
    }
 }

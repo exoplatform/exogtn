@@ -38,6 +38,13 @@ public class PageNavigation
 
    public PageNavigation()
    {
+      this(null, null);
+   }
+
+   public PageNavigation(String ownerType, String ownerId)
+   {
+      this.ownerType = ownerType;
+      this.ownerId = ownerId;
       this.fragments = new ArrayList<NavigationFragment>();
    }
 
@@ -81,13 +88,14 @@ public class PageNavigation
       return fragments != null && fragments.size() > 0 ? fragments.get(0) : null;
    }
 
-   public void addFragment(NavigationFragment fragment)
+   public PageNavigation addFragment(NavigationFragment fragment)
    {
       if (fragments == null)
       {
          fragments = new ArrayList<NavigationFragment>();
       }
       fragments.add(fragment);
+      return this;
    }
 
    @Override

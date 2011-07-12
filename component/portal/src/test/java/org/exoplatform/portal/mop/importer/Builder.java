@@ -19,9 +19,8 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.NavigationFragment;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PageNodeContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,38 +28,47 @@ import java.util.List;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Builder
+public abstract class Builder<B extends Builder<B>>
 {
 
    /** . */
-   private String value;
+   protected final String value;
 
    /** . */
-   private List<Builder> nodes;
+   protected final List<NodeBuilder> nodes;
 
-   private Builder(String value)
+   protected Builder(String value)
    {
       this.value = value;
-      this.nodes = new ArrayList<Builder>();
+      this.nodes = new ArrayList<NodeBuilder>();
    }
 
-   public static Builder navigation(String ownerId)
+   public static NodeBuilder node(String name)
    {
-      return new Builder(ownerId);
+      return new NodeBuilder(name);
    }
 
-   public static Builder node(String name)
+   public static FragmentBuilder fragment(String... path)
    {
-      return new Builder(name);
+      StringBuilder sb = new StringBuilder();
+      for (String name : path)
+      {
+         if (sb.length() > 0)
+         {
+            sb.append('/');
+         }
+         sb.append(name);
+      }
+      return new FragmentBuilder(sb.toString());
    }
 
-   public Builder add(Builder... nodes)
+   public B add(NodeBuilder... nodes)
    {
-      for (Builder node : nodes)
+      for (NodeBuilder node : nodes)
       {
          this.nodes.add(node);
       }
-      return this;
+      return (B)this;
    }
 
    public Builder get(String value)
@@ -75,33 +83,16 @@ public class Builder
       return null;
    }
 
-   private ArrayList<PageNode> buildNodes()
+   protected final ArrayList<PageNode> buildNodes()
    {
       ArrayList<PageNode> nodes = new ArrayList<PageNode>();
-      for (Builder node : this.nodes)
+      for (NodeBuilder node : this.nodes)
       {
-         nodes.add(node.buildNode());
+         nodes.add(node.build());
       }
       return nodes;
    }
 
-   public PageNavigation build()
-   {
-      NavigationFragment fragment = new NavigationFragment();
-      fragment.setNodes(buildNodes());
-      PageNavigation navigation = new PageNavigation();
-      navigation.setOwnerType("portal");
-      navigation.setOwnerId(value);
-      navigation.addFragment(fragment);
-      return navigation;
-   }
+   public abstract PageNodeContainer build();
 
-   private PageNode buildNode()
-   {
-      PageNode node = new PageNode();
-      node.setName(value);
-      node.setLabel(value);
-      node.setChildren(buildNodes());
-      return node;
-   }
 }

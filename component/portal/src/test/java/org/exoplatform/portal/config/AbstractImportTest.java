@@ -44,9 +44,17 @@ public abstract class AbstractImportTest extends AbstractGateInTest
 
    protected abstract ImportMode getMode();
 
-   protected abstract void assertOverride(NodeContext<?> root);
+   protected abstract String getConfig2();
 
-   protected abstract void assertNoOverride(NodeContext<?> root);
+   protected abstract String getConfig1();
+
+   protected abstract void afterBoot(NodeContext<?> root);
+
+   protected abstract void afterOverrideReboot(NodeContext<?> root);
+
+   protected abstract  void afterNoOverrideReboot(NodeContext<?> root);
+
+   protected abstract void afterNoOverrideReconfigure(NodeContext<?> root);
 
    public void testOverride() throws Exception
    {
@@ -61,27 +69,26 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       System.setProperty("import.mode", getMode().toString());
 
       //
-      System.setProperty("import.portal", "merge1");
+      System.setProperty("import.portal", getConfig1());
       bootstrap.boot();
       PortalContainer container = bootstrap.getContainer();
       NavigationService service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
       NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      afterBoot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
 
       //
-      System.setProperty("import.portal", "merge2");
+      System.setProperty("import.portal", getConfig2());
       bootstrap.boot();
       container = bootstrap.getContainer();
       service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      assertOverride(root);
+      afterOverrideReboot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
@@ -99,20 +106,19 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       System.setProperty("import.mode", getMode().toString());
 
       //
-      System.setProperty("import.portal", "merge1");
+      System.setProperty("import.portal", getConfig1());
       bootstrap.boot();
       PortalContainer container = bootstrap.getContainer();
       NavigationService service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
       NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      afterBoot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
 
       //
-      System.setProperty("import.portal", "merge2");
+      System.setProperty("import.portal", getConfig2());
       bootstrap.boot();
       container = bootstrap.getContainer();
       service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
@@ -120,8 +126,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      afterNoOverrideReboot(root);
       Workspace workspace = mgr.getSession().getWorkspace();
       assertTrue(workspace.isAdapted(Imported.class));
       workspace.removeAdapter(Imported.class);
@@ -137,7 +142,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      assertNoOverride(root);
+      afterNoOverrideReconfigure(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
