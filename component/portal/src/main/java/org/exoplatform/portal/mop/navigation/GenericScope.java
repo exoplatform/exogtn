@@ -98,59 +98,55 @@ public class GenericScope
 
          public VisitMode enter(int depth, String id, String name, NodeState state)
          {
-            if (depth == 0)
+            int size = getSize();
+
+            //
+            if (depth < size)
             {
-               return VisitMode.ALL_CHILDREN;
-            }
-            else if (depth > 0)
-            {
-               int size = getSize();
-               if (depth < size)
+               if (depth == 0 || name.equals(getName(depth - 1)))
                {
-                  if ((name.equals(getName(depth - 1))))
-                  {
-                     return VisitMode.ALL_CHILDREN;
-                  }
-                  else
-                  {
-                     return VisitMode.NO_CHILDREN;
-                  }
-               }
-               else if (depth == size)
-               {
-                  if ((name.equals(getName(size - 1))))
-                  {
-                     Scope.Visitor visitor = getFederated();
-                     VisitMode enter = visitor.enter(0, id, name, state);
-                     if (enter == VisitMode.ALL_CHILDREN)
-                     {
-                        this.visitor = visitor;
-                     }
-                     return enter;
-                  }
-                  else
-                  {
-                     return VisitMode.NO_CHILDREN;
-                  }
+                  return VisitMode.ALL_CHILDREN;
                }
                else
                {
-                  return visitor.enter(depth - size, id, name, state);
+                  return VisitMode.NO_CHILDREN;
                }
             }
-            throw new AssertionError();
+            else if (depth == size)
+            {
+               if (depth == 0 || name.equals(getName(depth - 1)))
+               {
+                  Scope.Visitor visitor = getFederated();
+                  VisitMode mode = visitor.enter(0, id, name, state);
+                  if (mode == VisitMode.ALL_CHILDREN)
+                  {
+                     this.visitor = visitor;
+                  }
+                  return mode;
+               }
+               else
+               {
+                  return VisitMode.NO_CHILDREN;
+               }
+            }
+            else
+            {
+               return visitor.enter(depth - size, id, name, state);
+            }
          }
 
          public void leave(int depth, String id, String name, NodeState state)
          {
             int size = getSize();
+
+            //
             if (depth < size)
             {
                // Do nothing
             }
             else if (depth == size)
             {
-               if (name.equals(getName(size - 1)) && visitor != null)
+               if (depth == 0 || name.equals(getName(depth - 1)))
                {
                   visitor.leave(0, id, name, state);
                   visitor = null;
