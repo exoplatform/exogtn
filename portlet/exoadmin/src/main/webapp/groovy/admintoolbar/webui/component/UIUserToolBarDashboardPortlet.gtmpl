@@ -103,9 +103,8 @@
 	</ul>	
 <% 
 	}else{
-		defaultDashboardPage =userNodes.iterator().next();
 		String link = nodeURL.setResource(
-		   new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), defaultDashboardPage)).toString();
+		   new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), userNodes.iterator().next())).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">

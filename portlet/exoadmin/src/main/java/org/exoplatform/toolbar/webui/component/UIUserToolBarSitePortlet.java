@@ -73,12 +73,6 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
       return portalName;
    }
 
-   public String getPortalURI(String portalName)
-   {
-      String currentPortalURI = Util.getPortalRequestContext().getPortalURI();
-      return currentPortalURI.substring(0, currentPortalURI.lastIndexOf(getCurrentPortal())) + portalName + "/";
-   } 
-
    @Override
    protected UserNode getNodeFromResourceID(String resourceId) throws Exception
    {      
@@ -96,8 +90,7 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
 
    private String getCurrentPortal()
    {
-      // TODO return the current portal name
-      return "classic";
+      return Util.getPortalRequestContext().getPortalOwner();
    }
 
    @Override

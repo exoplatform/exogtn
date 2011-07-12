@@ -2,16 +2,17 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.webui.organization.OrganizationUtils;
-	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.mop.user.UserNavigation;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.portal.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
+	import org.exoplatform.portal.mop.SiteKey;
 	
-	def rcontext = _ctx.getRequestContext() ;
+	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
 	jsmanager.importJavascript('eXo.portal.UIAdminToolbar');
@@ -46,16 +47,14 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String actionLink = nodeURL.setResource(new NavigationResource(navigation.getOwnerType(), navigation.getOwnerId(), node)).toString();
+		String actionLink = nodeURL.setResource(new NavigationResource(PortalConfig.GROUP_TYPE, groupId, node)).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
-		boolean toolong = (node.resolvedLabel.length() > 60);
-		String label = ( toolong ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel);
+		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
+		String label = ( toolong ? node.getEncodedResolvedLabel().substring(0, 57) + "..." : node.getEncodedResolvedLabel());
 		String title = "";
-		if(toolong) title = "title='$node.resolvedLabel'";
+		if(toolong) title = "title='$node.getEncodedResolvedLabel()'";
 		else title = "";
-        EntityEncoder entityEncoder = EntityEncoder.FULL;
-		label = entityEncoder.encode(label);
 		
 		def getNodeURL = "";
 		if (hasChild) {
@@ -77,7 +76,6 @@
 			print """
 				<ul class="MenuItemContainer" style="position: absolute; display:none">					
 			""" ;
-				int idx = 0;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, groupId, nodeURL);
 				}
@@ -91,16 +89,19 @@
 	    """ ;
 	}	
 	
-	def portalNavigation = uicomponent.getCurrentPortalNavigation();
-	def groupNaviNode = portalNavigation.getNode("groupnavigation");
+	def currentPortal = pcontext.getPortalOwner();
+	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
+	def nodes = uicomponent.getNavigationNodes(navigation);
+	def rootNode = nodes.iterator().next().getParent();
+    def groupNaviNode = rootNode.getChild("groupnavigation"); 
 %> 	
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab">
-		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalNavigation.getOwnerId(), groupNaviNode)).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, groupNaviNode)).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer">
-		<% for(navigation in groupNavigations) {
-				renderGroupPageNavigation(navigation, nodeURL);
+		<% for(nav in groupNavigations) {
+				renderGroupPageNavigation(nav, nodeURL);
 		} %>
 		</ul>
 		<% } %>

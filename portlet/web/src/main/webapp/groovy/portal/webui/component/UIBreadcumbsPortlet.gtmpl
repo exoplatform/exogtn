@@ -25,7 +25,7 @@
   							String actionLink = nodeURL.setResource(new NavigationResource(node));
   							if(i == list.size()-1) note = "Selected";
   				%>
-  							<a href="<%=(node.getPageReference() == null) ? "#" : actionLink%>"	class="$note"><%=node.getResolvedLabel();%></a> 																
+  							<a href="<%=(node.getPageRef() == null) ? "#" : actionLink%>"	class="$note"><%=node.getResolvedLabel();%></a> 																
   				<%			
   							if(i != list.size()-1) {
   				%>

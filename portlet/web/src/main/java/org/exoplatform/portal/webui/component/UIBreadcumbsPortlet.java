@@ -20,17 +20,10 @@
 package org.exoplatform.portal.webui.component;
 
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIBreadcumbs;
-import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -63,31 +56,6 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       template = prefers.getValue("template", "app:/groovy/portal/webui/component/UIBreadcumbsPortlet.gtmpl");
    }
 
-   private void loadSelectedPath() throws Exception
-   {
-      UserNode node = Util.getUIPortal().getSelectedUserNode();
-      List<LocalPath> paths = new ArrayList<LocalPath>();
-      
-      do
-      {
-         if (node.getPageRef() == null)
-         {
-            paths.add(new LocalPath(null, node.getResolvedLabel()));
-         }
-         else
-         {
-            paths.add(new LocalPath(node.getURI(), node.getResolvedLabel()));
-         }
-         node = node.getParent();
-      }
-      while (node != null && node.getParent() != null);
-      
-      Collections.reverse(paths);
-      
-      UIBreadcumbs uiBreadCumbs = getChild(UIBreadcumbs.class);
-      uiBreadCumbs.setPath(paths);
-   }   
-
    public String getTemplate()
    {
       return template != null ? template : super.getTemplate();
@@ -101,28 +69,20 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       return Boolean.valueOf(prefers.getValue("useAJAX", "true"));        
    }
    
-//   public List<PageNode> getSelectedPath()
-//   {
-//      return Util.getUIPortal().getSelectedPath();
-//   }   
-//
-//   @Override
-//   public void renderChildren() throws Exception
-//   {
-//      getSelectedPath();
-//      super.renderChildren();
-//   }
-//
-//   static public class SelectPathActionListener extends EventListener<UIBreadcumbs>
-//   {
-//      @Override
-//      public void execute(Event<UIBreadcumbs> event) throws Exception
-//      {
-//         String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-//         UIPortal uiPortal = Util.getUIPortal();
-//         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-//         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-//      }
-//   }
+   public List<UserNode> getSelectedPath() throws Exception
+   {
+      UserNode node = Util.getUIPortal().getSelectedUserNode();
+      List<UserNode> paths = new ArrayList<UserNode>();
+      
+      do
+      {
+         paths.add(node);
+         node = node.getParent();
+      }
+      while (node != null && node.getParent() != null);      
+      Collections.reverse(paths);
+      
+      return paths;
+   }   
 
 }
