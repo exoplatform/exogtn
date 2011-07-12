@@ -142,7 +142,7 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
             
             ControllerURL<NavigationResource, NavigationLocator> nodeURL =
                pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-            nodeURL.setResource(new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), targetNode));
+            nodeURL.setResource(new NavigationResource(targetNode));
             pcontext.sendRedirect(nodeURL.toString());
          }
       }

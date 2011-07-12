@@ -41,7 +41,7 @@
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
 		String href = nodeURL.setResource(
-		   new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), node)).toString();
+		   new NavigationResource(node)).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		def resolvedLabel = node.getEncodedResolvedLabel();
@@ -104,7 +104,7 @@
 <% 
 	}else{
 		String link = nodeURL.setResource(
-		   new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), userNodes.iterator().next())).toString();
+		   new NavigationResource(userNodes.iterator().next())).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">

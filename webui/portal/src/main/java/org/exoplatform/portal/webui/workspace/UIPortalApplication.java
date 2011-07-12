@@ -567,7 +567,8 @@ public class UIPortalApplication extends UIApplication
             {
                ControllerURL<NavigationResource, NavigationLocator> nodeURL =
                   pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-               nodeURL.setResource(new NavigationResource(getCurrentSite().getOwnerType(), getCurrentSite().getOwner().replaceAll("/", "_"), getCurrentSite().getSelectedUserNode()));
+//               nodeURL.setResource(new NavigationResource(getCurrentSite().getOwnerType(), getCurrentSite().getOwner().replaceAll("/", "_"), getCurrentSite().getSelectedUserNode()));
+               nodeURL.setResource(new NavigationResource(getCurrentSite().getSelectedUserNode()));
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }

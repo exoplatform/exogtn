@@ -38,11 +38,9 @@
 			
 			def node = treeNode.getNode();
 			def treePath = node.getId();
-			def nav = node.getNavigation();
-			def siteKey = nav.getKey();
 			String label = node.encodedResolvedLabel;		
 
-            String actionLink = nodeURL.setResource(new NavigationResource(siteKey.getTypeName(), siteKey.getName(), node)).toString();
+            String actionLink = nodeURL.setResource(new NavigationResource(node)).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {

@@ -81,7 +81,7 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, uicomponent.getCurrentPortal(), node)).toString();
+		String	href = nodeURL.setResource(new NavigationResource(node)).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
@@ -127,13 +127,11 @@
 	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
 	def nodes = uicomponent.getNavigationNodes(navigation);
 	_ctx.getRequestContext().setAttribute("nodes", nodes);
-	def rootNode = nodes.iterator().next().getParent();
-    def portalNavigationNode = rootNode.getChild("portalnavigation");    
 %> 
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab">
-		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, portalNavigationNode)).toString() %>">
+		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, "portalnavigation")).toString() %>">
 			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
 		</a>		
 		<% renderPortalNavigations(nodeURL) %>

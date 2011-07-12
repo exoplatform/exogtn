@@ -39,29 +39,29 @@ public class NavigationResource
    private final String siteName;
    
    /** . */
-   private final UserNode pageNode;
+   private final String nodeURI;
    
    public NavigationResource(String siteName)
    {
-      this(null, siteName, null);
+      this(null, null, siteName, null);
    }
    
    public NavigationResource(UserNode node)
    {
-      this(null, null, node);
-   }
-   
-   public NavigationResource(String siteType, String siteName, UserNode node)
-   {
-      this(null, siteType, siteName, node);
+      this(null, node.getNavigation().getKey().getTypeName(), node.getNavigation().getKey().getName(), node.getURI());
    }
 
-   public NavigationResource(String access, String siteType, String portalName, UserNode node)
+   public NavigationResource(String siteType, String portalName, String nodeURI)
+   {
+      this(null, siteType, portalName, nodeURI);
+   }
+   
+   public NavigationResource(String access, String siteType, String portalName, String nodeURI)
    {
       this.access = access;
       this.siteType = siteType;
       this.siteName = portalName;
-      this.pageNode = node;
+      this.nodeURI = nodeURI;
    }
 
    public String getAccess()
@@ -79,8 +79,8 @@ public class NavigationResource
       return siteName;
    }
 
-   public UserNode getUserNode()
+   public String getNodeURI()
    {
-      return pageNode;
+      return nodeURI;
    }
 }

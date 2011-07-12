@@ -26,18 +26,18 @@
 	void renderGroupPageNavigation(UserNavigation navigation, ControllerURL nodeURL) {
 			def nodes = uicomponent.getNavigationNodes(navigation);
 			if(nodes.size() < 1) return ;
-			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
+			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;		
 			def ownerId = navigation.getKey().getName();
 			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(ownerId));
 			print """
 						<li class="TitleBar" title="$ownerId">$navTitle</li>						
 			""" ;
 						for(UserNode node : nodes) {
-							renderPageNode(node, ownerId, nodeURL);
+							renderPageNode(node, nodeURL);
 						}	
 	}
 	
-	void renderPageNode(UserNode node, String groupId, ControllerURL nodeURL) {
+	void renderPageNode(UserNode node, ControllerURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
@@ -47,7 +47,7 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String actionLink = nodeURL.setResource(new NavigationResource(PortalConfig.GROUP_TYPE, groupId, node)).toString();
+		String actionLink = nodeURL.setResource(new NavigationResource(node)).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
@@ -58,8 +58,9 @@
 		
 		def getNodeURL = "";
 		if (hasChild) {
+		    def groupId = node.getNavigation().getKey().getName();
 			MimeResponse res = _ctx.getRequestContext().getResponse();
-			ResourceURL resourceURL = res.createResourceURL();
+			ResourceURL resourceURL = res.createResourceURL();			
 			resourceURL.setResourceID(res.encodeURL(groupId + "::" + node.getURI()));	
 			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
@@ -77,7 +78,7 @@
 				<ul class="MenuItemContainer" style="position: absolute; display:none">					
 			""" ;
 				for(UserNode child : node.getChildren()) {
-					renderPageNode(child, groupId, nodeURL);
+					renderPageNode(child, nodeURL);
 				}
 			print """				
 				</ul>
@@ -90,14 +91,10 @@
 	}	
 	
 	def currentPortal = pcontext.getPortalOwner();
-	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
-	def nodes = uicomponent.getNavigationNodes(navigation);
-	def rootNode = nodes.iterator().next().getParent();
-    def groupNaviNode = rootNode.getChild("groupnavigation"); 
 %> 	
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab">
-		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, groupNaviNode)).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer">
 		<% for(nav in groupNavigations) {

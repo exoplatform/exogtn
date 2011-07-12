@@ -73,13 +73,13 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
    {
       if (PATH.equals(parameterName))
       {
-         if (resource.getUserNode() == null) 
+         if (resource.getNodeURI() == null) 
          {
             return "";
          }
          else
          {
-            return "/" + resource.getUserNode().getURI();
+            return "/" + resource.getNodeURI();
          }
       }
       else if (REQUEST_SITE_TYPE.equals(parameterName))

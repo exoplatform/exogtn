@@ -381,7 +381,7 @@ public class UIPageCreationWizard extends UIPageWizard
             UserNode newNode = uiWizard.saveData();
             ControllerURL<NavigationResource, NavigationLocator> nodeURL =
                pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-            nodeURL.setResource(new NavigationResource(null, null, newNode));
+            nodeURL.setResource(new NavigationResource(newNode));
             UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             toolPanel.setUIComponent(null);
             uiWizard.updateUIPortal(event);         
