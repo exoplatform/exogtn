@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig.Builder;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
@@ -431,6 +432,44 @@ public class TestUserPortal extends AbstractPortalTest
             assertNull(nav.getParent().getParent().getParent());
          }
       }.execute("root");
+   }
+
+   public void testFindBestAvailablePath()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("limited", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+
+            // Without authentication
+            UserNode nav = userPortal.resolvePath(null, "/");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            nav = userPortal.resolvePath(null, "/foo");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            // With authentication
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+            builder.withAuthorizationCheck();
+            UserNodeFilterConfig filterConfig = builder.build();
+
+            nav = userPortal.resolvePath(filterConfig, "/");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("bar", nav.getName());
+
+            nav = userPortal.resolvePath(filterConfig, "/foo");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            nav = userPortal.resolvePath(filterConfig, "/bit");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("bit", nav.getName());
+         }
+      }.execute("demo");
    }
 
    public void testPathResolutionPerNavigation()

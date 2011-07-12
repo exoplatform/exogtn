@@ -342,7 +342,7 @@ public class UserPortalImpl implements UserPortal
       // Find the first navigation available or return null
       if (segments == null)
       {
-         return getDefaultPath(null);
+         return getDefaultPath(filterConfig);
       }
 
       // Get navigations

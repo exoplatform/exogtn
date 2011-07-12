@@ -101,6 +101,9 @@
                 <value>
                   <string>extended</string>
                 </value>
+                <value>
+                  <string>limited</string>
+                </value>
               </collection>
             </field>
             <field name="ownerType">
