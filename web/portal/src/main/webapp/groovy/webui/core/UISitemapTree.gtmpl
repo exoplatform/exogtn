@@ -2,12 +2,13 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.webui.core.UIPortletApplication;
 	import org.exoplatform.portal.mop.user.UserNode;
+	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.navigation.TreeNode;
 	import org.exoplatform.web.url.ControllerURL;
-	import org.exoplatform.web.application.Parameter;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
+	import javax.portlet.ResourceURL;
 
 	def navigations = uicomponent.getNavigations();
 
@@ -35,13 +36,13 @@
 			// count size;
 			size++;
 			
-			node = treeNode.getNode();
-			nav = treeNode.getNavigation();
-			String label = node.encodedResolvedLabel;	
-			actionExpand = uicomponent.event("SelectNode", nav.getId() + "::" + node.getURI());				
-			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getURI()) + "', true)";	
+			def node = treeNode.getNode();
+			def treePath = node.getId();
+			def nav = node.getNavigation();
+			def siteKey = nav.getKey();
+			String label = node.encodedResolvedLabel;		
 
-      String actionLink = nodeURL.setResource(new NavigationResource(nav.getOwnerType(), nav.getOwnerId(), node)).toString();
+            String actionLink = nodeURL.setResource(new NavigationResource(siteKey.getTypeName(), siteKey.getName(), node)).toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {
@@ -83,7 +84,7 @@
 							<div class="ChildrenContainer" style="display: none">
 					""";
 					
-				    renderNodes(treeNode, portalUri, useAjax);
+				    renderNodes(treeNode, nodeURL, useAjax);
 				}
 
 
