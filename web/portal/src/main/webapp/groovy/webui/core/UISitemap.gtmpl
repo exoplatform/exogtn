@@ -1,14 +1,7 @@
 <%	
-<<<<<<< HEAD
 		import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 					
 		def uiPortalNavigation = uicomponent.getChild(UIPortalNavigation.class); 
 		uiPortalNavigation.loadTreeNodes();
-=======
-		import org.exoplatform.portal.webui.component.UISitemapTree;
-					
-		def uiSitemapTree = uicomponent.getChild(UISitemapTree.class); 
-		uiSitemapTree.loadTreeNodes();
->>>>>>> 10fa210... - Support to specify siteType and siteName in URL
 		uicomponent.renderChildren();
 %>
