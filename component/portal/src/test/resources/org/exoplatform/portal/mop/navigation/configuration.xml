@@ -28,21 +28,17 @@
       <name>new.portal.config.user.listener</name>
       <set-method>initListener</set-method>
       <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
-      <description>this listener init the portal configuration</description>
       <init-params>
         <value-param>
           <name>default.portal</name>
-          <description>The default portal for checking db is empty or not</description>
           <value>classic</value>
         </value-param>
         <value-param>
           <name>initializing.failure.ignore</name>
-          <description>In the run method, use try catch or not (value is true/false)</description>
           <value>true</value>
         </value-param>
         <object-param>
           <name>portal.configuration</name>
-          <description>description</description>
           <object type="org.exoplatform.portal.config.NewPortalConfig">
             <field name="predefinedOwner">
               <collection type="java.util.HashSet">

@@ -31,7 +31,6 @@
   	<init-params>
       <object-param>
         <name>cache.config.default</name>
-        <description>The default cache configuration</description>
         <object type="org.exoplatform.services.cache.ExoCacheConfig">
           <field name="name"><string>default</string></field>
           <field name="maxSize"><int>30000</int></field>
@@ -96,17 +95,14 @@
     <init-params>
       <value-param>
         <name>super.user</name>
-        <description>administrator</description>
         <value>root</value>
       </value-param>
       <value-param>
         <name>guests.group</name>
-        <description>guests group</description>
         <value>/platform/guests</value>
       </value-param>
       <value-param>
         <name>navigation.creator.membership.type</name>
-        <description>specific membership type have full permission with group navigation</description>
         <value>manager</value>
       </value-param>
     </init-params>
@@ -148,7 +144,6 @@
  		  <init-params>
  		    <values-param>
  		      <name>autoCreatedInNewRepository</name>
- 		      <description>Node types configuration file</description>
            <value>jar:/conf/gatein-nodetypes.xml</value>
            <value>jar:/conf/mop-nodetypes.xml</value>
            <value>jar:/conf/content-nodetypes.xml</value>
@@ -234,11 +229,9 @@
       <name>new.user.event.listener</name>
       <set-method>addListenerPlugin</set-method>
       <type>org.exoplatform.services.organization.impl.NewUserEventListener</type>
-      <description>this listener assign group and membership to a new created user</description>
       <init-params>
         <object-param>
           <name>configuration</name>
-          <description>description</description>
           <object type="org.exoplatform.services.organization.impl.NewUserConfig">
             <field  name="group">
               <collection type="java.util.ArrayList">
