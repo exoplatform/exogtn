@@ -126,24 +126,31 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
          String nodeName = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
 
          Collection<UserNode> nodes = toolBarPortlet.getNavigationNodes(toolBarPortlet.getCurrentUserNavigation());
+         UserNode targetNode = null;
          if (nodes.size() < 1)
          {
-            createDashboard(nodeName, toolBarPortlet);
+            targetNode = createDashboard(nodeName, toolBarPortlet);
          }
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
-
-         ControllerURL<NavigationResource, NavigationLocator> nodeURL =
-            pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-         nodeURL.setResource(new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), nodes
-            .iterator().next()));
-         pcontext.sendRedirect(nodeURL.toString());
+         else 
+         {
+            targetNode = nodes.iterator().next();
+         }
+         
+         if (targetNode != null)
+         {            
+            PortalRequestContext pcontext = Util.getPortalRequestContext();
+            
+            ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+               pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+            nodeURL.setResource(new NavigationResource(PortalConfig.USER_TYPE, pcontext.getRemoteUser(), targetNode));
+            pcontext.sendRedirect(nodeURL.toString());
+         }
       }
 
-      private static void createDashboard(String _nodeName, UIUserToolBarDashboardPortlet toolBarPortlet)
+      private static UserNode createDashboard(String _nodeName, UIUserToolBarDashboardPortlet toolBarPortlet)
       {
          try
          {
-            PortalRequestContext prContext = Util.getPortalRequestContext();
             if (_nodeName == null)
             {
                logger.debug("Parsed nodeName is null, hence use Tab_0 as default name");
@@ -152,10 +159,6 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
 
             UserPortal userPortal = toolBarPortlet.getUserPortal();
             UserNavigation userNav = toolBarPortlet.getCurrentUserNavigation();
-            if (userNav == null)
-            {
-               return;
-            }
             SiteKey siteKey = userNav.getKey();
 
             UserPortalConfigService _configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
@@ -171,12 +174,13 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
             tabNode.setPageRef(page.getPageId());
 
             userPortal.saveNode(rootNode, null);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabNode.getURI());
+            return tabNode;
          }
          catch (Exception ex)
          {
             logger.info("Could not create default dashboard page", ex);
          }
+         return null;
       }
    }
 }
