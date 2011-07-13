@@ -101,9 +101,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
     */
    private final boolean overrideExistingData;
 
-   /** The import mode. */
-   private final ImportMode importMode;
-
    /** . */
    private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -173,16 +170,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       else
       {
          overrideExistingData = false;
-      }
-
-      valueParam = params.getValueParam("import.mode");
-      if (valueParam != null)
-      {
-         importMode = ImportMode.valueOf(valueParam.getValue().trim().toUpperCase());
-      }
-      else
-      {
-         importMode = ImportMode.CONSERVE;
       }
 
       this.pomMgr = pomMgr;
@@ -598,6 +585,17 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       //
       PageNavigation navigation = obj.getObject();
       boolean extendedNavigation = obj.getVersion() == Version.V_1_2;
+
+      //
+      ImportMode importMode;
+      if (config.getImportMode() != null)
+      {
+         importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
+      }
+      else
+      {
+         importMode = ImportMode.CONSERVE;
+      }
 
       //
       Locale locale;

@@ -34,10 +34,6 @@
           <value>classic</value>
         </value-param>
         <value-param>
-          <name>import.mode</name>
-          <value>${import.mode}</value>
-        </value-param>
-        <value-param>
           <name>override</name>
           <value>${override}</value>
         </value-param>
@@ -56,6 +52,9 @@
             </field>
             <field name="templateLocation">
               <string>classpath:/org/exoplatform/portal/config/${import.portal}-conf</string>
+            </field>
+            <field name="importMode">
+              <string>${import.mode}</string>
             </field>
           </object>
         </object-param>
