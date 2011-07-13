@@ -37,16 +37,24 @@ public class TestImportFragmentMerge extends AbstractImportFragmentTest
    @Override
    protected void afterOverrideReboot(NodeContext<?> root)
    {
-      assertEquals(2, root.getNodeCount());
-      assertNotNull(root.get("foo"));
-      assertNotNull(root.get("bar"));
+      assertEquals(1, root.getNodeSize());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(1, foo.getNodeSize());
+      NodeContext<?> bar = foo.get("bar");
+      assertNotNull(bar);
+      assertEquals(0, bar.getNodeSize());
    }
 
    @Override
    protected void afterNoOverrideReconfigure(NodeContext<?> root)
    {
-      assertEquals(2, root.getNodeCount());
-      assertNotNull(root.get("foo"));
-      assertNotNull(root.get("bar"));
+      assertEquals(1, root.getNodeSize());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(1, foo.getNodeSize());
+      NodeContext<?> bar = foo.get("bar");
+      assertNotNull(bar);
+      assertEquals(0, bar.getNodeSize());
    }
 }

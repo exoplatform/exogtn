@@ -38,13 +38,17 @@ public class TestImportFragmentConserve extends AbstractImportFragmentTest
    protected void afterOverrideReboot(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(0, foo.getNodeSize());
    }
 
    @Override
    protected void afterNoOverrideReconfigure(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(0, foo.getNodeSize());
    }
 }

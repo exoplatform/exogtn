@@ -42,15 +42,19 @@ public abstract class AbstractImportFragmentTest extends AbstractImportTest
    @Override
    protected final void afterBoot(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      assertEquals(1, root.getNodeSize());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(0, foo.getNodeSize());
    }
 
    @Override
    protected final void afterNoOverrideReboot(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      assertEquals(1, root.getNodeSize());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals(0, foo.getNodeSize());
    }
 
 

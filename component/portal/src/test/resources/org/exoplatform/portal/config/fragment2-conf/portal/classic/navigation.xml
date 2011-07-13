@@ -24,6 +24,7 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
 	<priority>1</priority>
   <page-nodes>
+    <parent-uri>foo</parent-uri>
     <node>
       <name>bar</name>
     </node>
