@@ -20,6 +20,9 @@
 package org.exoplatform.portal.mop.importer;
 
 import org.chromattic.api.annotations.MixinType;
+import org.chromattic.api.annotations.Property;
+
+import java.util.Date;
 
 /**
  * This mixin denotes the import performed.
@@ -27,6 +30,17 @@ import org.chromattic.api.annotations.MixinType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 @MixinType(name = "gtn:imported")
-public class Imported
+public abstract class Imported
 {
+
+   @Property(name = "gtn:creationdate")
+   public abstract Date getCreationDate();
+
+   public abstract void setCreationDate(Date creationDate);
+
+   @Property(name = "gtn:lastmodificationdate")
+   public abstract Date getLastModificationDate();
+
+   public abstract void setLastModificationDate(Date lastModificationDate);
+
 }

@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -175,45 +176,63 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       this.pomMgr = pomMgr;
    }
 
-   protected boolean performImport()
-   {
-      if (overrideExistingData)
-      {
-         return true;
-      }
-      else
-      {
-         POMSession session = pomMgr.getSession();
-
-         // Obtain the status
-         Workspace workspace = session.getWorkspace();
-         boolean perform = !workspace.isAdapted(Imported.class);
-
-         // We mark it
-         if (perform)
-         {
-            workspace.adapt(Imported.class);
-            session.save();
-         }
-
-         //
-         return perform;
-      }
-   }
-
-   public void run() throws Exception
+   private void touchImport()
    {
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
-         if (!performImport())
+         POMSession session = pomMgr.getSession();
+         Workspace workspace = session.getWorkspace();
+         Imported imported = workspace.adapt(Imported.class);
+         imported.setLastModificationDate(new Date());
+         session.save();
+      }
+      finally
+      {
+         RequestLifeCycle.end();
+      }
+   }
+
+   private boolean performImport()
+   {
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
+      {
+         if (overrideExistingData)
          {
-            return;
+            return true;
+         }
+         else
+         {
+            POMSession session = pomMgr.getSession();
+
+            // Obtain the status
+            Workspace workspace = session.getWorkspace();
+            boolean perform = !workspace.isAdapted(Imported.class);
+
+            // We mark it
+            if (perform)
+            {
+               Imported imported = workspace.adapt(Imported.class);
+               imported.setCreationDate(new Date());
+               session.save();
+            }
+
+            //
+            return perform;
          }
       }
       finally
       {
          RequestLifeCycle.end();
+      }
+   }
+
+   public void run() throws Exception
+   {
+      if (!performImport())
+      {
+         return;
       }
 
       //
@@ -291,6 +310,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             }
          }
 
+         //
+         touchImport();
       }
       else
       {
@@ -330,6 +351,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             ele.getPredefinedOwner().clear();
          }
+
+         //
+         touchImport();
       }
    }
 
