@@ -35,7 +35,7 @@
         </value-param>
         <value-param>
           <name>override</name>
-          <value>${override}</value>
+          <value>${override.1}</value>
         </value-param>
         <object-param>
           <name>portal.configuration</name>
@@ -51,10 +51,10 @@
               <string>portal</string>
             </field>
             <field name="templateLocation">
-              <string>classpath:/org/exoplatform/portal/config/${import.portal}-conf</string>
+              <string>classpath:/org/exoplatform/portal/config/${import.portal.1}-conf</string>
             </field>
             <field name="importMode">
-              <string>${import.mode}</string>
+              <string>${import.mode.1}</string>
             </field>
           </object>
         </object-param>

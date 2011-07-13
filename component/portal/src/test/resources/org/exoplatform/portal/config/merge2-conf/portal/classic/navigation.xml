@@ -26,6 +26,7 @@
 	<page-nodes>
 		<node>
 			<name>bar</name>
+      <icon>bar_icon</icon>
 		</node>
 	</page-nodes>
 </node-navigation>

@@ -40,12 +40,12 @@ public class TestImport extends AbstractGateInTest
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
 
       //
-      System.setProperty("override", "false");
-      System.setProperty("import.mode", "conserve");
-      System.setProperty("import.portal", "merge1");
+      System.setProperty("override.1", "false");
+      System.setProperty("import.mode.1", "conserve");
+      System.setProperty("import.portal.1", "merge1");
 
       //
       bootstrap.boot();

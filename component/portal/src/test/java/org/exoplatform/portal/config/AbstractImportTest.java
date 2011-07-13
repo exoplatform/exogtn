@@ -48,77 +48,108 @@ public abstract class AbstractImportTest extends AbstractGateInTest
 
    protected abstract String getConfig1();
 
-   protected abstract void afterBoot(NodeContext<?> root);
+   protected abstract void afterOnePhaseBoot(NodeContext<?> root);
 
-   protected abstract void afterOverrideReboot(NodeContext<?> root);
+   protected abstract void afterTwoPhasesBoot(NodeContext<?> root);
 
-   protected abstract  void afterNoOverrideReboot(NodeContext<?> root);
+   protected abstract void afterTwoPhaseOverrideReboot(NodeContext<?> root);
 
-   protected abstract void afterNoOverrideReconfigure(NodeContext<?> root);
+   protected abstract  void afterTwoPhaseNoOverrideReboot(NodeContext<?> root);
 
-   public void testOverride() throws Exception
+   protected abstract void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root);
+
+   public void testOnePhase() throws Exception
    {
       KernelBootstrap bootstrap = new KernelBootstrap();
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport2-configuration.xml");
 
       //
-      System.setProperty("override", "true");
-      System.setProperty("import.mode", getMode().toString());
+      System.setProperty("override.1", "false");
+      System.setProperty("import.mode.1", "conserve");
+      System.setProperty("import.portal.1", getConfig1());
+      System.setProperty("override_2", "false");
+      System.setProperty("import.mode_2", getMode().toString());
+      System.setProperty("import.portal_2", getConfig2());
 
       //
-      System.setProperty("import.portal", getConfig1());
       bootstrap.boot();
       PortalContainer container = bootstrap.getContainer();
       NavigationService service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
       NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
-      afterBoot(root);
+      afterOnePhaseBoot(root);
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+
+   public void testTwoPhasesOverride() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+
+      //
+      System.setProperty("override.1", "true");
+      System.setProperty("import.mode.1", getMode().toString());
+
+      //
+      System.setProperty("import.portal.1", getConfig1());
+      bootstrap.boot();
+      PortalContainer container = bootstrap.getContainer();
+      NavigationService service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
+      RequestLifeCycle.begin(container);
+      NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
+      NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
+      afterTwoPhasesBoot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
 
       //
-      System.setProperty("import.portal", getConfig2());
+      System.setProperty("import.portal.1", getConfig2());
       bootstrap.boot();
       container = bootstrap.getContainer();
       service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      afterOverrideReboot(root);
+      afterTwoPhaseOverrideReboot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
 
-   public void testNoOverride() throws Exception
+   public void testTwoPhasesNoOverride() throws Exception
    {
       KernelBootstrap bootstrap = new KernelBootstrap();
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
 
       //
-      System.setProperty("override", "false");
-      System.setProperty("import.mode", getMode().toString());
+      System.setProperty("override.1", "false");
+      System.setProperty("import.mode.1", getMode().toString());
 
       //
-      System.setProperty("import.portal", getConfig1());
+      System.setProperty("import.portal.1", getConfig1());
       bootstrap.boot();
       PortalContainer container = bootstrap.getContainer();
       NavigationService service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       RequestLifeCycle.begin(container);
       NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
       NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
-      afterBoot(root);
+      afterTwoPhasesBoot(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
 
       //
-      System.setProperty("import.portal", getConfig2());
+      System.setProperty("import.portal.1", getConfig2());
       bootstrap.boot();
       container = bootstrap.getContainer();
       service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
@@ -126,7 +157,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      afterNoOverrideReboot(root);
+      afterTwoPhaseNoOverrideReboot(root);
       Workspace workspace = mgr.getSession().getWorkspace();
       assertTrue(workspace.isAdapted(Imported.class));
       workspace.removeAdapter(Imported.class);
@@ -142,7 +173,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-      afterNoOverrideReconfigure(root);
+      afterTwoPhaseNoOverrideReconfigure(root);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }

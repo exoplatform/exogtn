@@ -35,16 +35,12 @@ public class TestImportNavigationConserve extends AbstractImportNavigationTest
    }
 
    @Override
-   protected void afterOverrideReboot(NodeContext<?> root)
+   protected void assertState(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
-   }
-
-   @Override
-   protected void afterNoOverrideReconfigure(NodeContext<?> root)
-   {
-      assertEquals(1, root.getNodeCount());
-      assertNotNull(root.get("foo"));
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals("foo_icon", foo.getState().getIcon());
+      assertEquals(0, foo.getNodeCount());
    }
 }

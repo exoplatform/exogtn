@@ -27,6 +27,7 @@
     <parent-uri>foo</parent-uri>
     <node>
       <name>bar</name>
+      <icon>bar_icon</icon>
     </node>
   </page-nodes>
 </node-navigation>

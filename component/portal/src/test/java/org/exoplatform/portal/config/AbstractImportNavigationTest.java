@@ -39,19 +39,37 @@ public abstract class AbstractImportNavigationTest extends AbstractImportTest
       return "merge2";
    }
 
+   protected abstract void assertState(NodeContext<?> root);
+
    @Override
-   protected final void afterBoot(NodeContext<?> root)
+   protected final void afterTwoPhasesBoot(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
       assertNotNull(root.get("foo"));
    }
 
    @Override
-   protected final void afterNoOverrideReboot(NodeContext<?> root)
+   protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeCount());
       assertNotNull(root.get("foo"));
    }
 
+   @Override
+   protected final void afterOnePhaseBoot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
 
+   @Override
+   protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
+
+   @Override
+   protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root)
+   {
+      assertState(root);
+   }
 }

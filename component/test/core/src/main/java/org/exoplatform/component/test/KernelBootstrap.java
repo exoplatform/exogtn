@@ -23,14 +23,13 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.lang.reflect.Field;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -66,9 +65,9 @@ public class KernelBootstrap
    {
 
       //
-      Set<String> rootConfigPaths = new HashSet<String>();
+      Set<String> rootConfigPaths = new LinkedHashSet<String>();
       rootConfigPaths.add("conf/root-configuration.xml");
-      Set<String> portalConfigPaths = new HashSet<String>();
+      Set<String> portalConfigPaths = new LinkedHashSet<String>();
       portalConfigPaths.add("conf/portal-configuration.xml");
       EnumMap<ContainerScope, Set<String>> configs = new EnumMap<ContainerScope, Set<String>>(ContainerScope.class);
       configs.put(ContainerScope.ROOT, rootConfigPaths);
