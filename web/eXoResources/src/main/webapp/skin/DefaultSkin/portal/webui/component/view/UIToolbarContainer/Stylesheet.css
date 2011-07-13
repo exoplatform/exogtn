@@ -20,6 +20,8 @@
 .UIToolbarContainer {	
 	padding: 0px;
 	height: auto;
+	position:relative;
+	z-index:4;
 }
 .UIToolbarContainer ul {
 	padding:0;
@@ -44,7 +46,7 @@
 }
 
 .UIToolbarContainer .ToolbarContainer .TRContainer {
-	height: 30px;
+	height: 32px;
 }
 
 .UIToolbarContainer .UIContainer {
@@ -140,8 +142,8 @@
 }
 
 .UIToolbarContainer  .ArrowIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat right bottom; /* orientation=lt */
-	background: url('background/ToolbarContainer-rt.gif') no-repeat -5px bottom; /* orientation=rt */
+	background: url('background/ToolbarContainer.gif') no-repeat right -452px; /* orientation=lt */
+	background: url('background/ToolbarContainer-rt.gif') no-repeat -5px -452px; /* orientation=rt */
 }
 
 .UIToolbarContainer .MenuItem {	
