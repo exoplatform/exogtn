@@ -52,7 +52,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.input.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 /** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
@@ -216,7 +216,7 @@ public class UIPageCreationWizard extends UIPageWizard
             return;
          }
 
-         if (((UIFormCheckBoxInput)uiPageSetInfo.getUIInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE)).isChecked())
+         if ((uiPageSetInfo.getUICheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE)).isChecked())
          {
          	
          	Calendar currentCalendar = Calendar.getInstance();
