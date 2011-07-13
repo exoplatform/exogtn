@@ -203,13 +203,13 @@ public class NavigationFragmentImporter
       navigationService.rebaseNode(dst, Scope.CHILDREN, null);
 
       //
-      ListDiff<PageNodeContainer, NodeContext<?>, String> diff = new ListDiff<PageNodeContainer, NodeContext<?>, String>(
-         PAGE_NODE_CONTAINER_ADAPTER,
-         NODE_ADAPTER);
+      ListDiff<NodeContext<?>, PageNodeContainer, String> diff = new ListDiff<NodeContext<?>, PageNodeContainer, String>(
+         NODE_ADAPTER,
+         PAGE_NODE_CONTAINER_ADAPTER);
 
       //
       List<PageNode> srcChildren = src.getNodes();
-      ListChangeIterator<PageNodeContainer, NodeContext<?>, String> it = diff.iterator(src, dst);
+      ListChangeIterator<NodeContext<?>, PageNodeContainer, String> it = diff.iterator(dst, src);
       NodeChangeQueue<PageNodeContainer> changes = new NodeChangeQueue<PageNodeContainer>();
 
       //
@@ -226,7 +226,7 @@ public class NavigationFragmentImporter
             case SAME:
                perform(srcChild, dstChild, labelMap);
                break;
-            case REMOVE:
+            case ADD:
                if (dst.getNode(name) != null)
                {
                   // It's a move we do nothing
@@ -239,7 +239,7 @@ public class NavigationFragmentImporter
                   changes.onAdd(srcChild, src, previous);
                }
                break;
-            case ADD:
+            case REMOVE:
                if (src.getNode(name) != null)
                {
                   // It's a move
@@ -338,7 +338,7 @@ public class NavigationFragmentImporter
             }
             else
             {
-               index = dst.getNodeSize();
+               index = 0;
             }
             NodeContext<?> child = dst.add(index, name);
             Date start = target.getStartPublicationDate();
