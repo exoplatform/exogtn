@@ -23,6 +23,8 @@ import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -68,4 +70,28 @@ public class TestPortal extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
    }
 
+   public void testLanguage4() throws Exception
+   {
+      Router router = router().
+         add(route("/public/{gtn:lang}{gtn:sitename}{gtn:path}")
+            .with(pathParam("gtn:lang").matchedBy("(?:[A-Za-z]{2}/)?").preservingPath())
+            .with(pathParam("gtn:path").matchedBy(".*").preservingPath())).
+         build();
+
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(QualifiedName.create("gtn", "lang"), "fr/");
+      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
+      
+      //
+//      assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/public"));
+      assertEquals(expectedParameters, router.route("/public/fr/classic/home"));
+      
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "");
+      assertEquals(expectedParameters, router.route("/public/fr/classic"));
+      
+      expectedParameters.put(QualifiedName.create("gtn", "lang"), "");
+      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
+      assertEquals(expectedParameters, router.route("/public/classic/home"));
+   }
 }
