@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.Described;
@@ -31,7 +31,6 @@ import org.gatein.mop.core.api.MOPService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -305,9 +304,9 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = new PageNavigation("portal", "importer_extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationFragment fragment = src.getFragment();
-      fragment.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
-      fragment.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
-      fragment.getNode("c").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("c_en"))));
+      fragment.getNode("a").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("a_en", Locale.ENGLISH), new LocalizedString("a_fr", Locale.FRENCH))));
+      fragment.getNode("b").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH))));
+      fragment.getNode("c").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("c_en"))));
       src.setOwnerId("importer_extended_label");
       NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, true, src, service, descriptionService);
       importer.perform();
@@ -355,9 +354,9 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       PageNavigation src = new PageNavigation("portal", "importer_simple_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationFragment fragment = src.getFragment();
-      fragment.getNode("a").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("a_en", Locale.ENGLISH), new LocalizedValue("a_fr", Locale.FRENCH))));
-      fragment.getNode("b").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("b_en"), new LocalizedValue("b_fr", Locale.FRENCH))));
-      fragment.getNode("c").setLabels(new ArrayList<LocalizedValue>(Arrays.asList(new LocalizedValue("c_en"))));
+      fragment.getNode("a").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("a_en", Locale.ENGLISH), new LocalizedString("a_fr", Locale.FRENCH))));
+      fragment.getNode("b").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH))));
+      fragment.getNode("c").setLabels(new ArrayList<LocalizedString>(Arrays.asList(new LocalizedString("c_en"))));
       src.setOwnerId("importer_simple_label");
       NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, false, src, service, descriptionService);
       importer.perform();

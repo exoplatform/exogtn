@@ -22,7 +22,7 @@ package org.exoplatform.portal.config;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.Page;
@@ -40,7 +40,6 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.IUnmarshallingContext;
-import org.jibx.runtime.impl.UnmarshallingContext;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -144,7 +143,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       //
       PageNode bar = nav.getFragment().getNode("bar");
       assertEquals("bar_label", bar.getLabel());
-      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      ArrayList<LocalizedString> barLabels =  bar.getLabels();
       assertNotNull(barLabels);
       assertEquals(1, barLabels.size());
       assertEquals("bar_label", barLabels.get(0).getValue());
@@ -161,7 +160,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       //
       PageNode foo = nav.getFragment().getNode("foo");
       assertEquals("foo_label", foo.getLabel());
-      ArrayList<LocalizedValue> fooLabels =  foo.getLabels();
+      ArrayList<LocalizedString> fooLabels =  foo.getLabels();
       assertNotNull(fooLabels);
       assertEquals(3, fooLabels.size());
       assertEquals("foo_label_en", fooLabels.get(0).getValue());
@@ -176,7 +175,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       //
       PageNode bar = nav.getFragment().getNode("bar");
       assertEquals("bar_label", bar.getLabel());
-      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      ArrayList<LocalizedString> barLabels =  bar.getLabels();
       assertNotNull(barLabels);
       assertEquals(1, barLabels.size());
       assertEquals("bar_label", barLabels.get(0).getValue());
@@ -186,7 +185,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       //
       PageNode juu = nav.getFragment().getNode("juu");
       assertEquals(null, juu.getLabel());
-      ArrayList<LocalizedValue> juuLabels =  juu.getLabels();
+      ArrayList<LocalizedString> juuLabels =  juu.getLabels();
       assertNotNull(juuLabels);
       assertEquals(3, juuLabels.size());
       assertEquals("juu_label_en", juuLabels.get(0).getValue());

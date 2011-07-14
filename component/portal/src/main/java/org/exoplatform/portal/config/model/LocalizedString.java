@@ -24,53 +24,20 @@ import java.util.Locale;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LocalizedValue<V>
+public class LocalizedString extends LocalizedValue<String>
 {
 
-   /** . */
-   private V value;
-
-   /** . */
-   private Locale lang;
-
-   public LocalizedValue()
+   public LocalizedString()
    {
    }
 
-   public LocalizedValue(V value)
+   public LocalizedString(String value)
    {
-      this.value = value;
+      super(value);
    }
 
-   public LocalizedValue(V value, Locale lang)
+   public LocalizedString(String value, Locale lang)
    {
-      this.value = value;
-      this.lang = lang;
-   }
-
-   public final V getValue()
-   {
-      return value;
-   }
-
-   public final void setValue(V value)
-   {
-      this.value = value;
-   }
-
-   public final Locale getLang()
-   {
-      return lang;
-   }
-
-   public final void setLang(Locale lang)
-   {
-      this.lang = lang;
-   }
-
-   @Override
-   public String toString()
-   {
-      return getClass().getSimpleName() + "[value=" + value + ",lang=" + lang + "]";
+      super(value, lang);
    }
 }

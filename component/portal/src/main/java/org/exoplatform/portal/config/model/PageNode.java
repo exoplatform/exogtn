@@ -33,7 +33,7 @@ public class PageNode extends PageNodeContainer
 {
 
    /** . */
-   private ArrayList<LocalizedValue> labels;
+   private ArrayList<LocalizedString> labels;
 
    /** . */
    private String icon;
@@ -67,7 +67,7 @@ public class PageNode extends PageNodeContainer
       // No op for back war compatibility during unmarshalling
    }
 
-   public ArrayList<LocalizedValue> getLabels()
+   public ArrayList<LocalizedString> getLabels()
    {
       return labels;
    }
@@ -75,8 +75,8 @@ public class PageNode extends PageNodeContainer
    public Map<Locale, String> getLocalizedLabel(Locale defaultLocale)
    {
       Map<Locale, String> map = Collections.emptyMap();
-      LocalizedValue portalLocaleLabel = null;
-      for (LocalizedValue label : labels)
+      LocalizedString portalLocaleLabel = null;
+      for (LocalizedString label : labels)
       {
          if (label.getLang() != null)
          {
@@ -105,7 +105,7 @@ public class PageNode extends PageNodeContainer
       }
    }
 
-   public void setLabels(ArrayList<LocalizedValue> labels)
+   public void setLabels(ArrayList<LocalizedString> labels)
    {
       this.labels = labels;
    }
@@ -114,7 +114,7 @@ public class PageNode extends PageNodeContainer
    {
       if (labels != null)
       {
-         for (LocalizedValue label : labels)
+         for (LocalizedString label : labels)
          {
             if (label.getLang() == null)
             {
@@ -129,13 +129,13 @@ public class PageNode extends PageNodeContainer
    {
       if (labels == null)
       {
-         labels = new ArrayList<LocalizedValue>();
+         labels = new ArrayList<LocalizedString>();
       }
       else
       {
          labels.clear();
       }
-      labels.add(new LocalizedValue(s));
+      labels.add(new LocalizedString(s));
    }
 
    public String getIcon()

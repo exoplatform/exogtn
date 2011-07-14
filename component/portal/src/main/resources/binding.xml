@@ -29,7 +29,7 @@
            marshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper" 
            unmarshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper"/>
 
-  <mapping class="org.exoplatform.portal.config.model.LocalizedValue"
+  <mapping class="org.exoplatform.portal.config.model.LocalizedString"
            name="label"
            unmarshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper"
            marshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper">
@@ -99,7 +99,7 @@
     <value name="uri" get-method="getUri" set-method="setUri" usage="optional"/>
     <value name="name" field="name"/>
     <collection field="labels" ordered="false">
-      <structure map-as="org.exoplatform.portal.config.model.LocalizedValue" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.LocalizedString" usage="optional"/>
     </collection>
     <value name="icon" field="icon" usage="optional"/>
     <value name="start-publication-date" field="startPublicationDate" usage="optional"/>

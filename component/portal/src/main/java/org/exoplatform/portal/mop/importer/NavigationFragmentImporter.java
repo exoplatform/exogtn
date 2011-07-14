@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
 import org.exoplatform.portal.mop.Described;
@@ -44,11 +44,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -268,12 +266,12 @@ public class NavigationFragmentImporter
          {
 
             //
-            LocalizedValue unqualifiedLabel = null;
-            List<LocalizedValue> labels = target.getLabels();
+            LocalizedString unqualifiedLabel = null;
+            List<LocalizedString> labels = target.getLabels();
             Map<Locale, Described.State> description = null;
             if (labels.size() > 0)
             {
-               for (LocalizedValue label : labels)
+               for (LocalizedString label : labels)
                {
                   Locale lang = label.getLang();
                   if (lang != null)
