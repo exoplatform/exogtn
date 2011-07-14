@@ -98,7 +98,7 @@
    <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
     <value name="uri" get-method="getUri" set-method="setUri" usage="optional"/>
     <value name="name" field="name"/>
-    <collection field="labels" ordered="false">
+    <collection field="labels" ordered="false" factory="org.exoplatform.portal.config.model.I18NString.create">
       <structure map-as="org.exoplatform.portal.config.model.LocalizedString" usage="optional"/>
     </collection>
     <value name="icon" field="icon" usage="optional"/>

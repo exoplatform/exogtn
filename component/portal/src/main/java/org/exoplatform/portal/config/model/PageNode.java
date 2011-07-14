@@ -22,18 +22,14 @@ package org.exoplatform.portal.config.model;
 import org.exoplatform.portal.mop.Visibility;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class PageNode extends PageNodeContainer
 {
 
    /** . */
-   private ArrayList<LocalizedString> labels;
+   private I18NString labels;
 
    /** . */
    private String icon;
@@ -67,45 +63,12 @@ public class PageNode extends PageNodeContainer
       // No op for back war compatibility during unmarshalling
    }
 
-   public ArrayList<LocalizedString> getLabels()
+   public I18NString getLabels()
    {
       return labels;
    }
 
-   public Map<Locale, String> getLocalizedLabel(Locale defaultLocale)
-   {
-      Map<Locale, String> map = Collections.emptyMap();
-      LocalizedString portalLocaleLabel = null;
-      for (LocalizedString label : labels)
-      {
-         if (label.getLang() != null)
-         {
-            if (map.isEmpty())
-            {
-               map = new HashMap<Locale, String>();
-            }
-            map.put(label.getLang(), label.getValue());
-         }
-         else
-         {
-            portalLocaleLabel = label;
-         }
-      }
-      if (map.isEmpty())
-      {
-         return null;
-      }
-      else
-      {
-         if (portalLocaleLabel != null && !map.containsKey(defaultLocale))
-         {
-            map.put(defaultLocale, portalLocaleLabel.getValue());
-         }
-         return map;
-      }
-   }
-
-   public void setLabels(ArrayList<LocalizedString> labels)
+   public void setLabels(I18NString labels)
    {
       this.labels = labels;
    }
@@ -129,7 +92,7 @@ public class PageNode extends PageNodeContainer
    {
       if (labels == null)
       {
-         labels = new ArrayList<LocalizedString>();
+         labels = new I18NString();
       }
       else
       {

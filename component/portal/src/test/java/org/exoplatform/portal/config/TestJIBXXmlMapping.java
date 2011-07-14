@@ -148,7 +148,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(1, barLabels.size());
       assertEquals("bar_label", barLabels.get(0).getValue());
       assertEquals(null, barLabels.get(0).getLang());
-      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+      assertEquals(null, bar.getLabels().getValue(Locale.ENGLISH));
    }
 
    public void testExtendedNavigationMapping() throws Exception
@@ -169,8 +169,8 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(null, fooLabels.get(1).getLang());
       assertEquals("foo_label_fr", fooLabels.get(2).getValue());
       assertEquals(Locale.FRENCH, fooLabels.get(2).getLang());
-      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLocalizedLabel(Locale.ENGLISH).keySet());
-      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLocalizedLabel(Locale.GERMAN).keySet());
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLabels().getValue(Locale.ENGLISH).keySet());
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLabels().getValue(Locale.GERMAN).keySet());
 
       //
       PageNode bar = nav.getFragment().getNode("bar");
@@ -180,7 +180,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(1, barLabels.size());
       assertEquals("bar_label", barLabels.get(0).getValue());
       assertEquals(null, barLabels.get(0).getLang());
-      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+      assertEquals(null, bar.getLabels().getValue(Locale.ENGLISH));
 
       //
       PageNode juu = nav.getFragment().getNode("juu");
