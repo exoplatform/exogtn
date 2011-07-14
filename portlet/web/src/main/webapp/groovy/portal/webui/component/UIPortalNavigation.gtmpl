@@ -57,25 +57,16 @@
 			label = label.substring(0,37) + "...";
 		}
 					
+		def actionLink = "#";
 		if(node.getPageRef() != null) {
 		    nodeURL.setResource(new NavigationResource(node));
-			if(uicomponent.isUseAjax()) {
-				print """
-					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a  class="ItemIcon $icon" onclick="$nodeURL.setAjax(true).toString()">$label</a>
-				""";
-			} else {
-				print """
-					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a class="ItemIcon $icon" href="$nodeURL.setAjax(false).toString()">$label</a>
-				""";
-			}
-		} else {
-			print """
-					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a class="ItemIcon $icon" href="javascript:void(0)">$label</a>
-			""";
-		}
+			nodeURL.setAjax(uicomponent.isUseAjax());
+			actionLink = nodeURL.toString();
+		} 
+		print """
+				<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
+						<a class="ItemIcon $icon" href="$actionLink">$label</a>
+		""";
 		
 		if (node.getChildren().size() > 0) {
 			renderChildrenContainer(node, nodeURL);
@@ -119,14 +110,10 @@
 					 			if(label.length() > 30) label = label.substring(0,29) + "...";
 					 			if(node.getPageRef() != null) {
 					 			    nodeURL.setResource(new NavigationResource(node));					 			                                        
-					 				if(uicomponent.isUseAjax()) {
-					 		%>
-							 			<a class="TabIcon ${iconType}" onclick="<%= nodeURL.setAjax(true).toString()%>">$label</a>
-							<%
-									} else {
-							%>
-										<a class="TabIcon ${iconType}" href="<%= nodeURL.setAjax(false).toString()%>">$label</a>
-							<%	    }
+					 			    nodeURL.setAjax(uicomponent.isUseAjax());
+									print """
+					 					<a class="TabIcon ${iconType}" href="$nodeURL">$label</a>
+					 				""";
 								} else {%>
 									<a class="TabIcon ${iconType}" href="javascript:void(0)">$label</a>
 							<%}%>								

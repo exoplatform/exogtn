@@ -34,10 +34,13 @@
 			def node = treeNode.getNode();
 			def treePath = node.getId();
 			String label = node.encodedResolvedLabel;		
-
-			nodeURL.setResource(new NavigationResource(node));
-			nodeURL.setAjax(useAjax);
-            String actionLink = nodeURL.toString();
+			
+			def actionLink = "#";
+			if(treeNode.getNode().getPageRef() != null) {
+			   nodeURL.setResource(new NavigationResource(node));
+			   nodeURL.setAjax(useAjax);
+			   actionLink = nodeURL.toString(); 
+			}
 			
 			lastNode = '';
 			if (size == childrenSize) {
@@ -52,8 +55,7 @@
 						<div class="$lastNode Node">
 							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionCollapse">
 					""";
-					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
+					   println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: block">
@@ -72,8 +74,7 @@
 						<div class="$lastNode Node">
 							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionExpand">
 					""";
-					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
+					      println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: none">
