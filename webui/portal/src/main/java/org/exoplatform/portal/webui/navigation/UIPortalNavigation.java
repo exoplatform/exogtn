@@ -318,27 +318,6 @@ public class UIPortalNavigation extends UIComponent
    {
       this.navigationScope = scope;
    }   
-   
-   static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>
-   {
-      public void execute(Event<UIPortalNavigation> event) throws Exception
-      {
-         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-
-         TreeNode selectedNode = event.getSource().getTreeNodes().findNodes(treePath);
-         //There're may be interuption between browser and server
-         if (selectedNode == null)
-         {
-            event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
-            return;
-         }
-         
-         PageNodeEvent<UIPortalApplication> pnevent;
-         pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, null, selectedNode.getNode().getURI());
-         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
-      }
-   }
 
    //Now we use serveSource method to expand a node
 /*   

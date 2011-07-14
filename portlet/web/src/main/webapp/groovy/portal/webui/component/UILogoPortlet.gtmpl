@@ -2,13 +2,15 @@
 	import javax.portlet.PortletMode ;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.portal.url.navigation.NavigationResource;
+	import org.exoplatform.portal.config.model.PortalConfig;
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;	
-	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
-	String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"	
 	String navTitle = uicomponent.getNavigationTitle();
 %>
 
@@ -18,7 +20,13 @@
 		<a href="#" class="Img"><image src="<%=uicomponent.getURL()%>" alt="" /></a>
 		<div class="BannerTitle">$navTitle</div>	
 		<!-- ACTIONs -->	
-		<% if(prContext.getRemoteUser() == null) { %>
+		<% 
+		if(prContext.getRemoteUser() == null) { 
+		    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
+			ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+			NavigationResource resource = new NavigationResource(PortalConfig.PORTAL_TYPE, pcontext.getPortalOwner(), "register");
+			String registerURI = nodeURL.setResource(resource).toString();
+		%>
 		<div class="Signin ClearFix">
 			<a onclick="$changeLanguageAction"><%=_ctx.appRes("UILogoPortlet.action.changeLanguage")%></a>
 			<a href="$registerURI"><%=_ctx.appRes("UILogoPortlet.action.Register")%></a>	

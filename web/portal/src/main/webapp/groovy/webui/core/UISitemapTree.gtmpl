@@ -10,13 +10,9 @@
 	import org.exoplatform.portal.url.navigation.NavigationResource;
 	import javax.portlet.ResourceURL;
 
-	def navigations = uicomponent.getNavigations();
-
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
 	JavascriptManager jsmanager = pcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.webui.UISiteMap') ;
-	
-	def portalURI = pcontext.getPortalURI();
 
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
@@ -25,7 +21,6 @@
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
 	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-	nodeURL.setAjax(true);
 							
 	public void renderNodes(TreeNode rootTree, ControllerURL nodeURL, boolean useAjax) {
 		List childrenNodes = rootTree.getChildren();
@@ -40,7 +35,9 @@
 			def treePath = node.getId();
 			String label = node.encodedResolvedLabel;		
 
-            String actionLink = nodeURL.setResource(new NavigationResource(node)).toString();
+			nodeURL.setResource(new NavigationResource(node));
+			nodeURL.setAjax(useAjax);
+            String actionLink = nodeURL.toString();
 			
 			lastNode = '';
 			if (size == childrenSize) {

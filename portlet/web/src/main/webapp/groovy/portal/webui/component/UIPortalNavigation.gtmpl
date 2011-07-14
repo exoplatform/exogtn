@@ -50,29 +50,24 @@
 		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
 
-		String label = node.getResolvedLabel();
+		String label = node.getEncodedResolvedLabel();
 		String title = "";
 		if(label.length() > 40) {
 			title = label;
 			label = label.substring(0,37) + "...";
 		}
-		EntityEncoder entityEncoder = EntityEncoder.FULL;
-		label = entityEncoder.encode(label);
-		
-		nodeURL.setResource(new NavigationResource(node));
-		String nonAjaxURL = nodeURL.setAjax(false).toString();
-	    String ajaxURL = nodeURL.setAjax(true).toString();
-		
+					
 		if(node.getPageRef() != null) {
+		    nodeURL.setResource(new NavigationResource(node));
 			if(uicomponent.isUseAjax()) {
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a  class="ItemIcon $icon" onclick="$ajaxURL">$label</a>
+							<a  class="ItemIcon $icon" onclick="$nodeURL.setAjax(true).toString()">$label</a>
 				""";
 			} else {
 				print """
 					<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-							<a class="ItemIcon $icon" href="$nonAjaxURL">$label</a>
+							<a class="ItemIcon $icon" href="$nodeURL.setAjax(false).toString()">$label</a>
 				""";
 			}
 		} else {
@@ -120,22 +115,17 @@
 							%>
 							<span class="$arrowIcon">																
 							<%
-					 			String label = node.getResolvedLabel();
+					 			String label = node.getEncodedResolvedLabel();
 					 			if(label.length() > 30) label = label.substring(0,29) + "...";
-								EntityEncoder entityEncoder = EntityEncoder.FULL;
-								label=entityEncoder.encode(label);
 					 			if(node.getPageRef() != null) {
-					 			    nodeURL.setResource(new NavigationResource(node));
-                                    String nonAjaxURL = nodeURL.setAjax(false).toString();
-                                    String ajaxURL = nodeURL.setAjax(true).toString();
-                                    
+					 			    nodeURL.setResource(new NavigationResource(node));					 			                                        
 					 				if(uicomponent.isUseAjax()) {
 					 		%>
-							 			<a class="TabIcon ${iconType}" onclick="$ajaxURL">$label</a>
+							 			<a class="TabIcon ${iconType}" onclick="<%= nodeURL.setAjax(true).toString()%>">$label</a>
 							<%
 									} else {
 							%>
-										<a class="TabIcon ${iconType}" href="$nonAjaxURL">$label</a>
+										<a class="TabIcon ${iconType}" href="<%= nodeURL.setAjax(false).toString()%>">$label</a>
 							<%	    }
 								} else {%>
 									<a class="TabIcon ${iconType}" href="javascript:void(0)">$label</a>

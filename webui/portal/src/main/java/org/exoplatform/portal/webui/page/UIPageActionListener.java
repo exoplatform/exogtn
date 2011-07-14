@@ -35,6 +35,7 @@ import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -132,6 +133,9 @@ public class UIPageActionListener
          }
          
          showedUIPortal.refreshUIPage();
+         PortalRequestContext pcontext = Util.getPortalRequestContext();
+         pcontext.setFullRender(true);
+         pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID));
       }
 
       private UIPortal buildUIPortal(SiteKey siteKey, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception

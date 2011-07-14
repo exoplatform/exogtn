@@ -33,7 +33,7 @@
 	void renderPageNode(ControllerURL nodeURL, PortalRequestContext pcontext, UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
+		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {
 				tabStyleNavigation = "SelectedItem";
 		}
 		

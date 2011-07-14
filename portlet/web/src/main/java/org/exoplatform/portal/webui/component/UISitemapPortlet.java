@@ -30,9 +30,12 @@ import javax.portlet.ResourceURL;
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,7 +55,6 @@ import org.json.JSONObject;
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "system:/groovy/webui/core/UISitemap.gtmpl"),
    @ComponentConfig(type = UIPortalNavigation.class, id = "UISiteMap", events = {
-      @EventConfig(listeners = UIPortalNavigation.SelectNodeActionListener.class),
 //      @EventConfig(listeners = UIPortalNavigation.ExpandAllNodeActionListener.class),
       @EventConfig(listeners = UIPortalNavigation.CollapseAllNodeActionListener.class),
       @EventConfig(listeners = UIPortalNavigation.CollapseNodeActionListener.class)})})
@@ -160,20 +162,13 @@ public class UISitemapPortlet extends UIPortletApplication
       rsURL.setResourceID(nodeId);
       json.put("getNodeURL", rsURL.toString());            
       
-      String actionLink;
-      if (node.getPageRef() == null)
+      if (node.getPageRef() != null)
       {
-         actionLink = null;
+         NavigationResource resource = new NavigationResource(node);
+         ControllerURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
+         url.setAjax(isUseAjax());
+         json.put("actionLink", url.toString());
       } 
-      else if (isUseAjax())
-      {
-         actionLink = uiPortalNavigation.event("SelectNode", nodeId);
-      } 
-      else
-      {
-         actionLink = Util.getPortalRequestContext().getPortalURI() + node.getURI();
-      }
-      json.put("actionLink", actionLink);
       
       JSONArray childs = new JSONArray();
       for (TreeNode child : tnode.getChildren())

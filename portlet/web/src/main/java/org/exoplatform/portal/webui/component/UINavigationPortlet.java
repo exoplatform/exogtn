@@ -31,8 +31,11 @@ import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.url.ControllerURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -45,7 +48,7 @@ import org.json.JSONObject;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIApplicationLifecycle.class),
-   @ComponentConfig(type = UIPortalNavigation.class, id = "UIHorizontalNavigation", events = @EventConfig(listeners = UIPortalNavigation.SelectNodeActionListener.class))})
+   @ComponentConfig(type = UIPortalNavigation.class, id = "UIHorizontalNavigation")})
 public class UINavigationPortlet extends UIPortletApplication
 {
    public static final int DEFAULT_LEVEL = 2;
@@ -144,21 +147,14 @@ public class UINavigationPortlet extends UIPortletApplication
       ResourceURL rsURL = res.createResourceURL();
       rsURL.setResourceID(res.encodeURL(node.getURI()));
       json.put("getNodeURL", rsURL.toString());            
-      
-      String actionLink;
-      if (node.getPageRef() == null)
+            
+      if (node.getPageRef() != null)
       {
-         actionLink = null;
+         NavigationResource resource = new NavigationResource(node);
+         ControllerURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
+         url.setAjax(isUseAjax());
+         json.put("actionLink", url.toString());
       } 
-      else if (isUseAjax())
-      {
-         actionLink = event("SelectNode", nodeId);
-      } 
-      else
-      {
-         actionLink = Util.getPortalRequestContext().getPortalURI() + node.getURI();
-      }
-      json.put("actionLink", actionLink);
       
       JSONArray childs = new JSONArray();
       for (UserNode child : node.getChildren())
