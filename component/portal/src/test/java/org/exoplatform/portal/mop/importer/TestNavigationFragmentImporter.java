@@ -63,7 +63,6 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          service,
          SiteKey.portal("BILTO"),
          Locale.ENGLISH,
-         false,
          descriptionService,
          imported);
       NodeContext node = importer.perform();
@@ -77,7 +76,6 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          service,
          SiteKey.portal("BILTO"),
          Locale.ENGLISH,
-         false,
          descriptionService,
          imported);
       node = importer.perform();
@@ -91,7 +89,6 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          service,
          SiteKey.portal("BILTO"),
          Locale.ENGLISH,
-         false,
          descriptionService,
          imported);
       node = importer.perform();

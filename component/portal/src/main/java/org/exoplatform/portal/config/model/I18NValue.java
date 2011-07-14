@@ -52,7 +52,52 @@ public class I18NValue<V, L extends LocalizedValue<V>> extends ArrayList<L>
       super(Arrays.asList(c));
    }
 
-   public final Map<Locale, V> getValue(Locale defaultLocale)
+   /**
+    * Returns true when the collection contains exactly one localized value and this value does not have
+    * a locale associated with it.
+    *
+    * @return true if the value is simple
+    */
+   public boolean isSimple()
+   {
+      return size() == 1 && get(0).getLang() == null;
+   }
+
+   /**
+    * Returns true if the collection extended which means that it is not empty and it is not simple.
+    *
+    * @return true if the value is extended
+    */
+   public boolean isExtended()
+   {
+      return !isEmpty() && !isSimple();
+   }
+
+   /**
+    * Returns the simple value or null if the collection is empty or extended.
+    *
+    * @return the simple value
+    */
+   public V getSimple()
+   {
+      if (isSimple())
+      {
+         return get(0).getValue();
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   /**
+    * Returns a map of the values or null if the collection is empty. The <code>defaultLocale</code> argument
+    * is used as a key when an unqualified value is found, otherwise it is not used
+    *
+    * @param defaultLocale the default locale
+    * @return the extended value map
+    */
+   public Map<Locale, V> getExtended(Locale defaultLocale)
    {
       Map<Locale, V> map = Collections.emptyMap();
       L unqualifiedLocalizedValue = null;

@@ -30,8 +30,6 @@ import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
@@ -71,7 +69,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal(name)));
       PageNavigation src = new PageNavigation("portal", name);
       src.setPriority(2);
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, mode, false, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, mode, src, service, descriptionService);
       merge.perform();
 
       //
@@ -93,7 +91,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", "merge_create").addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -120,7 +118,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", "merge_nested").addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -165,7 +163,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", name).addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, false, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -183,7 +181,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       builder = fragment().add(node("a").add(node("d"))).add(node("c"));
       src = new PageNavigation("portal", name).addFragment(builder.build());
-      merge = new NavigationImporter(Locale.ENGLISH, importMode, false, src, service, descriptionService);
+      merge = new NavigationImporter(Locale.ENGLISH, importMode, src, service, descriptionService);
       merge.perform();
 
       //
@@ -254,7 +252,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", "merge_order").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
+      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -267,7 +265,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       src.getFragment().getNodes().add(0, node("d").build());
-      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
+      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -280,7 +278,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       src.getFragment().getNodes().add(node("e").build());
-      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, false, src, service, descriptionService);
+      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       merge.perform();
 
       //
@@ -309,7 +307,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       fragment.getNode("b").setLabels(new I18NString(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH)));
       fragment.getNode("c").setLabels(new I18NString(new LocalizedString("c_en")));
       src.setOwnerId("importer_extended_label");
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, true, src, service, descriptionService);
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
       importer.perform();
 
       //
@@ -337,50 +335,6 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       // The simple use case : one single label without the xml:lang attribute
       NodeContext<?> c = (NodeContext<?>)node.getNode("c");
       Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
-      assertNotNull(cDesc);
-      assertEquals(Tools.toSet(Locale.ENGLISH), cDesc.keySet());
-      assertEquals(new Described.State("c_en", null), cDesc.get(Locale.ENGLISH));
-      assertEquals(null, c.getState().getLabel());
-   }
-
-   public void testSimpleLabel()
-   {
-      MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_simple_label");
-      sync(true);
-
-      //
-      assertNull(service.loadNavigation(SiteKey.portal("importer_simple_label")));
-
-      //
-      PageNavigation src = new PageNavigation("portal", "importer_simple_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
-      NavigationFragment fragment = src.getFragment();
-      fragment.getNode("a").setLabels(new I18NString(new LocalizedString("a_en", Locale.ENGLISH), new LocalizedString("a_fr", Locale.FRENCH)));
-      fragment.getNode("b").setLabels(new I18NString(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH)));
-      fragment.getNode("c").setLabels(new I18NString(new LocalizedString("c_en")));
-      src.setOwnerId("importer_simple_label");
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, false, src, service, descriptionService);
-      importer.perform();
-
-      //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_simple_label"));
-      NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
-
-      // The fully explicit case
-      NodeContext<?> a = (NodeContext<?>)node.getNode("a");
-      Map<Locale, Described.State> aDesc = descriptionService.getDescriptions(a.getId());
-      assertNull(aDesc);
-      assertEquals("a_en", a.getState().getLabel());
-
-      // No explicit language means to use the portal locale
-      NodeContext<?> b = (NodeContext<?>)node.getNode("b");
-      Map<Locale, Described.State> bDesc = descriptionService.getDescriptions(b.getId());
-      assertNull(bDesc);
-      assertEquals("b_en", b.getState().getLabel());
-
-      // The simple use case : one single label without the xml:lang attribute
-      NodeContext<?> c = (NodeContext<?>)node.getNode("c");
-      Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
       assertNull(cDesc);
       assertEquals("c_en", c.getState().getLabel());
    }
@@ -400,7 +354,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       src.addFragment(fragment("a").add(node("c")).build());
 
       //
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, false, src, service, descriptionService);
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
       importer.perform();
 
       //

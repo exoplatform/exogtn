@@ -43,9 +43,6 @@ public class NavigationImporter
    private final Locale portalLocale;
 
    /** . */
-   private final boolean extendedNavigation;
-
-   /** . */
    private final PageNavigation src;
 
    /** . */
@@ -60,13 +57,11 @@ public class NavigationImporter
    public NavigationImporter(
       Locale portalLocale,
       ImportMode mode,
-      boolean extendedNavigation,
       PageNavigation src,
       NavigationService service,
       DescriptionService descriptionService)
    {
       this.portalLocale = portalLocale;
-      this.extendedNavigation = extendedNavigation;
       this.mode = mode;
       this.src = src;
       this.service = service;
@@ -151,7 +146,6 @@ public class NavigationImporter
                   service,
                   dst.getKey(),
                   portalLocale,
-                  extendedNavigation,
                   descriptionService,
                   fragment);
 

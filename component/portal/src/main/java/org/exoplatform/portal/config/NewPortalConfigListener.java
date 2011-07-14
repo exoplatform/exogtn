@@ -634,7 +634,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
 
       //
-      NavigationImporter merge = new NavigationImporter(locale, importMode, extendedNavigation, navigation, navigationService_, descriptionService_);
+      NavigationImporter merge = new NavigationImporter(locale, importMode, navigation, navigationService_, descriptionService_);
 
       //
       merge.perform();

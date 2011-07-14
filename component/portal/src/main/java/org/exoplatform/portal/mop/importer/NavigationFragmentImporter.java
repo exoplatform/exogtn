@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.LocalizedString;
+import org.exoplatform.portal.config.model.I18NString;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
 import org.exoplatform.portal.mop.Described;
@@ -121,9 +121,6 @@ public class NavigationFragmentImporter
    private final Locale portalLocale;
 
    /** . */
-   private final boolean extendedNavigation;
-
-   /** . */
    private final DescriptionService descriptionService;
 
    /** . */
@@ -134,7 +131,6 @@ public class NavigationFragmentImporter
       NavigationService navigationService,
       SiteKey navigationKey,
       Locale portalLocale,
-      boolean extendedNavigation,
       DescriptionService descriptionService,
       PageNodeContainer src)
    {
@@ -142,7 +138,6 @@ public class NavigationFragmentImporter
       this.navigationService = navigationService;
       this.navigationKey = navigationKey;
       this.portalLocale = portalLocale;
-      this.extendedNavigation = extendedNavigation;
       this.descriptionService = descriptionService;
       this.src = src;
    }
@@ -264,67 +259,29 @@ public class NavigationFragmentImporter
 
          private void add(PageNode target, PageNode previous, NodeContext<?> dst)
          {
-
-            //
-            LocalizedString unqualifiedLabel = null;
-            List<LocalizedString> labels = target.getLabels();
-            Map<Locale, Described.State> description = null;
-            if (labels.size() > 0)
-            {
-               for (LocalizedString label : labels)
-               {
-                  Locale lang = label.getLang();
-                  if (lang != null)
-                  {
-                     if (description == null)
-                     {
-                        description = new HashMap<Locale, Described.State>(labels.size());
-                     }
-                     description.put(lang, new Described.State(label.getValue(), null));
-                  }
-                  else
-                  {
-                     unqualifiedLabel = label;
-                  }
-               }
-            }
+            I18NString labels = target.getLabels();
 
             //
             String label;
-            if (extendedNavigation)
+            Map<Locale, Described.State> description;
+            if (labels.isSimple())
             {
-               if (description == null)
-               {
-                  description = new HashMap<Locale, Described.State>();
-               }
-               if (!description.containsKey(portalLocale))
-               {
-                  if (unqualifiedLabel != null)
-                  {
-                     description.put(portalLocale, new Described.State(unqualifiedLabel.getValue(), null));
-                  }
-               }
-
-               //
+               label = labels.getSimple();
+               description = null;
+            }
+            else if (labels.isEmpty())
+            {
                label = null;
+               description = null;
             }
             else
             {
-               if (unqualifiedLabel != null)
+               label = null;
+               description = new HashMap<Locale, Described.State>();
+               for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
                {
-                  label = unqualifiedLabel.getValue();
+                  description.put(entry.getKey(), new Described.State(entry.getValue(), null));
                }
-               else if (description != null && description.containsKey(portalLocale))
-               {
-                  label = description.get(portalLocale).getName();
-               }
-               else
-               {
-                  label = null;
-               }
-
-               //
-               description = null;
             }
 
             //
