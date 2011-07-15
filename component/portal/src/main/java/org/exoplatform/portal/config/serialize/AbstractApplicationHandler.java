@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.NewPortalConfigListener;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.jibx.runtime.IAliasable;
@@ -100,7 +101,8 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
       ctx.parsePastStartTag(m_uri, m_name);
 
       //
-      Application<Portlet> app;
+      Application<?> app;
+      TransientApplicationState state;
       if ("application".equals(m_name))
       {
          String instanceId = ctx.parseElementText(m_uri, "instance-id");
@@ -111,7 +113,6 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          String ownerId = instanceId.substring(i0 + 1, i1);
          String persistenceid = instanceId.substring(i1 + 2);
          String[] persistenceChunks = split("/", persistenceid);
-         TransientApplicationState<Portlet> state;
          if (persistenceChunks.length == 2)
          {
             state = new TransientApplicationState<Portlet>(
@@ -133,12 +134,25 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          app = Application.createPortletApplication();
          app.setState(state);
       }
+      // Since we don't support dashboard's here, this only works for gadgets using the gadget wrapper portlet.
+      else if ("gadget-application".equals(m_name))
+      {
+         ctx.parsePastStartTag(m_uri, "gadget");
+         String gadgetName = ctx.parseElementText(m_uri, "gadget-ref");
+         Gadget gadget = null;
+         // Once the gadget portlet wrapper is able to use gadget userPref's, include parsing logic here.
+         // Gadget gadget = new Gadget();
+         // gadget.setUserPref();
+         state = new TransientApplicationState<Gadget>(gadgetName, gadget);
+         app = Application.createGadgetApplication();
+         app.setState(state);
+         ctx.parsePastEndTag(m_uri, "gadget");
+      }
       else
       {
          ctx.parsePastStartTag(m_uri, "portlet");
          String applicationName = ctx.parseElementText(m_uri, "application-ref");
          String portletName = ctx.parseElementText(m_uri, "portlet-ref");
-         TransientApplicationState<Portlet> state;
          if (ctx.isAt(m_uri, "preferences"))
          {
             PortletBuilder builder = new PortletBuilder();

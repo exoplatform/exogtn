@@ -50,6 +50,13 @@
            unmarshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler">
   </mapping>
 
+  <mapping name="gadget-application"
+           label="gadget-application"
+           class="org.exoplatform.portal.config.serialize.GadgetApplication"
+           marshaller="org.exoplatform.portal.config.serialize.GadgetApplicationHandler"
+           unmarshaller="org.exoplatform.portal.config.serialize.GadgetApplicationHandler">
+  </mapping>
+  
   <mapping name="page-body" label="pageBody" class="org.exoplatform.portal.config.model.PageBody">
   </mapping>
 	
@@ -74,6 +81,7 @@
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
 	    <structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.serialize.GadgetApplication" usage="optional"/>
     </collection>
   </mapping>
   
@@ -92,6 +100,7 @@
       <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.serialize.GadgetApplication" usage="optional"/>
     </collection>
   </mapping>
   

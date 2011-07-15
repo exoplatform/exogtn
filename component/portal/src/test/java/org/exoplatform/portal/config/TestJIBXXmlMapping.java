@@ -22,6 +22,7 @@ package org.exoplatform.portal.config;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.NavigationFragment;
@@ -33,6 +34,7 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.common.util.Tools;
@@ -132,6 +134,24 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals("web/BannerPortlet", portletState.getContentId());
       Portlet preferences = (Portlet)portletState.getContentState();
       assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
+   }
+   
+
+   public void testGadgetApplicationMapping() throws Exception
+   {
+      IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
+      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+      @SuppressWarnings("unchecked")
+      Application<Gadget> app =
+         (Application<Gadget>)uctx.unmarshalDocument(new FileInputStream(
+            "src/test/resources/jibx/gadget-application.xml"), null);
+
+      assertEquals(ApplicationType.GADGET, app.getType());
+      TransientApplicationState gadgetState = (TransientApplicationState)app.getState();
+      assertNotNull(gadgetState);
+      assertEquals("Calendar", gadgetState.getContentId());
+      assertNull(gadgetState.getContentState());
+      // Add test for user-prefs when supported...
    }
 
    public void testSimpleNavigationMapping() throws Exception
