@@ -19,16 +19,14 @@
 
 package org.exoplatform.portal.application;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 
-import java.util.Locale;
+import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class StandaloneAppRequestHandler extends PortalRequestHandler
@@ -66,39 +64,15 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       HttpServletRequest req = controllerContext.getRequest();
       HttpServletResponse res = controllerContext.getResponse();
 
-
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");
 
       //
       String requestPath = controllerContext.getParameter(REQUEST_PATH);
-      String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
-      String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
       String access = controllerContext.getParameter(ACCESS);
-      
-      //
-      Locale requestLocale;
-      String lang = controllerContext.getParameter(LANG);
-      if (lang.length() == 0)
-      {
-         requestLocale = null;
-      }
-      else
-      {
-         requestLocale = new Locale(lang.substring(0, 2));
-      }
-      //
-      if (requestSiteName == null) {
-         res.sendRedirect(req.getContextPath());
-         return;
-      }
-      StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
-      processRequest(context, app);
-      
-      log.debug("Session ID = " + req.getSession().getId());
-      res.setHeader("Cache-Control", "no-cache");
 
+      StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, access, requestPath);
       processRequest(context, app);
    }     
 }

@@ -29,6 +29,12 @@
 
   </route>
 
+  <route path="/standalone{gtn:path}">
+    <route-param qname="gtn:handler" value="standalone"/>
+    <route-param qname="gtn:access" value="private"/>
+    <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
+  </route>
+  
   <route path="/upload">
     <route-param qname="gtn:handler" value="upload"/>
   </route>

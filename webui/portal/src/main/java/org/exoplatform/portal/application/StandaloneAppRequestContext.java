@@ -29,24 +29,19 @@ import org.exoplatform.webui.core.UIApplication;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 public class StandaloneAppRequestContext extends PortalRequestContext
 {
    private String storageId;
 
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
-   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext,
-      String requestSiteType, String requestSiteName, String requestPath, String access, Locale requestLocale)
+   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String access, String requestPath)
       throws Exception
    {
-      super(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
-      HttpServletRequest req = controllerContext.getRequest();
-      int idx = (req.getServletPath() + req.getContextPath()).length() + 1;
-      if (idx <= getRequestURI().length())
+      super(app, controllerContext, null, null, requestPath, access, null);
+      if (!"".equals(requestPath))
       {
-         storageId = getRequestURI().substring(idx);
+         storageId = requestPath.substring(1);
       }
       else
       {
@@ -89,10 +84,5 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    public String getPortalOwner()
    {
       return null;
-   }
-
-   public String getNodePath()
-   {
-      throw new UnsupportedOperationException();
    }
 }
