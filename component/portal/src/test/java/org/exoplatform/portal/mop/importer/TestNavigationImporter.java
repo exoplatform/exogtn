@@ -30,6 +30,7 @@ import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -350,8 +351,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", "importer_full_navigation").addFragment(fragment().add(node("a")).build());
-      src.addFragment(fragment().add(node("b")).build());
-      src.addFragment(fragment("a").add(node("c")).build());
+      src.addFragment(fragment().add(node("b"), node("c")).build());
+      src.addFragment(fragment("a").add(node("d")).build());
 
       //
       NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
@@ -360,13 +361,20 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_full_navigation"));
       NodeContext<NodeContext<?>> root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
-      assertEquals(2, root.getNodeSize());
-//      Iterator<NodeContext<?>> i = root.iterator();
-//      NodeContext<?> a = i.next();
-//      assertEquals("a", a.getName());
-//      assertEquals(1, a.getNodeSize());
-//      NodeContext<?> b = i.next();
-//      assertEquals("b", b.getName());
-//      assertEquals(0, b.getNodeSize());
+      assertEquals(3, root.getNodeSize());
+      Iterator<NodeContext<?>> i = root.iterator();
+      NodeContext<?> a = i.next();
+      assertEquals("a", a.getName());
+      assertEquals(1, a.getNodeSize());
+      NodeContext<?> d = a.get("d");
+      assertNotNull(d);
+      assertEquals(0, d.getNodeSize());
+      NodeContext<?> b = i.next();
+      assertEquals("b", b.getName());
+      assertEquals(0, b.getNodeSize());
+      NodeContext<?> c = i.next();
+      assertEquals("c", c.getName());
+      assertEquals(0, c.getNodeSize());
+      assertFalse(i.hasNext());
    }
 }

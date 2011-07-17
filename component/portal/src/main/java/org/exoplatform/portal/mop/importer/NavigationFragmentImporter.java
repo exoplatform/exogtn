@@ -28,8 +28,6 @@ import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.NodeState;
@@ -44,6 +42,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -196,49 +195,72 @@ public class NavigationFragmentImporter
       navigationService.rebaseNode(dst, Scope.CHILDREN, null);
 
       //
-      ListDiff<NodeContext<?>, PageNodeContainer, String> diff = new ListDiff<NodeContext<?>, PageNodeContainer, String>(
-         NODE_ADAPTER,
-         PAGE_NODE_CONTAINER_ADAPTER);
+      ListDiff<PageNodeContainer, NodeContext<?>, String> diff = new ListDiff<PageNodeContainer,NodeContext<?>, String>(
+         PAGE_NODE_CONTAINER_ADAPTER,
+         NODE_ADAPTER
+         );
 
       //
       List<PageNode> srcChildren = src.getNodes();
-      ListChangeIterator<NodeContext<?>, PageNodeContainer, String> it = diff.iterator(dst, src);
-      NodeChangeQueue<PageNodeContainer> changes = new NodeChangeQueue<PageNodeContainer>();
+      ListChangeIterator<PageNodeContainer, NodeContext<?>, String> it = diff.iterator(src, dst);
 
-      //
+      class Change
+      {
+         final ListChangeType type;
+         final String name;
+         final int index1;
+         final int index2;
+
+         Change(ListChangeType type, String name, int index1, int index2)
+         {
+            this.type = type;
+            this.name = name;
+            this.index1 = index1;
+            this.index2 = index2;
+         }
+      }
+
+      // Buffer the changes in a list
+      LinkedList<Change> foo = new LinkedList<Change>();
       while (it.hasNext())
       {
-         ListChangeType changeType = it.next();
-         String name = it.getElement();
-         PageNode srcChild = src.getNode(name);
-         NodeContext<?> dstChild = dst.get(name);
+         ListChangeType type = it.next();
+         foo.add(new Change(type, it.getElement(), it.getIndex1(), it.getIndex2()));
+      }
+
+      // The last encountered child
+      NodeContext<?> previousChild = null;
+
+      // Replay the changes and apply them
+      for (Change change : foo)
+      {
+         PageNode srcChild = src.getNode(change.name);
+         NodeContext<?> dstChild = dst.get(change.name);
 
          //
-         switch (changeType)
+         switch (change.type)
          {
             case SAME:
+               // Perform recursively
                perform(srcChild, dstChild, labelMap);
+               previousChild = dstChild;
                break;
-            case ADD:
-               if (dst.getNode(name) != null)
+            case REMOVE:
+               if (dst.getNode(change.name) != null)
                {
                   // It's a move we do nothing
                }
                else
                {
                   // It's an addition
-                  int index = srcChildren.indexOf(srcChild);
-                  PageNode previous = index == 0 ? null : srcChildren.get(index - 1);
-                  changes.onAdd(srcChild, src, previous);
+                  previousChild = add(srcChild, previousChild, dst, labelMap);
                }
                break;
-            case REMOVE:
-               if (src.getNode(name) != null)
+            case ADD:
+               previousChild = dstChild;
+               if (src.getNode(change.name) != null)
                {
-                  // It's a move
-                  int index = srcChildren.indexOf(srcChild);
-                  PageNode previous = index == 0 ? null : srcChildren.get(index - 1);
-                  changes.onMove(srcChild, src, src, previous);
+                  // It's a move we do nothing
                }
                else
                {
@@ -247,85 +269,81 @@ public class NavigationFragmentImporter
                break;
          }
       }
+   }
+
+   private NodeContext<?> add(
+      PageNode target,
+      NodeContext<?> previous,
+      NodeContext<?> parent,
+      Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
+   {
+      I18NString labels = target.getLabels();
 
       //
-      changes.broadcast(new NodeChangeListener.Base<PageNodeContainer>()
+      String label;
+      Map<Locale, Described.State> description;
+      if (labels.isSimple())
       {
-         @Override
-         public void onAdd(PageNodeContainer target, PageNodeContainer parent, PageNodeContainer previous)
+         label = labels.getSimple();
+         description = null;
+      }
+      else if (labels.isEmpty())
+      {
+         label = null;
+         description = null;
+      }
+      else
+      {
+         label = null;
+         description = new HashMap<Locale, Described.State>();
+         for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
          {
-            add((PageNode)target, (PageNode)previous, dst);
+            description.put(entry.getKey(), new Described.State(entry.getValue(), null));
          }
+      }
 
-         private void add(PageNode target, PageNode previous, NodeContext<?> dst)
+      //
+      String name = target.getName();
+      int index;
+      if (previous != null)
+      {
+         index = parent.get((previous).getName()).getIndex() + 1;
+      }
+      else
+      {
+         index = 0;
+      }
+      NodeContext<?> child = parent.add(index, name);
+      Date start = target.getStartPublicationDate();
+      Date end = target.getEndPublicationDate();
+      NodeState state = new NodeState(
+         label,
+         target.getIcon(),
+         start == null ? -1 : start.getTime(),
+         end == null ? -1 : end.getTime(),
+         target.getVisibility(),
+         target.getPageReference()
+      );
+      child.setState(state);
+
+      //
+      if (description != null)
+      {
+         labelMap.put(child, description);
+      }
+
+      // We recurse to create the descendants
+      List<PageNode> targetChildren = target.getNodes();
+      if (targetChildren != null)
+      {
+         NodeContext<?> targetPrevious = null;
+         for (PageNode targetChild : targetChildren)
          {
-            I18NString labels = target.getLabels();
-
-            //
-            String label;
-            Map<Locale, Described.State> description;
-            if (labels.isSimple())
-            {
-               label = labels.getSimple();
-               description = null;
-            }
-            else if (labels.isEmpty())
-            {
-               label = null;
-               description = null;
-            }
-            else
-            {
-               label = null;
-               description = new HashMap<Locale, Described.State>();
-               for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
-               {
-                  description.put(entry.getKey(), new Described.State(entry.getValue(), null));
-               }
-            }
-
-            //
-            String name = target.getName();
-            int index;
-            if (previous != null)
-            {
-               index = dst.get((previous).getName()).getIndex() + 1;
-            }
-            else
-            {
-               index = 0;
-            }
-            NodeContext<?> child = dst.add(index, name);
-            Date start = target.getStartPublicationDate();
-            Date end = target.getEndPublicationDate();
-            NodeState state = new NodeState(
-               label,
-               target.getIcon(),
-               start == null ? -1 : start.getTime(),
-               end == null ? -1 : end.getTime(),
-               target.getVisibility(),
-               target.getPageReference()
-            );
-            child.setState(state);
-
-            //
-            if (description != null)
-            {
-               labelMap.put(child, description);
-            }
-
-            //
-            List<PageNode> targetChildren = target.getNodes();
-            if (targetChildren != null)
-            {
-               PageNode targetPrevious = null;
-               for (PageNode targetChild : targetChildren)
-               {
-                  add(targetChild, targetPrevious, child);
-                  targetPrevious = targetChild;
-               }
-            }
+            targetPrevious = add(targetChild, targetPrevious, child, labelMap);
          }
-      });
+      }
+
+      //
+      return child;
    }
 }
