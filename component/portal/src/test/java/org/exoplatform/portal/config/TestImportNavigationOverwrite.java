@@ -37,7 +37,11 @@ public class TestImportNavigationOverwrite extends AbstractImportNavigationTest
    @Override
    protected void assertState(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
+      assertEquals(2, root.getNodeCount());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals("foo_icon_2", foo.getState().getIcon());
+      assertEquals(0, foo.getNodeCount());
       NodeContext<?> bar = root.get("bar");
       assertNotNull(bar);
       assertEquals("bar_icon", bar.getState().getIcon());

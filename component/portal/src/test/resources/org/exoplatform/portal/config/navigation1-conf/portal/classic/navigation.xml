@@ -26,7 +26,15 @@
 	<page-nodes>
 		<node>
 			<name>foo</name>
-      <icon>foo_icon</icon>
+      <icon>foo_icon_1</icon>
+      <node>
+        <name>juu</name>
+        <icon>juu_icon</icon>
+      </node>
 		</node>
+    <node>
+      <name>daa</name>
+      <icon>daa_icon</icon>
+    </node>
 	</page-nodes>
 </node-navigation>

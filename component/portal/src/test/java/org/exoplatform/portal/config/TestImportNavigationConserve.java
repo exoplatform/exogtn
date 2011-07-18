@@ -37,10 +37,18 @@ public class TestImportNavigationConserve extends AbstractImportNavigationTest
    @Override
    protected void assertState(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
+      assertEquals(2, root.getNodeCount());
       NodeContext<?> foo = root.get("foo");
       assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(0, foo.getNodeCount());
+      assertEquals("foo_icon_1", foo.getState().getIcon());
+      assertEquals(1, foo.getNodeCount());
+      NodeContext<?> juu = foo.get("juu");
+      assertNotNull(juu);
+      assertEquals("juu_icon", juu.getState().getIcon());
+      assertEquals(0, juu.getNodeCount());
+      NodeContext<?> daa = root.get("daa");
+      assertNotNull(daa);
+      assertEquals("daa_icon", daa.getState().getIcon());
+      assertEquals(0, daa.getNodeCount());
    }
 }

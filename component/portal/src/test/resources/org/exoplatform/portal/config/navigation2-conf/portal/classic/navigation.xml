@@ -24,6 +24,10 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
 	<priority>1</priority>
 	<page-nodes>
+    <node>
+      <name>foo</name>
+      <icon>foo_icon_2</icon>
+    </node>
 		<node>
 			<name>bar</name>
       <icon>bar_icon</icon>

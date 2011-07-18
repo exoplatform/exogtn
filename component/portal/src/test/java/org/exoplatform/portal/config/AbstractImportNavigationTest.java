@@ -44,15 +44,17 @@ public abstract class AbstractImportNavigationTest extends AbstractImportTest
    @Override
    protected final void afterTwoPhasesBoot(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
+      assertEquals(2, root.getNodeCount());
       assertNotNull(root.get("foo"));
+      assertNotNull(root.get("daa"));
    }
 
    @Override
    protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root)
    {
-      assertEquals(1, root.getNodeCount());
+      assertEquals(2, root.getNodeCount());
       assertNotNull(root.get("foo"));
+      assertNotNull(root.get("daa"));
    }
 
    @Override
