@@ -91,6 +91,7 @@ public class NavigationImporter
                dst = null;
             }
             break;
+         case MERGE:
          case INSERT:
             if (dst == null)
             {
@@ -105,6 +106,8 @@ public class NavigationImporter
                service.saveNavigation(dst);
             }
             break;
+         default:
+            throw new AssertionError();
       }
 
       //

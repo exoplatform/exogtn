@@ -38,6 +38,11 @@ public enum ImportMode
    INSERT(new ImportConfig(false, false, true)),
 
    /**
+    * Import data when it does not exist, update data when it exists.
+    */
+   MERGE(new ImportConfig(false, true, true)),
+
+   /**
     * Overwrite data whatsoever.
     */
    OVERWRITE(new ImportConfig(true, true, true));
