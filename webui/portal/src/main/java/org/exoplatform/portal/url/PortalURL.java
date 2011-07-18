@@ -96,11 +96,13 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       // Configure mime type
       renderContext.setMimeType(mimeType);
 
+      boolean hasConfirm = confirm != null && confirm.length() > 0;
+      
       //
       if (ajax)
       {
          renderContext.append("javascript:", false);
-         if (confirm != null && confirm.length() > 0)
+         if (hasConfirm)
          {
             renderContext.append("if(confirm('", false);
             renderContext.append(confirm.replaceAll("'", "\\\\'"), false);
@@ -110,13 +112,13 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       }
       else
       {
-         if (confirm != null && confirm.length() > 0)
+         if (hasConfirm)
          {
-            // Need to find a way to make the confirm message appear
-            // I think we could use :
-            // 1/ the if(confirm('')) ...
-            // 2/ a call function that updates window.location
-            // for now it is disabled
+            renderContext.append("javascript:", false);
+            renderContext.append("if(confirm('", false);
+            renderContext.append(confirm.replaceAll("'", "\\\\'"), false);
+            renderContext.append("'))", false);
+            renderContext.append("window.location=\'", false);
          }
       }
 
@@ -172,6 +174,10 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       else
       {
          renderContext.flush();
+         if (hasConfirm)
+         {
+            renderContext.append("\'", false);            
+         }
       }
 
       //

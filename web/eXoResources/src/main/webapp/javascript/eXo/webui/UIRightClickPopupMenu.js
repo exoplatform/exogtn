@@ -58,27 +58,21 @@ UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 		document.oncontextmenu = function() {return true} ;
 	}
 };
-/**
- * Prepare something for context menu
- * @param {Object} evt event
- * @param {Object} elemt document object that contains context menu
- */
-UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
-	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
-	contextMenu.style.display = "none" ;
-	var href = elemt.getAttribute('href') ;
-	if(href.indexOf("javascript") == 0) {
-		eval(unescape(href).replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ; 
-		eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
-		return false;
-	}
-	elemt.setAttribute('href', href += '&objectId=' + encodeURI(contextMenu.objId.replace(/'/g, "\\'"))) ;
-	return true;
-}
 
-UIRightClickPopupMenu.prototype.ajaxPost = function(url, objId) {
-  var queryString = "ajaxRequest=true&objectId=" + objId;
-  ajaxPost(url, queryString);
+UIRightClickPopupMenu.prototype.ajaxPost = function(evt, elemt) {	
+  var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
+  contextMenu.style.display = "none" ;  
+  var href = elemt.getAttribute('exo:href') ;
+  var objId = encodeURI(contextMenu.objId.replace(/'/g, "\\'"));
+  
+  if(href.indexOf("javascript") == -1) {
+	  ajaxPost(url, "ajaxRequest=true&objectId=" + objId);
+	  return;
+  }
+  eXo.core.MouseEventManager.docMouseDownEvt(evt);
+  
+  href = href.replace("ajaxGet", "ajaxPost");  
+  eval(href.substr(0, href.length - 2) + "', 'objectId=" + objId + "')");
 }
 
 /**
