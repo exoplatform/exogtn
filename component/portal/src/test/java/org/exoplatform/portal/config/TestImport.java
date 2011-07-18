@@ -45,7 +45,7 @@ public class TestImport extends AbstractGateInTest
       //
       System.setProperty("override.1", "false");
       System.setProperty("import.mode.1", "conserve");
-      System.setProperty("import.portal.1", "merge1");
+      System.setProperty("import.portal.1", "navigation1");
 
       //
       bootstrap.boot();

@@ -94,7 +94,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          Locale.ENGLISH,
          descriptionService,
          imported,
-         ImportMode.MERGE.config);
+         ImportMode.INSERT.config);
       NodeContext node = importer.perform();
       assertNotNull(node);
       assertEquals("bar", node.getName());
@@ -108,7 +108,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          Locale.ENGLISH,
          descriptionService,
          imported,
-         ImportMode.MERGE.config);
+         ImportMode.INSERT.config);
       node = importer.perform();
       assertNotNull(node);
       assertEquals("daa", node.getName());
@@ -122,7 +122,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
          Locale.ENGLISH,
          descriptionService,
          imported,
-         ImportMode.MERGE.config);
+         ImportMode.INSERT.config);
       node = importer.perform();
       assertEquals("foo", node.getName());
       assertNotNull(node.get("juu"));

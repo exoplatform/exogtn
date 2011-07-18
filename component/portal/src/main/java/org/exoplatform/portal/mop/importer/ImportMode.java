@@ -33,14 +33,14 @@ public enum ImportMode
    CONSERVE(new ImportConfig(false, false, true)),
 
    /**
-    * Import data when it does not exist, otherwise try a merge strategy that adds new data but ignore other modifications.
+    * Import data when it does not exist, otherwise performs a strategy that adds new data only.
     */
-   MERGE(new ImportConfig(false, false, true)),
+   INSERT(new ImportConfig(false, false, true)),
 
    /**
-    * Reimport data whatsoever.
+    * Overwrite data whatsoever.
     */
-   REIMPORT(new ImportConfig(true, true, true));
+   OVERWRITE(new ImportConfig(true, true, true));
 
    /** . */
    public final ImportConfig config;

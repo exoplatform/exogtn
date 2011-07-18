@@ -42,9 +42,9 @@ import static org.exoplatform.portal.mop.importer.Builder.*;
 public class TestNavigationImporter extends AbstractTestNavigationService
 {
 
-   public void testMergeCreateNavigation()
+   public void testInsertCreateNavigation()
    {
-      testCreate(ImportMode.MERGE);
+      testCreate(ImportMode.INSERT);
    }
 
    public void testConserveCreateNavigation()
@@ -52,14 +52,14 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       testCreate(ImportMode.CONSERVE);
    }
 
-   public void testReimportCreateNavigation()
+   public void testOverwriteCreateNavigation()
    {
-      testCreate(ImportMode.REIMPORT);
+      testCreate(ImportMode.OVERWRITE);
    }
 
    private void testCreate(ImportMode mode)
    {
-      String name = mode.name() + "_create_navigation";
+      String name = mode.name() + "_create";
 
       //
       MOPService mop = mgr.getPOMService();
@@ -70,33 +70,33 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertNull(service.loadNavigation(SiteKey.portal(name)));
       PageNavigation src = new PageNavigation("portal", name);
       src.setPriority(2);
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, mode, src, service, descriptionService);
-      merge.perform();
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, mode, src, service, descriptionService);
+      importer.perform();
 
       //
       NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
       assertEquals(2, (int)ctx.getState().getPriority());
    }
 
-   public void testMergeCreate()
+   public void testInsertNavigation()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "merge_create");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "insert_navigation");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("merge_create")));
+      assertNull(service.loadNavigation(SiteKey.portal("insert_navigation")));
 
       //
       FragmentBuilder builder = fragment().add(node("a"));
 
       //
-      PageNavigation src = new PageNavigation("portal", "merge_create").addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
-      merge.perform();
+      PageNavigation src = new PageNavigation("portal", "insert_navigation").addFragment(builder.build());
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+      importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("merge_create"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_navigation"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
       NodeContext<?> a = node.get("a");
       assertNotNull(a);
@@ -105,25 +105,25 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       assertEquals(0, a.getNodeCount());
    }
 
-   public void testMergeNested()
+   public void testInsertFragment()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "merge_nested");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "insert_fragment");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("merge_nested")));
+      assertNull(service.loadNavigation(SiteKey.portal("insert_fragment")));
 
       //
       FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
       //
-      PageNavigation src = new PageNavigation("portal", "merge_nested").addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
-      merge.perform();
+      PageNavigation src = new PageNavigation("portal", "insert_fragment").addFragment(builder.build());
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+      importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("merge_nested"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_fragment"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
       NodeContext<?> a = node.get("a");
       assertNotNull(a);
@@ -137,19 +137,19 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       testMerge(ImportMode.CONSERVE);
    }
 
-   public void testMergeMerge()
+   public void testInsertMerge()
    {
-      testMerge(ImportMode.MERGE);
+      testMerge(ImportMode.INSERT);
    }
 
-   public void testReimportMerge()
+   public void testOverwriteMerge()
    {
-      testMerge(ImportMode.REIMPORT);
+      testMerge(ImportMode.OVERWRITE);
    }
 
    private void testMerge(ImportMode importMode)
    {
-      String name = importMode.name() + "_merge_merge";
+      String name = importMode.name() + "_merge";
 
       //
       MOPService mop = mgr.getPOMService();
@@ -164,8 +164,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       PageNavigation src = new PageNavigation("portal", name).addFragment(builder.build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, service, descriptionService);
-      merge.perform();
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, service, descriptionService);
+      importer.perform();
 
       //
       NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
@@ -182,15 +182,15 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       //
       builder = fragment().add(node("a").add(node("d"))).add(node("c"));
       src = new PageNavigation("portal", name).addFragment(builder.build());
-      merge = new NavigationImporter(Locale.ENGLISH, importMode, src, service, descriptionService);
-      merge.perform();
+      importer = new NavigationImporter(Locale.ENGLISH, importMode, src, service, descriptionService);
+      importer.perform();
 
       //
       ctx = service.loadNavigation(SiteKey.portal(name));
       node = service.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
       switch (importMode)
       {
-         case MERGE:
+         case INSERT:
          {
             assertEquals(2, node.getNodeCount());
             a = node.getChild("a");
@@ -222,7 +222,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
             assertEquals(0, b.getNodeCount());
             break;
          }
-         case REIMPORT:
+         case OVERWRITE:
          {
             assertEquals(2, node.getNodeCount());
             a = node.getChild("a");
@@ -242,22 +242,22 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       }
    }
 
-   public void testMergeOrder()
+   public void testOrder()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "merge_order");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "order");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("merge_order")));
+      assertNull(service.loadNavigation(SiteKey.portal("order")));
 
       //
-      PageNavigation src = new PageNavigation("portal", "merge_order").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
-      NavigationImporter merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
-      merge.perform();
+      PageNavigation src = new PageNavigation("portal", "order").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+      importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("merge_order"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("order"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
       assertEquals(3, node.getNodeCount());
       assertEquals("a", node.get(0).getName());
@@ -266,8 +266,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       src.getFragment().getNodes().add(0, node("d").build());
-      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
-      merge.perform();
+      importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+      importer.perform();
 
       //
       node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
@@ -279,8 +279,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService
 
       //
       src.getFragment().getNodes().add(node("e").build());
-      merge = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
-      merge.perform();
+      importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+      importer.perform();
 
       //
       node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
@@ -295,24 +295,24 @@ public class TestNavigationImporter extends AbstractTestNavigationService
    public void testExtendedLabel()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_extended_label");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "extended_label");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("importer_extended_label")));
+      assertNull(service.loadNavigation(SiteKey.portal("extended_label")));
 
       //
-      PageNavigation src = new PageNavigation("portal", "importer_extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
+      PageNavigation src = new PageNavigation("portal", "extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
       NavigationFragment fragment = src.getFragment();
       fragment.getNode("a").setLabels(new I18NString(new LocalizedString("a_en", Locale.ENGLISH), new LocalizedString("a_fr", Locale.FRENCH)));
       fragment.getNode("b").setLabels(new I18NString(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH)));
       fragment.getNode("c").setLabels(new I18NString(new LocalizedString("c_en")));
-      src.setOwnerId("importer_extended_label");
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
+      src.setOwnerId("extended_label");
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, service, descriptionService);
       importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_extended_label"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("extended_label"));
       NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
 
       // The fully explicit case
@@ -343,23 +343,23 @@ public class TestNavigationImporter extends AbstractTestNavigationService
    public void testFullNavigation()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "importer_full_navigation");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "full_navigation");
       sync(true);
 
       //
-      assertNull(service.loadNavigation(SiteKey.portal("importer_full_navigation")));
+      assertNull(service.loadNavigation(SiteKey.portal("full_navigation")));
 
       //
-      PageNavigation src = new PageNavigation("portal", "importer_full_navigation").addFragment(fragment().add(node("a")).build());
+      PageNavigation src = new PageNavigation("portal", "full_navigation").addFragment(fragment().add(node("a")).build());
       src.addFragment(fragment().add(node("b"), node("c")).build());
       src.addFragment(fragment("a").add(node("d")).build());
 
       //
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
       importer.perform();
 
       //
-      NavigationContext ctx = service.loadNavigation(SiteKey.portal("importer_full_navigation"));
+      NavigationContext ctx = service.loadNavigation(SiteKey.portal("full_navigation"));
       NodeContext<NodeContext<?>> root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
       assertEquals(3, root.getNodeSize());
       Iterator<NodeContext<?>> i = root.iterator();

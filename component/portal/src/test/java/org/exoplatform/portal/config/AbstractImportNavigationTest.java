@@ -30,13 +30,13 @@ public abstract class AbstractImportNavigationTest extends AbstractImportTest
    @Override
    protected final String getConfig1()
    {
-      return "merge1";
+      return "navigation1";
    }
 
    @Override
    protected final String getConfig2()
    {
-      return "merge2";
+      return "navigation2";
    }
 
    protected abstract void assertState(NodeContext<?> root);

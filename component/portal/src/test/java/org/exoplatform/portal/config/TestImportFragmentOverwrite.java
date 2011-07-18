@@ -25,13 +25,13 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestImportFragmentMerge extends AbstractImportFragmentTest
+public class TestImportFragmentOverwrite extends AbstractImportFragmentTest
 {
 
    @Override
    protected ImportMode getMode()
    {
-      return ImportMode.MERGE;
+      return ImportMode.OVERWRITE;
    }
 
    @Override
