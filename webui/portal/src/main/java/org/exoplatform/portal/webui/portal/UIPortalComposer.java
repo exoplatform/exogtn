@@ -79,6 +79,7 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UIPortalComposer.ToggleActionListener.class)}),
    @ComponentConfig(id = UIPortalComposer.UIPAGE_EDITOR, template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
       @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewPagePropertiesActionListener.class),
+      @EventConfig(listeners = UIPortalComposer.CloseComposerActionListener.class),
       @EventConfig(name = "Abort", listeners = UIPortalComposer.AbortPageEditionActionListener.class),
       @EventConfig(name = "Finish", listeners = UIPortalComposer.FinishPageEditionActionListener.class),
       @EventConfig(name = "Back", listeners = UIPortalComposer.BackActionListener.class),
