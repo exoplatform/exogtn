@@ -99,15 +99,11 @@ public class NavigationImporter
             }
             break;
          case REIMPORT:
-            if (dst != null)
-            {
-               service.destroyNavigation(dst);
-            }
-            else
+            if (dst == null)
             {
                dst = new NavigationContext(key, new NavigationState(src.getPriority()));
+               service.saveNavigation(dst);
             }
-            service.saveNavigation(dst);
             break;
       }
 
@@ -147,7 +143,8 @@ public class NavigationImporter
                   dst.getKey(),
                   portalLocale,
                   descriptionService,
-                  fragment);
+                  fragment,
+                  mode.config);
 
                //
                fragmentImporter.perform();

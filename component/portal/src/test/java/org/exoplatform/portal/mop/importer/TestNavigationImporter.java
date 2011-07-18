@@ -355,7 +355,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       src.addFragment(fragment("a").add(node("d")).build());
 
       //
-      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.REIMPORT, src, service, descriptionService);
+      NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
       importer.perform();
 
       //

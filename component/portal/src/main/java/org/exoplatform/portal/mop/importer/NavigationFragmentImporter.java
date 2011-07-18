@@ -125,13 +125,17 @@ public class NavigationFragmentImporter
    /** . */
    private final PageNodeContainer src;
 
+   /** . */
+   private final ImportConfig config;
+
    public NavigationFragmentImporter(
       String[] path,
       NavigationService navigationService,
       SiteKey navigationKey,
       Locale portalLocale,
       DescriptionService descriptionService,
-      PageNodeContainer src)
+      PageNodeContainer src,
+      ImportConfig config)
    {
       this.path = path;
       this.navigationService = navigationService;
@@ -139,6 +143,12 @@ public class NavigationFragmentImporter
       this.portalLocale = portalLocale;
       this.descriptionService = descriptionService;
       this.src = src;
+      this.config = config;
+   }
+
+   public ImportConfig getConfig()
+   {
+      return config;
    }
 
    public NodeContext<?> perform()
@@ -243,28 +253,47 @@ public class NavigationFragmentImporter
             case SAME:
                // Perform recursively
                perform(srcChild, dstChild, labelMap);
+
+               //
+               if (config.updatedSame)
+               {
+                  dstChild.setState(srcChild.getState());
+               }
+
+               //
                previousChild = dstChild;
                break;
             case REMOVE:
                if (dst.getNode(change.name) != null)
                {
-                  // It's a move we do nothing
                }
                else
                {
-                  // It's an addition
-                  previousChild = add(srcChild, previousChild, dst, labelMap);
+                  if (config.createMissing)
+                  {
+                     previousChild = add(srcChild, previousChild, dst, labelMap);
+                  }
                }
                break;
             case ADD:
-               previousChild = dstChild;
                if (src.getNode(change.name) != null)
                {
-                  // It's a move we do nothing
+                  if (config.updatedSame)
+                  {
+                     dstChild.setState(srcChild.getState());
+                  }
+                  previousChild = dstChild;
                }
                else
                {
-                  // It's a removal we do nothing
+                  if (config.destroyOrphan)
+                  {
+                     dstChild.removeNode();
+                  }
+                  else
+                  {
+                     previousChild = dstChild;
+                  }
                }
                break;
          }
@@ -280,21 +309,17 @@ public class NavigationFragmentImporter
       I18NString labels = target.getLabels();
 
       //
-      String label;
       Map<Locale, Described.State> description;
       if (labels.isSimple())
       {
-         label = labels.getSimple();
          description = null;
       }
       else if (labels.isEmpty())
       {
-         label = null;
          description = null;
       }
       else
       {
-         label = null;
          description = new HashMap<Locale, Described.State>();
          for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
          {
@@ -314,16 +339,7 @@ public class NavigationFragmentImporter
          index = 0;
       }
       NodeContext<?> child = parent.add(index, name);
-      Date start = target.getStartPublicationDate();
-      Date end = target.getEndPublicationDate();
-      NodeState state = new NodeState(
-         label,
-         target.getIcon(),
-         start == null ? -1 : start.getTime(),
-         end == null ? -1 : end.getTime(),
-         target.getVisibility(),
-         target.getPageReference()
-      );
+      NodeState state = target.getState();
       child.setState(state);
 
       //

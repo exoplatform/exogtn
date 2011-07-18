@@ -17,34 +17,47 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config;
-
-import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+package org.exoplatform.portal.mop.importer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestImportFragmentReimport extends AbstractImportFragmentTest
+public class ImportConfig
 {
 
-   @Override
-   protected ImportMode getMode()
+   /** . */
+   final boolean destroyOrphan;
+
+   /** . */
+   final boolean updatedSame;
+
+   /** . */
+   final boolean createMissing;
+
+   public ImportConfig(boolean destroyOrphan, boolean updatedSame, boolean createMissing)
    {
-      return ImportMode.REIMPORT;
+      this.destroyOrphan = destroyOrphan;
+      this.updatedSame = updatedSame;
+      this.createMissing = createMissing;
    }
 
-   @Override
-   protected void assertState(NodeContext<?> root)
+   /**
+    * Returns true when an orphan node should be destroyed.
+    *
+    * @return the destroy orphan value
+    */
+   public boolean getDestroyOrphan()
    {
-      assertEquals(1, root.getNodeSize());
-      NodeContext<?> foo = root.get("foo");
-      assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(1, foo.getNodeSize());
-      NodeContext<?> bar = foo.get("bar");
-      assertNotNull(bar);
-      assertEquals("bar_icon", bar.getState().getIcon());
-      assertEquals(0, bar.getNodeSize());
+      return destroyOrphan;
+   }
+
+   public boolean getUpdatedSame()
+   {
+      return updatedSame;
+   }
+
+   public boolean getCreateMissing()
+   {
+      return createMissing;
    }
 }

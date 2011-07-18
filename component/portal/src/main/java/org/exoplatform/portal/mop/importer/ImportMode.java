@@ -30,16 +30,23 @@ public enum ImportMode
    /**
     * Import data when it does not exist, otherwise do nothing.
     */
-   CONSERVE,
+   CONSERVE(new ImportConfig(false, false, true)),
 
    /**
     * Import data when it does not exist, otherwise try a merge strategy that adds new data but ignore other modifications.
     */
-   MERGE,
+   MERGE(new ImportConfig(false, false, true)),
 
    /**
     * Reimport data whatsoever.
     */
-   REIMPORT
+   REIMPORT(new ImportConfig(true, true, true));
 
+   /** . */
+   public final ImportConfig config;
+
+   ImportMode(ImportConfig config)
+   {
+      this.config = config;
+   }
 }

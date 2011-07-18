@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -174,6 +175,18 @@ public class PageNode extends PageNodeContainer
    public PageNode getChild(String name)
    {
       return getNode(name);
+   }
+
+   public NodeState getState()
+   {
+      return new NodeState(
+         labels.getSimple(),
+         icon,
+         startPublicationDate == null ? -1 : startPublicationDate.getTime(),
+         endPublicationDate == null ? -1 : endPublicationDate.getTime(),
+         visibility,
+         pageReference
+      );
    }
 
    @Override

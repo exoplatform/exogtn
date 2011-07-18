@@ -41,14 +41,43 @@ import static org.exoplatform.portal.mop.importer.Builder.node;
 public class TestNavigationFragmentImporter extends AbstractTestNavigationService
 {
 
-   public void testCreate()
+   public void testRemoveOrphan()
    {
       MOPService mop = mgr.getPOMService();
-      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "BILTO");
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_orphan");
       sync(true);
 
       //
-      NavigationContext ctx = new NavigationContext(SiteKey.portal("BILTO"), new NavigationState(1));
+      NavigationContext ctx = new NavigationContext(SiteKey.portal("remove_orphan"), new NavigationState(1));
+      service.saveNavigation(ctx);
+      NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
+      root.add(0, "foo").add(0, "bar");
+      service.saveNode(root, null);
+
+      //
+      NavigationFragment imported = fragment("foo").build();
+
+      //
+      NavigationFragmentImporter importer = new NavigationFragmentImporter(
+         new String[0],
+         service,
+         SiteKey.portal("remove_orphan"),
+         Locale.ENGLISH,
+         descriptionService,
+         imported,
+         new ImportConfig(true, false, false));
+      NodeContext node = importer.perform();
+      assertEquals(0, node.getNodeSize());
+   }
+
+   public void testCreateMissingPath()
+   {
+      MOPService mop = mgr.getPOMService();
+      mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "create_missing_path");
+      sync(true);
+
+      //
+      NavigationContext ctx = new NavigationContext(SiteKey.portal("create_missing_path"), new NavigationState(1));
       service.saveNavigation(ctx);
       NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
       root.add(0, "foo").add(0, "bar");
@@ -61,10 +90,11 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
       NavigationFragmentImporter importer = new NavigationFragmentImporter(
          new String[]{"foo","bar"},
          service,
-         SiteKey.portal("BILTO"),
+         SiteKey.portal("create_missing_path"),
          Locale.ENGLISH,
          descriptionService,
-         imported);
+         imported,
+         ImportMode.MERGE.config);
       NodeContext node = importer.perform();
       assertNotNull(node);
       assertEquals("bar", node.getName());
@@ -74,10 +104,11 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
       importer = new NavigationFragmentImporter(
          new String[]{"foo","bar","daa"},
          service,
-         SiteKey.portal("BILTO"),
+         SiteKey.portal("create_missing_path"),
          Locale.ENGLISH,
          descriptionService,
-         imported);
+         imported,
+         ImportMode.MERGE.config);
       node = importer.perform();
       assertNotNull(node);
       assertEquals("daa", node.getName());
@@ -87,10 +118,11 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
       importer = new NavigationFragmentImporter(
          new String[]{"foo"},
          service,
-         SiteKey.portal("BILTO"),
+         SiteKey.portal("create_missing_path"),
          Locale.ENGLISH,
          descriptionService,
-         imported);
+         imported,
+         ImportMode.MERGE.config);
       node = importer.perform();
       assertEquals("foo", node.getName());
       assertNotNull(node.get("juu"));
