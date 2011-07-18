@@ -113,6 +113,16 @@
 </external-component-plugins>
          ]]></programlisting>
         </section>
+        <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">
+            <title>Set the info bar shown by default for portlet</title>
+            <para>You can set the info bar shown by default for portlets of a portal by adding a property for the <emphasis>portal-config</emphasis> configuration in the <emphasis>portal.xml</emphasis> file.</para>
+            <programlisting><![CDATA[
+                    <properties>
+                        <entry key="showPortletInfo">1</entry>
+                    </properties>
+            ]]></programlisting>
+            <para>There are two values for "showPortletInfo": 0 and 1. If the value is 1, the info bar of portlets is shown by default. If the value is 0, it is not.</para>
+        </section>
     </section>
 </section>
 

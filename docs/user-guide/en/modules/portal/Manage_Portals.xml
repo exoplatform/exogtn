@@ -63,39 +63,36 @@
 		</step>
 		<step>
 			<para>
-				Select a skin for a portal.
+				Select a skin for a portal by selecting one from the skin list.
 			</para>
 		</step>
-		<step>
-			<para>
-				Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. There are 3 options: 
-				<variablelist>
-					<varlistentry>
-						<term><emphasis role="bold">Never</emphasis></term> 
-							<listitem>
-								<para>
-									The session will never timeout, even if an application requests it.
-								</para>
-							</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><emphasis role="bold">On-demand</emphasis></term> 
-							<listitem>
-								<para>
-									The session will timeout if an application requests it
-								</para>
-							</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><emphasis role="bold">Always</emphasis></term> 
-							<listitem>
-								<para>
-									The session will time out after a set period.
-								</para>
-							</listitem>
-					</varlistentry>
-				</variablelist>
-			</para>
+        <step>
+            <para>
+                Click on the
+                <emphasis role="bold">Properties</emphasis>
+                tab to set the properties of a portal.
+            </para>
+            <mediaobject>
+                <imageobject role="html">
+                    <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scale="100"/>
+                </imageobject>
+                <imageobject role="fo">
+                    <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" contentwidth="150mm"/>
+                </imageobject>
+            </mediaobject>
+            <para><guilabel>Keep session alive</guilabel>: keeps the working session for a long time to avoid the working time out. There are 3 options: </para>
+            <itemizedlist>
+                <listitem>
+                    <para><guilabel>Never</guilabel>: The session will never timeout, even if an application requests it.</para>
+                </listitem>
+                <listitem>
+                    <para><guilabel>On-demand</guilabel>: The session will timeout if an application requests it.</para>
+                </listitem>
+                <listitem>
+                    <para><guilabel>Always</guilabel>: The session will time out after a set period. </para>
+                </listitem>
+            </itemizedlist>
+            <para><guilabel>Show info bar by default</guilabel>: The checkbox is ticked, it means that the info bar of the porlet is shown by default when the portlet is used in a page of the portal.</para>
 		</step>
 		<step>
 			<para>
