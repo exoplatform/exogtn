@@ -604,9 +604,13 @@ class Route
 
    final <R extends Route> R add(R route)
    {
+      if (route == null)
+      {
+         throw new NullPointerException("No null route accepted");
+      }
       if (route.parent != null)
       {
-         throw new IllegalArgumentException();
+         throw new IllegalArgumentException("No route with an existing parent can be accepted");
       }
 
       //
@@ -621,7 +625,6 @@ class Route
          }
          routes.add(segment);
          ((Route)segment).parent = this;
-         return (R)segment;
       }
       else if (route instanceof PatternRoute)
       {
@@ -629,12 +632,14 @@ class Route
 
          patterns.add(pattern);
          route.parent = this;
-         return (R)pattern;
       }
       else
       {
          throw new IllegalArgumentException();
       }
+
+      //
+      return route;
    }
 
    final Set<String> getSegmentNames()
