@@ -706,6 +706,67 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
    
+   public void testInvalidateState()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            storage_.create(new PortalConfig("portal", "usernode_invalidate_uri"));
+            end(true);
+
+            //
+            begin();
+            Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "usernode_invalidate_uri");
+            site.getRootNavigation().addChild("default");
+            end(true);
+
+            //
+            begin();
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_invalidate_uri", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_invalidate_uri"));
+            UserNode root = userPortal.getNode(navigation, Scope.ALL, null, null);
+            UserNode foo = root.addChild("foo");
+            UserNode bar = root.addChild("bar");            
+            assertEquals("foo", foo.getURI());
+            assertEquals("bar", bar.getURI());
+            userPortal.saveNode(root, null);
+            end(true);
+            
+            begin();
+            //Move node --> change URI
+            foo.addChild(bar);
+            assertEquals("foo/bar", bar.getURI());
+            
+            //Rename node --> URI should be changed too
+            bar.setName("bar2");
+            assertEquals("foo/bar2", bar.getURI());
+            
+            userPortal.saveNode(bar, null);
+            end(true);
+            
+            begin();
+            UserNode root2 = userPortal.getNode(navigation, Scope.ALL, null, null);
+            UserNode foo2 = root2.getChild("foo");
+            foo2.setName("foo2");
+            
+            UserNode bar2 = foo2.getChild("bar2");           
+            root2.addChild(bar2);
+            
+            userPortal.saveNode(bar2, null);
+            end(true);
+            
+            begin();
+
+            //Changes from other session : foo has been renamed, and bar has been moved
+            userPortal.updateNode(root, Scope.ALL, null);
+            assertEquals("foo2", foo.getURI());
+            assertEquals("bar2", bar.getURI());
+         }
+      }.execute("root");
+   }
+   
    public void testNodeExtension()
    {
       new UnitTest()

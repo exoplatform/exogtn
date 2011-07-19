@@ -35,7 +35,6 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeContextChangeAdapter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -202,7 +201,7 @@ public class UserPortalImpl implements UserPortal
       NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException
    {
       UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-      NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
+      NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope, new UserNodeListener(listener));
       if (nodeContext != null)
       {
          return nodeContext.getNode().filter();
@@ -220,7 +219,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().updateNode(node.context, scope, new UserNodeListener(listener));
       node.filter();
    }
    
@@ -231,7 +230,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().rebaseNode(node.context, scope, new UserNodeListener(listener));
       node.filter();
    }
 
@@ -241,7 +240,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().saveNode(node.context, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().saveNode(node.context, new UserNodeListener(listener));
       node.filter();
    }
 
