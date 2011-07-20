@@ -364,7 +364,8 @@ public class UIPortal extends UIContainer
          
          //Delete the token from JCR
          String token = getTokenCookie(req);
-         if(token != null){
+         if(token != null)
+         {
             AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
             tokenService.deleteToken(token);
          }
@@ -375,14 +376,12 @@ public class UIPortal extends UIContainer
          cookie.setMaxAge(0);
          prContext.getResponse().addCookie(cookie);
 
-         //TODO: this could be a good portal name
-         String portalName = "classic";
+         String portalName = prContext.getPortalOwner();
          
          ControllerURL<NavigationResource, NavigationLocator> createURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
          createURL.setResource(new NavigationResource(PortalRequestHandler.PUBLIC_ACCESS, PortalConfig.PORTAL_TYPE, portalName, null));
-         prContext.getResponse().sendRedirect(createURL.toString());
-         prContext.setResponseComplete(true);
+         prContext.sendRedirect(createURL.toString());
       }
       
       private String getTokenCookie(HttpServletRequest req)
