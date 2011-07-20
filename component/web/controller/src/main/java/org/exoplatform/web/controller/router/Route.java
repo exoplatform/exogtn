@@ -74,7 +74,7 @@ class Route
          path.append(pr.chunks.get(pr.chunks.size() - 1));
          writer.writeStartElement("pattern");
          writer.writeAttribute("path", path.toString());
-         writer.writeAttribute("terminal", "" + terminal);
+         writer.writeAttribute("terminal", Boolean.toString(terminal));
          for (PathParam param : pr.params)
          {
             writer.writeStartElement("path-param");
@@ -158,7 +158,7 @@ class Route
    private Route parent;
 
    /** . */
-   boolean terminal;
+   private boolean terminal;
 
    /** . */
    private final Map<String, List<SegmentRoute>> segments;
@@ -180,6 +180,11 @@ class Route
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParams = new HashMap<QualifiedName, RouteParam>();
       this.requestParams = new HashMap<String, RequestParam>();
+   }
+
+   final boolean isTerminal()
+   {
+      return terminal;
    }
 
    /*
@@ -635,7 +640,7 @@ class Route
       }
       else
       {
-         throw new IllegalArgumentException();
+         throw new IllegalArgumentException("Only accept segment or pattern routes");
       }
 
       //
