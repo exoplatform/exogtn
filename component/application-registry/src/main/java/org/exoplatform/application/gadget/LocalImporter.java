@@ -28,6 +28,7 @@ import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.exoplatform.application.gadget.impl.GadgetRegistry;
 import org.exoplatform.application.gadget.impl.LocalGadgetData;
 import org.exoplatform.application.gadget.impl.RemoteGadgetData;
+import org.exoplatform.container.PortalContainer;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLTools;
@@ -49,6 +50,7 @@ public abstract class LocalImporter
    /** The gadget name as seen by GateIn. */
    private String name;
 
+   // TODO This property doesn't use anymore. Should remove in the future
    /** The gadget registry. */
    private GadgetRegistry registry;
 
@@ -60,17 +62,36 @@ public abstract class LocalImporter
 
    /** Used temporarily when importing resources. */
    private NTFolder folder;
+   
+   private GadgetRegistryService registryService;
 
-   protected LocalImporter(
-      String name,
-      GadgetRegistry registry,
-      String gadgetPath,
-      boolean local)
+   /**
+    * @deprecated see {@link #LocalImporter(String, GadgetRegistryService, String, boolean)}
+    * 
+    * @param name
+    * @param registry
+    * @param gadgetPath
+    * @param local
+    */
+   protected LocalImporter(String name, GadgetRegistry registry, String gadgetPath, boolean local)
+   {
+      this(name, (GadgetRegistryService) null, gadgetPath, local);
+   }
+   
+   protected LocalImporter(String name, GadgetRegistryService registryService, String gadgetPath, boolean local)
    {
       this.name = name;
-      this.registry = registry;
       this.gadgetPath = gadgetPath;
       this.local = local;
+      
+      if (registryService == null)
+      {
+         registryService = (GadgetRegistryService) PortalContainer.getInstance().getComponentInstanceOfType(
+               GadgetRegistryService.class);
+      }
+      
+      this.registryService = registryService;
+      this.registry = this.registryService.getRegistry();
    }
 
    private byte[] getGadgetBytes() throws IOException
@@ -83,18 +104,6 @@ public abstract class LocalImporter
       {
          URL url = new URL(gadgetPath);
          return URLTools.getContent(url, 5000, 5000);
-      }
-   }
-
-   private String getGadgetURL() throws Exception
-   {
-      if (local)
-      {
-         return "http://www.gatein.org";
-      }
-      else
-      {
-         return gadgetPath;
       }
    }
 
@@ -114,6 +123,7 @@ public abstract class LocalImporter
 
    public void doImport() throws Exception
    {
+      GadgetRegistry registry = registryService.getRegistry();
       if (registry.getGadget(name) != null)
       {
          log.debug("Will not import existing gagdet " + name);
@@ -135,39 +145,17 @@ public abstract class LocalImporter
       String gadget = new String(bytes, encoding);
 
       //
-      String gadgetURL = getGadgetURL();
-      GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
-      ModulePrefs prefs = spec.getModulePrefs();
-
-      //
       GadgetDefinition def = registry.addGadget(name);
-
-      //
-      String description = prefs.getDescription();
-      String thumbnail = prefs.getThumbnail().toString();
-      String title = getGadgetTitle(prefs, name);
-      String referenceURL = prefs.getTitleUrl().toString();
-
-      //
-      log.info("Importing gadget name=" + name + " description=" + description + " thumbnail=" + thumbnail + " title=" +
-               thumbnail + " title=" + title);
-
-      //
-      def.setDescription(description);
-      def.setThumbnail(thumbnail); // Do something better than that
-      def.setTitle(title);
-      def.setReferenceURL(referenceURL);
       def.setLocal(local);
 
-      //
       if (local)
       {
          LocalGadgetData data = (LocalGadgetData)def.getData();
-
+         
          //
          String fileName = getName(gadgetPath);
          data.setFileName(fileName);
-
+         
          // Import resource
          folder = data.getResources();
          String folderPath = getParent(gadgetPath);
@@ -177,10 +165,29 @@ public abstract class LocalImporter
       else
       {
          RemoteGadgetData data = (RemoteGadgetData)def.getData();
-
+         
          // Set remote URL
          data.setURL(gadgetPath);
       }
+
+      String gadgetURL = registryService.getGadgetURL(def);
+
+      GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
+      ModulePrefs prefs = spec.getModulePrefs();
+
+      //
+      String description = prefs.getDescription();
+      String thumbnail = prefs.getThumbnail().toString();
+      String title = getGadgetTitle(prefs, name);
+      String referenceURL = prefs.getTitleUrl().toString();
+
+      log.info("Importing gadget name=" + name + " description=" + description + " thumbnail=" + thumbnail + " title="
+            + thumbnail + " title=" + title);
+
+      def.setDescription(description);
+      def.setThumbnail(thumbnail);
+      def.setTitle(title);
+      def.setReferenceURL(referenceURL);
    }
 
    private void visit(String resourcePath) throws Exception

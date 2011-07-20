@@ -132,7 +132,7 @@ public class GadgetDeployer implements WebAppListener, Startable
                String path = XMLTools.asString(pathElt, true);
                ServletLocalImporter importer = new ServletLocalImporter(
                   gadgetName,
-                  gadgetRegistryService.getRegistry(),
+                  gadgetRegistryService,
                   path,
                   scontext,
                   true);

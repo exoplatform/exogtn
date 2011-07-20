@@ -42,16 +42,19 @@ public class ServletLocalImporter extends LocalImporter
    /** . */
    private final ServletContext servletContext;
 
-   public ServletLocalImporter(
-      String name,
-      GadgetRegistry registry,
-      String gadgetPath,
-      ServletContext servletContext,
-      boolean local)
+   /**
+    * @deprecated see {@link #ServletLocalImporter(String, GadgetRegistryService, String, ServletContext, boolean)}
+    */
+   public ServletLocalImporter(String name, GadgetRegistry registry, String gadgetPath, ServletContext servletContext,
+         boolean local)
    {
-      super(name, registry, gadgetPath, local);
-
-      //
+      this(name, (GadgetRegistryService) null, gadgetPath, servletContext, local);
+   }
+   
+   public ServletLocalImporter(String name, GadgetRegistryService registryService, String gadgetPath, ServletContext servletContext,
+         boolean local)
+   {
+      super(name, registryService, gadgetPath, local);
       this.servletContext = servletContext;
    }
 
