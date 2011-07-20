@@ -135,7 +135,7 @@ public class DescriptorBuilder
                String pattern = reader.getAttributeValue(null, "pattern");
                String encoded = reader.getAttributeValue(null, "encoding");
                EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-               routeDesc.with(new PathParamDescriptor(qualifiedName).matchedBy(pattern).withEncodingMode(encodingMode));
+               routeDesc.with(new PathParamDescriptor(qualifiedName).matchedBy(pattern).encodedBy(encodingMode));
             }
             else if (routeQN.equals(reader.getName()))
             {

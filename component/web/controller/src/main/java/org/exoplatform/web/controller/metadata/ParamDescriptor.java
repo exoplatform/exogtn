@@ -23,6 +23,6 @@ package org.exoplatform.web.controller.metadata;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ParamDescriptor
+public abstract class ParamDescriptor
 {
 }

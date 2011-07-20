@@ -92,7 +92,7 @@ public class TestRender extends AbstractTestController
    {
       Router router = router().
          add(route("/{a}b").
-            with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservingPath())).
+            with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservePath())).
          build();
 
       //

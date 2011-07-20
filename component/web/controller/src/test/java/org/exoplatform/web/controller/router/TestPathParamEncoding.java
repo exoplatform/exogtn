@@ -44,7 +44,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testPreservePath() throws Exception
    {
-      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("[^/]+").preservingPath())).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("[^/]+").preservePath())).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
@@ -75,7 +75,7 @@ public class TestPathParamEncoding extends AbstractTestController
 
    public void testWildcardPathParamWithPreservePath() throws Exception
    {
-      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".*").preservingPath())).build();
+      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".*").preservePath())).build();
 
       // Render
       assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));

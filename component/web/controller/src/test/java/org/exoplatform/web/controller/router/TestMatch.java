@@ -149,7 +149,7 @@ public class TestMatch extends AbstractTestController
    public void testLang() throws Exception
    {
       Router router = router().
-         add(route("/{a}b").with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservingPath())).
+         add(route("/{a}b").with(pathParam("a").matchedBy("(([A-Za-z]{2})/)?").preservePath())).
          build();
 
       //
@@ -162,7 +162,7 @@ public class TestMatch extends AbstractTestController
       Router router = router().
          add(route("/{a}/b").
             with(
-               pathParam("a").matchedBy("a?").preservingPath(),
+               pathParam("a").matchedBy("a?").preservePath(),
                routeParam("b").withValue("b"))
             ).build();
 
@@ -184,7 +184,7 @@ public class TestMatch extends AbstractTestController
       Router router = router().
          add(route("/{a}").
             with(
-               pathParam("a").matchedBy("abc").preservingPath())
+               pathParam("a").matchedBy("abc").preservePath())
             ).build();
 
       //
@@ -221,7 +221,7 @@ public class TestMatch extends AbstractTestController
       Router router = router().
          add(route("/{a}").
             with(
-               pathParam("a").matchedBy("a?").preservingPath()).
+               pathParam("a").matchedBy("a?").preservePath()).
             sub(route("/b").
                with(
                   routeParam("b").withValue("b")))

@@ -46,19 +46,19 @@ public class TestPortalConfiguration extends AbstractTestController
                   routeParam("gtn:controller").withValue("site"),
                   routeParam("gtn:controller").withValue("site"),
                   requestParam("gtn:componentid").named("portal:componentId"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath()),
+                  pathParam("gtn:path").matchedBy(".*").preservePath()),
             route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:controller").withValue("site"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath()),
+                  pathParam("gtn:path").matchedBy(".*").preservePath()),
             route("/groups/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:controller").withValue("site"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath()),
+                  pathParam("gtn:path").matchedBy(".*").preservePath()),
             route("/users/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:controller").withValue("site"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath())).
+                  pathParam("gtn:path").matchedBy(".*").preservePath())).
          build();
    }
 

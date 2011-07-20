@@ -50,11 +50,11 @@ public class TestLegacyPortal extends TestCase
             sub(route("/public/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:access").withValue("public"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath())).
+                  pathParam("gtn:path").matchedBy(".*").preservePath())).
             sub(route("/private/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:access").withValue("private"),
-                  pathParam("gtn:path").matchedBy(".*").preservingPath()))).
+                  pathParam("gtn:path").matchedBy(".*").preservePath()))).
          build();
    }
 

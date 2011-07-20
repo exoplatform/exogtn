@@ -37,7 +37,7 @@ public class TestPortal extends AbstractTestController
    {
       Router router = router().add(
          route("/public{gtn:lang}").
-            with(pathParam("gtn:lang").matchedBy("(/[A-Za-z][A-Za-z])?").preservingPath())).
+            with(pathParam("gtn:lang").matchedBy("(/[A-Za-z][A-Za-z])?").preservePath())).
          build();
 
       //
@@ -49,7 +49,7 @@ public class TestPortal extends AbstractTestController
    {
       Router router = router().add(
          route("/{gtn:lang}public").
-            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2}/)?").preservingPath())).
+            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2}/)?").preservePath())).
          build();
 
       //
@@ -74,8 +74,8 @@ public class TestPortal extends AbstractTestController
    {
       Router router = router().
          add(route("/public/{gtn:lang}{gtn:sitename}{gtn:path}")
-            .with(pathParam("gtn:lang").matchedBy("(?:[A-Za-z]{2}/)?").preservingPath())
-            .with(pathParam("gtn:path").matchedBy(".*").preservingPath())).
+            .with(pathParam("gtn:lang").matchedBy("(?:[A-Za-z]{2}/)?").preservePath())
+            .with(pathParam("gtn:path").matchedBy(".*").preservePath())).
          build();
 
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();

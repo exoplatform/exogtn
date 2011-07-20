@@ -66,22 +66,20 @@ public class PathParamDescriptor extends ParamDescriptor
       return this;
    }
 
-   public PathParamDescriptor withEncodingMode(EncodingMode encodingMode)
+   public PathParamDescriptor encodedBy(EncodingMode encodingMode)
    {
       this.encodingMode = encodingMode;
       return this;
    }
 
-   public PathParamDescriptor preservingPath()
+   public PathParamDescriptor preservePath()
    {
-      this.encodingMode = EncodingMode.PRESERVE_PATH;
-      return this;
+      return encodedBy(EncodingMode.PRESERVE_PATH);
    }
 
    public PathParamDescriptor form()
    {
-      this.encodingMode = EncodingMode.FORM;
-      return this;
+      return encodedBy(EncodingMode.FORM);
    }
 
    public QualifiedName getQualifiedName()
@@ -92,6 +90,16 @@ public class PathParamDescriptor extends ParamDescriptor
    public String getPattern()
    {
       return pattern;
+   }
+
+   public void setPattern(String pattern)
+   {
+      this.pattern = pattern;
+   }
+
+   public void setEncodingMode(EncodingMode encodingMode)
+   {
+      this.encodingMode = encodingMode;
    }
 
    public EncodingMode getEncodingMode()
