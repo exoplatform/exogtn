@@ -20,9 +20,6 @@
 package org.exoplatform.web.controller.regexp;
 
 import org.exoplatform.component.test.BaseGateInTest;
-import org.exoplatform.web.controller.regexp.RegExpRenderer;
-import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RegExpParser;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
