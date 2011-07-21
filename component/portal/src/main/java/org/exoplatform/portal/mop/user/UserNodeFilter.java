@@ -73,7 +73,8 @@ class UserNodeFilter implements NodeFilter
       //
       if (config.authorizationCheck)
       {
-         if (visibility == Visibility.SYSTEM)
+         // Only return the SYSTEM node for non-super user if required
+         if (visibility == Visibility.SYSTEM && config.visibility != null && !config.visibility.contains(Visibility.SYSTEM))
          {
             UserACL acl = userPortal.service.getUserACL();
             String userName = userPortal.userName;
