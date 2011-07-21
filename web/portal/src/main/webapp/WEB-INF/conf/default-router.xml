@@ -49,4 +49,14 @@
     <route-param qname="gtn:handler" value="download"/>
   </route>
 
+  <!-- The legacy route -->
+  <route path="/public/{gtn:sitename}{gtn:path}">
+    <route-param qname="gtn:handler" value="legacy"/>
+    <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
+  </route>
+  <route path="/private/{gtn:sitename}{gtn:path}">
+    <route-param qname="gtn:handler" value="legacy"/>
+    <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
+  </route>
+
 </router>

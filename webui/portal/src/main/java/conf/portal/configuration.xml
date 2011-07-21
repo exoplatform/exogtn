@@ -92,6 +92,11 @@
         <set-method>register</set-method>
         <type>org.exoplatform.portal.application.PortalRequestHandler</type>
      </component-plugin>
+     <component-plugin>
+        <name>LegacyRequestHandler</name>
+        <set-method>register</set-method>
+        <type>org.exoplatform.portal.application.LegacyRequestHandler</type>
+     </component-plugin>
   </external-component-plugins>
 
   <external-component-plugins>
