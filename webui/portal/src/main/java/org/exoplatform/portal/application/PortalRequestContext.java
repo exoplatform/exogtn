@@ -33,6 +33,8 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.url.LocatorProviderService;
 import org.exoplatform.portal.url.PortalURL;
+import org.exoplatform.portal.url.navigation.NavigationLocator;
+import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -102,16 +104,10 @@ public class PortalRequestContext extends WebuiRequestContext
    private final String nodePath_;
 
    /** . */
-   private final String access;
-
-   /** . */
    private final String requestURI_;
 
    /** . */
    private final String portalURI;
-
-   /** . */
-   private final int accessPath;
 
    /** . */
    private final String siteType;
@@ -171,7 +167,6 @@ public class PortalRequestContext extends WebuiRequestContext
       String requestSiteType,
       String requestSiteName,
       String requestPath,
-      String access,
       Locale requestLocale) throws Exception
    {
       super(app);
@@ -243,31 +238,12 @@ public class PortalRequestContext extends WebuiRequestContext
       this.siteType = requestSiteType;
       this.siteName = requestSiteName;
       this.nodePath_ = requestPath;
-      this.access = access;
       this.requestLocale = requestLocale;
 
-//      portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
-      Map<QualifiedName, String> tmp = new HashMap<QualifiedName, String>();
-      tmp.put(WebAppController.HANDLER_PARAM, "portal");
-      tmp.put(PortalRequestHandler.ACCESS, access);
-      tmp.put(PortalRequestHandler.REQUEST_SITE_TYPE, requestSiteType);
-      tmp.put(PortalRequestHandler.REQUEST_SITE_NAME, requestSiteName);
-      tmp.put(PortalRequestHandler.REQUEST_PATH, "/");
-      portalURI = controllerContext.renderURL(tmp);
-
       //
-      if (access.endsWith("public"))
-      {
-         accessPath = PUBLIC_ACCESS;
-      }
-      else if (access.equals("private"))
-      {
-         accessPath = PRIVATE_ACCESS;
-      }
-      else
-      {
-         accessPath = -1;
-      }
+      ControllerURL<NavigationResource, NavigationLocator> url = createURL(NavigationLocator.TYPE);
+      url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
+      portalURI = url.toString();
 
       //
       urlBuilder = new PortalURLBuilder(this, createURL(ComponentLocator.TYPE));
@@ -276,7 +252,12 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(controllerContext, locator, false, requestLocale, siteType, siteName, access);
+      return new PortalURL<R, L>(controllerContext, locator, false, requestLocale, siteType, siteName);
+   }
+
+   public String getInitialURI()
+   {
+      return portalURI;
    }
 
    public ControllerContext getControllerContext()
@@ -451,7 +432,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public int getAccessPath()
    {
-      return accessPath;
+      return request_.getRemoteUser() != null ? PRIVATE_ACCESS : PUBLIC_ACCESS;
    }
 
    final public String getRemoteUser()

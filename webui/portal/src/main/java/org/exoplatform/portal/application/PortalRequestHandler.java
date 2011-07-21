@@ -54,12 +54,6 @@ public class PortalRequestHandler extends WebRequestHandler
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
    /** . */
-   public static final String PUBLIC_ACCESS = "public";
-   
-   /** . */
-   public static final String PRIVATE_ACCESS = "private";
-
-   /** . */
    public static final QualifiedName REQUEST_PATH = QualifiedName.create("gtn", "path");
 
    /** . */
@@ -67,9 +61,6 @@ public class PortalRequestHandler extends WebRequestHandler
 
    /** . */
    public static final QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
-
-   /** . */
-   public static final QualifiedName ACCESS = QualifiedName.create("gtn", "access");
 
    /** . */
    public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
@@ -125,7 +116,6 @@ public class PortalRequestHandler extends WebRequestHandler
       String requestPath = controllerContext.getParameter(REQUEST_PATH);
       String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
       String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
-      String access = controllerContext.getParameter(ACCESS);
 
       //
       Locale requestLocale;
@@ -144,7 +134,7 @@ public class PortalRequestHandler extends WebRequestHandler
          return;
       }
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, access, requestLocale);
+      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, requestLocale);
       processRequest(context, app);
    }
 

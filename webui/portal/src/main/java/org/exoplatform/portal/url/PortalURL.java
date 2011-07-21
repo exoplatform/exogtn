@@ -41,9 +41,6 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
    private final ControllerContext controllerContext;
 
    /** . */
-   private final String access;
-
-   /** . */
    private final String siteType;
    
    /** . */
@@ -58,8 +55,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       Boolean ajax,
       Locale locale,
       String siteType,
-      String siteName,
-      String access)
+      String siteName)
    {
       super(locator, ajax, locale);
 
@@ -73,7 +69,6 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       this.siteType = siteType;
       this.siteName = siteName;
       this.controllerContext = requestContext;
-      this.access = access;
    }
 
    public String toString()
@@ -125,8 +120,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
-      parameters.put(PortalRequestHandler.ACCESS, access);
-      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteType);      
+      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteType);
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
 
       //

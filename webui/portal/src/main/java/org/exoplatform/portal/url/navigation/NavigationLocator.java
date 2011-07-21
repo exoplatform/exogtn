@@ -90,10 +90,6 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
       {
          return resource.getSiteName();
       }
-      else if (ACCESS.equals(parameterName))
-      {
-         return resource.getAccess();
-      }
       return null;
    }
 

@@ -1,13 +1,9 @@
 <%
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.portal.application.PortalRequestContext;
-  import org.exoplatform.web.url.ControllerURL;
-  import org.exoplatform.portal.url.navigation.NavigationResource;
-  
+
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-  ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-  nodeURL.setResource(new NavigationResource("private", "portal", pcontext.getPortalOwner(), null));
-	String initialURI = nodeURL.toString();
+	String initialURI = pcontext.getInitialURI();
 %>
 
 <div class="UIHomePagePortlet" id="$uicomponent.id">

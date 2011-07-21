@@ -30,7 +30,7 @@
 	PortalContainer manager = PortalContainer.getCurrentInstance(session.getServletContext()) ;
   UserPortalConfigService userPortalConfigService = (UserPortalConfigService) manager.getComponentInstanceOfType(UserPortalConfigService.class) ;
   PortalURLProvider provider = PortalURLProvider.getCurrentPortalURLProvider();
-  ControllerURL portalURL = provider.createPortalURL("public", PortalConfig.PORTAL_TYPE, userPortalConfigService.getDefaultPortal(), org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+  ControllerURL portalURL = provider.createPortalURL(PortalConfig.PORTAL_TYPE, userPortalConfigService.getDefaultPortal(), org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
   
 	response.sendRedirect(portalURL.setResource(new NavigationResource(null, null, null)).toString());
 %>

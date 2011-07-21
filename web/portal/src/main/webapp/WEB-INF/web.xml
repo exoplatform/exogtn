@@ -233,6 +233,10 @@
     <servlet-name>InitiateLoginServlet</servlet-name>
     <servlet-class>org.exoplatform.web.login.InitiateLoginServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DoLoginServlet</servlet-name>
+    <servlet-class>org.exoplatform.web.login.DoLoginServlet</servlet-class>
+  </servlet>
 	<servlet>
 		<servlet-name>ErrorLoginServlet</servlet-name>
 		<servlet-class>org.exoplatform.web.login.ErrorLoginServlet</servlet-class>
@@ -245,6 +249,7 @@
   </servlet>
 
 	<!--  =================================================================  -->
+
 	<servlet-mapping>
 	  <servlet-name>InitiateLoginServlet</servlet-name>
 	  <url-pattern>/initiatelogin</url-pattern>
@@ -257,6 +262,11 @@
 	  <servlet-name>PortalLoginController</servlet-name>
 	  <url-pattern>/login</url-pattern>
 	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DoLoginServlet</servlet-name>
+    <url-pattern>/dologin</url-pattern>
+  </servlet-mapping>
+
 	<servlet-mapping>
 	  <servlet-name>javascript</servlet-name>
 	  <url-pattern>/javascript/*</url-pattern>
@@ -313,6 +323,7 @@
 	<security-constraint>
 		<web-resource-collection>
 	  	<web-resource-name>user authentication</web-resource-name>
+	  	<url-pattern>/dologin</url-pattern>
 	  	<url-pattern>/private/*</url-pattern>
       <url-pattern>/standalone/*</url-pattern>
       <url-pattern>/groups/*</url-pattern>

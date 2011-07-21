@@ -29,9 +29,7 @@ import org.exoplatform.portal.mop.user.UserNode;
  */
 public class NavigationResource
 {
-   /** . */
-   private final String access;
-   
+
    /** . */
    private final String siteType;
    
@@ -43,32 +41,21 @@ public class NavigationResource
    
    public NavigationResource(String siteName)
    {
-      this(null, null, siteName, null);
+      this(null, siteName, null);
    }
    
    public NavigationResource(UserNode node)
    {
-      this(null, node.getNavigation().getKey().getTypeName(), node.getNavigation().getKey().getName(), node.getURI());
+      this(node.getNavigation().getKey().getTypeName(), node.getNavigation().getKey().getName(), node.getURI());
    }
 
    public NavigationResource(String siteType, String portalName, String nodeURI)
    {
-      this(null, siteType, portalName, nodeURI);
-   }
-   
-   public NavigationResource(String access, String siteType, String portalName, String nodeURI)
-   {
-      this.access = access;
       this.siteType = siteType;
       this.siteName = portalName;
       this.nodeURI = nodeURI;
    }
 
-   public String getAccess()
-   {
-      return access;
-   }
-   
    public String getSiteType()
    {
       return siteType;

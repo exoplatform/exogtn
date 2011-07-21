@@ -69,10 +69,9 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
 
       //
       String requestPath = controllerContext.getParameter(REQUEST_PATH);
-      String access = controllerContext.getParameter(ACCESS);
 
       StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, access, requestPath);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestPath);
       processRequest(context, app);
    }     
 }

@@ -40,16 +40,12 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
    private final ControllerContext controllerContext;
 
    /** . */
-   private final String access;
-
-   /** . */
    private PortalURLRenderContext renderContext;
 
    public StandaloneAppURL(
       ControllerContext requestContext,
       L locator,
-      Boolean ajax,
-      String access)
+      Boolean ajax)
    {
       super(locator, ajax, null);
 
@@ -60,7 +56,6 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
       }
 
       this.controllerContext = requestContext;
-      this.access = access;
    }
 
    public String toString()
@@ -112,7 +107,6 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(WebAppController.HANDLER_PARAM, "standalone");
-      parameters.put(PortalRequestHandler.ACCESS, access);
 
       //
       for (QualifiedName parameterName : locator.getParameterNames())

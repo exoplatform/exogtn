@@ -380,7 +380,7 @@ public class UIPortal extends UIContainer
          
          ControllerURL<NavigationResource, NavigationLocator> createURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-         createURL.setResource(new NavigationResource(PortalRequestHandler.PUBLIC_ACCESS, PortalConfig.PORTAL_TYPE, portalName, null));
+         createURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalName, null));
          prContext.sendRedirect(createURL.toString());
       }
       

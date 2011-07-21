@@ -13,19 +13,9 @@
     <!-- Language in URL -->
 
     <!-- The public access -->
-    <route path="/public/{gtn:lang}/{gtn:sitename}{gtn:path}">
+    <route path="/portals/{gtn:lang}/{gtn:sitename}{gtn:path}">
       <route-param qname="gtn:handler" value="portal"/>
       <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2})?" encoding="preserve-path"/>
-      <route-param qname="gtn:access" value="public"/>
-      <route-param qname="gtn:sitetype" value="portal"/>
-      <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
-    </route>
-
-    <!-- The private access -->
-    <route path="/private/{gtn:lang}/{gtn:sitename}{gtn:path}">
-      <route-param qname="gtn:handler" value="portal"/>
-      <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2})?" encoding="preserve-path"/>
-      <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="portal"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
@@ -34,7 +24,6 @@
     <route path="/groups/{gtn:lang}/{gtn:sitename}{gtn:path}">
       <route-param qname="gtn:handler" value="portal"/>
       <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2})?" encoding="preserve-path"/>
-      <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="group"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
@@ -43,7 +32,6 @@
     <route path="/users/{gtn:lang}/{gtn:sitename}{gtn:path}">
       <route-param qname="gtn:handler" value="portal"/>
       <path-param qname="gtn:lang" pattern="(?:[A-Za-z]{2})?" encoding="preserve-path"/>
-      <route-param qname="gtn:access" value="private"/>
       <route-param qname="gtn:sitetype" value="user"/>
       <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
     </route>
@@ -52,7 +40,6 @@
 
   <route path="/standalone{gtn:path}">
     <route-param qname="gtn:handler" value="standalone"/>
-    <route-param qname="gtn:access" value="private"/>
     <path-param qname="gtn:path" pattern=".*" encoding="preserve-path"/>
   </route>
   

@@ -39,10 +39,10 @@ public class StandaloneAppRequestContext extends PortalRequestContext
 
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
-   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String access, String requestPath)
+   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String requestPath)
       throws Exception
    {
-      super(app, controllerContext, null, null, requestPath, access, null);
+      super(app, controllerContext, null, null, requestPath, null);
       if (!"".equals(requestPath))
       {
          storageId = requestPath.substring(1);
@@ -57,7 +57,7 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
       ControllerContext context = getControllerContext();
-      return new StandaloneAppURL<R, L>(context, locator, false, context.getParameter(StandaloneAppRequestHandler.ACCESS));
+      return new StandaloneAppURL<R, L>(context, locator, false);
    }
 
    public String getStorageId()

@@ -102,7 +102,8 @@ public class PortalLoginController extends AbstractHttpServlet
       }
 
       //
-      resp.sendRedirect(uri);
+      String redirectURI = req.getContextPath() + "/dologin?initialURI=" + uri;
+      resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
