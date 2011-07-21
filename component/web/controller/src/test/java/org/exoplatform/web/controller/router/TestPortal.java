@@ -36,50 +36,41 @@ public class TestPortal extends AbstractTestController
    public void testLanguage1() throws Exception
    {
       Router router = router().add(
-         route("/public{gtn:lang}").
-            with(pathParam("gtn:lang").matchedBy("(/[A-Za-z][A-Za-z])?").preservePath())).
+         route("/public/{gtn:lang}").
+            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?").preservePath())).
          build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "/fr"), router.route("/public/fr"));
+      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/public/fr"));
    }
 
    public void testLanguage2() throws Exception
    {
-      Router router = router().add(
-         route("/{gtn:lang}public").
-            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2}/)?").preservePath())).
+      Router router = router().
+         add(route("/{gtn:lang}/public").
+            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?"))).
          build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr/"), router.route("/fr/public"));
+      assertNull(router.route("/f/public"));
+      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
+      assertEquals("/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "")));
+      assertNull(router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "f")));
+      assertEquals("/fr/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr")));
    }
 
    public void testLanguage3() throws Exception
    {
       Router router = router().
-         add(route("/public")).
-         add(route("/{gtn:lang}/public").
-            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})"))).
-         build();
-
-      //
-      assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/public"));
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
-   }
-
-   public void testLanguage4() throws Exception
-   {
-      Router router = router().
-         add(route("/public/{gtn:lang}{gtn:sitename}{gtn:path}")
-            .with(pathParam("gtn:lang").matchedBy("(?:[A-Za-z]{2}/)?").preservePath())
+         add(route("/public/{gtn:lang}/{gtn:sitename}{gtn:path}")
+            .with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?").preservePath())
             .with(pathParam("gtn:path").matchedBy(".*").preservePath())).
          build();
 
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("gtn", "lang"), "fr/");
+      expectedParameters.put(QualifiedName.create("gtn", "lang"), "fr");
       expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
       expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
       
