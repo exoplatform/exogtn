@@ -179,6 +179,22 @@ public class TestMatch extends AbstractTestController
       assertEquals("/b", router.render(expectedParameters));
    }
 
+   public void testAvoidMatchingPrefix() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}/ab/c").
+            with(
+               pathParam("a").matchedBy("a?").preservePath()
+            )
+         )  .build();
+
+      //
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(QualifiedName.create("a"), "");
+      assertEquals(expectedParameters, router.route("/ab/c"));
+      assertEquals("/ab/c", router.render(expectedParameters));
+   }
+
    public void testPartialMatching() throws Exception
    {
       Router router = router().

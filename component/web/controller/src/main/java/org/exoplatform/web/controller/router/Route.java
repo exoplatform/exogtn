@@ -853,6 +853,14 @@ class Route
 
             //
             builder.litteral(path, previous, pos);
+
+            // We want to satisfy one of the following conditions
+            // - the next char after the matched expression is '/'
+            // - the expression matched until the end
+            // - the match expression is the '/' expression
+            builder.expr("(?:(?<=^/)|(?=/)|$)");
+
+            //
             chunks.add(path.substring(previous, pos));
             PatternRoute route = new PatternRoute(builder.build(), parameterPatterns, chunks);
 
