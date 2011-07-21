@@ -134,7 +134,7 @@ public class PortalURL<R, L extends ResourceLocator<R>> extends ControllerURL<R,
       Locale locale = getLocale();
       if (locale != null)
       {
-         lang = locale.getLanguage() + "/";
+         lang = locale.getLanguage();
       }
       else
       {
