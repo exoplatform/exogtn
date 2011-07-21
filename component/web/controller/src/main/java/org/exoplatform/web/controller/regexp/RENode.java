@@ -33,6 +33,11 @@ public abstract class RENode
 
    public abstract String toString();
 
+   public final RENode getParent()
+   {
+      return owner != null ? owner.parent : null;
+   }
+
    public final RENode replaceBy(RENode that) throws IllegalStateException
    {
       if (owner == null)
@@ -58,8 +63,8 @@ public abstract class RENode
 
       public Disjunction(Alternative alternative, Disjunction next)
       {
-         this.alternative = new NonNullableRef<Alternative>(Alternative.class, alternative);
-         this.next = new NullableRef<Disjunction>(Disjunction.class, next);
+         this.alternative = new NonNullableRef<Alternative>(this, Alternative.class, alternative);
+         this.next = new NullableRef<Disjunction>(this, Disjunction.class, next);
       }
 
       public Alternative getAlternative()
@@ -112,8 +117,8 @@ public abstract class RENode
 
       public Alternative(Expr exp, Alternative next)
       {
-         this.exp = new NonNullableRef<Expr>(Expr.class, exp);
-         this.next = new NullableRef<Alternative>(Alternative.class, next);
+         this.exp = new NonNullableRef<Expr>(this, Expr.class, exp);
+         this.next = new NullableRef<Alternative>(this, Alternative.class, next);
       }
 
       public Expr getExp()
@@ -244,7 +249,7 @@ public abstract class RENode
 
       public Group(Disjunction disjunction, GroupType type)
       {
-         this.disjunction = new NonNullableRef<Disjunction>(Disjunction.class, disjunction);
+         this.disjunction = new NonNullableRef<Disjunction>(this, Disjunction.class, disjunction);
          this.type = type;
       }
 
@@ -311,7 +316,7 @@ public abstract class RENode
 
       public CharacterClass(CharacterClassExpr expr)
       {
-         this.expr = new NonNullableRef<CharacterClassExpr>(CharacterClassExpr.class, expr);
+         this.expr = new NonNullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, expr);
       }
 
       public CharacterClassExpr getExpr()
@@ -369,7 +374,7 @@ public abstract class RENode
 
          public Not(CharacterClassExpr negated)
          {
-            this.negated = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, negated);
+            this.negated = new NullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, negated);
          }
 
          public CharacterClassExpr getNegated()
@@ -414,8 +419,8 @@ public abstract class RENode
 
          public Or(CharacterClassExpr left, CharacterClassExpr right)
          {
-            this.left = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, left);
-            this.right = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, right);
+            this.left = new NullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, left);
+            this.right = new NullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, right);
          }
 
          public CharacterClassExpr getLeft()
@@ -486,8 +491,8 @@ public abstract class RENode
 
          public And(CharacterClassExpr left, CharacterClassExpr right)
          {
-            this.left = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, left);
-            this.right = new NullableRef<CharacterClassExpr>(CharacterClassExpr.class, right);
+            this.left = new NullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, left);
+            this.right = new NullableRef<CharacterClassExpr>(this, CharacterClassExpr.class, right);
          }
 
          public CharacterClassExpr getLeft()
@@ -730,8 +735,12 @@ public abstract class RENode
       /** . */
       private final Class<N> type;
 
-      protected Ref(Class<N> type)
+      /** . */
+      private final RENode parent;
+
+      protected Ref(RENode parent, Class<N> type)
       {
+         this.parent = parent;
          this.type = type;
       }
 
@@ -775,14 +784,14 @@ public abstract class RENode
       /** . */
       private N node;
 
-      public NullableRef(Class<N> type)
+      public NullableRef(RENode parent, Class<N> type)
       {
-         this(type, null);
+         this(parent, type, null);
       }
 
-      public NullableRef(Class<N> type, N node)
+      public NullableRef(RENode parent, Class<N> type, N node)
       {
-         super(type);
+         super(parent, type);
 
          //
          if (node != null)
@@ -836,9 +845,9 @@ public abstract class RENode
       /** . */
       private N node;
 
-      public NonNullableRef(Class<N> type, N node)
+      public NonNullableRef(RENode parent, Class<N> type, N node)
       {
-         super(type);
+         super(parent, type);
 
          //
          if (node == null)
