@@ -19,10 +19,12 @@
 
 package org.exoplatform.web.url;
 
+import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.util.ParameterMap;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An URL for a resource managed by the controller.
@@ -30,14 +32,11 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class PortalURL<R, L extends ResourceLocator<R>>
+public abstract class PortalURL<R, U extends PortalURL<R, U>>
 {
 
    /** . */
    private static final ParameterMap.AccessMode ACCES_MODE = ParameterMap.AccessMode.get(false, false);
-
-   /** . */
-   protected final L locator;
 
    /** . */
    protected Boolean ajax;
@@ -61,40 +60,24 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     * Create a portal URL instance.
     *
     * @param context the url context
-    * @param locator the resource locator that can't be null
     * @param ajax the ajax mode
     * @param locale the locale
-    * @throws NullPointerException if the resource locator is null
+    * @throws NullPointerException if the context is null
     */
-   public PortalURL(URLContext context, L locator, Boolean ajax, Locale locale) throws NullPointerException
+   public PortalURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
    {
       if (context == null)
       {
          throw new NullPointerException("No context");
       }
-      if (locator == null)
-      {
-         throw new NullPointerException("No null locator");
-      }
 
       //
       this.context = context;
-      this.locator = locator;
       this.ajax = ajax;
       this.locale = locale;
       this.confirm = null;
       this.queryParams = null;
       this.mimeType = null;
-   }
-
-   /**
-    * Returns the resource locator of this URL.
-    *
-    * @return the resource locator
-    */
-   public final L getResourceLocator()
-   {
-      return locator;
    }
 
    /**
@@ -113,10 +96,10 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     * @param ajax the new ajax mode
     * @return this object
     */
-   public final PortalURL setAjax(Boolean ajax)
+   public final U setAjax(Boolean ajax)
    {
       this.ajax = ajax;
-      return this;
+      return (U)this;
    }
 
    /**
@@ -135,10 +118,10 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     * @param confirm the new confirm message
     * @return this object
     */
-   public final PortalURL setConfirm(String confirm)
+   public final U setConfirm(String confirm)
    {
       this.confirm = confirm;
-      return this;
+      return (U)this;
    }
 
    /**
@@ -146,10 +129,7 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     *
     * @return the resource
     */
-   public final R getResource()
-   {
-      return locator.getResource();
-   }
+   public abstract R getResource();
 
    /**
     * Set a new resource on this URL.
@@ -157,11 +137,22 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     * @param resource the new resource
     * @return this object
     */
-   public final PortalURL setResource(R resource)
-   {
-      locator.setResource(resource);
-      return this;
-   }
+   public abstract U setResource(R resource);
+
+   /**
+    * Returns the set of parameter names provided this url.
+    *
+    * @return the parameter names
+    */
+   public abstract Set<QualifiedName> getParameterNames();
+
+   /**
+    * Returns a specified parameter value or null when it is not available.
+    *
+    * @param parameterName the parameter name
+    * @return the parameter value
+    */
+   public abstract String getParameterValue(QualifiedName parameterName);
 
    /**
     * Returns the current mime type that this URL will be generated for, or null if none is set (which means
@@ -263,6 +254,8 @@ public final class PortalURL<R, L extends ResourceLocator<R>>
     */
    public String toString()
    {
-      return context.render(this);
+      // remove me later
+      PortalURL foo = this;
+      return context.render(foo);
    }
 }

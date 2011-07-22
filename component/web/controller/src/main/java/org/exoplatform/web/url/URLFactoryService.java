@@ -20,25 +20,30 @@
 package org.exoplatform.web.url;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class LocatorProviderService extends LocatorProvider
+public class URLFactoryService extends URLFactory
 {
 
    /** . */
-   private final Map<ResourceType<?,?>, ResourceLocatorPlugin> plugins;
+   private final Map<ResourceType<?,?>, URLFactoryPlugin> plugins;
 
-   public LocatorProviderService()
+   public URLFactoryService()
    {
-      this.plugins = new HashMap<ResourceType<?,?>, ResourceLocatorPlugin>();
+      this.plugins = new HashMap<ResourceType<?,?>, URLFactoryPlugin>();
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> L newLocator(ResourceType<R, L> resourceType) throws NullPointerException
+   public <R, U extends PortalURL<R, U>> U newURL(
+      ResourceType<R, U> resourceType,
+      URLContext context,
+      Boolean ajax,
+      Locale locale) throws NullPointerException
    {
       if (resourceType == null)
       {
@@ -47,13 +52,13 @@ public class LocatorProviderService extends LocatorProvider
 
       // Can't really make that checked
       @SuppressWarnings("unchecked")
-      ResourceLocatorPlugin<R, L> plugin = (ResourceLocatorPlugin<R,L>)plugins.get(resourceType);
+      URLFactoryPlugin<R, U> plugin = (URLFactoryPlugin<R,U>)plugins.get(resourceType);
 
       //
-      return plugin != null ? plugin.newLocator() : null;
+      return plugin != null ? plugin.newURL(context, ajax, locale) : null;
    }
 
-   public void addPlugin(ResourceLocatorPlugin plugin)
+   public void addPlugin(URLFactoryPlugin plugin)
    {
       plugins.put(plugin.getResourceType(), plugin);
    }

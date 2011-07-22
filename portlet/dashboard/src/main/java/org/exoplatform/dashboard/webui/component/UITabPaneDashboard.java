@@ -31,7 +31,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.web.url.navigation.NavigationLocator;
+import org.exoplatform.web.url.navigation.NavigationURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -406,8 +406,8 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationLocator> nodeURL =
-            prContext.createURL(NavigationLocator.TYPE);
+         PortalURL<NavigationResource, NavigationURL> nodeURL =
+            prContext.createURL(NavigationURL.TYPE);
          nodeURL.setResource(new NavigationResource(nextNode));
          
          prContext.sendRedirect(nodeURL.toString());
@@ -437,8 +437,8 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationLocator> nodeURL =
-            prContext.createURL(NavigationLocator.TYPE);
+         PortalURL<NavigationResource, NavigationURL> nodeURL =
+            prContext.createURL(NavigationURL.TYPE);
          nodeURL.setResource(new NavigationResource(node));
          
          prContext.sendRedirect(nodeURL.toString());
@@ -480,8 +480,8 @@ public class UITabPaneDashboard extends UIContainer
             }
          }
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationLocator> nodeURL =
-            prContext.createURL(NavigationLocator.TYPE);
+         PortalURL<NavigationResource, NavigationURL> nodeURL =
+            prContext.createURL(NavigationURL.TYPE);
          nodeURL.setResource(new NavigationResource(node));
          
          prContext.sendRedirect(nodeURL.toString());

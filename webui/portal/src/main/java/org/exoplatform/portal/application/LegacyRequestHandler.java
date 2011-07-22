@@ -27,13 +27,12 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NavigationLocator;
+import org.exoplatform.web.url.navigation.NavigationURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.LocatorProviderService;
+import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.url.PortalURL;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
@@ -49,7 +48,7 @@ public class LegacyRequestHandler extends WebRequestHandler
 {
 
    /** . */
-   private final LocatorProviderService locatorFactory;
+   private final URLFactoryService urlFactory;
 
    /** . */
    private final UserPortalConfigService userPortalService;
@@ -68,9 +67,9 @@ public class LegacyRequestHandler extends WebRequestHandler
       }
    };
 
-   public LegacyRequestHandler(LocatorProviderService locatorFactory, UserPortalConfigService userPortalService)
+   public LegacyRequestHandler(URLFactoryService urlFactory, UserPortalConfigService userPortalService)
    {
-      this.locatorFactory = locatorFactory;
+      this.urlFactory = urlFactory;
       this.userPortalService = userPortalService;
    }
 
@@ -111,9 +110,8 @@ public class LegacyRequestHandler extends WebRequestHandler
       }
 
       //
-      NavigationLocator locator = locatorFactory.newLocator(NavigationLocator.TYPE);
       PortalURLContext urlContext = new PortalURLContext(context, siteType, siteName);
-      PortalURL<NavigationResource, NavigationLocator> url = new PortalURL<NavigationResource, NavigationLocator>(urlContext, locator, false, null);
+      NavigationURL url = urlFactory.newURL(NavigationURL.TYPE, urlContext, false, null);
 
       // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteType, siteName, uri));

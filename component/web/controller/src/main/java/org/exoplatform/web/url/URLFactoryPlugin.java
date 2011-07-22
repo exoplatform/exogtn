@@ -17,27 +17,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.url.navigation;
+package org.exoplatform.web.url;
 
-import org.exoplatform.web.url.ResourceLocatorPlugin;
-import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.container.component.BaseComponentPlugin;
+
+import java.util.Locale;
 
 /**
+ * A plugin for adding an url factory to the {@link URLFactoryService}.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocatorPlugin extends ResourceLocatorPlugin<NavigationResource, NavigationLocator>
+public abstract class URLFactoryPlugin<R, U extends PortalURL<R, U>> extends BaseComponentPlugin
 {
 
-   @Override
-   protected ResourceType<NavigationResource, NavigationLocator> getResourceType()
-   {
-      return NavigationLocator.TYPE;
-   }
+   /**
+    * Returns the resource type.
+    *
+    * @return the resource type
+    */
+   protected abstract ResourceType<R, U> getResourceType();
 
-   @Override
-   protected NavigationLocator newLocator()
-   {
-      return new NavigationLocator();
-   }
+   /**
+    * Returns a new url instance.
+    *
+    * @return a new url instance
+    */
+   protected abstract U newURL(URLContext context, Boolean ajax, Locale locale);
+
 }

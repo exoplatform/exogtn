@@ -22,7 +22,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.url.LocatorProvider;
+import org.exoplatform.web.url.URLFactory;
 
 import java.io.IOException;
 
@@ -48,7 +48,7 @@ public class PortalURLProviderFilter extends AbstractFilter
 
       WebAppController webAppController = (WebAppController)container.getComponentInstanceOfType(WebAppController.class);
 
-      LocatorProvider locatorProvider = (LocatorProvider)container.getComponentInstanceOfType(LocatorProvider.class);
+      URLFactory urlFactory = (URLFactory)container.getComponentInstanceOfType(URLFactory.class);
       
       HttpServletRequest httpRequest = (HttpServletRequest)request;
 
@@ -56,7 +56,7 @@ public class PortalURLProviderFilter extends AbstractFilter
       try
       {
          ControllerContext controllerCtx = new ControllerContext(webAppController, httpRequest, httpResponse, null);
-         PortalURLProvider urlProvider = new PortalURLProvider(controllerCtx, locatorProvider, null);
+         PortalURLProvider urlProvider = new PortalURLProvider(controllerCtx, urlFactory, null);
          PortalURLProvider.setCurrentPortalURLProvider(urlProvider);
          chain.doFilter(httpRequest, httpResponse);
       }

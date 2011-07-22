@@ -25,6 +25,6 @@ package org.exoplatform.web.url;
 public interface URLContext
 {
 
-   <R, L extends ResourceLocator<R>> String render(PortalURL<R, L> url);
+   <R, U extends PortalURL<R, U>> String render(U url);
 
 }

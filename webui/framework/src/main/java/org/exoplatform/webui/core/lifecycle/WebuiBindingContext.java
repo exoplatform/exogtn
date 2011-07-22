@@ -26,6 +26,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.url.navigation.NavigationURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
@@ -58,7 +59,7 @@ public class WebuiBindingContext extends BindingContext
          @Override
          public Object call(Object[] args)
          {
-            return context.createURL(org.exoplatform.web.url.navigation.NavigationLocator.TYPE);
+            return context.createURL(NavigationURL.TYPE);
          }
       });
 

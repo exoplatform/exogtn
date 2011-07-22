@@ -17,29 +17,32 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url.component;
+package org.exoplatform.web.url;
 
-import org.exoplatform.web.url.ResourceLocatorPlugin;
-import org.exoplatform.web.url.ResourceType;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.url.ComponentLocator;
+import java.util.Locale;
 
 /**
+ * A factory for urls.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentLocatorPlugin extends ResourceLocatorPlugin<UIComponent, ComponentLocator>
+public abstract class URLFactory
 {
 
-   @Override
-   protected ResourceType<UIComponent, ComponentLocator> getResourceType()
-   {
-      return ComponentLocator.TYPE;
-   }
+   /**
+    * Creates a new url.
+    *
+    * @param resourceType the resource type
+    * @param <R> the resource parameter type
+    * @param <U> the url parameter type
+    * @return the context
+    * @throws NullPointerException if the resource type is null
+    */
+   public abstract <R, U extends PortalURL<R, U>> U newURL(
+      ResourceType<R, U> resourceType,
+      URLContext context,
+      Boolean ajax,
+      Locale locale) throws NullPointerException;
 
-   @Override
-   protected ComponentLocator newLocator()
-   {
-      return new ComponentLocator();
-   }
 }

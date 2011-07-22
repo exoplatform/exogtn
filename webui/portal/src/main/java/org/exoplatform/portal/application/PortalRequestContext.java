@@ -31,9 +31,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NavigationLocator;
+import org.exoplatform.web.url.navigation.NavigationURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.LocatorProviderService;
+import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -46,13 +46,12 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.LocatorProvider;
-import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.url.ComponentLocator;
+import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
@@ -141,7 +140,7 @@ public class PortalRequestContext extends WebuiRequestContext
    private Locale locale = Locale.ENGLISH;
 
    /** . */
-   private final LocatorProviderService locatorFactory;
+   private final URLFactoryService urlFactory;
 
    /** . */
    private final ControllerContext controllerContext;
@@ -170,7 +169,7 @@ public class PortalRequestContext extends WebuiRequestContext
       super(app);
 
       //
-      this.locatorFactory = (LocatorProviderService)PortalContainer.getComponent(LocatorProviderService.class);
+      this.urlFactory = (URLFactoryService)PortalContainer.getComponent(URLFactoryService.class);
       this.controllerContext = controllerContext;
 
       //
@@ -239,19 +238,19 @@ public class PortalRequestContext extends WebuiRequestContext
       this.requestLocale = requestLocale;
 
       //
-      PortalURL<NavigationResource, NavigationLocator> url = createURL(NavigationLocator.TYPE);
+      PortalURL<NavigationResource, NavigationURL> url = createURL(NavigationURL.TYPE);
       url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
       portalURI = url.toString();
 
       //
-      urlBuilder = new PortalURLBuilder(this, createURL(ComponentLocator.TYPE));
+      urlBuilder = new PortalURLBuilder(this, createURL(ComponentURL.TYPE));
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
    {
       PortalURLContext urlContext = new PortalURLContext(controllerContext, siteType, siteName);
-      return new PortalURL<R, L>(urlContext, locator, false, requestLocale);
+      return urlFactory.newURL(resourceType, urlContext, false, requestLocale);
    }
 
    public String getInitialURI()
@@ -305,9 +304,9 @@ public class PortalRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public LocatorProvider getLocatorProvider()
+   public URLFactory getURLFactory()
    {
-      return locatorFactory;
+      return urlFactory;
    }
 
    public Orientation getOrientation()

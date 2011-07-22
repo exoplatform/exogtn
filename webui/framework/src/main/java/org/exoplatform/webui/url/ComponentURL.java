@@ -20,13 +20,15 @@
 package org.exoplatform.webui.url;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.URLContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.util.Tools;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,11 +36,11 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentLocator implements ResourceLocator<UIComponent>
+public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
 {
 
    /** . */
-   public static final ResourceType<UIComponent, ComponentLocator> TYPE = new ResourceType<UIComponent, ComponentLocator>() {};
+   public static final ResourceType<UIComponent, ComponentURL> TYPE = new ResourceType<UIComponent, ComponentURL>() {};
 
    /** . */
    public static final QualifiedName COMPONENT = QualifiedName.create("gtn", "componentid");
@@ -69,8 +71,11 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
 
    private Map<QualifiedName, String> entries;
 
-   public ComponentLocator()
+   public ComponentURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
    {
+      super(context, ajax, locale);
+
+      //
       this.entries = new HashMap<QualifiedName, String>();
    }
 
@@ -79,9 +84,10 @@ public class ComponentLocator implements ResourceLocator<UIComponent>
       return resource;
    }
 
-   public void setResource(UIComponent resource)
+   public ComponentURL setResource(UIComponent resource)
    {
       this.resource = resource;
+      return this;
    }
 
    public Set<QualifiedName> getParameterNames()

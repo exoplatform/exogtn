@@ -70,17 +70,17 @@
    </component>  
 
   <component>
-		<type>org.exoplatform.web.url.LocatorProviderService</type>
+		<type>org.exoplatform.web.url.URLFactoryService</type>
     <component-plugins>
       <component-plugin>
-        <name>navigation.locator.plugin</name>
+        <name>navigation.urlfactory.plugin</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.web.url.navigation.NavigationLocatorPlugin</type>
+        <type>org.exoplatform.web.url.navigation.NavigationURLFactoryPlugin</type>
       </component-plugin>
       <component-plugin>
-        <name>navigation.locator.plugin</name>
+        <name>navigation.urlfactory.plugin</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.portal.url.component.ComponentLocatorPlugin</type>
+        <type>org.exoplatform.portal.url.component.ComponentURLFactoryPlugin</type>
       </component-plugin>
     </component-plugins>
   </component>

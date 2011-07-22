@@ -20,19 +20,21 @@
 package org.exoplatform.web.url.navigation;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.URLContext;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
- * A resource locator for navigation nodes.
+ * An url for navigation.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocator implements ResourceLocator<NavigationResource>
+public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
 {
 
    /** . */
@@ -48,7 +50,7 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
    public static final QualifiedName ACCESS = QualifiedName.create("gtn", "access");
 
    /** . */
-   public static final ResourceType<NavigationResource, NavigationLocator> TYPE = new ResourceType<NavigationResource, NavigationLocator>(){};
+   public static final ResourceType<NavigationResource, NavigationURL> TYPE = new ResourceType<NavigationResource, NavigationURL>(){};
 
    /** . */
    private static final Set<QualifiedName> PARAMETER_NAMES = new HashSet<QualifiedName>();
@@ -63,7 +65,12 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
 
    /** . */
    private NavigationResource resource;
-   
+
+   public NavigationURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
+   {
+      super(context, ajax, locale);
+   }
+
    public Set<QualifiedName> getParameterNames()
    {
       return PARAMETER_NAMES;
@@ -98,8 +105,9 @@ public class NavigationLocator implements ResourceLocator<NavigationResource>
       return resource;
    }
 
-   public void setResource(NavigationResource resource)
+   public NavigationURL setResource(NavigationResource resource)
    {
       this.resource = resource;
+      return this;
    }
 }

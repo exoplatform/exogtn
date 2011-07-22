@@ -26,8 +26,8 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.core.UIApplication;
 
@@ -54,10 +54,10 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
    {
       StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
-      return new PortalURL<R, L>(context, locator, false, null);
+      return urlFactory.newURL(resourceType, context, false, null);
    }
 
    public String getStorageId()

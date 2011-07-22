@@ -25,8 +25,8 @@ package org.exoplatform.web.url;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  * @param <R> the resource parameter type
- * @param <L> the resource locator parameter type
+ * @param <U> the url parameter type
  */
-public abstract class ResourceType<R, L extends ResourceLocator<R>>
+public abstract class ResourceType<R, U extends PortalURL<R, U>>
 {
 }

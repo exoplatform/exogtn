@@ -24,7 +24,6 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.URLContext;
 
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class PortalURLContext implements URLContext
       this.renderContext = null;
    }
 
-   public <R, L extends ResourceLocator<R>> String render(PortalURL<R, L> url)
+   public <R, U extends PortalURL<R, U>> String render(U url)
    {
       if (renderContext == null)
       {
@@ -134,10 +133,9 @@ public class PortalURLContext implements URLContext
       parameters.put(PortalRequestHandler.LANG, lang);
 
       //
-      ResourceLocator<R> locator = url.getResourceLocator();
-      for (QualifiedName parameterName : locator.getParameterNames())
+      for (QualifiedName parameterName : url.getParameterNames())
       {
-         String parameterValue = locator.getParameterValue(parameterName);
+         String parameterValue = url.getParameterValue(parameterName);
          if (parameterValue != null)
          {
             parameters.put(parameterName, parameterValue);

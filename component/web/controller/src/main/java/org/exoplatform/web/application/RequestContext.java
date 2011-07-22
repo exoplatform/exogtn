@@ -20,9 +20,8 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.LocatorProvider;
-import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 
 import java.io.Writer;
@@ -80,17 +79,17 @@ abstract public class RequestContext
    }
 
    /**
-    * Returns the locator factory associated with this context.
+    * Returns the url factory associated with this context.
     *
-    * @return the locator factory
+    * @return the url factory
     */
-   public abstract LocatorProvider getLocatorProvider();
+   public abstract URLFactory getURLFactory();
 
-   public abstract <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator);
+   public abstract <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory);
 
-   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createURL(ResourceType<R, L> resourceType, R resource)
+   public final <R, U extends PortalURL<R, U>> U createURL(ResourceType<R, U> resourceType, R resource)
    {
-      PortalURL<R, L> url = createURL(resourceType);
+      U url = createURL(resourceType);
 
       // Set the resource on the URL
       url.setResource(resource);
@@ -99,22 +98,13 @@ abstract public class RequestContext
       return url;
    }
 
-   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createURL(ResourceType<R, L> resourceType)
+   public final <R, L extends PortalURL<R, L>> L createURL(ResourceType<R, L> resourceType)
    {
       // Get the provider
-      LocatorProvider provider = getLocatorProvider();
+      URLFactory provider = getURLFactory();
 
-      // Obtain a locator for the resource type
-      L locator = provider.newLocator(resourceType);
-
-      //
-      if (locator == null)
-      {
-         throw new IllegalArgumentException("No resource locator found for the resource type " + resourceType);
-      }
-
-      // Create an URL from the locator
-      return newURL(resourceType, locator);
+      // Create an URL from the factory
+      return newURL(resourceType, provider);
    }
 
    /**

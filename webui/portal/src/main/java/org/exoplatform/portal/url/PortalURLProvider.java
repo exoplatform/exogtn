@@ -20,9 +20,8 @@
 package org.exoplatform.portal.url;
 
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.LocatorProvider;
-import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 
 import java.util.Locale;
@@ -37,14 +36,14 @@ public class PortalURLProvider
 
    private ControllerContext controllerContext;
 
-   private LocatorProvider locatorProvider;
+   private URLFactory urlFactory;
 
    private Locale requestLocale;
    
-   public PortalURLProvider(ControllerContext controllerCtx, LocatorProvider locatorService, Locale requestLocale)
+   public PortalURLProvider(ControllerContext controllerCtx, URLFactory urlFactory, Locale requestLocale)
    {
       this.controllerContext = controllerCtx;
-      this.locatorProvider = locatorService;
+      this.urlFactory = urlFactory;
       this.requestLocale = requestLocale;
    }
    
@@ -58,14 +57,13 @@ public class PortalURLProvider
       return currentProvider.get();
    }
 
-   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createPortalURL(String siteType, String siteName, ResourceType<R, L> resourceType)
+   public final <R, U extends PortalURL<R, U>> U createPortalURL(String siteType, String siteName, ResourceType<R, U> resourceType)
    {
       PortalURLProvider portalURLProvider = currentProvider.get();
       if (portalURLProvider != null)
       {
-         L newLocator = locatorProvider.newLocator(resourceType);
          PortalURLContext context = new PortalURLContext(controllerContext, siteType, siteName);
-         return new PortalURL<R, L>(context, newLocator, false, requestLocale);
+         return urlFactory.newURL(resourceType, context, false, requestLocale);
       }
       return null;
    }

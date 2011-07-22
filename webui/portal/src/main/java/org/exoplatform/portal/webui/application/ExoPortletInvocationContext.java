@@ -23,7 +23,7 @@ import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.url.ComponentLocator;
+import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MarkupInfo;
 import org.gatein.common.util.ParameterValidation;
@@ -61,16 +61,16 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    private final HttpServletRequest request;
 
    /** . */
-   private final PortalURL<UIComponent, ComponentLocator> url;
+   private final PortalURL<UIComponent, ComponentURL> url;
 
    public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet)
    {
       super(new MarkupInfo(MediaType.TEXT_HTML, "UTF-8"));
 
       //
-      PortalURL<UIComponent,ComponentLocator> url = portalRequestContext.createURL(ComponentLocator.TYPE, portlet);
+      ComponentURL url = portalRequestContext.createURL(ComponentURL.TYPE, portlet);
       String path = portalRequestContext.getNodePath();
-      url.getResourceLocator().setPath(path);
+      url.setPath(path);
 
       //
       this.request = portalRequestContext.getRequest();
