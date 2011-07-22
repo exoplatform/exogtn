@@ -28,11 +28,12 @@ import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.url.LocatorProviderService;
-import org.exoplatform.portal.url.PortalURL;
+import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
+import org.exoplatform.web.url.PortalURL;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
@@ -111,7 +112,8 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       //
       NavigationLocator locator = locatorFactory.newLocator(NavigationLocator.TYPE);
-      PortalURL<NavigationResource, NavigationLocator> url = new PortalURL<NavigationResource, NavigationLocator>(context, locator, false, null, "portal", "classic");
+      PortalURLContext urlContext = new PortalURLContext(context, siteType, siteName);
+      PortalURL<NavigationResource, NavigationLocator> url = new PortalURL<NavigationResource, NavigationLocator>(urlContext, locator, false, null);
 
       // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteType, siteName, uri));

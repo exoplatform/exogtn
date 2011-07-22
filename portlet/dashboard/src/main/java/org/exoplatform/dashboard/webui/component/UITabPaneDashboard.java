@@ -40,7 +40,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -406,7 +406,7 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+         PortalURL<NavigationResource, NavigationLocator> nodeURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
          nodeURL.setResource(new NavigationResource(nextNode));
          
@@ -437,7 +437,7 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+         PortalURL<NavigationResource, NavigationLocator> nodeURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
          nodeURL.setResource(new NavigationResource(node));
          
@@ -480,7 +480,7 @@ public class UITabPaneDashboard extends UIContainer
             }
          }
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+         PortalURL<NavigationResource, NavigationLocator> nodeURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
          nodeURL.setResource(new NavigationResource(node));
          

@@ -41,7 +41,7 @@ import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -178,7 +178,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
-         ControllerURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
+         PortalURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
          json.put("actionLink", url.setAjax(false).toString());
       }                
       

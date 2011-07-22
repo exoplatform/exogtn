@@ -21,7 +21,7 @@ package org.exoplatform.portal.application;
 
 import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentLocator;
 
@@ -33,12 +33,12 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
 {
 
    /** . */
-   private final ControllerURL<UIComponent, ComponentLocator> url;
+   private final PortalURL<UIComponent, ComponentLocator> url;
 
    /** . */
    private final ComponentLocator locator;
 
-   public PortalURLBuilder(PortalRequestContext ctx, ControllerURL<UIComponent, ComponentLocator> url)
+   public PortalURLBuilder(PortalRequestContext ctx, PortalURL<UIComponent, ComponentLocator> url)
    {
       String path = ctx.getNodePath();
       url.getResourceLocator().setPath(path);

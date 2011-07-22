@@ -5,7 +5,7 @@
 	import org.gatein.common.text.EntityEncoder;
 	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;	
 	
 	def rcontext = _ctx.getRequestContext();
@@ -17,9 +17,9 @@
 	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 
-	public void renderChildrenContainer(UserNode node, ControllerURL nodeURL) {
+	public void renderChildrenContainer(UserNode node, PortalURL nodeURL) {
 		print """
 			<ul class="MenuItemContainer " style="display: none;">
 		""";
@@ -31,7 +31,7 @@
 		""";	  
 	}  
 	
-	public void renderChildNode(UserNode node, ControllerURL nodeURL) {
+	public void renderChildNode(UserNode node, PortalURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
 		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 

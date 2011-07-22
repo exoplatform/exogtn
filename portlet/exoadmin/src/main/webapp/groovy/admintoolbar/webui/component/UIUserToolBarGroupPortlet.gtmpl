@@ -7,7 +7,7 @@
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
 	import org.exoplatform.portal.mop.SiteKey;
@@ -21,9 +21,9 @@
 	def groupNavigations = uicomponent.getGroupNavigations();
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 	
-	void renderGroupPageNavigation(UserNavigation navigation, ControllerURL nodeURL) {
+	void renderGroupPageNavigation(UserNavigation navigation, PortalURL nodeURL) {
 			def nodes = uicomponent.getNavigationNodes(navigation);
 			if(nodes.size() < 1) return ;
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;		
@@ -37,7 +37,7 @@
 						}	
 	}
 	
-	void renderPageNode(UserNode node, ControllerURL nodeURL) {
+	void renderPageNode(UserNode node, PortalURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {

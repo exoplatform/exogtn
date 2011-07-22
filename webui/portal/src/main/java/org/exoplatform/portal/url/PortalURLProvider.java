@@ -20,6 +20,7 @@
 package org.exoplatform.portal.url;
 
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
@@ -63,7 +64,8 @@ public class PortalURLProvider
       if (portalURLProvider != null)
       {
          L newLocator = locatorProvider.newLocator(resourceType);
-         return new PortalURL<R, L>(controllerContext, newLocator, false, requestLocale, siteType, siteName);
+         PortalURLContext context = new PortalURLContext(controllerContext, siteType, siteName);
+         return new PortalURL<R, L>(context, newLocator, false, requestLocale);
       }
       return null;
    }

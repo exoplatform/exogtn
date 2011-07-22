@@ -4,14 +4,14 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.mop.user.UserNode;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
 	
 	def nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 
 	def selectedNode = Util.getUIPortal().getSelectedUserNode();
 	

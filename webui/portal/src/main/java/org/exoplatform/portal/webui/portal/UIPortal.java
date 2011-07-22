@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
@@ -50,7 +49,7 @@ import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -378,7 +377,7 @@ public class UIPortal extends UIContainer
 
          String portalName = prContext.getPortalOwner();
          
-         ControllerURL<NavigationResource, NavigationLocator> createURL =
+         PortalURL<NavigationResource, NavigationLocator> createURL =
             prContext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
          createURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalName, null));
          prContext.sendRedirect(createURL.toString());

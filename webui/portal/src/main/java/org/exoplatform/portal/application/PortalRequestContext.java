@@ -32,7 +32,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.url.LocatorProviderService;
-import org.exoplatform.portal.url.PortalURL;
+import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -43,11 +43,9 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
@@ -241,7 +239,7 @@ public class PortalRequestContext extends WebuiRequestContext
       this.requestLocale = requestLocale;
 
       //
-      ControllerURL<NavigationResource, NavigationLocator> url = createURL(NavigationLocator.TYPE);
+      PortalURL<NavigationResource, NavigationLocator> url = createURL(NavigationLocator.TYPE);
       url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
       portalURI = url.toString();
 
@@ -250,9 +248,10 @@ public class PortalRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      return new PortalURL<R, L>(controllerContext, locator, false, requestLocale, siteType, siteName);
+      PortalURLContext urlContext = new PortalURLContext(controllerContext, siteType, siteName);
+      return new PortalURL<R, L>(urlContext, locator, false, requestLocale);
    }
 
    public String getInitialURI()

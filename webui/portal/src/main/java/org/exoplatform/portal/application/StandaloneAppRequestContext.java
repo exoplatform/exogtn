@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.portal.url.StandaloneAppURL;
+import org.exoplatform.portal.url.StandaloneAppURLContext;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.core.UIApplication;
@@ -54,10 +54,10 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
-      ControllerContext context = getControllerContext();
-      return new StandaloneAppURL<R, L>(context, locator, false);
+      StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
+      return new PortalURL<R, L>(context, locator, false, null);
    }
 
    public String getStorageId()

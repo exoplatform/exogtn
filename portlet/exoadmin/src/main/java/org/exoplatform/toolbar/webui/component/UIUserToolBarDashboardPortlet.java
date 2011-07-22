@@ -23,7 +23,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -36,7 +35,7 @@ import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -140,7 +139,7 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
          {            
             PortalRequestContext pcontext = Util.getPortalRequestContext();
             
-            ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+            PortalURL<NavigationResource, NavigationLocator> nodeURL =
                pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
             nodeURL.setResource(new NavigationResource(targetNode));
             pcontext.sendRedirect(nodeURL.toString());

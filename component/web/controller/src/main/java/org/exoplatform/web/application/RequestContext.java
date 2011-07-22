@@ -20,7 +20,7 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
@@ -86,11 +86,11 @@ abstract public class RequestContext
     */
    public abstract LocatorProvider getLocatorProvider();
 
-   public abstract <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator);
+   public abstract <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator);
 
-   public final <R, L extends ResourceLocator<R>> ControllerURL<R, L> createURL(ResourceType<R, L> resourceType, R resource)
+   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createURL(ResourceType<R, L> resourceType, R resource)
    {
-      ControllerURL<R, L> url = createURL(resourceType);
+      PortalURL<R, L> url = createURL(resourceType);
 
       // Set the resource on the URL
       url.setResource(resource);
@@ -99,7 +99,7 @@ abstract public class RequestContext
       return url;
    }
 
-   public final <R, L extends ResourceLocator<R>> ControllerURL<R, L> createURL(ResourceType<R, L> resourceType)
+   public final <R, L extends ResourceLocator<R>> PortalURL<R, L> createURL(ResourceType<R, L> resourceType)
    {
       // Get the provider
       LocatorProvider provider = getLocatorProvider();

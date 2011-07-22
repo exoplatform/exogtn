@@ -30,17 +30,15 @@ import javax.portlet.ResourceURL;
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.url.navigation.NavigationLocator;
 import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.json.JSONArray;
@@ -151,7 +149,7 @@ public class UINavigationPortlet extends UIPortletApplication
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
-         ControllerURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
+         PortalURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
          url.setAjax(isUseAjax());
          json.put("actionLink", url.toString());
       } 

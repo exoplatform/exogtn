@@ -47,7 +47,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -55,7 +55,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 /** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
@@ -379,7 +378,7 @@ public class UIPageCreationWizard extends UIPageWizard
          try
          {
             UserNode newNode = uiWizard.saveData();
-            ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+            PortalURL<NavigationResource, NavigationLocator> nodeURL =
                pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
             nodeURL.setResource(new NavigationResource(newNode));
             UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);

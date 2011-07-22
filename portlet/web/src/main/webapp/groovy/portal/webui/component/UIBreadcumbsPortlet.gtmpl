@@ -3,13 +3,13 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.gatein.common.text.EntityEncoder;
-  import org.exoplatform.web.url.ControllerURL;
+  import org.exoplatform.web.url.PortalURL;
   import org.exoplatform.portal.url.navigation.NavigationResource;
  
 	List list = uicomponent.getSelectedPath();
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 	nodeURL.setAjax(uicomponent.isUseAjax());
 %>
 <div class="UIBreadcumbsPortlet" id="$uicomponent.id">

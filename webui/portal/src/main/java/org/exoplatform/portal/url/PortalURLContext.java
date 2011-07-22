@@ -23,42 +23,50 @@ import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceLocator;
+import org.exoplatform.web.url.URLContext;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
- * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
- * @version $Revision$
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends ControllerURL<R, L>
+public class PortalURLContext implements URLContext
 {
 
    /** . */
    private final ControllerContext controllerContext;
 
    /** . */
+   private final String siteType;
+
+   /** . */
+   private final String siteName;
+
+   /** . */
    private PortalURLRenderContext renderContext;
 
-   public StandaloneAppURL(
-      ControllerContext requestContext,
-      L locator,
-      Boolean ajax)
+   public PortalURLContext(
+      ControllerContext controllerContext,
+      String siteType,
+      String siteName)
    {
-      super(locator, ajax, null);
-
-      //
-      if (requestContext == null)
+      if (controllerContext == null)
       {
-         throw new NullPointerException("No null request context");
+         throw new NullPointerException("No null controller context");
       }
 
-      this.controllerContext = requestContext;
+      //
+      this.controllerContext = controllerContext;
+      this.siteType = siteType;
+      this.siteName = siteName;
+      this.renderContext = null;
    }
 
-   public String toString()
+   public <R, L extends ResourceLocator<R>> String render(PortalURL<R, L> url)
    {
       if (renderContext == null)
       {
@@ -70,18 +78,20 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
       }
 
       //
-      if (locator.getResource() == null)
+      if (url.getResource() == null)
       {
-         throw new IllegalStateException("No resource set on standaloneApp URL");
+         throw new IllegalStateException("No resource set on portal URL");
       }
 
       // Configure mime type
-      renderContext.setMimeType(mimeType);
+      renderContext.setMimeType(url.getMimeType());
 
-      boolean hasConfirm = confirm != null && confirm.length() > 0;
-      
       //
-      if (ajax)
+      String confirm = url.getConfirm();
+      boolean hasConfirm = confirm != null && confirm.length() > 0;
+
+      //
+      if (url.getAjax())
       {
          renderContext.append("javascript:", false);
          if (hasConfirm)
@@ -106,9 +116,25 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
 
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(WebAppController.HANDLER_PARAM, "standalone");
+      parameters.put(WebAppController.HANDLER_PARAM, "portal");
+      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteType);
+      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
 
       //
+      String lang;
+      Locale locale = url.getLocale();
+      if (locale != null)
+      {
+         lang = locale.getLanguage();
+      }
+      else
+      {
+         lang = "";
+      }
+      parameters.put(PortalRequestHandler.LANG, lang);
+
+      //
+      ResourceLocator<R> locator = url.getResourceLocator();
       for (QualifiedName parameterName : locator.getParameterNames())
       {
          String parameterValue = locator.getParameterValue(parameterName);
@@ -122,7 +148,7 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
       controllerContext.renderURL(parameters, renderContext);
 
       // Now append generic query parameters
-      for (Map.Entry<String, String[]> entry : getQueryParameters().entrySet())
+      for (Map.Entry<String, String[]> entry : url.getQueryParameters().entrySet())
       {
          for (String value : entry.getValue())
          {
@@ -131,7 +157,7 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
       }
 
       //
-      if (ajax)
+      if (url.getAjax())
       {
          renderContext.appendQueryParameter("ajaxRequest", "true");
          renderContext.flush();
@@ -142,7 +168,7 @@ public class StandaloneAppURL<R, L extends ResourceLocator<R>> extends Controlle
          renderContext.flush();
          if (hasConfirm)
          {
-            renderContext.append("\'", false);            
+            renderContext.append("\'", false);
          }
       }
 

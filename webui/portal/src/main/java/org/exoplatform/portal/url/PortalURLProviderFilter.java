@@ -67,7 +67,6 @@ public class PortalURLProviderFilter extends AbstractFilter
       
    }
 
-   @Override
    public void destroy()
    {
    }

@@ -6,7 +6,7 @@
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
-    import org.exoplatform.web.url.ControllerURL;
+    import org.exoplatform.web.url.PortalURL;
     import org.exoplatform.portal.url.navigation.NavigationResource;
     import org.exoplatform.portal.config.model.PortalConfig;
 	
@@ -17,8 +17,8 @@
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
-	void renderDashboards(ControllerURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
 			<ul style="display:none" class="MenuItemContainer">
 		""";
@@ -30,7 +30,7 @@
 		""" ;
 	}
 	
-	void renderPageNode(ControllerURL nodeURL, PortalRequestContext pcontext, UserNode node) {
+	void renderPageNode(PortalURL nodeURL, PortalRequestContext pcontext, UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {

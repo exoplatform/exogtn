@@ -35,7 +35,7 @@ import org.exoplatform.portal.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -165,7 +165,7 @@ public class UISitemapPortlet extends UIPortletApplication
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
-         ControllerURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
+         PortalURL<NavigationResource, NavigationLocator> url = Util.getPortalRequestContext().createURL(NavigationLocator.TYPE, resource);
          url.setAjax(isUseAjax());
          json.put("actionLink", url.toString());
       } 

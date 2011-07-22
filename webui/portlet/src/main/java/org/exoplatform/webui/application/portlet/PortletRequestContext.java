@@ -26,7 +26,7 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.LocatorProvider;
 import org.exoplatform.web.url.ResourceLocator;
 import org.exoplatform.web.url.ResourceType;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -81,7 +81,7 @@ public class PortletRequestContext extends WebuiRequestContext
    }
 
    @Override
-   public <R, L extends ResourceLocator<R>> ControllerURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
+   public <R, L extends ResourceLocator<R>> PortalURL<R, L> newURL(ResourceType<R, L> resourceType, L locator)
    {
       return parentAppRequestContext_.newURL(resourceType, locator);
    }

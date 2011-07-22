@@ -46,7 +46,7 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.web.url.ControllerURL;
+import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -565,7 +565,7 @@ public class UIPortalApplication extends UIApplication
             isAjaxInLastRequest = false;
             if (requestURI.equals(lastNonAjaxRequestUri) && !requestURI.equals(lastRequestURI))
             {
-               ControllerURL<NavigationResource, NavigationLocator> nodeURL =
+               PortalURL<NavigationResource, NavigationLocator> nodeURL =
                   pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 //               nodeURL.setResource(new NavigationResource(getCurrentSite().getOwnerType(), getCurrentSite().getOwner().replaceAll("/", "_"), getCurrentSite().getSelectedUserNode()));
                nodeURL.setResource(new NavigationResource(getCurrentSite().getSelectedUserNode()));

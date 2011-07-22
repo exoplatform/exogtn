@@ -30,7 +30,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ControllerURL<R, L extends ResourceLocator<R>>
+public final class PortalURL<R, L extends ResourceLocator<R>>
 {
 
    /** . */
@@ -54,22 +54,31 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
    /** . */
    private Locale locale;
 
+   /** . */
+   private final URLContext context;
+
    /**
-    * Create a resource URL instance.
+    * Create a portal URL instance.
     *
+    * @param context the url context
     * @param locator the resource locator that can't be null
     * @param ajax the ajax mode
     * @param locale the locale
     * @throws NullPointerException if the resource locator is null
     */
-   public ControllerURL(L locator, Boolean ajax, Locale locale) throws NullPointerException
+   public PortalURL(URLContext context, L locator, Boolean ajax, Locale locale) throws NullPointerException
    {
+      if (context == null)
+      {
+         throw new NullPointerException("No context");
+      }
       if (locator == null)
       {
          throw new NullPointerException("No null locator");
       }
 
       //
+      this.context = context;
       this.locator = locator;
       this.ajax = ajax;
       this.locale = locale;
@@ -104,7 +113,7 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
     * @param ajax the new ajax mode
     * @return this object
     */
-   public final ControllerURL setAjax(Boolean ajax)
+   public final PortalURL setAjax(Boolean ajax)
    {
       this.ajax = ajax;
       return this;
@@ -126,7 +135,7 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
     * @param confirm the new confirm message
     * @return this object
     */
-   public final ControllerURL setConfirm(String confirm)
+   public final PortalURL setConfirm(String confirm)
    {
       this.confirm = confirm;
       return this;
@@ -148,7 +157,7 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
     * @param resource the new resource
     * @return this object
     */
-   public final ControllerURL setResource(R resource)
+   public final PortalURL setResource(R resource)
    {
       locator.setResource(resource);
       return this;
@@ -252,5 +261,8 @@ public abstract class ControllerURL<R, L extends ResourceLocator<R>>
     *
     * @return the URL value
     */
-   public abstract String toString();
+   public String toString()
+   {
+      return context.render(this);
+   }
 }

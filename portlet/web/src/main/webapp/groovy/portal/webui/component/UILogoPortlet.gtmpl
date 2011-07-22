@@ -2,7 +2,7 @@
 	import javax.portlet.PortletMode ;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
 	
@@ -23,7 +23,7 @@
 		<% 
 		if(prContext.getRemoteUser() == null) { 
 		    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-			ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+			PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 			NavigationResource resource = new NavigationResource(PortalConfig.PORTAL_TYPE, pcontext.getPortalOwner(), "register");
 			String registerURI = nodeURL.setResource(resource).toString();
 		%>

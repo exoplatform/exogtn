@@ -7,7 +7,7 @@
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.mop.SiteKey;
 	import org.exoplatform.portal.application.PortalRequestContext;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
     import org.exoplatform.portal.config.model.PortalConfig;
     
@@ -18,9 +18,9 @@
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
   
-	void renderPortalNavigations(ControllerURL nodeURL) {	 
+	void renderPortalNavigations(PortalURL nodeURL) {
 			print """
 					<ul style="position: absolute; display:none" class="MenuItemContainer">						
 			""";
@@ -58,7 +58,7 @@
 			""";
 	}
 	
-	void renderCurrentPortal(ControllerURL nodeURL) {	    
+	void renderCurrentPortal(PortalURL nodeURL) {
 	    def nodes = _ctx.getRequestContext().getAttribute("nodes");
 		print """
 			<ul style="position: absolute; display:none" class="MenuItemContainer">
@@ -71,7 +71,7 @@
 		""";
 	}
 	
-	void renderPageNode(ControllerURL nodeURL, UserNode node) {
+	void renderPageNode(PortalURL nodeURL, UserNode node) {
 	    UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {			 

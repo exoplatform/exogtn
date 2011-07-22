@@ -6,7 +6,7 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.navigation.TreeNode;
-	import org.exoplatform.web.url.ControllerURL;
+	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.portal.url.navigation.NavigationResource;
 	import javax.portlet.ResourceURL;
 
@@ -20,9 +20,9 @@
 	def actionExpandAll = uicomponent.event("ExpandAllNode");
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
-	ControllerURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
 							
-	public void renderNodes(TreeNode rootTree, ControllerURL nodeURL, boolean useAjax) {
+	public void renderNodes(TreeNode rootTree, PortalURL nodeURL, boolean useAjax) {
 		List childrenNodes = rootTree.getChildren();
 		int childrenSize = childrenNodes.size() ;  
 		int size = 0;	
