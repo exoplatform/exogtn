@@ -8,7 +8,7 @@
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
-	import org.exoplatform.portal.url.navigation.NavigationResource;
+	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
 	import org.exoplatform.portal.mop.SiteKey;
 	
@@ -21,7 +21,7 @@
 	def groupNavigations = uicomponent.getGroupNavigations();
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = nodeurl();
 	
 	void renderGroupPageNavigation(UserNavigation navigation, PortalURL nodeURL) {
 			def nodes = uicomponent.getNavigationNodes(navigation);

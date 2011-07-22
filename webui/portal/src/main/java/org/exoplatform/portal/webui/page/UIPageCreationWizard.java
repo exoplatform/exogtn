@@ -36,8 +36,8 @@ import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.url.navigation.NavigationLocator;
-import org.exoplatform.portal.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NavigationLocator;
+import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -379,7 +379,7 @@ public class UIPageCreationWizard extends UIPageWizard
          {
             UserNode newNode = uiWizard.saveData();
             PortalURL<NavigationResource, NavigationLocator> nodeURL =
-               pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+               pcontext.createURL(NavigationLocator.TYPE);
             nodeURL.setResource(new NavigationResource(newNode));
             UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             toolPanel.setUIComponent(null);

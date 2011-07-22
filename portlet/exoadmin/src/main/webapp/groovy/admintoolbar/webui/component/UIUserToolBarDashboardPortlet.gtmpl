@@ -7,7 +7,7 @@
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
     import org.exoplatform.web.url.PortalURL;
-    import org.exoplatform.portal.url.navigation.NavigationResource;
+    import org.exoplatform.web.url.navigation.NavigationResource;
     import org.exoplatform.portal.config.model.PortalConfig;
 	
 	def rcontext = _ctx.getRequestContext() ;
@@ -17,7 +17,7 @@
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = nodeurl();
 	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
 			<ul style="display:none" class="MenuItemContainer">

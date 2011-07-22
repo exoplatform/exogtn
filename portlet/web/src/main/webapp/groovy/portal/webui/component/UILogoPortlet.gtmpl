@@ -3,7 +3,7 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.web.url.PortalURL;
-	import org.exoplatform.portal.url.navigation.NavigationResource;
+	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
@@ -23,7 +23,7 @@
 		<% 
 		if(prContext.getRemoteUser() == null) { 
 		    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
-			PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+			PortalURL nodeURL = nodeurl();
 			NavigationResource resource = new NavigationResource(PortalConfig.PORTAL_TYPE, pcontext.getPortalOwner(), "register");
 			String registerURI = nodeURL.setResource(resource).toString();
 		%>

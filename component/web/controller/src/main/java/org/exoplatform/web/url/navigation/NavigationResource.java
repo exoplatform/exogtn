@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.url.navigation;
+package org.exoplatform.web.url.navigation;
 
 import org.exoplatform.portal.mop.user.UserNode;
 

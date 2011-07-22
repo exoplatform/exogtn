@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url.navigation;
+package org.exoplatform.web.url.navigation;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.ResourceLocator;

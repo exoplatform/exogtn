@@ -17,9 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url;
-
-import org.exoplatform.web.url.*;
+package org.exoplatform.web.url;
 
 import java.util.HashMap;
 import java.util.Map;

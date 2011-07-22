@@ -6,7 +6,7 @@
 	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
-	import org.exoplatform.portal.url.navigation.NavigationResource;	
+	import org.exoplatform.web.url.navigation.NavigationResource;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -17,7 +17,7 @@
 	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
-	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = nodeurl();
 
 	public void renderChildrenContainer(UserNode node, PortalURL nodeURL) {
 		print """

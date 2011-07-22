@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core.lifecycle;
 
+import groovy.lang.Closure;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.groovyscript.text.BindingContext;
 import org.exoplatform.resolver.ResourceResolver;
@@ -45,11 +46,21 @@ public class WebuiBindingContext extends BindingContext
 
    private WebuiRequestContext rcontext_;
 
-   public WebuiBindingContext(ResourceResolver resolver, Writer w, UIComponent uicomponent, WebuiRequestContext context)
+   public WebuiBindingContext(ResourceResolver resolver, Writer w, UIComponent uicomponent, final WebuiRequestContext context)
    {
       super(resolver, w);
       uicomponent_ = uicomponent;
       rcontext_ = context;
+
+      // Closure nodeurl()
+      put("nodeurl", new Closure(this)
+      {
+         @Override
+         public Object call(Object[] args)
+         {
+            return context.createURL(org.exoplatform.web.url.navigation.NavigationLocator.TYPE);
+         }
+      });
 
       // Add Orientation specific information
       Orientation orientation = context.getOrientation();

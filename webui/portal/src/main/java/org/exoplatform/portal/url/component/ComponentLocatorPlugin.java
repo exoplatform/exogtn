@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.url.component;
 
-import org.exoplatform.portal.url.ResourceLocatorPlugin;
+import org.exoplatform.web.url.ResourceLocatorPlugin;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentLocator;

@@ -17,27 +17,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.url.navigation;
+package org.exoplatform.web.url;
 
-import org.exoplatform.portal.url.ResourceLocatorPlugin;
-import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.container.component.BaseComponentPlugin;
 
 /**
+ * A plugin for adding resource locator to the {@link LocatorProviderService}.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationLocatorPlugin extends ResourceLocatorPlugin<NavigationResource, NavigationLocator>
+public abstract class ResourceLocatorPlugin<R, L extends ResourceLocator<R>> extends BaseComponentPlugin
 {
 
-   @Override
-   protected ResourceType<NavigationResource, NavigationLocator> getResourceType()
-   {
-      return NavigationLocator.TYPE;
-   }
+   /**
+    * Returns the resource type.
+    *
+    * @return the resource type
+    */
+   protected abstract ResourceType<R, L> getResourceType();
 
-   @Override
-   protected NavigationLocator newLocator()
-   {
-      return new NavigationLocator();
-   }
+   /**
+    * Returns a new locator instance.
+    *
+    * @return a new locator instance
+    */
+   protected abstract L newLocator();
+
 }

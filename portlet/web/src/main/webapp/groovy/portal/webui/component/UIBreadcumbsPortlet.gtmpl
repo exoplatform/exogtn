@@ -4,12 +4,12 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.gatein.common.text.EntityEncoder;
   import org.exoplatform.web.url.PortalURL;
-  import org.exoplatform.portal.url.navigation.NavigationResource;
+  import org.exoplatform.web.url.navigation.NavigationResource;
  
 	List list = uicomponent.getSelectedPath();
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-	PortalURL nodeURL = pcontext.createURL(org.exoplatform.portal.url.navigation.NavigationLocator.TYPE);
+	PortalURL nodeURL = nodeurl();
 	nodeURL.setAjax(uicomponent.isUseAjax());
 %>
 <div class="UIBreadcumbsPortlet" id="$uicomponent.id">
