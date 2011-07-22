@@ -46,9 +46,6 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
    public static final QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
    
    /** . */
-   public static final QualifiedName ACCESS = QualifiedName.create("gtn", "access");
-
-   /** . */
    public static final ResourceType<NavigationResource, NavigationURL> TYPE = new ResourceType<NavigationResource, NavigationURL>(){};
 
    /** . */
@@ -59,7 +56,6 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
       PARAMETER_NAMES.add(PATH);
       PARAMETER_NAMES.add(REQUEST_SITE_TYPE);
       PARAMETER_NAMES.add(REQUEST_SITE_NAME);
-      PARAMETER_NAMES.add(ACCESS);
    }
 
    /** . */
