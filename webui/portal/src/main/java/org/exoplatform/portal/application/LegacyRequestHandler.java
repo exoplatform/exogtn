@@ -111,7 +111,7 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       //
       PortalURLContext urlContext = new PortalURLContext(context, siteType, siteName);
-      NavigationURL url = urlFactory.newURL(NavigationURL.TYPE, urlContext, false, null);
+      NavigationURL url = urlFactory.newURL(NavigationURL.TYPE, urlContext);
 
       // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteType, siteName, uri));

@@ -76,7 +76,8 @@ public class StandaloneAppURLContext implements URLContext
       boolean hasConfirm = confirm != null && confirm.length() > 0;
 
       //
-      if (url.getAjax())
+      Boolean ajax = url.getAjax() != null && url.getAjax();
+      if (ajax)
       {
          renderContext.append("javascript:", false);
          if (hasConfirm)
@@ -126,7 +127,7 @@ public class StandaloneAppURLContext implements URLContext
       }
 
       //
-      if (url.getAjax())
+      if (ajax)
       {
          renderContext.appendQueryParameter("ajaxRequest", "true");
          renderContext.flush();

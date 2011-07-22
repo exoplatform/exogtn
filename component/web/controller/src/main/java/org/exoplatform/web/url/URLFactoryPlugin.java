@@ -42,8 +42,9 @@ public abstract class URLFactoryPlugin<R, U extends PortalURL<R, U>> extends Bas
    /**
     * Returns a new url instance.
     *
+    * @param context the context
     * @return a new url instance
     */
-   protected abstract U newURL(URLContext context, Boolean ajax, Locale locale);
+   protected abstract U newURL(URLContext context);
 
 }

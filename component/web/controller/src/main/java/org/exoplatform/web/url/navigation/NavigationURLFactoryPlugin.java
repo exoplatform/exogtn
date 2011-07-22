@@ -23,8 +23,6 @@ import org.exoplatform.web.url.URLFactoryPlugin;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLContext;
 
-import java.util.Locale;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -39,8 +37,8 @@ public class NavigationURLFactoryPlugin extends URLFactoryPlugin<NavigationResou
    }
 
    @Override
-   protected NavigationURL newURL(URLContext context, Boolean ajax, Locale locale)
+   protected NavigationURL newURL(URLContext context)
    {
-      return new NavigationURL(context, ajax, locale);
+      return new NavigationURL(context);
    }
 }

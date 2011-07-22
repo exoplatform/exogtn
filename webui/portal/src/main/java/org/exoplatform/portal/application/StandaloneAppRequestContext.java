@@ -57,7 +57,12 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
    {
       StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
-      return urlFactory.newURL(resourceType, context, false, null);
+      U url = urlFactory.newURL(resourceType, context);
+      if (url != null)
+      {
+         url.setAjax(false);
+      }
+      return url;
    }
 
    public String getStorageId()

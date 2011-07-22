@@ -25,8 +25,6 @@ import org.exoplatform.web.url.URLContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
 
-import java.util.Locale;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -41,8 +39,8 @@ public class ComponentURLFactoryPlugin extends URLFactoryPlugin<UIComponent, Com
    }
 
    @Override
-   protected ComponentURL newURL(URLContext context, Boolean ajax, Locale locale)
+   protected ComponentURL newURL(URLContext context)
    {
-      return new ComponentURL(context, ajax, locale);
+      return new ComponentURL(context);
    }
 }

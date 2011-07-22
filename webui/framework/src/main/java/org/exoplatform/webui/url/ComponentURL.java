@@ -28,7 +28,6 @@ import org.gatein.common.util.Tools;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,9 +70,9 @@ public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
 
    private Map<QualifiedName, String> entries;
 
-   public ComponentURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
+   public ComponentURL(URLContext context) throws NullPointerException
    {
-      super(context, ajax, locale);
+      super(context);
 
       //
       this.entries = new HashMap<QualifiedName, String>();

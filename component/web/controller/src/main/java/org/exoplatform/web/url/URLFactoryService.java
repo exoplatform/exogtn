@@ -20,7 +20,6 @@
 package org.exoplatform.web.url;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -41,9 +40,7 @@ public class URLFactoryService extends URLFactory
    @Override
    public <R, U extends PortalURL<R, U>> U newURL(
       ResourceType<R, U> resourceType,
-      URLContext context,
-      Boolean ajax,
-      Locale locale) throws NullPointerException
+      URLContext context) throws NullPointerException
    {
       if (resourceType == null)
       {
@@ -55,7 +52,7 @@ public class URLFactoryService extends URLFactory
       URLFactoryPlugin<R, U> plugin = (URLFactoryPlugin<R,U>)plugins.get(resourceType);
 
       //
-      return plugin != null ? plugin.newURL(context, ajax, locale) : null;
+      return plugin != null ? plugin.newURL(context) : null;
    }
 
    public void addPlugin(URLFactoryPlugin plugin)

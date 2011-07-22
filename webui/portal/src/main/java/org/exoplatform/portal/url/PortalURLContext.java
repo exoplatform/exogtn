@@ -90,7 +90,8 @@ public class PortalURLContext implements URLContext
       boolean hasConfirm = confirm != null && confirm.length() > 0;
 
       //
-      if (url.getAjax())
+      boolean ajax = url.getAjax() != null && url.getAjax();
+      if (ajax)
       {
          renderContext.append("javascript:", false);
          if (hasConfirm)
@@ -155,7 +156,7 @@ public class PortalURLContext implements URLContext
       }
 
       //
-      if (url.getAjax())
+      if (ajax)
       {
          renderContext.appendQueryParameter("ajaxRequest", "true");
          renderContext.flush();

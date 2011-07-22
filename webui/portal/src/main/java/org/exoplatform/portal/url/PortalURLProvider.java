@@ -63,7 +63,7 @@ public class PortalURLProvider
       if (portalURLProvider != null)
       {
          PortalURLContext context = new PortalURLContext(controllerContext, siteType, siteName);
-         return urlFactory.newURL(resourceType, context, false, requestLocale);
+         return urlFactory.newURL(resourceType, context);
       }
       return null;
    }

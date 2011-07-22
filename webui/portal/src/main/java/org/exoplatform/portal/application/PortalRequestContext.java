@@ -250,7 +250,13 @@ public class PortalRequestContext extends WebuiRequestContext
    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
    {
       PortalURLContext urlContext = new PortalURLContext(controllerContext, siteType, siteName);
-      return urlFactory.newURL(resourceType, urlContext, false, requestLocale);
+      U url = urlFactory.newURL(resourceType, urlContext);
+      if (url != null)
+      {
+         url.setAjax(false);
+         url.setLocale(requestLocale);
+      }
+      return url;
    }
 
    public String getInitialURI()

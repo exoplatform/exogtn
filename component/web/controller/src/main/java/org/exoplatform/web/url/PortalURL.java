@@ -60,11 +60,9 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
     * Create a portal URL instance.
     *
     * @param context the url context
-    * @param ajax the ajax mode
-    * @param locale the locale
     * @throws NullPointerException if the context is null
     */
-   public PortalURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
+   public PortalURL(URLContext context) throws NullPointerException
    {
       if (context == null)
       {
@@ -73,8 +71,8 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
 
       //
       this.context = context;
-      this.ajax = ajax;
-      this.locale = locale;
+      this.ajax = null;
+      this.locale = null;
       this.confirm = null;
       this.queryParams = null;
       this.mimeType = null;

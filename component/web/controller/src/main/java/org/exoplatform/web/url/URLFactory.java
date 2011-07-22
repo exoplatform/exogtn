@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.url;
 
-import java.util.Locale;
-
 /**
  * A factory for urls.
  *
@@ -31,18 +29,13 @@ public abstract class URLFactory
 {
 
    /**
-    * Creates a new url.
+    * Creates a new url or return null if the resource type cannot be resolved to an url.
     *
     * @param resourceType the resource type
-    * @param <R> the resource parameter type
-    * @param <U> the url parameter type
-    * @return the context
-    * @throws NullPointerException if the resource type is null
+    * @param context the context
+    * @return the url
+    * @throws NullPointerException if the resource type or the context is null
     */
-   public abstract <R, U extends PortalURL<R, U>> U newURL(
-      ResourceType<R, U> resourceType,
-      URLContext context,
-      Boolean ajax,
-      Locale locale) throws NullPointerException;
+   public abstract <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLContext context) throws NullPointerException;
 
 }

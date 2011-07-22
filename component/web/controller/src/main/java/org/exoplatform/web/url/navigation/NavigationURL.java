@@ -25,7 +25,6 @@ import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLContext;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -66,9 +65,9 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
    /** . */
    private NavigationResource resource;
 
-   public NavigationURL(URLContext context, Boolean ajax, Locale locale) throws NullPointerException
+   public NavigationURL(URLContext context) throws NullPointerException
    {
-      super(context, ajax, locale);
+      super(context);
    }
 
    public Set<QualifiedName> getParameterNames()
