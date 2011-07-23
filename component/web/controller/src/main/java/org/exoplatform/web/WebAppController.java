@@ -47,13 +47,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 /**
- * Created by The eXo Platform SAS
- * Mar 21, 2007  
- * 
- * The WebAppController is the entry point of the eXo web framework
- * 
- * It also stores WebRequestHandlers, Attributes and deployed Applications
- * 
+ * The WebAppController is the entry point of the GateIn service.
  */
 public class WebAppController
 {
@@ -67,6 +61,7 @@ public class WebAppController
    /** . */
    private HashMap<String, Object> attributes_;
 
+   /** . */
    private volatile HashMap<String, Application> applications_;
 
    /** . */
@@ -78,13 +73,14 @@ public class WebAppController
    /**
     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the
     * PortalController servlet (controller.register(new PortalRequestHandler())) also add the
-    * CommandHandler object that will listen for the incoming /command path in the URL
-    * 
+    * CommandHandler object that will listen for the incoming /command path in the URL.
+    *
+    * @param params the init params
+    * @param configurationManager the configuration manager
     * @throws Exception any exception
     */
    public WebAppController(InitParams params, ConfigurationManager configurationManager) throws Exception
    {
-
       // Get router config
       ValueParam routerConfig = params.getValueParam("router.config");
       if (routerConfig == null)
@@ -93,7 +89,6 @@ public class WebAppController
       }
       String routerConfigPath = routerConfig.getValue();
 
-
       // Read configuration (a bit hardcoded for now)
       URL routerURL = configurationManager.getResource(routerConfigPath);
       XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
@@ -101,9 +96,6 @@ public class WebAppController
 
       // Build router from configuration
       Router router = new Router(routerDesc);
-
-      //
-      System.out.println("router = " + router);
 
       //
       this.applications_ = new HashMap<String, Application>();
@@ -166,12 +158,18 @@ public class WebAppController
       return (T)result;
    }
 
+   /**
+    * Register an handler as a component plugin, this method is invoked by the kernel with reflection.
+    *
+    * @param handler the handler
+    * @throws Exception any exception
+    */
    public void register(WebRequestHandler handler) throws Exception
    {
       handlers.put(handler.getHandlerName(), handler);
    }
    
-   public void onHandlersInit(ServletConfig config) throws Exception
+   private void onHandlersInit(ServletConfig config) throws Exception
    {
       Collection<WebRequestHandler> hls = handlers.values();
       for (WebRequestHandler handler : hls)
@@ -181,25 +179,21 @@ public class WebAppController
    }
    
    /**
-    * This is the first method - in the eXo web framework - reached by incoming HTTP request, it acts like a
-    * servlet service() method
-    * 
-    * According to the servlet path used the correct handler is selected and then executed.
-    * 
-    * The event "exo.application.portal.start-http-request" and "exo.application.portal.end-http-request" are also sent 
-    * through the ListenerService and several listeners may listen to it.
-    * 
-    * Finally a WindowsInfosContainer object using a ThreadLocal (from the portlet-container product) is created 
+    * <p>This is the first method - in the GateIn portal - reached by incoming HTTP request, it acts like a
+    * servlet service() method. According to the servlet path used the correct handler is selected and then executed.</p>
+    *
+    * <p>During a request the request life cycle is demarcated by calls to {@link RequestLifeCycle#begin(ExoContainer);}
+    * and {@link RequestLifeCycle#end()}.</p>
+    *
+    * @param req the http request
+    * @param res the http response
+    * @throws Exception any exception
     */
    public void service(HttpServletRequest req, HttpServletResponse res) throws Exception
    {
-
+      boolean debug = log.isDebugEnabled();
       String portalPath = req.getRequestURI().substring(req.getContextPath().length());
-      log.info("Portal path: " + portalPath);
-
-      //
       Map<QualifiedName, String> parameters = router.route(portalPath);
-      log.info("Decoded parameters: " + parameters);
 
       //
       if (parameters != null)
@@ -208,7 +202,10 @@ public class WebAppController
          if (handlerKey != null)
          {
             WebRequestHandler handler = handlers.get(handlerKey);
-            log.info("Handler used for this path: " + handler);
+            if (debug)
+            {
+               log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
+            }
 
             //
             ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
@@ -226,6 +223,14 @@ public class WebAppController
             {
                RequestLifeCycle.end();
             }
+         }
+      }
+      else
+      {
+         // JULIEN : found something to do like a default handler
+         if (debug)
+         {
+            log.debug("Could not associate the request path=" + portalPath + ", parameters=" + parameters + " with an handler");
          }
       }
    }
