@@ -169,7 +169,7 @@ public class WebAppController
       handlers.put(handler.getHandlerName(), handler);
    }
    
-   private void onHandlersInit(ServletConfig config) throws Exception
+   public void onHandlersInit(ServletConfig config) throws Exception
    {
       Collection<WebRequestHandler> hls = handlers.values();
       for (WebRequestHandler handler : hls)
