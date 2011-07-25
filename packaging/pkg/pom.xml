@@ -282,7 +282,7 @@
                            <descriptors>
                               <descriptor>src/main/assembly/tomcat-zip.xml</descriptor>
                            </descriptors>
-                           <attach>false</attach>
+                           <attach>true</attach>
                         </configuration>
                      </execution>
                   </executions>
@@ -503,7 +503,7 @@
                            <descriptors>
                               <descriptor>src/main/assembly/jbossear-zip.xml</descriptor>
                            </descriptors>
-                           <attach>false</attach>
+                           <attach>true</attach>
                         </configuration>
                      </execution>
                   </executions>
