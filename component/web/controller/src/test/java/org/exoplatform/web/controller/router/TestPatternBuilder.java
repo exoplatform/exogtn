@@ -49,7 +49,7 @@ public class TestPatternBuilder extends TestCase
    {
       PatternBuilder pb = new PatternBuilder();
       pb.expr("^");
-      pb.litteral(c);
+      pb.literal(c);
       pb.expr("$");
       Pattern pattern = pb.build();
       assertTrue(pattern.matcher(Character.toString(c)).matches());

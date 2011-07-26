@@ -30,13 +30,10 @@ import java.io.IOException;
 public class TestRegExpRenderer extends TestCase
 {
 
-   static void assertRender(String regexp, String expected)
+   static void assertRender(RENode re, String expected)
    {
       try
       {
-         RegExpParser parser = new RegExpParser(regexp);
-         RENode re = parser.parse();
-         assertTrue(parser.isDone());
          String rendered;
          if (re != null)
          {
@@ -49,12 +46,6 @@ public class TestRegExpRenderer extends TestCase
          }
          assertEquals(expected, rendered);
       }
-      catch (SyntaxException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
       catch (IOException e)
       {
          AssertionFailedError afe = new AssertionFailedError();
@@ -63,20 +54,101 @@ public class TestRegExpRenderer extends TestCase
       }
    }
 
-   public void testSimple() throws Exception
+   static RENode.Disjunction disjunction(String regexp)
    {
-      assertRender("", "");
-      assertRender(".", ".");
-      assertRender("^", "^");
-      assertRender("\\.", "\\.");
-
-
+      try
+      {
+         RegExpParser parser = new RegExpParser(regexp);
+         RENode.Disjunction re = parser.parseDisjunction();
+         assertTrue(parser.isDone());
+         return re;
+      }
+      catch (SyntaxException e)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(e);
+         throw afe;
+      }
    }
 
-   public void testDisjunction() throws Exception
+   static RENode.Alternative alternative(String regexp)
    {
-      assertRender("|", "");
-      assertRender("a|", "a");
-      assertRender("|a", "a");
+      try
+      {
+         RegExpParser parser = new RegExpParser(regexp);
+         RENode.Alternative re = parser.parseAlternative();
+         assertTrue(parser.isDone());
+         return re;
+      }
+      catch (SyntaxException e)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(e);
+         throw afe;
+      }
+   }
+
+   static RENode.Expr expression(String regexp)
+   {
+      try
+      {
+         RegExpParser parser = new RegExpParser(regexp);
+         RENode.Expr re = parser.parseExpression();
+         assertTrue(parser.isDone());
+         return re;
+      }
+      catch (SyntaxException e)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(e);
+         throw afe;
+      }
+   }
+
+   static RENode.CharacterClass characterClass(String regexp)
+   {
+      try
+      {
+         RegExpParser parser = new RegExpParser(regexp);
+         RENode.CharacterClass re = parser.parseCharacterClass();
+         assertTrue(parser.isDone());
+         return re;
+      }
+      catch (SyntaxException e)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(e);
+         throw afe;
+      }
+   }
+
+   public void testSimple()
+   {
+      assertRender(expression("."), ".");
+      assertRender(expression("^"), "^");
+      assertRender(expression("\\."), "\\.");
+   }
+
+   public void testDisjunction()
+   {
+      assertRender(disjunction(""), "");
+      assertRender(disjunction("|"), "");
+      assertRender(disjunction("a|"), "a");
+      assertRender(disjunction("|a"), "a");
+   }
+
+   public void testAlternative()
+   {
+      assertRender(alternative(""), "");
+      assertRender(alternative("ab"), "ab");
+      assertRender(alternative("abc"), "abc");
+   }
+
+   public void testCharacterClass()
+   {
+      assertRender(characterClass(""), "");
+      assertRender(characterClass("[a]"), "[a]");
+      assertRender(characterClass("[ab]"), "[ab]");
+      assertRender(characterClass("[.\\]]"), "[\\.\\]]");
    }
 }

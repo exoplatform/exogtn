@@ -125,6 +125,11 @@ public class RegExpRenderer
       }
    }
 
+   protected void doRender(Quantifier quantifier, Appendable appendable) throws IOException
+   {
+      quantifier.toString(appendable);
+   }
+
    protected void doRender(RENode.Assertion assertion, Appendable appendable) throws IOException
    {
       if (assertion instanceof RENode.Assertion.Begin)
@@ -144,19 +149,27 @@ public class RegExpRenderer
    protected void doRender(RENode.Assertion.Begin expr, Appendable appendable) throws IOException
    {
       appendable.append('^');
+      if (expr.getQuantifier() != null)
+      {
+         doRender(expr.getQuantifier(), appendable);
+      }
    }
 
    protected void doRender(RENode.Assertion.End expr, Appendable appendable) throws IOException
    {
       appendable.append('$');
+      if (expr.getQuantifier() != null)
+      {
+         doRender(expr.getQuantifier(), appendable);
+      }
    }
 
    protected void doRender(RENode.Char expr, Appendable appendable) throws IOException
    {
-      appendable.append(expr.getLiteralValue());
+      Literal.escapeTo(expr.getValue(), appendable);
       if (expr.getQuantifier() != null)
       {
-         appendable.append(expr.getQuantifier().toString());
+         doRender(expr.getQuantifier(), appendable);
       }
    }
 
@@ -167,7 +180,7 @@ public class RegExpRenderer
       appendable.append(expr.getType().getClose());
       if (expr.getQuantifier() != null)
       {
-         appendable.append(expr.getQuantifier().toString());
+         doRender(expr.getQuantifier(), appendable);
       }
    }
 
@@ -176,7 +189,7 @@ public class RegExpRenderer
       appendable.append('.');
       if (expr.getQuantifier() != null)
       {
-         appendable.append(expr.getQuantifier().toString());
+         doRender(expr.getQuantifier(), appendable);
       }
    }
 
@@ -187,7 +200,7 @@ public class RegExpRenderer
       appendable.append("]");
       if (expr.getQuantifier() != null)
       {
-         appendable.append(expr.getQuantifier().toString());
+         doRender(expr.getQuantifier(), appendable);
       }
    }
 
@@ -267,13 +280,13 @@ public class RegExpRenderer
 
    protected void doRender(RENode.CharacterClassExpr.Range expr, Appendable appendable) throws IOException
    {
-      appendable.append(expr.getFrom());
+      doRender(expr.getFrom(), appendable);
       appendable.append('-');
-      appendable.append(expr.getTo());
+      doRender(expr.getTo(), appendable);
    }
 
    protected void doRender(RENode.CharacterClassExpr.Char expr, Appendable appendable) throws IOException
    {
-      appendable.append(expr.getValue());
+      Literal.escapeTo(expr.getValue(), appendable);
    }
 }

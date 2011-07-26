@@ -226,16 +226,12 @@ public class RegExpParser
       }
       else
       {
-         RENode.Atom a = parseCharacterLiteral();
-         if (a == null)
+         RENode.Atom atom = parseCharacterLiteral();
+         if (atom == null)
          {
-            RENode.CharacterClassExpr b = parseCharacterClass();
-            if (b != null)
-            {
-               a = new RENode.CharacterClass(b);
-            }
+            atom = parseCharacterClass();
          }
-         return a;
+         return atom;
       }
    }
 
@@ -251,7 +247,20 @@ public class RegExpParser
       }
    }
 
-   public RENode.CharacterClassExpr parseCharacterClass() throws SyntaxException
+   public RENode.CharacterClass parseCharacterClass() throws SyntaxException
+   {
+      RENode.CharacterClassExpr cce = _parseCharacterClass();
+      if (cce != null)
+      {
+         return new RENode.CharacterClass(cce);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   private RENode.CharacterClassExpr _parseCharacterClass() throws SyntaxException
    {
       if (lexer.next(Kind.CC_OPEN))
       {
@@ -310,7 +319,7 @@ public class RegExpParser
 
    public RENode.CharacterClassExpr parseCharacterClassTerm() throws SyntaxException
    {
-      RENode.CharacterClassExpr expr = parseCharacterClass();
+      RENode.CharacterClassExpr expr = _parseCharacterClass();
       if (expr == null)
       {
          RENode.CharacterClassExpr.Char c = parseCharacterClassLiteral();
@@ -321,7 +330,7 @@ public class RegExpParser
                RENode.CharacterClassExpr.Char to = parseCharacterClassLiteral();
                if (to != null)
                {
-                  expr = new RENode.CharacterClassExpr.Range(c.getValue(), to.getValue());
+                  expr = new RENode.CharacterClassExpr.Range(c, to);
                }
                else
                {

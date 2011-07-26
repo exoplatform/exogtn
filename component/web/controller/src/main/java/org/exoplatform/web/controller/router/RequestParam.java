@@ -77,7 +77,7 @@ class RequestParam
                default:
                   if (level == 0)
                   {
-                     matchValueBuilder.litteral(c);
+                     matchValueBuilder.literal(c);
                   }
                   else
                   {

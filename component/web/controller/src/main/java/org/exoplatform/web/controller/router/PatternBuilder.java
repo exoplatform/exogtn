@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.regexp.RE;
+import org.exoplatform.web.controller.regexp.Literal;
 
 import java.util.regex.Pattern;
 
@@ -65,24 +65,32 @@ class PatternBuilder
       }
       if (from < to)
       {
-         RE.appendLiteral(buffer, s, from, to);
+         for (int i = from;i < to;i++)
+         {
+            char c = s.charAt(i);
+            if (Literal.isEscaped(c))
+            {
+               buffer.append('\\');
+            }
+            buffer.append(c);
+         }
       }
       return this;
    }
 
-   public PatternBuilder litteral(String s, int from)
+   public PatternBuilder literal(String s, int from)
    {
       return litteral(s, from, s.length());
    }
 
-   public PatternBuilder litteral(String s)
+   public PatternBuilder literal(String s)
    {
       return litteral(s, 0, s.length());
    }
 
-   public PatternBuilder litteral(char c)
+   public PatternBuilder literal(char c)
    {
-      return litteral(Character.toString(c));
+      return literal(Character.toString(c));
    }
 
    public Pattern build()

@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.regexp;
 
+import java.io.IOException;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -180,35 +182,50 @@ public class Quantifier
       return false;
    }
 
+
    @Override
    public String toString()
+   {
+      try
+      {
+         StringBuilder sb = new StringBuilder();
+         toString(sb);
+         return sb.toString();
+      }
+      catch (IOException e)
+      {
+         throw new AssertionError(e);
+      }
+   }
+
+   public void toString(Appendable appendable) throws IOException
    {
       if (range.min == 0)
       {
          if (range.max == null)
          {
-            return "*" + mode.value;
+            appendable.append('*').append(mode.value);
          }
          else if (range.max == 1)
          {
-            return "?" + mode.value;
+            appendable.append('?').append(mode.value);
          }
       }
       else if (range.min == 1 && range.max == null)
       {
-         return "+" + mode.value;
+         appendable.append('+').append(mode.value);
       }
-      if (range.max == null)
+      else if (range.max == null)
       {
-         return "{" + range.min + ",}" + mode.value;
+         appendable.append('{').append(Integer.toString(range.min)).append(",").append('}').append(mode.value);
       }
       else if (range.min == range.max)
       {
-         return "{" + range.min + "}" + mode.value;
+         appendable.append('{').append(Integer.toString(range.min)).append('}').append(mode.value);
       }
       else
       {
-         return "{" + range.min + "," + range.max + "}" + mode.value;
+         appendable.append('{').append(Integer.toString(range.min)).append(",").append(range.max.toString()).append('}').append(mode.value);
       }
    }
 }

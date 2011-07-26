@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.controller.regexp;
 
-import java.util.EnumMap;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -313,54 +311,6 @@ public abstract class RENode
       public void setValue(char value)
       {
          this.value = value;
-      }
-
-      /**
-       * Return the char value as a string literal in a regexp. Note that the implementation does not tries
-       * to optimize the value with respect to the AST context, (for instance (?) would be fine as (?) but it
-       * will rewritten as (\?).
-       *
-       * @return the literal value
-       */
-      public String getLiteralValue()
-      {
-         switch (value)
-         {
-            case '|':
-               return "\\|";
-            case '&':
-               return "\\&";
-            case '$':
-               return "\\$";
-            case '^':
-               return "\\^";
-            case '-':
-               return "\\-";
-            case '.':
-               return "\\.";
-            case '?':
-               return "\\?";
-            case '+':
-               return "\\+";
-            case '*':
-               return "\\*";
-            case '[':
-               return "\\[";
-            case ']':
-               return "\\]";
-            case '(':
-               return "\\(";
-            case ')':
-               return "\\)";
-            case '{':
-               return "\\{";
-            case '}':
-               return "\\}";
-            case '\\':
-               return "\\\\";
-            default:
-               return Character.toString(value);
-         }
       }
 
       @Override
@@ -670,14 +620,14 @@ public abstract class RENode
       {
 
          /** From inclusive. */
-         private char from;
+         private RENode.CharacterClassExpr.Char from;
 
          /** To inclusive. */
-         private char to;
+         private RENode.CharacterClassExpr.Char to;
 
-         public Range(char from, char to)
+         public Range(RENode.CharacterClassExpr.Char from, RENode.CharacterClassExpr.Char to)
          {
-            if (from > to)
+            if (from.value > to.value)
             {
                throw new IllegalArgumentException("From cannot be greater or equals than to");
             }
@@ -687,57 +637,57 @@ public abstract class RENode
 
          public CharacterClassExpr remove(char c) throws IllegalArgumentException
          {
-            if (from == to)
+            if (from.value == to.value)
             {
-               if (from == c)
+               if (from.value == c)
                {
                   throw new UnsupportedOperationException();
                }
             }
-            else if (from +1 == to)
+            else if (from.value +1 == to.value)
             {
-               if (from == c)
+               if (from.value == c)
                {
-                  Char repl = new Char(to);
+                  Char repl = new Char(to.value);
                   replaceBy(repl);
                   return repl;
                }
                else
                {
-                  Char repl = new Char(from);
+                  Char repl = new Char(from.value);
                   replaceBy(repl);
                   return repl;
                }
             }
             else
             {
-               if (from == c)
+               if (from.value == c)
                {
-                  from++;
+                  from.value++;
                }
-               else if (to == c)
+               else if (to.value == c)
                {
-                  to--;
+                  to.value--;
                }
-               else if (from < c && c < to)
+               else if (from.value < c && c < to.value)
                {
                   CharacterClassExpr left;
-                  if (from + 1 == c)
+                  if (from.value + 1 == c)
                   {
-                     left = new Char(from);
+                     left = new Char(from.value);
                   }
                   else
                   {
-                     left = new Range(from, (char)(c - 1));
+                     left = new Range(from, new Char((char)(c - 1)));
                   }
                   CharacterClassExpr right;
-                  if (c == to - 1)
+                  if (c == to.value - 1)
                   {
-                     right = new Char(to);
+                     right = new Char(to.value);
                   }
                   else
                   {
-                     right = new Range((char)(c + 1), to);
+                     right = new Range(new Char((char)(c + 1)), to);
                   }
                   Or repl = new Or(left, right);
                   replaceBy(repl);
@@ -763,30 +713,20 @@ public abstract class RENode
             return repl;
          }
 
-         public char getFrom()
+         public RENode.CharacterClassExpr.Char getFrom()
          {
             return from;
          }
 
-         public void setFrom(char from)
-         {
-            this.from = from;
-         }
-
-         public char getTo()
+         public RENode.CharacterClassExpr.Char getTo()
          {
             return to;
-         }
-
-         public void setTo(char to)
-         {
-            this.to = to;
          }
 
          @Override
          public String toString()
          {
-            return "[" + from + "-" + to + "]";
+            return "[" + from.value + "-" + to.value + "]";
          }
       }
    }
