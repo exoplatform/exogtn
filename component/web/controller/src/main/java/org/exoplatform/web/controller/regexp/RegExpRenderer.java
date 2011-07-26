@@ -70,11 +70,19 @@ public class RegExpRenderer
 
    protected void doRender(RENode.Disjunction disjunction, Appendable appendable) throws IOException, NullPointerException
    {
-      doRender(disjunction.getAlternative(), appendable);
+      RENode.Alternative alternative = disjunction.getAlternative();
       RENode.Disjunction next = disjunction.getNext();
-      if (next != null)
+      if (alternative != null)
       {
-         appendable.append('|');
+         doRender(alternative, appendable);
+         if (next != null)
+         {
+            appendable.append('|');
+            doRender(next, appendable);
+         }
+      }
+      else if (next != null)
+      {
          doRender(next, appendable);
       }
    }
@@ -107,15 +115,45 @@ public class RegExpRenderer
       {
          doRender((RENode.CharacterClass)expr, appendable);
       }
+      else if (expr instanceof RENode.Assertion)
+      {
+         doRender((RENode.Assertion)expr, appendable);
+      }
       else
       {
-         throw new AssertionError();
+         throw new AssertionError("Was not expecting node " + expr);
       }
+   }
+
+   protected void doRender(RENode.Assertion assertion, Appendable appendable) throws IOException
+   {
+      if (assertion instanceof RENode.Assertion.Begin)
+      {
+         doRender((RENode.Assertion.Begin)assertion, appendable);
+      }
+      else if (assertion instanceof RENode.Assertion.End)
+      {
+         doRender((RENode.Assertion.End)assertion, appendable);
+      }
+      else
+      {
+         throw new AssertionError("Was not expecting node " + assertion);
+      }
+   }
+
+   protected void doRender(RENode.Assertion.Begin expr, Appendable appendable) throws IOException
+   {
+      appendable.append('^');
+   }
+
+   protected void doRender(RENode.Assertion.End expr, Appendable appendable) throws IOException
+   {
+      appendable.append('$');
    }
 
    protected void doRender(RENode.Char expr, Appendable appendable) throws IOException
    {
-      appendable.append(expr.getValue());
+      appendable.append(expr.getLiteralValue());
       if (expr.getQuantifier() != null)
       {
          appendable.append(expr.getQuantifier().toString());

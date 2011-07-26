@@ -51,7 +51,7 @@ public abstract class RENode
    {
 
       /** . */
-      private final NonNullableRef<Alternative> alternative;
+      private final NullableRef<Alternative> alternative;
 
       /** . */
       private final NullableRef<Disjunction> next;
@@ -63,7 +63,7 @@ public abstract class RENode
 
       public Disjunction(Alternative alternative, Disjunction next)
       {
-         this.alternative = new NonNullableRef<Alternative>(this, Alternative.class, alternative);
+         this.alternative = new NullableRef<Alternative>(this, Alternative.class, alternative);
          this.next = new NullableRef<Disjunction>(this, Disjunction.class, next);
       }
 
@@ -92,11 +92,25 @@ public abstract class RENode
       {
          if (next.isNotNull())
          {
-            return alternative.get() + "|" + next.get();
+            if (alternative.isNotNull())
+            {
+               return alternative.get() + "|" + next.get();
+            }
+            else
+            {
+               return next.get().toString();
+            }
          }
          else
          {
-            return alternative.get().toString();
+            if (alternative.isNotNull())
+            {
+               return alternative.get().toString();
+            }
+            else
+            {
+               return "";
+            }
          }
       }
    }
@@ -249,7 +263,7 @@ public abstract class RENode
 
       public Group(Disjunction disjunction, GroupType type)
       {
-         this.disjunction = new NonNullableRef<Disjunction>(this, Disjunction.class, disjunction);
+         this.disjunction = new NullableRef<Disjunction>(this, Disjunction.class, disjunction);
          this.type = type;
       }
 
@@ -299,6 +313,54 @@ public abstract class RENode
       public void setValue(char value)
       {
          this.value = value;
+      }
+
+      /**
+       * Return the char value as a string literal in a regexp. Note that the implementation does not tries
+       * to optimize the value with respect to the AST context, (for instance (?) would be fine as (?) but it
+       * will rewritten as (\?).
+       *
+       * @return the literal value
+       */
+      public String getLiteralValue()
+      {
+         switch (value)
+         {
+            case '|':
+               return "\\|";
+            case '&':
+               return "\\&";
+            case '$':
+               return "\\$";
+            case '^':
+               return "\\^";
+            case '-':
+               return "\\-";
+            case '.':
+               return "\\.";
+            case '?':
+               return "\\?";
+            case '+':
+               return "\\+";
+            case '*':
+               return "\\*";
+            case '[':
+               return "\\[";
+            case ']':
+               return "\\]";
+            case '(':
+               return "\\(";
+            case ')':
+               return "\\)";
+            case '{':
+               return "\\{";
+            case '}':
+               return "\\}";
+            case '\\':
+               return "\\\\";
+            default:
+               return Character.toString(value);
+         }
       }
 
       @Override
@@ -615,7 +677,7 @@ public abstract class RENode
 
          public Range(char from, char to)
          {
-            if (from >= to)
+            if (from > to)
             {
                throw new IllegalArgumentException("From cannot be greater or equals than to");
             }

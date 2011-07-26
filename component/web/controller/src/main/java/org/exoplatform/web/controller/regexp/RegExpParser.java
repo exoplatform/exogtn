@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -26,292 +26,251 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RegExpParser extends Parser
+public class RegExpParser
 {
 
    /** . */
-   private static final Pattern pattern = Pattern.compile("^([0-9]+)" + "(?:" + "(,)([0-9]+)?" + ")?$");
+   private final Lexer lexer;
 
-   /** . */
-   private int index;
-
-   public RegExpParser(CharSequence s)
+   public RegExpParser(CharSequence seq)
    {
-      super(s);
-
-      //
-      this.index = 0;
+      this.lexer = new Lexer(seq);
    }
 
-   public RegExpParser(CharSequence s, int from, int to)
+   public RegExpParser(Lexer lexer)
    {
-      super(s, from, to);
-
-      //
-      this.index = from;
+      this.lexer = lexer;
    }
 
    public void reset()
    {
-      this.index = 0;
+      lexer.reset();
    }
 
    public int getIndex()
    {
-      return index;
+      return lexer.getIndex();
    }
 
-   /**
-    * disjunction -> alternative | alternative '|' disjunction
-    *
-    * @return the disjunction
-    * @throws SyntaxException any syntax exception
-    */
+   public RENode parse() throws SyntaxException
+   {
+      return parseDisjunction();
+   }
+
+   public boolean isDone()
+   {
+      return lexer.isDone();
+   }
+
    public RENode.Disjunction parseDisjunction() throws SyntaxException
    {
-      int pipe = indexOf('|', from);
-      if (pipe == -1)
+      RENode.Alternative alternative = parseAlternative();
+      if (alternative != null)
       {
-         return new RENode.Disjunction(parseAlternative());
-      }
-      else
-      {
-         RegExpParser left = new RegExpParser(s, from, pipe);
-         RENode.Alternative alternative = left.parseAlternative();
-         RegExpParser right = new RegExpParser(s, pipe + 1, to);
-         RENode.Disjunction next = right.parseDisjunction();
-         index = to;
-         return new RENode.Disjunction(alternative, next);
-      }
-   }
-
-   /**
-    * alternative -> expression | expression '|' alternative
-    *
-    * @return the alternative
-    * @throws SyntaxException any syntax exception
-    */
-   public RENode.Alternative parseAlternative() throws SyntaxException
-   {
-      if (index < to)
-      {
-         RENode.Expr exp = parseExpression();
-         if (index < to)
+         if (lexer.next(Kind.OR))
          {
-            RENode.Alternative next = parseAlternative();
-            return new RENode.Alternative(exp, next);
+            RENode.Disjunction next = parseDisjunction();
+            return new RENode.Disjunction(alternative, next);
          }
          else
          {
-            return new RENode.Alternative(exp);
+            return new RENode.Disjunction(alternative);
          }
       }
       else
       {
-         throw new SyntaxException();
+         if (lexer.next(Kind.OR))
+         {
+            RENode.Disjunction next = parseDisjunction();
+            return new RENode.Disjunction(null, next);
+         }
+         else
+         {
+            return null;
+         }
       }
    }
 
-   /**
-    * expression        -> assertion | group | character | expression quantifier
-    * group             -> '(' disjunction ')' | '(' '?' ':' disjunction ')'
-    * assertion         -> '^' | '$'
-    * character         -> '.' | escaped | character_class | literal
-    * escaped           -> '\' any char
-    * quantifier        -> quantifier_prefix | quantifier_prefix ?
-    * quantifier_prefix -> '*' | '+' | '?' | '{' count '}' | '{' count ',' '}' | '{' count ',' count '}'
-    *
-    * @return the expression
-    * @throws SyntaxException any syntax exception
-    */
+   public RENode.Alternative parseAlternative() throws SyntaxException
+   {
+      RENode.Expr expr = parseExpression();
+      if (expr != null)
+      {
+         RENode.Alternative next = parseAlternative();
+         return new RENode.Alternative(expr, next);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
    public RENode.Expr parseExpression() throws SyntaxException
    {
-      if (index == to)
+      RENode.Expr expr;
+      if (lexer.next(Kind.BEGIN))
       {
-         throw new SyntaxException();
+         expr = new RENode.Assertion.Begin();
       }
-      RENode.Expr exp;
-      char c = s.charAt(index);
-      switch (c)
+      else if (lexer.next(Kind.END))
       {
-         case '^':
-            exp = new RENode.Expr.Assertion.Begin();
-            index++;
-            break;
-         case '$':
-            exp = new RENode.Expr.Assertion.End();
-            index++;
-            break;
-         case '(':
-            int endGroup = findClosing(index, to, '(', ')');
-            if (endGroup == -1)
-            {
-               throw new SyntaxException();
-            }
+         expr = new RENode.Assertion.End();
+      }
+      else if (lexer.next(Kind.GROUP_OPEN))
+      {
+         GroupType groupType = GroupType.forPrefix(lexer.getToken());
+         RENode.Disjunction group = parseDisjunction();
+         if (lexer.next(Kind.GROUP_CLOSE))
+         {
+            expr = new RENode.Group(group, groupType);
+         }
+         else
+         {
+            throw new SyntaxException("Group not closed ");
+         }
+      }
+      else
+      {
+         expr = parseCharacter();
+      }
+      if (expr != null)
+      {
+         Quantifier quantifier = parseQuantifier();
+         if (quantifier != null)
+         {
+            expr.setQuantifier(quantifier);
+         }
+      }
+      return expr;
+   }
 
-            // Do we have a special construct ?
-            int startGroup = index + 1;
-            GroupType type = GroupType.CAPTURING_GROUP;
-            if (startGroup < endGroup)
-            {
-               if (s.charAt(startGroup) == '?')
-               {
-                  if (startGroup + 1 < endGroup)
-                  {
-                     switch (s.charAt(startGroup + 1))
-                     {
-                        case ':':
-                           startGroup += 2;
-                           type = GroupType.NON_CAPTURING_GROUP;
-                           break;
-                        case '=':
-                           startGroup += 2;
-                           type = GroupType.POSITIVE_LOOKAHEAD;
-                           break;
-                        case '!':
-                           startGroup += 2;
-                           type = GroupType.NEGATIVE_LOOKAHEAD;
-                           break;
-                        case '<':
-                           if (startGroup + 2 < endGroup)
-                           {
-                              switch (s.charAt(startGroup + 2))
-                              {
-                                 case '=':
-                                    startGroup += 3;
-                                    type = GroupType.POSITIVE_LOOKBEHIND;
-                                    break;
-                                 case '!':
-                                    startGroup += 3;
-                                    type = GroupType.NEGATIVE_LOOKBEHIND;
-                                    break;
-                                 default:
-                                    throw createSyntaxException("Syntax not supported", index + 1, index + 4);
-                              }
-                           }
-                           else
-                           {
-                              throw createSyntaxException("Syntax not supported", index + 1, index + 3);
-                           }
-                           break;
-                        default:
-                           throw createSyntaxException("Syntax not supported", index + 1, index + 3);
-                     }
-                  }
-                  else
-                  {
-                     throw createSyntaxException("Group containing a single question mark are not allowed", index, index + 2);
-                  }
-               }
-            }
+   private static final Pattern QUANTIFIER_PATTERN = Pattern.compile(
+         "^" +
+            "(\\?|\\+|\\*)|\\{([0-9]+)(?:(,)([0-9]*))?\\}" +
+         "$");
 
-            //
-            RENode.Disjunction grouped = new RegExpParser(s, startGroup, endGroup).parseDisjunction();
-            exp = new RENode.Group(grouped, type);
-            index = endGroup + 1;
-            break;
-         case '*':
-         case '+':
-         case '?':
-         case '{':
-         case '|':
-            throw createSyntaxException("Was not expecting the char " + c, index, index + 1);
-
-         case '[':
-            int closingBracket = findClosing(index, to, '[', ']');
-            if (closingBracket == -1)
+   public Quantifier parseQuantifier() throws SyntaxException
+   {
+      if (lexer.next(Kind.QUANTIFIER))
+      {
+         String quantifierToken = lexer.getToken();
+         Matcher matcher = QUANTIFIER_PATTERN.matcher(quantifierToken);
+         if (!matcher.matches())
+         {
+            throw new AssertionError("The quantifier token " + quantifierToken + " is not valid");
+         }
+         Quantifier.Range range;
+         if (matcher.group(1) != null)
+         {
+            switch (quantifierToken.charAt(0))
             {
-               throw new SyntaxException();
+               case '*':
+                  range = Quantifier.Range.zeroOrMore();
+                  break;
+               case '+':
+                  range = Quantifier.Range.oneOrMore();
+                  break;
+               case '?':
+                  range = Quantifier.Range.onceOrNotAtAll();
+                  break;
+               default:
+                  throw new AssertionError();
             }
-            exp = new RENode.CharacterClass(parseCharacterClass(index, closingBracket + 1));
-            index = closingBracket + 1;
-            break;
-         case '\\':
-            if (index +1 < to)
+         }
+         else
+         {
+            int min = Integer.parseInt(matcher.group(2));
+            Integer max;
+            if (matcher.group(3) != null)
             {
-               index++;
-               char escaped = s.charAt(index);
-               if (!RE.isMeta(escaped))
-               {
-                  throw new SyntaxException();
-               }
-               exp = new RENode.Char(escaped);
-               index++;
-               break;
+               max = matcher.group(4).isEmpty() ? null : Integer.parseInt(matcher.group(4));
             }
             else
             {
-               throw new SyntaxException();
+               max = min;
             }
-         case '.':
-            exp = new RENode.Any();
-            index++;
-            break;
-         default:
-            exp = new RENode.Char(c);
-            index++;
-            break;
-            //
+            range = new Quantifier.Range(min, max);
+         }
+         Quantifier.Mode mode;
+         if (lexer.next(Kind.QUANTIFIER_MODE))
+         {
+            switch (lexer.getToken().charAt(0))
+            {
+               case '?':
+                  mode = Quantifier.Mode.RELUCTANT;
+                  break;
+               case '+':
+                  mode = Quantifier.Mode.POSSESSIVE;
+                  break;
+               default:
+                  throw new AssertionError();
+            }
+         }
+         else
+         {
+            mode = Quantifier.Mode.GREEDY;
+         }
+         return new Quantifier(mode, range);
       }
-
-      //
-      exp.setQuantifier(parseQuantifier());
-
-      //
-      return exp;
+      else
+      {
+         return null;
+      }
    }
 
-   Quantifier parseQuantifier() throws SyntaxException
+   public RENode.Atom parseCharacter() throws SyntaxException
    {
-      if (index < to)
+      if (lexer.next(Kind.ANY))
       {
-         char c = s.charAt(index);
-         switch (c)
+         return new RENode.Any();
+      }
+      else
+      {
+         RENode.Atom a = parseCharacterLiteral();
+         if (a == null)
          {
-            case '*':
-               index++;
-               return Quantifier.zeroOrMore(parseQuantifierMode());
-            case '+':
-               index++;
-               return Quantifier.oneOrMore(parseQuantifierMode());
-            case '?':
-               index++;
-               return Quantifier.onceOrNotAtAll(parseQuantifierMode());
-            case '{':
-               index++;
-               int closingBrace = indexOf(index, '}', to);
-               if (closingBrace == -1)
-               {
-                  throw new SyntaxException();
-               }
-               SubCharSequence sub = new SubCharSequence(s, index, closingBrace);
-               index = closingBrace + 1;
-               Matcher matcher = pattern.matcher(sub);
-               if (!matcher.matches())
-               {
-                  throw new SyntaxException();
-               }
-               if (matcher.group(2) == null)
-               {
-                  return Quantifier.exactly(
-                     parseQuantifierMode(),
-                     Integer.parseInt(matcher.group(1)));
-               }
-               else if (matcher.group(3) == null)
-               {
-                  return Quantifier.atLeast(
-                     parseQuantifierMode(),
-                     Integer.parseInt(matcher.group(1)));
-               }
-               else
-               {
-                  return Quantifier.between(
-                     parseQuantifierMode(),
-                     Integer.parseInt(matcher.group(1)),
-                     Integer.parseInt(matcher.group(3)));
-               }
-            default:
-               return null;
+            RENode.CharacterClassExpr b = parseCharacterClass();
+            if (b != null)
+            {
+               a = new RENode.CharacterClass(b);
+            }
+         }
+         return a;
+      }
+   }
+
+   public RENode.Char parseCharacterLiteral() throws SyntaxException
+   {
+      if (lexer.next(Kind.LITERAL))
+      {
+         return new RENode.Char(lexer.getToken().charAt(0));
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public RENode.CharacterClassExpr parseCharacterClass() throws SyntaxException
+   {
+      if (lexer.next(Kind.CC_OPEN))
+      {
+         boolean negated = lexer.getToken().length()  > 1;
+         RENode.CharacterClassExpr expr = parseCharacterClassExpression();
+         if (expr != null)
+         {
+            if (lexer.next(Kind.CC_CLOSE))
+            {
+               return negated ? new RENode.CharacterClassExpr.Not(expr) : expr;
+            }
+            else
+            {
+               throw new SyntaxException("");
+            }
+         }
+         else
+         {
+            throw new SyntaxException("");
          }
       }
       else
@@ -320,104 +279,88 @@ public class RegExpParser extends Parser
       }
    }
 
-   private Quantifier.Mode parseQuantifierMode()
+   public RENode.CharacterClassExpr parseCharacterClassExpression() throws SyntaxException
    {
-      if (index < to)
+      RENode.CharacterClassExpr left = parseCharacterClassTerm();
+      if (left != null)
       {
-         switch (s.charAt(index))
+         boolean and = lexer.next(Kind.CC_AND);
+         RENode.CharacterClassExpr right = parseCharacterClassExpression();
+         if (right != null)
          {
-            case '?':
-               index++;
-               return Quantifier.Mode.RELUCTANT;
-            case '+':
-               index++;
-               return Quantifier.Mode.POSSESSIVE;
-         }
-      }
-      return Quantifier.Mode.GREEDY;
-   }
-
-   /**
-    * character_class -> '[' bracket_list ']' | '[' '^' bracket_list ']'
-    * bracket_list    -> bracket_term | bracket_term bracket_list | bracket_term '&' '&' bracket_list
-    * bracket_term    -> character_class | single_term | range_term
-    *
-    * @param begin the begin
-    * @param end the end
-    * @return a character class expression
-    * @throws SyntaxException any syntax exception
-    */
-   private RENode.CharacterClassExpr parseCharacterClass(int begin, int end) throws SyntaxException
-   {
-      if (begin == end)
-      {
-         throw new SyntaxException();
-      }
-
-      //
-      if (begin < end)
-      {
-         RENode.CharacterClassExpr next;
-         if (s.charAt(begin) == '[')
-         {
-            int closing = findClosing(begin, end, '[', ']');
-            if (closing == -1)
+            if (and)
             {
-               throw new SyntaxException("Was expecting a closing brack");
+               return new RENode.CharacterClassExpr.And(left, right);
             }
-
-            //
-            boolean matching = true;
-            int nestedStart = begin + 1;
-            int nestedEnd = closing;
-            if (s.charAt(nestedStart) == '^' && nestedStart + 1 < nestedEnd)
+            else
             {
-               nestedStart++;
-               matching = false;
+               return new RENode.CharacterClassExpr.Or(left, right);
             }
-
-            //
-            RENode.CharacterClassExpr nested = parseCharacterClass(nestedStart, nestedEnd);
-            next = matching ? nested : new RENode.CharacterClassExpr.Not(nested);
-            begin = closing + 1;
          }
          else
          {
-            char c = s.charAt(begin);
-            begin++;
-            if (begin + 1 < end && s.charAt(begin) == '-')
-            {
-               next = new RENode.CharacterClassExpr.Range(c, s.charAt(begin + 1));
-               begin += 2;
-            }
-            else
-            {
-               next = new RENode.CharacterClassExpr.Char(c);
-            }
+            return left;
          }
-
-         //
-         if (begin < end)
-         {
-            char n = s.charAt(begin);
-            if (n == '&' && begin + 1 < end && s.charAt(begin + 1) == '&')
-            {
-               RENode.CharacterClassExpr next2 = parseCharacterClass(begin + 2, end);
-               next = new RENode.CharacterClassExpr.And(next, next2);
-            }
-            else
-            {
-               RENode.CharacterClassExpr next2 = parseCharacterClass(begin, end);
-               next = new RENode.CharacterClassExpr.Or(next, next2);
-            }
-         }
-
-         //
-         return next;
       }
       else
       {
-         throw new UnsupportedOperationException("not yet implemented");
+         return null;
+      }
+   }
+
+   public RENode.CharacterClassExpr parseCharacterClassTerm() throws SyntaxException
+   {
+      RENode.CharacterClassExpr expr = parseCharacterClass();
+      if (expr == null)
+      {
+         RENode.CharacterClassExpr.Char c = parseCharacterClassLiteral();
+         if (c != null)
+         {
+            if (lexer.next(Kind.HYPHEN))
+            {
+               RENode.CharacterClassExpr.Char to = parseCharacterClassLiteral();
+               if (to != null)
+               {
+                  expr = new RENode.CharacterClassExpr.Range(c.getValue(), to.getValue());
+               }
+               else
+               {
+                  throw new SyntaxException();
+               }
+            }
+            else
+            {
+               expr = c;
+            }
+         }
+         else if (lexer.next(Kind.ANY))
+         {
+            // NOT SURE THIS IS CORRECT
+            expr = new RENode.CharacterClassExpr.Char('.');
+         }
+         else if (lexer.next(Kind.BEGIN))
+         {
+            // NOT SURE THIS IS CORRECT
+            expr = new RENode.CharacterClassExpr.Char('^');
+         }
+         else if (lexer.next(Kind.END))
+         {
+            // NOT SURE THIS IS CORRECT
+            expr = new RENode.CharacterClassExpr.Char('$');
+         }
+      }
+      return expr;
+   }
+
+   public RENode.CharacterClassExpr.Char parseCharacterClassLiteral() throws SyntaxException
+   {
+      if (lexer.next(Kind.LITERAL))
+      {
+         return new RENode.CharacterClassExpr.Char(lexer.getToken().charAt(0));
+      }
+      else
+      {
+         return null;
       }
    }
 }

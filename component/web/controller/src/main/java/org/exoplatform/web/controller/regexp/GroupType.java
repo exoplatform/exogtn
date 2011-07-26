@@ -39,6 +39,26 @@ public enum GroupType
    NEGATIVE_LOOKBEHIND("(?<!", ")");
 
    /** . */
+   private static final GroupType[] ALL = values();
+
+   public static GroupType forPrefix(String s)
+   {
+      if (s == null)
+      {
+         throw new NullPointerException("No null prefix accepted");
+      }
+      // No need for a fast lookup, iteration on array will do well
+      for (GroupType type : ALL)
+      {
+         if (type.open.equals(s))
+         {
+            return type;
+         }
+      }
+      return null;
+   }
+
+   /** . */
    private final String open;
 
    /** . */

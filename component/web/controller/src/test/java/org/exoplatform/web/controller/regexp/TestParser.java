@@ -46,10 +46,6 @@ public class TestParser extends BaseGateInTest
       {
          this.parser = new RegExpParser(s);
       }
-      private ParserTester(CharSequence s, int from, int to)
-      {
-         this.parser = new RegExpParser(s, from, to);
-      }
       ParserTester assertParseCharacterClass(String expectedValue)
       {
          try
@@ -68,10 +64,17 @@ public class TestParser extends BaseGateInTest
       {
          try
          {
-            int expectedIndex = parser.getTo();
             RENode.Disjunction disjunction = parser.parseDisjunction();
-            assertEquals(expectedValue, disjunction.toString());
-            assertEquals(expectedIndex, parser.getIndex());
+            assertTrue(parser.isDone());
+            if (expectedValue.length() == 0)
+            {
+               assertNull(disjunction);
+            }
+            else
+            {
+               assertNotNull(disjunction);
+               assertEquals(expectedValue, disjunction.toString());
+            }
             return this;
          }
          catch (SyntaxException e)
@@ -109,21 +112,18 @@ public class TestParser extends BaseGateInTest
       }
       ParserTester assertNotParseExpression()
       {
-         int index = parser.getIndex();
          try
          {
-            parser.parseExpression();
-            fail();
+            RENode.Expr expr = parser.parseExpression();
+            assertNull(expr);
          }
          catch (SyntaxException e)
          {
-            assertEquals(index, parser.getIndex());
          }
          return this;
       }
-      ParserTester assertParseQuantifier(int expectedIndex, Quantifier expectedQuantifier)
+      ParserTester assertParseQuantifier(Quantifier expectedQuantifier)
       {
-         int index = parser.getIndex();
          Quantifier quantifier;
          try
          {
@@ -136,30 +136,26 @@ public class TestParser extends BaseGateInTest
          if (expectedQuantifier != null)
          {
             assertEquals(expectedQuantifier, quantifier);
-            assertEquals(expectedIndex, parser.getIndex());
          }
          else
          {
             assertNull(quantifier);
-            assertEquals(expectedIndex, parser.getIndex());
          }
-         return this;
-      }
-      ParserTester assertIndex(int expectedIndex)
-      {
-         assertEquals(expectedIndex, parser.getIndex());
          return this;
       }
    }
 
    public void testExtendedRegexp()
    {
+      new ParserTester("").assertParseDisjunction("");
+      new ParserTester(".").assertParseDisjunction("<./>");
       new ParserTester("^").assertParseDisjunction("<^/>");
       new ParserTester("^$").assertParseDisjunction("<^/><$/>");
       new ParserTester("a").assertParseDisjunction("<c>a</c>");
       new ParserTester("a|b").assertParseDisjunction("<c>a</c>|<c>b</c>");
       new ParserTester("a|b|c").assertParseDisjunction("<c>a</c>|<c>b</c>|<c>c</c>");
       new ParserTester("a+|b*").assertParseDisjunction("<+><c>a</c></+>|<*><c>b</c></*>");
+      new ParserTester("\\.").assertParseDisjunction("<c>.</c>");
    }
    
    public void testExpression()
@@ -191,7 +187,7 @@ public class TestParser extends BaseGateInTest
       new ParserTester("(?!a)").assertParseExpression("<(?!><c>a</c></(?!>", 5);
       new ParserTester("(?<=a)").assertParseExpression("<(?<=><c>a</c></(?<=>", 6);
       new ParserTester("(?<!a)").assertParseExpression("<(?<!><c>a</c></(?<!>", 6);
-      new ParserTester("(?)").assertNotParseExpression();
+      new ParserTester("(?)").assertParseExpression("<(><c>?</c></(>", 3);
       new ParserTester("(?_)").assertNotParseExpression();
       new ParserTester("(?<_)").assertNotParseExpression();
    }
@@ -202,23 +198,23 @@ public class TestParser extends BaseGateInTest
 
    public void testQuantifier()
    {
-      new ParserTester("*").assertParseQuantifier(1, Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
-      new ParserTester("+").assertParseQuantifier(1, Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
-      new ParserTester("?").assertParseQuantifier(1, Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
-      new ParserTester("*a").assertParseQuantifier(1, Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
-      new ParserTester("+a").assertParseQuantifier(1, Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
-      new ParserTester("?a").assertParseQuantifier(1, Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
-      new ParserTester("*?").assertParseQuantifier(2, Quantifier.zeroOrMore(Quantifier.Mode.RELUCTANT));
-      new ParserTester("+?").assertParseQuantifier(2, Quantifier.oneOrMore(Quantifier.Mode.RELUCTANT));
-      new ParserTester("??").assertParseQuantifier(2, Quantifier.onceOrNotAtAll(Quantifier.Mode.RELUCTANT));
-      new ParserTester("*+").assertParseQuantifier(2, Quantifier.zeroOrMore(Quantifier.Mode.POSSESSIVE));
-      new ParserTester("++").assertParseQuantifier(2, Quantifier.oneOrMore(Quantifier.Mode.POSSESSIVE));
-      new ParserTester("?+").assertParseQuantifier(2, Quantifier.onceOrNotAtAll(Quantifier.Mode.POSSESSIVE));
-      new ParserTester("a").assertParseQuantifier(0, null);
-      new ParserTester("").assertParseQuantifier(0, null);
-      new ParserTester("{2}").assertParseQuantifier(3, Quantifier.exactly(Quantifier.Mode.GREEDY, 2));
-      new ParserTester("{2,}").assertParseQuantifier(4, Quantifier.atLeast(Quantifier.Mode.GREEDY, 2));
-      new ParserTester("{2,4}").assertParseQuantifier(5, Quantifier.between(Quantifier.Mode.GREEDY, 2, 4));
+      new ParserTester("*").assertParseQuantifier(Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("+").assertParseQuantifier(Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("?").assertParseQuantifier(Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
+      new ParserTester("*a").assertParseQuantifier(Quantifier.zeroOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("+a").assertParseQuantifier(Quantifier.oneOrMore(Quantifier.Mode.GREEDY));
+      new ParserTester("?a").assertParseQuantifier(Quantifier.onceOrNotAtAll(Quantifier.Mode.GREEDY));
+      new ParserTester("*?").assertParseQuantifier(Quantifier.zeroOrMore(Quantifier.Mode.RELUCTANT));
+      new ParserTester("+?").assertParseQuantifier(Quantifier.oneOrMore(Quantifier.Mode.RELUCTANT));
+      new ParserTester("??").assertParseQuantifier(Quantifier.onceOrNotAtAll(Quantifier.Mode.RELUCTANT));
+      new ParserTester("*+").assertParseQuantifier(Quantifier.zeroOrMore(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("++").assertParseQuantifier(Quantifier.oneOrMore(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("?+").assertParseQuantifier(Quantifier.onceOrNotAtAll(Quantifier.Mode.POSSESSIVE));
+      new ParserTester("a").assertParseQuantifier(null);
+      new ParserTester("").assertParseQuantifier(null);
+      new ParserTester("{2}").assertParseQuantifier(Quantifier.exactly(Quantifier.Mode.GREEDY, 2));
+      new ParserTester("{2,}").assertParseQuantifier(Quantifier.atLeast(Quantifier.Mode.GREEDY, 2));
+      new ParserTester("{2,4}").assertParseQuantifier(Quantifier.between(Quantifier.Mode.GREEDY, 2, 4));
    }
 
    public void testParseBracketExpression()

@@ -40,20 +40,99 @@ public class Quantifier
       }
    }
 
+   public static class Range
+   {
+
+      /** . */
+      private final int min;
+
+      /** . */
+      private final Integer max;
+
+      public Range(int min, Integer max)
+      {
+         this.min = min;
+         this.max = max;
+      }
+
+      @Override
+      public boolean equals(Object o)
+      {
+         if (o == this)
+         {
+            return true;
+         }
+         else if (o instanceof Range)
+         {
+            Range that = (Range)o;
+            return min == that.min && (max == null ? that.max == null : max.equals(that.max));
+         }
+         return false;
+      }
+
+      public static Range onceOrNotAtAll()
+      {
+         return new Range(0, 1);
+      }
+
+      public static Range zeroOrMore()
+      {
+         return new Range(0, null);
+      }
+
+      public static Range oneOrMore()
+      {
+         return new Range(1, null);
+      }
+
+      public static Range exactly(int value)
+      {
+         return new Range(value, value);
+      }
+
+      public static Range atLeast(int value)
+      {
+         return new Range(value, null);
+      }
+
+      public static Range between(int min, int max)
+      {
+         return new Range(min, max);
+      }
+   }
+
    /** . */
    private final Mode mode;
 
    /** . */
-   private final int min;
+   private final Range range;
 
-   /** . */
-   private final Integer max;
-
-   protected Quantifier(Mode mode, int min, Integer max)
+   public Quantifier(Mode mode, int min, Integer max)
    {
+      if (mode == null)
+      {
+         throw new NullPointerException("No null mode accepted");
+      }
+
+      //
       this.mode = mode;
-      this.min = min;
-      this.max = max;
+      this.range = new Range(min, max);
+   }
+
+   public Quantifier(Mode mode, Range range)
+   {
+      if (mode == null)
+      {
+         throw new NullPointerException("No null mode accepted");
+      }
+      if (range == null)
+      {
+         throw new NullPointerException("No null range accepted");
+      }
+
+      //
+      this.mode = mode;
+      this.range = range;
    }
 
    public static Quantifier onceOrNotAtAll(Mode mode)
@@ -96,7 +175,7 @@ public class Quantifier
       else if (o instanceof Quantifier)
       {
          Quantifier that = (Quantifier)o;
-         return mode == that.mode && min == that.min && (max == null ? that.max == null : max.equals(that.max));
+         return mode == that.mode && range.equals(that.range);
       }
       return false;
    }
@@ -104,32 +183,32 @@ public class Quantifier
    @Override
    public String toString()
    {
-      if (min == 0)
+      if (range.min == 0)
       {
-         if (max == null)
+         if (range.max == null)
          {
             return "*" + mode.value;
          }
-         else if (max == 1)
+         else if (range.max == 1)
          {
             return "?" + mode.value;
          }
       }
-      else if (min == 1 && max == null)
+      else if (range.min == 1 && range.max == null)
       {
          return "+" + mode.value;
       }
-      if (max == null)
+      if (range.max == null)
       {
-         return "{" + min + ",}" + mode.value;
+         return "{" + range.min + ",}" + mode.value;
       }
-      else if (min == max)
+      else if (range.min == range.max)
       {
-         return "{" + min + "}" + mode.value;
+         return "{" + range.min + "}" + mode.value;
       }
       else
       {
-         return "{" + min + "," + max + "}" + mode.value;
+         return "{" + range.min + "," + range.max + "}" + mode.value;
       }
    }
 }

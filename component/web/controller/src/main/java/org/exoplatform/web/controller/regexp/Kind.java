@@ -21,21 +21,34 @@ package org.exoplatform.web.controller.regexp;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public abstract class Parser
+enum Kind
 {
 
-   public Parser()
-   {
-   }
+   BEGIN,
 
-/*
-   protected final SyntaxException createSyntaxException(String msg, int start, int end)
-   {
-      StringBuilder sb = new StringBuilder(msg).append(" : ");
-      sb.append(s, 0, start).append(" ->").append(s, start, end).append("<- ").append(s, end, s.length());
-      return new SyntaxException(sb.toString());
-   }
-*/
+   END,
+
+   ANY,
+
+   HYPHEN,
+
+   OR,
+
+   LITERAL,
+
+   GROUP_OPEN,
+
+   GROUP_CLOSE,
+
+   QUANTIFIER,
+
+   QUANTIFIER_MODE,
+
+   CC_OPEN,
+
+   CC_CLOSE,
+
+   CC_AND
+
 }
