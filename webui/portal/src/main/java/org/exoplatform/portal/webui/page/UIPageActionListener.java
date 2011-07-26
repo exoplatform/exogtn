@@ -72,14 +72,18 @@ public class UIPageActionListener
 
          UserNode targetNode = null;
          SiteKey siteKey = pageNodeEvent.getSiteKey();
-         if (siteKey == null)
+         if (siteKey != null)
          {
-            targetNode = userPortal.resolvePath(builder.build(), nodePath);
+            UserNavigation navigation = userPortal.getNavigation(siteKey);
+            if (navigation != null)
+            {
+               targetNode = userPortal.resolvePath(navigation, builder.build(), nodePath);
+            }
          }
-         else 
+
+         if (targetNode == null)
          {
-            targetNode = userPortal.resolvePath(userPortal.getNavigation(siteKey), builder.build(), nodePath);
-            targetNode = targetNode == null ? userPortal.getDefaultPath(builder.build()) : targetNode;
+            targetNode = userPortal.getDefaultPath(builder.build());
          }
          if (targetNode == null)
          {
