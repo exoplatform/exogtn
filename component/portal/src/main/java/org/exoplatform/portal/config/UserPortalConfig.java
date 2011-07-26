@@ -36,9 +36,6 @@ public class UserPortalConfig
    final String accessUser;
 
    /** . */
-   private UserPortalImpl userPortal;
-
-   /** . */
    private UserPortalContext userPortalContext;
 
    public UserPortalConfig()
@@ -61,14 +58,7 @@ public class UserPortalConfig
 
    public UserPortal getUserPortal()
    {
-         userPortal = new UserPortalImpl(
-            service,
-            portalName,
-            portal,
-            accessUser,
-            userPortalContext
-         );
-      return userPortal;
+      return new UserPortalImpl(service, portalName, portal, accessUser, userPortalContext);
    }
 
    public PortalConfig getPortalConfig()

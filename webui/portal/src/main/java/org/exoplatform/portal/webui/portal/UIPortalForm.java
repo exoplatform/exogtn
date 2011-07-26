@@ -323,8 +323,11 @@ public class UIPortalForm extends UIFormTabPane
                PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
                dataService.save(portalConfig);
                UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
-               prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
-               uiPortalApp.reloadSkinPortal(prContext);
+               if (prContext.getPortalOwner() == uiForm.getPortalOwner())
+               {
+                  uiPortalApp.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
+                  uiPortalApp.reloadSkinPortal(prContext);
+               }
                
                // We should use IPC to update some portlets in the future instead of
                UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);

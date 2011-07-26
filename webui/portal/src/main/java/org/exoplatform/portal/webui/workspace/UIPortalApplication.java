@@ -798,8 +798,7 @@ public class UIPortalApplication extends UIApplication
       }
       else
       {
-         UserPortalConfig userPortalConfig = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
-         String userPortalConfigSkin = userPortalConfig .getPortalConfig().getSkin();
+         String userPortalConfigSkin = userPortalConfig_.getPortalConfig().getSkin();
          if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
             skin_ = userPortalConfigSkin;
       }
