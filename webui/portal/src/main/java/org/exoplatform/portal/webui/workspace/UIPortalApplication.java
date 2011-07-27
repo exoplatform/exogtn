@@ -19,11 +19,15 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
@@ -140,36 +144,14 @@ public class UIPortalApplication extends UIApplication
       log = ExoLogger.getLogger("portal:UIPortalApplication");
       PortalRequestContext context = PortalRequestContext.getCurrentInstance();
 
-      userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
-      if (userPortalConfig_ == null)
-         throw new Exception("Can't load user portal config");
-      
-      // Get portal skin
-      this.reloadSkinPortal(context);
+//      userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
+//      if (userPortalConfig_ == null)
+//         throw new Exception("Can't load user portal config");
       
       // dang.tung - set portal language by user preference -> browser ->
       // default
       // ------------------------------------------------------------------------------
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
-
-      OrganizationService orgService = getApplicationComponent(OrganizationService.class);
-
-      String user = context.getRemoteUser();
-      String userSkin = null;
-
-      if (user != null)
-      {
-         UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
-         if (userProfile != null)
-         {
-            userSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
-         }
-         else
-         {
-            if (log.isWarnEnabled())
-               log.warn("Could not load user profile for " + user + ". Using default portal locale.");
-         }
-      }
 
       Locale locale = context.getLocale();
       if (locale == null)
@@ -194,29 +176,7 @@ public class UIPortalApplication extends UIApplication
 
       this.all_UIPortals = new HashMap<SiteKey, UIPortal>(5);
       
-      addWorkingWorkspace();
-      
-      setOwner(context.getPortalOwner());
-
-      // use the skin from the user profile if available, otherwise use from the portal config
-      if (userSkin != null && userSkin.trim().length() > 0)
-      {
-         skin_ = userSkin;
-      }
-      else
-      {
-         String siteSkin = userPortalConfig_.getPortalConfig().getSkin();
-         if (siteSkin != null && siteSkin.trim().length() > 0)
-         {
-            skin_ = siteSkin;
-         }
-         else
-         // in the case the skin is not specified by site config, the one in default portal will be returned instead
-         {
-            DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-         }
-
-      }
+      initWorkspaces();
    }
 
    /**
@@ -507,7 +467,7 @@ public class UIPortalApplication extends UIApplication
     * 
     * @throws Exception
     */
-   private void addWorkingWorkspace() throws Exception
+   private void initWorkspaces() throws Exception
    {
       UIWorkingWorkspace uiWorkingWorkspace =
          addChild(UIWorkingWorkspace.class, UIPortalApplication.UI_WORKING_WS_ID, null);
@@ -515,11 +475,6 @@ public class UIPortalApplication extends UIApplication
 
       DataStorage dataStorage = getApplicationComponent(DataStorage.class);
       Container container = dataStorage.getSharedLayout();
-      UIPortal uiPortal = createUIComponent(UIPortal.class, null, null);
-      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_.getPortalConfig());
-
-      this.putCachedUIPortal(uiPortal);
-      setCurrentSite(uiPortal);
 
       uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
       if (container != null)
@@ -528,20 +483,57 @@ public class UIPortalApplication extends UIApplication
             createUIComponent(org.exoplatform.portal.webui.container.UIContainer.class, null, null);
          uiContainer.setStorageId(container.getStorageId());
          PortalDataMapper.toUIContainer(uiContainer, container);
-         UISiteBody uiSiteBody = uiContainer.findFirstComponentOfType(UISiteBody.class);
-         uiSiteBody.setUIComponent(this.currentSite);
          uiContainer.setRendered(true);
          uiViewWS.setUIComponent(uiContainer);
-      }
-      else
-      {
-         uiViewWS.setUIComponent(this.currentSite);
       }
       addChild(UIMaskWorkspace.class, UIPortalApplication.UI_MASK_WS_ID, null);
    }
 
+   @Override
+   public void processDecode(WebuiRequestContext context) throws Exception
+   {
+      PortalRequestContext pcontext = (PortalRequestContext)context;
+      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+      UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+      String remoteUser = pcontext.getRemoteUser();
+      String siteType = pcontext.getSiteType();
+      String lastPortalSite = (userPortalConfig_ != null) ? userPortalConfig_.getPortalName() : null;
+      
+      String siteName = null;
+      if (PortalConfig.PORTAL_TYPE.equals(siteType))
+      {
+         if (!Safe.equals(siteName, pcontext.getSiteName()))
+         {
+            siteName = pcontext.getSiteName();
+         }
+      }
+      else
+      {
+         if (lastPortalSite == null)
+         {
+            siteName = service_.getDefaultPortal();
+         }
+      }
+      
+      if (siteName != null)
+      {
+         UserPortalConfig userPortalConfig = service_.getUserPortalConfig(siteName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
+         if (userPortalConfig == null)
+         {
+            pcontext.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+         }
+         else
+         {
+            setUserPortalConfig(userPortalConfig);
+            reloadPortalProperties();
+         }
+      }
+      super.processDecode(context);
+   }
+   
    /**
-    * The processDecode() method is doing 3 actions: <br/>
+    * The processAction() method is doing 3 actions: <br/>
     * 1) if this is a non ajax request and the last is an ajax one,
     * then we check if the requested nodePath is equal to last non ajax nodePath and
     * is not equal to the last nodePath, the server performs a 302 redirect on the last nodePath.<br/>
@@ -552,7 +544,7 @@ public class UIPortalApplication extends UIApplication
     * is sent to the associated EventListener; a call to super is then done.
     */
    @Override
-   public void processDecode(WebuiRequestContext context) throws Exception
+   public void processAction(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
       String requestURI = pcontext.getRequestURI();
@@ -597,13 +589,13 @@ public class UIPortalApplication extends UIApplication
       {
          lastNonAjaxRequestUri = requestURI;
       }
-
-      super.processDecode(pcontext);
       
       if (currentSite == null || currentSite.getSelectedUserNode() == null)
       {
          pcontext.sendError(HttpServletResponse.SC_NOT_FOUND);
       }
+
+      super.processAction(pcontext);
    }
 
    /**
@@ -765,14 +757,13 @@ public class UIPortalApplication extends UIApplication
    }
 
    /**
-    * Get portal skin from {@link UserProfile} or from {@link UserPortalConfig}
+    * Reload portal properties. This is needed to be called when it is changing Portal site
     * 
-    * @param context PortalRequestContext
-    * @throws Exception 
-    * 
+    * @throws Exception
     */
-   public void reloadSkinPortal(PortalRequestContext context) throws Exception
+   public void reloadPortalProperties() throws Exception
    {
+      PortalRequestContext context = Util.getPortalRequestContext();
       String user = context.getRemoteUser();
       String portalSkin = null;
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);

@@ -60,8 +60,6 @@ public class UIPageActionListener
       public void execute(Event<UIPortalApplication> event) throws Exception
       {
          UIPortalApplication uiPortalApp = event.getSource();
-         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
-         
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
    
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
@@ -94,11 +92,17 @@ public class UIPageActionListener
          
          UserNavigation targetNav = targetNode.getNavigation();
          
-         UserNode currentNavPath = showedUIPortal.getNavPath();         
-         if(currentNavPath != null && currentNavPath.getNavigation().getKey().equals(targetNav.getKey()))
+         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
+         UserNode currentNavPath = null;
+         if (showedUIPortal != null)
          {
-            //Case 1: Both navigation type and id are not changed, but current page node is changed
-            if(!currentNavPath.getURI().equals(targetNode.getURI()))
+            currentNavPath = showedUIPortal.getNavPath();
+         }
+         
+         if (currentNavPath != null && currentNavPath.getNavigation().getKey().equals(targetNav.getKey()))
+         {
+            //Case 1: Both navigation type and id are not changed, but current page node is changed and it is not a first request.
+            if (!currentNavPath.getURI().equals(targetNode.getURI()))
             {
                showedUIPortal.setNavPath(targetNode);
             }

@@ -362,18 +362,6 @@ public class PortalDataMapper
             buildUIContainer(uiPortal, child, false);
          }
       }
-//<<<<<<< HEAD
-//      //uiPortal.setNavigation(userPortalConfig.getNavigations());
-////      uiPortal.setNavigation(userPortalConfig.getSelectedNavigation());
-//=======
-//   }
-//   
-//   static public void toUIPortal(UIPortal uiPortal, UserPortalConfig userPortalConfig) throws Exception
-//   {
-//      PortalConfig model = userPortalConfig.getPortalConfig();
-//      toUIPortal(uiPortal, model);
-//      uiPortal.setNavigation(userPortalConfig.getNavigation(model.getType(), model.getName()));
-//>>>>>>> 10fa210... - Support to specify siteType and siteName in URL
    }
 
    private static void buildUIContainer(UIContainer uiContainer, Object model, boolean dashboard) throws Exception

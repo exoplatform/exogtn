@@ -81,20 +81,6 @@ public class PortalStateManager extends StateManager
       //
       if (uiapp == null)
       {
-         if (context instanceof PortalRequestContext)
-         {
-            PortalRequestContext portalRC = (PortalRequestContext)context;
-            UserPortalConfig config = getUserPortalConfig(portalRC);
-            if (config == null)
-            {
-               HttpServletResponse response = portalRC.getResponse();
-               response.sendRedirect(portalRC.getRequest().getContextPath() + "/portal-unavailable.jsp");
-               portalRC.setResponseComplete(true);
-               return null;
-            }
-            portalRC.setAttribute(UserPortalConfig.class, config);
-         }
-         
          ConfigurationManager cmanager = app.getConfigurationManager();
          String uirootClass = cmanager.getApplication().getUIRootComponent();
          Class<? extends UIApplication> type = (Class<UIApplication>) Thread.currentThread().getContextClassLoader().loadClass(uirootClass);

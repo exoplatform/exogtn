@@ -24,7 +24,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
@@ -326,7 +325,7 @@ public class UIPortalForm extends UIFormTabPane
                if (prContext.getPortalOwner() == uiForm.getPortalOwner())
                {
                   uiPortalApp.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
-                  uiPortalApp.reloadSkinPortal(prContext);
+                  uiPortalApp.reloadPortalProperties();
                }
                
                // We should use IPC to update some portlets in the future instead of

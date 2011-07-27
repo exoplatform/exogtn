@@ -26,6 +26,7 @@ import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -211,9 +212,9 @@ public class PortalRequestContext extends WebuiRequestContext
       }
 
       requestURI_ = request_.getRequestURI();
+/*
       String decodedURI = URLDecoder.decode(requestURI_, "UTF-8");
 
-/*
       // req.getPathInfo will already have the encoding set from the server.
       // We need to use the UTF-8 value since this is how we store the portal name.
       // Reconstructing the getPathInfo from the non server decoded values.
@@ -411,7 +412,15 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getPortalOwner()
    {
-      return ((UIPortalApplication)uiApplication_).getUserPortalConfig().getPortalName();
+      UserPortalConfig userPortalConfig = ((UIPortalApplication)uiApplication_).getUserPortalConfig();
+      if (userPortalConfig != null)
+      {
+         return userPortalConfig.getPortalName();
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public String getNodePath()
