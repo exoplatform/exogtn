@@ -34,7 +34,7 @@
 		directory_title="To-do"
 		title_url="http://www.exoplatform.org"
 		description="To-do Gadget, easily manage and track your daily to-do list."
-		thumbnail="http://localhost:8080/eXoGadgets/skin/DefaultSkin/portletIcons/Todo.png"
+		thumbnail="portletIcon/Todo.png"
 		height="235">
 		<Locale messages="locale/ALL_ALL.xml" />
 		<Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
