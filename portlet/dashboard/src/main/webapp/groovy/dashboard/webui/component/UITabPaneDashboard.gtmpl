@@ -20,17 +20,17 @@
 			<%
 			int i = 0;
 			for(UserNode node : nodes){
-			   def tabLabel = node.getResolvedLabel();
+			   def tabLabel = node.getEncodedResolvedLabel();
 				if ("Tab_Default".equals(node.getName()))
 				{
 					tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + tabLabel);
-				}
+				}				
 			    String param = node.getName();
 			    if(node.getURI().equals(selectedNode.getURI())){ 
 			%>
 			<div class="UITab SelectedTab">
 				<% 
-					String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",\"" + tabLabel + "\")"; 
+					String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",this.innerHTML)"; 
 				%>
 				<span ondblclick='$ondblclick'>$tabLabel</span>		
 				<a href="<%= uicomponent.url("DeleteTab",param); %>" class="CloseIcon" title="DEL"></a>			
