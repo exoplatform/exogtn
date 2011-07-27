@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,46 +20,24 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-class RouteParam extends Param
+class Param
 {
 
-   static RouteParam create(RouteParamDescriptor descriptor)
-   {
-      if (descriptor == null)
-      {
-         throw new NullPointerException("No null descriptor accepted");
-      }
-
-      //
-      return new RouteParam(descriptor.getQualifiedName(), descriptor.getValue());
-   }
-
    /** . */
-   final String value;
+   final QualifiedName name;
 
-   RouteParam(QualifiedName name, String value)
+   Param(QualifiedName name)
    {
-      super(name);
-
-      //
-      if (value == null)
+      if (name == null)
       {
-         throw new NullPointerException("No null value accepted");
+         throw new NullPointerException("No null name accepted");
       }
 
       //
-      this.value = value;
-   }
-
-   @Override
-   public String toString()
-   {
-      return "RouteParam[name=" + name + ",value=" + value + "]";
+      this.name = name;
    }
 }

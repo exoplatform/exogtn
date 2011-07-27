@@ -22,28 +22,17 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 
+import javax.ws.rs.core.Request;
 import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class RequestParam
+class RequestParam extends Param
 {
 
-   /** . */
-   final QualifiedName name;
-
-   /** . */
-   final String matchName;
-
-   /** . */
-   final Pattern matchValue;
-
-   /** . */
-   final boolean required;
-
-   RequestParam(RequestParamDescriptor descriptor)
+   static RequestParam create(RequestParamDescriptor descriptor)
    {
       if (descriptor == null)
       {
@@ -91,25 +80,29 @@ class RequestParam
       }
 
       //
-      this.name = descriptor.getQualifiedName();
-      this.matchName = descriptor.getName();
-      this.matchValue = matchValue;
-      this.required = descriptor.isRequired();
+      return new RequestParam(descriptor.getQualifiedName(), descriptor.getName(), matchValue, descriptor.isRequired());
    }
+
+   /** . */
+   final QualifiedName name;
+
+   /** . */
+   final String matchName;
+
+   /** . */
+   final Pattern matchValue;
+
+   /** . */
+   final boolean required;
 
    RequestParam(QualifiedName name, String matchName, Pattern matchValue, boolean required)
    {
-      if (name == null)
-      {
-         throw new NullPointerException("No null name accepted");
-      }
+      super(name);
+
+      //
       if (matchName == null)
       {
          throw new NullPointerException("No null match name accepted");
-      }
-      if (matchValue == null)
-      {
-         throw new NullPointerException("No null match value accepted");
       }
 
       //
@@ -119,28 +112,8 @@ class RequestParam
       this.required = required;
    }
 
-   public QualifiedName getName()
-   {
-      return name;
-   }
-
-   public String getMatchName()
-   {
-      return matchName;
-   }
-
-   public Pattern getMatchValue()
-   {
-      return matchValue;
-   }
-
-   public boolean matchValue(String value)
+   boolean matchValue(String value)
    {
       return matchValue == null || matchValue.matcher(value).matches();
-   }
-
-   public boolean isRequired()
-   {
-      return required;
    }
 }

@@ -25,15 +25,10 @@ import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
-import org.exoplatform.web.controller.regexp.RegExpRenderer;
-import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RegExpParser;
-import org.exoplatform.web.controller.regexp.SyntaxException;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The implementation of the routing algorithm.
@@ -53,7 +47,6 @@ import java.util.regex.Pattern;
  */
 class Route
 {
-
 
    void writeTo(XMLStreamWriter writer) throws XMLStreamException
    {
@@ -80,7 +73,7 @@ class Route
             writer.writeStartElement("path-param");
             writer.writeAttribute("qname", param.name.getValue());
             writer.writeAttribute("encodingMode", param.encodingMode.toString());
-            writer.writeAttribute("pattern", param.pattern.toString());
+            writer.writeAttribute("pattern", param.renderingPattern.toString());
             writer.writeEndElement();
          }
       }
@@ -217,10 +210,10 @@ class Route
       {
          for (RequestParam requestParamDef : requestParams.values())
          {
-            String s = blah.get(requestParamDef.getName());
+            String s = blah.get(requestParamDef.name);
             if (s != null)
             {
-               renderContext.appendQueryParameter(requestParamDef.getMatchName(), s);
+               renderContext.appendQueryParameter(requestParamDef.matchName, s);
             }
          }
       }
@@ -342,7 +335,7 @@ class Route
             {
                abc.remove(requestParamDef.name);
             }
-            else if (!requestParamDef.isRequired())
+            else if (!requestParamDef.required)
             {
                // Do nothing
             }
@@ -367,10 +360,10 @@ class Route
                switch (param.encodingMode)
                {
                   case FORM:
-                     matched = param.pattern.matcher(s).matches();
+                     matched = param.renderingPattern.matcher(s).matches();
                      break;
                   case PRESERVE_PATH:
-                     matched = param.pattern.matcher(s).matches();
+                     matched = param.renderingPattern.matcher(s).matches();
                      break;
                   default:
                      throw new AssertionError();
@@ -435,7 +428,7 @@ class Route
          for (RequestParam requestParamDef : this.requestParams.values())
          {
             String value = null;
-            String[] values = requestParams.get(requestParamDef.getMatchName());
+            String[] values = requestParams.get(requestParamDef.matchName);
             if (values != null && values.length > 0 && values[0] != null)
             {
                value = values[0];
@@ -446,9 +439,9 @@ class Route
                {
                   routeRequestParams = new HashMap<QualifiedName, String>();
                }
-               routeRequestParams.put(requestParamDef.getName(), value);
+               routeRequestParams.put(requestParamDef.name, value);
             }
-            else if (requestParamDef.isRequired())
+            else if (requestParamDef.required)
             {
                return null;
             }
@@ -682,14 +675,14 @@ class Route
       Map<QualifiedName, RouteParam> routeParams = new HashMap<QualifiedName, RouteParam>();
       for (RouteParamDescriptor routeParamDesc : descriptor.getRouteParams())
       {
-         routeParams.put(routeParamDesc.getQualifiedName(), new RouteParam(routeParamDesc.getQualifiedName(), routeParamDesc.getValue()));
+         routeParams.put(routeParamDesc.getQualifiedName(), RouteParam.create(routeParamDesc));
       }
 
       //
       Map<String, RequestParam> requestParams = new HashMap<String, RequestParam>();
       for (RequestParamDescriptor requestParamDesc : descriptor.getRequestParams())
       {
-         requestParams.put(requestParamDesc.getName(), new RequestParam(requestParamDesc));
+         requestParams.put(requestParamDesc.getName(), RequestParam.create(requestParamDesc));
       }
 
       //
@@ -785,69 +778,23 @@ class Route
 
                // Now get path param metadata
                PathParamDescriptor parameterDescriptor = pathParamDescriptors.get(parameterQName);
-               String regex = null;
-               EncodingMode encodingMode = EncodingMode.FORM;
-               if (parameterDescriptor != null)
-               {
-                  regex = parameterDescriptor.getPattern();
-                  encodingMode = parameterDescriptor.getEncodingMode();
-               }
 
                //
-               if (regex == null)
+               PathParam param;
+               if (parameterDescriptor != null)
                {
-                  if (encodingMode == EncodingMode.FORM)
-                  {
-                     regex = ".+";
-                  }
-                  else
-                  {
-                     regex = "[^/]+";
-                  }
+                  param = PathParam.create(parameterDescriptor);
                }
-
-               // Now work on the regex
-               StringBuilder renderingRegex = new StringBuilder();
-               StringBuilder routingRegex = new StringBuilder();
-               try
+               else
                {
-                  RegExpParser parser = new RegExpParser(regex);
-
-                  //
-                  RENode.Disjunction routingDisjunction = parser.parseDisjunction();
-                  if (encodingMode == EncodingMode.FORM)
-                  {
-                     RouteEscaper escaper = new RouteEscaper('/', '_');
-                     escaper.visit(routingDisjunction);
-                  }
-                  new RegExpRenderer().render(routingDisjunction, routingRegex);
-
-                  //
-                  parser.reset();
-                  RENode.Disjunction renderingDisjunction = parser.parseDisjunction();
-                  new RegExpRenderer().render(renderingDisjunction, renderingRegex);
-               }
-               catch (IOException e)
-               {
-                  throw new RuntimeException(e);
-               }
-               catch (SyntaxException e)
-               {
-                  throw new RuntimeException(e);
-               }
-               catch (MalformedRegExpException e)
-               {
-                  throw new RuntimeException(e);
+                  param = PathParam.create(parameterQName);
                }
 
                // Append routing regex to the route regex
-               builder.expr("(").expr(routingRegex).expr(")");
+               builder.expr("(").expr(param.routingRegex).expr(")");
 
                // Add the path param with the rendering regex
-               parameterPatterns.add(new PathParam(
-                  parameterQName,
-                  encodingMode,
-                  Pattern.compile("^" + renderingRegex + "$")));
+               parameterPatterns.add(param);
                previous = end.get(i) + 1;
             }
 
