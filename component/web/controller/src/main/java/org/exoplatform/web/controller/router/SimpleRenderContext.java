@@ -41,6 +41,9 @@ public class SimpleRenderContext implements RenderContext
    /** . */
    private Map<String, String> queryParams;
 
+   /** . */
+   private boolean questionMarkDone;
+
    public SimpleRenderContext()
    {
       this(null);
@@ -50,6 +53,7 @@ public class SimpleRenderContext implements RenderContext
    {
       this.sb = sb;
       this.queryParams = EMPTY;
+      this.questionMarkDone = false;
    }
 
    public String getPath()
@@ -72,6 +76,7 @@ public class SimpleRenderContext implements RenderContext
       {
          queryParams.clear();
       }
+      this.questionMarkDone = false;
    }
 
    public void appendPath(char c, boolean escape)
@@ -81,7 +86,10 @@ public class SimpleRenderContext implements RenderContext
 
    public void appendPath(String s, boolean escape)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      if (questionMarkDone)
+      {
+         throw new IllegalStateException("Query separator already written");
+      }
       if (sb == null)
       {
          sb = new StringBuilder();

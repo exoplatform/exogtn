@@ -187,35 +187,28 @@ class Route
    final void render(Map<QualifiedName, String> blah, RenderContext renderContext)
    {
       Route r = find(blah);
+
+      // We found a route we need to render it now
       if (r != null)
       {
-         r._render(blah, renderContext, false);
+         // Append path first
+         r.renderPath(blah, renderContext, false);
+
+         // Append query parameters after
+         r.renderQueryString(blah, renderContext);
       }
    }
 
-   private boolean _render(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
+   private boolean renderPath(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
    {
       boolean endWithSlash;
       if (parent != null)
       {
-         endWithSlash = parent._render(blah, renderContext, true);
+         endWithSlash = parent.renderPath(blah, renderContext, true);
       }
       else
       {
          endWithSlash = false;
-      }
-
-      //
-      if (requestParams.size() > 0)
-      {
-         for (RequestParam requestParamDef : requestParams.values())
-         {
-            String s = blah.get(requestParamDef.name);
-            if (s != null)
-            {
-               renderContext.appendQueryParameter(requestParamDef.matchName, s);
-            }
-         }
       }
 
       //
@@ -295,6 +288,27 @@ class Route
 
       //
       return endWithSlash;
+   }
+
+   private void renderQueryString(Map<QualifiedName, String> blah, RenderContext renderContext)
+   {
+      if (parent != null)
+      {
+         parent.renderQueryString(blah, renderContext);
+      }
+
+      //
+      if (requestParams.size() > 0)
+      {
+         for (RequestParam requestParamDef : requestParams.values())
+         {
+            String s = blah.get(requestParamDef.name);
+            if (s != null)
+            {
+               renderContext.appendQueryParameter(requestParamDef.matchName, s);
+            }
+         }
+      }
    }
 
    final Route find(Map<QualifiedName, String> blah)

@@ -24,7 +24,6 @@ import org.exoplatform.commons.utils.CharsetCharEncoder;
 import org.exoplatform.web.controller.router.RenderContext;
 import org.exoplatform.web.url.MimeType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
@@ -59,16 +58,15 @@ class PortalURLRenderContext implements RenderContext
    private StringBuilder buffer;
 
    /** . */
-   private List<String[]> queryParams;
-
-   /** . */
    private MimeType mimeType;
 
+   /** . */
+   private boolean questionMarkDone;
 
    PortalURLRenderContext(StringBuilder buffer)
    {
       this.buffer = buffer;
-      this.queryParams = EMPTY;
+      this.questionMarkDone = false;
    }
 
    public MimeType getMimeType()
@@ -79,21 +77,6 @@ class PortalURLRenderContext implements RenderContext
    public void setMimeType(MimeType mimeType)
    {
       this.mimeType = mimeType;
-   }
-
-   public void appendSlash()
-   {
-      append('/', false);
-   }
-
-   public void appendPath(char c)
-   {
-      append(c, true);
-   }
-
-   public void appendPath(String s)
-   {
-      append(s, true);
    }
 
    public void appendQueryParameter(String parameterName, String paramaterValue)
@@ -108,26 +91,6 @@ class PortalURLRenderContext implements RenderContext
       }
 
       //
-      if (queryParams == EMPTY)
-      {
-         queryParams = new ArrayList<String[]>();
-      }
-
-      //
-      queryParams.add(new String[]{parameterName,paramaterValue});
-   }
-
-   void reset()
-   {
-      buffer.setLength(0);
-      queryParams.clear();
-   }
-
-   /**
-    * Finish to write to the buffer.
-    */
-   void flush()
-   {
       MimeType mt = mimeType;
       if (mt == null)
       {
@@ -136,27 +99,34 @@ class PortalURLRenderContext implements RenderContext
       String amp = AMP_MAP.get(mt);
 
       //
-      boolean questionMarkDone = false;
-      if (queryParams.size() > 0)
-      {
-         for (String[] pair : queryParams)
-         {
-            append(questionMarkDone ? amp : "?", false);
-            append(pair[0], true);
-            append('=', false);
-            append(pair[1], true);
-            questionMarkDone = true;
-         }
-      }
+      append(questionMarkDone ? amp : "?", false);
+      append(parameterName, true);
+      append('=', false);
+      append(paramaterValue, true);
+      questionMarkDone = true;
+   }
+
+   void reset()
+   {
+      buffer.setLength(0);
+      questionMarkDone = false;
    }
 
    public void appendPath(char c, boolean escape)
    {
+      if (questionMarkDone)
+      {
+         throw new IllegalStateException("Query separator already written");
+      }
       append(c, escape);
    }
 
    public void appendPath(String s, boolean escape)
    {
+      if (questionMarkDone)
+      {
+         throw new IllegalStateException("Query separator already written");
+      }
       append(s, escape);
    }
 

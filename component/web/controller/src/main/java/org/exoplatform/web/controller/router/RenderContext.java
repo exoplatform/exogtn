@@ -34,16 +34,18 @@ public interface RenderContext
     *
     * @param c the char to append
     * @param escape when the char should be escaped
+    * @throws IllegalStateException if a query parameter was already appended
     */
-   void appendPath(char c, boolean escape);
+   void appendPath(char c, boolean escape) throws IllegalStateException;
 
    /**
     * Append a string to the path.
     *
     * @param s the string to append.
     * @param escape when the char should be escaped
+    * @throws IllegalStateException if a query parameter was already appended
     */
-   void appendPath(String s, boolean escape);
+   void appendPath(String s, boolean escape) throws IllegalStateException;
 
    /**
     * Append a query parameter to the parameter set. Note that the query parameters are ordered

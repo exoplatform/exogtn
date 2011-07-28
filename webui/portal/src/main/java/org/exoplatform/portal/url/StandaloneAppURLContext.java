@@ -130,12 +130,10 @@ public class StandaloneAppURLContext implements URLContext
       if (ajax)
       {
          renderContext.appendQueryParameter("ajaxRequest", "true");
-         renderContext.flush();
          renderContext.append("')", false);
       }
       else
       {
-         renderContext.flush();
          if (hasConfirm)
          {
             renderContext.append("\'", false);
