@@ -37,7 +37,7 @@
 			<%// start render action%>
 			
 			<div class="UIAction"> 
-				<a href="javascript:void(0);" onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'CreatePortal', true))" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
 			</div>
 			
 		</div>
