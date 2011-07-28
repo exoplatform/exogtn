@@ -24,6 +24,8 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
 
+import java.util.Map;
+
 /**
  * Created by The eXo Platform SAS
  * Apr 3, 2007  
@@ -57,7 +59,11 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
 
    private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      url.getQueryParameters().clear();
+      Map<String,String[]> queryParameters = url.getQueryParameters();
+      if (queryParameters != null)
+      {
+         queryParameters.clear();
+      }
 
       //
       url.setAjax(ajax);

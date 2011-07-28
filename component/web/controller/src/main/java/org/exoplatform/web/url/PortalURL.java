@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An URL for a resource managed by the controller.
+ * An URL for a resource managed by the portal.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -105,7 +105,7 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
     *
     * @return the confirm message
     */
-   public String getConfirm()
+   public final String getConfirm()
    {
       return confirm;
    }
@@ -158,7 +158,7 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
     *
     * @return the current mime type
     */
-   public MimeType getMimeType()
+   public final MimeType getMimeType()
    {
       return mimeType;
    }
@@ -184,20 +184,28 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
       this.locale = locale;
    }
 
+   /**
+    * Returns the query parameters. Null can be returned.
+    *
+    * @return the query parameters
+    */
    public Map<String, String[]> getQueryParameters()
    {
-      if (queryParams == null)
-      {
-         queryParams = new ParameterMap(ACCES_MODE);
-      }
       return queryParams;
    }
 
-   public String getQueryParameterValue(String parameterName)
+   /**
+    * Returns a query parameter value or null if it does not exist.
+    *
+    * @param parameterName the parameter name
+    * @return the parameter value
+    * @throws NullPointerException if the parameter name is null
+    */
+   public String getQueryParameterValue(String parameterName) throws NullPointerException
    {
       if (parameterName == null)
       {
-         throw new NullPointerException("");
+         throw new NullPointerException("No null parameter name");
       }
       else if (queryParams == null)
       {
@@ -210,20 +218,45 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
       }
    }
 
-   public void setQueryParameterValue(String parameterName, String parameterValue)
+   /**
+    * Update the parameter value when the parameterValue argument is not null or remove it when the parameterValue
+    * argument is null.
+    *
+    * @param parameterName the parameter name
+    * @param parameterValue the parameter value
+    * @throws NullPointerException if the parameter value is null
+    */
+   public final void setQueryParameterValue(String parameterName, String parameterValue) throws NullPointerException
    {
       if (parameterName == null)
       {
          throw new NullPointerException("No null parameter name");
       }
-      if (queryParams == null)
+      if (parameterValue == null)
       {
-         queryParams = new ParameterMap(ACCES_MODE);
+         if (queryParams != null)
+         {
+            queryParams.remove(parameterName);
+         }
       }
-      queryParams.setValue(parameterName, parameterValue);
+      else
+      {
+         if (queryParams == null)
+         {
+            queryParams = new ParameterMap(ACCES_MODE);
+         }
+         queryParams.setValue(parameterName, parameterValue);
+      }
    }
 
-   public String[] getQueryParameterValues(String parameterName)
+   /**
+    * Returns a query parameter value or null if it does not exist.
+    *
+    * @param parameterName the parameter name
+    * @return the parameter value
+    * @throws NullPointerException if the parameter name is null
+    */
+   public final String[] getQueryParameterValues(String parameterName) throws NullPointerException
    {
       if (parameterName == null)
       {
@@ -232,17 +265,35 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
       return queryParams != null ? queryParams.getValues(parameterName) : null;
    }
 
-   public void setQueryParameterValues(String parameterName, String[] parameterValues)
+   /**
+    * Update the parameter value when the parameterValues argument is not null or remove it when the parameterValues
+    * argument is null.
+    *
+    * @param parameterName the parameter name
+    * @param parameterValues the parameter value
+    * @throws NullPointerException if the parameter value is null
+    */
+   public final void setQueryParameterValues(String parameterName, String[] parameterValues) throws NullPointerException
    {
       if (parameterName == null)
       {
          throw new NullPointerException("No null parameter name");
       }
-      if (queryParams == null)
+      if (parameterValues == null)
       {
-         queryParams = new ParameterMap(ACCES_MODE);
+         if (queryParams != null)
+         {
+            queryParams.remove(parameterName);
+         }
       }
-      queryParams.setValues(parameterName, parameterValues);
+      else
+      {
+         if (queryParams == null)
+         {
+            queryParams = new ParameterMap(ACCES_MODE);
+         }
+         queryParams.setValues(parameterName, parameterValues);
+      }
    }
 
    /**
@@ -250,10 +301,9 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
     *
     * @return the URL value
     */
-   public String toString()
+   public final String toString()
    {
-      // remove me later
-      PortalURL foo = this;
-      return context.render(foo);
+      PortalURL _this = this;
+      return context.render(_this);
    }
 }

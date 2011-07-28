@@ -147,11 +147,15 @@ public class PortalURLContext implements URLContext
       controllerContext.renderURL(parameters, renderContext);
 
       // Now append generic query parameters
-      for (Map.Entry<String, String[]> entry : url.getQueryParameters().entrySet())
+      Map<String, String[]> queryParameters = url.getQueryParameters();
+      if (queryParameters != null)
       {
-         for (String value : entry.getValue())
+         for (Map.Entry<String, String[]> entry : queryParameters.entrySet())
          {
-            renderContext.appendQueryParameter(entry.getKey(), value);
+            for (String value : entry.getValue())
+            {
+               renderContext.appendQueryParameter(entry.getKey(), value);
+            }
          }
       }
 

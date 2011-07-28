@@ -109,8 +109,12 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 */
       
       //Clear URL parameters
-      url.getQueryParameters().clear();
-      
+      Map<String, String[]> queryParameters = url.getQueryParameters();
+      if (queryParameters != null)
+      {
+         queryParameters.clear();
+      }
+
       String type;
       if (containerURL instanceof RenderURL)
       {
