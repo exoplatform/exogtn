@@ -48,7 +48,7 @@ public class RegExpRenderer
       return appendable;
    }
 
-   private <A extends Appendable> void doRender(RENode re, A appendable) throws IOException
+   protected void doRender(RENode re, Appendable appendable) throws IOException
    {
       if (re instanceof RENode.Disjunction)
       {
@@ -64,7 +64,7 @@ public class RegExpRenderer
       }
       else
       {
-         throw new AssertionError();
+         throw new AssertionError("Was not expecting node " + re);
       }
    }
 
