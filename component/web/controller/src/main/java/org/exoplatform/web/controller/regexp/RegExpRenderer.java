@@ -99,21 +99,13 @@ public class RegExpRenderer
 
    protected void doRender(RENode.Expr expr, Appendable appendable) throws IOException, NullPointerException
    {
-      if (expr instanceof RENode.Any)
+      if (expr instanceof RENode.Atom)
       {
-         doRender((RENode.Any) expr, appendable);
+         doRender((RENode.Atom) expr, appendable);
       }
       else if (expr instanceof RENode.Group)
       {
          doRender((RENode.Group)expr, appendable);
-      }
-      else if (expr instanceof RENode.Char)
-      {
-         doRender((RENode.Char)expr, appendable);
-      }
-      else if (expr instanceof RENode.CharacterClass)
-      {
-         doRender((RENode.CharacterClass)expr, appendable);
       }
       else if (expr instanceof RENode.Assertion)
       {
@@ -164,20 +156,40 @@ public class RegExpRenderer
       }
    }
 
-   protected void doRender(RENode.Char expr, Appendable appendable) throws IOException
+   protected void doRender(RENode.Group expr, Appendable appendable) throws IOException
    {
-      Literal.escapeTo(expr.getValue(), appendable);
+      appendable.append(expr.getType().getOpen());
+      this.doRender(expr.getDisjunction(), appendable);
+      appendable.append(expr.getType().getClose());
       if (expr.getQuantifier() != null)
       {
          doRender(expr.getQuantifier(), appendable);
       }
    }
 
-   protected void doRender(RENode.Group expr, Appendable appendable) throws IOException
+   protected void doRender(RENode.Atom atom, Appendable appendable) throws IOException
    {
-      appendable.append(expr.getType().getOpen());
-      this.doRender(expr.getDisjunction(), appendable);
-      appendable.append(expr.getType().getClose());
+      if (atom instanceof RENode.Any)
+      {
+         doRender((RENode.Any) atom, appendable);
+      }
+      else if (atom instanceof RENode.Char)
+      {
+         doRender((RENode.Char)atom, appendable);
+      }
+      else if (atom instanceof RENode.CharacterClass)
+      {
+         doRender((RENode.CharacterClass)atom, appendable);
+      }
+      else
+      {
+         throw new AssertionError("Was not expecting node " + atom);
+      }
+   }
+
+   protected void doRender(RENode.Char expr, Appendable appendable) throws IOException
+   {
+      Literal.escapeTo(expr.getValue(), appendable);
       if (expr.getQuantifier() != null)
       {
          doRender(expr.getQuantifier(), appendable);

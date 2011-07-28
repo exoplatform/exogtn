@@ -234,23 +234,7 @@ public abstract class RENode
       }
    }
 
-   public static abstract class Atom extends Expr
-   {
-      private Atom()
-      {
-      }
-   }
-
-   public static final class Any extends Atom
-   {
-      @Override
-      protected void writeTo(StringBuilder sb)
-      {
-         sb.append("<./>");
-      }
-   }
-
-   public static final class Group extends Atom
+   public static final class Group extends Expr
    {
 
       /** . */
@@ -289,6 +273,22 @@ public abstract class RENode
       protected void writeTo(StringBuilder sb)
       {
          sb.append("<").append(type.getOpen()).append('>').append(disjunction.get()).append("</").append(type.getOpen()).append(">");
+      }
+   }
+
+   public static abstract class Atom extends Expr
+   {
+      private Atom()
+      {
+      }
+   }
+
+   public static final class Any extends Atom
+   {
+      @Override
+      protected void writeTo(StringBuilder sb)
+      {
+         sb.append("<./>");
       }
    }
 
