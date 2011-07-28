@@ -29,30 +29,22 @@ public class RouteParamDescriptor extends ParamDescriptor
 {
 
    /** . */
-   private final QualifiedName qualifiedName;
-
-   /** . */
    private String value;
 
    public RouteParamDescriptor(QualifiedName qualifiedName)
    {
-      this.qualifiedName = qualifiedName;
+      super(qualifiedName);
    }
 
    public RouteParamDescriptor(String qualifiedName)
    {
-      this.qualifiedName = QualifiedName.parse(qualifiedName);
+      super(qualifiedName);
    }
 
    public RouteParamDescriptor withValue(String value)
    {
       this.value = value;
       return this;
-   }
-
-   public QualifiedName getQualifiedName()
-   {
-      return qualifiedName;
    }
 
    public String getValue()

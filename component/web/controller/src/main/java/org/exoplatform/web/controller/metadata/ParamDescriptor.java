@@ -19,10 +19,42 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public abstract class ParamDescriptor
 {
+
+   /** . */
+   private final QualifiedName qualifiedName;
+
+   protected ParamDescriptor(QualifiedName qualifiedName)
+   {
+      if (qualifiedName == null)
+      {
+         throw new NullPointerException("No null qualified name accepted");
+      }
+
+      //
+      this.qualifiedName = qualifiedName;
+   }
+
+   public ParamDescriptor(String qualifiedName)
+   {
+      if (qualifiedName == null)
+      {
+         throw new NullPointerException("No null qualified name accepted");
+      }
+
+      //
+      this.qualifiedName = QualifiedName.parse(qualifiedName);
+   }
+
+   public QualifiedName getQualifiedName()
+   {
+      return qualifiedName;
+   }
 }

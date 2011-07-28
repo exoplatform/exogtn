@@ -30,9 +30,6 @@ public class PathParamDescriptor extends ParamDescriptor
 {
 
    /** . */
-   private final QualifiedName qualifiedName;
-
-   /** . */
    private String pattern;
 
    /** . */
@@ -40,24 +37,12 @@ public class PathParamDescriptor extends ParamDescriptor
 
    public PathParamDescriptor(QualifiedName qualifiedName)
    {
-      if (qualifiedName == null)
-      {
-         throw new NullPointerException("No null name accepted");
-      }
-
-      //
-      this.qualifiedName = qualifiedName;
+      super(qualifiedName);
    }
 
    public PathParamDescriptor(String qualifiedName)
    {
-      if (qualifiedName == null)
-      {
-         throw new NullPointerException("No null name accepted");
-      }
-
-      //
-      this.qualifiedName = QualifiedName.parse(qualifiedName);
+      super(qualifiedName);
    }
 
    public PathParamDescriptor matchedBy(String pattern)
@@ -80,11 +65,6 @@ public class PathParamDescriptor extends ParamDescriptor
    public PathParamDescriptor form()
    {
       return encodedBy(EncodingMode.FORM);
-   }
-
-   public QualifiedName getQualifiedName()
-   {
-      return qualifiedName;
    }
 
    public String getPattern()

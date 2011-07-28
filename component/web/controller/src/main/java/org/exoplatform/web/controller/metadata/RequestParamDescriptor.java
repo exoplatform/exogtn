@@ -29,9 +29,6 @@ public class RequestParamDescriptor extends ParamDescriptor
 {
 
    /** . */
-   private final QualifiedName qualifiedName;
-
-   /** . */
    private String name;
 
    /** . */
@@ -42,26 +39,21 @@ public class RequestParamDescriptor extends ParamDescriptor
 
    public RequestParamDescriptor(QualifiedName qualifiedName)
    {
-      if (qualifiedName == null)
-      {
-         throw new NullPointerException("No null qualified name accepted");
-      }
+      super(qualifiedName);
 
       //
-      this.qualifiedName = qualifiedName;
       this.value = null;
       this.required = false;
    }
 
    public RequestParamDescriptor(String qualifiedName)
    {
-      if (qualifiedName == null)
-      {
-         throw new NullPointerException("No null qualified name accepted");
-      }
+      super(qualifiedName);
 
       //
-      this.qualifiedName = QualifiedName.parse(qualifiedName);
+      //
+      this.value = null;
+      this.required = false;
    }
 
    public RequestParamDescriptor named(String name)
@@ -86,11 +78,6 @@ public class RequestParamDescriptor extends ParamDescriptor
    {
       this.required = required;
       return this;
-   }
-
-   public QualifiedName getQualifiedName()
-   {
-      return qualifiedName;
    }
 
    public String getName()
