@@ -89,6 +89,10 @@ class RequestParam extends Param
       {
          throw new NullPointerException("No null match name accepted");
       }
+      if (valueMapping == null)
+      {
+         throw new NullPointerException("No null value mapping accepted");
+      }
 
       //
       this.name = name;
