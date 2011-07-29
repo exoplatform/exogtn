@@ -26,10 +26,8 @@ import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
-import org.staxnav.StaxNavigatorImpl;
+import org.staxnav.StaxNavigatorFactory;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 import java.io.Reader;
@@ -70,43 +68,21 @@ public class DescriptorBuilder
 
    public RouterDescriptor build(InputStream in) throws StaxNavException
    {
-      try
-      {
-         XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(in);
-         return build(routerReader);
-      }
-      catch (XMLStreamException e)
-      {
-         throw new StaxNavException(e);
-      }
+      return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), in));
    }
 
    public RouterDescriptor build(Reader reader) throws StaxNavException
    {
-      try
-      {
-         XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(reader);
-         return build(routerReader);
-      }
-      catch (XMLStreamException e)
-      {
-         throw new StaxNavException(e);
-      }
+      return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader));
    }
 
    public RouterDescriptor build(XMLStreamReader reader) throws StaxNavException
    {
-      StaxNavigator<Element> root;
-      try
-      {
-         root = new StaxNavigatorImpl<Element>(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader);
-      }
-      catch (XMLStreamException e)
-      {
-         throw new StaxNavException(e);
-      }
+      return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader));
+   }
 
-      //
+   public RouterDescriptor build(StaxNavigator<Element> root) throws StaxNavException
+   {
       RouterDescriptor router = router();
       if (root.child() != null)
       {
@@ -126,69 +102,65 @@ public class DescriptorBuilder
       //
       RouteDescriptor route = new RouteDescriptor(path);
 
-      if (root.child() != null)
+      //
+      for (Element elt = root.child();elt != null;elt = root.sibling())
       {
-         while (root.getName() != null)
+         StaxNavigator<Element> fork = root.fork();
+         switch (elt)
          {
-            StaxNavigator<Element> fork = root.fork(Axis.FOLLOWING_SIBLING);
-
-            //
-            switch (fork.getName())
+            case PATH_PARAM:
             {
-               case PATH_PARAM:
+               String qualifiedName = fork.getAttribute("qname");
+               String encoded = fork.getAttribute("encoding");
+               String pattern = null;
+               if (fork.child(Element.PATTERN))
                {
-                  String qualifiedName = fork.getAttribute("qname");
-                  String encoded = fork.getAttribute("encoding");
-                  String pattern = null;
-                  if (fork.child(Element.PATTERN))
-                  {
-                     pattern = fork.getContent();
-                  }
-                  EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-                  route.with(new PathParamDescriptor(qualifiedName).encodedBy(encodingMode).matchedBy(pattern));
-                  break;
+                  pattern = fork.getContent();
                }
-               case ROUTE_PARAM:
-               {
-                  String qualifiedName = fork.getAttribute("qname");
-                  String value = null;
-                  if (fork.child(Element.VALUE))
-                  {
-                     value = fork.getContent();
-                  }
-                  route.with(new RouteParamDescriptor(qualifiedName).withValue(value));
-                  break;
-               }
-               case REQUEST_PARAM:
-               {
-                  String qualifiedName = fork.getAttribute("qname");
-                  String name = fork.getAttribute("name");
-                  String required = fork.getAttribute("required");
-                  String valueMappingAtt = fork.getAttribute("value-mapping");
-                  RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName);
-                  param.setName(name);
-                  param.setRequired("true".equals(required));
-                  param.setValueMapping(parse(valueMappingAtt));
-                  if (fork.child(Element.VALUE))
-                  {
-                     param.setValue(fork.getContent());
-                     param.setValueType(ValueType.LITERAL);
-                  }
-                  if (fork.child(Element.PATTERN))
-                  {
-                     param.setValue(fork.getContent());
-                     param.setValueType(ValueType.PATTERN);
-                  }
-                  route.with(param);
-                  break;
-               }
-               case ROUTE:
-                  RouteDescriptor sub = buildRoute(fork);
-                  route.sub(sub);
-                  break;
-               default:
-                  throw new AssertionError();
+               EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
+               route.with(new PathParamDescriptor(qualifiedName).encodedBy(encodingMode).matchedBy(pattern));
+               break;
             }
+            case ROUTE_PARAM:
+            {
+               String qualifiedName = fork.getAttribute("qname");
+               String value = null;
+               if (fork.child(Element.VALUE))
+               {
+                  value = fork.getContent();
+               }
+               route.with(new RouteParamDescriptor(qualifiedName).withValue(value));
+               break;
+            }
+            case REQUEST_PARAM:
+            {
+               String qualifiedName = fork.getAttribute("qname");
+               String name = fork.getAttribute("name");
+               String required = fork.getAttribute("required");
+               String valueMappingAtt = fork.getAttribute("value-mapping");
+               RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName);
+               param.setName(name);
+               param.setRequired("true".equals(required));
+               param.setValueMapping(parse(valueMappingAtt));
+               if (fork.child(Element.VALUE))
+               {
+                  param.setValue(fork.getContent());
+                  param.setValueType(ValueType.LITERAL);
+               }
+               if (fork.child(Element.PATTERN))
+               {
+                  param.setValue(fork.getContent());
+                  param.setValueType(ValueType.PATTERN);
+               }
+               route.with(param);
+               break;
+            }
+            case ROUTE:
+               RouteDescriptor sub = buildRoute(fork);
+               route.sub(sub);
+               break;
+            default:
+               throw new AssertionError();
          }
       }
 
