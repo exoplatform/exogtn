@@ -24,10 +24,15 @@ import org.exoplatform.web.controller.router.ValueMapping;
 import org.exoplatform.web.controller.router.ValueType;
 import org.staxnav.Axis;
 import org.staxnav.Naming;
+import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
 import org.staxnav.StaxNavigatorImpl;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -63,10 +68,46 @@ public class DescriptorBuilder
       return new RouterDescriptor();
    }
 
-   public RouterDescriptor build(XMLStreamReader reader) throws Exception
+   public RouterDescriptor build(InputStream in) throws StaxNavException
    {
+      try
+      {
+         XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(in);
+         return build(routerReader);
+      }
+      catch (XMLStreamException e)
+      {
+         throw new StaxNavException(e);
+      }
+   }
+
+   public RouterDescriptor build(Reader reader) throws StaxNavException
+   {
+      try
+      {
+         XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(reader);
+         return build(routerReader);
+      }
+      catch (XMLStreamException e)
+      {
+         throw new StaxNavException(e);
+      }
+   }
+
+   public RouterDescriptor build(XMLStreamReader reader) throws StaxNavException
+   {
+      StaxNavigator<Element> root;
+      try
+      {
+         root = new StaxNavigatorImpl<Element>(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader);
+      }
+      catch (XMLStreamException e)
+      {
+         throw new StaxNavException(e);
+      }
+
+      //
       RouterDescriptor router = router();
-      StaxNavigator<Element> root = new StaxNavigatorImpl<Element>(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader);
       if (root.child() != null)
       {
          for (StaxNavigator<Element> routeNav : root.fork(Element.ROUTE))
@@ -78,7 +119,7 @@ public class DescriptorBuilder
       return router;
    }
 
-   private RouteDescriptor buildRoute(StaxNavigator<Element> root) throws Exception
+   private RouteDescriptor buildRoute(StaxNavigator<Element> root) throws StaxNavException
    {
       String path = root.getAttribute("path");
 

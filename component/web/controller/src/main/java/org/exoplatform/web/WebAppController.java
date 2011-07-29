@@ -33,18 +33,19 @@ import org.exoplatform.web.controller.router.Router;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 
 /**
  * The WebAppController is the entry point of the GateIn service.
@@ -68,7 +69,7 @@ public class WebAppController
    private HashMap<String, WebRequestHandler> handlers;
 
    /** . */
-   final Router router;
+   private final AtomicReference<Router> routerRef;
 
    /**
     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the
@@ -89,10 +90,9 @@ public class WebAppController
       }
       String routerConfigPath = routerConfig.getValue();
 
-      // Read configuration (a bit hardcoded for now)
+      // Read configuration
       URL routerURL = configurationManager.getResource(routerConfigPath);
-      XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
-      RouterDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
+      RouterDescriptor routerDesc = new DescriptorBuilder().build(routerURL.openStream());
 
       // Build router from configuration
       Router router = new Router(routerDesc);
@@ -101,7 +101,7 @@ public class WebAppController
       this.applications_ = new HashMap<String, Application>();
       this.attributes_ = new HashMap<String, Object>();
       this.handlers = new HashMap<String, WebRequestHandler>();
-      this.router = router;
+      this.routerRef = new AtomicReference<Router>(router);
    }
 
    public Object getAttribute(String name, Object value)
@@ -177,7 +177,25 @@ public class WebAppController
          handler.onInit(this, config);
       }
    }
-   
+
+   /**
+    * Reconfigure the controller.
+    *
+    * @param xml the router configuration
+    */
+   public void setConfiguration(String xml)
+   {
+      Reader r = new StringReader(xml);
+      RouterDescriptor routerDesc = new DescriptorBuilder().build(r);
+      Router router = new Router(routerDesc);
+      routerRef.set(router);
+   }
+
+   Router getRouter()
+   {
+      return routerRef.get();
+   }
+
    /**
     * <p>This is the first method - in the GateIn portal - reached by incoming HTTP request, it acts like a
     * servlet service() method. According to the servlet path used the correct handler is selected and then executed.</p>
@@ -193,7 +211,7 @@ public class WebAppController
    {
       boolean debug = log.isDebugEnabled();
       String portalPath = req.getRequestURI().substring(req.getContextPath().length());
-      Map<QualifiedName, String> parameters = router.route(portalPath, req.getParameterMap());
+      Map<QualifiedName, String> parameters = routerRef.get().route(portalPath, req.getParameterMap());
 
       //
       if (parameters != null)

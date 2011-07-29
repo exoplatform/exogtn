@@ -94,7 +94,7 @@ public class ControllerContext
       renderContext.appendPath(contextName, true);
 
       //
-      controller.router.render(parameters, renderContext);
+      controller.getRouter().render(parameters, renderContext);
    }
 
    public String renderURL(Map<QualifiedName, String> parameters)
@@ -115,7 +115,7 @@ public class ControllerContext
       renderContext.appendPath(contextName, true);
 
       //
-      controller.router.render(parameters, renderContext);
+      controller.getRouter().render(parameters, renderContext);
 
       //
       return renderContext.getPath();
