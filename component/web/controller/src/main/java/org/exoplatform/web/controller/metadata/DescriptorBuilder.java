@@ -20,12 +20,12 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.router.EncodingMode;
+import org.staxnav.Axis;
+import org.staxnav.Naming;
+import org.staxnav.StaxNavigator;
+import org.staxnav.StaxNavigatorImpl;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -34,17 +34,7 @@ import java.util.List;
 public class DescriptorBuilder
 {
 
-   /** . */
-   private static final QName routeQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route");
-
-   /** . */
-   private static final QName paramQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "route-param");
-
-   /** . */
-   private static final QName requestParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "request-param");
-
-   /** . */
-   private static final QName pathParamQN = new QName("http://www.gatein.org/xml/ns/gatein_router_1_0", "path-param");
+   // http://www.gatein.org/xml/ns/gatein_router_1_0
 
    public static PathParamDescriptor pathParam(String qualifiedName)
    {
@@ -73,79 +63,89 @@ public class DescriptorBuilder
 
    public RouterDescriptor build(XMLStreamReader reader) throws Exception
    {
-      RouterDescriptor routerDesc = router();
-
-      //
-      while (true)
+      RouterDescriptor router = router();
+      StaxNavigator<Element> root = new StaxNavigatorImpl<Element>(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader);
+      if (root.child() != null)
       {
-         int event = reader.next();
-         if (event == XMLStreamConstants.END_DOCUMENT)
+         for (StaxNavigator<Element> routeNav : root.fork(Element.ROUTE))
          {
-            reader.close();
-            break;
-         }
-         else if (event == XMLStreamConstants.START_ELEMENT)
-         {
-            if (routeQN.equals(reader.getName()))
-            {
-               build(reader, routerDesc.getRoutes());
-            }
+            RouteDescriptor route = buildRoute(routeNav);
+            router.add(route);
          }
       }
-
-      //
-      return routerDesc;
+      return router;
    }
 
-   private void build(XMLStreamReader reader, List<RouteDescriptor> descriptors) throws XMLStreamException
+   private RouteDescriptor buildRoute(StaxNavigator<Element> root) throws Exception
    {
-      String path = reader.getAttributeValue(null, "path");
-      RouteDescriptor routeDesc = route(path);
+      String path = root.getAttribute("path");
 
       //
-      while (true)
+      RouteDescriptor route = new RouteDescriptor(path);
+
+      if (root.child() != null)
       {
-         int event = reader.next();
-         if (event == XMLStreamConstants.END_ELEMENT)
+         while (root.getName() != null)
          {
-            if (routeQN.equals(reader.getName()))
+            StaxNavigator<Element> fork = root.fork(Axis.FOLLOWING_SIBLING);
+
+            //
+            switch (fork.getName())
             {
-               break;
-            }
-         }
-         else if (event == XMLStreamConstants.START_ELEMENT)
-         {
-            if (paramQN.equals(reader.getName()))
-            {
-               String qualifiedName = reader.getAttributeValue(null, "qname");
-               String value = reader.getAttributeValue(null, "value");
-               routeDesc.with(new RouteParamDescriptor(qualifiedName).withValue(value));
-            }
-            else if (requestParamQN.equals(reader.getName()))
-            {
-               String qualifiedName = reader.getAttributeValue(null, "qname");
-               String name = reader.getAttributeValue(null, "name");
-               String value = reader.getAttributeValue(null, "value");
-               String optional = reader.getAttributeValue(null, "required");
-               routeDesc.with(new RequestParamDescriptor(qualifiedName).named(name).withValue(value).required("true".equals(optional)));
-            }
-            else if (pathParamQN.equals(reader.getName()))
-            {
-               String qualifiedName = reader.getAttributeValue(null, "qname");
-               String pattern = reader.getAttributeValue(null, "pattern");
-               String encoded = reader.getAttributeValue(null, "encoding");
-               EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-               routeDesc.with(new PathParamDescriptor(qualifiedName).matchedBy(pattern).encodedBy(encodingMode));
-            }
-            else if (routeQN.equals(reader.getName()))
-            {
-               build(reader, routeDesc.getChildren());
+               case PATH_PARAM:
+               {
+                  String qualifiedName = fork.getAttribute("qname");
+                  String encoded = fork.getAttribute("encoding");
+                  String pattern = null;
+                  if (fork.child(Element.PATTERN))
+                  {
+                     pattern = fork.getContent();
+                  }
+                  EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
+                  route.with(new PathParamDescriptor(qualifiedName).encodedBy(encodingMode).matchedBy(pattern));
+                  break;
+               }
+               case ROUTE_PARAM:
+               {
+                  String qualifiedName = fork.getAttribute("qname");
+                  String value = null;
+                  if (fork.child(Element.VALUE))
+                  {
+                     value = fork.getContent();
+                  }
+                  route.with(new RouteParamDescriptor(qualifiedName).withValue(value));
+                  break;
+               }
+               case REQUEST_PARAM:
+               {
+                  String qualifiedName = fork.getAttribute("qname");
+                  String name = fork.getAttribute("name");
+                  String required = fork.getAttribute("required");
+                  RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName).named(name).required("true".equals(required));
+                  if (fork.child(Element.VALUE))
+                  {
+                     param.setValue(fork.getContent());
+                     param.setValueType(ValueType.LITERAL);
+                  }
+                  if (fork.child(Element.PATTERN))
+                  {
+                     param.setValue(fork.getContent());
+                     param.setValueType(ValueType.PATTERN);
+                  }
+                  route.with(param);
+                  break;
+               }
+               case ROUTE:
+                  RouteDescriptor sub = buildRoute(fork);
+                  route.sub(sub);
+                  break;
+               default:
+                  throw new AssertionError();
             }
          }
       }
 
       //
-      descriptors.add(routeDesc);
+      return route;
    }
-
 }

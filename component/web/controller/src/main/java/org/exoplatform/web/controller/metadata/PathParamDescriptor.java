@@ -33,16 +33,22 @@ public class PathParamDescriptor extends ParamDescriptor
    private String pattern;
 
    /** . */
-   private EncodingMode encodingMode = EncodingMode.FORM;
+   private EncodingMode encodingMode;
 
    public PathParamDescriptor(QualifiedName qualifiedName)
    {
       super(qualifiedName);
+
+      //
+      this.encodingMode = EncodingMode.FORM;
    }
 
    public PathParamDescriptor(String qualifiedName)
    {
       super(qualifiedName);
+
+      //
+      this.encodingMode = EncodingMode.FORM;
    }
 
    public PathParamDescriptor matchedBy(String pattern)
@@ -77,13 +83,13 @@ public class PathParamDescriptor extends ParamDescriptor
       this.pattern = pattern;
    }
 
-   public void setEncodingMode(EncodingMode encodingMode)
-   {
-      this.encodingMode = encodingMode;
-   }
-
    public EncodingMode getEncodingMode()
    {
       return encodingMode;
+   }
+
+   public void setEncodingMode(EncodingMode encodingMode)
+   {
+      this.encodingMode = encodingMode;
    }
 }

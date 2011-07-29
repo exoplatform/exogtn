@@ -57,6 +57,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.1.0-beta6</version.chromattic>
       <version.reflect>1.1.0-beta12</version.reflect>
+      <org.staxnav.version>0.9.3</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
 
       <!-- EXOGTN-106 : forced at packaging level -->
@@ -624,6 +625,12 @@
             <groupId>org.jboss.jbossas</groupId>
             <artifactId>jboss-as-tomcat</artifactId>
             <version>5.1.0.GA</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.staxnav</groupId>
+            <artifactId>staxnav.core</artifactId>
+            <version>${org.staxnav.version}</version>
          </dependency>
 
          <dependency>

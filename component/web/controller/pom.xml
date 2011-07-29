@@ -63,5 +63,9 @@
       <artifactId>exo.portal.component.test.core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+       <groupId>org.staxnav</groupId>
+       <artifactId>staxnav.core</artifactId>
+    </dependency>
   </dependencies>
 </project>

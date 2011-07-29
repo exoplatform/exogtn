@@ -49,13 +49,17 @@
   </xs:complexType>
 
   <xs:complexType name="routeParamType">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="value" type="xs:string"/>
+    </xs:choice>
     <xs:attribute name="qname" type="xs:string" use="required"/>
-    <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="pathParamType">
+    <xs:choice minOccurs="0" maxOccurs="1">
+      <xs:element name="pattern" type="xs:string"/>
+    </xs:choice>
     <xs:attribute name="qname" type="xs:string" use="required"/>
-    <xs:attribute name="pattern" type="xs:string" use="optional"/>
     <xs:attribute name="encoding" use="optional">
       <xs:simpleType>
         <xs:restriction base="xs:string">
@@ -67,9 +71,12 @@
   </xs:complexType>
 
   <xs:complexType name="requestParamType">
+    <xs:choice minOccurs="0" maxOccurs="1">
+      <xs:element name="value" type="xs:string"/>
+      <xs:element name="pattern" type="xs:string"/>
+    </xs:choice>
     <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="value" type="xs:string" use="optional"/>
     <xs:attribute name="required" type="xs:boolean" use="optional"/>
   </xs:complexType>
 

@@ -21,8 +21,8 @@ package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
+import org.exoplatform.web.controller.metadata.ValueType;
 
-import javax.ws.rs.core.Request;
 import java.util.regex.Pattern;
 
 /**
@@ -45,42 +45,24 @@ class RequestParam extends Param
       {
          PatternBuilder matchValueBuilder = new PatternBuilder();
          matchValueBuilder.expr("^");
-         int level = 0;
-         for (char c : descriptor.getValue().toCharArray())
+         if (descriptor.getValueType() == ValueType.PATTERN)
          {
-            switch (c)
-            {
-               case '{':
-
-                  if (level++ > 0)
-                  {
-                     matchValueBuilder.expr('{');
-                  }
-                  break;
-               case '}':
-                  if (--level > 0)
-                  {
-                     matchValueBuilder.expr('}');
-                  }
-                  break;
-               default:
-                  if (level == 0)
-                  {
-                     matchValueBuilder.literal(c);
-                  }
-                  else
-                  {
-                     matchValueBuilder.expr(c);
-                  }
-                  break;
-            }
+            matchValueBuilder.expr(descriptor.getValue());
+         }
+         else
+         {
+            matchValueBuilder.literal(descriptor.getValue());
          }
          matchValueBuilder.expr("$");
          matchValue = matchValueBuilder.build();
       }
 
       //
-      return new RequestParam(descriptor.getQualifiedName(), descriptor.getName(), matchValue, descriptor.isRequired());
+      return new RequestParam(
+         descriptor.getQualifiedName(),
+         descriptor.getName(),
+         matchValue,
+         descriptor.isRequired());
    }
 
    /** . */
@@ -90,12 +72,12 @@ class RequestParam extends Param
    final String matchName;
 
    /** . */
-   final Pattern matchValue;
+   final Pattern matchPattern;
 
    /** . */
    final boolean required;
 
-   RequestParam(QualifiedName name, String matchName, Pattern matchValue, boolean required)
+   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, boolean required)
    {
       super(name);
 
@@ -108,12 +90,12 @@ class RequestParam extends Param
       //
       this.name = name;
       this.matchName = matchName;
-      this.matchValue = matchValue;
+      this.matchPattern = matchPattern;
       this.required = required;
    }
 
    boolean matchValue(String value)
    {
-      return matchValue == null || matchValue.matcher(value).matches();
+      return matchPattern == null || matchPattern.matcher(value).matches();
    }
 }

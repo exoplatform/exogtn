@@ -35,7 +35,7 @@ public class TestRequestParam extends AbstractTestController
 
    public void testRoot() throws Exception
    {
-      Router router = router().add(route("/").with(requestParam("foo").named("a").withValue("a").required())).build();
+      Router router = router().add(route("/").with(requestParam("foo").named("a").matchedByLiteral("a").required())).build();
 
       //
       assertNull(router.route("/"));
@@ -51,7 +51,7 @@ public class TestRequestParam extends AbstractTestController
 
    public void testSegment() throws Exception
    {
-      Router router = router().add(route("/a").with(requestParam("foo").named("a").withValue("a").required())).build();
+      Router router = router().add(route("/a").with(requestParam("foo").named("a").matchedByLiteral("a").required())).build();
 
       //
       assertNull(router.route("/a"));
@@ -67,7 +67,7 @@ public class TestRequestParam extends AbstractTestController
 
    public void testValuePattern() throws Exception
    {
-      Router router = router().add(route("/a").with(requestParam("foo").named("a").withValue("{[0-9]+}").required())).build();
+      Router router = router().add(route("/a").with(requestParam("foo").named("a").matchedByPattern("[0-9]+").required())).build();
 
       //
       assertNull(router.route("/a"));
@@ -86,8 +86,8 @@ public class TestRequestParam extends AbstractTestController
    public void testPrecedence() throws Exception
    {
       Router router = router().
-         add(route("/a").with(requestParam("foo").named("a").withValue("a").required())).
-         add(route("/a").with(requestParam("bar").named("b").withValue("b").required())).
+         add(route("/a").with(requestParam("foo").named("a").matchedByLiteral("a").required())).
+         add(route("/a").with(requestParam("bar").named("b").matchedByLiteral("b").required())).
          build();
 
       //
@@ -110,8 +110,8 @@ public class TestRequestParam extends AbstractTestController
    public void testInheritance() throws Exception
    {
       Router router = router().
-         add(route("/a").with(requestParam("foo").named("a").withValue("a").required()).
-            sub(route("/b").with(requestParam("bar").named("b").withValue("b").required()))).
+         add(route("/a").with(requestParam("foo").named("a").matchedByLiteral("a").required()).
+            sub(route("/b").with(requestParam("bar").named("b").matchedByLiteral("b").required()))).
          build();
 
       //
@@ -144,7 +144,7 @@ public class TestRequestParam extends AbstractTestController
    public void testOptional() throws Exception
    {
       Router router = router().add(route("/").
-         with(requestParam("foo").named("a").withValue("a"))).build();
+         with(requestParam("foo").named("a").matchedByLiteral("a"))).build();
 
       //
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/", Collections.<String, String[]>emptyMap()));
@@ -164,8 +164,8 @@ public class TestRequestParam extends AbstractTestController
    public void testMatchDescendantOfRootParameters() throws Exception
    {
       Router router = router().
-         add(route("/").with(requestParam("foo").named("a").withValue("a")).
-            sub(route("/a").with(requestParam("bar").named("b").withValue("b")))).
+         add(route("/").with(requestParam("foo").named("a").matchedByLiteral("a")).
+            sub(route("/a").with(requestParam("bar").named("b").matchedByLiteral("b")))).
          build();
 
       //

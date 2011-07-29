@@ -97,9 +97,9 @@ class Route
          writer.writeStartElement("request-param");
          writer.writeAttribute("qname", requestParam.name.getValue());
          writer.writeAttribute("name", requestParam.matchName);
-         if (requestParam.matchValue != null)
+         if (requestParam.matchPattern != null)
          {
-            writer.writeAttribute("value", requestParam.matchValue.pattern());
+            writer.writeAttribute("value", requestParam.matchPattern.pattern());
          }
          writer.writeEndElement();
       }

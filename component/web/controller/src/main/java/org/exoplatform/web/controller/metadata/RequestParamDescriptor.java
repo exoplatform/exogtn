@@ -35,6 +35,9 @@ public class RequestParamDescriptor extends ParamDescriptor
    private String value;
 
    /** . */
+   private ValueType valueType;
+
+   /** . */
    private boolean required;
 
    public RequestParamDescriptor(QualifiedName qualifiedName)
@@ -44,6 +47,7 @@ public class RequestParamDescriptor extends ParamDescriptor
       //
       this.value = null;
       this.required = false;
+      this.valueType = ValueType.LITERAL;
    }
 
    public RequestParamDescriptor(String qualifiedName)
@@ -51,9 +55,9 @@ public class RequestParamDescriptor extends ParamDescriptor
       super(qualifiedName);
 
       //
-      //
       this.value = null;
       this.required = false;
+      this.valueType = ValueType.LITERAL;
    }
 
    public RequestParamDescriptor named(String name)
@@ -62,9 +66,17 @@ public class RequestParamDescriptor extends ParamDescriptor
       return this;
    }
 
-   public RequestParamDescriptor withValue(String value)
+   public RequestParamDescriptor matchedByLiteral(String value)
    {
       this.value = value;
+      this.valueType = ValueType.LITERAL;
+      return this;
+   }
+
+   public RequestParamDescriptor matchedByPattern(String value)
+   {
+      this.value = value;
+      this.valueType = ValueType.PATTERN;
       return this;
    }
 
@@ -90,8 +102,28 @@ public class RequestParamDescriptor extends ParamDescriptor
       return value;
    }
 
+   public void setValue(String value)
+   {
+      this.value = value;
+   }
+
+   public ValueType getValueType()
+   {
+      return valueType;
+   }
+
+   public void setValueType(ValueType valueType)
+   {
+      this.valueType = valueType;
+   }
+
    public boolean isRequired()
    {
       return required;
+   }
+
+   public void setRequired(boolean required)
+   {
+      this.required = required;
    }
 }

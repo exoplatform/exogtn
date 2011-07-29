@@ -25,6 +25,7 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import org.exoplatform.web.controller.metadata.ValueType;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -112,14 +113,17 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(QualifiedName.parse("foo"), route6.getRequestParam("foo").getQualifiedName());
       assertEquals("foo", route6.getRequestParam("foo").getName());
       assertEquals(null, route6.getRequestParam("foo").getValue());
+      assertEquals(ValueType.LITERAL, route6.getRequestParam("foo").getValueType());
       assertEquals(false, route6.getRequestParam("foo").isRequired());
       assertEquals(QualifiedName.parse("bar"), route6.getRequestParam("bar").getQualifiedName());
       assertEquals("bar", route6.getRequestParam("bar").getName());
       assertEquals("bar", route6.getRequestParam("bar").getValue());
+      assertEquals(ValueType.LITERAL, route6.getRequestParam("bar").getValueType());
       assertEquals(false, route6.getRequestParam("bar").isRequired());
       assertEquals(QualifiedName.parse("juu"), route6.getRequestParam("juu").getQualifiedName());
       assertEquals("juu", route6.getRequestParam("juu").getName());
       assertEquals("juu", route6.getRequestParam("juu").getValue());
+      assertEquals(ValueType.PATTERN, route6.getRequestParam("juu").getValueType());
       assertEquals(true, route6.getRequestParam("juu").isRequired());
 
       //
