@@ -40,8 +40,7 @@
 		boolean hasChild = (node.getChildrenCount() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String href = nodeURL.setResource(
-		   new NavigationResource(node)).toString();
+		String href = nodeURL.setNode(node);
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		def resolvedLabel = node.getEncodedResolvedLabel();
@@ -103,8 +102,7 @@
 	</ul>	
 <% 
 	}else{
-		String link = nodeURL.setResource(
-		   new NavigationResource(userNodes.iterator().next())).toString();
+		String link = nodeURL.setNode(userNodes.iterator().next());
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">

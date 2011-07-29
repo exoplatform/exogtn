@@ -59,7 +59,7 @@
 					
 		def actionLink = "#";
 		if(node.getPageRef() != null) {
-		    nodeURL.setResource(new NavigationResource(node));
+		    nodeURL.setNode(node);
 			nodeURL.setAjax(uicomponent.isUseAjax());
 			actionLink = nodeURL.toString();
 		} 
@@ -109,7 +109,7 @@
 					 			String label = node.getEncodedResolvedLabel();
 					 			if(label.length() > 30) label = label.substring(0,29) + "...";
 					 			if(node.getPageRef() != null) {
-					 			    nodeURL.setResource(new NavigationResource(node));					 			                                        
+					 			    nodeURL.setNode(node);
 					 			    nodeURL.setAjax(uicomponent.isUseAjax());
 									print """
 					 					<a class="TabIcon ${iconType}" href="$nodeURL">$label</a>

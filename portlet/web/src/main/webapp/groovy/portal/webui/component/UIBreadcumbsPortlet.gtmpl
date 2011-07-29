@@ -22,7 +22,7 @@
   						String note = "LeftBlock";
   						for(i in 0 .. list.size()-1) { 
   							def node = list.get(i);							
-  							String actionLink = nodeURL.setResource(new NavigationResource(node));
+  							String actionLink = nodeURL.setNode(node);
   							if(i == list.size()-1) note = "Selected";
   				%>
   							<a href="<%=(node.getPageRef() == null) ? "#" : actionLink%>"	class="$note"><%=node.getEncodedResolvedLabel();%></a> 																

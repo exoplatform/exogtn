@@ -378,9 +378,7 @@ public class UIPageCreationWizard extends UIPageWizard
          try
          {
             UserNode newNode = uiWizard.saveData();
-            PortalURL<NavigationResource, NavigationURL> nodeURL =
-               pcontext.createURL(NavigationURL.TYPE);
-            nodeURL.setResource(new NavigationResource(newNode));
+            NavigationURL nodeURL = pcontext.createURL(NavigationURL.TYPE).setNode(newNode);
             UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             toolPanel.setUIComponent(null);
             uiWizard.updateUIPortal(event);         

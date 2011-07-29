@@ -239,7 +239,7 @@ public class PortalRequestContext extends WebuiRequestContext
       this.requestLocale = requestLocale;
 
       //
-      PortalURL<NavigationResource, NavigationURL> url = createURL(NavigationURL.TYPE);
+      NavigationURL url = createURL(NavigationURL.TYPE);
       url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
       portalURI = url.toString();
 

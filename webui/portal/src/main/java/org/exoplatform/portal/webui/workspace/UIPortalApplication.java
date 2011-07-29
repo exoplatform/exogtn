@@ -557,9 +557,7 @@ public class UIPortalApplication extends UIApplication
             isAjaxInLastRequest = false;
             if (requestURI.equals(lastNonAjaxRequestUri) && !requestURI.equals(lastRequestURI))
             {
-               PortalURL<NavigationResource, NavigationURL> nodeURL =
-                  pcontext.createURL(NavigationURL.TYPE);
-               nodeURL.setResource(new NavigationResource(getCurrentSite().getSelectedUserNode()));
+               NavigationURL nodeURL = pcontext.createURL(NavigationURL.TYPE).setNode(getCurrentSite().getSelectedUserNode());
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }

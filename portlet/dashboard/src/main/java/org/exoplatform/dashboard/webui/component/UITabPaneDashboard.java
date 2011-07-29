@@ -406,10 +406,8 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationURL> nodeURL =
-            prContext.createURL(NavigationURL.TYPE);
-         nodeURL.setResource(new NavigationResource(nextNode));
-         
+         NavigationURL nodeURL = prContext.createURL(NavigationURL.TYPE).setNode(nextNode);
+
          prContext.sendRedirect(nodeURL.toString());
       }
    }
@@ -437,10 +435,8 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationURL> nodeURL =
-            prContext.createURL(NavigationURL.TYPE);
-         nodeURL.setResource(new NavigationResource(node));
-         
+         NavigationURL nodeURL = prContext.createURL(NavigationURL.TYPE).setNode(node);
+
          prContext.sendRedirect(nodeURL.toString());
       }
    }
@@ -480,10 +476,8 @@ public class UITabPaneDashboard extends UIContainer
             }
          }
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         PortalURL<NavigationResource, NavigationURL> nodeURL =
-            prContext.createURL(NavigationURL.TYPE);
-         nodeURL.setResource(new NavigationResource(node));
-         
+         NavigationURL nodeURL = prContext.createURL(NavigationURL.TYPE).setNode(node);
+
          prContext.sendRedirect(nodeURL.toString());
       }
    }

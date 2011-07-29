@@ -139,9 +139,7 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
          {            
             PortalRequestContext pcontext = Util.getPortalRequestContext();
             
-            PortalURL<NavigationResource, NavigationURL> nodeURL =
-               pcontext.createURL(NavigationURL.TYPE);
-            nodeURL.setResource(new NavigationResource(targetNode));
+            NavigationURL nodeURL = pcontext.createURL(NavigationURL.TYPE).setNode(targetNode);
             pcontext.sendRedirect(nodeURL.toString());
          }
       }

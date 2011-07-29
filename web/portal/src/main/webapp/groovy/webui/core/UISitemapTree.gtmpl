@@ -37,7 +37,7 @@
 			
 			def actionLink = "#";
 			if(treeNode.getNode().getPageRef() != null) {
-			   nodeURL.setResource(new NavigationResource(node));
+			   nodeURL.setNode(node);
 			   nodeURL.setAjax(useAjax);
 			   actionLink = nodeURL.toString(); 
 			}

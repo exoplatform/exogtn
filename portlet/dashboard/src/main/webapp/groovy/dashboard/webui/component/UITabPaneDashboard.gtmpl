@@ -23,7 +23,7 @@
 			int i = 0;
 			for(UserNode node : nodes){
 				def tabLabel = node.getEncodedResolvedLabel();
-			    nodeURL.setResource(new NavigationResource(node));
+			    nodeURL.setNode(node);
 				if ("Tab_Default".equals(node.getName()))
 				{
 					tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + tabLabel);

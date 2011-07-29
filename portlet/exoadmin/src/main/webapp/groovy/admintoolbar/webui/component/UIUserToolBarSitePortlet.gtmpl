@@ -81,7 +81,7 @@
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = nodeURL.setResource(new NavigationResource(node)).toString();
+		String	href = nodeURL.setNode(node).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);

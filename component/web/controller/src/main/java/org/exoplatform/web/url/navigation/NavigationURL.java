@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.url.navigation;
 
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceType;
@@ -103,6 +104,12 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
    public NavigationURL setResource(NavigationResource resource)
    {
       this.resource = resource;
+      return this;
+   }
+
+   public NavigationURL setNode(UserNode node)
+   {
+      this.resource = new NavigationResource(node);
       return this;
    }
 }

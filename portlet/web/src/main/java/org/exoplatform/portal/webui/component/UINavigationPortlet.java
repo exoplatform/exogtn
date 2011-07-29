@@ -149,7 +149,7 @@ public class UINavigationPortlet extends UIPortletApplication
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
-         PortalURL<NavigationResource, NavigationURL> url = Util.getPortalRequestContext().createURL(NavigationURL.TYPE, resource);
+         NavigationURL url = Util.getPortalRequestContext().createURL(NavigationURL.TYPE, resource);
          url.setAjax(isUseAjax());
          json.put("actionLink", url.toString());
       } 

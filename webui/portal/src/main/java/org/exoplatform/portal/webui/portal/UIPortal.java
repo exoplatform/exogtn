@@ -377,7 +377,7 @@ public class UIPortal extends UIContainer
 
          String portalName = prContext.getPortalOwner();
          
-         PortalURL<NavigationResource, NavigationURL> createURL =
+         NavigationURL createURL =
             prContext.createURL(NavigationURL.TYPE);
          createURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalName, null));
          prContext.sendRedirect(createURL.toString());

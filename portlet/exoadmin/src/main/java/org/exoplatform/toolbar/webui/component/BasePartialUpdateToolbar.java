@@ -178,7 +178,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
-         PortalURL<NavigationResource, NavigationURL> url = Util.getPortalRequestContext().createURL(NavigationURL.TYPE, resource);
+         NavigationURL url = Util.getPortalRequestContext().createURL(NavigationURL.TYPE, resource);
          json.put("actionLink", url.setAjax(false).toString());
       }                
       
