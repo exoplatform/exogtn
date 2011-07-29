@@ -78,6 +78,7 @@
     <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="required" type="xs:boolean" use="optional"/>
+    <xs:attribute name="skip-empty" type="xs:boolean" use="optional"/>
   </xs:complexType>
 
 </xs:schema>

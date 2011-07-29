@@ -62,7 +62,8 @@ class RequestParam extends Param
          descriptor.getQualifiedName(),
          descriptor.getName(),
          matchValue,
-         descriptor.isRequired());
+         descriptor.isRequired(),
+         descriptor.getSkipEmpty());
    }
 
    /** . */
@@ -77,7 +78,10 @@ class RequestParam extends Param
    /** . */
    final boolean required;
 
-   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, boolean required)
+   /** . */
+   final boolean skipEmpty;
+
+   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, boolean required, boolean skipEmpty)
    {
       super(name);
 
@@ -92,6 +96,7 @@ class RequestParam extends Param
       this.matchName = matchName;
       this.matchPattern = matchPattern;
       this.required = required;
+      this.skipEmpty = skipEmpty;
    }
 
    boolean matchValue(String value)

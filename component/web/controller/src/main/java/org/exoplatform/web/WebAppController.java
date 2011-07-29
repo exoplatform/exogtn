@@ -193,7 +193,7 @@ public class WebAppController
    {
       boolean debug = log.isDebugEnabled();
       String portalPath = req.getRequestURI().substring(req.getContextPath().length());
-      Map<QualifiedName, String> parameters = router.route(portalPath);
+      Map<QualifiedName, String> parameters = router.route(portalPath, req.getParameterMap());
 
       //
       if (parameters != null)

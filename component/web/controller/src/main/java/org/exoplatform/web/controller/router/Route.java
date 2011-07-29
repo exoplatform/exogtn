@@ -303,7 +303,7 @@ class Route
          for (RequestParam requestParamDef : requestParams.values())
          {
             String s = blah.get(requestParamDef.name);
-            if (s != null)
+            if (s != null && (s.length() > 0 || !requestParamDef.skipEmpty))
             {
                renderContext.appendQueryParameter(requestParamDef.matchName, s);
             }
@@ -449,11 +449,14 @@ class Route
             }
             if (value != null && requestParamDef.matchValue(value))
             {
-               if (routeRequestParams.isEmpty())
+               if (value.length() > 0 || !requestParamDef.skipEmpty)
                {
-                  routeRequestParams = new HashMap<QualifiedName, String>();
+                  if (routeRequestParams.isEmpty())
+                  {
+                     routeRequestParams = new HashMap<QualifiedName, String>();
+                  }
+                  routeRequestParams.put(requestParamDef.name, value);
                }
-               routeRequestParams.put(requestParamDef.name, value);
             }
             else if (requestParamDef.required)
             {

@@ -121,7 +121,11 @@ public class DescriptorBuilder
                   String qualifiedName = fork.getAttribute("qname");
                   String name = fork.getAttribute("name");
                   String required = fork.getAttribute("required");
-                  RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName).named(name).required("true".equals(required));
+                  String skipEmpty = fork.getAttribute("skip-empty");
+                  RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName);
+                  param.setName(name);
+                  param.setRequired("true".equals(required));
+                  param.setSkipEmpty("true".equals(skipEmpty));
                   if (fork.child(Element.VALUE))
                   {
                      param.setValue(fork.getContent());

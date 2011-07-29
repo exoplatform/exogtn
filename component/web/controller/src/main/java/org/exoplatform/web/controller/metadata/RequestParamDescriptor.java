@@ -40,6 +40,9 @@ public class RequestParamDescriptor extends ParamDescriptor
    /** . */
    private boolean required;
 
+   /** . */
+   private boolean skipEmpty;
+
    public RequestParamDescriptor(QualifiedName qualifiedName)
    {
       super(qualifiedName);
@@ -48,6 +51,7 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.value = null;
       this.required = false;
       this.valueType = ValueType.LITERAL;
+      this.skipEmpty = false;
    }
 
    public RequestParamDescriptor(String qualifiedName)
@@ -58,6 +62,7 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.value = null;
       this.required = false;
       this.valueType = ValueType.LITERAL;
+      this.skipEmpty = false;
    }
 
    public RequestParamDescriptor named(String name)
@@ -86,15 +91,32 @@ public class RequestParamDescriptor extends ParamDescriptor
       return this;
    }
 
-   public RequestParamDescriptor required(boolean required)
+   public RequestParamDescriptor optional()
    {
-      this.required = required;
+      this.required = false;
+      return this;
+   }
+
+   public RequestParamDescriptor skipEmpty()
+   {
+      this.skipEmpty = true;
+      return this;
+   }
+
+   public RequestParamDescriptor useEmpty()
+   {
+      this.skipEmpty = false;
       return this;
    }
 
    public String getName()
    {
       return name;
+   }
+
+   public void setName(String name)
+   {
+      this.name = name;
    }
 
    public String getValue()
@@ -125,5 +147,15 @@ public class RequestParamDescriptor extends ParamDescriptor
    public void setRequired(boolean required)
    {
       this.required = required;
+   }
+
+   public boolean getSkipEmpty()
+   {
+      return skipEmpty;
+   }
+
+   public void setSkipEmpty(boolean skipEmpty)
+   {
+      this.skipEmpty = skipEmpty;
    }
 }
