@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.ValueMapping;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -41,7 +42,7 @@ public class RequestParamDescriptor extends ParamDescriptor
    private boolean required;
 
    /** . */
-   private boolean skipEmpty;
+   private ValueMapping valueMapping;
 
    public RequestParamDescriptor(QualifiedName qualifiedName)
    {
@@ -51,7 +52,7 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.value = null;
       this.required = false;
       this.valueType = ValueType.LITERAL;
-      this.skipEmpty = false;
+      this.valueMapping = ValueMapping.CANONICAL;
    }
 
    public RequestParamDescriptor(String qualifiedName)
@@ -62,7 +63,7 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.value = null;
       this.required = false;
       this.valueType = ValueType.LITERAL;
-      this.skipEmpty = false;
+      this.valueMapping = ValueMapping.CANONICAL;
    }
 
    public RequestParamDescriptor named(String name)
@@ -97,15 +98,21 @@ public class RequestParamDescriptor extends ParamDescriptor
       return this;
    }
 
-   public RequestParamDescriptor skipEmpty()
+   public RequestParamDescriptor neverEmpty()
    {
-      this.skipEmpty = true;
+      this.valueMapping = ValueMapping.NEVER_EMPTY;
       return this;
    }
 
-   public RequestParamDescriptor useEmpty()
+   public RequestParamDescriptor neverNull()
    {
-      this.skipEmpty = false;
+      this.valueMapping = ValueMapping.NEVER_NULL;
+      return this;
+   }
+
+   public RequestParamDescriptor canonical()
+   {
+      this.valueMapping = ValueMapping.CANONICAL;
       return this;
    }
 
@@ -149,13 +156,13 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.required = required;
    }
 
-   public boolean getSkipEmpty()
+   public ValueMapping getValueMapping()
    {
-      return skipEmpty;
+      return valueMapping;
    }
 
-   public void setSkipEmpty(boolean skipEmpty)
+   public void setValueMapping(ValueMapping valueMapping)
    {
-      this.skipEmpty = skipEmpty;
+      this.valueMapping = valueMapping;
    }
 }

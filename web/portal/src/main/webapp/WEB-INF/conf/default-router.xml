@@ -12,7 +12,7 @@
 
     <!-- The group access -->
     <route path="/groups/{gtn:sitename}{gtn:path}">
-      <request-param qname="gtn:lang" name="lang" skip-empty="true">
+      <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2})?</pattern>
       </request-param>
       <route-param qname="gtn:handler">
@@ -28,7 +28,7 @@
 
     <!-- The user access -->
     <route path="/users/{gtn:sitename}{gtn:path}">
-      <request-param qname="gtn:lang" name="lang" skip-empty="true">
+      <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2})?</pattern>
       </request-param>
       <route-param qname="gtn:handler">

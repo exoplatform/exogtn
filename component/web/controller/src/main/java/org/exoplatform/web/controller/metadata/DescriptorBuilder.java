@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.router.EncodingMode;
+import org.exoplatform.web.controller.router.ValueMapping;
 import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavigator;
@@ -121,11 +122,11 @@ public class DescriptorBuilder
                   String qualifiedName = fork.getAttribute("qname");
                   String name = fork.getAttribute("name");
                   String required = fork.getAttribute("required");
-                  String skipEmpty = fork.getAttribute("skip-empty");
+                  String valueMappingAtt = fork.getAttribute("value-mapping");
                   RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName);
                   param.setName(name);
                   param.setRequired("true".equals(required));
-                  param.setSkipEmpty("true".equals(skipEmpty));
+                  param.setValueMapping(parse(valueMappingAtt));
                   if (fork.child(Element.VALUE))
                   {
                      param.setValue(fork.getContent());
@@ -151,5 +152,25 @@ public class DescriptorBuilder
 
       //
       return route;
+   }
+
+   static ValueMapping parse(String s)
+   {
+      if (s == null || "canonical".equals(s))
+      {
+         return ValueMapping.CANONICAL;
+      }
+      else if ("never-empty".equals(s))
+      {
+         return ValueMapping.NEVER_EMPTY;
+      }
+      else if ("never-null".equals(s))
+      {
+         return ValueMapping.NEVER_NULL;
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Handle me gracefully");
+      }
    }
 }

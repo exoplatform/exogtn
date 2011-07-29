@@ -182,10 +182,10 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(expectedRequestParameters, renderContext.getQueryParams());
    }
 
-   public void testUseEmpty() throws Exception
+   public void testCanonical() throws Exception
    {
       Router router = router().
-         add(route("/").with(requestParam("foo").useEmpty().named("a"))).
+         add(route("/").with(requestParam("foo").canonical().optional().named("a"))).
          build();
 
       //
@@ -195,8 +195,6 @@ public class TestRequestParam extends AbstractTestController
       router.render(parameters, rc);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
-
-      //
       Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
       assertNotNull(a);
       assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
@@ -209,18 +207,25 @@ public class TestRequestParam extends AbstractTestController
       router.render(parameters, rc);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
-
-      //
       a = router.route("/", Collections.singletonMap("a", new String[]{""}));
       assertNotNull(a);
       assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
       assertEquals("", a.get(QualifiedName.parse("foo")));
+
+      //
+      parameters = new HashMap<QualifiedName, String>();
+      rc.reset();
+      router.render(parameters, rc);
+      assertEquals(Collections.<String>emptySet(), rc.getQueryParams().keySet());
+      a = router.route("/");
+      assertNotNull(a);
+      assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
    }
 
-   public void testSkipEmpty() throws Exception
+   public void testNeverEmpty() throws Exception
    {
       Router router = router().
-         add(route("/").with(requestParam("foo").skipEmpty().named("a"))).
+         add(route("/").with(requestParam("foo").neverEmpty().optional().named("a"))).
          build();
 
       //
@@ -230,8 +235,6 @@ public class TestRequestParam extends AbstractTestController
       router.render(parameters, rc);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
-
-      //
       Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
       assertNotNull(a);
       assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
@@ -243,10 +246,59 @@ public class TestRequestParam extends AbstractTestController
       rc.reset();
       router.render(parameters, rc);
       assertEquals(Collections.EMPTY_MAP, rc.getQueryParams());
-
-      //
       a = router.route("/", Collections.singletonMap("a", new String[]{""}));
       assertNotNull(a);
       assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
+
+      //
+      parameters = new HashMap<QualifiedName, String>();
+      rc.reset();
+      router.render(parameters, rc);
+      assertEquals(Collections.EMPTY_MAP, rc.getQueryParams());
+      a = router.route("/");
+      assertNotNull(a);
+      assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
+   }
+
+   public void testNeverNull() throws Exception
+   {
+      Router router = router().
+         add(route("/").with(requestParam("foo").neverNull().optional().named("a"))).
+         build();
+
+      //
+      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+      parameters.put(QualifiedName.parse("foo"), "bar");
+      SimpleRenderContext rc = new SimpleRenderContext();
+      router.render(parameters, rc);
+      assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
+      assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
+      Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
+      assertNotNull(a);
+      assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
+      assertEquals("bar", a.get(QualifiedName.parse("foo")));
+
+      //
+      parameters = new HashMap<QualifiedName, String>();
+      parameters.put(QualifiedName.parse("foo"), "");
+      rc.reset();
+      router.render(parameters, rc);
+      assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
+      assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
+      a = router.route("/", Collections.singletonMap("a", new String[]{""}));
+      assertNotNull(a);
+      assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
+      assertEquals("", a.get(QualifiedName.parse("foo")));
+
+      //
+      parameters = new HashMap<QualifiedName, String>();
+      rc.reset();
+      router.render(parameters, rc);
+      assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
+      assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
+      a = router.route("/");
+      assertNotNull(a);
+      assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
+      assertEquals("", a.get(QualifiedName.parse("foo")));
    }
 }

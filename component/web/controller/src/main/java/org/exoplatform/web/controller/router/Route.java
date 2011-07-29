@@ -303,7 +303,24 @@ class Route
          for (RequestParam requestParamDef : requestParams.values())
          {
             String s = blah.get(requestParamDef.name);
-            if (s != null && (s.length() > 0 || !requestParamDef.skipEmpty))
+            switch (requestParamDef.valueMapping)
+            {
+               case CANONICAL:
+                  break;
+               case NEVER_EMPTY:
+                  if (s != null && s.length() == 0)
+                  {
+                     s = null;
+                  }
+                  break;
+               case NEVER_NULL:
+                  if (s == null)
+                  {
+                     s = "";
+                  }
+                  break;
+            }
+            if (s != null)
             {
                renderContext.appendQueryParameter(requestParamDef.matchName, s);
             }
@@ -447,9 +464,26 @@ class Route
             {
                value = values[0];
             }
-            if (value != null && requestParamDef.matchValue(value))
+            if (value != null && requestParamDef.matchValue(value) || !requestParamDef.required)
             {
-               if (value.length() > 0 || !requestParamDef.skipEmpty)
+               switch (requestParamDef.valueMapping)
+               {
+                  case CANONICAL:
+                     break;
+                  case NEVER_EMPTY:
+                     if (value != null && value.length() == 0)
+                     {
+                        value = null;
+                     }
+                     break;
+                  case NEVER_NULL:
+                     if (value == null)
+                     {
+                        value = "";
+                     }
+                     break;
+               }
+               if (value != null)
                {
                   if (routeRequestParams.isEmpty())
                   {
@@ -458,7 +492,7 @@ class Route
                   routeRequestParams.put(requestParamDef.name, value);
                }
             }
-            else if (requestParamDef.required)
+            else
             {
                return null;
             }
