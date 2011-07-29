@@ -21,7 +21,6 @@ package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
-import org.exoplatform.web.controller.metadata.ValueType;
 
 import java.util.regex.Pattern;
 

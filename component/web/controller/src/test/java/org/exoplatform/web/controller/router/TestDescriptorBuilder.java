@@ -25,7 +25,6 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
-import org.exoplatform.web.controller.metadata.ValueType;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;

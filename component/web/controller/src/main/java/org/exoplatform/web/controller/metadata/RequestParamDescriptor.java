@@ -21,6 +21,7 @@ package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.ValueMapping;
+import org.exoplatform.web.controller.router.ValueType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

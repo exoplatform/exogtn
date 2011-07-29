@@ -21,6 +21,7 @@ package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.router.EncodingMode;
 import org.exoplatform.web.controller.router.ValueMapping;
+import org.exoplatform.web.controller.router.ValueType;
 import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavigator;
