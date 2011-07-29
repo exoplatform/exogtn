@@ -34,7 +34,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
+public class NodeURL extends PortalURL<NavigationResource, NodeURL>
 {
 
    /** . */
@@ -47,7 +47,7 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
    public static final QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
    
    /** . */
-   public static final ResourceType<NavigationResource, NavigationURL> TYPE = new ResourceType<NavigationResource, NavigationURL>(){};
+   public static final ResourceType<NavigationResource, NodeURL> TYPE = new ResourceType<NavigationResource, NodeURL>(){};
 
    /** . */
    private static final Set<QualifiedName> PARAMETER_NAMES = new HashSet<QualifiedName>();
@@ -62,7 +62,7 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
    /** . */
    private NavigationResource resource;
 
-   public NavigationURL(URLContext context) throws NullPointerException
+   public NodeURL(URLContext context) throws NullPointerException
    {
       super(context);
    }
@@ -101,13 +101,13 @@ public class NavigationURL extends PortalURL<NavigationResource, NavigationURL>
       return resource;
    }
 
-   public NavigationURL setResource(NavigationResource resource)
+   public NodeURL setResource(NavigationResource resource)
    {
       this.resource = resource;
       return this;
    }
 
-   public NavigationURL setNode(UserNode node)
+   public NodeURL setNode(UserNode node)
    {
       this.resource = new NavigationResource(node);
       return this;

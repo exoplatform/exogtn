@@ -32,7 +32,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NavigationURL;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
@@ -60,7 +60,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -239,7 +238,7 @@ public class PortalRequestContext extends WebuiRequestContext
       this.requestLocale = requestLocale;
 
       //
-      NavigationURL url = createURL(NavigationURL.TYPE);
+      NodeURL url = createURL(NodeURL.TYPE);
       url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
       portalURI = url.toString();
 

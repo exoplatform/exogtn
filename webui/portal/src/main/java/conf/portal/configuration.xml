@@ -75,7 +75,7 @@
       <component-plugin>
         <name>navigation.urlfactory.plugin</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.web.url.navigation.NavigationURLFactoryPlugin</type>
+        <type>org.exoplatform.web.url.navigation.NodeURLFactoryPlugin</type>
       </component-plugin>
       <component-plugin>
         <name>navigation.urlfactory.plugin</name>

@@ -33,8 +33,7 @@ import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
-import org.exoplatform.web.url.navigation.NavigationURL;
-import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -50,7 +49,6 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -557,7 +555,7 @@ public class UIPortalApplication extends UIApplication
             isAjaxInLastRequest = false;
             if (requestURI.equals(lastNonAjaxRequestUri) && !requestURI.equals(lastRequestURI))
             {
-               NavigationURL nodeURL = pcontext.createURL(NavigationURL.TYPE).setNode(getCurrentSite().getSelectedUserNode());
+               NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE).setNode(getCurrentSite().getSelectedUserNode());
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }

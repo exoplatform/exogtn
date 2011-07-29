@@ -27,7 +27,7 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NavigationURL;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
@@ -111,7 +111,7 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       //
       PortalURLContext urlContext = new PortalURLContext(context, siteType, siteName);
-      NavigationURL url = urlFactory.newURL(NavigationURL.TYPE, urlContext);
+      NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
       // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteType, siteName, uri));
