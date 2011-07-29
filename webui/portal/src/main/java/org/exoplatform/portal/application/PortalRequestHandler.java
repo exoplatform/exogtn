@@ -120,7 +120,7 @@ public class PortalRequestHandler extends WebRequestHandler
       //
       Locale requestLocale;
       String lang = controllerContext.getParameter(LANG);
-      if (lang.length() == 0)
+      if (lang == null || lang.length() == 0)
       {
          requestLocale = null;
       }
