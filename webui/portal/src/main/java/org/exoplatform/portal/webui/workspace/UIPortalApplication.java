@@ -502,7 +502,7 @@ public class UIPortalApplication extends UIApplication
       String siteName = null;
       if (PortalConfig.PORTAL_TYPE.equals(siteType))
       {
-         if (!Safe.equals(siteName, pcontext.getSiteName()))
+         if (!Safe.equals(lastPortalSite, pcontext.getSiteName()))
          {
             siteName = pcontext.getSiteName();
          }
@@ -559,7 +559,6 @@ public class UIPortalApplication extends UIApplication
             {
                PortalURL<NavigationResource, NavigationURL> nodeURL =
                   pcontext.createURL(NavigationURL.TYPE);
-//               nodeURL.setResource(new NavigationResource(getCurrentSite().getOwnerType(), getCurrentSite().getOwner().replaceAll("/", "_"), getCurrentSite().getSelectedUserNode()));
                nodeURL.setResource(new NavigationResource(getCurrentSite().getSelectedUserNode()));
                pcontext.sendRedirect(nodeURL.toString());
                return;
