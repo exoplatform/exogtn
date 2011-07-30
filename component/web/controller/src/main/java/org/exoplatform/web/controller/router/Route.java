@@ -366,13 +366,18 @@ class Route
             {
                abc.remove(requestParamDef.name);
             }
-            else if (requestParamDef.controlMode == ControlMode.OPTIONAL)
-            {
-               // Do nothing
-            }
             else
             {
-               return null;
+               switch (requestParamDef.controlMode)
+               {
+                  case OPTIONAL:
+                     // Do nothing
+                     break;
+                  case REQUIRED:
+                     return null;
+                  default:
+                     throw new AssertionError();
+               }
             }
          }
       }
@@ -464,37 +469,41 @@ class Route
             {
                value = values[0];
             }
-            if (value != null && requestParamDef.matchValue(value) || requestParamDef.controlMode == ControlMode.OPTIONAL)
+            if (value == null || !requestParamDef.matchValue(value))
             {
-               switch (requestParamDef.valueMapping)
+               switch (requestParamDef.controlMode)
                {
-                  case CANONICAL:
+                  case OPTIONAL:
+                     // Do nothing
                      break;
-                  case NEVER_EMPTY:
-                     if (value != null && value.length() == 0)
-                     {
-                        value = null;
-                     }
-                     break;
-                  case NEVER_NULL:
-                     if (value == null)
-                     {
-                        value = "";
-                     }
-                     break;
-               }
-               if (value != null)
-               {
-                  if (routeRequestParams.isEmpty())
-                  {
-                     routeRequestParams = new HashMap<QualifiedName, String>();
-                  }
-                  routeRequestParams.put(requestParamDef.name, value);
+                  case REQUIRED:
+                     return null;
                }
             }
-            else
+            switch (requestParamDef.valueMapping)
             {
-               return null;
+               case CANONICAL:
+                  break;
+               case NEVER_EMPTY:
+                  if (value != null && value.length() == 0)
+                  {
+                     value = null;
+                  }
+                  break;
+               case NEVER_NULL:
+                  if (value == null)
+                  {
+                     value = "";
+                  }
+                  break;
+            }
+            if (value != null)
+            {
+               if (routeRequestParams.isEmpty())
+               {
+                  routeRequestParams = new HashMap<QualifiedName, String>();
+               }
+               routeRequestParams.put(requestParamDef.name, value);
             }
          }
       }
