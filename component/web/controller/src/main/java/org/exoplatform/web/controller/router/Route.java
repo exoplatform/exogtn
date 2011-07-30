@@ -366,7 +366,7 @@ class Route
             {
                abc.remove(requestParamDef.name);
             }
-            else if (!requestParamDef.required)
+            else if (requestParamDef.controlMode == ControlMode.OPTIONAL)
             {
                // Do nothing
             }
@@ -464,7 +464,7 @@ class Route
             {
                value = values[0];
             }
-            if (value != null && requestParamDef.matchValue(value) || !requestParamDef.required)
+            if (value != null && requestParamDef.matchValue(value) || requestParamDef.controlMode == ControlMode.OPTIONAL)
             {
                switch (requestParamDef.valueMapping)
                {

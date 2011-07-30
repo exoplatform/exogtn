@@ -19,10 +19,10 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.router.ControlMode;
 import org.exoplatform.web.controller.router.EncodingMode;
 import org.exoplatform.web.controller.router.ValueMapping;
 import org.exoplatform.web.controller.router.ValueType;
-import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
@@ -136,12 +136,12 @@ public class DescriptorBuilder
             {
                String qualifiedName = fork.getAttribute("qname");
                String name = fork.getAttribute("name");
-               String required = fork.getAttribute("required");
+               String controlModeAtt = fork.getAttribute("control-mode");
                String valueMappingAtt = fork.getAttribute("value-mapping");
                RequestParamDescriptor param = new RequestParamDescriptor(qualifiedName);
                param.setName(name);
-               param.setRequired("true".equals(required));
-               param.setValueMapping(parse(valueMappingAtt));
+               param.setControlMode(parseControlMode(controlModeAtt));
+               param.setValueMapping(parseValueMapping(valueMappingAtt));
                if (fork.child(Element.VALUE))
                {
                   param.setValue(fork.getContent());
@@ -168,7 +168,23 @@ public class DescriptorBuilder
       return route;
    }
 
-   static ValueMapping parse(String s)
+   static ControlMode parseControlMode(String s)
+   {
+      if (s == null || "optional".equals(s))
+      {
+         return ControlMode.OPTIONAL;
+      }
+      else if ("required".equals(s))
+      {
+         return ControlMode.REQUIRED;
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Handle me gracefully");
+      }
+   }
+
+   static ValueMapping parseValueMapping(String s)
    {
       if (s == null || "canonical".equals(s))
       {

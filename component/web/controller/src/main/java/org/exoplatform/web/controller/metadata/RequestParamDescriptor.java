@@ -20,6 +20,7 @@
 package org.exoplatform.web.controller.metadata;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.ControlMode;
 import org.exoplatform.web.controller.router.ValueMapping;
 import org.exoplatform.web.controller.router.ValueType;
 
@@ -40,7 +41,7 @@ public class RequestParamDescriptor extends ParamDescriptor
    private ValueType valueType;
 
    /** . */
-   private boolean required;
+   private ControlMode controlMode;
 
    /** . */
    private ValueMapping valueMapping;
@@ -51,7 +52,7 @@ public class RequestParamDescriptor extends ParamDescriptor
 
       //
       this.value = null;
-      this.required = false;
+      this.controlMode = ControlMode.OPTIONAL;
       this.valueType = ValueType.LITERAL;
       this.valueMapping = ValueMapping.CANONICAL;
    }
@@ -62,7 +63,7 @@ public class RequestParamDescriptor extends ParamDescriptor
 
       //
       this.value = null;
-      this.required = false;
+      this.controlMode = ControlMode.OPTIONAL;
       this.valueType = ValueType.LITERAL;
       this.valueMapping = ValueMapping.CANONICAL;
    }
@@ -89,13 +90,13 @@ public class RequestParamDescriptor extends ParamDescriptor
 
    public RequestParamDescriptor required()
    {
-      this.required = true;
+      this.controlMode = ControlMode.REQUIRED;
       return this;
    }
 
    public RequestParamDescriptor optional()
    {
-      this.required = false;
+      this.controlMode = ControlMode.OPTIONAL;
       return this;
    }
 
@@ -147,14 +148,14 @@ public class RequestParamDescriptor extends ParamDescriptor
       this.valueType = valueType;
    }
 
-   public boolean isRequired()
+   public ControlMode getControlMode()
    {
-      return required;
+      return controlMode;
    }
 
-   public void setRequired(boolean required)
+   public void setControlMode(ControlMode controlMode)
    {
-      this.required = required;
+      this.controlMode = controlMode;
    }
 
    public ValueMapping getValueMapping()

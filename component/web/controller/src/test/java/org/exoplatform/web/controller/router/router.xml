@@ -49,7 +49,7 @@
     <request-param qname="bar" name="bar">
       <value>bar</value>
     </request-param>
-    <request-param qname="juu" name="juu" required="true">
+    <request-param qname="juu" name="juu" control-mode="required">
       <pattern>juu</pattern>
     </request-param>
   </route>

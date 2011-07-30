@@ -6,9 +6,9 @@
   <route path="/">
 
     <!-- Webui parameters -->
-    <request-param qname="gtn:componentid" name="portal:componentId" required="false"/>
-    <request-param qname="gtn:action" name="portal:action" required="false"/>
-    <request-param qname="gtn:objectid" name="objectId" required="false"/>
+    <request-param qname="gtn:componentid" name="portal:componentId"/>
+    <request-param qname="gtn:action" name="portal:action"/>
+    <request-param qname="gtn:objectid" name="objectId"/>
 
     <!-- The group access -->
     <route path="/groups/{gtn:sitename}{gtn:path}">

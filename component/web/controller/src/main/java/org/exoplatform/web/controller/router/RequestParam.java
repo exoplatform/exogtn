@@ -61,7 +61,7 @@ class RequestParam extends Param
          descriptor.getQualifiedName(),
          descriptor.getName(),
          matchValue,
-         descriptor.isRequired(),
+         descriptor.getControlMode(),
          descriptor.getValueMapping());
    }
 
@@ -75,12 +75,12 @@ class RequestParam extends Param
    final Pattern matchPattern;
 
    /** . */
-   final boolean required;
+   final ControlMode controlMode;
 
    /** . */
    final ValueMapping valueMapping;
 
-   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, boolean required, ValueMapping valueMapping)
+   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, ControlMode controlMode, ValueMapping valueMapping)
    {
       super(name);
 
@@ -88,6 +88,10 @@ class RequestParam extends Param
       if (matchName == null)
       {
          throw new NullPointerException("No null match name accepted");
+      }
+      if (controlMode == null)
+      {
+         throw new NullPointerException("No null control mode accepted");
       }
       if (valueMapping == null)
       {
@@ -98,7 +102,7 @@ class RequestParam extends Param
       this.name = name;
       this.matchName = matchName;
       this.matchPattern = matchPattern;
-      this.required = required;
+      this.controlMode = controlMode;
       this.valueMapping = valueMapping;
    }
 

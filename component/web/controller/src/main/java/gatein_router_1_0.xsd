@@ -77,7 +77,7 @@
     </xs:choice>
     <xs:attribute name="qname" type="xs:string" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="required" type="xs:boolean" use="optional"/>
+    <xs:attribute name="control-mode" type="controlModeType" use="optional"/>
     <xs:attribute name="value-mapping" type="valueMappingType" use="optional"/>
   </xs:complexType>
 
@@ -86,6 +86,13 @@
       <xs:enumeration value="canonical" />
       <xs:enumeration value="never-empty" />
       <xs:enumeration value="never-null" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="controlModeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="optional" />
+      <xs:enumeration value="required" />
     </xs:restriction>
   </xs:simpleType>
 

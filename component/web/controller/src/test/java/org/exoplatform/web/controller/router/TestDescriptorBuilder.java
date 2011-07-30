@@ -113,17 +113,17 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals("foo", route6.getRequestParam("foo").getName());
       assertEquals(null, route6.getRequestParam("foo").getValue());
       assertEquals(ValueType.LITERAL, route6.getRequestParam("foo").getValueType());
-      assertEquals(false, route6.getRequestParam("foo").isRequired());
+      assertEquals(ControlMode.OPTIONAL, route6.getRequestParam("foo").getControlMode());
       assertEquals(QualifiedName.parse("bar"), route6.getRequestParam("bar").getQualifiedName());
       assertEquals("bar", route6.getRequestParam("bar").getName());
       assertEquals("bar", route6.getRequestParam("bar").getValue());
       assertEquals(ValueType.LITERAL, route6.getRequestParam("bar").getValueType());
-      assertEquals(false, route6.getRequestParam("bar").isRequired());
+      assertEquals(ControlMode.OPTIONAL, route6.getRequestParam("bar").getControlMode());
       assertEquals(QualifiedName.parse("juu"), route6.getRequestParam("juu").getQualifiedName());
       assertEquals("juu", route6.getRequestParam("juu").getName());
       assertEquals("juu", route6.getRequestParam("juu").getValue());
       assertEquals(ValueType.PATTERN, route6.getRequestParam("juu").getValueType());
-      assertEquals(true, route6.getRequestParam("juu").isRequired());
+      assertEquals(ControlMode.REQUIRED, route6.getRequestParam("juu").getControlMode());
 
       //
       assertFalse(i.hasNext());
