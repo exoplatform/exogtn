@@ -32,10 +32,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +107,7 @@ class Route
       }
 
       //
+/*
       for (Map.Entry<String, SegmentRoute[]> entry : segments.entrySet())
       {
          writer.writeStartElement("segment");
@@ -124,6 +124,7 @@ class Route
       {
          pattern.writeTo(writer);
       }
+*/
 
       //
       writer.writeEndElement();
@@ -151,7 +152,7 @@ class Route
    private static final char slashEscape = '_';
 
    /** . */
-   private static final PatternRoute[] EMPTY_PATTERN_ROUTE = new PatternRoute[0];
+   private static final Route[] EMPTY_ROUTE_ARRAY = new Route[0];
 
    /** . */
    private Route parent;
@@ -160,10 +161,7 @@ class Route
    private boolean terminal;
 
    /** . */
-   private final Map<String, SegmentRoute[]> segments;
-
-   /** Actually here we allow to store several times the same pattern and routing could be optimized instead. */
-   private PatternRoute[] patterns;
+   private Route[] children;
 
    /** . */
    private final Map<QualifiedName, RouteParam> routeParams;
@@ -175,8 +173,7 @@ class Route
    {
       this.parent = null;
       this.terminal = true;
-      this.segments = new LinkedHashMap<String, SegmentRoute[]>();
-      this.patterns = EMPTY_PATTERN_ROUTE;
+      this.children = EMPTY_ROUTE_ARRAY;
       this.routeParams = new HashMap<QualifiedName, RouteParam>();
       this.requestParams = new HashMap<String, RequestParam>();
    }
@@ -429,18 +426,7 @@ class Route
       }
 
       //
-      for (SegmentRoute[] routes : segments.values())
-      {
-         for (SegmentRoute route : routes)
-         {
-            Route a = route.find(abc);
-            if (a != null)
-            {
-               return a;
-            }
-         }
-      }
-      for (PatternRoute route : patterns)
+      for (Route route : children)
       {
          Route a = route.find(abc);
          if (a != null)
@@ -525,112 +511,128 @@ class Route
                ret = new HashMap<QualifiedName, String>();
             }
          }
-         else
-         {
-            // Find the next '/' for determining the segment and next path
-            int pos = path.indexOf('/', 1);
-            if (pos == -1)
-            {
-               pos = path.length();
-            }
-
-            String segment = path.substring(1, pos);
-
-            // Try to find a route for the segment
-            SegmentRoute[] routes = segments.get(segment);
-            if (routes != null)
-            {
-               // Determine next path
-               String nextPath;
-               if (pos == path.length())
-               {
-                  nextPath = "/";
-               }
-               else
-               {
-                  nextPath = path.substring(pos);
-               }
-
-               //
-               for (SegmentRoute route : routes)
-               {
-                  // Delegate the process to the next route
-                  Map<QualifiedName, String> response = route.route(nextPath, requestParams);
-
-                  // If we do have a response we return it
-                  if (response != null)
-                  {
-                     ret = response;
-                     break;
-                  }
-               }
-            }
-         }
 
          // Try to find a pattern matching route otherwise
          if (ret == null)
          {
-            for (PatternRoute route : patterns)
+
+            // Find the next '/' for determining the segment and next path
+            int pos = -1;
+            String segment = null;
+
+            // Determine next path
+            String nextSegmentPath = null;
+
+            //
+            for (Route route : children)
             {
-               Matcher matcher = route.pattern.matcher(path);
-
-               // We match
-               if (matcher.find())
+               if (route instanceof SegmentRoute)
                {
-                  // Build next controller context
-                  int nextPos = matcher.end();
-                  String nextPath;
-                  if (path.length() == nextPos)
+                  SegmentRoute segmentRoute = (SegmentRoute)route;
+
+                  // Find the next '/' for determining the segment and next path
+                  if (segment == null)
                   {
-                     nextPath = "/";
-                  }
-                  else
-                  {
-                     if (nextPos > 0 && path.charAt(nextPos - 1) == '/')
+                     pos = path.indexOf('/', 1);
+                     if (pos == -1)
                      {
-                        nextPos--;
+                        pos = path.length();
                      }
-
-                     //
-                     nextPath = path.substring(nextPos);
+                     segment = path.substring(1, pos);
                   }
 
-                  // Delegate to next route
-                  Map<QualifiedName, String> response = route.route(nextPath, requestParams);
-
-                  // If we do have a response we return it
-                  if (response != null)
+                  // Determine next path
+                  if (segmentRoute.name.equals(segment))
                   {
-                     // Append parameters
-                     int group = 1;
-                     for (int i = 0;i < route.params.length;i++)
+                     // Lazy create next segment path
+                     if (nextSegmentPath == null)
                      {
-                        PathParam param = route.params[i];
-
-                        //
-                        String value = matcher.group(group);
-
-                        //
-                        if (value != null)
+                        if (pos == path.length())
                         {
-                           if (param.encodingMode == EncodingMode.FORM)
-                           {
-                              value = value.replace(slashEscape, '/');
-                           }
-                           response.put(param.name, value);
+                           nextSegmentPath = "/";
                         }
                         else
                         {
-                           // We have an optional match
+                           nextSegmentPath = path.substring(pos);
+                        }
+                     }
+
+                     // Delegate the process to the next route
+                     Map<QualifiedName, String> response = segmentRoute.route(nextSegmentPath, requestParams);
+
+                     // If we do have a response we return it
+                     if (response != null)
+                     {
+                        ret = response;
+                        break;
+                     }
+                  }
+               }
+               else if (route instanceof PatternRoute)
+               {
+                  PatternRoute patternRoute = (PatternRoute)route;
+
+                  //
+                  Matcher matcher = patternRoute.pattern.matcher(path);
+
+                  // We match
+                  if (matcher.find())
+                  {
+                     // Build next controller context
+                     int nextPos = matcher.end();
+                     String nextPath;
+                     if (path.length() == nextPos)
+                     {
+                        nextPath = "/";
+                     }
+                     else
+                     {
+                        if (nextPos > 0 && path.charAt(nextPos - 1) == '/')
+                        {
+                           nextPos--;
                         }
 
                         //
-                        group++;
+                        nextPath = path.substring(nextPos);
                      }
 
-                     //
-                     ret = response;
-                     break;
+                     // Delegate to next patternRoute
+                     Map<QualifiedName, String> response = patternRoute.route(nextPath, requestParams);
+
+                     // If we do have a response we return it
+                     if (response != null)
+                     {
+                        // Append parameters
+                        int group = 1;
+                        for (int i = 0;i < patternRoute.params.length;i++)
+                        {
+                           PathParam param = patternRoute.params[i];
+
+                           //
+                           String value = matcher.group(group);
+
+                           //
+                           if (value != null)
+                           {
+                              if (param.encodingMode == EncodingMode.FORM)
+                              {
+                                 value = value.replace(slashEscape, '/');
+                              }
+                              response.put(param.name, value);
+                           }
+                           else
+                           {
+                              // We have an optional match
+                           }
+
+                           //
+                           group++;
+                        }
+
+                        //
+                        ret = response;
+                        break;
+                     }
                   }
                }
             }
@@ -691,26 +693,9 @@ class Route
       }
 
       //
-      if (route instanceof SegmentRoute)
+      if (route instanceof PatternRoute || route instanceof SegmentRoute)
       {
-         SegmentRoute segment = (SegmentRoute)route;
-         SegmentRoute[] routes = segments.get(segment.name);
-         if (routes == null)
-         {
-            routes = new SegmentRoute[]{segment};
-         }
-         else
-         {
-            routes = Tools.appendTo(routes, segment);
-         }
-         segments.put(segment.name, routes);
-         terminal = false;
-         route.parent = this;
-      }
-      else if (route instanceof PatternRoute)
-      {
-         PatternRoute pattern = (PatternRoute)route;
-         patterns = Tools.appendTo(patterns, pattern);
+         children = Tools.appendTo(children, route);
          terminal = false;
          route.parent = this;
       }
@@ -725,29 +710,88 @@ class Route
 
    final Set<String> getSegmentNames()
    {
-      return segments.keySet();
+      Set<String> names = new HashSet<String>();
+      for (Route child : children)
+      {
+         if (child instanceof SegmentRoute)
+         {
+            SegmentRoute childSegment = (SegmentRoute)child;
+            names.add(childSegment.name);
+         }
+      }
+      return names;
    }
 
    final int getSegmentSize(String segmentName)
    {
-      SegmentRoute[] routes = segments.get(segmentName);
-      return routes != null ? routes.length : 0;
+      int size = 0;
+      for (Route child : children)
+      {
+         if (child instanceof SegmentRoute)
+         {
+            SegmentRoute childSegment = (SegmentRoute)child;
+            if (segmentName.equals(childSegment.name))
+            {
+               size++;
+            }
+         }
+      }
+      return size;
    }
 
    final SegmentRoute getSegment(String segmentName, int index)
    {
-      SegmentRoute[] routes = segments.get(segmentName);
-      return routes != null ? routes[index] : null;
+      for (Route child : children)
+      {
+         if (child instanceof SegmentRoute)
+         {
+            SegmentRoute childSegment = (SegmentRoute)child;
+            if (segmentName.equals(childSegment.name))
+            {
+               if (index == 0)
+               {
+                  return childSegment;
+               }
+               else
+               {
+                  index--;
+               }
+            }
+         }
+      }
+      return null;
    }
 
    final int getPatternSize()
    {
-      return patterns.length;
+      int size = 0;
+      for (Route route : children)
+      {
+         if (route instanceof PatternRoute)
+         {
+            size++;
+         }
+      }
+      return size;
    }
 
    final PatternRoute getPattern(int index)
    {
-      return patterns[index];
+      for (Route route : children)
+      {
+         if (route instanceof PatternRoute)
+         {
+            if (index == 0)
+            {
+               return (PatternRoute)route;
+            }
+            else
+            {
+               index--;
+            }
+         }
+      }
+      return null;
    }
 
    final Route append(RouteDescriptor descriptor) throws MalformedRouteException
@@ -1008,18 +1052,6 @@ class Route
       if (param != null)
       {
          params.add(param);
-      }
-      Collection<SegmentRoute[]> values = segments.values();
-      for (SegmentRoute[] segments : values)
-      {
-         for (SegmentRoute segment : segments)
-         {
-            ((Route)segment).findDescendantOrSelfParams(name, params);
-         }
-      }
-      for (PatternRoute pattern : patterns)
-      {
-         ((Route)pattern).findDescendantOrSelfParams(name, params);
       }
    }
 }
