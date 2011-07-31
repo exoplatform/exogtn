@@ -168,7 +168,7 @@ class Route
    Route()
    {
       this.parent = null;
-      this.terminal = false;
+      this.terminal = true;
       this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
       this.patterns = new ArrayList<PatternRoute>();
       this.routeParams = new HashMap<QualifiedName, RouteParam>();
@@ -682,13 +682,14 @@ class Route
             segments.put(segment.name, routes);
          }
          routes.add(segment);
-         ((Route)segment).parent = this;
+         terminal = false;
+         route.parent = this;
       }
       else if (route instanceof PatternRoute)
       {
          PatternRoute pattern = (PatternRoute)route;
-
          patterns.add(pattern);
+         terminal = false;
          route.parent = this;
       }
       else
@@ -746,7 +747,6 @@ class Route
       }
 
       //
-      route.terminal = true;
       route.routeParams.putAll(routeParams);
       route.requestParams.putAll(requestParams);
 

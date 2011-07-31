@@ -41,7 +41,8 @@ public class TestHierarchy extends AbstractTestController
          build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
+      // assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
+      assertNull(router.route("/a"));
 
       //
       Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
