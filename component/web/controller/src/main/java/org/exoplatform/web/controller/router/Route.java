@@ -25,6 +25,7 @@ import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
+import org.gatein.common.util.Tools;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -60,11 +61,11 @@ class Route
       {
          PatternRoute pr = (PatternRoute)this;
          StringBuilder path = new StringBuilder("/");
-         for (int i = 0;i < pr.params.size();i++)
+         for (int i = 0;i < pr.params.length;i++)
          {
-            path.append(pr.chunks.get(i)).append("{").append(pr.params.get(i).name.getValue()).append("}");
+            path.append(pr.chunks[i]).append("{").append(pr.params[i].name.getValue()).append("}");
          }
-         path.append(pr.chunks.get(pr.chunks.size() - 1));
+         path.append(pr.chunks[pr.chunks.length - 1]);
          writer.writeStartElement("pattern");
          writer.writeAttribute("path", path.toString());
          writer.writeAttribute("terminal", Boolean.toString(terminal));
@@ -105,7 +106,7 @@ class Route
       }
 
       //
-      for (Map.Entry<String, List<SegmentRoute>> entry : segments.entrySet())
+      for (Map.Entry<String, SegmentRoute[]> entry : segments.entrySet())
       {
          writer.writeStartElement("segment");
          writer.writeAttribute("name", entry.getKey());
@@ -148,16 +149,19 @@ class Route
    private static final char slashEscape = '_';
 
    /** . */
+   private static final PatternRoute[] EMPTY_PATTERN_ROUTE = new PatternRoute[0];
+
+   /** . */
    private Route parent;
 
    /** . */
    private boolean terminal;
 
    /** . */
-   private final Map<String, List<SegmentRoute>> segments;
+   private final Map<String, SegmentRoute[]> segments;
 
    /** Actually here we allow to store several times the same pattern and routing could be optimized instead. */
-   private final List<PatternRoute> patterns;
+   private PatternRoute[] patterns;
 
    /** . */
    private final Map<QualifiedName, RouteParam> routeParams;
@@ -169,8 +173,8 @@ class Route
    {
       this.parent = null;
       this.terminal = true;
-      this.segments = new LinkedHashMap<String, List<SegmentRoute>>();
-      this.patterns = new ArrayList<PatternRoute>();
+      this.segments = new LinkedHashMap<String, SegmentRoute[]>();
+      this.patterns = EMPTY_PATTERN_ROUTE;
       this.routeParams = new HashMap<QualifiedName, RouteParam>();
       this.requestParams = new HashMap<String, RequestParam>();
    }
@@ -237,14 +241,14 @@ class Route
          }
          int i = 0;
          int count = 0;
-         while (i < pr.params.size())
+         while (i < pr.params.length)
          {
-            String chunk = pr.chunks.get(i);
+            String chunk = pr.chunks[i];
             renderContext.appendPath(chunk, true);
             count += chunk.length();
 
             //
-            PathParam def = pr.params.get(i);
+            PathParam def = pr.params[i];
             String value = blah.get(def.name);
             count += value.length();
 
@@ -269,7 +273,7 @@ class Route
             //
             i++;
          }
-         String lastChunk = pr.chunks.get(i);
+         String lastChunk = pr.chunks[i];
          renderContext.appendPath(lastChunk, false);
          count += lastChunk.length();
          if (count > 0)
@@ -386,9 +390,9 @@ class Route
       if (this instanceof PatternRoute)
       {
          PatternRoute prt = (PatternRoute)this;
-         for (int i = 0;i < prt.params.size();i++)
+         for (int i = 0;i < prt.params.length;i++)
          {
-            PathParam param = prt.params.get(i);
+            PathParam param = prt.params[i];
             String s = blah.get(param.name);
             boolean matched = false;
             if (s != null)
@@ -423,7 +427,7 @@ class Route
       }
 
       //
-      for (List<SegmentRoute> routes : segments.values())
+      for (SegmentRoute[] routes : segments.values())
       {
          for (SegmentRoute route : routes)
          {
@@ -531,7 +535,7 @@ class Route
             String segment = path.substring(1, pos);
 
             // Try to find a route for the segment
-            List<SegmentRoute> routes = segments.get(segment);
+            SegmentRoute[] routes = segments.get(segment);
             if (routes != null)
             {
                // Determine next path
@@ -597,9 +601,9 @@ class Route
                   {
                      // Append parameters
                      int group = 1;
-                     for (int i = 0;i < route.params.size();i++)
+                     for (int i = 0;i < route.params.length;i++)
                      {
-                        PathParam param = route.params.get(i);
+                        PathParam param = route.params[i];
 
                         //
                         String value = matcher.group(group);
@@ -675,20 +679,23 @@ class Route
       if (route instanceof SegmentRoute)
       {
          SegmentRoute segment = (SegmentRoute)route;
-         List<SegmentRoute> routes = segments.get(segment.name);
+         SegmentRoute[] routes = segments.get(segment.name);
          if (routes == null)
          {
-            routes = new ArrayList<SegmentRoute>();
-            segments.put(segment.name, routes);
+            routes = new SegmentRoute[]{segment};
          }
-         routes.add(segment);
+         else
+         {
+            routes = Tools.appendTo(routes, segment);
+         }
+         segments.put(segment.name, routes);
          terminal = false;
          route.parent = this;
       }
       else if (route instanceof PatternRoute)
       {
          PatternRoute pattern = (PatternRoute)route;
-         patterns.add(pattern);
+         patterns = Tools.appendTo(patterns, pattern);
          terminal = false;
          route.parent = this;
       }
@@ -708,24 +715,24 @@ class Route
 
    final int getSegmentSize(String segmentName)
    {
-      List<SegmentRoute> routes = segments.get(segmentName);
-      return routes != null ? routes.size() : 0;
+      SegmentRoute[] routes = segments.get(segmentName);
+      return routes != null ? routes.length : 0;
    }
 
    final SegmentRoute getSegment(String segmentName, int index)
    {
-      List<SegmentRoute> routes = segments.get(segmentName);
-      return routes != null ? routes.get(index) : null;
+      SegmentRoute[] routes = segments.get(segmentName);
+      return routes != null ? routes[index] : null;
    }
 
    final int getPatternSize()
    {
-      return patterns.size();
+      return patterns.length;
    }
 
    final PatternRoute getPattern(int index)
    {
-      return patterns.get(index);
+      return patterns[index];
    }
 
    final Route append(RouteDescriptor descriptor)

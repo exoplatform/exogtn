@@ -65,13 +65,13 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, router.root.getPatternSize());
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.size());
-         assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
-         assertEquals("^.+$", patternRoute.params.get(0).renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
-         assertEquals(2, patternRoute.chunks.size());
-         assertEquals("", patternRoute.chunks.get(0));
-         assertEquals("", patternRoute.chunks.get(1));
+         assertEquals(1, patternRoute.params.length);
+         assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+         assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
+         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+         assertEquals(2, patternRoute.chunks.length);
+         assertEquals("", patternRoute.chunks[0]);
+         assertEquals("", patternRoute.chunks[1]);
       }
    }
 
@@ -87,13 +87,13 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, router.root.getPatternSize());
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.size());
-         assertEquals(QualifiedName.create("q", "a"), patternRoute.params.get(0).name);
-         assertEquals("^.+$", patternRoute.params.get(0).renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
-         assertEquals(2, patternRoute.chunks.size());
-         assertEquals("", patternRoute.chunks.get(0));
-         assertEquals("", patternRoute.chunks.get(1));
+         assertEquals(1, patternRoute.params.length);
+         assertEquals(QualifiedName.create("q", "a"), patternRoute.params[0].name);
+         assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
+         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+         assertEquals(2, patternRoute.chunks.length);
+         assertEquals("", patternRoute.chunks[0]);
+         assertEquals("", patternRoute.chunks[1]);
       }
    }
 
@@ -109,13 +109,13 @@ public class TestBuildRoute extends TestCase
          assertEquals(1, router.root.getPatternSize());
          PatternRoute patternRoute = router.root.getPattern(0);
          assertEquals("^/([^/]*)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.size());
-         assertEquals(QualifiedName.create("a"), patternRoute.params.get(0).name);
-         assertEquals("^.*$", patternRoute.params.get(0).renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params.get(0).encodingMode);
-         assertEquals(2, patternRoute.chunks.size());
-         assertEquals("", patternRoute.chunks.get(0));
-         assertEquals("", patternRoute.chunks.get(1));
+         assertEquals(1, patternRoute.params.length);
+         assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+         assertEquals("^.*$", patternRoute.params[0].renderingPattern.toString());
+         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+         assertEquals(2, patternRoute.chunks.length);
+         assertEquals("", patternRoute.chunks[0]);
+         assertEquals("", patternRoute.chunks[1]);
       }
    }
 
@@ -151,11 +151,11 @@ public class TestBuildRoute extends TestCase
       if (route instanceof PatternRoute)
       {
          assertEquals(((PatternRoute)expectedRoute).pattern.toString(), ((PatternRoute)route).pattern.toString());
-         assertEquals(((PatternRoute)expectedRoute).params.size(), ((PatternRoute)route).params.size());
-         for (int i = 0;i < ((PatternRoute)expectedRoute).params.size();i++)
+         assertEquals(((PatternRoute)expectedRoute).params.length, ((PatternRoute)route).params.length);
+         for (int i = 0;i < ((PatternRoute)expectedRoute).params.length;i++)
          {
-            PathParam expectedParam = ((PatternRoute)expectedRoute).params.get(i);
-            PathParam param = ((PatternRoute)route).params.get(i);
+            PathParam expectedParam = ((PatternRoute)expectedRoute).params[i];
+            PathParam param = ((PatternRoute)route).params[i];
             assertEquals(expectedParam.name, param.name);
             assertEquals(expectedParam.renderingPattern.toString(), param.renderingPattern.toString());
             assertEquals(expectedParam.encodingMode, param.encodingMode);

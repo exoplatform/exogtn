@@ -33,10 +33,10 @@ class PatternRoute extends Route
    final Pattern pattern;
 
    /** . */
-   final List<PathParam> params;
+   final PathParam[] params;
 
    /** . */
-   final List<String> chunks;
+   final String[] chunks;
 
    PatternRoute(
       Pattern pattern,
@@ -50,7 +50,7 @@ class PatternRoute extends Route
 
       //
       this.pattern = pattern;
-      this.params = params;
-      this.chunks = chunks;
+      this.params = params.toArray(new PathParam[params.size()]);
+      this.chunks = chunks.toArray(new String[chunks.size()]);
    }
 }
