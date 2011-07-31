@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.router.MalformedRouteException;
 import org.exoplatform.web.controller.router.Router;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class RouterDescriptor
       return routes;
    }
 
-   public Router build()
+   public Router build() throws MalformedRouteException
    {
       return new Router(this);
    }

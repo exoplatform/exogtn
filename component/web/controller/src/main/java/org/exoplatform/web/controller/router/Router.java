@@ -39,7 +39,7 @@ public class Router
    /** . */
    final Route root;
 
-   public Router(RouterDescriptor metaData)
+   public Router(RouterDescriptor metaData) throws MalformedRouteException
    {
       this.root = new Route();
 
@@ -50,7 +50,7 @@ public class Router
       }
    }
 
-   public void addRoute(RouteDescriptor routeMetaData)
+   public void addRoute(RouteDescriptor routeMetaData) throws MalformedRouteException
    {
       root.append(routeMetaData);
    }

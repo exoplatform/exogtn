@@ -29,6 +29,7 @@ import org.exoplatform.web.application.Application;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import org.exoplatform.web.controller.router.MalformedRouteException;
 import org.exoplatform.web.controller.router.Router;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -182,8 +183,9 @@ public class WebAppController
     * Reconfigure the controller.
     *
     * @param xml the router configuration
+    * @throws MalformedRouteException when the router xml is not correct
     */
-   public void setConfiguration(String xml)
+   public void setConfiguration(String xml) throws MalformedRouteException
    {
       Reader r = new StringReader(xml);
       RouterDescriptor routerDesc = new DescriptorBuilder().build(r);

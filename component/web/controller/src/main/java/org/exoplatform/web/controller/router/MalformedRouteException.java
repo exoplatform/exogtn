@@ -20,26 +20,28 @@
 package org.exoplatform.web.controller.router;
 
 /**
+ * A malformed route.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class MalformedRegExpException extends Exception
+public class MalformedRouteException extends Exception
 {
-   public MalformedRegExpException()
+   public MalformedRouteException()
    {
    }
 
-   public MalformedRegExpException(String s)
+   public MalformedRouteException(String s)
    {
       super(s);
    }
 
-   public MalformedRegExpException(String s, Throwable throwable)
+   public MalformedRouteException(String s, Throwable throwable)
    {
       super(s, throwable);
    }
 
-   public MalformedRegExpException(Throwable throwable)
+   public MalformedRouteException(Throwable throwable)
    {
       super(throwable);
    }

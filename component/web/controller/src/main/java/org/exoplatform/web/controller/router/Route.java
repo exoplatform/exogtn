@@ -32,9 +32,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -664,7 +666,7 @@ class Route
       return ret;
    }
 
-   final <R extends Route> R add(R route)
+   final <R extends Route> R add(R route) throws MalformedRouteException
    {
       if (route == null)
       {
@@ -673,6 +675,19 @@ class Route
       if (route.parent != null)
       {
          throw new IllegalArgumentException("No route with an existing parent can be accepted");
+      }
+
+      //
+      LinkedList<Param> ancestorParams = new LinkedList<Param>();
+      findAncestorOrSelfParams(ancestorParams);
+      LinkedList<Param> descendantParams = new LinkedList<Param>();
+      for (Param param : ancestorParams)
+      {
+         route.findDescendantOrSelfParams(param.name, descendantParams);
+         if (descendantParams.size() > 0)
+         {
+            throw new MalformedRouteException("Duplicate parameter " + param.name);
+         }
       }
 
       //
@@ -735,27 +750,21 @@ class Route
       return patterns[index];
    }
 
-   final Route append(RouteDescriptor descriptor)
+   final Route append(RouteDescriptor descriptor) throws MalformedRouteException
    {
       Route route = append(descriptor.getPathParams(), descriptor.getPath());
 
       //
-      Map<QualifiedName, RouteParam> routeParams = new HashMap<QualifiedName, RouteParam>();
       for (RouteParamDescriptor routeParamDesc : descriptor.getRouteParams())
       {
-         routeParams.put(routeParamDesc.getQualifiedName(), RouteParam.create(routeParamDesc));
+         route.add(RouteParam.create(routeParamDesc));
       }
 
       //
-      Map<String, RequestParam> requestParams = new HashMap<String, RequestParam>();
       for (RequestParamDescriptor requestParamDesc : descriptor.getRequestParams())
       {
-         requestParams.put(requestParamDesc.getName(), RequestParam.create(requestParamDesc));
+         route.add(RequestParam.create(requestParamDesc));
       }
-
-      //
-      route.routeParams.putAll(routeParams);
-      route.requestParams.putAll(requestParams);
 
       //
       for (RouteDescriptor childDescriptor : descriptor.getChildren())
@@ -767,6 +776,28 @@ class Route
       return route;
    }
 
+   final Route add(RouteParam param) throws MalformedRouteException
+   {
+      Param existing = findParam(param.name);
+      if (existing != null)
+      {
+         throw new MalformedRouteException("Duplicate parameter " + param.name);
+      }
+      routeParams.put(param.name, param);
+      return this;
+   }
+
+   final Route add(RequestParam param) throws MalformedRouteException
+   {
+      Param existing = findParam(param.name);
+      if (existing != null)
+      {
+         throw new MalformedRouteException("Duplicate parameter " + param.name);
+      }
+      requestParams.put(param.matchName, param);
+      return this;
+   }
+
    /**
     * Append a path, creates the necessary routes and returns the last route added.
     *
@@ -774,7 +805,7 @@ class Route
     * @param path the path to append
     * @return the last route added
     */
-   private Route append(Map<QualifiedName, PathParamDescriptor> pathParamDescriptors, String path)
+   private Route append(Map<QualifiedName, PathParamDescriptor> pathParamDescriptors, String path) throws MalformedRouteException
    {
       int pos = path.length();
       int level = 0;
@@ -898,6 +929,97 @@ class Route
       else
       {
          return next;
+      }
+   }
+
+   private Param getParam(QualifiedName name)
+   {
+      if (routeParams.containsKey(name))
+      {
+         return routeParams.get(name);
+      }
+      else
+      {
+         for (RequestParam param : requestParams.values())
+         {
+            if (param.name.equals(name))
+            {
+               return param;
+            }
+         }
+      }
+      if (this instanceof PatternRoute)
+      {
+         for (PathParam param : ((PatternRoute)this).params)
+         {
+            if  (param.name.equals(name))
+            {
+               return param;
+            }
+         }
+      }
+      return null;
+   }
+
+   private Param findParam(QualifiedName name)
+   {
+      Param param = getParam(name);
+      if (param == null && parent != null)
+      {
+         param = parent.findParam(name);
+      }
+      return param;
+   }
+
+   private void findParams(List<Param> params)
+   {
+      for (RouteParam param : routeParams.values())
+      {
+         params.add(param);
+      }
+      for (RequestParam param : requestParams.values())
+      {
+         params.add(param);
+      }
+      if (this instanceof PatternRoute)
+      {
+         Collections.addAll(params, ((PatternRoute)this).params);
+      }
+   }
+
+   private void findAncestorOrSelfParams(List<Param> params)
+   {
+      findParams(params);
+      if (parent != null)
+      {
+         parent.findAncestorOrSelfParams(params);
+      }
+   }
+
+   /**
+    * Find the params having the specified <code>name</code> among this route or its descendants.
+    *
+    * @param name the name
+    * @param params the list collecting the found params
+    */
+   private void findDescendantOrSelfParams(QualifiedName name, List<Param> params)
+   {
+      Param param = getParam(name);
+      if (param != null)
+      {
+         params.add(param);
+      }
+      Collection<SegmentRoute[]> values = segments.values();
+      for (SegmentRoute[] segments : values)
+      {
+         for (SegmentRoute segment : segments)
+         {
+            ((Route)segment).findDescendantOrSelfParams(name, params);
+         }
+      }
+      for (PatternRoute pattern : patterns)
+      {
+         ((Route)pattern).findDescendantOrSelfParams(name, params);
       }
    }
 }

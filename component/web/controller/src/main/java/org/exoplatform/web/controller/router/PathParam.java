@@ -101,7 +101,7 @@ class PathParam extends Param
       {
          throw new RuntimeException(e);
       }
-      catch (MalformedRegExpException e)
+      catch (MalformedRouteException e)
       {
          throw new RuntimeException(e);
       }

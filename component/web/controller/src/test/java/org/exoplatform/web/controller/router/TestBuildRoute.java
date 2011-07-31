@@ -30,7 +30,7 @@ import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 public class TestBuildRoute extends TestCase
 {
 
-   public void testRoot()
+   public void testRoot() throws Exception
    {
       String[] paths = {"/",""};
       for (String path : paths)
@@ -41,7 +41,7 @@ public class TestBuildRoute extends TestCase
       }
    }
 
-   public void testSimpleSegment()
+   public void testSimpleSegment() throws Exception
    {
       String[] paths = {"/a","a"};
       for (String path : paths)
@@ -53,7 +53,7 @@ public class TestBuildRoute extends TestCase
       }
    }
    
-   public void testParameterSegment()
+   public void testParameterSegment() throws Exception
    {
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
@@ -75,7 +75,7 @@ public class TestBuildRoute extends TestCase
       }
    }
 
-   public void testQualifiedParameterSegment()
+   public void testQualifiedParameterSegment() throws Exception
    {
       String[] paths = {"/{q:a}","{q:a}"};
       for (String path : paths)
@@ -97,7 +97,7 @@ public class TestBuildRoute extends TestCase
       }
    }
 
-   public void testPatternSegment()
+   public void testPatternSegment() throws Exception
    {
       String[] paths = {"/{a}","{a}"};
       for (String path : paths)
@@ -119,7 +119,7 @@ public class TestBuildRoute extends TestCase
       }
    }
 
-   public void testSamePrefix()
+   public void testSamePrefix() throws Exception
    {
       Router router = router().add(route("/public/foo")).add(route("/public/bar")).build();
       assertEquals(2, router.root.getSegmentSize("public"));
