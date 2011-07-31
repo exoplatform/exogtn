@@ -461,7 +461,7 @@ class Route
             {
                value = values[0];
             }
-            if (value == null || !requestParamDef.matchValue(value))
+            if (value == null)
             {
                switch (requestParamDef.controlMode)
                {
@@ -471,6 +471,10 @@ class Route
                   case REQUIRED:
                      return null;
                }
+            }
+            else if (!requestParamDef.matchValue(value))
+            {
+               return null;
             }
             switch (requestParamDef.valueMapping)
             {
@@ -530,41 +534,57 @@ class Route
                {
                   SegmentRoute segmentRoute = (SegmentRoute)route;
 
-                  // Find the next '/' for determining the segment and next path
-                  if (segment == null)
+                  //
+                  if (segmentRoute.name.length() == 0)
                   {
-                     pos = path.indexOf('/', 1);
-                     if (pos == -1)
-                     {
-                        pos = path.length();
-                     }
-                     segment = path.substring(1, pos);
-                  }
-
-                  // Determine next path
-                  if (segmentRoute.name.equals(segment))
-                  {
-                     // Lazy create next segment path
-                     if (nextSegmentPath == null)
-                     {
-                        if (pos == path.length())
-                        {
-                           nextSegmentPath = "/";
-                        }
-                        else
-                        {
-                           nextSegmentPath = path.substring(pos);
-                        }
-                     }
-
                      // Delegate the process to the next route
-                     Map<QualifiedName, String> response = segmentRoute.route(nextSegmentPath, requestParams);
+                     Map<QualifiedName, String> response = segmentRoute.route(path, requestParams);
 
                      // If we do have a response we return it
                      if (response != null)
                      {
                         ret = response;
                         break;
+                     }
+                  }
+                  else
+                  {
+                     // Find the next '/' for determining the segment and next path
+                     if (segment == null)
+                     {
+                        pos = path.indexOf('/', 1);
+                        if (pos == -1)
+                        {
+                           pos = path.length();
+                        }
+                        segment = path.substring(1, pos);
+                     }
+
+                     // Determine next path
+                     if (segmentRoute.name.equals(segment))
+                     {
+                        // Lazy create next segment path
+                        if (nextSegmentPath == null)
+                        {
+                           if (pos == path.length())
+                           {
+                              nextSegmentPath = "/";
+                           }
+                           else
+                           {
+                              nextSegmentPath = path.substring(pos);
+                           }
+                        }
+
+                        // Delegate the process to the next route
+                        Map<QualifiedName, String> response = segmentRoute.route(nextSegmentPath, requestParams);
+
+                        // If we do have a response we return it
+                        if (response != null)
+                        {
+                           ret = response;
+                           break;
+                        }
                      }
                   }
                }
@@ -851,11 +871,17 @@ class Route
     */
    private Route append(Map<QualifiedName, PathParamDescriptor> pathParamDescriptors, String path) throws MalformedRouteException
    {
+      if (path.length() == 0 || path.charAt(0) != '/')
+      {
+         throw new MalformedRouteException();
+      }
+
+      //
       int pos = path.length();
       int level = 0;
       List<Integer> start = new ArrayList<Integer>();
       List<Integer> end = new ArrayList<Integer>();
-      for (int i = 0;i < path.length();i++)
+      for (int i = 1;i < path.length();i++)
       {
          char c = path.charAt(i);
          if (c == '{')
@@ -886,17 +912,10 @@ class Route
       Route next;
       if (start.isEmpty())
       {
-         if (pos == 0)
-         {
-            next = this;
-         }
-         else
-         {
-            String segment = path.substring(0, pos);
-            SegmentRoute route = new SegmentRoute(segment);
-            add(route);
-            next = route;
-         }
+         String segment = path.substring(1, pos);
+         SegmentRoute route = new SegmentRoute(segment);
+         add(route);
+         next = route;
       }
       else
       {
@@ -908,7 +927,7 @@ class Route
             List<PathParam> parameterPatterns = new ArrayList<PathParam>();
 
             //
-            int previous = 0;
+            int previous = 1;
             for (int i = 0;i < start.size();i++)
             {
                builder.litteral(path, previous, start.get(i));
@@ -968,7 +987,7 @@ class Route
       //
       if (pos < path.length())
       {
-         return next.append(pathParamDescriptors, path.substring(pos + 1));
+         return next.append(pathParamDescriptors, path.substring(pos));
       }
       else
       {

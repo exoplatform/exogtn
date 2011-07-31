@@ -21,6 +21,11 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
+import org.gatein.common.util.Tools;
+
+import java.util.Collections;
+import java.util.Map;
+
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 /**
@@ -32,91 +37,72 @@ public class TestBuildRoute extends TestCase
 
    public void testRoot() throws Exception
    {
-      String[] paths = {"/",""};
-      for (String path : paths)
-      {
-         Router router = router().add(route(path)).build();
-         Route expectedRoute = new Route();
-         assertEquals(expectedRoute, router.root);
-      }
+      Router router = router().add(route("/")).build();
+      Route expectedRoute = new Route();
+      expectedRoute.add(new SegmentRoute(""));
+      assertEquals(expectedRoute, router.root);
    }
 
    public void testSimpleSegment() throws Exception
    {
-      String[] paths = {"/a","a"};
-      for (String path : paths)
-      {
-         Router router = router().add(route(path)).build();
-         Route expectedRoute = new Route();
-         expectedRoute.add(new SegmentRoute("a"));
-         assertEquals(expectedRoute, router.root);
-      }
+      Router router = router().add(route("/a")).build();
+      Route expectedRoute = new Route();
+      expectedRoute.add(new SegmentRoute("a"));
+      assertEquals(expectedRoute, router.root);
    }
    
    public void testParameterSegment() throws Exception
    {
-      String[] paths = {"/{a}","{a}"};
-      for (String path : paths)
-      {
-         Router router = router().add(route(path)).build();
+      Router router = router().add(route("/{a}")).build();
 
-         //
-         assertEquals(0, router.root.getSegmentNames().size());
-         assertEquals(1, router.root.getPatternSize());
-         PatternRoute patternRoute = router.root.getPattern(0);
-         assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.length);
-         assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
-         assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
-         assertEquals(2, patternRoute.chunks.length);
-         assertEquals("", patternRoute.chunks[0]);
-         assertEquals("", patternRoute.chunks[1]);
-      }
+      //
+      assertEquals(0, router.root.getSegmentNames().size());
+      assertEquals(1, router.root.getPatternSize());
+      PatternRoute patternRoute = router.root.getPattern(0);
+      assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
+      assertEquals(1, patternRoute.params.length);
+      assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+      assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
+      assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+      assertEquals(2, patternRoute.chunks.length);
+      assertEquals("", patternRoute.chunks[0]);
+      assertEquals("", patternRoute.chunks[1]);
    }
 
    public void testQualifiedParameterSegment() throws Exception
    {
-      String[] paths = {"/{q:a}","{q:a}"};
-      for (String path : paths)
-      {
-         Router router = router().add(route(path)).build();
+      Router router = router().add(route("/{q:a}")).build();
 
-         //
-         assertEquals(0, router.root.getSegmentNames().size());
-         assertEquals(1, router.root.getPatternSize());
-         PatternRoute patternRoute = router.root.getPattern(0);
-         assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.length);
-         assertEquals(QualifiedName.create("q", "a"), patternRoute.params[0].name);
-         assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
-         assertEquals(2, patternRoute.chunks.length);
-         assertEquals("", patternRoute.chunks[0]);
-         assertEquals("", patternRoute.chunks[1]);
-      }
+      //
+      assertEquals(0, router.root.getSegmentNames().size());
+      assertEquals(1, router.root.getPatternSize());
+      PatternRoute patternRoute = router.root.getPattern(0);
+      assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
+      assertEquals(1, patternRoute.params.length);
+      assertEquals(QualifiedName.create("q", "a"), patternRoute.params[0].name);
+      assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
+      assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+      assertEquals(2, patternRoute.chunks.length);
+      assertEquals("", patternRoute.chunks[0]);
+      assertEquals("", patternRoute.chunks[1]);
    }
 
    public void testPatternSegment() throws Exception
    {
-      String[] paths = {"/{a}","{a}"};
-      for (String path : paths)
-      {
-         Router router = router().add(route(path).with(pathParam("a").matchedBy(".*"))).build();
+      Router router = router().add(route("/{a}").with(pathParam("a").matchedBy(".*"))).build();
 
-         //
-         assertEquals(0, router.root.getSegmentNames().size());
-         assertEquals(1, router.root.getPatternSize());
-         PatternRoute patternRoute = router.root.getPattern(0);
-         assertEquals("^/([^/]*)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
-         assertEquals(1, patternRoute.params.length);
-         assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
-         assertEquals("^.*$", patternRoute.params[0].renderingPattern.toString());
-         assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
-         assertEquals(2, patternRoute.chunks.length);
-         assertEquals("", patternRoute.chunks[0]);
-         assertEquals("", patternRoute.chunks[1]);
-      }
+      //
+      assertEquals(0, router.root.getSegmentNames().size());
+      assertEquals(1, router.root.getPatternSize());
+      PatternRoute patternRoute = router.root.getPattern(0);
+      assertEquals("^/([^/]*)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
+      assertEquals(1, patternRoute.params.length);
+      assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+      assertEquals("^.*$", patternRoute.params[0].renderingPattern.toString());
+      assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
+      assertEquals(2, patternRoute.chunks.length);
+      assertEquals("", patternRoute.chunks[0]);
+      assertEquals("", patternRoute.chunks[1]);
    }
 
    public void testSamePrefix() throws Exception

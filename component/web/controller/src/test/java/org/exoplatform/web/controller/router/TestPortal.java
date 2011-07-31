@@ -20,6 +20,8 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.gatein.common.util.Tools;
+
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
@@ -84,5 +86,32 @@ public class TestPortal extends AbstractTestController
       expectedParameters.put(QualifiedName.create("gtn", "lang"), "");
       expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
       assertEquals(expectedParameters, router.route("/public/classic/home"));
+   }
+
+   public void testDuplicateRouteWithDifferentRouteParam() throws Exception
+   {
+      Router router = router().add(
+         route("/").with(routeParam("foo").withValue("foo_1")).with(requestParam("bar").named("bar").matchedByLiteral("bar_value")),
+         route("/").with(routeParam("foo").withValue("foo_2"))
+      ).build();
+
+      //
+      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
+      expected.put(QualifiedName.parse("foo"), "foo_1");
+      expected.put(QualifiedName.parse("bar"), "bar_value");
+      assertEquals(expected, router.route("/", Collections.singletonMap("bar", new String[]{"bar_value"})));
+      SimpleRenderContext rc = new SimpleRenderContext();
+      router.render(expected, rc);
+      assertEquals("/", rc.getPath());
+      assertEquals(Collections.<String, String>singletonMap("bar", "bar_value"), rc.getQueryParams());
+
+      //
+      expected = new HashMap<QualifiedName, String>();
+      expected.put(QualifiedName.parse("foo"), "foo_2");
+      assertEquals(expected,  router.route("/", Collections.singletonMap("bar", new String[]{"flabbergast"})));
+      rc = new SimpleRenderContext();
+      router.render(expected, rc);
+      assertEquals("/", rc.getPath());
+      assertEquals(Collections.<String, String>emptyMap(), rc.getQueryParams());
    }
 }

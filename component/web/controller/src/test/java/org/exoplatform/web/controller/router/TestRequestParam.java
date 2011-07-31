@@ -184,6 +184,36 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(expectedRequestParameters, renderContext.getQueryParams());
    }
 
+   public void testLiteralMatch() throws Exception
+   {
+      Router router = router().
+         add(route("/").with(requestParam("foo").canonical().optional().named("a").matchedByLiteral("foo_value"))).
+         build();
+
+      //
+      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+      parameters.put(QualifiedName.parse("foo"), "foo_value");
+      SimpleRenderContext rc = new SimpleRenderContext();
+      router.render(parameters, rc);
+      assertEquals("/", rc.getPath());
+      assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
+      assertEquals(Collections.singletonList("foo_value"), Arrays.asList(rc.getQueryParams().get("a")));
+      Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"foo_value"}));
+      assertNotNull(a);
+      assertEquals(Collections.singleton(QualifiedName.parse("foo")), a.keySet());
+      assertEquals("foo_value", a.get(QualifiedName.parse("foo")));
+
+      //
+      parameters = new HashMap<QualifiedName, String>();
+      parameters.put(QualifiedName.parse("foo"), "bar_value");
+      rc.reset();
+      router.render(parameters, rc);
+      assertEquals("", rc.getPath());
+      assertEquals(Collections.<String>emptySet(), rc.getQueryParams().keySet());
+      a = router.route("/", Collections.singletonMap("a", new String[]{"bar_value"}));
+      assertNull(a);
+   }
+
    public void testCanonical() throws Exception
    {
       Router router = router().

@@ -87,8 +87,11 @@ public class TestMatch extends AbstractTestController
    public void testParameterPropagationToDescendants() throws Exception
    {
       Router router = router().
-         add(route("/").with(routeParam("p").withValue("a"))).
-         add(route("/a")).build();
+         add(
+            route("/").
+               with(routeParam("p").withValue("a")).
+               sub(route("/a")))
+         .build();
 
       //
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
