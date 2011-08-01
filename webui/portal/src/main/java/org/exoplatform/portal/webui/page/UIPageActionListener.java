@@ -21,12 +21,14 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -35,7 +37,6 @@ import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -43,7 +44,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +61,7 @@ public class UIPageActionListener
       {
          UIPortalApplication uiPortalApp = event.getSource();
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
+         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
    
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withReadCheck();
@@ -82,17 +83,43 @@ public class UIPageActionListener
          if (targetNode == null)
          {
             targetNode = userPortal.getDefaultPath(builder.build());
+            if (targetNode == null)
+            {
+               if (showedUIPortal != null)
+               {
+                  UIPageBody uiPageBody = showedUIPortal.findFirstComponentOfType(UIPageBody.class);
+                  uiPageBody.setUIComponent(null);                  
+               }
+               return;
+            }
          }
-         if (targetNode == null)
+         
+         //Require unauthenticated users to login as they browse to a page of type PORTAL and that the navigation service
+         //returns a null UserNode. For the moment, we could not determine if the null returned value is due to restricted
+         //access permission, or due to the existence of data
+         //TODO: The targetNode should wrap information saying if annonymous user should login or not
+         PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
+         if (pcontext.getRemoteUser() == null && siteKey != null && SiteType.PORTAL.equals(siteKey.getType()) && nodePath != null && nodePath.length() > 0)
          {
-            UIPageBody uiPageBody = showedUIPortal.findFirstComponentOfType(UIPageBody.class);
-            uiPageBody.setUIComponent(null);
-            return;
+            String pageRef = targetNode.getPageRef();
+            boolean requireLogin = false;
+            if(pageRef != null)
+            {
+               Page page = uiPortalApp.getApplicationComponent(DataStorage.class).getPage(pageRef);
+               UserACL userACL = uiPortalApp.getApplicationComponent(UserACL.class);
+               requireLogin = page != null && !userACL.hasPermission(page);
+            }
+
+            if(requireLogin)
+            {
+               //PortalURL<NavigationResource, NavigationURL> doLoginURL = pcontext.createURL(NavigationURL.TYPE);
+               String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
+               pcontext.sendRedirect(doLoginPath);
+               return;
+            }
          }
          
-         UserNavigation targetNav = targetNode.getNavigation();
-         
-         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
+         UserNavigation targetNav = targetNode.getNavigation();                  
          UserNode currentNavPath = null;
          if (showedUIPortal != null)
          {
@@ -141,7 +168,6 @@ public class UIPageActionListener
          }
          
          showedUIPortal.refreshUIPage();
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
          pcontext.setFullRender(true);
          pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID));
       }

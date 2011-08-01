@@ -585,6 +585,11 @@ public class UIPortalApplication extends UIApplication
          lastNonAjaxRequestUri = requestURI;
       }
       
+      if (pcontext.isResponseComplete())
+      {
+         return;
+      }
+      
       if (currentSite == null || currentSite.getSelectedUserNode() == null)
       {
          pcontext.sendError(HttpServletResponse.SC_NOT_FOUND);
