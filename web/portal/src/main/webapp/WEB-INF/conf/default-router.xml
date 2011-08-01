@@ -99,4 +99,11 @@
     </path-param>
   </route>
 
+  <!-- Default handler -->
+  <route path="/">
+    <route-param qname="gtn:handler">
+      <value>default</value>
+    </route-param>
+  </route>
+
 </router>
