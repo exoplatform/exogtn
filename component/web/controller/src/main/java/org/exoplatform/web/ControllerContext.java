@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -21,6 +21,7 @@ package org.exoplatform.web;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.RenderContext;
+import org.exoplatform.web.controller.router.Router;
 import org.exoplatform.web.controller.router.SimpleRenderContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,9 @@ public class ControllerContext
    private final WebAppController controller;
 
    /** . */
+   private final Router router;
+
+   /** . */
    private final Map<QualifiedName, String> parameters;
 
    /** . */
@@ -54,6 +58,7 @@ public class ControllerContext
 
    public ControllerContext(
       WebAppController controller,
+      Router router,
       HttpServletRequest request,
       HttpServletResponse response,
       Map<QualifiedName, String> parameters)
@@ -64,6 +69,7 @@ public class ControllerContext
       this.parameters = parameters;
       this.renderContext = null;
       this.contextName = request.getContextPath().substring(1);
+      this.router = router;
    }
 
    public WebAppController getController()
@@ -94,7 +100,7 @@ public class ControllerContext
       renderContext.appendPath(contextName, true);
 
       //
-      controller.getRouter().render(parameters, renderContext);
+      router.render(parameters, renderContext);
    }
 
    public String renderURL(Map<QualifiedName, String> parameters)
@@ -115,7 +121,7 @@ public class ControllerContext
       renderContext.appendPath(contextName, true);
 
       //
-      controller.getRouter().render(parameters, renderContext);
+      router.render(parameters, renderContext);
 
       //
       return renderContext.getPath();
