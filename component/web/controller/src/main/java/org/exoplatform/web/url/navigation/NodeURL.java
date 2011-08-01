@@ -82,7 +82,7 @@ public class NodeURL extends PortalURL<NavigationResource, NodeURL>
          }
          else
          {
-            return "/" + resource.getNodeURI();
+            return resource.getNodeURI();
          }
       }
       else if (REQUEST_SITE_TYPE.equals(parameterName))

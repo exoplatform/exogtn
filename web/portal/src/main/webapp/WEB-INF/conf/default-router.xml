@@ -35,7 +35,7 @@
     <request-param qname="gtn:objectid" name="objectId"/>
 
     <!-- The group access -->
-    <route path="/groups/{gtn:sitename}{gtn:path}">
+    <route path="/groups/{gtn:sitename}/{gtn:path}">
       <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2})?</pattern>
       </request-param>
@@ -48,7 +48,7 @@
     </route>
 
     <!-- The user access -->
-    <route path="/users/{gtn:sitename}{gtn:path}">
+    <route path="/users/{gtn:sitename}/{gtn:path}">
       <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2})?</pattern>
       </request-param>
@@ -61,7 +61,7 @@
     </route>
 
     <!-- The portal access -->
-    <route path="/{gtn:lang}/{gtn:sitename}{gtn:path}">
+    <route path="/{gtn:lang}/{gtn:sitename}/{gtn:path}">
       <route-param qname="gtn:sitetype">
         <value>portal</value>
       </route-param>
@@ -75,7 +75,7 @@
 
   </route>
 
-  <route path="/standalone{gtn:path}">
+  <route path="/standalone/{gtn:path}">
     <route-param qname="gtn:handler">
       <value>standalone</value>
     </route-param>
@@ -97,7 +97,7 @@
   </route>
 
   <!-- The legacy route -->
-  <route path="/public/{gtn:sitename}{gtn:path}">
+  <route path="/public/{gtn:sitename}/{gtn:path}">
     <route-param qname="gtn:handler">
       <value>legacy</value>
     </route-param>
@@ -105,7 +105,7 @@
       <pattern>.*</pattern>
     </path-param>
   </route>
-  <route path="/private/{gtn:sitename}{gtn:path}">
+  <route path="/private/{gtn:sitename}/{gtn:path}">
     <route-param qname="gtn:handler">
       <value>legacy</value>
     </route-param>
