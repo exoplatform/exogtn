@@ -141,6 +141,7 @@ public interface UserPortal
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException any navigation service exception
     */
+   @Deprecated
    UserNode resolvePath(UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 

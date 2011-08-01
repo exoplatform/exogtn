@@ -62,7 +62,7 @@ public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
    public UIUserToolBarDashboardPortlet() throws Exception
    {
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
-      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
       toolbarFilterConfig = builder.build();      
    }

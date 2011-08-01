@@ -68,7 +68,7 @@ public class UIPortalNavigation extends UIComponent
    public UIPortalNavigation()
    {
       UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
-      filterConfigBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      filterConfigBuilder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       filterConfigBuilder.withTemporalCheck();
       NAVIGATION_FILTER_CONFIG = filterConfigBuilder.build();
    }

@@ -47,7 +47,7 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
    public UIUserToolBarSitePortlet() throws Exception
    {
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
-      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
       toolbarFilterConfig = builder.build();
    }

@@ -184,7 +184,7 @@ public class UIMainActionListener
       private UserNodeFilterConfig createFilterConfig()
       {
          UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
-         filterConfigBuilder.withAuthorizationCheck();
+         filterConfigBuilder.withReadWriteCheck();
          return filterConfigBuilder.build();
       }
    }
