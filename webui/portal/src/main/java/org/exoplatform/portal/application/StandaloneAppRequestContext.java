@@ -35,22 +35,12 @@ import java.util.Locale;
 
 public class StandaloneAppRequestContext extends PortalRequestContext
 {
-   private String storageId;
-
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
    public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String requestPath)
       throws Exception
    {
-      super(app, controllerContext, null, null, requestPath, null);
-      if (!"".equals(requestPath))
-      {
-         storageId = requestPath.substring(1);
-      }
-      else
-      {
-         storageId = "";
-      }      
+      super(app, controllerContext, null, null, requestPath, null);    
    }
 
    @Override
@@ -67,7 +57,7 @@ public class StandaloneAppRequestContext extends PortalRequestContext
 
    public String getStorageId()
    {
-      return storageId;
+      return getNodePath();
    }
 
    public String getTitle() throws Exception
