@@ -39,7 +39,7 @@ import java.io.Reader;
 public class DescriptorBuilder
 {
 
-   // http://www.gatein.org/xml/ns/gatein_router_1_0
+   // http://www.gatein.org/xml/ns/gatein_controller_1_0
 
    public static PathParamDescriptor pathParam(String qualifiedName)
    {
