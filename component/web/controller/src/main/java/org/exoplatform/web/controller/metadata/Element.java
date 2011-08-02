@@ -25,7 +25,7 @@ package org.exoplatform.web.controller.metadata;
 public enum Element
 {
 
-   ROUTER,
+   CONTROLLER,
 
    ROUTE,
 

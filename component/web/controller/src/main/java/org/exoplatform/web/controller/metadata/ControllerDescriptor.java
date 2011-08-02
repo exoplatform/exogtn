@@ -26,23 +26,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Describe a router.
+ * Describe a controller.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouterDescriptor
+public class ControllerDescriptor
 {
 
    /** . */
    private final List<RouteDescriptor> routes;
 
-   public RouterDescriptor()
+   public ControllerDescriptor()
    {
       this.routes = new ArrayList<RouteDescriptor>();
    }
 
-   public RouterDescriptor add(RouteDescriptor... routes)
+   public ControllerDescriptor add(RouteDescriptor... routes)
    {
       if (routes == null)
       {

@@ -24,7 +24,7 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import org.exoplatform.web.controller.metadata.ControllerDescriptor;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -46,7 +46,7 @@ public class TestDescriptorBuilder extends TestCase
 
       URL routerURL = TestDescriptorBuilder.class.getResource("router.xml");
       XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
-      RouterDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
+      ControllerDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
 
       Iterator<RouteDescriptor> i = routerDesc.getRoutes().iterator();
 

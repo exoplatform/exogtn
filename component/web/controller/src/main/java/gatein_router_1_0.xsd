@@ -28,9 +28,9 @@
    attributeFormDefault="unqualified"
    version="1.0">
 
-  <xs:element name="router" type="routerType" />
+  <xs:element name="controller" type="controllerType" />
 
-  <xs:complexType name="routerType">
+  <xs:complexType name="controllerType">
     <xs:sequence>
       <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>

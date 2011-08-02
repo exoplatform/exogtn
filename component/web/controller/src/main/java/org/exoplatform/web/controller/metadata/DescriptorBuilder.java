@@ -61,29 +61,29 @@ public class DescriptorBuilder
       return new RouteDescriptor(path);
    }
 
-   public static RouterDescriptor router()
+   public static ControllerDescriptor router()
    {
-      return new RouterDescriptor();
+      return new ControllerDescriptor();
    }
 
-   public RouterDescriptor build(InputStream in) throws StaxNavException
+   public ControllerDescriptor build(InputStream in) throws StaxNavException
    {
       return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), in));
    }
 
-   public RouterDescriptor build(Reader reader) throws StaxNavException
+   public ControllerDescriptor build(Reader reader) throws StaxNavException
    {
       return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader));
    }
 
-   public RouterDescriptor build(XMLStreamReader reader) throws StaxNavException
+   public ControllerDescriptor build(XMLStreamReader reader) throws StaxNavException
    {
       return build(StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, Element.UNKNOWN), reader));
    }
 
-   public RouterDescriptor build(StaxNavigator<Element> root) throws StaxNavException
+   public ControllerDescriptor build(StaxNavigator<Element> root) throws StaxNavException
    {
-      RouterDescriptor router = router();
+      ControllerDescriptor router = router();
       if (root.child() != null)
       {
          for (StaxNavigator<Element> routeNav : root.fork(Element.ROUTE))

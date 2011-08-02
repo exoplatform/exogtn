@@ -29,12 +29,8 @@
     <type>org.exoplatform.web.WebAppController</type>
     <init-params>
       <value-param>
-        <name>router.config</name>
-        <value>war:/conf/default-router.xml</value>
-      </value-param>
-      <value-param profiles="proto-router-1">
-        <name>router.config</name>
-        <value>war:/conf/proto-router-1.xml</value>
+        <name>controller.config</name>
+        <value>${gatein.controller.config}</value>
       </value-param>
     </init-params>
   </component>

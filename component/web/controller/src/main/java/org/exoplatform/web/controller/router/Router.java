@@ -21,7 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.RouterDescriptor;
+import org.exoplatform.web.controller.metadata.ControllerDescriptor;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -39,7 +39,7 @@ public class Router
    /** . */
    final Route root;
 
-   public Router(RouterDescriptor metaData) throws MalformedRouteException
+   public Router(ControllerDescriptor metaData) throws MalformedRouteException
    {
       this.root = new Route();
 
