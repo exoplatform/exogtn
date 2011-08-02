@@ -44,9 +44,6 @@
 }
 
 .UINavigationPortlet .UINavigationBar  .UITab  {
-	float:left;/* orientation=lt */
-	float:right;/* orientation=rt */
-	text-align:center;
 	font-weight:normal;
 }
 
@@ -119,6 +116,11 @@
 	color: #3e8df0;
 }
 
+.UINavigationPortlet .MenuItemContainer  .ArrowIcon {
+	background: url('background/Button.gif') no-repeat right -48px; /* orientation=lt */ 
+	background: url('background/Button-rt.gif') no-repeat left -48px; /* orientation=rt */ 
+}	
+
 .UINavigationPortlet .MenuItemContainer .SelectedItem {
 	background: #c7c7c7;
 }
@@ -145,13 +147,6 @@
 	background-position: right;/* orientation=rt */
 }
 
-.UINavigationPortlet .MenuItemContainer .MenuItem .ArrowIcon {
-	height: 24px; 
-	width: auto;
-	background: url('background/Button.gif') no-repeat right -48px; /* orientation=lt */ 
-	background: url('background/Button-rt.gif') no-repeat left -48px; /* orientation=rt */ 
-	display:block;
-}	
 
 /*============ Scroll Buttons =====================*/
 
@@ -205,8 +200,3 @@
 	background: url('background/Button-rt.gif') no-repeat left top; /* orientation=rt */
 }
 
-/***********GroupNavigation*************/
-
-.UINavigationPortlet .GroupNavigation {
-	background: #f9f9f9;
-}

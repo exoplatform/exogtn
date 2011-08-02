@@ -53,21 +53,20 @@
 		<css-path>/skin/webPortlet/webui/component/UIPortalNavigationPortlet/Stylesheet.css</css-path>
 	</portlet-skin>
 	
-	<portlet-skin>
-		<application-name>web</application-name>
-		<portlet-name>SiteMapPortlet</portlet-name>
-		<skin-name>SimpleSkin</skin-name>
-		<css-path>/skin/webPortlet/webui/component/UISiteMap/Stylesheet.css</css-path>
-	</portlet-skin>
-	
 	<!-- Skin for HomePagePortlet -->
 	<portlet-skin>
 		<application-name>web</application-name>
 		<portlet-name>HomePagePortlet</portlet-name>
 		<skin-name>SimpleSkin</skin-name>
 		<css-path>/skin/webPortlet/webui/component/UIHomePagePortlet/Stylesheet.css</css-path>
-	</portlet-skin>
+	</portlet-skin>	
 	
+	<portlet-skin>
+		<application-name>exoadmin</application-name>
+		<portlet-name>OrganizationPortlet</portlet-name>
+		<skin-name>SimpleSkin</skin-name>
+		<css-path>/skin/exoadmin/organization/webui/component/UIOrganizationPortlet/SimpleStylesheet.css</css-path>
+	</portlet-skin>
 	
 	<!-- Simple window style -->
 	<window-style>
