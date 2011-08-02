@@ -261,18 +261,18 @@ public class UIPortalNavigation extends UIComponent
 
       for (UserNavigation nav : listNavigation)
       {
-         String ownerType = nav.getKey().getTypeName();
-         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+         SiteType siteType = nav.getKey().getType();
+         switch (siteType)
          {
-            portalNavs.add(nav);
-         }
-         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
-         {
-            groupNavs.add(nav);
-         }
-         else if (PortalConfig.USER_TYPE.equals(ownerType))
-         {
-            userNavs.add(nav);
+            case PORTAL:
+               portalNavs.add(nav);
+               break;
+            case GROUP:
+               groupNavs.add(nav);
+               break;
+            case USER:
+               userNavs.add(nav);
+               break;
          }
       }
 
