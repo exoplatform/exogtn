@@ -9,9 +9,9 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
-	import org.exoplatform.portal.config.model.PortalConfig;
 	import org.exoplatform.portal.mop.SiteKey;
-	
+	import org.exoplatform.portal.mop.SiteType;
+
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
@@ -94,7 +94,7 @@
 %> 	
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab">
-		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer">
 		<% for(nav in groupNavigations) {

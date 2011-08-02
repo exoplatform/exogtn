@@ -29,6 +29,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortalContext;
@@ -107,10 +109,7 @@ public class PortalRequestContext extends WebuiRequestContext
    private final String portalURI;
 
    /** . */
-   private final String siteType;
-   
-   /** The site name decoded from the request. */
-   private final String siteName;
+   private final SiteKey siteKey;
 
    /** The locale from the request. */
    private final Locale requestLocale;
@@ -232,14 +231,13 @@ public class PortalRequestContext extends WebuiRequestContext
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
 */
       //
-      this.siteType = requestSiteType;
-      this.siteName = requestSiteName;
+      this.siteKey = new SiteKey(SiteType.valueOf(requestSiteType.toUpperCase()), requestSiteName);
       this.nodePath_ = requestPath;
       this.requestLocale = requestLocale;
 
       //
       NodeURL url = createURL(NodeURL.TYPE);
-      url.setResource(new NavigationResource(requestSiteType, requestSiteName, ""));
+      url.setResource(new NavigationResource(siteKey, ""));
       portalURI = url.toString();
 
       //
@@ -249,7 +247,7 @@ public class PortalRequestContext extends WebuiRequestContext
    @Override
    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
    {
-      PortalURLContext urlContext = new PortalURLContext(controllerContext, siteType, siteName);
+      PortalURLContext urlContext = new PortalURLContext(controllerContext, siteKey);
       U url = urlFactory.newURL(resourceType, urlContext);
       if (url != null)
       {
@@ -399,14 +397,19 @@ public class PortalRequestContext extends WebuiRequestContext
       return PortalRequestContext.UI_COMPONENT_ID;
    }
 
-   public String getSiteType()
+   public SiteType getSiteType()
    {
-      return siteType;
+      return siteKey.getType();
    }
    
    public String getSiteName()
    {
-      return siteName;
+      return siteKey.getName();
+   }
+
+   public SiteKey getSiteKey()
+   {
+      return siteKey;
    }
 
    public String getPortalOwner()

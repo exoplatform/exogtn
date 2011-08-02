@@ -20,6 +20,8 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
@@ -57,9 +59,9 @@ public class DefaultRequestHandler extends WebRequestHandler
    public void execute(ControllerContext context) throws Exception
    {
       String defaultPortal = configService.getDefaultPortal();
-      PortalURLContext urlContext = new PortalURLContext(context, "portal", defaultPortal);
+      PortalURLContext urlContext = new PortalURLContext(context, SiteKey.portal(defaultPortal));
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
-      String s = url.setResource(new NavigationResource("portal", defaultPortal, "")).toString();
+      String s = url.setResource(new NavigationResource(SiteType.PORTAL, defaultPortal, "")).toString();
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));
    }

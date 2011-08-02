@@ -3,8 +3,8 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
-	import org.exoplatform.portal.config.model.PortalConfig;
-	
+	import org.exoplatform.portal.mop.SiteType;
+
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
@@ -22,7 +22,7 @@
 					<%} else {
 					    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
 						PortalURL nodeURL = nodeurl();
-						NavigationResource resource = new NavigationResource(PortalConfig.PORTAL_TYPE, pcontext.getPortalOwner(), "register");
+						NavigationResource resource = new NavigationResource(SiteType.PORTAL, pcontext.getPortalOwner(), "register");
 						String registerURI = nodeURL.setResource(resource).toString();
 					%>
 					<div class="MiddleBanner MiddleBannerSignin">

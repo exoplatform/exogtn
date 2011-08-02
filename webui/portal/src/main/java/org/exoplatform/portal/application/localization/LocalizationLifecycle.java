@@ -132,7 +132,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       PortalConfig pConfig = null;
       try
       {
-         pConfig = dataStorage.getPortalConfig(reqCtx.getSiteType(), reqCtx.getSiteName());
+         pConfig = dataStorage.getPortalConfig(reqCtx.getSiteType().getName(), reqCtx.getSiteName());
          if (pConfig == null)
             log.warn("No UserPortalConfig available! Portal locale set to 'en'");
       }

@@ -6,6 +6,7 @@
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.mop.SiteKey;
+	import org.exoplatform.portal.mop.SiteType;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
@@ -34,7 +35,7 @@
 					isCurrent = true;
 			 	} else isCurrent = false; 	
  				
- 				nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalName, null));
+ 				nodeURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
  				
 				if(isCurrent) clazz = "ArrowIcon";
 				else clazz = "";
@@ -131,7 +132,7 @@
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab">
-		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, currentPortal, "portalnavigation")).toString() %>">
+		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString() %>">
 			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
 		</a>		
 		<% renderPortalNavigations(nodeURL) %>

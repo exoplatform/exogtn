@@ -18,6 +18,8 @@
  */
 package org.exoplatform.web.url.navigation;
 
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNode;
 
 /**
@@ -31,7 +33,7 @@ public class NavigationResource
 {
 
    /** . */
-   private final String siteType;
+   private final SiteType siteType;
    
    /** . */
    private final String siteName;
@@ -46,17 +48,22 @@ public class NavigationResource
    
    public NavigationResource(UserNode node)
    {
-      this(node.getNavigation().getKey().getTypeName(), node.getNavigation().getKey().getName(), node.getURI());
+      this(node.getNavigation().getKey().getType(), node.getNavigation().getKey().getName(), node.getURI());
    }
 
-   public NavigationResource(String siteType, String portalName, String nodeURI)
+   public NavigationResource(SiteKey siteKey, String nodeURI)
+   {
+      this(siteKey.getType(), siteKey.getName(), nodeURI);
+   }
+
+   public NavigationResource(SiteType siteType, String portalName, String nodeURI)
    {
       this.siteType = siteType;
       this.siteName = portalName;
       this.nodeURI = nodeURI;
    }
 
-   public String getSiteType()
+   public SiteType getSiteType()
    {
       return siteType;
    }

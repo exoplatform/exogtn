@@ -24,7 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.replication.ApplicationState;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.StateManager;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -124,9 +124,9 @@ public class PortalStateManager extends StateManager
       ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
       UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       String remoteUser = context.getRemoteUser();
-      String siteType = context.getSiteType();
+      SiteType siteType = context.getSiteType();
       String siteName;
-      if (PortalConfig.PORTAL_TYPE.equals(siteType))
+      if (siteType == SiteType.PORTAL)
       {
          siteName = context.getSiteName();
       }

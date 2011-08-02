@@ -87,7 +87,7 @@ public class NodeURL extends PortalURL<NavigationResource, NodeURL>
       }
       else if (REQUEST_SITE_TYPE.equals(parameterName))
       {
-         return resource.getSiteType();
+         return resource.getSiteType().getName();
       }
       else if (REQUEST_SITE_NAME.equals(parameterName))
       {

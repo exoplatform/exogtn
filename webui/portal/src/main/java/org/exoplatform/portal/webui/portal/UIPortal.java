@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.web.url.navigation.NodeURL;
@@ -378,7 +379,7 @@ public class UIPortal extends UIContainer
          
          NodeURL createURL =
             prContext.createURL(NodeURL.TYPE);
-         createURL.setResource(new NavigationResource(PortalConfig.PORTAL_TYPE, portalName, null));
+         createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
          prContext.sendRedirect(createURL.toString());
       }
       

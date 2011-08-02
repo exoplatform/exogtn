@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -494,11 +495,11 @@ public class UIPortalApplication extends UIApplication
       ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
       UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       String remoteUser = pcontext.getRemoteUser();
-      String siteType = pcontext.getSiteType();
+      SiteType siteType = pcontext.getSiteType();
       String lastPortalSite = (userPortalConfig_ != null) ? userPortalConfig_.getPortalName() : null;
       
       String siteName = null;
-      if (PortalConfig.PORTAL_TYPE.equals(siteType))
+      if (SiteType.PORTAL == siteType)
       {
          if (!Safe.equals(lastPortalSite, pcontext.getSiteName()))
          {

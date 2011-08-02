@@ -92,29 +92,25 @@ public class LegacyRequestHandler extends WebRequestHandler
       UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
 
       //
+      SiteKey siteKey;
       String uri;
-      String siteName;
-      String siteType;
       if (userNode != null)
       {
-         SiteKey siteKey = userNode.getNavigation().getKey();
+         siteKey = userNode.getNavigation().getKey();
          uri = userNode.getURI();
-         siteName = siteKey.getName();
-         siteType = siteKey.getTypeName();
       }
       else
       {
+         siteKey = SiteKey.portal("classic");
          uri = "";
-         siteName = "classic";
-         siteType = "portal";
       }
 
       //
-      PortalURLContext urlContext = new PortalURLContext(context, siteType, siteName);
+      PortalURLContext urlContext = new PortalURLContext(context, siteKey);
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
       // For now we redirect on the default classic site
-      url.setResource(new NavigationResource(siteType, siteName, uri));
+      url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
       String s = url.toString();
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));

@@ -20,6 +20,7 @@
 package org.exoplatform.portal.url;
 
 import org.exoplatform.portal.application.PortalRequestHandler;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
@@ -40,18 +41,14 @@ public class PortalURLContext implements URLContext
    private final ControllerContext controllerContext;
 
    /** . */
-   private final String siteType;
-
-   /** . */
-   private final String siteName;
+   private final SiteKey siteKey;
 
    /** . */
    private PortalURLRenderContext renderContext;
 
    public PortalURLContext(
       ControllerContext controllerContext,
-      String siteType,
-      String siteName)
+      SiteKey siteKey)
    {
       if (controllerContext == null)
       {
@@ -60,8 +57,7 @@ public class PortalURLContext implements URLContext
 
       //
       this.controllerContext = controllerContext;
-      this.siteType = siteType;
-      this.siteName = siteName;
+      this.siteKey = siteKey;
       this.renderContext = null;
    }
 
@@ -117,8 +113,8 @@ public class PortalURLContext implements URLContext
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(WebAppController.HANDLER_PARAM, "portal");
-      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteType);
-      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteName);
+      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteKey.getTypeName());
+      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteKey.getName());
 
       //
       String lang;
