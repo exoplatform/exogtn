@@ -39,8 +39,10 @@ import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.ControllerDescriptor;
 import org.exoplatform.web.controller.router.MalformedRouteException;
 import org.exoplatform.web.controller.router.Router;
+import org.gatein.common.http.QueryStringParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.util.ParameterMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +51,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -196,6 +199,46 @@ public class WebAppController
    {
       log.info("Loading router configuration " + configurationPathRef.get());
       loadConfiguration(configurationPathRef.get());
+   }
+
+   @Managed
+   @ManagedDescription("Enumerates the routes found for the specified request")
+   @Impact(ImpactType.READ)
+   public String findRoutes(@ManagedDescription("The request uri relative to the web application") @ManagedName("uri") String uri)
+   {
+      Router router = routerRef.get();
+      if (router != null)
+      {
+         Map<String, String[]> parameters;
+         String path;
+         int pos = uri.indexOf('?');
+         if (pos != -1)
+         {
+            parameters = QueryStringParser.getInstance().parseQueryString(uri.substring(pos + 1));
+            path = uri.substring(0, pos);
+         }
+         else
+         {
+            parameters = Collections.emptyMap();
+            path = uri;
+         }
+
+         //
+         List<Map<QualifiedName, String>> results = new ArrayList<Map<QualifiedName, String>>();
+         Iterator<Map<QualifiedName, String>> matcher = router.matcher(path, parameters);
+         while (matcher.hasNext())
+         {
+            Map<QualifiedName, String> match = matcher.next();
+            results.add(match);
+         }
+
+         //
+         return results.toString();
+      }
+      else
+      {
+         throw new IllegalStateException("No route currently configured");
+      }
    }
 
    /**

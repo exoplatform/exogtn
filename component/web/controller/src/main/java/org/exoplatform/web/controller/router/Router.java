@@ -73,7 +73,7 @@ public class Router
       return route(path, Collections.<String, String[]>emptyMap());
    }
 
-   public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams) throws IOException
+   public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams)
    {
       Iterator<Map<QualifiedName, String>> matcher = matcher(path, queryParams);
       if (matcher.hasNext())
@@ -86,7 +86,7 @@ public class Router
       }
    }
 
-   public Iterator<Map<QualifiedName, String>> matcher(String path, Map<String, String[]> queryParams) throws IOException
+   public Iterator<Map<QualifiedName, String>> matcher(String path, Map<String, String[]> queryParams)
    {
       return root.route(path, queryParams);
    }
