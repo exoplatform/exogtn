@@ -6,9 +6,10 @@
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
-    import org.exoplatform.web.url.PortalURL;
-    import org.exoplatform.web.url.navigation.NavigationResource;
-    import org.exoplatform.portal.config.model.PortalConfig;
+	import org.exoplatform.web.url.PortalURL;
+	import org.exoplatform.web.url.navigation.NavigationResource;
+	import org.exoplatform.portal.config.model.PortalConfig;
+	import org.exoplatform.portal.mop.SiteType;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -91,13 +92,12 @@
 
 <%
 	def userNodes = uicomponent.getNavigationNodes(uicomponent.getCurrentUserNavigation());
-	String defaultDashboardPage;				
 	if(userNodes.size() < 1) {
-		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;
+		String createDashboardLink = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id">
 		<li class="UITab NormalToolbarTab">
-			<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
+			<a class="DashboardIcon TBIcon" href="$createDashboardLink"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
 		</li>
 	</ul>	
 <% 
