@@ -42,10 +42,7 @@ import org.gatein.common.util.ParameterValidation;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl",
-   events = {
-      @EventConfig(listeners = UIUserToolBarGroupPortlet.NavigationChangeActionListener.class)
-   }
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl"
 )
 public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
 {
@@ -117,6 +114,12 @@ public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
       return null;
    }
 
+   /**
+    * An empty action listener for trigger update portlet by ajax via Portlet Event
+    * 
+    * @author <a href="trongtt@gmail.com">Trong Tran</a>
+    * @version $Revision$
+    */
    public static class NavigationChangeActionListener extends EventListener<UIUserToolBarGroupPortlet>
    {
       @Override

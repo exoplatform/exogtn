@@ -24,7 +24,9 @@ import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalImpl;
 
-public class UserPortalConfig
+import java.io.Serializable;
+
+public class UserPortalConfig implements Serializable
 {
 
    PortalConfig portal;
@@ -66,7 +68,7 @@ public class UserPortalConfig
       return portal;
    }
 
-   public void setPortal(PortalConfig portal)
+   public void setPortalConfig(PortalConfig portal)
    {
       this.portal = portal;
    }

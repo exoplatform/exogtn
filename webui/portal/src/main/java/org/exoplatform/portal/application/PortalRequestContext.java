@@ -22,6 +22,7 @@ package org.exoplatform.portal.application;
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -73,6 +74,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * This class extends the abstract WebuiRequestContext which itself extends the RequestContext one
@@ -98,6 +100,8 @@ public class PortalRequestContext extends WebuiRequestContext
    final static public String REQUEST_TITLE = "portal:requestTitle".intern();
 
    final static public String REQUEST_METADATA = "portal:requestMetadata".intern();
+
+   final static private String LAST_PORTAL_NAME = "prc.lastPortalName";
 
    /** The path decoded from the request. */
    private final String nodePath_;
@@ -144,6 +148,8 @@ public class PortalRequestContext extends WebuiRequestContext
    /** . */
    private final ControllerContext controllerContext;
 
+   private UserPortalConfig userPortalConfig;
+   
    public JavascriptManager getJavascriptManager()
    {
       return jsmanager_;
@@ -255,6 +261,55 @@ public class PortalRequestContext extends WebuiRequestContext
          url.setLocale(requestLocale);
       }
       return url;
+   }
+   
+   public UserPortalConfig getUserPortalConfig()
+   {
+      if (userPortalConfig == null)
+      {
+         String portalName = null;
+         String remoteUser = getRemoteUser();
+         SiteType siteType = getSiteType();
+
+         ExoContainer appContainer = getApplication().getApplicationServiceContainer();
+         UserPortalConfigService service_ =
+            (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+         if (SiteType.PORTAL == siteType)
+         {
+            portalName = getSiteName();
+         }
+         
+         HttpSession session = request_.getSession();
+         if (portalName == null)
+         {
+            if (session != null)
+            {
+               portalName = (String)session.getAttribute(LAST_PORTAL_NAME);
+            }
+         }
+
+         if (portalName == null)
+         {
+            portalName = service_.getDefaultPortal();
+         }
+         try
+         {
+            userPortalConfig =
+               service_.getUserPortalConfig(portalName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
+            session.setAttribute(LAST_PORTAL_NAME, portalName);
+         }
+         catch (Exception e)
+         {
+            return null;
+         }
+      }
+      
+      return userPortalConfig;
+   }
+   
+   public void setUserPortalConfig(UserPortalConfig upc)
+   {
+      userPortalConfig = upc;
    }
 
    public String getInitialURI()
@@ -414,7 +469,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getPortalOwner()
    {
-      UserPortalConfig userPortalConfig = ((UIPortalApplication)uiApplication_).getUserPortalConfig();
+      UserPortalConfig userPortalConfig = getUserPortalConfig();
       if (userPortalConfig != null)
       {
          return userPortalConfig.getPortalName();

@@ -37,7 +37,6 @@
       <listener>org.exoplatform.portal.application.PortalApplicationLifecycle</listener>
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
       <listener>org.exoplatform.portal.application.UserProfileLifecycle</listener>
-      <listener>org.exoplatform.portal.application.concurrent.PortalConcurrencyMonitorLifecycle</listener>
     </application-lifecycle-listeners>
 
     <events>

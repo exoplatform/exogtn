@@ -35,7 +35,6 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class PortalStateManager extends StateManager
@@ -67,7 +66,10 @@ public class PortalStateManager extends StateManager
       UIApplication uiapp = null;
       if (appState != null)
       {
-         log.debug("Found application " + key + " :" + appState.getApplication());
+         if (log.isDebugEnabled())
+         {
+            log.debug("Found application " + key + " :" + appState.getApplication());
+         }
          if (Safe.equals(context.getRemoteUser(), appState.getUserName()))
          {
             uiapp = appState.getApplication();
@@ -117,25 +119,6 @@ public class PortalStateManager extends StateManager
    public void expire(String sessionId, WebuiApplication app) throws Exception
    {
       // For now do nothing....
-   }
-
-   public static UserPortalConfig getUserPortalConfig(PortalRequestContext context) throws Exception
-   {
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      String remoteUser = context.getRemoteUser();
-      SiteType siteType = context.getSiteType();
-      String siteName;
-      if (siteType == SiteType.PORTAL)
-      {
-         siteName = context.getSiteName();
-      }
-      else
-      {
-         siteName = service_.getDefaultPortal();
-      }
-      
-      return service_.getUserPortalConfig(siteName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
    }
 
    private String getKey(WebuiRequestContext webuiRC)

@@ -331,6 +331,8 @@ public class UIPortalForm extends UIFormTabPane
                
                // We should use IPC to update some portlets in the future instead of
                UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
+               
+               // TODO: Raise Portlet Event instead
                uiWorkingWS.updatePortletsByName("PortalNavigationPortlet");
                uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             }

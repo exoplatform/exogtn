@@ -148,7 +148,7 @@ public class UIPageActionListener
                UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
                
                //Update layout-related data on UserPortalConfig
-               userPortalConfig.setPortal(associatedPortalConfig);
+               userPortalConfig.setPortalConfig(associatedPortalConfig);
             }
             else
             {
@@ -178,7 +178,7 @@ public class UIPageActionListener
          Container layout = portalConfig.getPortalLayout();
          if(layout != null)
          {
-            userPortalConfig.setPortal(portalConfig);
+            userPortalConfig.setPortalConfig(portalConfig);
          }
          UIPortal uiPortal = uiPortalApp.createUIComponent(UIPortal.class, null, null);
          

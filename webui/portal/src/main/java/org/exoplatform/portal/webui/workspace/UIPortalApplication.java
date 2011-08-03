@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.Skin;
@@ -112,8 +111,6 @@ public class UIPortalApplication extends UIApplication
 
    private String skin_ = SkinService.DEFAULT_SKIN;
 
-   private UserPortalConfig userPortalConfig_;
-
    private boolean isSessionOpen = false;
    
    private Map<SiteKey, UIPortal> all_UIPortals;
@@ -123,6 +120,8 @@ public class UIPortalApplication extends UIApplication
    private boolean isAjaxInLastRequest;
 
    private String lastNonAjaxRequestUri;
+
+   private String lastPortal;
    
    /**
     * The constructor of this class is used to build the tree of UI components
@@ -495,42 +494,12 @@ public class UIPortalApplication extends UIApplication
    @Override
    public void processDecode(WebuiRequestContext context) throws Exception
    {
-      PortalRequestContext pcontext = (PortalRequestContext)context;
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      String remoteUser = pcontext.getRemoteUser();
-      SiteType siteType = pcontext.getSiteType();
-      String lastPortalSite = (userPortalConfig_ != null) ? userPortalConfig_.getPortalName() : null;
-      
-      String siteName = null;
-      if (SiteType.PORTAL == siteType)
+      PortalRequestContext prc = (PortalRequestContext)context;
+      String portalName = prc.getUserPortalConfig().getPortalName();
+      if (!Safe.equals(portalName, lastPortal))
       {
-         if (!Safe.equals(lastPortalSite, pcontext.getSiteName()))
-         {
-            siteName = pcontext.getSiteName();
-         }
-      }
-      else
-      {
-         if (lastPortalSite == null)
-         {
-            siteName = service_.getDefaultPortal();
-         }
-      }
-      
-      if (siteName != null)
-      {
-         UserPortalConfig userPortalConfig = service_.getUserPortalConfig(siteName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
-         if (userPortalConfig == null)
-         {
-            pcontext.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-         }
-         else
-         {
-            setUserPortalConfig(userPortalConfig);
-            reloadPortalProperties();
-         }
+         reloadPortalProperties();
+         lastPortal = portalName;
       }
       super.processDecode(context);
    }
@@ -751,14 +720,26 @@ public class UIPortalApplication extends UIApplication
       return b.toString();
    }
 
+   /**
+    * Use {@link PortalRequestContext#getUserPortalConfig()} instead
+    * 
+    * @return
+    */
+   @Deprecated
    public UserPortalConfig getUserPortalConfig()
    {
-      return userPortalConfig_;
+      return Util.getPortalRequestContext().getUserPortalConfig();
    }
 
+   /**
+    * Use {@link PortalRequestContext#setUserPortalConfig(UserPortalConfig)} instead
+    * 
+    * @return
+    */
+   @Deprecated
    public void setUserPortalConfig(UserPortalConfig userPortalConfig)
    {
-      this.userPortalConfig_ = userPortalConfig;
+      Util.getPortalRequestContext().setUserPortalConfig(userPortalConfig);
    }
 
    /**
@@ -794,7 +775,7 @@ public class UIPortalApplication extends UIApplication
       }
       else
       {
-         String userPortalConfigSkin = userPortalConfig_.getPortalConfig().getSkin();
+         String userPortalConfigSkin = context.getUserPortalConfig().getPortalConfig().getSkin();
          if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
             skin_ = userPortalConfigSkin;
       }
