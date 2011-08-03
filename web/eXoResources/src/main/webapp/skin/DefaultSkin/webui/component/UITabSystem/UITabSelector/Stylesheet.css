@@ -49,12 +49,9 @@
 	overflow: hidden;
 	line-height: 29px;
 	height: 29px;
+	border:none;
 }
 
-.UITabSelector .UIHorizontalTabs .UITab {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-}
 
 .UITabSelector .UIHorizontalTabs .LineSeparator {
 	float: left; /* orientation=lt */
@@ -126,8 +123,8 @@
 .UITabSelector .FlatTabStyle .SelectedTab .MiddleTab {
 	line-height: 29px;
 	background: url('background/TabSelector.gif') repeat-x left -62px;
-	cursor: pointer;
 	padding: 0px 6px;
+	border:0;
 }
 
 /************************************ List Permission Selector *******************************/
@@ -138,10 +135,5 @@
 
 .UIAccessGroup .UIGrid {
 	width: 95%;
-	margin: auto;
 }
 
-.UIAccessGroup .UIPageIterator {
-	width: 95%;
-	margin: 5px auto 0px auto;
-}

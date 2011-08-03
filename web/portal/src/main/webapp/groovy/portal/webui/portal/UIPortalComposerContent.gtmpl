@@ -16,7 +16,7 @@
 				UIApplicationList appList = uicomponent.getChild(UIApplicationList.class);
 				UIContainerList contList = uicomponent.getChild(UIContainerList.class);
 			%>
-			<div class="UITab GrayTabStyle">
+			<div class="UITab NormalTabStyle">
 				<div class="<%= appList.getId().equals(selTabId) ? "SelectedTab" : "NormalTab" %>">
 					<div class="LeftTab">
 						<div class="RightTab">
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="UITab GrayTabStyle">			
+			<div class="UITab NormalTabStyle">			
 				<div class="<%= contList.getId().equals(selTabId) ? "SelectedTab" : "NormalTab" %>">
 					<div class="LeftTab">
 						<div class="RightTab">

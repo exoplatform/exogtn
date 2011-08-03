@@ -30,7 +30,7 @@
 								<div class="LeftTab">
 									<div class="RightTab">
 		""";
-		println "<div class=\"MiddleTab\" onclick=\"eXo.webui.UIHorizontalTabs.displayTabContent(this)\"><div class=\"TabIcon ${title}Icon\">"+_ctx.appRes("UIPopupMessages.label."+"${title}") +"</div></div>";
+		println "<div class=\"MiddleTab\" onclick=\"eXo.webui.UIHorizontalTabs.displayTabContent(this)\"><a class=\"TabIcon ${title}Icon\">"+_ctx.appRes("UIPopupMessages.label."+"${title}") +"</a></div>";
 		println """
 									</div>
 								</div>
@@ -66,60 +66,35 @@
 		}
 	}
 %>
-	<div class="UIPopupWindow UIDragObject" id="$popupId" style="width: 550px; display: none;">
-		<div class="ExoMessageDecorator">
-			<div class="TopLeftCornerDecorator">
-				<div class="TopRightCornerDecorator">
-					<div class="TopCenterDecorator">
-						<div class="OverflowContainer">
-							<div class="PopupTitleIcon"><span></span></div>
-							<div class="CloseButton" title="<%=_ctx.appRes("UIConfirmation.Close")%>" onclick="<%=uicomponent.event("Close")%>"><span></span></div>
-							<div class="PopupTitle"><%= _ctx.appRes("UIConfirmation.title.exoMessages") %></div>
-						</div>
-					</div>
+<div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
+	<div class="OverflowContainer ClearFix">
+		<a class="CloseButton" title="<%=_ctx.appRes("UIConfirmation.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
+		<span class="PopupTitle"><%= _ctx.appRes("UIConfirmation.title.exoMessages") %></span>
+	</div>
+
+	<div class="UIWindowContent">
+		<div class="PopupContent UIPopupMessages">
+			<div class="UIHorizontalTabs">
+				<div class="TabsContainer">
+				<%	
+					boolean flag = false
+					flag = printTab(message, "Warning", flag);
+				%>
 				</div>
 			</div>
-			
-			<div class="MiddleLeftSideDecorator">
-				<div class="MiddleRightSideDecorator">
-					<div class="MiddleCenterDecorator">
-						<div class="UIWindowContent">
-							<div class="PopupContent">
-								<div class="UIPopupMessages">	
-									<div class="UIHorizontalTabs">
-										<div class="TabsContainer">
-										<%	
-											boolean flag = true
-											flag = printTab(message, "Warning", flag);
-										%>
-										</div>
-									</div>
-									<div class="UITabContentContainer">
-										<%
-											printMessage(message, "ErrorMessage");
-										%>
-									</div>
-									<div class="MessageActionBar">
-										<div class="UIAction">
-											<%
-												printAction(actions);
-											%>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div class="UITabContentContainer">
+				<%
+					printMessage(message, "ErrorMessage");
+				%>
 			</div>
-			<div><span></span></div>
-			<div class="BottomLeftCornerDecorator">
-				<div class="BottomRightCornerDecorator">
-					<div class="BottomCenterDecorator"><span></span></div>
-				</div>
+			<div class="UIAction MessageActionBar">
+				<%
+					printAction(actions);
+				%>
 			</div>
 		</div>
 	</div>
+</div>
 	
 	<%
 		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false, null, null, $uicomponent.showMask);");

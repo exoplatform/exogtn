@@ -18,19 +18,17 @@
 		uicomponent.renderUIComponent(uiPopupMenu); 
 	}
 %>
-<div class="UITrees ScrollArea">
-	<div class="TreeContainer JSContainer">
-		<div style="padding-bottom: 12px">
-			<div class="HomeNode">
-				<a class="LevelUpArrowIcon" href="<%=uicomponent.getActionLink();%>" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UITree.tooltip.UpLevel")%>" style="display: block;"><span></span></a>
-			</div>
+<ul class="UITrees TreeContainer">
+			<li class="HomeNode">
+				<a class="LevelUpArrowIcon" href="<%=uicomponent.getActionLink();%>" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UITree.tooltip.UpLevel")%>" style="display: block;"></a>
+			</li>
 			<%
 			int count=0;
 			for(object in sibling) {
 			if(uicomponent.displayThisNode(object, rcontext)){
 				if(count == indexOfRightMostDisplayedSibbling) {
 			%>
-				<div class="LastNode Node">
+				<li class="LastNode Node">
 					<% 
 					String objId = String.valueOf(uicomponent.getId(object));
 					String actionLink = uicomponent.event("ChangeNode", objId);
@@ -38,28 +36,28 @@
 					<%=uicomponent.renderNode(object);%>											
 					<%	
 						if(uicomponent.isSelected(object)){%>
-							<div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+							<ul class = "ChildrenContainer" actionLink="$actionLink" display = "block">
 						<%	
 						int countChild=0;
 						for(child in children) {
 						if(uicomponent.displayThisNode(child, rcontext)){
 						if(countChild == indexOfRightMostDisplayedChild) {
 						%>
-						 		<div class="LastNode Node">
+						 		<li class="LastNode Node">
 									<%=uicomponent.renderNode(child);%>
-								</div>
+								</li>
 						 <% } else { %>													 
-								<div class="Node">
+								<li class="Node">
 									<%=uicomponent.renderNode(child);%>
-								</div>
+								</li>
 							<% } %>	
 							<% } %>
 							<%countChild++;}	%>								
-							</div>						
+							</ul>						
 					<%}%>							 
-					</div>
+					</li>
 			<% } else { %>		
-					<div class="Node">
+					<li class="Node">
 					<% 
 					String objId = String.valueOf(uicomponent.getId(object));
 					String actionLink = uicomponent.event("ChangeNode", objId);
@@ -67,29 +65,27 @@
 					<%=uicomponent.renderNode(object);%>											
 					<%	
 						if(uicomponent.isSelected(object)){%>
-						<div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+						<ul class = "ChildrenContainer" actionLink="$actionLink" display = "block">
 						<%	
 						int countChild=0;
 						for(child in children) {
 						if(uicomponent.displayThisNode(child, rcontext)){
 									if(countChild == indexOfRightMostDisplayedChild) {
 						 %>
-						 		<div class="LastNode Node">
+						 		<li class="LastNode Node">
 									<%=uicomponent.renderNode(child);%>
-								</div>
+								</li>
 						 <% } else { %>													 
-								<div class="Node">
+								<li class="Node">
 									<%=uicomponent.renderNode(child);%>
-								</div>
+								</li>
 							<% } %>
 							<% } %>	
 							<%countChild++;}	%>								
-							</div>					
+							</ul>					
 					<%}%>							 
-					</div>
+					</li>
 				<% } %>
 				<% } %>
 			<%count++;}%>
-		</div>
-	</div>	
-</div>
+		</ul>

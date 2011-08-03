@@ -20,6 +20,14 @@
 .UIMaskWorkspace {
 	border: none;
 	width: 650px;
+	-moz-box-shadow: 0px 0px 10px #CACACA;
+	-webkit-box-shadow: 0px 0px 10px #CACACA;
+	box-shadow: 0px 0px 10px #afafaf;
+	border: 1px solid #CACACA;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #EBEBEB;
 }
 
 .UIMaskWorkspace .TopLeftDecorator {
@@ -48,7 +56,10 @@
 }
 
 .UIMaskWorkspace .MaskContainer {
-	background: #f5f5f5;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
 }
 
 .UIMaskWorkspace .BottomLeftDecorator {

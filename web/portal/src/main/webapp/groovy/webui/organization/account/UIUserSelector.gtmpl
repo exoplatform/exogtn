@@ -54,11 +54,10 @@
 			<%}%>
 			<div class="AddressContainer">
 				<div class="ListAddress">
-					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
-						<thead>
+					<table cellspacing="0" cellpadding="0" id="UIListUsers" class="UIGrid">
 							<tr>
 								<% if(isMulti) {%>
-								<th style="width: 30px;"><input type="checkbox" class="checkbox" value="4" /></th>
+								<th class="center" style="width: 30px;"><input type="checkbox" class="checkbox" value="4" /></th>
 								<% } %>
 								<th>
 									<%=uiform.getLabel('userName')%>
@@ -76,8 +75,6 @@
 								<th width="100px">Action</th>
 								<% } %>
 							</tr>
-						</thead>
-						<tbody>
 							<% if(uicomponent.getData().size() < 1)	{%>
 							<tr>
 								<td style="font-style:italic; color: #FF5604; text-align: center;" colspan="5">
@@ -124,7 +121,6 @@
 									<% } %>
 								</tr>
 							<%}%>
-						</tbody>
 					</table>			
 					<%_ctx.include("system:/groovy/webui/core/UIPageIterator.gtmpl");%>		
 				</div>

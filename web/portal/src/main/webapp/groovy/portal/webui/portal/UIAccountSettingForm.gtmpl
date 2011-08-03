@@ -1,5 +1,4 @@
-<div class="UIAccountSettingForm" id="<%=uicomponent.getId();%>">	
-
+<div class="UIAccountSettingForm" id="<%=uicomponent.getId();%>">
 	<div class="UITabPane">
 		<div class="TabPaneContent"> 
 			<div class="WorkingAreaWithHelp">
@@ -8,8 +7,6 @@
 				 		<div class="RightHorizontalTabs">
 				 			<div class="CenterHorizontalTabs">
 								<div class="TabsContainer">
-									
-									<div class="LineSeparator"><span></span></div>
 									<div class="UITab">
 										<div class="SelectedTab">
 											<div class="LeftTab">
@@ -20,10 +17,7 @@
 												</div>
 											</div>
 										</div>
-									</div>							
-										
-									<div class="LineSeparator"><span></span></div>
-										
+									</div>										
 									<div class="UITab">
 										<div class="NormalTab">
 											<div class="LeftTab">
@@ -34,10 +28,7 @@
 												</div>
 											</div>
 										</div>
-									</div>							
-	
-									<div class="LineSeparator"><span></span></div>
-									
+									</div>								
 								</div>
 							</div>
 						</div>

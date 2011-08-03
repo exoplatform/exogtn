@@ -85,8 +85,8 @@
 
 		</div>
 		<% if(portletPreferences.getKeys().size() != 0) {%>
-		<div class="Preferences" style="border: 1px solid #b7b7b7; padding: 10px; margin: 10px; background: #f7f7f7">
-			<table class="UIGrid" style="width: 99%">
+		<div class="Preferences" style="border: 1px solid #b7b7b7; padding: 10px; margin: 10px 0; background: #f7f7f7">
+			<table class="UIGrid" style="width: 99%" cellspacing="0" cellpadding="0">
 				<tr>
 					<th colspan="2"><%=_ctx.appRes("UIPortletInfo.title.portletPreferences")%></th>
 				</tr>
@@ -95,13 +95,16 @@
 				<% 
 					//Iterator<Entry<String, String[]>> itr = portletPreferences.getKeys().iterator();
 					Iterator<String> itr = portletPreferences.getKeys().iterator();
+					def odd = true;
                                         while(itr.hasNext()) {
+                                          def rowClass = odd ? "EvenRow" : "OddRow";
+										 										  odd = !odd;
                                           String key = itr.next();
                                           List<String> values = portletPreferences.getPreference(key).getDefaultValue();
                                         
 					//Entry<String, String[]> entry = itr.next(); 
 				%>
-				<tr>
+				<tr class="$rowClass">
 					<td width="30%"><%= key %></td>
 					<td>
 					<% for(value in values) { %>

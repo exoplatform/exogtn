@@ -19,13 +19,12 @@
 
 .UITrees {
 	border: 1px solid #b7b7b7;
-	background: white;
-}
-
-.UITrees .TreeContainer {
+	background: #fff;
+	list-style:none;
+	margin:0;	
+	padding:5px 0 10px 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	width: 99.5%;
 }
 
 .UITrees a {
@@ -38,28 +37,26 @@
 
 .UITrees .LevelUpArrowIcon {
 	height: 20px;
-	margin-left: 10px; /* orientation=lt */
-	margin-right: 10px; /* orientation=rt */
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/BlueUpLevelArrow.gif) no-repeat 0 center; /* orientation=lt */
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/BlueUpLevelArrow-rt.gif) no-repeat 0 center; /* orientation=rt */
+	margin-left: 19px; /* orientation=lt */
+	margin-right: 19px; /* orientation=rt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/BlueUpLevelArrow.gif) no-repeat center center; /* orientation=lt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/BlueUpLevelArrow-rt.gif) no-repeat center center; /* orientation=rt */
+	width:24px;
 }
 
 .UITrees a.LevelUpArrowIcon:hover {
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/OverBlueUpLevelArrow.gif) no-repeat 0 center; /* orientation=lt */
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/OverBlueUpLevelArrow-rt.gif) no-repeat 0 center; /* orientation=rt */
-	margin-left: 10px; /* orientation=lt */
-	margin-right: 10px; /* orientation=rt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/OverBlueUpLevelArrow.gif) no-repeat center center; /* orientation=lt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/OverBlueUpLevelArrow-rt.gif) no-repeat center center; /* orientation=rt */
 }
 
 .UITrees .Node {
-	line-height: 19px;
-	padding-top: 7px;
-	margin-left: 15px; /* orientation=lt */
-	margin-right: 15px; /* orientation=rt */
+	line-height: 18px;
+	padding-top: 8px;
+	margin-left: 24px; /* orientation=lt */
+	margin-right: 24px; /* orientation=rt */
 	white-space: nowrap;
-	background: url('background/Dotted.gif') repeat-y left; /* orientation=lt */
-	background: url('background/Dotted-rt.gif') repeat-y right; /* orientation=rt */
-	width: 100%;
+	background: url('background/Dotted.gif') repeat-y left 3px; /* orientation=lt */
+	background: url('background/Dotted-rt.gif') repeat-y right 3px; /* orientation=rt */
 }
 
 .UITrees .LastNode {
@@ -72,24 +69,22 @@
 	background-position: right top; /* orientation=rt */
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
-	width: 100%;
 	height: auto;
 }
 
 .UITrees .Node .ExpandIcon {
-	padding-left: 18px; /* orientation=lt */
-	padding-right: 18px; /* orientation=rt */
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
 	background: url('background/SmallGrayMinus.gif') no-repeat left top; /* orientation=lt */
 	background: url('background/SmallGrayMinus-rt.gif') no-repeat right top; /* orientation=rt */
-	width: 100%; height: auto;
+	height: auto;
 }
 
 .UITrees .Node .CollapseIcon {
-	padding-left: 18px; /* orientation=lt */
-	padding-right: 18px; /* orientation=rt */
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
 	background: url('background/SmallGrayPlus.gif') no-repeat left top; /* orientation=lt */
 	background: url('background/SmallGrayPlus-rt.gif') no-repeat right top; /* orientation=rt */
-	width: 100%; 
 	height: auto;
 }
 
@@ -100,12 +95,11 @@
 }
 
 .UITrees .Node .NullItemIcon {
-	padding-left: 18px; /* orientation=lt */
-	padding-right: 18px; /* orientation=rt */
-	background: url('background/NullItemIcon.gif') no-repeat 6px top; /* orientation=lt */
-	background: url('background/NullItemIcon-rt.gif') no-repeat 98.5% top; /* orientation=rt */
-	-webkit-background: url('background/NullItemIcon-rt.gif') no-repeat 98.2% top; /* orientation=rt */
-	width: 100%; height: auto;
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
+	background: url('background/NullItemIcon.gif') no-repeat 9px top; /* orientation=lt */
+	background: url('background/NullItemIcon-rt.gif') no-repeat 97.3% top; /* orientation=rt */
+	height: auto;
 }
 
 /** ################# Icons ###################*/

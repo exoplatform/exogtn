@@ -16,7 +16,7 @@
           String tabId = uiChild.getId();
           if(tabId.equals(selTabId)) style="SelectedTab" ;
       %>
-        <div class="UITab GrayTabStyle">
+        <div class="UITab NormalTabStyle">
           <div class="$style">
             <div class="LeftTab">
               <div class="RightTab">          

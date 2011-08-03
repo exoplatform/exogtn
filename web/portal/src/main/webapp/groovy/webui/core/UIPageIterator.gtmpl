@@ -8,14 +8,14 @@
 	<% if(currentPage + 10 <= totalPage) {%>				
 	<a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Icon NextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"></a>
 			<% } else if(currentPage + 1 <= totalPage) { %>
-	<a class="Icon DisableNextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"><span></span></a>
+	<a class="Icon DisableNextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"></a>
 	<% } else {%>
-	<a class="Icon DisableNextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"><span></span></a>
+	<a class="Icon DisableNextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"></a>
 	<% }%>	
 	<% if(currentPage +1 <= totalPage) { %>
 	<a href="<%=uicomponent.event("ShowPage","${currentPage + 1}")%>" class="Icon NextPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.next")%>"></a>
 	<% } else { %>
-	<a class="Icon DisableNextPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.next")%>"><span></span></a>
+	<a class="Icon DisableNextPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.next")%>"></a>
 	<%}%>
 	
 	<%
@@ -40,7 +40,7 @@
 	<%if( currentPage - 1 > 0 ){%>				
 	<a href="<%=uicomponent.event("ShowPage","${currentPage - 1}")%>" class="Icon LastPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.previous")%>"></a>
 	<% } else {%>
-	<a class="Icon DisableLastPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.previous")%>"><span></span></a>
+	<a class="Icon DisableLastPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.previous")%>"></a>
 	<%}%>
 	<%if(currentPage > 10) { %>
 	<a href="<%=uicomponent.event("ShowPage","${currentPage -10}")%>" class="Icon LastTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.backTenPages")%>"></a>
@@ -50,6 +50,5 @@
 	
 	<a class="PagesTotalNumber"><%=totalPage%></a>
 	<a class="TotalPages"><%=_ctx.appRes("UIPageIterator.label.totalPage")%>:</a>
-	<div class="ClearRight"><span></span></div>
 <%}%>	
 </div>

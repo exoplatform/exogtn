@@ -15,15 +15,14 @@
   DateFormat dateFormat = null;
 %>
 <div id="$uicomponent.id">
-    <table class="UIGrid" cellspacing="0">
-        <thead>
+    <table class="UIGrid" cellspacing="0" cellpadding="0">
             <tr>
                 <%if(name != null) {%>
                     <%for(field in beanFields) { %>
                             <th><%=_ctx.appRes(name+".header."+field)%></th>
                     <%}%>
                     <%if(beanActions != null) { %>
-                            <th><%=_ctx.appRes(name+".header.action")%></th>
+                            <th class="center"><%=_ctx.appRes(name+".header.action")%></th>
                     <%}%>
                 <%}%>
                 <%if(name == null) {%>
@@ -31,12 +30,10 @@
                             <th><%=_ctx.appRes(uiParent.getName()+".header."+field)%></th>
                     <%}%>
                     <%if(beanActions != null && beanActions.length > 0) { %>
-                            <th><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
+                            <th class="center"><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
                     <%}%>
                 <%}%>
             </tr>
-        </thead>
-        <tbody class="FeedBox">
 			<% 
 			boolean even = true;
 			for (bean in uicomponent.getBeans())  { 
@@ -87,6 +84,5 @@
         <%
             }
         %>
-        </tbody>
     </table>
 </div>

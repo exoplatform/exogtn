@@ -1,7 +1,6 @@
 <%import org.exoplatform.webui.core.UIComponent ;%>
 <div class="UIFormTableInputSet">
-	<table class="UIGrid" cellspacing="0" borderspacing="0">
-		<thead>
+	<table class="UIGrid" cellspacing="0" cellpadding="0">
 			<tr>
 				<%
 					String name = uicomponent.getName();
@@ -11,8 +10,6 @@
 						<th><%=_ctx.appRes(name + ".header."+col)%></th>
 				<%}%>
 			</tr>
-		</thead>
-		<tbody>
 		<%
 			String rowClass = null;
 			boolean even = true;
@@ -30,6 +27,5 @@
 					<%}%>
 				</tr>
 		<%}%>
-		</tbody>
 	</table> 
 </div>

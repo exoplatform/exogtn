@@ -17,8 +17,7 @@
    UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
 %>
 <div id="$uicomponent.id">
-   <table class="UIGrid" cellspacing="0">
-      <thead>
+   <table class="UIGrid" cellspacing="0" cellpadding="0">
       <tr>
          <% if (name != null)
          		{ for (field in beanFields)
@@ -27,7 +26,7 @@
          		<% }
          			if (beanActions != null)
          			{ %>
-         				<th><%=_ctx.appRes(name + ".header.action")%></th>
+         				<th class="center"><%=_ctx.appRes(name + ".header.action")%></th>
          		<% }
          		}
          		if (name == null)
@@ -38,12 +37,10 @@
          	 <% }
          			if (beanActions != null && beanActions.length > 0)
          			{ %>
-         				<th><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
+         				<th class="center"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
          	 <% }
          		} %>
       </tr>
-      </thead>
-      <tbody>
       <% if (uicomponent.getUIPageIterator().getAvailable() < 1)
       { %>
       <tr>
@@ -117,7 +114,6 @@
             }
          }
       %>
-      </tbody>
    </table> <!--End UIGrid-->
 <%
    if (uicomponent.getUIPageIterator().getAvailablePage() > 1)

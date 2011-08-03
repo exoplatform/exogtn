@@ -276,7 +276,7 @@ function UIDashboard() {
 		if(eXo.core.Browser.isIE6()) gadgetContainer.style.width = "99.5%";
 		
 		var selectPopup = DOMUtil.findPreviousElementByTagName(uiContainer, "div");
-		var closeButton = DOMUtil.findFirstDescendantByClass(selectPopup, "div", "CloseButton");
+		var closeButton = DOMUtil.findFirstDescendantByClass(selectPopup, "a", "CloseButton");	
 		closeButton.onclick = eXo.webui.UIDashboard.showHideSelectContainer;
 		
 		var colsContainer = DOMUtil.findFirstChildByClass(gadgetContainer, "div", "UIColumns");

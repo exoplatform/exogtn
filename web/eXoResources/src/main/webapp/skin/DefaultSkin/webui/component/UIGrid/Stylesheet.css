@@ -18,44 +18,86 @@
  */
 
 .UIGrid {
-	border: 1px solid #b7b7b7;
-	border-collapse: collapse;
-	padding-left: 1px;
 	margin: auto;
-	table-layout: fixed;
+	border: 1px solid #EAEAEA;
+	border-top:1px solid #EDEDED;
+	border-collapse:separate;	
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px; 
+	border-radius:3px ; 
 }
 
-.UIGrid thead {
-	border: 1px solid #b7b7b7;
+.UIGrid .center {
+	text-align:center;
 }
 
 .UIGrid th {
-	line-height: 19px;
-	border: 1px solid #b7b7b7;
-	background: #d2ddf1 url('background/ThGridRepeatBg1x19.jpg') repeat-x;
-	font-weight: normal;
-	padding: 0px 4px;
-	vertical-align: middle;
+	line-height: 20px;
+	background: #e1e1e1 url('background/ThGridRepeatBg1x19.png') repeat-x;
+	padding: 10px 17px;
+	text-align:left;/* orientation=lt */
+	text-align:right;/* orientation=rt */
 }
 
-.UIGrid tbody {
-	padding-bottom: 1px;
+.UIGrid th:first-child {
+	-moz-border-radius-topleft:2px;/* orientation=lt */
+	-webkit-border-top-left-radius:2px;/* orientation=lt */
+	border-top-left-radius:2px;/* orientation=lt */
+	-moz-border-radius-topright:2px; /* orientation=rt */	
+	-webkit-border-top-right-radius:2px;/* orientation=rt */
+	border-top-right-radius:2px;/* orientation=rt */
+}
+
+.UIGrid th:last-child {
+	-moz-border-radius-topright:2px;/* orientation=lt */ 		
+	-webkit-border-top-right-radius:2px;/* orientation=lt */
+	border-top-right-radius:2px;/* orientation=lt */
+	-moz-border-radius-topleft:2px; /* orientation=rt */
+	-webkit-border-top-left-radius:2px; /* orientation=rt */
+	border-top-left-radius:2px; /* orientation=rt */
 }
 
 .UIGrid td {
-  height: 20px; line-height: 20px;
-	border-right: 1px solid #cccccc;
-	border-left: 1px solid #cccccc;
-	border-top: 1px solid white;
-	padding: 4px;
+	padding: 10px 17px;
+	border: 1px solid #fff;
+	border-right: 0; /* orientation=lt */
+	border-left: 0; /* orientation=rt */	
+	vertical-align: middle;
 }
 
 .UIGrid .OddRow {
-	background: #f0f0f0;
+	background-color:#fff;
 }
 
 .UIGrid .EvenRow {
-	background: #f5f5f5;
+	background-color:#f4f4f4;
+}
+
+.UIGrid .OddRow td {
+	border-bottom:0;
+	border-top:0;
+}
+
+.UIGrid .EvenRow:last-child td {
+	border-bottom:2px solid #fff;
+}
+
+.UIGrid tr:last-child td:last-child {
+	-moz-border-radius-bottomright:2px; /* orientation=lt */
+	-webkit-border-bottom-right-radius:2px;/* orientation=lt */
+	border-bottom-right-radius:2px;/* orientation=lt */
+	-moz-border-radius-bottomleft:2px;/* orientation=rt */ 		
+	-webkit-border-bottom-left-radius:2px;/* orientation=rt */
+	border-bottom-left-radius:2px;/* orientation=rt */
+}
+
+.UIGrid tr:last-child td:first-child {
+	-moz-border-radius-bottomleft:2px;/* orientation=lt */ 		
+	-webkit-border-bottom-left-radius:2px;/* orientation=lt */
+	border-bottom-left-radius:2px;/* orientation=lt */
+	-moz-border-radius-bottomright:2px; /* orientation=rt */
+	-webkit-border-bottom-right-radius:2px;/* orientation=rt */
+	border-bottom-right-radius:2px;/* orientation=rt */
 }
 
 .UIGrid .ActionContainer {
