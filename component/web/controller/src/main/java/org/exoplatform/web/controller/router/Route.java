@@ -35,9 +35,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
 
@@ -440,27 +442,39 @@ class Route
    }
 
    /**
-    * Defines the status of a frame.
+    * Create a route matcher for the a request.
+    *
+    * @param path the path
+    * @param requestParams the query parameters
+    * @return the route matcher
     */
-   static enum Status
+   final RouteMatcher route(String path, Map<String, String[]> requestParams)
    {
-      BEGIN,
-
-      MATCHED_PARAMS,
-
-      PROCESS_CHILDREN,
-
-      MATCHED,
-
-      END
-
+      return new RouteMatcher(this, path, requestParams);
    }
 
-   static class Frame
+   static class RouteFrame
    {
 
+      /**
+       * Defines the status of a frame.
+       */
+      static enum Status
+      {
+         BEGIN,
+
+         MATCHED_PARAMS,
+
+         PROCESS_CHILDREN,
+
+         MATCHED,
+
+         END
+
+      }
+
       /** . */
-      private final Frame parent;
+      private final RouteFrame parent;
 
       /** . */
       private final Route route;
@@ -474,10 +488,10 @@ class Route
       /** The matches. */
       private Map<QualifiedName, String> matches;
 
-      /** The index when iterating child in {@link Status#PROCESS_CHILDREN} status. */
+      /** The index when iterating child in {@link org.exoplatform.web.controller.router.Route.RouteFrame.Status#PROCESS_CHILDREN} status. */
       private int childIndex;
 
-      private Frame(Frame parent, Route route, String path)
+      private RouteFrame(RouteFrame parent, Route route, String path)
       {
          this.parent = parent;
          this.route = route;
@@ -486,7 +500,7 @@ class Route
          this.childIndex = 0;
       }
 
-      private Frame(Route route, String path)
+      private RouteFrame(Route route, String path)
       {
          this(null, route, path);
       }
@@ -494,7 +508,7 @@ class Route
       Map<QualifiedName, String> getParameters()
       {
          Map<QualifiedName, String> parameters = null;
-         for (Frame frame = this;frame != null;frame = frame.parent)
+         for (RouteFrame frame = this;frame != null;frame = frame.parent)
          {
             if (frame.matches != null)
             {
@@ -520,26 +534,82 @@ class Route
       }
    }
 
-   /**
-    *
-    * @param path the path
-    * @param requestParams the query parameters
-    * @return null or the parameters when it matches
-    */
-   final Frame route(String path, Map<String, String[]> requestParams)
+   static class RouteMatcher implements Iterator<Map<QualifiedName, String>>
    {
-      return route(new Frame(null, this, path), requestParams);
+
+      /** . */
+      private final Map<String, String[]> requestParams;
+
+      /** . */
+      private RouteFrame frame;
+
+      /** . */
+      private RouteFrame next;
+
+      RouteMatcher(Route route, String path, Map<String, String[]> requestParams)
+      {
+         this.frame = new RouteFrame(route, path);
+         this.requestParams = requestParams;
+      }
+
+      public boolean hasNext()
+      {
+         if (next == null)
+         {
+            if (frame != null)
+            {
+               frame = route(frame, requestParams);
+            }
+            if (frame != null && frame.status == RouteFrame.Status.MATCHED)
+            {
+               next = frame;
+            }
+         }
+         return next != null;
+      }
+
+      public Map<QualifiedName, String> next()
+      {
+         if (!hasNext())
+         {
+            throw new NoSuchElementException();
+         }
+         Map<QualifiedName, String> parameters = next.getParameters();
+         next = null;
+         return parameters;
+      }
+
+      public void remove()
+      {
+         throw new UnsupportedOperationException();
+      }
    }
 
-   private static Frame route(Frame root, Map<String, String[]> requestParams)
+   private static RouteFrame route(RouteFrame root, Map<String, String[]> requestParams)
    {
+      RouteFrame current = root;
+
       //
-      Frame current = root;
+      if (root.status == RouteFrame.Status.MATCHED)
+      {
+         if (root.parent != null)
+         {
+            current = root.parent;
+         }
+         else
+         {
+            return null;
+         }
+      }
+      else if (root.status != RouteFrame.Status.BEGIN)
+      {
+         throw new AssertionError("Unexpected status " + root.status);
+      }
 
       //
       while (true)
       {
-         if (current.status == Status.BEGIN)
+         if (current.status == RouteFrame.Status.BEGIN)
          {
             boolean matched = true;
 
@@ -603,16 +673,16 @@ class Route
             if (matched)
             {
                // We enter next state
-               current.status = Status.MATCHED_PARAMS;
+               current.status = RouteFrame.Status.MATCHED_PARAMS;
             }
             else
             {
-               current.status = Status.END;
+               current.status = RouteFrame.Status.END;
             }
          }
-         else if (current.status == Status.MATCHED_PARAMS)
+         else if (current.status == RouteFrame.Status.MATCHED_PARAMS)
          {
-            Status next;
+            RouteFrame.Status next;
 
             // Anything that does not begin with '/' returns null
             if (current.path.length() > 0 && current.path.charAt(0) == '/')
@@ -620,29 +690,29 @@ class Route
                // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
                if (current.path.length() == 1 && current.route.terminal)
                {
-                  next = Status.MATCHED;
+                  next = RouteFrame.Status.MATCHED;
                }
                else
                {
-                  next = Status.PROCESS_CHILDREN;
+                  next = RouteFrame.Status.PROCESS_CHILDREN;
                }
             }
             else
             {
-               next = Status.END;
+               next = RouteFrame.Status.END;
             }
 
             //
             current.status = next;
          }
-         else if (current.status == Status.PROCESS_CHILDREN)
+         else if (current.status == RouteFrame.Status.PROCESS_CHILDREN)
          {
             if (current.childIndex < current.route.children.length)
             {
                Route child = current.route.children[current.childIndex++];
 
                // The next frame
-               Frame next;
+               RouteFrame next;
 
                //
                if (child instanceof SegmentRoute)
@@ -653,7 +723,7 @@ class Route
                   if (segmentRoute.name.length() == 0)
                   {
                      // Delegate the process to the next route
-                     next = new Frame(current, segmentRoute, current.path);
+                     next = new RouteFrame(current, segmentRoute, current.path);
                   }
                   else
                   {
@@ -682,7 +752,7 @@ class Route
                         }
 
                         // Delegate the process to the next route
-                        next = new Frame(current, segmentRoute, nextSegmentPath);
+                        next = new RouteFrame(current, segmentRoute, nextSegmentPath);
                      }
                      else
                      {
@@ -719,7 +789,7 @@ class Route
                      }
 
                      // Delegate to next patternRoute
-                     next = new Frame(current, patternRoute, nextPath);
+                     next = new RouteFrame(current, patternRoute, nextPath);
 
                      // JULIEN : this can be done lazyly
                      // Append parameters
@@ -771,14 +841,15 @@ class Route
             }
             else
             {
-               current.status = Status.END;
+               current.status = RouteFrame.Status.END;
             }
          }
-         else if (current.status == Status.MATCHED)
+         else if (current.status == RouteFrame.Status.MATCHED)
          {
-            return current;
+            // We found a solution
+            break;
          }
-         else if (current.status == Status.END)
+         else if (current.status == RouteFrame.Status.END)
          {
             if (current.parent != null)
             {
@@ -787,7 +858,7 @@ class Route
             else
             {
                // The end of the search
-               return null;
+               break;
             }
          }
          else
@@ -795,6 +866,9 @@ class Route
             throw new AssertionError();
          }
       }
+
+      //
+      return current;
    }
 
    final <R extends Route> R add(R route) throws MalformedRouteException

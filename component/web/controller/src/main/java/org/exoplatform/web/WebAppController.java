@@ -50,6 +50,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -264,7 +265,14 @@ public class WebAppController
       //
       if (router != null)
       {
-         Map<QualifiedName, String> parameters = router.route(portalPath, req.getParameterMap());
+         Iterator<Map<QualifiedName, String>> matcher = router.matcher(portalPath, req.getParameterMap());
+
+         //
+         Map<QualifiedName, String> parameters = null;
+         if (matcher.hasNext())
+         {
+            parameters = matcher.next();
+         }
 
          //
          if (parameters != null)

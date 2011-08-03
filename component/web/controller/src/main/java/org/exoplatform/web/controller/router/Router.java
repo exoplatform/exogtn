@@ -25,6 +25,7 @@ import org.exoplatform.web.controller.metadata.ControllerDescriptor;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -74,8 +75,20 @@ public class Router
 
    public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams) throws IOException
    {
-      Route.Frame frame = root.route(path, queryParams);
-      return frame != null ? frame.getParameters() : null;
+      Iterator<Map<QualifiedName, String>> matcher = matcher(path, queryParams);
+      if (matcher.hasNext())
+      {
+         return matcher.next();
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public Iterator<Map<QualifiedName, String>> matcher(String path, Map<String, String[]> queryParams) throws IOException
+   {
+      return root.route(path, queryParams);
    }
 
    @Override

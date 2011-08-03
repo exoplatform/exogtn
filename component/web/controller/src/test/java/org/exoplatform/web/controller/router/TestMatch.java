@@ -24,6 +24,7 @@ import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -257,5 +258,20 @@ public class TestMatch extends AbstractTestController
       expectedParameters.put(QualifiedName.create("a"), "");
       assertEquals(expectedParameters, router.route("/b"));
       assertEquals("/b", router.render(expectedParameters));
+   }
+
+   public void testMatcher() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}")).
+         add(route("/a").with(routeParam("b").withValue("b_value"))).
+         build();
+
+      Iterator<Map<QualifiedName, String>> i = router.root.route("/a", Collections.<String, String[]>emptyMap());
+      Map<QualifiedName, String> s1 = i.next();
+      assertEquals(Collections.singletonMap(QualifiedName.parse("a"), "a"), s1);
+      Map<QualifiedName, String> s2 = i.next();
+      assertEquals(Collections.singletonMap(QualifiedName.parse("b"), "b_value"), s2);
+      assertFalse(i.hasNext());
    }
 }
