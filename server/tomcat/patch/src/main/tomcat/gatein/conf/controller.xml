@@ -22,7 +22,12 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_controller_1_0 http://www.gatein.org/xml/ns/gatein_controller_1_0"
     xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_0">
 
-  <route path="/standalone/{gtn:path}">
+  <route path="/standalone/{gtn:path}">    
+    <!-- Webui parameters -->
+    <request-param qname="gtn:componentid" name="portal:componentId"/>
+    <request-param qname="gtn:action" name="portal:action"/>
+    <request-param qname="gtn:objectid" name="objectId"/>
+    
     <route-param qname="gtn:handler">
       <value>standalone</value>
     </route-param>
