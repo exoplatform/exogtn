@@ -74,7 +74,8 @@ public class Router
 
    public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams) throws IOException
    {
-      return root.route(path, queryParams);
+      Route.Frame frame = root.route(path, queryParams);
+      return frame != null ? frame.getParameters() : null;
    }
 
    @Override

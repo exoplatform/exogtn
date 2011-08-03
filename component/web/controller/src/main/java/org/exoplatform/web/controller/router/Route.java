@@ -440,160 +440,262 @@ class Route
    }
 
    /**
+    * Defines the status of a frame.
+    */
+   static enum Status
+   {
+      BEGIN,
+
+      MATCHED_PARAMS,
+
+      PROCESS_CHILDREN,
+
+      MATCHED,
+
+      END
+
+   }
+
+   static class Frame
+   {
+
+      /** . */
+      private final Frame parent;
+
+      /** . */
+      private final Route route;
+
+      /** . */
+      private final String path;
+
+      /** . */
+      private Status status;
+
+      /** The matches. */
+      private Map<QualifiedName, String> matches;
+
+      /** The index when iterating child in {@link Status#PROCESS_CHILDREN} status. */
+      private int childIndex;
+
+      private Frame(Frame parent, Route route, String path)
+      {
+         this.parent = parent;
+         this.route = route;
+         this.path = path;
+         this.status = Status.BEGIN;
+         this.childIndex = 0;
+      }
+
+      private Frame(Route route, String path)
+      {
+         this(null, route, path);
+      }
+
+      Map<QualifiedName, String> getParameters()
+      {
+         Map<QualifiedName, String> parameters = null;
+         for (Frame frame = this;frame != null;frame = frame.parent)
+         {
+            if (frame.matches != null)
+            {
+               if (parameters == null)
+               {
+                  parameters = new HashMap<QualifiedName, String>();
+               }
+               parameters.putAll(frame.matches);
+            }
+            if (frame.route.routeParams.size() > 0)
+            {
+               if (parameters == null)
+               {
+                  parameters = new HashMap<QualifiedName, String>();
+               }
+               for (RouteParam param : frame.route.routeParams.values())
+               {
+                  parameters.put(param.name, param.value);
+               }
+            }
+         }
+         return parameters != null ? parameters : Collections.<QualifiedName, String>emptyMap();
+      }
+   }
+
+   /**
     *
     * @param path the path
     * @param requestParams the query parameters
     * @return null or the parameters when it matches
     */
-   final Map<QualifiedName, String> route(String path, Map<String, String[]> requestParams)
+   final Frame route(String path, Map<String, String[]> requestParams)
    {
-      Map<QualifiedName, String> ret = null;
+      return route(new Frame(null, this, path), requestParams);
+   }
 
-      // Check request parameters
-      Map<QualifiedName, String> routeRequestParams = Collections.emptyMap();
-      if (this.requestParams.size() > 0)
+   private static Frame route(Frame root, Map<String, String[]> requestParams)
+   {
+      //
+      Frame current = root;
+
+      //
+      while (true)
       {
-         for (RequestParam requestParamDef : this.requestParams.values())
+         if (current.status == Status.BEGIN)
          {
-            String value = null;
-            String[] values = requestParams.get(requestParamDef.matchName);
-            if (values != null && values.length > 0 && values[0] != null)
+            boolean matched = true;
+
+            // We enter a frame
+            if (current.route.requestParams.size() > 0)
             {
-               value = values[0];
-            }
-            if (value == null)
-            {
-               switch (requestParamDef.controlMode)
+               for (RequestParam requestParamDef : current.route.requestParams.values())
                {
-                  case OPTIONAL:
-                     // Do nothing
-                     break;
-                  case REQUIRED:
-                     return null;
-               }
-            }
-            else if (!requestParamDef.matchValue(value))
-            {
-               return null;
-            }
-            switch (requestParamDef.valueMapping)
-            {
-               case CANONICAL:
-                  break;
-               case NEVER_EMPTY:
-                  if (value != null && value.length() == 0)
+                  String value = null;
+                  String[] values = requestParams.get(requestParamDef.matchName);
+                  if (values != null && values.length > 0 && values[0] != null)
                   {
-                     value = null;
+                     value = values[0];
                   }
-                  break;
-               case NEVER_NULL:
                   if (value == null)
                   {
-                     value = "";
+                     switch (requestParamDef.controlMode)
+                     {
+                        case OPTIONAL:
+                           // Do nothing
+                           break;
+                        case REQUIRED:
+                           matched = false;
+                           break;
+                     }
                   }
-                  break;
-            }
-            if (value != null)
-            {
-               if (routeRequestParams.isEmpty())
-               {
-                  routeRequestParams = new HashMap<QualifiedName, String>();
+                  else if (!requestParamDef.matchValue(value))
+                  {
+                     matched = false;
+                     break;
+                  }
+                  switch (requestParamDef.valueMapping)
+                  {
+                     case CANONICAL:
+                        break;
+                     case NEVER_EMPTY:
+                        if (value != null && value.length() == 0)
+                        {
+                           value = null;
+                        }
+                        break;
+                     case NEVER_NULL:
+                        if (value == null)
+                        {
+                           value = "";
+                        }
+                        break;
+                  }
+                  if (value != null)
+                  {
+                     if (current.matches == null)
+                     {
+                        current.matches = new HashMap<QualifiedName, String>();
+                     }
+                     current.matches.put(requestParamDef.name, value);
+                  }
                }
-               routeRequestParams.put(requestParamDef.name, value);
             }
-         }
-      }
-
-      // Anything that does not begin with '/' returns null
-      if (path.length() > 0 && path.charAt(0) == '/')
-      {
-         // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
-         if (path.length() == 1)
-         {
-            if (terminal)
-            {
-               ret = new HashMap<QualifiedName, String>();
-            }
-         }
-
-         // Try to find a pattern matching route otherwise
-         if (ret == null)
-         {
-
-            // Find the next '/' for determining the segment and next path
-            int pos = -1;
-            String segment = null;
-
-            // Determine next path
-            String nextSegmentPath = null;
 
             //
-            for (Route route : children)
+            if (matched)
             {
-               if (route instanceof SegmentRoute)
+               // We enter next state
+               current.status = Status.MATCHED_PARAMS;
+            }
+            else
+            {
+               current.status = Status.END;
+            }
+         }
+         else if (current.status == Status.MATCHED_PARAMS)
+         {
+            Status next;
+
+            // Anything that does not begin with '/' returns null
+            if (current.path.length() > 0 && current.path.charAt(0) == '/')
+            {
+               // The '/' means the current controller if any, otherwise it may be processed by the pattern matching
+               if (current.path.length() == 1 && current.route.terminal)
                {
-                  SegmentRoute segmentRoute = (SegmentRoute)route;
+                  next = Status.MATCHED;
+               }
+               else
+               {
+                  next = Status.PROCESS_CHILDREN;
+               }
+            }
+            else
+            {
+               next = Status.END;
+            }
+
+            //
+            current.status = next;
+         }
+         else if (current.status == Status.PROCESS_CHILDREN)
+         {
+            if (current.childIndex < current.route.children.length)
+            {
+               Route child = current.route.children[current.childIndex++];
+
+               // The next frame
+               Frame next;
+
+               //
+               if (child instanceof SegmentRoute)
+               {
+                  SegmentRoute segmentRoute = (SegmentRoute)child;
 
                   //
                   if (segmentRoute.name.length() == 0)
                   {
                      // Delegate the process to the next route
-                     Map<QualifiedName, String> response = segmentRoute.route(path, requestParams);
-
-                     // If we do have a response we return it
-                     if (response != null)
-                     {
-                        ret = response;
-                        break;
-                     }
+                     next = new Frame(current, segmentRoute, current.path);
                   }
                   else
                   {
                      // Find the next '/' for determining the segment and next path
-                     if (segment == null)
+                     // JULIEN : this can be computed multiple times
+                     int pos = current.path.indexOf('/', 1);
+                     if (pos == -1)
                      {
-                        pos = path.indexOf('/', 1);
-                        if (pos == -1)
-                        {
-                           pos = path.length();
-                        }
-                        segment = path.substring(1, pos);
+                        pos = current.path.length();
                      }
+                     String segment = current.path.substring(1, pos);
 
                      // Determine next path
                      if (segmentRoute.name.equals(segment))
                      {
                         // Lazy create next segment path
-                        if (nextSegmentPath == null)
+                        // JULIEN : this can be computed multiple times
+                        String nextSegmentPath;
+                        if (pos == current.path.length())
                         {
-                           if (pos == path.length())
-                           {
-                              nextSegmentPath = "/";
-                           }
-                           else
-                           {
-                              nextSegmentPath = path.substring(pos);
-                           }
+                           nextSegmentPath = "/";
+                        }
+                        else
+                        {
+                           nextSegmentPath = current.path.substring(pos);
                         }
 
                         // Delegate the process to the next route
-                        Map<QualifiedName, String> response = segmentRoute.route(nextSegmentPath, requestParams);
-
-                        // If we do have a response we return it
-                        if (response != null)
-                        {
-                           ret = response;
-                           break;
-                        }
+                        next = new Frame(current, segmentRoute, nextSegmentPath);
+                     }
+                     else
+                     {
+                        next = null;
                      }
                   }
                }
-               else if (route instanceof PatternRoute)
+               else if (child instanceof PatternRoute)
                {
-                  PatternRoute patternRoute = (PatternRoute)route;
+                  PatternRoute patternRoute = (PatternRoute)child;
 
                   //
-                  Matcher matcher = patternRoute.pattern.matcher(path);
+                  Matcher matcher = patternRoute.pattern.matcher(current.path);
 
                   // We match
                   if (matcher.find())
@@ -601,91 +703,98 @@ class Route
                      // Build next controller context
                      int nextPos = matcher.end();
                      String nextPath;
-                     if (path.length() == nextPos)
+                     if (current.path.length() == nextPos)
                      {
                         nextPath = "/";
                      }
                      else
                      {
-                        if (nextPos > 0 && path.charAt(nextPos - 1) == '/')
+                        if (nextPos > 0 && current.path.charAt(nextPos - 1) == '/')
                         {
                            nextPos--;
                         }
 
                         //
-                        nextPath = path.substring(nextPos);
+                        nextPath = current.path.substring(nextPos);
                      }
 
                      // Delegate to next patternRoute
-                     Map<QualifiedName, String> response = patternRoute.route(nextPath, requestParams);
+                     next = new Frame(current, patternRoute, nextPath);
 
-                     // If we do have a response we return it
-                     if (response != null)
+                     // JULIEN : this can be done lazyly
+                     // Append parameters
+                     int group = 1;
+                     for (int i = 0;i < patternRoute.params.length;i++)
                      {
-                        // Append parameters
-                        int group = 1;
-                        for (int i = 0;i < patternRoute.params.length;i++)
+                        PathParam param = patternRoute.params[i];
+
+                        //
+                        String value = matcher.group(group);
+
+                        //
+                        if (value != null)
                         {
-                           PathParam param = patternRoute.params[i];
-
-                           //
-                           String value = matcher.group(group);
-
-                           //
-                           if (value != null)
+                           if (param.encodingMode == EncodingMode.FORM)
                            {
-                              if (param.encodingMode == EncodingMode.FORM)
-                              {
-                                 value = value.replace(slashEscape, '/');
-                              }
-                              response.put(param.name, value);
+                              value = value.replace(slashEscape, '/');
                            }
-                           else
+                           if (next.matches == null)
                            {
-                              // We have an optional match
+                              next.matches = new HashMap<QualifiedName, String>();
                            }
-
-                           //
-                           group++;
+                           next.matches.put(param.name, value);
+                        }
+                        else
+                        {
+                           // We have an optional match
                         }
 
                         //
-                        ret = response;
-                        break;
+                        group++;
                      }
                   }
+                  else
+                  {
+                     next = null;
+                  }
                }
+               else
+               {
+                  throw new AssertionError();
+               }
+
+               //
+               if (next != null)
+               {
+                  current = next;
+               }
+            }
+            else
+            {
+               current.status = Status.END;
             }
          }
-
-         // Update parameters if it is possible
-         if (ret != null)
+         else if (current.status == Status.MATCHED)
          {
-            if (routeParams.size() > 0)
+            return current;
+         }
+         else if (current.status == Status.END)
+         {
+            if (current.parent != null)
             {
-               for (RouteParam param : routeParams.values())
-               {
-                  if (!ret.containsKey(param.name))
-                  {
-                     ret.put(param.name, param.value);
-                  }
-               }
+               current = current.parent;
             }
-            if (routeRequestParams.size() > 0)
+            else
             {
-               for (Map.Entry<QualifiedName, String> entry : routeRequestParams.entrySet())
-               {
-                  if (!ret.containsKey(entry.getKey()))
-                  {
-                     ret.put(entry.getKey(), entry.getValue());
-                  }
-               }
+               // The end of the search
+               return null;
             }
+         }
+         else
+         {
+            throw new AssertionError();
          }
       }
-
-      //
-      return ret;
    }
 
    final <R extends Route> R add(R route) throws MalformedRouteException
