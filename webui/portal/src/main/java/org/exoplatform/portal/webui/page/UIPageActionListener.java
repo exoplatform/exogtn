@@ -78,6 +78,11 @@ public class UIPageActionListener
             {
                targetNode = userPortal.resolvePath(navigation, builder.build(), nodePath);
             }
+
+            if (targetNode == null)
+            {
+               targetNode = userPortal.getDefaultPath(navigation, builder.build());
+            }
          }
 
          if (targetNode == null)
