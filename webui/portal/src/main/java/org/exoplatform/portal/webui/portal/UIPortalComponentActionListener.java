@@ -338,7 +338,7 @@ public class UIPortalComponentActionListener
                //we should get "showInfobar" from current UI portal instead of Storage service
                UIPortal currentPortal = Util.getUIPortal();
                DataStorage storage = uiApp.getApplicationComponent(DataStorage.class);
-               uiPortlet.setShowInfoBar(storage.getPortalConfig(currentPortal.getOwnerType(), currentPortal.getOwner()).isShowInfobar());
+               uiPortlet.setShowInfoBar(storage.getPortalConfig(currentPortal.getSiteType().getName(), currentPortal.getName()).isShowInfobar());
                uiSource = uiPortlet;
             }
             List<UIComponent> children = uiTarget.getChildren();

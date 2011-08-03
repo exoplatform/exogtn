@@ -31,6 +31,8 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -86,7 +88,7 @@ public class UIPageCreationWizard extends UIPageWizard
    {            
       UIPageNodeSelector nodeSelector = findFirstComponentOfType(UIPageNodeSelector.class);
       nodeSelector.configure(node);      
-      if (node.getNavigation().getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+      if (node.getNavigation().getKey().getType().equals(SiteType.USER))
       {
          nodeSelector.setRendered(false);         
       }
@@ -266,20 +268,20 @@ public class UIPageCreationWizard extends UIPageWizard
    static public class ViewStep3ActionListener extends EventListener<UIPageCreationWizard>
    {
 
-      private void setDefaultPermission(Page page, String ownerType, String ownerId)
+      private void setDefaultPermission(Page page, SiteKey siteKey)
       {
          UIPortal uiPortal = Util.getUIPortal();
-         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+         if (SiteType.PORTAL.equals(siteKey.getType()))
          {
             page.setAccessPermissions(uiPortal.getAccessPermissions());
             page.setEditPermission(uiPortal.getEditPermission());
          }
-         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
+         else if (SiteType.GROUP.equals(siteKey.getType()))
          {
             UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-            ownerId = ownerId.startsWith("/") ? ownerId : "/" + ownerId;
-            page.setAccessPermissions(new String[]{"*:" + ownerId});
-            page.setEditPermission(acl.getMakableMT() + ":" + ownerId);
+            String siteName = siteKey.getName().startsWith("/") ? siteKey.getName() : "/" + siteKey.getName();
+            page.setAccessPermissions(new String[]{"*:" + siteName});
+            page.setEditPermission(acl.getMakableMT() + ":" + siteName);
          }         
       }
 
@@ -332,7 +334,7 @@ public class UIPageCreationWizard extends UIPageWizard
          page.setModifiable(true);
 
          // Set default permissions on the page
-         setDefaultPermission(page, ownerType, ownerId);
+         setDefaultPermission(page, pageNavi.getKey());
 
          if (page.getTitle() == null || page.getTitle().trim().length() == 0)
          {

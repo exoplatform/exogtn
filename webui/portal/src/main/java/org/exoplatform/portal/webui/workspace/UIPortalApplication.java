@@ -237,12 +237,11 @@ public class UIPortalApplication extends UIApplication
     */
    public void putCachedUIPortal(UIPortal uiPortal)
    {
-      String ownerType = uiPortal.getOwnerType();
-      String ownerId = uiPortal.getOwner();
+      SiteKey siteKey = uiPortal.getSiteKey();
 
-      if (ownerType != null && ownerId != null)
+      if (siteKey != null)
       {
-         this.all_UIPortals.put(new SiteKey(ownerType, ownerId), uiPortal);
+         this.all_UIPortals.put(siteKey, uiPortal);
       }
    }
 

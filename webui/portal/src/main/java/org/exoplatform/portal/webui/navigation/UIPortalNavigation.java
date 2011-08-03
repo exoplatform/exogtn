@@ -163,7 +163,7 @@ public class UIPortalNavigation extends UIComponent
       List<UserNode> childNodes = new LinkedList<UserNode>();
       for (UserNavigation nav : rearrangeNavigations(listNavigations))
       {
-         if (!showUserNavigation && nav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (!showUserNavigation && nav.getKey().getType().equals(SiteType.USER))
          {
             continue;
          }

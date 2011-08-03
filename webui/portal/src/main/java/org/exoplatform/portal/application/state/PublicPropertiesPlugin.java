@@ -92,8 +92,8 @@ public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPl
          }
          
          // Site related properties
-         addProperty(properties, siteTypeQName, currentSite.getOwnerType());
-         addProperty(properties, siteNameQName, currentSite.getOwner());
+         addProperty(properties, siteTypeQName, currentSite.getSiteType().getName());
+         addProperty(properties, siteNameQName, currentSite.getName());
 
          // Window related properties
          addProperty(properties, windowShowInfoBarQName, Boolean.toString(portletWindow.getShowInfoBar()));

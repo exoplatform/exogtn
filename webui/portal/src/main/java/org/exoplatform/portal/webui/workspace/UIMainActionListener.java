@@ -19,14 +19,12 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import java.lang.reflect.Method;
-
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -49,6 +47,8 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by The eXo Platform SAS 
@@ -171,7 +171,7 @@ public class UIMainActionListener
       {         
          UserNavigation currNav = selectedNode.getNavigation();
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         if (currNav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (currNav.getKey().getType().equals(SiteType.USER))
          {            
             return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);
          }
@@ -209,7 +209,7 @@ public class UIMainActionListener
          UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(
             UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), 
+         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getSiteType().getName(), currentUIPortal.getName(), 
                                                 currentUIPortal.getEditPermission()))
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",

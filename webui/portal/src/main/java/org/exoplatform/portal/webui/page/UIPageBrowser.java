@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -264,7 +265,7 @@ public class UIPageBrowser extends UIContainer
          Page page = service.getPage(id, context.getRemoteUser());
 
          if (page == null || !page.isModifiable() ||
-            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(context.getRemoteUser())))
+            (page.getOwnerType().equals(SiteType.USER.getName()) && !page.getOwnerId().equals(context.getRemoteUser())))
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -274,7 +275,7 @@ public class UIPageBrowser extends UIContainer
          UIPortal uiPortal = Util.getUIPortal();
          UserNode userNode = uiPortal.getSelectedUserNode();
          boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getPageId());
-         if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
+         if (isDeleteCurrentPage && page.getOwnerType().equals(SiteType.USER.getName()))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
             event.getRequestContext().getUIApplication().addMessage(msg);
@@ -287,7 +288,7 @@ public class UIPageBrowser extends UIContainer
          int currentPage = datasource.getCurrentPage();
 
          //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
+         if(page.getOwnerType().equals(SiteType.USER.getName())){
             removePageNode(page, event);
          }
 
@@ -414,7 +415,10 @@ public class UIPageBrowser extends UIContainer
          UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
          uiMaskWS.setUIComponent(uiPageForm);
          uiMaskWS.setShow(true);
-         
+
+         uiPageForm.getUIStringInput("ownerType").setValue(SiteType.USER.getName());
+         uiPageForm.getUIStringInput("ownerId").setValue(prContext.getRemoteUser());
+         uiPageForm.removeChildById("PermissionSetting");         
          uiPageForm.removeChild(UIFormInputItemSelector.class);
          UIPageTemplateOptions uiTemplateConfig = uiPageForm.createUIComponent(UIPageTemplateOptions.class, null, null);
          uiPageForm.addUIFormInput(uiTemplateConfig);
@@ -466,7 +470,7 @@ public class UIPageBrowser extends UIContainer
             return;
          }
 
-         page.setOwnerType(uiPage.getOwnerType());
+         page.setOwnerType(uiPage.getSiteKey().getTypeName());
 
          List<UIComponent> uiChildren = uiPage.getChildren();
          if (uiChildren == null)

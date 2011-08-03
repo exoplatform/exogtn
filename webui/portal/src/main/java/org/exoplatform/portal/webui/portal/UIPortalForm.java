@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
@@ -375,7 +376,7 @@ public class UIPortalForm extends UIFormTabPane
          }
 
          UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
-         service.createUserPortalConfig(PortalConfig.PORTAL_TYPE, portalName, template);
+         service.createUserPortalConfig(SiteType.PORTAL.getName(), portalName, template);
          
          PortalConfig pconfig = dataService.getPortalConfig(portalName);
          uiForm.invokeSetBindingBean(pconfig);

@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
@@ -78,10 +77,7 @@ import javax.servlet.http.HttpServletRequest;
    @EventConfig(listeners = UIPortalActionListener.PingActionListener.class)})
 public class UIPortal extends UIContainer
 {
-
-   private String owner;
-
-   private String ownerType;
+   private SiteKey siteKey;
 
    private String locale;
    
@@ -105,19 +101,14 @@ public class UIPortal extends UIContainer
 
    public SiteKey getSiteKey()
    {
-      return new SiteKey(ownerType, name_);
+      return siteKey;
    }
    
-   public String getOwner()
+   public void setSiteKey(SiteKey key)
    {
-      return owner;
+      siteKey = key;
    }
-
-   public void setOwner(String s)
-   {
-      owner = s;
-   }
-
+   
    public String getLocale()
    {
       return locale;
@@ -148,14 +139,20 @@ public class UIPortal extends UIContainer
       skin = s;
    }
 
+   /**
+    * @deprecated Use {@link #getSiteType()} instead
+    * 
+    * @return
+    */
+   @Deprecated
    public String getOwnerType()
    {
-      return ownerType;
+      return siteKey.getTypeName();
    }
-
-   public void setOwnerType(String ownerType)
+   
+   public SiteType getSiteType()
    {
-      this.ownerType = ownerType;
+      return siteKey.getType();
    }
 
    public Map<String, String[]> getPublicParameters()
@@ -217,7 +214,6 @@ public class UIPortal extends UIContainer
    public UserNavigation getUserNavigation() throws Exception
    {
       UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
-      SiteKey siteKey = new SiteKey(ownerType, owner);
       return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
    }
    

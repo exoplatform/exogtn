@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -251,7 +252,7 @@ public class UIPortalComposer extends UIContainer
 
    private void rebuildUIPortal(UIPortalApplication uiPortalApp, UIPortal uiPortal, DataStorage storage) throws Exception
    {
-      PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getOwnerType(), uiPortal.getOwner());
+      PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getSiteType().getName(), uiPortal.getName());
       UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
       userPortalConfig.setPortal(portalConfig);
       uiPortal.getChildren().clear();
@@ -272,9 +273,9 @@ public class UIPortalComposer extends UIContainer
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
 
       String portalOwner = null;
-      if (editPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+      if (editPortal.getSiteType().equals(SiteType.PORTAL))
       {
-         portalOwner = editPortal.getOwner();
+         portalOwner = editPortal.getName();
       }
       else
       {
@@ -373,9 +374,9 @@ public class UIPortalComposer extends UIContainer
          if (temp != null && (temp instanceof UIPortal))
          {
             uiPortal = (UIPortal)temp;
-            if (uiPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+            if (uiPortal.getSiteType().equals(SiteType.PORTAL))
             {
-               portalOwner = uiPortal.getOwner();
+               portalOwner = uiPortal.getName();
             }
             else
             {
@@ -393,7 +394,7 @@ public class UIPortalComposer extends UIContainer
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
          portalForm.setPortalOwner(portalOwner);
          portalForm.setBindingBean();
-         if (PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType()))
+         if (SiteType.USER.equals(uiPortal.getSiteType()))
          {
             portalForm.removeChildById("PermissionSetting");
          }
@@ -502,7 +503,7 @@ public class UIPortalComposer extends UIContainer
          }
          else
          {
-            if (editPortal.getOwner().equals(prContext.getPortalOwner()))
+            if (editPortal.getName().equals(prContext.getPortalOwner()))
             {
                HttpServletRequest request = prContext.getRequest();
                request.getSession().invalidate();

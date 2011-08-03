@@ -76,7 +76,7 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       UIPortalApplication portalApp = Util.getUIPortalApplication();
       UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
       UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-      return userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), currentUIPortal.getEditPermission());
+      return userACL.hasEditPermissionOnPortal(currentUIPortal.getSiteType().getName(), currentUIPortal.getName(), currentUIPortal.getEditPermission());
    }
 
    private boolean hasEditPermissionOnPage() throws Exception
@@ -89,7 +89,7 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
 
       if(uiPage != null)
       {
-         return userACL.hasEditPermissionOnPage(uiPage.getOwnerType(), uiPage.getOwnerId(), uiPage.getEditPermission());
+         return userACL.hasEditPermissionOnPage(uiPage.getSiteKey().getTypeName(), uiPage.getSiteKey().getName(), uiPage.getEditPermission());
       }
       else
       {

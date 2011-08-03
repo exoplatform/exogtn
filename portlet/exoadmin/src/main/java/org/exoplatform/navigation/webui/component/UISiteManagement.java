@@ -380,8 +380,7 @@ public class UISiteManagement extends UIContainer
          UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
          uicomp.naviManager = naviManager;
 
-         naviManager.setOwner(portalName);
-         naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
+         naviManager.setSiteKey(SiteKey.portal(portalName));
 
          UserPortal userPortal = userPortalConfig.getUserPortal();
          UserNavigation edittedNavigation = userPortal.getNavigation(SiteKey.portal(portalName));
