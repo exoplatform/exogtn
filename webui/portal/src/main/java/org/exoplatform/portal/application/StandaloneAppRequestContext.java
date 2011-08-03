@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.url.StandaloneAppURLContext;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;
@@ -40,7 +41,7 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String requestPath)
       throws Exception
    {
-      super(app, controllerContext, null, null, requestPath, null);    
+      super(app, controllerContext, SiteType.USER.name(), controllerContext.getRequest().getRemoteUser(), requestPath, null);    
    }
 
    @Override

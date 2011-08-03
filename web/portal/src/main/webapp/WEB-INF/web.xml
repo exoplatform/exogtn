@@ -263,10 +263,6 @@
 	</servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>portal</servlet-name>
-    <url-pattern>/standalone/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
