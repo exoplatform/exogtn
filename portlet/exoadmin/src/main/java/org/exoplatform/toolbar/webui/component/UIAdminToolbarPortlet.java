@@ -84,6 +84,11 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       UIPortalApplication portalApp = Util.getUIPortalApplication();
       UIWorkingWorkspace uiWorkingWS = portalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
+      if (pageBody == null)
+      {
+         return false;
+      }
+      
       UIPage uiPage = (UIPage)pageBody.getUIComponent();
       UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
 

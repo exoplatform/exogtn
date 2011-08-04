@@ -27,6 +27,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -132,7 +133,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       PortalConfig pConfig = null;
       try
       {
-         pConfig = dataStorage.getPortalConfig(reqCtx.getSiteType().getName(), reqCtx.getSiteName());
+         pConfig = dataStorage.getPortalConfig(SiteType.PORTAL.getName(), reqCtx.getPortalOwner());
          if (pConfig == null)
             log.warn("No UserPortalConfig available! Portal locale set to 'en'");
       }
