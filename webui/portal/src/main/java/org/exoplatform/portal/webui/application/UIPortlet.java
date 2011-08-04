@@ -1002,7 +1002,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    public void update(C updateState) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      ExoContainer container = context.getApplication().getApplicationServiceContainer();      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
+      ExoContainer container = context.getApplication().getApplicationServiceContainer();
+      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
       setState(state);
    }
    
