@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
@@ -44,6 +43,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +62,7 @@ public class UIPageActionListener
          UIPortalApplication uiPortalApp = event.getSource();
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
          UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
+         PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
    
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withReadCheck();
@@ -79,6 +80,20 @@ public class UIPageActionListener
                targetNode = userPortal.resolvePath(navigation, builder.build(), nodePath);
             }
 
+            // If unauthenticated users have no permission on PORTAL node and URL is valid, they will be required to login
+            if (targetNode == null && pcontext.getRemoteUser() == null && siteKey.getType().equals(SiteType.PORTAL))
+            {
+               targetNode = userPortal.resolvePath(navigation, builder.withAuthMode(UserNodeFilterConfig.AUTH_NO_CHECK).build(), nodePath); 
+               if (targetNode != null)
+               {
+                  uiPortalApp.setLastRequestURI(null);
+                  String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
+                  pcontext.sendRedirect(doLoginPath);
+                  return;
+               }
+            }
+
+            // If path to node is invalid, get the default node instead of.
             if (targetNode == null)
             {
                targetNode = userPortal.getDefaultPath(navigation, builder.build());
@@ -98,31 +113,7 @@ public class UIPageActionListener
                return;
             }
          }
-         
-         //Require unauthenticated users to login as they browse to a page of type PORTAL and that the navigation service
-         //returns a null UserNode. For the moment, we could not determine if the null returned value is due to restricted
-         //access permission, or due to the existence of data
-         //TODO: The targetNode should wrap information saying if annonymous user should login or not
-         PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
-         if (pcontext.getRemoteUser() == null && siteKey != null && SiteType.PORTAL.equals(siteKey.getType()) && nodePath != null && nodePath.length() > 0)
-         {
-            String pageRef = targetNode.getPageRef();
-            if(pageRef != null)
-            {
-               boolean requireLogin = false;
-               Page page = uiPortalApp.getApplicationComponent(DataStorage.class).getPage(pageRef);
-               UserACL userACL = uiPortalApp.getApplicationComponent(UserACL.class);
-               requireLogin = page != null && !userACL.hasPermission(page);
-               if(requireLogin)
-               {
-                  uiPortalApp.setLastRequestURI(null);
-                  String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
-                  pcontext.sendRedirect(doLoginPath);
-                  return;
-               }
-            }
-         }
-         
+
          UserNavigation targetNav = targetNode.getNavigation();                  
          UserNode currentNavPath = null;
          if (showedUIPortal != null)
