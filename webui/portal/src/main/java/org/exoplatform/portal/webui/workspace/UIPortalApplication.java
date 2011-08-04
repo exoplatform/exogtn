@@ -295,6 +295,11 @@ public class UIPortalApplication extends UIApplication
       return modeState;
    }
 
+   public void setLastRequestURI(String uri)
+   {
+      this.lastRequestURI = uri;
+   }
+
    /**
     * @deprecated use the Mode State instead
     * 

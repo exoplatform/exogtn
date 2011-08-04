@@ -107,20 +107,19 @@ public class UIPageActionListener
          if (pcontext.getRemoteUser() == null && siteKey != null && SiteType.PORTAL.equals(siteKey.getType()) && nodePath != null && nodePath.length() > 0)
          {
             String pageRef = targetNode.getPageRef();
-            boolean requireLogin = false;
             if(pageRef != null)
             {
+               boolean requireLogin = false;
                Page page = uiPortalApp.getApplicationComponent(DataStorage.class).getPage(pageRef);
                UserACL userACL = uiPortalApp.getApplicationComponent(UserACL.class);
                requireLogin = page != null && !userACL.hasPermission(page);
-            }
-
-            if(requireLogin)
-            {
-               //PortalURL<NavigationResource, NavigationURL> doLoginURL = pcontext.createURL(NavigationURL.TYPE);
-               String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
-               pcontext.sendRedirect(doLoginPath);
-               return;
+               if(requireLogin)
+               {
+                  uiPortalApp.setLastRequestURI(null);
+                  String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
+                  pcontext.sendRedirect(doLoginPath);
+                  return;
+               }
             }
          }
          
