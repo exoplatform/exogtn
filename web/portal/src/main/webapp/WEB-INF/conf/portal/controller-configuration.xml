@@ -30,7 +30,7 @@
     <init-params>
       <value-param>
         <name>controller.config</name>
-        <value>${gatein.controller.config}</value>
+        <value>${gatein.portal.controller.config}</value>
       </value-param>
     </init-params>
   </component>
