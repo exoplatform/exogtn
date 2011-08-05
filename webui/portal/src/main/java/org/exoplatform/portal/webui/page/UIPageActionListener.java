@@ -78,28 +78,29 @@ public class UIPageActionListener
             if (navigation != null)
             {
                targetNode = userPortal.resolvePath(navigation, builder.build(), nodePath);
-            }
-
-            // If unauthenticated users have no permission on PORTAL node and URL is valid, they will be required to login
-            if (targetNode == null && pcontext.getRemoteUser() == null && siteKey.getType().equals(SiteType.PORTAL))
-            {
-               targetNode = userPortal.resolvePath(navigation, builder.withAuthMode(UserNodeFilterConfig.AUTH_NO_CHECK).build(), nodePath); 
-               if (targetNode != null)
+               if (targetNode == null)
                {
-                  uiPortalApp.setLastRequestURI(null);
-                  String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
-                  pcontext.sendRedirect(doLoginPath);
-                  return;
+                  // If unauthenticated users have no permission on PORTAL node and URL is valid, they will be required to login
+                  if (pcontext.getRemoteUser() == null && siteKey.getType().equals(SiteType.PORTAL))
+                  {
+                     targetNode = userPortal.resolvePath(navigation, builder.withAuthMode(UserNodeFilterConfig.AUTH_NO_CHECK).build(), nodePath); 
+                     if (targetNode != null)
+                     {
+                        uiPortalApp.setLastRequestURI(null);
+                        String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
+                        pcontext.sendRedirect(doLoginPath);
+                        return;
+                     }
+                  } 
+                  else
+                  {
+                     // If path to node is invalid, get the default node instead of.
+                     targetNode = userPortal.getDefaultPath(navigation, builder.build());
+                  }
                }
             }
-
-            // If path to node is invalid, get the default node instead of.
-            if (targetNode == null)
-            {
-               targetNode = userPortal.getDefaultPath(navigation, builder.build());
-            }
          }
-
+         
          if (targetNode == null)
          {
             targetNode = userPortal.getDefaultPath(builder.build());
