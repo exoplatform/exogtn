@@ -59,21 +59,47 @@ UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 	}
 };
 
-UIRightClickPopupMenu.prototype.ajaxPost = function(evt, elemt) {	
-  var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
-  contextMenu.style.display = "none" ;  
-  var href = elemt.getAttribute('exo:href') ;
-  var objId = encodeURI(contextMenu.objId.replace(/'/g, "\\'"));
-  
-  if(href.indexOf("javascript") == -1) {
-	  ajaxPost(url, "ajaxRequest=true&objectId=" + objId);
-	  return;
-  }
-  eXo.core.MouseEventManager.docMouseDownEvt(evt);
-  
-  href = href.replace("ajaxGet", "ajaxPost");  
-  eval(href.substr(0, href.length - 2) + "', 'objectId=" + objId + "')");
-}
+/**
+* Prepare objectId for context menu
+* Make ajaxPost request if needed
+* @param {Object} evt event
+* @param {Object} elemt document object that contains context menu
+*/
+UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
+	eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
+	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
+	contextMenu.style.display = "none" ;
+	var href = elemt.getAttribute('href') ;	
+	if (!href) {
+		return;
+	}
+	if(href.indexOf("ajaxGet") != -1) {
+		href = href.replace("ajaxGet", "ajaxPost");
+		elemt.setAttribute('href', href) ;
+	}	
+	if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
+		return;
+	}
+	var objId = encodeURI(contextMenu.objId.replace(/'/g, "\\'"));
+	
+	if (href.indexOf("javascript") == -1) {
+		elemt.setAttribute('href', href + "&objectId=" + objId) ;
+		return;
+	} else  if(href.indexOf("window.location") != -1) {
+		href =  href.substr(0, href.length - 1) + "&objectId=" + objId + "'" ;
+	} else if (href.indexOf("ajaxPost") != -1) {
+		href = href.substr(0, href.length - 2) + "', 'objectId=" + objId + "')";				
+	} else {
+		href = href.substr(0, href.length - 2) + "&objectId=" + objId + "')";
+	}
+	
+	eval(href);
+	if ( evt && evt.preventDefault )
+		evt.preventDefault();
+	else
+		window.event.returnValue = false;
+	return false;
+};
 
 /**
  * Mouse click on element, If click is right-click, the context menu will be shown
