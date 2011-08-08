@@ -135,7 +135,14 @@ public class PortalRequestHandler extends WebRequestHandler
       }
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
       PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, requestLocale);
-      processRequest(context, app);
+      if (context.getUserPortalConfig() == null)
+      {
+         context.sendError(HttpServletResponse.SC_NOT_FOUND);
+      }
+      else
+      {
+         processRequest(context, app);
+      }
    }
 
    @SuppressWarnings("unchecked")
@@ -143,11 +150,6 @@ public class PortalRequestHandler extends WebRequestHandler
    {
       WebuiRequestContext.setCurrentInstance(context);
       UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
-      
-      if (uiApp == null)
-      {
-         return;
-      }
       
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try
