@@ -72,8 +72,7 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
             configService.createUserSite(userName);
          }
 
-         //TODO: Avoid using getDefaultPortal()
-         UserPortalConfig userPortalConfig = configService.getUserPortalConfig(configService.getDefaultPortal(), userName, PortalRequestContext.USER_PORTAL_CONTEXT);
+         UserPortalConfig userPortalConfig = context.getUserPortalConfig();
          UserPortal userPortal = userPortalConfig.getUserPortal();
          SiteKey siteKey = context.getSiteKey();
          UserNavigation nav = userPortal.getNavigation(siteKey);
