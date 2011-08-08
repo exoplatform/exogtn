@@ -791,7 +791,7 @@ class Route
                      // Delegate to next patternRoute
                      next = new RouteFrame(current, patternRoute, nextPath);
 
-                     // JULIEN : this can be done lazyly
+                     // JULIEN : this can be done lazily
                      // Append parameters
                      int group = 1;
                      for (int i = 0;i < patternRoute.params.length;i++)
