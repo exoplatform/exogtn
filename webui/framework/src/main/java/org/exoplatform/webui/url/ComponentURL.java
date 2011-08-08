@@ -27,8 +27,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.util.Tools;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -68,14 +66,9 @@ public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
    /** . */
    private String path;
 
-   private Map<QualifiedName, String> entries;
-
    public ComponentURL(URLContext context) throws NullPointerException
    {
       super(context);
-
-      //
-      this.entries = new HashMap<QualifiedName, String>();
    }
 
    public UIComponent getResource()
