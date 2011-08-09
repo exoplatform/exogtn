@@ -68,6 +68,12 @@ public class Router
    /** The slash escape char. */
    final char slashEscape;
 
+   /** . */
+   final char slashEscapeNible1;
+
+   /** . */
+   final char slashEscapeNible2;
+
    public Router(ControllerDescriptor metaData) throws RouterConfigException
    {
       char slashEscape = metaData.getSlashEscape();
@@ -78,6 +84,11 @@ public class Router
       {
          throw new RouterConfigException("Char " + (int)slashEscape + " cannot be used a slash escape");
       }
+
+      //
+      String s = Integer.toString(slashEscape, 16).toUpperCase();
+      slashEscapeNible1 = s.charAt(0);
+      slashEscapeNible2 = s.charAt(1);
 
       //
       this.root = new Route(this);

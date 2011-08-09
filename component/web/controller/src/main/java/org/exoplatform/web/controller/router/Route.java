@@ -258,25 +258,25 @@ class Route
             for (int len = value.length(), j = 0;j < len;j++)
             {
                char c = value.charAt(j);
-               switch (c)
+               if (c == router.slashEscape)
                {
-                  case '_':
-                     if (def.encodingMode == EncodingMode.PRESERVE_PATH)
-                     {
-                        writer.append('_');
-                     } else
-                     {
-                        writer.append('%');
-                        writer.append('5');
-                        writer.append('F');
-                     }
-                     break;
-                  case '/':
-                     writer.append(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : router.slashEscape);
-                     break;
-                  default:
-                     writer.appendSegment(c);
-                     break;
+                  if (def.encodingMode == EncodingMode.PRESERVE_PATH)
+                  {
+                     writer.append('_');
+                  } else
+                  {
+                     writer.append('%');
+                     writer.append(router.slashEscapeNible1);
+                     writer.append(router.slashEscapeNible2);
+                  }
+               }
+               else if (c == '/')
+               {
+                  writer.append(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : router.slashEscape);
+               }
+               else
+               {
+                  writer.appendSegment(c);
                }
             }
 
