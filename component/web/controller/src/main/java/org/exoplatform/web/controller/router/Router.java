@@ -22,8 +22,11 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.ControllerDescriptor;
+import org.exoplatform.web.url.MimeType;
+import org.gatein.common.io.UndeclaredIOException;
 
 import java.io.IOException;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,11 +41,47 @@ public class Router
 {
 
    /** . */
+   private static final BitSet escapeSet;
+
+   static
+   {
+      // A subset of the path literals
+      BitSet bs = new BitSet();
+      bs.set('_');
+      bs.set('.');
+      bs.set('-');
+      bs.set('~');
+      bs.set('!');
+      bs.set('$');
+      bs.set('&');
+      bs.set('+');
+      bs.set(':');
+      bs.set('@');
+
+      //
+      escapeSet = bs;
+   }
+
+   /** The root route. */
    final Route root;
 
-   public Router(ControllerDescriptor metaData) throws MalformedRouteException
+   /** The slash escape char. */
+   final char slashEscape;
+
+   public Router(ControllerDescriptor metaData) throws RouterConfigException
    {
-      this.root = new Route();
+      char slashEscape = metaData.getSlashEscape();
+
+      //
+      int i = slashEscape & ~0x7F;
+      if (i > 0 || !escapeSet.get(slashEscape))
+      {
+         throw new RouterConfigException("Char " + (int)slashEscape + " cannot be used a slash escape");
+      }
+
+      //
+      this.root = new Route(this);
+      this.slashEscape = slashEscape;
 
       //
       for (RouteDescriptor routeMetaData : metaData.getRoutes())
@@ -51,21 +90,29 @@ public class Router
       }
    }
 
-   public void addRoute(RouteDescriptor routeMetaData) throws MalformedRouteException
+   public void addRoute(RouteDescriptor routeMetaData) throws RouterConfigException
    {
       root.append(routeMetaData);
    }
 
-   public void render(Map<QualifiedName, String> parameters, RenderContext renderContext)
+   public void render(Map<QualifiedName, String> parameters, URIWriter writer) throws IOException
    {
-      root.render(parameters, renderContext);
+      root.render(parameters, writer);
    }
 
    public String render(Map<QualifiedName, String> parameters)
    {
-      SimpleRenderContext renderContext = new SimpleRenderContext();
-      render(parameters, renderContext);
-      return renderContext.getPath();
+      try
+      {
+         StringBuilder sb = new StringBuilder();
+         URIWriter renderContext = new URIWriter(sb, MimeType.PLAIN);
+         render(parameters, renderContext);
+         return sb.toString();
+      }
+      catch (IOException e)
+      {
+         throw new UndeclaredIOException(e);
+      }
    }
 
    public Map<QualifiedName, String> route(String path) throws IOException

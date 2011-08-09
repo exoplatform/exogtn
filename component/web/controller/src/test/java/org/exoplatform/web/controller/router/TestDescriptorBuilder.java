@@ -48,6 +48,10 @@ public class TestDescriptorBuilder extends TestCase
       XMLStreamReader routerReader = XMLInputFactory.newInstance().createXMLStreamReader(routerURL.openStream());
       ControllerDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
 
+      //
+      assertEquals('&', routerDesc.getSlashEscape());
+
+      //
       Iterator<RouteDescriptor> i = routerDesc.getRoutes().iterator();
 
       //

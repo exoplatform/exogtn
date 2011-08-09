@@ -69,7 +69,7 @@ public class TestLegacyPortal extends TestCase
 
       //
       assertEquals(expectedParameters, router.route("/private/classic", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic", router.render(expectedParameters));
+      assertEquals("/private/classic?portal:componentId=foo", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception
@@ -109,7 +109,7 @@ public class TestLegacyPortal extends TestCase
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic/", router.render(expectedParameters));
+      assertEquals("/private/classic/?portal:componentId=foo", router.render(expectedParameters));
    }
 
    public void testPrivateClassicHome() throws Exception
@@ -136,6 +136,6 @@ public class TestLegacyPortal extends TestCase
 
       //
       assertEquals(expectedParameters, router.route("/private/classic/home", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic/home", router.render(expectedParameters));
+      assertEquals("/private/classic/home?portal:componentId=foo", router.render(expectedParameters));
    }
 }

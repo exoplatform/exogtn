@@ -20,7 +20,6 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.gatein.common.util.Tools;
 
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
@@ -59,7 +58,7 @@ public class TestPortal extends AbstractTestController
       assertNull(router.route("/f/public"));
       assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
       assertEquals("/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "")));
-      assertNull(router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "f")));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "f")));
       assertEquals("/fr/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr")));
    }
 
@@ -100,18 +99,18 @@ public class TestPortal extends AbstractTestController
       expected.put(QualifiedName.parse("foo"), "foo_1");
       expected.put(QualifiedName.parse("bar"), "bar_value");
       assertEquals(expected, router.route("/", Collections.singletonMap("bar", new String[]{"bar_value"})));
-      SimpleRenderContext rc = new SimpleRenderContext();
-      router.render(expected, rc);
+      URIHelper rc = new URIHelper();
+      router.render(expected, rc.writer);
       assertEquals("/", rc.getPath());
-      assertEquals(Collections.<String, String>singletonMap("bar", "bar_value"), rc.getQueryParams());
+      assertMapEquals(Collections.<String, String[]>singletonMap("bar", new String[]{"bar_value"}), rc.getQueryParams());
 
       //
       expected = new HashMap<QualifiedName, String>();
       expected.put(QualifiedName.parse("foo"), "foo_2");
       assertEquals(expected,  router.route("/", Collections.singletonMap("bar", new String[]{"flabbergast"})));
-      rc = new SimpleRenderContext();
-      router.render(expected, rc);
+      rc = new URIHelper();
+      router.render(expected, rc.writer);
       assertEquals("/", rc.getPath());
-      assertEquals(Collections.<String, String>emptyMap(), rc.getQueryParams());
+      assertEquals(null, rc.getQueryParams());
    }
 }

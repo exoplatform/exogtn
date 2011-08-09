@@ -22,9 +22,12 @@ package org.exoplatform.portal.url;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.URIWriter;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.URLContext;
+import org.gatein.common.io.UndeclaredIOException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +41,10 @@ public class StandaloneAppURLContext implements URLContext
    private final ControllerContext controllerContext;
 
    /** . */
-   private PortalURLRenderContext renderContext;
+   private URIWriter writer;
+   
+   /** . */
+   private StringBuilder buffer;
 
    public StandaloneAppURLContext(ControllerContext controllerContext)
    {
@@ -53,13 +59,26 @@ public class StandaloneAppURLContext implements URLContext
 
    public <R, U extends PortalURL<R, U>> String render(U url)
    {
-      if (renderContext == null)
+      try
       {
-         renderContext = new PortalURLRenderContext(new StringBuilder());
+         return _render(url);
+      }
+      catch (IOException e)
+      {
+         throw new UndeclaredIOException(e);
+      }
+   }
+
+   private <R, U extends PortalURL<R, U>> String _render(U url) throws IOException
+   {
+      if (writer == null)
+      {
+         writer = new URIWriter(buffer = new StringBuilder());
       }
       else
       {
-         renderContext.reset();
+         buffer.setLength(0);
+         writer.reset(buffer);
       }
 
       //
@@ -68,8 +87,8 @@ public class StandaloneAppURLContext implements URLContext
          throw new IllegalStateException("No resource set on standaloneApp URL");
       }
 
-      // Configure mime type
-      renderContext.setMimeType(url.getMimeType());
+      //
+      writer.setMimeType(url.getMimeType());
 
       //
       String confirm = url.getConfirm();
@@ -79,24 +98,24 @@ public class StandaloneAppURLContext implements URLContext
       Boolean ajax = url.getAjax() != null && url.getAjax();
       if (ajax)
       {
-         renderContext.append("javascript:", false);
+         writer.append("javascript:");
          if (hasConfirm)
          {
-            renderContext.append("if(confirm('", false);
-            renderContext.append(confirm.replaceAll("'", "\\\\'"), false);
-            renderContext.append("'))", false);
+            writer.append("if(confirm('");
+            writer.append(confirm.replaceAll("'", "\\\\'"));
+            writer.append("'))");
          }
-         renderContext.append("ajaxGet('", false);
+         writer.append("ajaxGet('");
       }
       else
       {
          if (hasConfirm)
          {
-            renderContext.append("javascript:", false);
-            renderContext.append("if(confirm('", false);
-            renderContext.append(confirm.replaceAll("'", "\\\\'"), false);
-            renderContext.append("'))", false);
-            renderContext.append("window.location=\'", false);
+            writer.append("javascript:");
+            writer.append("if(confirm('");
+            writer.append(confirm.replaceAll("'", "\\\\'"));
+            writer.append("'))");
+            writer.append("window.location=\'");
          }
       }
 
@@ -115,7 +134,7 @@ public class StandaloneAppURLContext implements URLContext
       }
 
       // Render url via controller
-      controllerContext.renderURL(parameters, renderContext);
+      controllerContext.renderURL(parameters, writer);
 
       // Now append generic query parameters
       Map<String, String[]> queryParameters = url.getQueryParameters();
@@ -125,7 +144,7 @@ public class StandaloneAppURLContext implements URLContext
          {
             for (String value : entry.getValue())
             {
-               renderContext.appendQueryParameter(entry.getKey(), value);
+               writer.appendQueryParameter(entry.getKey(), value);
             }
          }
       }
@@ -133,18 +152,18 @@ public class StandaloneAppURLContext implements URLContext
       //
       if (ajax)
       {
-         renderContext.appendQueryParameter("ajaxRequest", "true");
-         renderContext.append("')", false);
+         writer.appendQueryParameter("ajaxRequest", "true");
+         writer.append("')");
       }
       else
       {
          if (hasConfirm)
          {
-            renderContext.append("\'", false);
+            writer.append("\'");
          }
       }
 
       //
-      return renderContext.toString();
+      return writer.toString();
    }
 }

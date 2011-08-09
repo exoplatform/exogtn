@@ -73,7 +73,7 @@ public class TestPortalConfiguration extends AbstractTestController
 
       //
       assertEquals(expectedParameters, router.route("/private/portal/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/portal/classic/", router.render(expectedParameters));
+      assertEquals("/private/portal/classic/?portal:componentId=foo", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception

@@ -25,7 +25,7 @@ package org.exoplatform.web.controller.router;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class MalformedRouteException extends Exception
+public class MalformedRouteException extends RouterConfigException
 {
    public MalformedRouteException()
    {

@@ -30,6 +30,7 @@ import org.gatein.common.util.Tools;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,11 +151,11 @@ class Route
       }
    }
 
-   /** Julien : make that configurable. */
-   private static final char slashEscape = '_';
-
    /** . */
    private static final Route[] EMPTY_ROUTE_ARRAY = new Route[0];
+
+   /** . */
+   private final Router router;
 
    /** . */
    private Route parent;
@@ -171,8 +172,9 @@ class Route
    /** . */
    private final Map<String, RequestParam> requestParams;
 
-   Route()
+   Route(Router router)
    {
+      this.router = router;
       this.parent = null;
       this.terminal = true;
       this.children = EMPTY_ROUTE_ARRAY;
@@ -189,7 +191,7 @@ class Route
     * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
     * a way to optimize it later with some precompilation. 
     */
-   final void render(Map<QualifiedName, String> blah, RenderContext renderContext)
+   final void render(Map<QualifiedName, String> blah, URIWriter writer) throws IOException
    {
       Route r = find(blah);
 
@@ -197,19 +199,19 @@ class Route
       if (r != null)
       {
          // Append path first
-         r.renderPath(blah, renderContext, false);
+         r.renderPath(blah, writer, false);
 
          // Append query parameters after
-         r.renderQueryString(blah, renderContext);
+         r.renderQueryString(blah, writer);
       }
    }
 
-   private boolean renderPath(Map<QualifiedName, String> blah, RenderContext renderContext, boolean hasChildren)
+   private boolean renderPath(Map<QualifiedName, String> blah, URIWriter writer, boolean hasChildren) throws IOException
    {
       boolean endWithSlash;
       if (parent != null)
       {
-         endWithSlash = parent.renderPath(blah, renderContext, true);
+         endWithSlash = parent.renderPath(blah, writer, true);
       }
       else
       {
@@ -222,11 +224,11 @@ class Route
          SegmentRoute sr = (SegmentRoute)this;
          if (!endWithSlash)
          {
-            renderContext.appendPath('/', false);
+            writer.append('/');
             endWithSlash = true;
          }
-         String name = sr.name;
-         renderContext.appendPath(name, true);
+         String name = sr.encodedName;
+         writer.append(name);
          if (name.length() > 0)
          {
             endWithSlash = false;
@@ -237,46 +239,52 @@ class Route
          PatternRoute pr = (PatternRoute)this;
          if (!endWithSlash)
          {
-            renderContext.appendPath('/', false);
+            writer.append('/');
             endWithSlash = true;
          }
          int i = 0;
          int count = 0;
          while (i < pr.params.length)
          {
-            String chunk = pr.chunks[i];
-            renderContext.appendPath(chunk, true);
-            count += chunk.length();
+            writer.append(pr.encodedChunks[i]);
+            count += pr.chunks[i].length();
 
             //
             PathParam def = pr.params[i];
             String value = blah.get(def.name);
             count += value.length();
 
-            //
-            int from = 0;
-            while (true)
+            // Write value
+            for (int len = value.length(), j = 0;j < len;j++)
             {
-               int to = value.indexOf('/', from);
-               if (to == -1)
+               char c = value.charAt(j);
+               switch (c)
                {
-                  break;
-               }
-               else
-               {
-                  renderContext.appendPath(value.substring(from, to), true);
-                  renderContext.appendPath(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : slashEscape, false);
-                  from = to +1;
+                  case '_':
+                     if (def.encodingMode == EncodingMode.PRESERVE_PATH)
+                     {
+                        writer.append('_');
+                     } else
+                     {
+                        writer.append('%');
+                        writer.append('5');
+                        writer.append('F');
+                     }
+                     break;
+                  case '/':
+                     writer.append(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : router.slashEscape);
+                     break;
+                  default:
+                     writer.appendSegment(c);
+                     break;
                }
             }
-            renderContext.appendPath(value.substring(from), false);
 
             //
             i++;
          }
-         String lastChunk = pr.chunks[i];
-         renderContext.appendPath(lastChunk, false);
-         count += lastChunk.length();
+         writer.append(pr.encodedChunks[i]);
+         count += pr.chunks[i].length();
          if (count > 0)
          {
             endWithSlash = false;
@@ -286,7 +294,7 @@ class Route
       {
          if (!hasChildren)
          {
-            renderContext.appendPath('/', false);
+            writer.append('/');
             endWithSlash = true;
          }
       }
@@ -295,11 +303,11 @@ class Route
       return endWithSlash;
    }
 
-   private void renderQueryString(Map<QualifiedName, String> blah, RenderContext renderContext)
+   private void renderQueryString(Map<QualifiedName, String> blah, URIWriter writer) throws IOException
    {
       if (parent != null)
       {
-         parent.renderQueryString(blah, renderContext);
+         parent.renderQueryString(blah, writer);
       }
 
       //
@@ -327,7 +335,7 @@ class Route
             }
             if (s != null)
             {
-               renderContext.appendQueryParameter(requestParamDef.matchName, s);
+               writer.appendQueryParameter(requestParamDef.matchName, s);
             }
          }
       }
@@ -450,7 +458,7 @@ class Route
     */
    final RouteMatcher route(String path, Map<String, String[]> requestParams)
    {
-      return new RouteMatcher(this, path, requestParams);
+      return new RouteMatcher(this, Path.parse(path), requestParams);
    }
 
    static class RouteFrame
@@ -480,7 +488,7 @@ class Route
       private final Route route;
 
       /** . */
-      private final String path;
+      private final Path path;
 
       /** . */
       private Status status;
@@ -491,7 +499,7 @@ class Route
       /** The index when iterating child in {@link org.exoplatform.web.controller.router.Route.RouteFrame.Status#PROCESS_CHILDREN} status. */
       private int childIndex;
 
-      private RouteFrame(RouteFrame parent, Route route, String path)
+      private RouteFrame(RouteFrame parent, Route route, Path path)
       {
          this.parent = parent;
          this.route = route;
@@ -500,7 +508,7 @@ class Route
          this.childIndex = 0;
       }
 
-      private RouteFrame(Route route, String path)
+      private RouteFrame(Route route, Path path)
       {
          this(null, route, path);
       }
@@ -546,7 +554,7 @@ class Route
       /** . */
       private RouteFrame next;
 
-      RouteMatcher(Route route, String path, Map<String, String[]> requestParams)
+      RouteMatcher(Route route, Path path, Map<String, String[]> requestParams)
       {
          this.frame = new RouteFrame(route, path);
          this.requestParams = requestParams;
@@ -734,21 +742,22 @@ class Route
                      {
                         pos = current.path.length();
                      }
-                     String segment = current.path.substring(1, pos);
+                     String segment = current.path.getValue().substring(1, pos);
 
                      // Determine next path
                      if (segmentRoute.name.equals(segment))
                      {
                         // Lazy create next segment path
                         // JULIEN : this can be computed multiple times
-                        String nextSegmentPath;
+                        Path nextSegmentPath;
                         if (pos == current.path.length())
                         {
-                           nextSegmentPath = "/";
+                           // todo make a constant
+                           nextSegmentPath = Path.SLASH;
                         }
                         else
                         {
-                           nextSegmentPath = current.path.substring(pos);
+                           nextSegmentPath = current.path.subPath(pos);
                         }
 
                         // Delegate the process to the next route
@@ -765,17 +774,17 @@ class Route
                   PatternRoute patternRoute = (PatternRoute)child;
 
                   //
-                  Matcher matcher = patternRoute.pattern.matcher(current.path);
+                  Matcher matcher = patternRoute.pattern.matcher(current.path.getValue());
 
                   // We match
                   if (matcher.find())
                   {
                      // Build next controller context
                      int nextPos = matcher.end();
-                     String nextPath;
+                     Path nextPath;
                      if (current.path.length() == nextPos)
                      {
-                        nextPath = "/";
+                        nextPath = Path.SLASH;
                      }
                      else
                      {
@@ -785,7 +794,7 @@ class Route
                         }
 
                         //
-                        nextPath = current.path.substring(nextPos);
+                        nextPath = current.path.subPath(nextPos);
                      }
 
                      // Delegate to next patternRoute
@@ -799,14 +808,29 @@ class Route
                         PathParam param = patternRoute.params[i];
 
                         //
-                        String value = matcher.group(group);
+                        int end = matcher.end(group);
 
                         //
-                        if (value != null)
+                        if (end != -1)
                         {
+                           String value;
                            if (param.encodingMode == EncodingMode.FORM)
                            {
-                              value = value.replace(slashEscape, '/');
+                              StringBuilder sb = new StringBuilder();
+                              for (int from = matcher.start(group);from < end;from++)
+                              {
+                                 char c = current.path.charAt(from);
+                                 if (c == child.router.slashEscape && current.path.getRawLength(from) == 1)
+                                 {
+                                    c = '/';
+                                 }
+                                 sb.append(c);
+                              }
+                              value = sb.toString();
+                           }
+                           else
+                           {
+                              value = matcher.group(group);
                            }
                            if (next.matches == null)
                            {
@@ -1096,7 +1120,7 @@ class Route
       if (start.isEmpty())
       {
          String segment = path.substring(1, pos);
-         SegmentRoute route = new SegmentRoute(segment);
+         SegmentRoute route = new SegmentRoute(router, segment);
          add(route);
          next = route;
       }
@@ -1153,7 +1177,7 @@ class Route
 
             //
             chunks.add(path.substring(previous, pos));
-            PatternRoute route = new PatternRoute(builder.build(), parameterPatterns, chunks);
+            PatternRoute route = new PatternRoute(router, builder.build(), parameterPatterns, chunks);
 
             // Wire
             add(route);

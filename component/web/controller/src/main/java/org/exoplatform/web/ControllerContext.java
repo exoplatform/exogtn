@@ -20,12 +20,12 @@
 package org.exoplatform.web;
 
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.RenderContext;
 import org.exoplatform.web.controller.router.Router;
-import org.exoplatform.web.controller.router.SimpleRenderContext;
+import org.exoplatform.web.controller.router.URIWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -51,9 +51,6 @@ public class ControllerContext
    private final Map<QualifiedName, String> parameters;
 
    /** . */
-   private SimpleRenderContext renderContext;
-
-   /** . */
    private final String contextName;
 
    public ControllerContext(
@@ -67,7 +64,6 @@ public class ControllerContext
       this.request = request;
       this.response = response;
       this.parameters = parameters;
-      this.renderContext = null;
       this.contextName = request.getContextPath().substring(1);
       this.router = router;
    }
@@ -92,38 +88,14 @@ public class ControllerContext
       return parameters.get(parameter);
    }
 
-   public void renderURL(Map<QualifiedName, String> parameters, RenderContext renderContext)
+   public void renderURL(Map<QualifiedName, String> parameters, URIWriter renderContext) throws IOException
    {
-      renderContext.appendPath('/', false);
+      renderContext.append('/');
 
       //
-      renderContext.appendPath(contextName, true);
+      renderContext.appendSegment(contextName);
 
       //
       router.render(parameters, renderContext);
-   }
-
-   public String renderURL(Map<QualifiedName, String> parameters)
-   {
-      if (renderContext == null)
-      {
-         renderContext = new SimpleRenderContext();
-      }
-      else
-      {
-         renderContext.reset();
-      }
-
-      //
-      renderContext.appendPath('/', false);
-
-      //
-      renderContext.appendPath(contextName, true);
-
-      //
-      router.render(parameters, renderContext);
-
-      //
-      return renderContext.getPath();
    }
 }

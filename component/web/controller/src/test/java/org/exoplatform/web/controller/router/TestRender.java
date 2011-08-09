@@ -61,7 +61,7 @@ public class TestRender extends AbstractTestController
 
       //
       assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
    }
 
    public void testSimplePatternPathParam() throws Exception
@@ -70,7 +70,7 @@ public class TestRender extends AbstractTestController
 
       //
       assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
-      assertNull(router.render(Collections.singletonMap(QualifiedName.create("p"), "ab")));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "ab")));
    }
 
    public void testPrecedence() throws Exception

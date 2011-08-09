@@ -43,11 +43,11 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "a"), router.route("/", Collections.singletonMap("a", new String[]{"a"})));
 
       //
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
-      SimpleRenderContext renderContext = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext);
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
+      URIHelper renderContext = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext.writer);
       assertEquals("/", renderContext.getPath());
-      assertEquals(Collections.singletonMap("a", "a"), renderContext.getQueryParams());
+      assertMapEquals(Collections.singletonMap("a", new String[]{"a"}), renderContext.getQueryParams());
    }
 
    public void testSegment() throws Exception
@@ -59,11 +59,11 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "a"), router.route("/a", Collections.singletonMap("a", new String[]{"a"})));
 
       //
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
-      SimpleRenderContext renderContext = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext);
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
+      URIHelper renderContext = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext.writer);
       assertEquals("/a", renderContext.getPath());
-      assertEquals(Collections.singletonMap("a", "a"), renderContext.getQueryParams());
+      assertMapEquals(Collections.singletonMap("a", new String[]{"a"}), renderContext.getQueryParams());
    }
 
    public void testValuePattern() throws Exception
@@ -76,12 +76,12 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "0123"), router.route("/a", Collections.singletonMap("a", new String[]{"0123"})));
 
       //
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
-      assertNull(router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a")));
-      SimpleRenderContext renderContext = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "12"), renderContext);
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a")));
+      URIHelper renderContext = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "12"), renderContext.writer);
       assertEquals("/a", renderContext.getPath());
-      assertEquals(Collections.singletonMap("a", "12"), renderContext.getQueryParams());
+      assertMapEquals(Collections.singletonMap("a", new String[]{"12"}), renderContext.getQueryParams());
    }
 
    public void testPrecedence() throws Exception
@@ -97,15 +97,15 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("bar"), "b"), router.route("/a", Collections.singletonMap("b", new String[]{"b"})));
 
       //
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
-      SimpleRenderContext renderContext1 = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext1);
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
+      URIHelper renderContext1 = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext1.writer);
       assertEquals("/a", renderContext1.getPath());
-      assertEquals(Collections.singletonMap("a", "a"), renderContext1.getQueryParams());
-      SimpleRenderContext renderContext2 = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("bar"), "b"), renderContext2);
+      assertMapEquals(Collections.singletonMap("a", new String[]{"a"}), renderContext1.getQueryParams());
+      URIHelper renderContext2 = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("bar"), "b"), renderContext2.writer);
       assertEquals("/a", renderContext2.getPath());
-      assertEquals(Collections.singletonMap("b", "b"), renderContext2.getQueryParams());
+      assertMapEquals(Collections.singletonMap("b", new String[]{"b"}), renderContext2.getQueryParams());
    }
 
    public void testInheritance() throws Exception
@@ -129,19 +129,19 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(expectedParameters, router.route("/a/b", requestParameters));
 
       //
-      assertNull(router.render(Collections.<QualifiedName, String>emptyMap()));
-      SimpleRenderContext renderContext1 = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext1);
+      assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
+      URIHelper renderContext1 = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext1.writer);
       // assertEquals("/a", renderContext1.getPath());
       // assertEquals(Collections.singletonMap("a", "a"), renderContext1.getQueryParams());
-      assertNull(renderContext1.getPath());
-      SimpleRenderContext renderContext2 = new SimpleRenderContext();
-      router.render(expectedParameters, renderContext2);
+      assertEquals("", renderContext1.getPath());
+      URIHelper renderContext2 = new URIHelper();
+      router.render(expectedParameters, renderContext2.writer);
       assertEquals("/a/b", renderContext2.getPath());
-      Map<String, String> expectedRequestParameters = new HashMap<String, String>();
-      expectedRequestParameters.put("a", "a");
-      expectedRequestParameters.put("b", "b");
-      assertEquals(expectedRequestParameters, renderContext2.getQueryParams());
+      Map<String, String[]> expectedRequestParameters = new HashMap<String, String[]>();
+      expectedRequestParameters.put("a", new String[]{"a"});
+      expectedRequestParameters.put("b", new String[]{"b"});
+      assertMapEquals(expectedRequestParameters, renderContext2.getQueryParams());
    }
 
    public void testOptional() throws Exception
@@ -154,14 +154,14 @@ public class TestRequestParam extends AbstractTestController
       assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "a"), router.route("/", Collections.singletonMap("a", new String[]{"a"})));
 
       //
-      SimpleRenderContext renderContext1 = new SimpleRenderContext();
-      router.render(Collections.<QualifiedName, String>emptyMap(), renderContext1);
+      URIHelper renderContext1 = new URIHelper();
+      router.render(Collections.<QualifiedName, String>emptyMap(), renderContext1.writer);
       assertEquals("/", renderContext1.getPath());
-      assertEquals(Collections.<String, String>emptyMap(), renderContext1.getQueryParams());
-      SimpleRenderContext renderContext2 = new SimpleRenderContext();
-      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext2);
+      assertEquals(null, renderContext1.getQueryParams());
+      URIHelper renderContext2 = new URIHelper();
+      router.render(Collections.singletonMap(QualifiedName.parse("foo"), "a"), renderContext2.writer);
       assertEquals("/", renderContext2.getPath());
-      assertEquals(Collections.singletonMap("a", "a"), renderContext2.getQueryParams());
+      assertMapEquals(Collections.singletonMap("a", new String[]{"a"}), renderContext2.getQueryParams());
    }
 
    public void testMatchDescendantOfRootParameters() throws Exception
@@ -172,16 +172,16 @@ public class TestRequestParam extends AbstractTestController
          build();
 
       //
-      SimpleRenderContext renderContext = new SimpleRenderContext();
+      URIHelper renderContext = new URIHelper();
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "a");
       parameters.put(QualifiedName.parse("bar"), "b");
-      router.render(parameters, renderContext);
+      router.render(parameters, renderContext.writer);
       assertEquals("/a", renderContext.getPath());
-      Map<String, String> expectedRequestParameters = new HashMap<String, String>();
-      expectedRequestParameters.put("a", "a");
-      expectedRequestParameters.put("b", "b");
-      assertEquals(expectedRequestParameters, renderContext.getQueryParams());
+      Map<String, String[]> expectedRequestParameters = new HashMap<String, String[]>();
+      expectedRequestParameters.put("a", new String[]{"a"});
+      expectedRequestParameters.put("b", new String[]{"b"});
+      assertMapEquals(expectedRequestParameters, renderContext.getQueryParams());
    }
 
    public void testLiteralMatch() throws Exception
@@ -193,8 +193,8 @@ public class TestRequestParam extends AbstractTestController
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "foo_value");
-      SimpleRenderContext rc = new SimpleRenderContext();
-      router.render(parameters, rc);
+      URIHelper rc = new URIHelper();
+      router.render(parameters, rc.writer);
       assertEquals("/", rc.getPath());
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("foo_value"), Arrays.asList(rc.getQueryParams().get("a")));
@@ -207,9 +207,9 @@ public class TestRequestParam extends AbstractTestController
       parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "bar_value");
       rc.reset();
-      router.render(parameters, rc);
+      router.render(parameters, rc.writer);
       assertEquals("", rc.getPath());
-      assertEquals(Collections.<String>emptySet(), rc.getQueryParams().keySet());
+      assertEquals(null, rc.getQueryParams());
       a = router.route("/", Collections.singletonMap("a", new String[]{"bar_value"}));
       assertNull(a);
    }
@@ -223,8 +223,8 @@ public class TestRequestParam extends AbstractTestController
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "bar");
-      SimpleRenderContext rc = new SimpleRenderContext();
-      router.render(parameters, rc);
+      URIHelper rc = new URIHelper();
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
       Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
@@ -236,7 +236,7 @@ public class TestRequestParam extends AbstractTestController
       parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "");
       rc.reset();
-      router.render(parameters, rc);
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
       a = router.route("/", Collections.singletonMap("a", new String[]{""}));
@@ -247,8 +247,8 @@ public class TestRequestParam extends AbstractTestController
       //
       parameters = new HashMap<QualifiedName, String>();
       rc.reset();
-      router.render(parameters, rc);
-      assertEquals(Collections.<String>emptySet(), rc.getQueryParams().keySet());
+      router.render(parameters, rc.writer);
+      assertEquals(null, rc.getQueryParams());
       a = router.route("/");
       assertNotNull(a);
       assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
@@ -263,8 +263,8 @@ public class TestRequestParam extends AbstractTestController
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "bar");
-      SimpleRenderContext rc = new SimpleRenderContext();
-      router.render(parameters, rc);
+      URIHelper rc = new URIHelper();
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
       Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
@@ -276,8 +276,8 @@ public class TestRequestParam extends AbstractTestController
       parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "");
       rc.reset();
-      router.render(parameters, rc);
-      assertEquals(Collections.EMPTY_MAP, rc.getQueryParams());
+      router.render(parameters, rc.writer);
+      assertEquals(null, rc.getQueryParams());
       a = router.route("/", Collections.singletonMap("a", new String[]{""}));
       assertNotNull(a);
       assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
@@ -285,8 +285,8 @@ public class TestRequestParam extends AbstractTestController
       //
       parameters = new HashMap<QualifiedName, String>();
       rc.reset();
-      router.render(parameters, rc);
-      assertEquals(Collections.EMPTY_MAP, rc.getQueryParams());
+      router.render(parameters, rc.writer);
+      assertEquals(null, rc.getQueryParams());
       a = router.route("/");
       assertNotNull(a);
       assertEquals(Collections.<QualifiedName>emptySet(), a.keySet());
@@ -301,8 +301,8 @@ public class TestRequestParam extends AbstractTestController
       //
       Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "bar");
-      SimpleRenderContext rc = new SimpleRenderContext();
-      router.render(parameters, rc);
+      URIHelper rc = new URIHelper();
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList("bar"), Arrays.asList(rc.getQueryParams().get("a")));
       Map<QualifiedName, String> a = router.route("/", Collections.singletonMap("a", new String[]{"bar"}));
@@ -314,7 +314,7 @@ public class TestRequestParam extends AbstractTestController
       parameters = new HashMap<QualifiedName, String>();
       parameters.put(QualifiedName.parse("foo"), "");
       rc.reset();
-      router.render(parameters, rc);
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
       a = router.route("/", Collections.singletonMap("a", new String[]{""}));
@@ -325,7 +325,7 @@ public class TestRequestParam extends AbstractTestController
       //
       parameters = new HashMap<QualifiedName, String>();
       rc.reset();
-      router.render(parameters, rc);
+      router.render(parameters, rc.writer);
       assertEquals(Collections.singleton("a"), rc.getQueryParams().keySet());
       assertEquals(Collections.singletonList(""), Arrays.asList(rc.getQueryParams().get("a")));
       a = router.route("/");

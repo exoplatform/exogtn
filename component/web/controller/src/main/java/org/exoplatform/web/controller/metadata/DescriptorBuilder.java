@@ -84,6 +84,16 @@ public class DescriptorBuilder
    public ControllerDescriptor build(StaxNavigator<Element> root) throws StaxNavException
    {
       ControllerDescriptor router = router();
+
+      //
+      String s = root.getAttribute("slash-escape");
+      if (s != null)
+      {
+         char c = s.charAt(0);
+         router.setSlashEscape(c);
+      }
+
+      //
       if (root.child() != null)
       {
          for (StaxNavigator<Element> routeNav : root.fork(Element.ROUTE))

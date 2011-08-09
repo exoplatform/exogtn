@@ -33,11 +33,21 @@ import java.util.Map;
  */
 public abstract class AbstractTestController extends TestCase
 {
-   public void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
+   public static void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
    {
       assertNotNull("Was not expecting a null parameter set", parameters);
       Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
       for (Map.Entry<QualifiedName, String> expectedEntry : expectedParameters.entrySet())
+      {
+         Assert.assertEquals(expectedEntry.getValue(), parameters.get(expectedEntry.getKey()));
+      }
+   }
+
+   public static void assertMapEquals(Map<String, String[]> expectedParameters, Map<String, String[]> parameters)
+   {
+      assertNotNull("Was not expecting a null parameter set", parameters);
+      Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
+      for (Map.Entry<String, String[]> expectedEntry : expectedParameters.entrySet())
       {
          Assert.assertEquals(Arrays.asList(expectedEntry.getValue()), Arrays.asList(parameters.get(expectedEntry.getKey())));
       }

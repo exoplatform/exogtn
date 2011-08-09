@@ -28,21 +28,56 @@ import java.util.Collections;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPathParamEncoding extends AbstractTestController
+public class TestPathEncoding extends AbstractTestController
 {
 
-   public void testDefaultForm() throws Exception
+   public void testSegment1() throws Exception
+   {
+      Router router = router().add(route("/?")).build();
+      assertEquals("/%3F", router.render(Collections.<QualifiedName, String>emptyMap()));
+   }
+
+   public void testSegment2() throws Exception
+   {
+      Router router = router().add(route("/?{p}?")).build();
+      assertEquals("/%3Fa%3F", router.render(Collections.singletonMap(QualifiedName.parse("p"), "a")));
+   }
+
+   public void testParamDefaultForm() throws Exception
    {
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".+"))).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/_"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/%5F"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_/"), router.route("/%5F_"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/_"), router.route("/_%5F"));
+      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "?"), router.route("/%3F"));
 
       // Render
       assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("/%5F", router.render(Collections.singletonMap(QualifiedName.create("p"), "_")));
+      assertEquals("/%5F_", router.render(Collections.singletonMap(QualifiedName.create("p"), "_/")));
+      assertEquals("/_%5F", router.render(Collections.singletonMap(QualifiedName.create("p"), "/_")));
+      assertEquals("/%3F", router.render(Collections.singletonMap(QualifiedName.create("p"), "?")));
    }
 
-   public void testPreservePath() throws Exception
+   public void testBug() throws Exception
+   {
+      Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("[^_]+"))).build();
+
+      // This is a *known* bug
+      assertNull(router.route("/_"));
+
+      // This is expected
+      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+
+      // This is expected
+      assertNull(router.route("/%5F"));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "_")));
+   }
+
+   public void testParamPreservePath() throws Exception
    {
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("[^/]+").preservePath())).build();
 
@@ -51,7 +86,7 @@ public class TestPathParamEncoding extends AbstractTestController
       assertNull(router.route("//"));
 
       // Render
-      assertEquals(null, router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
    }
 
    public void testD() throws Exception
@@ -70,7 +105,7 @@ public class TestPathParamEncoding extends AbstractTestController
       // Render
       assertEquals("/_platform_administrator", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator")));
       assertEquals("/_platform_administrator_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/")));
-      assertEquals(null, router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator//")));
+      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator//")));
    }
 
    public void testWildcardPathParamWithPreservePath() throws Exception

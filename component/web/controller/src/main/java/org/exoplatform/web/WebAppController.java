@@ -37,12 +37,11 @@ import org.exoplatform.web.application.Application;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.ControllerDescriptor;
-import org.exoplatform.web.controller.router.MalformedRouteException;
+import org.exoplatform.web.controller.router.RouterConfigException;
 import org.exoplatform.web.controller.router.Router;
 import org.gatein.common.http.QueryStringParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.common.util.ParameterMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -161,7 +160,7 @@ public class WebAppController
    @Managed
    @ManagedDescription("Load the controller configuration")
    @Impact(ImpactType.WRITE)
-   public void loadConfiguration(@ManagedDescription("The configuration path") @ManagedName("path") String path) throws IOException, MalformedRouteException
+   public void loadConfiguration(@ManagedDescription("The configuration path") @ManagedName("path") String path) throws IOException, RouterConfigException
    {
       File f = new File(path);
       if (!f.exists())
@@ -176,7 +175,7 @@ public class WebAppController
       configurationPathRef.set(path);
    }
 
-   private void loadConfiguration(URL url) throws MalformedRouteException, IOException
+   private void loadConfiguration(URL url) throws RouterConfigException, IOException
    {
       log.info("Loading router configuration " + url);
       InputStream in = url.openStream();
@@ -195,7 +194,7 @@ public class WebAppController
    @Managed
    @ManagedDescription("Reload the controller configuration")
    @Impact(ImpactType.WRITE)
-   public void reloadConfiguration() throws MalformedRouteException, IOException
+   public void reloadConfiguration() throws RouterConfigException, IOException
    {
       log.info("Loading router configuration " + configurationPathRef.get());
       loadConfiguration(configurationPathRef.get());

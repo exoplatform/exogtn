@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.exoplatform.web.controller.router.MalformedRouteException;
+import org.exoplatform.web.controller.router.RouterConfigException;
 import org.exoplatform.web.controller.router.Router;
 
 import java.util.ArrayList;
@@ -37,9 +37,13 @@ public class ControllerDescriptor
    /** . */
    private final List<RouteDescriptor> routes;
 
+   /** . */
+   private char slashEscape;
+
    public ControllerDescriptor()
    {
       this.routes = new ArrayList<RouteDescriptor>();
+      this.slashEscape = '_';
    }
 
    public ControllerDescriptor add(RouteDescriptor... routes)
@@ -65,12 +69,28 @@ public class ControllerDescriptor
       return this;
    }
 
+   public ControllerDescriptor slashEscapedBy(char c)
+   {
+      this.slashEscape = c;
+      return this;
+   }
+
+   public char getSlashEscape()
+   {
+      return slashEscape;
+   }
+
+   public void setSlashEscape(char slashEscape)
+   {
+      this.slashEscape = slashEscape;
+   }
+
    public List<RouteDescriptor> getRoutes()
    {
       return routes;
    }
 
-   public Router build() throws MalformedRouteException
+   public Router build() throws RouterConfigException
    {
       return new Router(this);
    }

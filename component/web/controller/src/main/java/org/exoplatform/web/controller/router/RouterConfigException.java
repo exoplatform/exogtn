@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -21,23 +21,26 @@ package org.exoplatform.web.controller.router;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-class SegmentRoute extends Route
+public class RouterConfigException extends Exception
 {
 
-   /** . */
-   final String name;
-
-   /** . */
-   final String encodedName;
-
-   SegmentRoute(Router router, String name)
+   public RouterConfigException()
    {
-      super(router);
+   }
 
-      //
-      this.name = name;
-      this.encodedName = PercentEncoding.PATH_SEGMENT.encode(name);
+   public RouterConfigException(String message)
+   {
+      super(message);
+   }
+
+   public RouterConfigException(String message, Throwable cause)
+   {
+      super(message, cause);
+   }
+
+   public RouterConfigException(Throwable cause)
+   {
+      super(cause);
    }
 }

@@ -34,6 +34,22 @@
     <xs:sequence>
       <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="slash-escape" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="_"/>
+          <xs:enumeration value="."/>
+          <xs:enumeration value="-"/>
+          <xs:enumeration value="~"/>
+          <xs:enumeration value="!"/>
+          <xs:enumeration value="$"/>
+          <xs:enumeration value="&amp;"/>
+          <xs:enumeration value="+"/>
+          <xs:enumeration value=":"/>
+          <xs:enumeration value="@"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="routeType">

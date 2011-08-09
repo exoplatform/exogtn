@@ -21,10 +21,6 @@ package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
-import org.gatein.common.util.Tools;
-
-import java.util.Collections;
-import java.util.Map;
 
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
@@ -35,22 +31,6 @@ import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 public class TestBuildRoute extends TestCase
 {
 
-   public void testRoot() throws Exception
-   {
-      Router router = router().add(route("/")).build();
-      Route expectedRoute = new Route();
-      expectedRoute.add(new SegmentRoute(""));
-      assertEquals(expectedRoute, router.root);
-   }
-
-   public void testSimpleSegment() throws Exception
-   {
-      Router router = router().add(route("/a")).build();
-      Route expectedRoute = new Route();
-      expectedRoute.add(new SegmentRoute("a"));
-      assertEquals(expectedRoute, router.root);
-   }
-   
    public void testParameterSegment() throws Exception
    {
       Router router = router().add(route("/{a}")).build();
