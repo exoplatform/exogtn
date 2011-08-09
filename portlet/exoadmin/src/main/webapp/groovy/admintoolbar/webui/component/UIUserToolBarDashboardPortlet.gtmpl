@@ -102,7 +102,7 @@
 	</ul>	
 <% 
 	}else{
-		String link = nodeURL.setNode(userNodes.iterator().next());
+		String link = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">
