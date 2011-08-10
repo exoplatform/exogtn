@@ -60,7 +60,7 @@ public class TestRender extends AbstractTestController
       Router router = router().add(route("/{p}")).build();
 
       //
-      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
+      assertEquals("/a", router.render(Collections.singletonMap(Names.P, "a")));
       assertEquals("", router.render(Collections.<QualifiedName, String>emptyMap()));
    }
 
@@ -69,8 +69,8 @@ public class TestRender extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("a"))).build();
 
       //
-      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
-      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "ab")));
+      assertEquals("/a", router.render(Collections.singletonMap(Names.P, "a")));
+      assertEquals("", router.render(Collections.singletonMap(Names.P, "ab")));
    }
 
    public void testPrecedence() throws Exception
@@ -85,7 +85,7 @@ public class TestRender extends AbstractTestController
       assertEquals("/a", router.render(Collections.<QualifiedName, String>emptyMap()));
 
       //
-      assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
+      assertEquals("/a/b", router.render(Collections.singletonMap(Names.P, "a")));
    }
 
    public void testLang() throws Exception
@@ -96,7 +96,7 @@ public class TestRender extends AbstractTestController
          build();
 
       //
-      assertEquals("/fr/b", router.render(Collections.singletonMap(QualifiedName.parse("a"), "fr/")));
-      assertEquals("/b", router.render(Collections.singletonMap(QualifiedName.parse("a"), "")));
+      assertEquals("/fr/b", router.render(Collections.singletonMap(Names.A, "fr/")));
+      assertEquals("/b", router.render(Collections.singletonMap(Names.A, "")));
    }
 }

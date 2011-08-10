@@ -61,10 +61,10 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route1.getRouteParamNames());
       assertEquals(WebAppController.HANDLER_PARAM, route1.getRouteParam(WebAppController.HANDLER_PARAM).getQualifiedName());
       assertEquals("portal", route1.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
-      assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route1.getPathParams().keySet());
-      assertEquals(QualifiedName.parse("gtn:path"), route1.getPathParams().get(QualifiedName.parse("gtn:path")).getQualifiedName());
-      assertEquals(".*", route1.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
-      assertEquals(EncodingMode.FORM, route1.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
+      assertEquals(Collections.singleton(Names.GTN_PATH), route1.getPathParams().keySet());
+      assertEquals(Names.GTN_PATH, route1.getPathParams().get(Names.GTN_PATH).getQualifiedName());
+      assertEquals(".*", route1.getPathParams().get(Names.GTN_PATH).getPattern());
+      assertEquals(EncodingMode.FORM, route1.getPathParams().get(Names.GTN_PATH).getEncodingMode());
 
       //
       assertTrue(i.hasNext());
@@ -73,10 +73,10 @@ public class TestDescriptorBuilder extends TestCase
       assertEquals(Collections.singleton(WebAppController.HANDLER_PARAM), route2.getRouteParamNames());
       assertEquals(WebAppController.HANDLER_PARAM, route2.getRouteParam(WebAppController.HANDLER_PARAM).getQualifiedName());
       assertEquals("portal", route2.getRouteParam(WebAppController.HANDLER_PARAM).getValue());
-      assertEquals(Collections.singleton(QualifiedName.parse("gtn:path")), route2.getPathParams().keySet());
-      assertEquals(QualifiedName.parse("gtn:path"), route2.getPathParams().get(QualifiedName.parse("gtn:path")).getQualifiedName());
-      assertEquals(".*", route2.getPathParams().get(QualifiedName.parse("gtn:path")).getPattern());
-      assertEquals(EncodingMode.PRESERVE_PATH, route2.getPathParams().get(QualifiedName.parse("gtn:path")).getEncodingMode());
+      assertEquals(Collections.singleton(Names.GTN_PATH), route2.getPathParams().keySet());
+      assertEquals(Names.GTN_PATH, route2.getPathParams().get(Names.GTN_PATH).getQualifiedName());
+      assertEquals(".*", route2.getPathParams().get(Names.GTN_PATH).getPattern());
+      assertEquals(EncodingMode.PRESERVE_PATH, route2.getPathParams().get(Names.GTN_PATH).getEncodingMode());
 
       //
       assertTrue(i.hasNext());
@@ -98,32 +98,32 @@ public class TestDescriptorBuilder extends TestCase
       assertTrue(i.hasNext());
       RouteDescriptor route5 = i.next();
       assertEquals("/a", route5.getPath());
-      assertEquals(Collections.singleton(QualifiedName.create("a")), route5.getRouteParamNames());
-      assertEquals(QualifiedName.create("a"), route5.getRouteParam(QualifiedName.create("a")).getQualifiedName());
-      assertEquals("a_value", route5.getRouteParam(QualifiedName.create("a")).getValue());
+      assertEquals(Collections.singleton(Names.A), route5.getRouteParamNames());
+      assertEquals(Names.A, route5.getRouteParam(Names.A).getQualifiedName());
+      assertEquals("a_value", route5.getRouteParam(Names.A).getValue());
       assertEquals(1, route5.getChildren().size());
       RouteDescriptor route5_1 = route5.getChildren().get(0);
       assertEquals("/b", route5_1.getPath());
-      assertEquals(Collections.singleton(QualifiedName.create("b")), route5_1.getRouteParamNames());
-      assertEquals(QualifiedName.create("b"), route5_1.getRouteParam(QualifiedName.create("b")).getQualifiedName());
-      assertEquals("b_value", route5_1.getRouteParam(QualifiedName.create("b")).getValue());
+      assertEquals(Collections.singleton(Names.B), route5_1.getRouteParamNames());
+      assertEquals(Names.B, route5_1.getRouteParam(Names.B).getQualifiedName());
+      assertEquals("b_value", route5_1.getRouteParam(Names.B).getValue());
 
       //
       assertTrue(i.hasNext());
       RouteDescriptor route6 = i.next();
       assertEquals("/b", route6.getPath());
       assertEquals(new HashSet<String>(Arrays.asList("foo", "bar", "juu")), route6.getRequestParamMatchNames());
-      assertEquals(QualifiedName.parse("foo"), route6.getRequestParam("foo").getQualifiedName());
+      assertEquals(Names.FOO, route6.getRequestParam("foo").getQualifiedName());
       assertEquals("foo", route6.getRequestParam("foo").getName());
       assertEquals(null, route6.getRequestParam("foo").getValue());
       assertEquals(ValueType.LITERAL, route6.getRequestParam("foo").getValueType());
       assertEquals(ControlMode.OPTIONAL, route6.getRequestParam("foo").getControlMode());
-      assertEquals(QualifiedName.parse("bar"), route6.getRequestParam("bar").getQualifiedName());
+      assertEquals(Names.BAR, route6.getRequestParam("bar").getQualifiedName());
       assertEquals("bar", route6.getRequestParam("bar").getName());
       assertEquals("bar", route6.getRequestParam("bar").getValue());
       assertEquals(ValueType.LITERAL, route6.getRequestParam("bar").getValueType());
       assertEquals(ControlMode.OPTIONAL, route6.getRequestParam("bar").getControlMode());
-      assertEquals(QualifiedName.parse("juu"), route6.getRequestParam("juu").getQualifiedName());
+      assertEquals(Names.JUU, route6.getRequestParam("juu").getQualifiedName());
       assertEquals("juu", route6.getRequestParam("juu").getName());
       assertEquals("juu", route6.getRequestParam("juu").getValue());
       assertEquals(ValueType.PATTERN, route6.getRequestParam("juu").getValueType());

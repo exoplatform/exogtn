@@ -82,7 +82,7 @@ public class TestMatch extends AbstractTestController
       Router router = router().add(route("/{p}")).build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(Names.P, "a"), router.route("/a"));
    }
 
    public void testParameterPropagationToDescendants() throws Exception
@@ -95,7 +95,7 @@ public class TestMatch extends AbstractTestController
          .build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(Names.P, "a"), router.route("/a"));
    }
 
    public void testSimplePattern() throws Exception
@@ -103,7 +103,7 @@ public class TestMatch extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("a"))).build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(Names.P, "a"), router.route("/a"));
       assertNull(router.route("a"));
       assertNull(router.route("/ab"));
       assertNull(router.route("ab"));
@@ -120,7 +120,7 @@ public class TestMatch extends AbstractTestController
       assertNull(router.route("a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(Names.P, "a"), router.route("/a/b"));
    }
 
    public void testTwoRules1() throws Exception
@@ -131,7 +131,7 @@ public class TestMatch extends AbstractTestController
          build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("b"), "b"), router.route("/a"));
+      assertEquals(Collections.singletonMap(Names.B, "b"), router.route("/a"));
       assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/a/b"));
    }
 
@@ -144,10 +144,10 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("a"), "a");
-      expectedParameters.put(QualifiedName.create("b"), "b");
+      expectedParameters.put(Names.A, "a");
+      expectedParameters.put(Names.B, "b");
       assertEquals(expectedParameters, router.route("/a"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("a"), "a"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(Names.A, "a"), router.route("/a/b"));
    }
 
    public void testLang() throws Exception
@@ -157,8 +157,8 @@ public class TestMatch extends AbstractTestController
          build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.create("a"), "fr/"), router.route("/fr/b"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("a"), ""), router.route("/b"));
+      assertEquals(Collections.singletonMap(Names.A, "fr/"), router.route("/fr/b"));
+      assertEquals(Collections.singletonMap(Names.A, ""), router.route("/b"));
    }
 
    public void testOptionalParameter() throws Exception
@@ -172,13 +172,13 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("a"), "a");
-      expectedParameters.put(QualifiedName.create("b"), "b");
+      expectedParameters.put(Names.A, "a");
+      expectedParameters.put(Names.B, "b");
       assertEquals(expectedParameters, router.route("/a/b"));
       assertEquals("/a/b", router.render(expectedParameters));
 
       //
-      expectedParameters.put(QualifiedName.create("a"), "");
+      expectedParameters.put(Names.A, "");
       assertEquals(expectedParameters, router.route("/b"));
       assertEquals("/b", router.render(expectedParameters));
    }
@@ -194,7 +194,7 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("a"), "");
+      expectedParameters.put(Names.A, "");
       assertEquals(expectedParameters, router.route("/ab/c"));
       assertEquals("/ab/c", router.render(expectedParameters));
    }
@@ -224,13 +224,13 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("a"), "");
-      expectedParameters.put(QualifiedName.create("b"), "b");
+      expectedParameters.put(Names.A, "");
+      expectedParameters.put(Names.B, "b");
       assertEquals(expectedParameters, router.route("/b"));
       assertEquals("/b", router.render(expectedParameters));
 
       //
-      expectedParameters.put(QualifiedName.create("a"), "a");
+      expectedParameters.put(Names.A, "a");
       assertEquals(expectedParameters, router.route("/a/b"));
       assertEquals("/a/b", router.render(expectedParameters));
    }
@@ -249,13 +249,13 @@ public class TestMatch extends AbstractTestController
 
       //
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("a"), "a");
-      expectedParameters.put(QualifiedName.create("b"), "b");
+      expectedParameters.put(Names.A, "a");
+      expectedParameters.put(Names.B, "b");
       assertEquals(expectedParameters, router.route("/a/b"));
       assertEquals("/a/b", router.render(expectedParameters));
 
       //
-      expectedParameters.put(QualifiedName.create("a"), "");
+      expectedParameters.put(Names.A, "");
       assertEquals(expectedParameters, router.route("/b"));
       assertEquals("/b", router.render(expectedParameters));
    }
@@ -269,9 +269,9 @@ public class TestMatch extends AbstractTestController
 
       Iterator<Map<QualifiedName, String>> i = router.root.route("/a", Collections.<String, String[]>emptyMap());
       Map<QualifiedName, String> s1 = i.next();
-      assertEquals(Collections.singletonMap(QualifiedName.parse("a"), "a"), s1);
+      assertEquals(Collections.singletonMap(Names.A, "a"), s1);
       Map<QualifiedName, String> s2 = i.next();
-      assertEquals(Collections.singletonMap(QualifiedName.parse("b"), "b_value"), s2);
+      assertEquals(Collections.singletonMap(Names.B, "b_value"), s2);
       assertFalse(i.hasNext());
    }
 }

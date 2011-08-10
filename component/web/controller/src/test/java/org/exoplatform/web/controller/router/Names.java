@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,33 +20,28 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.QualifiedName;
-import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
+ * Various predefined names for testing purpose.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public class TestHierarchy extends AbstractTestController
+public interface Names
 {
 
-   public void testFoo() throws Exception
-   {
-      Router router = router().
-         add(route("/a").with(routeParam("foo").withValue("bar")).
-            sub(route("/b").with(routeParam("juu").withValue("daa")))).
-         build();
+   QualifiedName Q_A = QualifiedName.parse("q:a");
+   QualifiedName A = QualifiedName.parse("a");
+   QualifiedName B = QualifiedName.parse("b");
+   QualifiedName P = QualifiedName.parse("p");
+   QualifiedName FOO = QualifiedName.parse("foo");
+   QualifiedName BAR = QualifiedName.parse("bar");
+   QualifiedName JUU = QualifiedName.parse("juu");
+   QualifiedName GTN_HANDLER = QualifiedName.parse("gtn:handler");
+   QualifiedName GTN_LANG = QualifiedName.parse("gtn:lang");
+   QualifiedName GTN_SITENAME = QualifiedName.parse("gtn:sitename");
+   QualifiedName GTN_SITETYPE = QualifiedName.parse("gtn:sitetype");
+   QualifiedName GTN_ACCESS = QualifiedName.parse("gtn:access");
+   QualifiedName GTN_PATH = QualifiedName.parse("gtn:path");
+   QualifiedName GTN_COMPONENTID = QualifiedName.parse("gtn:componentid");
 
-      //
-      // assertEquals(Collections.singletonMap(QualifiedName.create("foo"), "bar"), router.route("/a"));
-      assertNull(router.route("/a"));
-
-      //
-      Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(Names.FOO, "bar");
-      expected.put(Names.JUU, "daa");
-      assertEquals(expected, router.route("/a/b"));
-   }
 }

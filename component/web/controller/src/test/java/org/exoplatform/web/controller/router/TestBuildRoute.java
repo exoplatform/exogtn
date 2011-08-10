@@ -20,7 +20,6 @@
 package org.exoplatform.web.controller.router;
 
 import junit.framework.TestCase;
-import org.exoplatform.web.controller.QualifiedName;
 
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
@@ -41,7 +40,7 @@ public class TestBuildRoute extends TestCase
       PatternRoute patternRoute = router.root.getPattern(0);
       assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
       assertEquals(1, patternRoute.params.length);
-      assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+      assertEquals(Names.A, patternRoute.params[0].name);
       assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);
@@ -59,7 +58,7 @@ public class TestBuildRoute extends TestCase
       PatternRoute patternRoute = router.root.getPattern(0);
       assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
       assertEquals(1, patternRoute.params.length);
-      assertEquals(QualifiedName.create("q", "a"), patternRoute.params[0].name);
+      assertEquals(Names.Q_A, patternRoute.params[0].name);
       assertEquals("^.+$", patternRoute.params[0].renderingPattern.toString());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);
@@ -77,7 +76,7 @@ public class TestBuildRoute extends TestCase
       PatternRoute patternRoute = router.root.getPattern(0);
       assertEquals("^/([^/]*)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.toString());
       assertEquals(1, patternRoute.params.length);
-      assertEquals(QualifiedName.create("a"), patternRoute.params[0].name);
+      assertEquals(Names.A, patternRoute.params[0].name);
       assertEquals("^.*$", patternRoute.params[0].renderingPattern.toString());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);

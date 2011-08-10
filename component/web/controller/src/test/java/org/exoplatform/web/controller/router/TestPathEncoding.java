@@ -40,7 +40,7 @@ public class TestPathEncoding extends AbstractTestController
    public void testSegment2() throws Exception
    {
       Router router = router().add(route("/?{p}?")).build();
-      assertEquals("/%3Fa%3F", router.render(Collections.singletonMap(QualifiedName.parse("p"), "a")));
+      assertEquals("/%3Fa%3F", router.render(Collections.singletonMap(Names.P, "a")));
    }
 
    public void testParamDefaultForm() throws Exception
@@ -48,18 +48,18 @@ public class TestPathEncoding extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".+"))).build();
 
       // Route
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/_"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/%5F"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_/"), router.route("/%5F_"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/_"), router.route("/_%5F"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "?"), router.route("/%3F"));
+      assertEquals(Collections.singletonMap(Names.P, "/"), router.route("/_"));
+      assertEquals(Collections.singletonMap(Names.P, "_"), router.route("/%5F"));
+      assertEquals(Collections.singletonMap(Names.P, "_/"), router.route("/%5F_"));
+      assertEquals(Collections.singletonMap(Names.P, "/_"), router.route("/_%5F"));
+      assertEquals(Collections.singletonMap(Names.P, "?"), router.route("/%3F"));
 
       // Render
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-      assertEquals("/%5F", router.render(Collections.singletonMap(QualifiedName.create("p"), "_")));
-      assertEquals("/%5F_", router.render(Collections.singletonMap(QualifiedName.create("p"), "_/")));
-      assertEquals("/_%5F", router.render(Collections.singletonMap(QualifiedName.create("p"), "/_")));
-      assertEquals("/%3F", router.render(Collections.singletonMap(QualifiedName.create("p"), "?")));
+      assertEquals("/_", router.render(Collections.singletonMap(Names.P, "/")));
+      assertEquals("/%5F", router.render(Collections.singletonMap(Names.P, "_")));
+      assertEquals("/%5F_", router.render(Collections.singletonMap(Names.P, "_/")));
+      assertEquals("/_%5F", router.render(Collections.singletonMap(Names.P, "/_")));
+      assertEquals("/%3F", router.render(Collections.singletonMap(Names.P, "?")));
    }
 
    public void testAlternativeSepartorEscape() throws Exception
@@ -67,14 +67,14 @@ public class TestPathEncoding extends AbstractTestController
       Router router = router().separatorEscapedBy(':').add(route("/{p}").with(pathParam("p").matchedBy(".+"))).build();
 
       // Route
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/:"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), ":"), router.route("/%3A"));
+      assertEquals(Collections.singletonMap(Names.P, "/"), router.route("/:"));
+      assertEquals(Collections.singletonMap(Names.P, "_"), router.route("/_"));
+      assertEquals(Collections.singletonMap(Names.P, ":"), router.route("/%3A"));
 
       // Render
-      assertEquals("/:", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "_")));
-      assertEquals("/%3A", router.render(Collections.singletonMap(QualifiedName.create("p"), ":")));
+      assertEquals("/:", router.render(Collections.singletonMap(Names.P, "/")));
+      assertEquals("/_", router.render(Collections.singletonMap(Names.P, "_")));
+      assertEquals("/%3A", router.render(Collections.singletonMap(Names.P, ":")));
    }
 
    public void testBug() throws Exception
@@ -85,11 +85,11 @@ public class TestPathEncoding extends AbstractTestController
       assertNull(router.route("/_"));
 
       // This is expected
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("/_", router.render(Collections.singletonMap(Names.P, "/")));
 
       // This is expected
       assertNull(router.route("/%5F"));
-      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "_")));
+      assertEquals("", router.render(Collections.singletonMap(Names.P, "_")));
    }
 
    public void testParamPreservePath() throws Exception
@@ -97,11 +97,11 @@ public class TestPathEncoding extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy("[^/]+").preservePath())).build();
 
       // Route
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "_"), router.route("/_"));
+      assertEquals(Collections.singletonMap(Names.P, "_"), router.route("/_"));
       assertNull(router.route("//"));
 
       // Render
-      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("", router.render(Collections.singletonMap(Names.P, "/")));
    }
 
    public void testD() throws Exception
@@ -112,15 +112,15 @@ public class TestPathEncoding extends AbstractTestController
          build();
 
       // Route
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator"), router.route("/_platform_administrator"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator"), router.route("/_platform_administrator/"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/"), router.route("/_platform_administrator_"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/"), router.route("/_platform_administrator_/"));
+      assertEquals(Collections.singletonMap(Names.P, "/platform/administrator"), router.route("/_platform_administrator"));
+      assertEquals(Collections.singletonMap(Names.P, "/platform/administrator"), router.route("/_platform_administrator/"));
+      assertEquals(Collections.singletonMap(Names.P, "/platform/administrator/"), router.route("/_platform_administrator_"));
+      assertEquals(Collections.singletonMap(Names.P, "/platform/administrator/"), router.route("/_platform_administrator_/"));
 
       // Render
-      assertEquals("/_platform_administrator", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator")));
-      assertEquals("/_platform_administrator_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator/")));
-      assertEquals("", router.render(Collections.singletonMap(QualifiedName.create("p"), "/platform/administrator//")));
+      assertEquals("/_platform_administrator", router.render(Collections.singletonMap(Names.P, "/platform/administrator")));
+      assertEquals("/_platform_administrator_", router.render(Collections.singletonMap(Names.P, "/platform/administrator/")));
+      assertEquals("", router.render(Collections.singletonMap(Names.P, "/platform/administrator//")));
    }
 
    public void testWildcardPathParamWithPreservePath() throws Exception
@@ -128,16 +128,16 @@ public class TestPathEncoding extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".*").preservePath())).build();
 
       // Render
-      assertEquals("/", router.render(Collections.singletonMap(QualifiedName.create("p"), "")));
-      assertEquals("//", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
-      assertEquals("/a", router.render(Collections.singletonMap(QualifiedName.create("p"), "a")));
-      assertEquals("/a/b", router.render(Collections.singletonMap(QualifiedName.create("p"), "a/b")));
+      assertEquals("/", router.render(Collections.singletonMap(Names.P, "")));
+      assertEquals("//", router.render(Collections.singletonMap(Names.P, "/")));
+      assertEquals("/a", router.render(Collections.singletonMap(Names.P, "a")));
+      assertEquals("/a/b", router.render(Collections.singletonMap(Names.P, "a/b")));
 
       // Route
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), ""), router.route("/"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("//"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a"), router.route("/a"));
-      assertEquals(Collections.singletonMap(QualifiedName.create("p"), "a/b"), router.route("/a/b"));
+      assertEquals(Collections.singletonMap(Names.P, ""), router.route("/"));
+      assertEquals(Collections.singletonMap(Names.P, "/"), router.route("//"));
+      assertEquals(Collections.singletonMap(Names.P, "a"), router.route("/a"));
+      assertEquals(Collections.singletonMap(Names.P, "a/b"), router.route("/a/b"));
    }
 
    public void testWildcardParamPathWithDefaultForm() throws Exception
@@ -145,7 +145,7 @@ public class TestPathEncoding extends AbstractTestController
       Router router = router().add(route("/{p}").with(pathParam("p").matchedBy(".*"))).build();
 
       //
-      assertEquals("/_", router.render(Collections.singletonMap(QualifiedName.create("p"), "/")));
+      assertEquals("/_", router.render(Collections.singletonMap(Names.P, "/")));
    }
 
 }

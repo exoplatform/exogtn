@@ -39,9 +39,9 @@ public class TestRoutePriority extends AbstractTestController
          add(route("/foo").with(routeParam("foo").withValue("b"))).
          build();
 
-      assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "foo"), router.route("/foo"));
-      assertEquals("/foo", router.render(Collections.singletonMap(QualifiedName.parse("foo"), "foo")));
-      assertEquals("/b", router.render(Collections.singletonMap(QualifiedName.parse("foo"), "b")));
+      assertEquals(Collections.singletonMap(Names.FOO, "foo"), router.route("/foo"));
+      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
+      assertEquals("/b", router.render(Collections.singletonMap(Names.FOO, "b")));
    }
 
    public void testExactMatchingBeforeWildcard() throws Exception
@@ -52,8 +52,8 @@ public class TestRoutePriority extends AbstractTestController
          add(route("/{foo}")).
          build();
 
-      assertEquals(Collections.singletonMap(QualifiedName.parse("foo"), "b"), router.route("/foo"));
-      assertEquals("/foo", router.render(Collections.singletonMap(QualifiedName.parse("foo"), "b")));
-      assertEquals("/foo", router.render(Collections.singletonMap(QualifiedName.parse("foo"), "foo")));
+      assertEquals(Collections.singletonMap(Names.FOO, "b"), router.route("/foo"));
+      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "b")));
+      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
    }
 }

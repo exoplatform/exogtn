@@ -42,8 +42,8 @@ public class TestPortal extends AbstractTestController
          build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/public/fr"));
+      assertEquals(Collections.singletonMap(Names.GTN_LANG, ""), router.route("/public"));
+      assertEquals(Collections.singletonMap(Names.GTN_LANG, "fr"), router.route("/public/fr"));
    }
 
    public void testLanguage2() throws Exception
@@ -54,12 +54,12 @@ public class TestPortal extends AbstractTestController
          build();
 
       //
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), ""), router.route("/public"));
+      assertEquals(Collections.singletonMap(Names.GTN_LANG, ""), router.route("/public"));
       assertNull(router.route("/f/public"));
-      assertEquals(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr"), router.route("/fr/public"));
-      assertEquals("/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "")));
-      assertEquals("", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "f")));
-      assertEquals("/fr/public", router.render(Collections.singletonMap(QualifiedName.parse("gtn:lang"), "fr")));
+      assertEquals(Collections.singletonMap(Names.GTN_LANG, "fr"), router.route("/fr/public"));
+      assertEquals("/public", router.render(Collections.singletonMap(Names.GTN_LANG, "")));
+      assertEquals("", router.render(Collections.singletonMap(Names.GTN_LANG, "f")));
+      assertEquals("/fr/public", router.render(Collections.singletonMap(Names.GTN_LANG, "fr")));
    }
 
    public void testLanguage3() throws Exception
@@ -71,19 +71,19 @@ public class TestPortal extends AbstractTestController
          build();
 
       Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(QualifiedName.create("gtn", "lang"), "fr");
-      expectedParameters.put(QualifiedName.create("gtn", "sitename"), "classic");
-      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
+      expectedParameters.put(Names.GTN_LANG, "fr");
+      expectedParameters.put(Names.GTN_SITENAME, "classic");
+      expectedParameters.put(Names.GTN_PATH, "/home");
       
       //
 //      assertEquals(Collections.<QualifiedName, String>emptyMap(), router.route("/public"));
       assertEquals(expectedParameters, router.route("/public/fr/classic/home"));
       
-      expectedParameters.put(QualifiedName.create("gtn", "path"), "");
+      expectedParameters.put(Names.GTN_PATH, "");
       assertEquals(expectedParameters, router.route("/public/fr/classic"));
       
-      expectedParameters.put(QualifiedName.create("gtn", "lang"), "");
-      expectedParameters.put(QualifiedName.create("gtn", "path"), "/home");
+      expectedParameters.put(Names.GTN_LANG, "");
+      expectedParameters.put(Names.GTN_PATH, "/home");
       assertEquals(expectedParameters, router.route("/public/classic/home"));
    }
 
@@ -96,8 +96,8 @@ public class TestPortal extends AbstractTestController
 
       //
       Map<QualifiedName, String> expected = new HashMap<QualifiedName, String>();
-      expected.put(QualifiedName.parse("foo"), "foo_1");
-      expected.put(QualifiedName.parse("bar"), "bar_value");
+      expected.put(Names.FOO, "foo_1");
+      expected.put(Names.BAR, "bar_value");
       assertEquals(expected, router.route("/", Collections.singletonMap("bar", new String[]{"bar_value"})));
       URIHelper rc = new URIHelper();
       router.render(expected, rc.writer);
@@ -106,7 +106,7 @@ public class TestPortal extends AbstractTestController
 
       //
       expected = new HashMap<QualifiedName, String>();
-      expected.put(QualifiedName.parse("foo"), "foo_2");
+      expected.put(Names.FOO, "foo_2");
       assertEquals(expected,  router.route("/", Collections.singletonMap("bar", new String[]{"flabbergast"})));
       rc = new URIHelper();
       router.render(expected, rc.writer);
