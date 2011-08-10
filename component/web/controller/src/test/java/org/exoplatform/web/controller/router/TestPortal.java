@@ -34,23 +34,27 @@ import java.util.Map;
 public class TestPortal extends AbstractTestController
 {
 
+   /** . */
+   public static final String LANG_PATTERN = "([A-Za-z]{2}(-[A-Za-z]{2})?)?";
+
    public void testLanguage1() throws Exception
    {
       Router router = router().add(
          route("/public/{gtn:lang}").
-            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?").preservePath())).
+            with(pathParam("gtn:lang").matchedBy(LANG_PATTERN).preservePath())).
          build();
 
       //
       assertEquals(Collections.singletonMap(Names.GTN_LANG, ""), router.route("/public"));
       assertEquals(Collections.singletonMap(Names.GTN_LANG, "fr"), router.route("/public/fr"));
+      assertEquals(Collections.singletonMap(Names.GTN_LANG, "fr-FR"), router.route("/public/fr-FR"));
    }
 
    public void testLanguage2() throws Exception
    {
       Router router = router().
          add(route("/{gtn:lang}/public").
-            with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?"))).
+            with(pathParam("gtn:lang").matchedBy(LANG_PATTERN))).
          build();
 
       //
@@ -60,13 +64,14 @@ public class TestPortal extends AbstractTestController
       assertEquals("/public", router.render(Collections.singletonMap(Names.GTN_LANG, "")));
       assertEquals("", router.render(Collections.singletonMap(Names.GTN_LANG, "f")));
       assertEquals("/fr/public", router.render(Collections.singletonMap(Names.GTN_LANG, "fr")));
+      assertEquals("/fr-FR/public", router.render(Collections.singletonMap(Names.GTN_LANG, "fr-FR")));
    }
 
    public void testLanguage3() throws Exception
    {
       Router router = router().
          add(route("/public/{gtn:lang}/{gtn:sitename}{gtn:path}")
-            .with(pathParam("gtn:lang").matchedBy("([A-Za-z]{2})?").preservePath())
+            .with(pathParam("gtn:lang").matchedBy(LANG_PATTERN).preservePath())
             .with(pathParam("gtn:path").matchedBy(".*").preservePath())).
          build();
 

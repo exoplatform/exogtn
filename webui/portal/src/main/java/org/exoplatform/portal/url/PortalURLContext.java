@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.url;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.web.ControllerContext;
@@ -137,15 +138,11 @@ public class PortalURLContext implements URLContext
       parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteKey.getName());
 
       //
-      String lang;
+      String lang = "";
       Locale locale = url.getLocale();
-      if (locale != null)
+      if (locale != null && locale.getLanguage().length() > 0)
       {
-         lang = locale.getLanguage();
-      }
-      else
-      {
-         lang = "";
+         lang = I18N.toTagIdentifier(locale);
       }
       parameters.put(PortalRequestHandler.LANG, lang);
 

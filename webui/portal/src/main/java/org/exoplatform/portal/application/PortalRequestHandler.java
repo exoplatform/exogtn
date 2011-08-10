@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.services.log.ExoLogger;
@@ -126,7 +127,7 @@ public class PortalRequestHandler extends WebRequestHandler
       }
       else
       {
-         requestLocale = new Locale(lang.substring(0, 2));
+         requestLocale = I18N.parseTagIdentifier(lang);
       }
 
       if (requestSiteName == null) {
