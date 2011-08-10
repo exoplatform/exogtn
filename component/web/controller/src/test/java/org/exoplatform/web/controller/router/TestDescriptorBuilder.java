@@ -49,7 +49,7 @@ public class TestDescriptorBuilder extends TestCase
       ControllerDescriptor routerDesc = new DescriptorBuilder().build(routerReader);
 
       //
-      assertEquals('&', routerDesc.getSlashEscape());
+      assertEquals('&', routerDesc.getSeparatorEscape());
 
       //
       Iterator<RouteDescriptor> i = routerDesc.getRoutes().iterator();

@@ -62,9 +62,9 @@ public class TestPathEncoding extends AbstractTestController
       assertEquals("/%3F", router.render(Collections.singletonMap(QualifiedName.create("p"), "?")));
    }
 
-   public void testAlternativeSlashEscape() throws Exception
+   public void testAlternativeSepartorEscape() throws Exception
    {
-      Router router = router().slashEscapedBy(':').add(route("/{p}").with(pathParam("p").matchedBy(".+"))).build();
+      Router router = router().separatorEscapedBy(':').add(route("/{p}").with(pathParam("p").matchedBy(".+"))).build();
 
       // Route
       assertEquals(Collections.singletonMap(QualifiedName.create("p"), "/"), router.route("/:"));

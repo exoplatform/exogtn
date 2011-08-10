@@ -34,7 +34,7 @@
     <xs:sequence>
       <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="slash-escape" use="optional">
+    <xs:attribute name="separator-escape" use="optional">
       <xs:simpleType>
         <xs:restriction base="xs:string">
           <xs:enumeration value="_"/>

@@ -86,11 +86,11 @@ public class DescriptorBuilder
       ControllerDescriptor router = router();
 
       //
-      String s = root.getAttribute("slash-escape");
+      String s = root.getAttribute("separator-escape");
       if (s != null)
       {
          char c = s.charAt(0);
-         router.setSlashEscape(c);
+         router.setSeparatorEscape(c);
       }
 
       //

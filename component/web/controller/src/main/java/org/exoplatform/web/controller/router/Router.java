@@ -66,33 +66,33 @@ public class Router
    final Route root;
 
    /** The slash escape char. */
-   final char slashEscape;
+   final char separatorEscape;
 
    /** . */
-   final char slashEscapeNible1;
+   final char separatorEscapeNible1;
 
    /** . */
-   final char slashEscapeNible2;
+   final char separatorEscapeNible2;
 
    public Router(ControllerDescriptor metaData) throws RouterConfigException
    {
-      char slashEscape = metaData.getSlashEscape();
+      char separtorEscape = metaData.getSeparatorEscape();
 
       //
-      int i = slashEscape & ~0x7F;
-      if (i > 0 || !escapeSet.get(slashEscape))
+      int i = separtorEscape & ~0x7F;
+      if (i > 0 || !escapeSet.get(separtorEscape))
       {
-         throw new RouterConfigException("Char " + (int)slashEscape + " cannot be used a slash escape");
+         throw new RouterConfigException("Char " + (int)separtorEscape + " cannot be used a separator escape");
       }
 
       //
-      String s = Integer.toString(slashEscape, 16).toUpperCase();
-      slashEscapeNible1 = s.charAt(0);
-      slashEscapeNible2 = s.charAt(1);
+      String s = Integer.toString(separtorEscape, 16).toUpperCase();
+      separatorEscapeNible1 = s.charAt(0);
+      separatorEscapeNible2 = s.charAt(1);
 
       //
       this.root = new Route(this);
-      this.slashEscape = slashEscape;
+      this.separatorEscape = separtorEscape;
 
       //
       for (RouteDescriptor routeMetaData : metaData.getRoutes())

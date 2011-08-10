@@ -258,7 +258,7 @@ class Route
             for (int len = value.length(), j = 0;j < len;j++)
             {
                char c = value.charAt(j);
-               if (c == router.slashEscape)
+               if (c == router.separatorEscape)
                {
                   if (def.encodingMode == EncodingMode.PRESERVE_PATH)
                   {
@@ -266,13 +266,13 @@ class Route
                   } else
                   {
                      writer.append('%');
-                     writer.append(router.slashEscapeNible1);
-                     writer.append(router.slashEscapeNible2);
+                     writer.append(router.separatorEscapeNible1);
+                     writer.append(router.separatorEscapeNible2);
                   }
                }
                else if (c == '/')
                {
-                  writer.append(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : router.slashEscape);
+                  writer.append(def.encodingMode == EncodingMode.PRESERVE_PATH ? '/' : router.separatorEscape);
                }
                else
                {
@@ -820,7 +820,7 @@ class Route
                               for (int from = matcher.start(group);from < end;from++)
                               {
                                  char c = current.path.charAt(from);
-                                 if (c == child.router.slashEscape && current.path.getRawLength(from) == 1)
+                                 if (c == child.router.separatorEscape && current.path.getRawLength(from) == 1)
                                  {
                                     c = '/';
                                  }

@@ -38,12 +38,12 @@ public class ControllerDescriptor
    private final List<RouteDescriptor> routes;
 
    /** . */
-   private char slashEscape;
+   private char separatorEscape;
 
    public ControllerDescriptor()
    {
       this.routes = new ArrayList<RouteDescriptor>();
-      this.slashEscape = '_';
+      this.separatorEscape = '_';
    }
 
    public ControllerDescriptor add(RouteDescriptor... routes)
@@ -69,20 +69,20 @@ public class ControllerDescriptor
       return this;
    }
 
-   public ControllerDescriptor slashEscapedBy(char c)
+   public ControllerDescriptor separatorEscapedBy(char c)
    {
-      this.slashEscape = c;
+      this.separatorEscape = c;
       return this;
    }
 
-   public char getSlashEscape()
+   public char getSeparatorEscape()
    {
-      return slashEscape;
+      return separatorEscape;
    }
 
-   public void setSlashEscape(char slashEscape)
+   public void setSeparatorEscape(char separatorEscape)
    {
-      this.slashEscape = slashEscape;
+      this.separatorEscape = separatorEscape;
    }
 
    public List<RouteDescriptor> getRoutes()
