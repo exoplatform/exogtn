@@ -24,13 +24,9 @@
 			%>
 							<div class="GadgetCategory" id="${category.getName()}">
 								<div class="GadgetTab SelectedTab" onclick="eXo.webui.UIDashboard.onTabClick(this, 'NormalTab', 'SelectedTab')">
-									<div class="LeftCategoryTitleBar">
-										<div class="RightCategoryTitleBar">
-											<div class="MiddleCategoryTitleBar">
-												<div class="ArrowIcon" title="${category.getDisplayName()}">${category.getDisplayName()}</div>
-											</div>								
-										</div>
-									</div>
+									
+										<a href="#" class="ArrowIcon" title="${category.getDisplayName()}">${category.getDisplayName()}</a>
+									
 								</div>
 								<div class="ItemsContainer">
 									<%

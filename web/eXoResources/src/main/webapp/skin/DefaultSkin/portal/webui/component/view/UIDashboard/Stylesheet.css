@@ -56,10 +56,8 @@
 
 .UITabPaneDashboard  {
 	height: auto;
-	-moz-border-radius: 5px 5px 0 0;
-	-webkit-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
-	background-color: #ffcf01;
+	background-color: #ededed;
+	border: 1px solid #e1e1e1;
 	padding: 0px 9px;
 	margin: 0 9px;
 }
@@ -67,17 +65,15 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
-	height: 24px;
-	line-height: 24px;
+	height: 19px;
+	line-height: 17px;
+	border: 1px solid #d4d4d4;
 	padding:0px 6px 0px 9px;/* orientation=lt */
 	padding:0px 9px 0px 6px;/* orientation=rt */
 	margin: 4px 2px 0px 0px;/* orientation=lt */
 	margin: 4px 0px 0px 2px;/* orientation=rt */
 }
 
-.UITabPaneDashboard .NormalTab {
-	background-color:#E6E6E6;
-}
 
 .UITabPaneDashboard .SelectedTab {
 	background-color:#fff;
@@ -100,7 +96,7 @@
 
 
 .UITabPaneDashboard .UITab .CloseIcon {
-	background: url('background/IconClose.gif') no-repeat center top;
+	background: url('background/IconClose.png') no-repeat center;
 	width: 14px;
 	height: 13px;
 	cursor: pointer;	
@@ -115,9 +111,9 @@
 }
 
 .UITabPaneDashboard .AddDashboard {
-	background: url('background/AddDashboard.gif') no-repeat center center;
-	width: 34px;
-	height: 32px;
+	background: url('background/AddDashboard.png') no-repeat center center;
+	width: 23px;
+	height: 29px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	cursor: pointer;
@@ -219,19 +215,16 @@
 	text-transform: capitalize;
 }
 
-.UIDashboardSelectContainer .GadgetCategory .GadgetTab .LeftCategoryTitleBar {
+.UIDashboardSelectContainer .GadgetCategory .GadgetTab {
 	background: url('background/CategoryTitleBar.gif') repeat-x left top;
 	border: 1px solid #b8babf;
-}
-
-.UIDashboardSelectContainer .GadgetCategory .GadgetTab .MiddleCategoryTitleBar {
 	height: 23px;
 	padding: 0px 8px;
 }
 
 .UIDashboardSelectContainer .GadgetCategory .GadgetTab .ArrowIcon {
-	background: url('background/ArrowIcon.gif') no-repeat left -14px; /* orientation=lt */
-	background: url('background/ArrowIcon.gif') no-repeat right -14px; /* orientation=rt */
+	background: url('background/ArrowIcon.gif') no-repeat left -20px; /* orientation=lt */
+	background: url('background/ArrowIcon.gif') no-repeat right -20px; /* orientation=rt */
 	line-height: 23px;
 	overflow: hidden;
 	padding-left: 18px; /* orientation=lt */
@@ -241,8 +234,8 @@
 }
 
 .UIDashboardSelectContainer .GadgetCategory .SelectedTab .ArrowIcon {
-	background: url('background/ArrowIcon.gif') no-repeat left 8px; /* orientation=lt */
-	background: url('background/ArrowIcon.gif') no-repeat right 8px; /* orientation=rt */
+	background: url('background/ArrowIcon.gif') no-repeat left 3px; /* orientation=lt */
+	background: url('background/ArrowIcon.gif') no-repeat right 3px; /* orientation=rt */
 }
 
 .UIDashboardSelectContainer .GadgetCategory .ItemsContainer {
@@ -266,6 +259,8 @@
 	width: 150px;	
 	float: none;
 	margin: 0px !important;
+	line-height: 21px;
+	font-size: 11px;
 }
 
 /*----------------------UIGadgetsContainer-------------------*/
@@ -288,30 +283,21 @@
 	height: 100%;
 	min-height: 400px;
 	_height: 400px;
+	padding: 8px;
+	text-align: right;/* orientation=lt */
+	text-align: left;/* orientation=rt */
 }
 
-.UIDashboardContainer .GadgetContainer .ContainerControlBarL {
-	padding: 5px 10px;
-	height: 22px;
-}
-
-.UIDashboardContainer .ContainerControlBarL .AddIcon {
-	background: url('background/Dashboard.gif') no-repeat left -200px; /* orientation=lt */
-	background: url('background/Dashboard.gif') no-repeat right -200px; /* orientation=rt */
-	padding-left: 30px; /* orientation=lt */
-	padding-right: 30px; /* orientation=rt */
+.UIDashboardContainer .AddIcon {
+	background: url('background/AddGadget.gif') no-repeat left center; /* orientation=lt */
+	background: url('background/AddGadget.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
 	width: 200px; /* orientation=rt */
-	font-weight: bold; font-size: 12px;
-	display: block;
-	line-height: 22px;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-}
-
-.UIDashboardContainer .GadgetContainer .AddIcon a {
+	font-size: 12px;
+	line-height: 30px;
 	text-decoration: underline;
-	color: #292929;
-	cursor: pointer;
+	color: #226ab3;
 }
 
 .UIDashboardContainer .GadgetContainer .AddIcon a:hover {
@@ -432,7 +418,7 @@
 /*----------------------Maximized-------------------*/
 
 .Maximized .UIGadget {
-	padding: 5px;
+	padding: 20px;
 	margin: 0px;
 }
 
@@ -448,3 +434,4 @@
 	width: 100%;
 	_width: 98%;
 }
+

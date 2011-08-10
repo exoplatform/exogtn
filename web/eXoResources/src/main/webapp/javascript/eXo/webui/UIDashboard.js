@@ -434,7 +434,7 @@ function UIDashboard() {
 		var portletFragment = DOMUtil.findAncestorByClass(uiDashboardPortlet, "PORTLET-FRAGMENT");
 		var uiContainer = DOMUtil.findFirstDescendantByClass(uiDashboardPortlet, "div", "UIDashboardContainer");
 		var uiSelectPopup = DOMUtil.findPreviousElementByTagName(uiContainer, "div");
-		var addButton = DOMUtil.findFirstDescendantByClass(uiContainer, "div", "ContainerControlBarL");
+		var addButton = DOMUtil.findFirstDescendantByClass(uiContainer, "a", "AddIcon");
 
 		var params;
 		if(uiSelectPopup.style.display != "none") {
