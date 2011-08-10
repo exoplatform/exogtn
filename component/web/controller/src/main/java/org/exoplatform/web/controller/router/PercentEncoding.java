@@ -175,9 +175,9 @@ final class PercentEncoding
       else
       {
          byte[] bytes = encoder.encode(c);
-         appendable.append('%');
          for (byte b : bytes)
          {
+            appendable.append('%');
             appendable.append(ALPHABET[(b & 0xF0) >> 4]);
             appendable.append(ALPHABET[b & 0xF]);
          }
