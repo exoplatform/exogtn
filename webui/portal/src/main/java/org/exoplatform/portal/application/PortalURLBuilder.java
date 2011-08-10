@@ -84,44 +84,16 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
       }
 
       //
+      if (removeLocale)
+      {
+         url.setLocale(null);
+      }
+      else if (locale != null)
+      {
+         url.setLocale(locale);
+      }
+
+      //
       return url.toString();
    }
-
-   // I keept that as reminder for the various encodings
-/*
-
-
-   protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
-      Parameter[] params)
-   {
-      builder.append("baseurl").append("?").append(PortalRequestContext.UI_COMPONENT_ID).append('=').append(
-         targetComponent.getId());
-      if (action != null && action.trim().length() > 0)
-      {
-         builder.append("&amp;").append(PortalRequestContext.UI_COMPONENT_ACTION).append('=').append(action);
-      }
-
-      if (targetBeanId != null && targetBeanId.trim().length() > 0)
-      {
-         builder.append("&amp;").append(UIComponent.OBJECTID).append('=').append(targetBeanId);
-      }
-
-      if (params == null || params.length < 1)
-         return;
-      for (Parameter param : params)
-      {
-         try
-         {
-            param.setValue(URLEncoder.encode(param.getValue(), "utf-8"));
-         }
-         catch (Exception e)
-         {
-            LOGGER.error("Could not encode URL", e);
-         }
-         builder.append("&amp;").append(param.getName()).append('=').append(param.getValue());
-      }
-
-   }
-*/
-
 }

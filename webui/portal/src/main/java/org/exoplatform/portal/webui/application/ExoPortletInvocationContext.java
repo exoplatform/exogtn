@@ -281,10 +281,10 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
       }
 
       // Ajax support
-      url.setAjax("true".equals(containerURL.getProperties().get("ajax")));
+      url.setAjax("true".equals(props.get("gtn:ajax")));
 
       // Confirm messsage
-      url.setConfirm(containerURL.getProperties().get("confirm"));
+      url.setConfirm(props.get("gtn:confirm"));
 
       //
       return url.toString();

@@ -61,8 +61,8 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
       url.getParameterMap().clear();
 
       //
-      url.setProperty("ajax", Boolean.toString(ajax));
-      url.setProperty("confirm", confirm);
+      url.setProperty("gtn:ajax", Boolean.toString(ajax));
+      url.setProperty("gtn:confirm", confirm);
 
       //
       url.setParameter(UIComponent.UICOMPONENT, targetComponent.getId());
@@ -86,6 +86,16 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
          {
             url.setParameter(param.getName(), param.getValue());
          }
+      }
+
+      //
+      if (removeLocale)
+      {
+         url.setProperty("gtn:lang", "");
+      }
+      else if (locale != null)
+      {
+         url.setProperty("gtn:lang", locale.toString());
       }
 
       //

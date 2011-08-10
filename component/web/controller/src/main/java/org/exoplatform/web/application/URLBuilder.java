@@ -20,12 +20,41 @@
 package org.exoplatform.web.application;
 
 
+import java.util.Locale;
+
 /**
  * Created by The eXo Platform SAS
  * Mar 29, 2007  
  */
 abstract public class URLBuilder<T>
 {
+
+   /** . */
+   protected Locale locale = null;
+
+   /** . */
+   protected boolean removeLocale = false;
+
+   public Locale getLocale()
+   {
+      return locale;
+   }
+
+   public void setLocale(Locale locale)
+   {
+      this.locale = locale;
+   }
+
+   public void setRemoveLocale(boolean removeLocale)
+   {
+      this.removeLocale = removeLocale;
+   }
+
+   public boolean getRemoveLocale()
+   {
+      return removeLocale;
+   }
+
    public final String createURL(String action)
    {
       throw new UnsupportedOperationException("don't use me");
