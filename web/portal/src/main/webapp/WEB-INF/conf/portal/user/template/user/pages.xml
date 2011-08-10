@@ -28,6 +28,7 @@
   <!-- The default dashboard page -->
   <page>
     <name>Tab_Default</name>
+    <title>Tab_Default</title>
     <portlet-application>
       <portlet>
         <application-ref>dashboard</application-ref>
