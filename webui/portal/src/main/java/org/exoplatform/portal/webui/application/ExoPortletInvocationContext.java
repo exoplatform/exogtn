@@ -20,10 +20,13 @@
 package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.Constants;
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MarkupInfo;
 import org.gatein.common.util.ParameterValidation;
@@ -38,6 +41,7 @@ import org.gatein.pc.api.WindowState;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.portlet.impl.spi.AbstractPortletInvocationContext;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +57,9 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    static final String INTERACTION_STATE_PARAM_NAME = "interactionstate";
    static final String NAVIGATIONAL_STATE_PARAM_NAME = "navigationalstate";
    static final String RESOURCE_STATE_PARAM_NAME = "resourcestate";
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ExoPortletInvocationContext.class);
 
    /** . */
    private final HttpServletResponse response;
@@ -247,6 +254,29 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
+         }
+      }
+
+      //
+      Map<String, String> props = containerURL.getProperties();
+      String lang = props.get("gtn:lang");
+      if (lang != null)
+      {
+         if (lang.length() == 0)
+         {
+            url.setLocale(null);
+         }
+         else
+         {
+            try
+            {
+               Locale locale = I18N.parseJavaIdentifier(lang);
+               url.setLocale(locale);
+            }
+            catch (IllegalArgumentException e)
+            {
+               log.debug("Unparsable locale string: " + lang, e);
+            }
          }
       }
 
