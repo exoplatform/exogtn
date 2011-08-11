@@ -19,14 +19,18 @@
 
 package org.gatein.portal.samples.api;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.portlet.ResourceURL;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -39,33 +43,81 @@ public class LocaleURLPortlet extends GenericPortlet
 {
 
    @Override
+   public void serveResource(ResourceRequest req, ResourceResponse resp) throws PortletException, IOException
+   {
+      resp.setContentType("text/html");
+      PrintWriter writer = resp.getWriter();
+      String namespace = "n_" + resp.getNamespace();
+      ResourceURL resourceURL = resp.createResourceURL();
+      resourceURL.setCacheability(ResourceURL.PAGE);
+      PortletURL renderURL = resp.createRenderURL();
+      Locale current = req.getLocale();
+
+      //
+      writer.print(
+         "<html>" +
+         "<head>" +
+         "<script type='text/javascript'>" +
+         "function openLinkInParent(){" +
+         "var e = document.getElementById(\"" + namespace + "\");" +
+         "var url = e.options[e.selectedIndex].value;" +
+         "window.open(url,'" + namespace + "_parent');" +
+         "window.focus();" +
+         "}\n");
+
+      writer.print(
+         "</script>" +
+         "</head>" +
+         "<body>");
+
+      writer.print("<p>Selecting a language will update the main portal window with the language in URL</p>");
+
+      writer.print("<p><form action=\"javascript:openLinkInParent()\">");
+      writer.print("<select id=\"" + namespace + "\">");
+      renderURL.setProperty("gtn:lang", "");
+      writer.print("<option value='" + renderURL + "'>&nbsp;</option>");
+      for (String lang : new String[]{"en","fr","it","vi"})
+      {
+         renderURL.setProperty("gtn:lang", lang);
+         writer.print("<option value=\"" + renderURL + "\">" + new Locale(lang).getDisplayName(current) + "</option>");
+      }
+      writer.print("</select>");
+      writer.print("<input type='submit' value=\"Change\"/>");
+      writer.print("</form></p>");
+      writer.print("</body></html>");
+   }
+
+   @Override
    protected void doView(RenderRequest req, RenderResponse resp) throws PortletException, IOException
    {
       resp.setContentType("text/html");
       PrintWriter writer = resp.getWriter();
-      PortletURL url = resp.createRenderURL();
       Locale current = req.getLocale();
-      writer.print("<div>Current locale: " + current + "</div>");
-      writer.print("<ul>");
+      ResourceURL resource = resp.createResourceURL();
+      resource.setCacheability(ResourceURL.PAGE);
+      String namespace = "n_" + resp.getNamespace();
+      String remoteWindowName = namespace + "_remote";
 
-      // Setting the gtn:lang property to the empty string removes the language from the url
-      url.setProperty("gtn:lang", "");
-      writer.print("<li>");
-      writer.print("<a href='" + url + "'>None</a>");
-      writer.print("</li>");
+      writer.print(
+         "<script type='text/javascript'>" +
+         "var " + remoteWindowName + "; function " + namespace + "_popup(url){" +
+         "window.name='" + namespace + "_parent';" +
+         "window.open(url, '" + remoteWindowName + "', 'width=256,height=128,scrollable=yes')" +
+         "}" +
+         "onload = function() {" +
+         "if (typeof " + remoteWindowName + " != 'undefined') " +
+         "{" + remoteWindowName + ".location.reload(true);" +
+         "}" +
+         "}" +
+         "</script>");
 
-      // Setting the gtn:lang property to a valid locale value will set the locale in the url
-      // note that this is valid for language and country code, variant are not supported
-      for (String lang : new String[]{"en","fr","it","vi"})
-      {
-         url.setProperty("gtn:lang", lang);
-         writer.print("<li>");
-         writer.print("<a href='" + url + "'>" + new Locale(lang).getDisplayName(current) + "</a>");
-         writer.print("</li>");
-      }
+      writer.print(
+         "<p><a href='#' onclick=\"" + namespace + "_remote=" + namespace + "_popup('" + resource + "')\">" +
+         "Language controller</a></p>");
+
+      writer.print("<p>Current locale is " + current.getDisplayName(current) + "</p>");
 
       //
-      writer.print("</ul>");
       writer.close();
    }
 }
