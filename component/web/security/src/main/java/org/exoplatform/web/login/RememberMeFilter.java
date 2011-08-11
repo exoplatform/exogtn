@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.login;
 
+import org.exoplatform.web.controller.router.PercentEncoding;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.FastURLEncoder;
@@ -60,14 +61,7 @@ public class RememberMeFilter implements Filter
          String token = InitiateLoginServlet.getRememberMeTokenCookie(req);
          if (token != null)
          {
-            StringBuilder builder = new StringBuilder();
-            builder.append(req.getContextPath());
-            builder.append("/private");
-            String pathInfo = req.getPathInfo();
-            if (pathInfo != null)
-            {
-               builder.append(pathInfo);
-            }
+            StringBuilder builder = new StringBuilder(req.getRequestURI());
             char sep = '?';
             for (Enumeration<String> e = req.getParameterNames();e.hasMoreElements();)
             {
@@ -81,9 +75,10 @@ public class RememberMeFilter implements Filter
                   builder.append(CONVERTER.encode(parameteValue));
                }
             }
-            String s = builder.toString();
-            log.debug("Redirecting unauthenticated request with token " + token + " to URL " + s);
-            resp.sendRedirect(s);
+            String initialURI = PercentEncoding.QUERY_PARAM.encode(builder);
+            String redirect = req.getContextPath() + "/login?initialURI=" + initialURI;
+            log.debug("Redirecting unauthenticated request with token " + token + " to URL " + redirect);
+            resp.sendRedirect(resp.encodeRedirectURL(redirect));
             return;
          }
       }

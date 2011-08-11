@@ -29,7 +29,7 @@ import java.util.BitSet;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-final class PercentEncoding
+public final class PercentEncoding
 {
 
    /** . */
@@ -143,7 +143,7 @@ final class PercentEncoding
       return c < allowed.length() && allowed.get(c);
    }
 
-   void encode(CharSequence s, Appendable appendable) throws IOException
+   public void encode(CharSequence s, Appendable appendable) throws IOException
    {
       for (int len = s.length(), i = 0;i < len;i++)
       {
@@ -152,7 +152,7 @@ final class PercentEncoding
       }
    }
 
-   String encode(CharSequence s)
+   public String encode(CharSequence s)
    {
       try
       {
@@ -166,7 +166,7 @@ final class PercentEncoding
       }
    }
 
-   void encode(char c, Appendable appendable) throws IOException
+   public void encode(char c, Appendable appendable) throws IOException
    {
       if (accept(c))
       {
