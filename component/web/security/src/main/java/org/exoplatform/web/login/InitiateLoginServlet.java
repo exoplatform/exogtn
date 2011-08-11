@@ -19,7 +19,6 @@
 
 package org.exoplatform.web.login;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.web.AbstractHttpServlet;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
@@ -30,7 +29,6 @@ import org.gatein.common.logging.LoggerFactory;
 
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -67,10 +65,6 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       //
       if (credentials == null)
       {
-         PortalContainer pContainer = PortalContainer.getInstance();
-         ServletContext context = pContainer.getPortalContext();
-
-         //
          String token = getRememberMeTokenCookie(req);
          if (token != null)
          {
@@ -126,7 +120,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       try
       {
          String queryString = (String)req.getAttribute("javax.servlet.forward.query_string");
-         if ((String)req.getAttribute("javax.servlet.forward.query_string") != null)
+         if (req.getAttribute("javax.servlet.forward.query_string") != null)
          {
             initialURI = initialURI + "?" + queryString;
          }
