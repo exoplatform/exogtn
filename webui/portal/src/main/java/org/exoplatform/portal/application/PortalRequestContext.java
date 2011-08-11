@@ -314,7 +314,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getInitialURI()
    {
-      return portalURI;
+      return request_.getRequestURI();
    }
 
    public ControllerContext getControllerContext()
