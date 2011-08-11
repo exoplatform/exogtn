@@ -27,6 +27,7 @@ import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.URLContext;
 import org.gatein.common.io.UndeclaredIOException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,12 @@ public class StandaloneAppURLContext implements URLContext
 
    private <R, U extends PortalURL<R, U>> String _render(U url) throws IOException
    {
+      if (url.getResource() == null)
+      {
+         throw new IllegalStateException("No resource set on standaloneApp URL");
+      }
+
+      //
       if (writer == null)
       {
          writer = new URIWriter(buffer = new StringBuilder());
@@ -82,9 +89,20 @@ public class StandaloneAppURLContext implements URLContext
       }
 
       //
-      if (url.getResource() == null)
+      HttpServletRequest req = controllerContext.getRequest();
+      if (url.getSchemeUse())
       {
-         throw new IllegalStateException("No resource set on standaloneApp URL");
+         buffer.append(req.getScheme());
+         buffer.append("://");
+      }
+      if (url.getAuthorityUse())
+      {
+         buffer.append(req.getServerName());
+         int port = req.getServerPort();
+         if (port != 80)
+         {
+            buffer.append(':').append(port);
+         }
       }
 
       //

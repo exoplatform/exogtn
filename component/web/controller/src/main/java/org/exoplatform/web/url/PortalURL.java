@@ -39,6 +39,12 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
    private static final ParameterMap.AccessMode ACCES_MODE = ParameterMap.AccessMode.get(false, false);
 
    /** . */
+   private boolean schemeUse;
+
+   /** . */
+   private boolean authorityUse;
+
+   /** . */
    protected Boolean ajax;
 
    /** . */
@@ -70,12 +76,64 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
       }
 
       //
+      this.authorityUse = false;
+      this.schemeUse = false;
       this.context = context;
       this.ajax = null;
       this.locale = null;
       this.confirm = null;
       this.queryParams = null;
       this.mimeType = null;
+   }
+
+   /**
+    * Returns the current scheme use.
+    *
+    * @return the scheme use
+    */
+   public boolean getSchemeUse()
+   {
+      return schemeUse;
+   }
+
+   /**
+    * Control the scheme generation (<code>http</code> or <code>https</code> according to the request) of the URL.
+    * If the scheme is enabled, the authority property will be set to true.
+    *
+    * @param schemeUse the scheme use value
+    */
+   public void setSchemeUse(boolean schemeUse)
+   {
+      if (schemeUse)
+      {
+         this.authorityUse = true;
+      }
+      this.schemeUse = schemeUse;
+   }
+
+   /**
+    * Returns the current authority use.
+    *
+    * @return the authority use
+    */
+   public boolean getAuthorityUse()
+   {
+      return authorityUse;
+   }
+
+   /**
+    * Control the authority generation (the server name appended with the port when its value is different than 80) of the
+    * URL. If the authority is disabled, the scheme property will be set to false.
+    *
+    * @param authorityUse the authority use value
+    */
+   public void setAuthorityUse(boolean authorityUse)
+   {
+      if (!authorityUse)
+      {
+         schemeUse = false;
+      }
+      this.authorityUse = authorityUse;
    }
 
    /**
