@@ -217,9 +217,8 @@ function getModule(params)
       addDependency(new Project("org.exoplatform.portal", "exo.portal.webui.dashboard", "jar", module.version));
 
    module.sample = {};
-   module.sample.framework =
-   new Project("org.exoplatform.portal", "exo.portal.sample.framework", "war", module.version);
-   module.sample.framework.deployName = "eXoSampleFramework";
+
+   module.sample.skin = new Project("org.gatein.portal.examples.skins", "gatein-sample-skin", "war", module.version);
 
    module.eXoGadgetServer =
    new Project("org.exoplatform.portal", "exo.portal.gadgets-server", "war", module.version).
