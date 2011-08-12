@@ -58,6 +58,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.1.0-beta6</version.chromattic>
       <version.reflect>1.1.0-beta12</version.reflect>
+      <org.staxnav.version>0.9.4</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
 
       <!-- EXOGTN-106 : forced at packaging level -->
@@ -628,6 +629,12 @@
          </dependency>
 
          <dependency>
+            <groupId>org.staxnav</groupId>
+            <artifactId>staxnav.core</artifactId>
+            <version>${org.staxnav.version}</version>
+         </dependency>
+
+         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>${commons-dbcp.version}</version>
@@ -830,10 +837,14 @@
       </resources>
       <testResources>
          <testResource>
-            <directory>src/test/resources</directory>
+            <directory>src/test/java</directory>
             <includes>
-               <include>**/*.*</include>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
             </includes>
+         </testResource>
+         <testResource>
+            <directory>src/test/resources</directory>
          </testResource>
       </testResources>
       <pluginManagement>

@@ -19,41 +19,46 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.url.StandaloneAppURLContext;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
-import org.exoplatform.portal.webui.application.UIStandaloneGadget;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.webui.core.UIApplication;
+
 import java.util.Locale;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class StandaloneAppRequestContext extends PortalRequestContext
 {
-   private String storageId;
    protected static Log log = ExoLogger.getLogger(StandaloneAppRequestContext.class);
 
-   public StandaloneAppRequestContext(WebuiApplication app, HttpServletRequest req, HttpServletResponse res)
+   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String requestPath)
       throws Exception
    {
-      super(app, req, res);
-      int idx = (req.getServletPath() + req.getContextPath()).length() + 1;
-      if (idx <= getRequestURI().length())
+      super(app, controllerContext, SiteType.USER.name(), controllerContext.getRequest().getRemoteUser(), requestPath, null);    
+   }
+
+   @Override
+   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
+   {
+      StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
+      U url = urlFactory.newURL(resourceType, context);
+      if (url != null)
       {
-         storageId = getRequestURI().substring(idx);
+         url.setAjax(false);
       }
-      else
-      {
-         storageId = "";
-      }
+      return url;
    }
 
    public String getStorageId()
    {
-      return storageId;
+      return getNodePath();
    }
 
    public String getTitle() throws Exception
@@ -65,7 +70,7 @@ public class StandaloneAppRequestContext extends PortalRequestContext
       {
          title = container.getCurrAppName();
       }
-      
+
       if (title == null)
       {
          title = "";
@@ -86,10 +91,5 @@ public class StandaloneAppRequestContext extends PortalRequestContext
    public String getPortalOwner()
    {
       return null;
-   }
-
-   public String getNodePath()
-   {
-      throw new UnsupportedOperationException();
    }
 }

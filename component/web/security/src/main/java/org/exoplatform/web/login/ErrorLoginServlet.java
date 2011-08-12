@@ -25,9 +25,10 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -45,6 +46,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ErrorLoginServlet extends AbstractHttpServlet
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ErrorLoginServlet.class);
 
    /**
     * Serial version ID
@@ -74,17 +78,18 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       
    private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
-      if (initialURI == null)
+      String initialURI = req.getHeader("referer");
+      if (initialURI == null || initialURI.length() == 0)
       {
-         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
+         initialURI = req.getContextPath();
+         log.debug("No initial URI found, will use default " + initialURI + " instead ");
       }
-      int jsecurityIndex = initialURI.lastIndexOf("/j_security_check");
-      if (jsecurityIndex != -1) 
+      else
       {
-         initialURI = initialURI.substring(0, jsecurityIndex);
+         log.debug("Found initial URI from referer " + initialURI);
       }
-      
+
+      //
       try
       {
          req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);

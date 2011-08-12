@@ -5,6 +5,11 @@
 	import java.util.Collection;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.web.url.PortalURL;
+	import org.exoplatform.web.url.navigation.NavigationResource;
+	import org.exoplatform.portal.config.model.PortalConfig;
+	import org.exoplatform.portal.mop.SiteType;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -12,33 +17,31 @@
 	jsmanager.importJavascript('eXo.portal.UIAdminToolbar');
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
 
-	def portalURI = Util.getPortalRequestContext().getPortalURI();
-	void renderDashboards(Collection nodes) {
-		String clazz = "";
-		
+	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
+	PortalURL nodeURL = nodeurl();
+	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
 			<ul style="display:none" class="MenuItemContainer">
 		""";
-					int idx = 0;
 					for(UserNode node : nodes) {
-						renderPageNode(node, idx++ % 2 == 0);
+						renderPageNode(nodeURL, pcontext, node);
 					}
 		print """
 			</ul>
 		""" ;
 	}
 	
-	void renderPageNode(UserNode node, boolean flag) {
+	void renderPageNode(PortalURL nodeURL, PortalRequestContext pcontext, UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getURI() == selectedNode.getURI()) {
+		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {
 				tabStyleNavigation = "SelectedItem";
 		}
 		
 		boolean hasChild = (node.getChildrenCount() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+		String href = nodeURL.setNode(node);
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		def resolvedLabel = node.getEncodedResolvedLabel();
@@ -73,9 +76,8 @@
 			print """
 				<ul class="MenuItemContainer">			
 			""" ;
-					int idx = 0;
 					for(UserNode child : node.getChildren()) {
-						renderPageNode(child, idx++ % 2 == 0);
+						renderPageNode(nodeURL, pcontext, child);
 					}
 			print """
 				</ul>
@@ -90,23 +92,22 @@
 
 <%
 	def userNodes = uicomponent.getNavigationNodes(uicomponent.getCurrentUserNavigation());
-	String defaultDashboardPage;				
 	if(userNodes.size() < 1) {
-		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;
+		String createDashboardLink = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id">
 		<li class="UITab NormalToolbarTab">
-			<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
+			<a class="DashboardIcon TBIcon" href="$createDashboardLink"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
 		</li>
 	</ul>	
 <% 
 	}else{
-		defaultDashboardPage =userNodes.iterator().next().getName();
+		String link = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
 	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">
-			<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
-				<% renderDashboards(userNodes); %>
+			<a class="DashboardIcon TBIcon" href="$link"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
+				<% renderDashboards(nodeURL, pcontext, userNodes); %>
 		</li>
 	</ul>
 <% } %>

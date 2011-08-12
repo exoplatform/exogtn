@@ -97,10 +97,10 @@
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
 		 if (headerElements != null) 
 		 {
-			 for (element in headerElements)
-			 { %>
-				<%=element%>	
-		<% }
+		    for (element in headerElements)
+		    {
+		    	print(element);  
+		    }
 		 }		 
 		%>
 	</head>
@@ -112,7 +112,7 @@
 			//rcontext.getJavascriptManager().addOnResizeJavascript('eXo.core.UIMaskLayer.resizeMaskLayer');
 		%>
  
-	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
+	  <div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
 			
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
 			<div class="LoadingContainer">
@@ -125,4 +125,3 @@
 			
 			</div>
 		</div>
-	

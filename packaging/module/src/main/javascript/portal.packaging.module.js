@@ -47,6 +47,7 @@ function getModule(params)
    var rhinoVersion = "${rhino.version}";
    var jcipVersion = "${jcip.version}";
    var simplecapthaVersion = "${nl.captcha.simplecaptcha.version}";
+   var staxnavVersion = "${org.staxnav.version}";
 
    //TODO versions for gatein components
    
@@ -100,7 +101,8 @@ function getModule(params)
    module.component.web = {}
    module.component.web.controller =
    new Project("org.exoplatform.portal", "exo.portal.component.web.controller", "jar", module.version).
-      addDependency(module.component.common);
+      addDependency(module.component.common).
+      addDependency(new Project("org.staxnav", "staxnav.core", "jar", staxnavVersion));
 
    module.component.web.security =
    new Project("org.exoplatform.portal", "exo.portal.component.web.security", "jar", module.version).

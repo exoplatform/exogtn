@@ -574,16 +574,12 @@ function ajaxGet(url, callback) {
   doRequest("Get", url, null, callback) ;
 } ;
 
-/*
-* This method is called when a HTTP POST should be done but in an AJAX
-* case some maniputalions are needed
-* Once the content of the form is placed into a string object, the call
-* is delegated to the doRequest() method 
-*/
-function ajaxPost(formElement, callback) {
+/**
+ * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
+ * The call is delegated to the doRequest() method with a callback function
+ */
+function ajaxPost(url, queryString, callback) {
   if (!callback) callback = null ;
-  var queryString = eXo.webui.UIForm.serializeForm(formElement) ;
-  var url = formElement.action + "&ajaxRequest=true" ;
   doRequest("POST", url, queryString, callback) ;
 } ;
 
@@ -613,6 +609,7 @@ function doRequest(method, url, queryString, callback) {
 	  eXo.session.itvInit() ;
   }
 }	;
+
 /**
  * Abort an ajax request
  * @return
@@ -625,6 +622,7 @@ function ajaxAbort() {
   eXo.portal.CurrentRequest.aborted = true ;
   eXo.portal.CurrentRequest = null ;
 } ;
+
 /**
  * Create a ajax request
  * @param {String} url - Url
@@ -643,6 +641,7 @@ function ajaxAsyncGetRequest(url, async) {
   }
 	if(!async) return request.responseText ;
 }
+
 /**
  * Redirect browser to url
  * @param url

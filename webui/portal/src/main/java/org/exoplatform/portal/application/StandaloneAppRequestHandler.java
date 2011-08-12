@@ -19,13 +19,14 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.web.WebAppController;
 
 
 public class StandaloneAppRequestHandler extends PortalRequestHandler
@@ -42,11 +43,10 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       }
    }
 
-   private String[] PATHS = {"/standalone"};
-
-   public String[] getPath()
+   @Override
+   public String getHandlerName()
    {
-      return PATHS;
+      return "standalone";
    }
 
    @Override
@@ -58,14 +58,20 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       controller.addApplication(standaloneApplication);
    }
    
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   @Override
+   public void execute(ControllerContext controllerContext) throws Exception
    {
+      HttpServletRequest req = controllerContext.getRequest();
+      HttpServletResponse res = controllerContext.getResponse();
+
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");
 
-      StandaloneApplication app = controller.getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, req, res);
+      //
+      String requestPath = controllerContext.getParameter(REQUEST_PATH);
 
+      StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestPath);
       processRequest(context, app);
    }     
 }

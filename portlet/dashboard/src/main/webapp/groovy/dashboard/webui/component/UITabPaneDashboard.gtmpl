@@ -4,12 +4,14 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.mop.user.UserNode;
+	import org.exoplatform.web.url.PortalURL;
+	import org.exoplatform.web.url.navigation.NavigationResource;
 	
 	def nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();	
-	def portalURI = pcontext.getPortalURI();
+	PortalRequestContext pcontext = Util.getPortalRequestContext();
+	PortalURL nodeURL = nodeurl();
 
 	def selectedNode = Util.getUIPortal().getSelectedUserNode();
 	
@@ -20,7 +22,8 @@
 			<%
 			int i = 0;
 			for(UserNode node : nodes){
-			   def tabLabel = node.getEncodedResolvedLabel();
+				def tabLabel = node.getEncodedResolvedLabel();
+			    nodeURL.setNode(node);
 				if ("Tab_Default".equals(node.getName()))
 				{
 					tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + tabLabel);
@@ -37,7 +40,7 @@
 			</div>
 				<%}else{ %>
 			<div class="UITab NormalTab">
-				<a href="<%= portalURI + node.getURI(); %>" class="Tablabel">$tabLabel</a>
+				<a href="<%= nodeURL.toString()%>" class="Tablabel">$tabLabel</a>
 				<a href="<%= uicomponent.url("DeleteTab",param); %>" class="CloseIcon" title="DEL" ></a>	
 			</div>
 				<%} %>	

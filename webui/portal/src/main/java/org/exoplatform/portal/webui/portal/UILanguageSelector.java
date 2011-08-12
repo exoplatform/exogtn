@@ -28,6 +28,8 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -167,17 +169,22 @@ public class UILanguageSelector extends UIContainer
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUIComponent(null);
-         // event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS) ;
-         Util.getPortalRequestContext().setFullRender(false);
+
          if (language == null || language.trim().length() < 1)
             return;
-         // if(!uiPortal.isModifiable()) return;
          LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
          LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
          if (localeConfig == null)
             localeConfig = localeConfigService.getDefaultLocaleConfig();
          PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
          prqCtx.setLocale(localeConfig.getLocale());
+
+         if (prqCtx.getRequestLocale() != null)
+         {
+            NodeURL url = prqCtx.createURL(NodeURL.TYPE).setNode(Util.getUIPortal().getNavPath());
+            url.setLocale(null);
+            prqCtx.sendRedirect(url.toString());            
+         }
       }
    }
 

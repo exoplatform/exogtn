@@ -23,11 +23,15 @@ import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.StaleModelException;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -67,18 +71,18 @@ import javax.servlet.http.HttpServletRequest;
 /** Created by The eXo Platform SAS Author : Pham Thanh Tung thanhtungty@gmail.com Jun 10, 2009 */
 @ComponentConfigs({
    @ComponentConfig(template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
-      @EventConfig(listeners = UIPortalComposer.ViewPropertiesActionListener.class),
+      @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewSitePropertiesActionListener.class),
       @EventConfig(listeners = UIPortalComposer.CloseComposerActionListener.class),
-      @EventConfig(listeners = UIPortalComposer.AbortActionListener.class),
-      @EventConfig(listeners = UIPortalComposer.FinishActionListener.class),
+      @EventConfig(name = "Abort", listeners = UIPortalComposer.AbortSiteEditionActionListener.class),
+      @EventConfig(name = "Finish", listeners = UIPortalComposer.FinishSiteEditionActionListener.class),
       @EventConfig(listeners = UIPortalComposer.SwitchModeActionListener.class),
       @EventConfig(listeners = UIPortalComposer.ChangeEdittedStateActionListener.class),
       @EventConfig(listeners = UIPortalComposer.ToggleActionListener.class)}),
-   @ComponentConfig(id = "UIPageEditor", template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
-      @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewProperties2ActionListener.class),
+   @ComponentConfig(id = UIPortalComposer.UIPAGE_EDITOR, template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
+      @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewPagePropertiesActionListener.class),
       @EventConfig(listeners = UIPortalComposer.CloseComposerActionListener.class),
-      @EventConfig(name = "Abort", listeners = UIPortalComposer.Abort2ActionListener.class),
-      @EventConfig(name = "Finish", listeners = UIPortalComposer.Finish2ActionListener.class),
+      @EventConfig(name = "Abort", listeners = UIPortalComposer.AbortPageEditionActionListener.class),
+      @EventConfig(name = "Finish", listeners = UIPortalComposer.FinishPageEditionActionListener.class),
       @EventConfig(name = "Back", listeners = UIPortalComposer.BackActionListener.class),
       @EventConfig(listeners = UIPortalComposer.SwitchModeActionListener.class),
       @EventConfig(listeners = UIPortalComposer.ChangeEdittedStateActionListener.class),
@@ -86,7 +90,10 @@ import javax.servlet.http.HttpServletRequest;
    @ComponentConfig(id = "UIPortalComposerTab", type = UITabPane.class, template = "app:/groovy/portal/webui/portal/UIPortalComposerContent.gtmpl", events = {@EventConfig(listeners = UIPortalComposer.SelectTabActionListener.class)})})
 public class UIPortalComposer extends UIContainer
 {
-
+   final static public String UIPORTAL_COMPOSER = "UIPortalComposer";
+   
+   final static public String UIPAGE_EDITOR = "UIPageEditor";
+   
    private boolean isEditted = false;
 
    private boolean isCollapsed = false;
@@ -181,11 +188,11 @@ public class UIPortalComposer extends UIContainer
       UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
       String remoteUser = prContext.getRemoteUser();
-      String ownerUser = prContext.getPortalOwner();
+      String portalName = prContext.getPortalOwner();
 
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
-      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
       DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+      UserACL acl = getApplicationComponent(UserACL.class);
 
       if (!isPortalExist(editPortal))
       {
@@ -204,11 +211,11 @@ public class UIPortalComposer extends UIContainer
          //caught in the ApplicationLifecycle
          rebuildUIPortal(uiPortalApp, editPortal, dataStorage);
       }
-      uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
-      UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
-      if (userPortalConfig != null)
+      uiPortalApp.getUserPortalConfig().setPortalConfig(portalConfig);
+      PortalConfig pConfig = dataStorage.getPortalConfig(portalName);
+      if (pConfig != null)
       {
-         editPortal.setModifiable(userPortalConfig.getPortalConfig().isModifiable());
+         editPortal.setModifiable(acl.hasEditPermission(pConfig));
       }
       else
       {
@@ -245,11 +252,11 @@ public class UIPortalComposer extends UIContainer
 
    private void rebuildUIPortal(UIPortalApplication uiPortalApp, UIPortal uiPortal, DataStorage storage) throws Exception
    {
-      PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getOwnerType(), uiPortal.getOwner());
+      PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getSiteType().getName(), uiPortal.getName());
       UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
-      userPortalConfig.setPortal(portalConfig);
+      userPortalConfig.setPortalConfig(portalConfig);
       uiPortal.getChildren().clear();
-      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
+      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig.getPortalConfig());
       
       uiPortalApp.putCachedUIPortal(uiPortal);
       
@@ -266,9 +273,9 @@ public class UIPortalComposer extends UIContainer
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
 
       String portalOwner = null;
-      if (editPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+      if (editPortal.getSiteType().equals(SiteType.PORTAL))
       {
-         portalOwner = editPortal.getOwner();
+         portalOwner = editPortal.getName();
       }
       else
       {
@@ -354,7 +361,7 @@ public class UIPortalComposer extends UIContainer
       super.processRender(context);
    }
 
-   static public class ViewPropertiesActionListener extends EventListener<UIPortalComposer>
+   static public class ViewSitePropertiesActionListener extends EventListener<UIPortalComposer>
    {
 
       public void execute(Event<UIPortalComposer> event) throws Exception
@@ -367,9 +374,9 @@ public class UIPortalComposer extends UIContainer
          if (temp != null && (temp instanceof UIPortal))
          {
             uiPortal = (UIPortal)temp;
-            if (uiPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+            if (uiPortal.getSiteType().equals(SiteType.PORTAL))
             {
-               portalOwner = uiPortal.getOwner();
+               portalOwner = uiPortal.getName();
             }
             else
             {
@@ -387,7 +394,7 @@ public class UIPortalComposer extends UIContainer
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
          portalForm.setPortalOwner(portalOwner);
          portalForm.setBindingBean();
-         if (PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType()))
+         if (SiteType.USER.equals(uiPortal.getSiteType()))
          {
             portalForm.removeChildById("PermissionSetting");
          }
@@ -396,7 +403,7 @@ public class UIPortalComposer extends UIContainer
       }
    }
 
-   static public class AbortActionListener extends EventListener<UIPortalComposer>
+   static public class AbortSiteEditionActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
@@ -408,15 +415,17 @@ public class UIPortalComposer extends UIContainer
          uiEditWS.getComposer().setEditted(false);
          uiEditWS.setRendered(false);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         prContext.setFullRender(true);
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
 
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
          siteBody.setUIComponent(uiPortal);
 
-         String uri = uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null;
-         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
+         PageNodeEvent<UIPortalApplication> pnevent =
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+         
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = prContext.getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -430,7 +439,7 @@ public class UIPortalComposer extends UIContainer
     * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
     * @version $Revision$
     */
-   static public class FinishActionListener extends EventListener<UIPortalComposer>
+   static public class FinishSiteEditionActionListener extends EventListener<UIPortalComposer>
    {
 
       public void execute(Event<UIPortalComposer> event) throws Exception
@@ -460,8 +469,6 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.setFullRender(true);
-
-         String uri = (uiPortal.getSelectedUserNode() != null)? (uiPortal.getSelectedUserNode().getURI()) : null;
         
          if (uiComposer.isPortalExist(editPortal))
          {
@@ -470,30 +477,33 @@ public class UIPortalComposer extends UIContainer
                storage.getPortalConfig(uiPortal.getSiteKey().getTypeName(), uiPortal.getSiteKey().getName());
             if (pConfig != null)
             {
-               uiPortalApp.getUserPortalConfig().setPortal(pConfig);
+               uiPortalApp.getUserPortalConfig().setPortalConfig(pConfig);
             }
             uiPortal.getChildren().clear();
-            PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig());
+            PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig().getPortalConfig());
 
             //Update the cache of UIPortal from UIPortalApplication
             uiPortalApp.putCachedUIPortal(uiPortal);
-            uiPortalApp.setShowedUIPortal(uiPortal);
+            uiPortalApp.setCurrentSite(uiPortal);
             
             //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
             //temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires
             //multiple UIPortal (already available) and concept of SiteConfig
             uiPortal.refreshUIPage();
             
-            PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            UserNode currentNode = uiPortal.getSelectedUserNode();
+            SiteKey siteKey = currentNode.getNavigation().getKey();
+            PageNodeEvent<UIPortalApplication> pnevent =
+               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+            uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+            
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
             JavascriptManager jsManager = prContext.getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
          }
          else
          {
-            if (editPortal.getOwner().equals(prContext.getPortalOwner()))
+            if (editPortal.getName().equals(prContext.getPortalOwner()))
             {
                HttpServletRequest request = prContext.getRequest();
                request.getSession().invalidate();
@@ -604,7 +614,7 @@ public class UIPortalComposer extends UIContainer
       }
    }
 
-   static public class ViewProperties2ActionListener extends EventListener<UIPortalComposer>
+   static public class ViewPagePropertiesActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
@@ -643,7 +653,7 @@ public class UIPortalComposer extends UIContainer
       }
    }
 
-   static public class Abort2ActionListener extends EventListener<UIPortalComposer>
+   static public class AbortPageEditionActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
@@ -657,17 +667,18 @@ public class UIPortalComposer extends UIContainer
          PortalRequestContext prContext = Util.getPortalRequestContext();
          prContext.setFullRender(true);
 
-         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
+         UIPortal uiPortal = uiPortalApp.getCurrentSite();
          uiPortal.setRenderSibling(UIPortal.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
 
          uiPortal.refreshUIPage();
          
-         PageNodeEvent<UIPortal> pnevent =
-            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
-               ? uiPortal.getSelectedUserNode().getURI() : null));
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
+         PageNodeEvent<UIPortalApplication> pnevent =
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -680,12 +691,12 @@ public class UIPortalComposer extends UIContainer
     * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
     * @version $Revision$
     */
-   static public class Finish2ActionListener extends EventListener<UIPortalComposer>
+   static public class FinishPageEditionActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
+         UIPortal uiPortal = uiPortalApp.getCurrentSite();
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
@@ -699,18 +710,22 @@ public class UIPortalComposer extends UIContainer
             uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
          
          /*
-          * if it is a edition of the current page
+          * if it is a edition of the current page and it is not available to current remote user anymore.
           */
+         PortalRequestContext pContext = Util.getPortalRequestContext();
          if (page.getStorageId() != null && portalConfigService.getPage(pageId) == null)
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, 1));
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, ApplicationMessage.WARNING));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-            Util.getPortalRequestContext().setFullRender(true);
-            PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
-                  (uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null));
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            pContext.setFullRender(true);
+            
+            UserNode currentNode = uiPortal.getSelectedUserNode();
+            SiteKey siteKey = currentNode.getNavigation().getKey();
+            PageNodeEvent<UIPortalApplication> pnevent =
+               new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+            uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+            
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
             return;
@@ -763,11 +778,14 @@ public class UIPortalComposer extends UIContainer
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         Util.getPortalRequestContext().setFullRender(true);
-         PageNodeEvent<UIPortal> pnevent =
-            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
-               ? uiPortal.getSelectedUserNode().getURI() : null));
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         pContext.setFullRender(true);
+         
+         UserNode currentNode = uiPortal.getSelectedUserNode();
+         SiteKey siteKey = currentNode.getNavigation().getKey();
+         PageNodeEvent<UIPortalApplication> pnevent =
+            new PageNodeEvent<UIPortalApplication>(uiPortalApp, PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+         uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
+
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }

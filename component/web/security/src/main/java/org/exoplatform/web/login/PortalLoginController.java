@@ -49,23 +49,32 @@ public class PortalLoginController extends AbstractHttpServlet
       String password = req.getParameter("password");
 
       //
-      if (username == null)
+      if (username != null && password != null)
       {
-         log.error("Tried to access the portal login controller without username provided");
-         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No username provided");
-         return;
-      }
-      if (password == null)
-      {
-         log.error("Tried to access the portal login controller without password provided");
-         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No password provided");
-         return;
-      }
+         log.debug("Found username and password and set credentials in http session");
+         Credentials credentials = new Credentials(username, password);
+         req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
 
-      //
-      log.debug("Found username and password and set credentials in http session");
-      Credentials credentials = new Credentials(username, password);
-      req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
+         // if we do have a remember me
+         String rememberme = req.getParameter("rememberme");
+         if ("true".equals(rememberme))
+         {
+            boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
+            if (isRemember)
+            {
+               //Create token
+               AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+               String cookieToken = tokenService.createToken(credentials);
+
+               log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
+                  "in the next response");
+               Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
+               cookie.setPath(req.getContextPath());
+               cookie.setMaxAge((int)tokenService.getValidityTime());
+               resp.addCookie(cookie);
+            }
+         }
+      }
 
       // Obtain initial URI
       String uri = req.getParameter("initialURI");
@@ -81,28 +90,9 @@ public class PortalLoginController extends AbstractHttpServlet
          log.debug("Found initial URI " + uri);
       }
 
-      // if we do have a remember me
-      String rememberme = req.getParameter("rememberme");
-      if ("true".equals(rememberme))
-      {
-         boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
-         if (isRemember)
-         {
-            //Create token
-            AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
-            String cookieToken = tokenService.createToken(credentials);
-
-            log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
-               "in the next response");
-            Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
-            cookie.setPath(req.getContextPath());
-            cookie.setMaxAge((int)tokenService.getValidityTime());
-            resp.addCookie(cookie);
-         }
-      }
-
       //
-      resp.sendRedirect(uri);
+      String redirectURI = req.getContextPath() + "/dologin?initialURI=" + uri;
+      resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

@@ -23,6 +23,7 @@ import org.exoplatform.portal.application.StandaloneAppRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.services.security.ConversationState;
@@ -97,7 +98,7 @@ public class UIStandaloneAppContainer extends UIContainer
          siteOwner = siteInfo[1];
       }
       ConversationState currentState = ConversationState.getCurrent();
-      if (PortalConfig.USER_TYPE.equals(siteType) && currentState.getIdentity().getUserId().equals(siteOwner))
+      if (SiteType.USER.getName().equals(siteType) && currentState.getIdentity().getUserId().equals(siteOwner))
       {
          Application<Gadget> gadgetModel = ds.getApplicationModel(storageId);
          UIStandaloneGadget staGadget = createUIComponent(UIStandaloneGadget.class, null, null);
