@@ -20,19 +20,17 @@
 package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
@@ -57,8 +55,11 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.url.ComponentURL;
 
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -94,6 +95,10 @@ public class UIPortalApplication extends UIApplication
    public static final int CONTAINER_BLOCK_EDIT_MODE = 3;
 
    public static final int CONTAINER_VIEW_EDIT_MODE = 4;
+   
+   public static final UIComponent EMPTY_COMPONENT = new UIComponent(){
+      public String getId() { return "{portal:componentId}"; };
+   };
 
    private int modeState = NORMAL_MODE;
 
@@ -543,11 +548,15 @@ public class UIPortalApplication extends UIApplication
       {
          lastRequestURI = requestURI;
 
-         StringBuilder baseUriInJS = new StringBuilder("eXo.env.server.portalBaseURL=\"");
-         baseUriInJS.append(pcontext.getRequestURI()).append("\";");
-
-         pcontext.getJavascriptManager().addCustomizedOnLoadScript(baseUriInJS.toString());
-
+         StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
+         js.append(pcontext.getRequestURI()).append("\";\n");
+         
+         String url = getPortalURLTemplate();
+         js.append("eXo.env.server.portalURLTemplate=\"");
+         js.append(url).append("\";");
+         
+         pcontext.getJavascriptManager().addCustomizedOnLoadScript(js.toString());
+         
          SiteKey siteKey = new SiteKey(pcontext.getSiteType(), pcontext.getSiteName());
          PageNodeEvent<UIPortalApplication> pnevent =
             new PageNodeEvent<UIPortalApplication>(this, PageNodeEvent.CHANGE_NODE, siteKey, pcontext.getNodePath());
@@ -779,5 +788,27 @@ public class UIPortalApplication extends UIApplication
          if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
             skin_ = userPortalConfigSkin;
       }
+   }
+   
+   /**
+    * Return the portal url template which will be sent to client ( browser )
+    * and used for JS based portal url generation.
+    * 
+    * <p>The portal url template are calculated base on the current request and site state.
+    * Something like : <code>"/portal/groups/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&portal:action={portal:action}" ;</code>
+    * 
+    * @return return portal url template
+    * @throws UnsupportedEncodingException
+    */
+   public String getPortalURLTemplate() throws UnsupportedEncodingException
+   {
+      PortalRequestContext pcontext = Util.getPortalRequestContext();
+      ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
+      urlTemplate.setMimeType(MimeType.PLAIN);
+      urlTemplate.setPath(pcontext.getNodePath());
+      urlTemplate.setResource(EMPTY_COMPONENT);
+      urlTemplate.setAction("{portal:action}");
+      
+      return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
    }
 }
