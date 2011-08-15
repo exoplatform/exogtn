@@ -27,16 +27,20 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NodeURL;
-import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
+import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.URLFactoryService;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This handler resolves legacy request and redirect them to the new URL computed dynamically against the
@@ -52,7 +56,7 @@ public class LegacyRequestHandler extends WebRequestHandler
 
    /** . */
    private final UserPortalConfigService userPortalService;
-
+   
    /** . */
    private final UserPortalContext userPortalContext = new UserPortalContext()
    {
@@ -86,7 +90,7 @@ public class LegacyRequestHandler extends WebRequestHandler
       String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
 
       // Resolve the user node
-      UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName,  context.getRequest().getRemoteUser(), userPortalContext);
+      UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
       UserPortal userPortal = cfg.getUserPortal();
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
       UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
@@ -111,7 +115,18 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
+      url.setMimeType(MimeType.PLAIN);
+
+      HttpServletRequest request = context.getRequest();
+      Enumeration paraNames = request.getParameterNames();
+      while (paraNames.hasMoreElements())
+      {
+         String parameter = paraNames.nextElement().toString();
+         url.setQueryParameterValues(parameter, request.getParameterValues(parameter));
+      }
+
       String s = url.toString();
+
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));
    }

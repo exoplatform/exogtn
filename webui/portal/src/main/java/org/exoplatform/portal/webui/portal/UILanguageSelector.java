@@ -182,7 +182,7 @@ public class UILanguageSelector extends UIContainer
          if (prqCtx.getRequestLocale() != null)
          {
             NodeURL url = prqCtx.createURL(NodeURL.TYPE).setNode(Util.getUIPortal().getNavPath());
-            url.setLocale(null);
+            url.setLocale(prqCtx.getLocale());
             prqCtx.sendRedirect(url.toString());            
          }
       }

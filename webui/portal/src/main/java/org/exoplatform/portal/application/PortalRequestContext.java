@@ -22,7 +22,6 @@ package org.exoplatform.portal.application;
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
-import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -296,7 +295,10 @@ public class PortalRequestContext extends WebuiRequestContext
          {
             userPortalConfig =
                service_.getUserPortalConfig(portalName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
-            session.setAttribute(LAST_PORTAL_NAME, portalName);
+            if (userPortalConfig != null)
+            {
+               session.setAttribute(LAST_PORTAL_NAME, portalName);
+            }
          }
          catch (Exception e)
          {
