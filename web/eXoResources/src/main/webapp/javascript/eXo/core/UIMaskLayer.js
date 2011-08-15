@@ -50,12 +50,10 @@ UIMaskLayer.prototype.createTransparentMask = function() {
 	var ajaxLoading = document.getElementById("AjaxLoadingMask") ;
 	var maskLayer = eXo.core.UIMaskLayer.createMask("UIPortalApplication", ajaxLoading, 0) ;
 	Browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.setPosition) ;
-							
 	ajaxLoading.style.display = "none";
 	Browser.setOpacity(maskLayer,0);
 	maskLayer.style.backgroundColor = "white";
 	maskLayer.style.cursor = "wait";
-	
 	return maskLayer;
 };
 
@@ -64,6 +62,7 @@ UIMaskLayer.prototype.createTransparentMask = function() {
  */
 UIMaskLayer.prototype.showAjaxLoading = function(mask){
 	var ajaxLoading = document.getElementById("AjaxLoadingMask");
+	ajaxLoading.style.top = document.documentElement.scrollTop + "px";
 	ajaxLoading.style.display = "block";
 	eXo.core.Browser.setOpacity(mask,30);
 	mask.style.backgroundColor = "black";	
