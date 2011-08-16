@@ -64,7 +64,7 @@
 	border-right: 1px solid white;
 }
 
-.UIToolbarContainer .ToolbarContainer a {
+.UIToolbarContainer .ToolbarContainer .TBIcon {
 	display: block;
 	padding: 0px 5px 0px 35px; /* orientation=lt */
 	padding: 0px 35px 0px 5px; /* orientation=rt */
@@ -165,8 +165,11 @@
 }
 
 .UIToolbarContainer .MenuItem a {	
-	padding-right: 25px; /* orientation=lt */
-	padding-left: 25px; /* orientation=rt */
+	display: block;
+	padding: 0px 25px 0px 35px; /* orientation=lt */
+	padding: 0px 35px 0px 25px; /* orientation=rt */
+	white-space: nowrap;
+	color: #3e3e3e;
 }
 
 .UIToolbarContainer .ItemIcon {	

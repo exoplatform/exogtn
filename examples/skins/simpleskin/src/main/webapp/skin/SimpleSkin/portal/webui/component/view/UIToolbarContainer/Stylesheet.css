@@ -27,7 +27,7 @@
 	border: none;
 }
 
-.UIToolbarContainer .ToolbarContainer a {
+.UIToolbarContainer .ToolbarContainer .TBIcon {
 	padding: 0px 15px 0px 35px; /* orientation=lt */
 	padding: 0px 35px 0px 15px; /* orientation=rt */
 	color: #fff;
