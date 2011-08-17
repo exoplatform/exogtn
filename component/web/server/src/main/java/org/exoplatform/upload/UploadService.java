@@ -20,6 +20,9 @@
 package org.exoplatform.upload;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,13 +43,12 @@ import org.exoplatform.container.xml.PortalContainerInfo;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
 public class UploadService
 {
    /** . */
    private static final Logger log = LoggerFactory.getLogger(UploadService.class);
+   
+   private List<MimeTypeUploadPlugin> plugins ;
 
    private Map<String, UploadResource> uploadResources = new LinkedHashMap<String, UploadResource>();
 
@@ -55,7 +57,7 @@ public class UploadService
    private int defaultUploadLimitMB_;
 
    private Map<String, Integer> uploadLimitsMB_ = new LinkedHashMap<String, Integer>();
-
+   
    public static String UPLOAD_RESOURCES_STACK = "uploadResourcesStack";
 
    public UploadService(PortalContainerInfo pinfo, InitParams params) throws Exception
@@ -70,7 +72,12 @@ public class UploadService
       if (!uploadDir.exists())
          uploadDir.mkdirs();
    }
-
+   
+   public void register(MimeTypeUploadPlugin plugin) {
+      if(plugins == null) plugins = new ArrayList<MimeTypeUploadPlugin>() ;
+      plugins.add(plugin) ;
+   }
+   
    /**
     * Create UploadResource for HttpServletRequest
     * 
@@ -123,6 +130,12 @@ public class UploadService
 
       upResource.setFileName(fileName);
       upResource.setMimeType(fileItem.getContentType());
+      if(plugins != null) 
+         for(MimeTypeUploadPlugin plugin : plugins) 
+         {
+            String mimeType = plugin.getMimeType(fileName) ;
+            if(mimeType != null) upResource.setMimeType(mimeType) ;
+         }
       upResource.setStoreLocation(storeLocation);
       upResource.setStatus(UploadResource.UPLOADED_STATUS);
    }
@@ -322,4 +335,6 @@ public class UploadService
       }
       return false;
    }
+
+   
 }
