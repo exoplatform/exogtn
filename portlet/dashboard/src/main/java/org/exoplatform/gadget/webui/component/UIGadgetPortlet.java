@@ -21,7 +21,7 @@ package org.exoplatform.gadget.webui.component;
 
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
-import org.exoplatform.application.gadget.LocalImporter;
+import org.exoplatform.application.gadget.GadgetImporter;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.application.GadgetUtil;
@@ -59,7 +59,7 @@ public class UIGadgetPortlet extends UIPortletApplication
 {
    final static public String LOCAL_STRING = "local://";
 
-   private static final Logger log = LoggerFactory.getLogger(LocalImporter.class);
+   private static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
 
    /** User pref. */
    private String userPref;

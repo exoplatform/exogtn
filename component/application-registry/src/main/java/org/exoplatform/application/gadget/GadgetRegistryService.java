@@ -19,9 +19,6 @@
 
 package org.exoplatform.application.gadget;
 
-import org.exoplatform.application.gadget.impl.GadgetDefinition;
-import org.exoplatform.application.gadget.impl.GadgetRegistry;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,6 +31,13 @@ import java.util.List;
  */
 public interface GadgetRegistryService
 {
+
+   /**
+    * Deploy a set of gadgets.
+    *
+    * @param gadgets the gadgets to deploy
+    */
+   public void deploy(Iterable<GadgetImporter> gadgets);
 
    /**
     * Return Gadget object retrieved from database by its name.
@@ -105,14 +109,8 @@ public interface GadgetRegistryService
     * <li>Remote gadget: An absolute link to gadget definition
     * </ul>
     * 
-    * @param def
+    * @param gadgetName
     * @return link to local gadget definition stored in JCR or URL to remote gadget
     */
-   public String getGadgetURL(GadgetDefinition def);
-
-   /**
-    * Get persistent instance of the <code>GadgetRegistry</code>. Otherwise insert new one
-    * @return
-    */
-   public GadgetRegistry getRegistry();
+   public String getGadgetURL(String gadgetName);
 }

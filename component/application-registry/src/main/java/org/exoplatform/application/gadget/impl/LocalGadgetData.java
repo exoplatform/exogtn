@@ -61,7 +61,7 @@ public abstract class LocalGadgetData extends GadgetData
    public abstract NTFolder getResources();
 
    protected abstract void setResources(NTFolder resources);
-   
+
    @Path
    public abstract String getPath();
 
