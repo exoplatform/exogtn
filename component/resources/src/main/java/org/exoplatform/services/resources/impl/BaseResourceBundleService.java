@@ -609,7 +609,7 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          }
          catch (Exception ex)
          {
-            log_.error("Cannot load and merge the bundle: " + id, ex);
+            log_.warn("Cannot load and merge the bundle: " + id + " with message: " + ex.getMessage());
          }
          return outputBundled;
       }
