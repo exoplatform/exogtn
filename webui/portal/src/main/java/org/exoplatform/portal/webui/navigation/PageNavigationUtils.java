@@ -407,8 +407,9 @@ public class PageNavigationUtils
    {
       if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          return;
+      String localeLanguage = (locale.getCountry().length() > 0) ? locale.getLanguage() + "_" + locale.getCountry() : locale.getLanguage();
       ResourceBundle res =
-         i18nManager.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
+         i18nManager.getNavigationResourceBundle(localeLanguage, nav.getOwnerType(), nav.getOwnerId());
       for (PageNode node : nav.getNodes())
       {
          resolveLabel(res, node);
