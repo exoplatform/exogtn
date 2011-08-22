@@ -84,11 +84,6 @@
 .UIPopupWindow .PopupContent {
 	width: 100%;
 	overflow: auto;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	border: none;
-	background: #fff;
 }
 
 .UIPopupWindow .ResizeButton {
