@@ -54,7 +54,7 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       super(name, bindingExpression, null);
       if (value != null)
          typeValue_ = (Class<T>)value.getClass();
-      value_ = value;
+      setValue(value);
       setId(name);
    }
 
@@ -70,6 +70,10 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       else if (boolean.class.isInstance(value))
       {
          checked = boolean.class.cast(value);
+      }
+      else if (value instanceof String)
+      {
+         checked = Boolean.parseBoolean((String)value);
       }
       typeValue_ = (Class<T>)value.getClass();
       return super.setValue(value);
