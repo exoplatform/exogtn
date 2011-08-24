@@ -48,13 +48,12 @@
 
 .UIHorizontalTabs  .SelectedTab .MiddleTab {
 	background: #fff;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topleft: 6px;/*Firefox*/
 	-moz-border-radius-topright: 6px;
-    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-left-radius: 6px;  /*Chrome, Safari*/
     -webkit-border-top-right-radius: 6px;
-	border-radius-topleft: 6px;
-	border-radius-topright: 6px;
+	border-top-left-radius: 6px 6px;/*supported in IE9+, Firefox 4+, Chrome, Safari 5+, and Opera. http://www.w3schools.com*/
+	border-top-right-radius: 6px 6px; 
 	border:1px solid #AEAEAE;	
 	border-bottom: none;
 	padding-bottom: 1px;
