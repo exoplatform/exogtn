@@ -49,21 +49,20 @@
 /*##############################-LightBlueStyle ActionButton-################################*/
 
 .UIAction .LightBlueStyle {
- 	line-height: 19px; text-align: center; 
+ 	line-height: 22px; 
+	text-align: center; 
 	background: url('background/LightBlueStyle.gif') repeat-x center;
 	white-space: nowrap;
-	padding: 0px 12px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	border: 1px solid #8a8a8a;
-	border-bottom: 1px solid #5d5d5d;
+	padding: 0px 14px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px solid #acacac;
+	color:#464646;
+	font-size: 12px;
 }
 
 /*##############################-SimpleStyle ActionButton-################################*/
-
-.UIAction .SimpleStyle {
-}
 
 .UIAction .SimpleStyle {
 	line-height: 20px;

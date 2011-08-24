@@ -19,4 +19,5 @@
 
 .UIAction .LightBlueStyle {
 	background: url('background/SimpleStyle1.gif') repeat-x center;
+	line-height: 20px;
 }
