@@ -26,6 +26,7 @@ import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
+import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -222,6 +223,13 @@ public class UIGadgetEditor extends UIForm
          uiManagement.initData();
          uiManagement.setSelectedGadget(gadget.getName());
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
+         
+         //Send request to invalidate the cache to Shindig
+         String gadgetServerUrl = GadgetUtil.getGadgetServerUrl();
+         String gadgetUrl = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
+         String metadataUrl = gadgetServerUrl + (gadgetServerUrl.endsWith("/") ? "" : "/") + "metadata";
+         String queryString = "{\"context\":{\"ignoreCache\":\"true\"},\"gadgets\":[" + "{\"url\":\"" + gadgetUrl + "\"}]}";
+         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRequest('POST', '" + metadataUrl + "', true, '" + queryString + "');");
       }
 
    }
