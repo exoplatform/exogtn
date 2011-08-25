@@ -49,15 +49,11 @@
 			style = "";
 			isSelected = true;
 		}
-		println "<div class=\"UITabContent\" $style>";
-		println "	 <div class=\"PopupMessageBox\">";
-		println "			<div class=\"$messType\">";
-		println "					<div class=\"PopupMessageContainer\">";
+		println "			<ul class=\"UITabContent PopupMessageBox $messType\" $style>";
 		for(mess in messages) {
 			if(mess.messageKey == null) continue;
-			println "						<div class=\"MessageContainer\">";
-			println "							<div class=\"PopupIcon ${messType}Icon\"><span></span></div>";
-			println "							<div class=\"PopupMessage\">";			
+			println "						<li class=\"MessageContainer\">";
+			println "							<span class=\"PopupIcon ${messType}Icon\">";
 			String msgValue = _ctx.appRes(mess.messageKey);
 			Object[] msgArguments = mess.getMessageAruments();
 			if(msgArguments != null && msgArguments.length > 0) {
@@ -73,14 +69,10 @@
 			}
 			EntityEncoder entityEncoder = EntityEncoder.FULL;
 			println entityEncoder.encode(msgValue);
-			println "						 </div>";
-			println "						 <div style=\"clear:left\"><span></span></div>";
-			println "					 </div>";
+			println "						 </span>";
+			println "					 </li>";
 		}
- 		println "					 </div>";
-		println "			 </div>";
-		println "		</div>";
-		println " </div>";
+		println "		</ul>";
 		return isSelected;
 	}
 
