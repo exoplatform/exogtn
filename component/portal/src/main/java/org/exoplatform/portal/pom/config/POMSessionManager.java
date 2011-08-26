@@ -22,6 +22,7 @@ package org.exoplatform.portal.pom.config;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.commons.scope.ScopedKey;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.cache.PortalNamesCache;
 import org.exoplatform.services.cache.CacheService;
@@ -49,7 +50,7 @@ public class POMSessionManager implements Startable
    private MOPService pomService;
 
    /** . */
-   private final ExoCache<GlobalKey, Object> cache;
+   private final ExoCache<ScopedKey<?>, Object> cache;
 
    /** . */
    final ChromatticManager manager;
@@ -80,7 +81,7 @@ public class POMSessionManager implements Startable
 
    public void cachePut(Serializable key, Object value)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      ScopedKey<?> globalKey = ScopedKey.create(key);
 
       //
       if (log.isTraceEnabled())
@@ -94,7 +95,7 @@ public class POMSessionManager implements Startable
 
    public Object cacheGet(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      ScopedKey globalKey = ScopedKey.create(key);
 
       //
       Object value = cache.get(globalKey);
@@ -111,7 +112,7 @@ public class POMSessionManager implements Startable
 
    public void cacheRemove(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      final ScopedKey<?> globalKey = ScopedKey.create(key);
 
       //
       if (log.isTraceEnabled())
