@@ -20,7 +20,6 @@
 package org.exoplatform.account.webui.component;
 
 import org.exoplatform.portal.webui.CaptchaValidator;
-import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
@@ -94,9 +93,7 @@ public class UIRegisterForm extends UIForm
       // TODO Auto-generated method stub
       super.processAction(context);
       
-      UIApplication uiApp = context.getUIApplication();
-      UIPopupMessages popupMessages = uiApp.getUIPopupMessages();
-      if(popupMessages.getWarnings().size() > 0 || popupMessages.getErrors().size() > 0)
+      if(context.getProcessRender())
       {
          //Invalidate the capcha
          if (context instanceof PortletRequestContext)

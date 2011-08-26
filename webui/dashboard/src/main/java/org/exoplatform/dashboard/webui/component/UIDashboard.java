@@ -47,11 +47,13 @@ public class UIDashboard extends UIContainer
 
    public static String GADGET_POPUP_ID = "UIAddGadgetPopup";
 
+   public static String APP_NOT_EXIST = "APP_NOT_EXIT";
+   
    private boolean isShowSelectPopup = false;
 
    private String aggregatorId;
 
-   private UIGadget maximizedGadget;
+   private UIGadget maximizedGadget;   
 
    public UIDashboard() throws Exception
    {
@@ -66,14 +68,10 @@ public class UIDashboard extends UIContainer
       UIGadget uiGadget = this.getMaximizedGadget();      
       if (uiGadget != null) 
       {         
-         UIPopupMessages uiPopupMessages = getAncestorOfType(UIPortletApplication.class).getUIPopupMessages();
-         for (ApplicationMessage msg : uiPopupMessages.getErrors())
+         if (context.getAttribute(APP_NOT_EXIST) != null || 
+                  context.getAttribute(UIGadget.SAVE_PREF_FAIL) != null) 
          {
-            if (msg.getMessageKey().equals("UIDashboard.msg.ApplicationNotExisted"))
-            {
-               this.setMaximizedGadget(null);
-               break;
-            }
+            this.setMaximizedGadget(null);
          }         
       }
       
@@ -164,6 +162,7 @@ public class UIDashboard extends UIContainer
          {
             UIPortalApplication uiApp = Util.getUIPortalApplication();
             uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            context.setAttribute(APP_NOT_EXIST, true);
             uiDashboardCont.removeUIGadget(uiGadget.getId());
             context.addUIComponentToUpdateByAjax(uiDashboard);
          }
@@ -171,7 +170,7 @@ public class UIDashboard extends UIContainer
          {
             uiGadget.getProperties().setProperty("minimized", minimized);
             uiDashboardCont.save();
-            if (uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages().hasMessage())
+            if (context.getAttribute(UIDashboardContainer.SAVE_FAIL) != null)
             {
                return;
             }
@@ -194,6 +193,7 @@ public class UIDashboard extends UIContainer
          {
             UIPortalApplication uiApp = Util.getUIPortalApplication();
             uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            context.setAttribute(APP_NOT_EXIST, true);
             if (uiGadget != null)
                uiDashboardCont.removeUIGadget(uiGadget.getId());
             uiDashboardCont.save();
@@ -207,9 +207,8 @@ public class UIDashboard extends UIContainer
          uiGadget.getProperties().setProperty("minimized", "false");
          uiDashboardCont.save();
 
-         UIPortletApplication uiDashboarPortlet = uiDashboard.getAncestorOfType(UIPortletApplication.class);
          if (maximize.equals("maximize")
-            && !uiDashboarPortlet.getUIPopupMessages().hasMessage())
+            && context.getAttribute(UIDashboardContainer.SAVE_FAIL) == null)
          {
             uiGadget.setView(UIGadget.CANVAS_VIEW);
             uiDashboard.setMaximizedGadget(uiGadget);
