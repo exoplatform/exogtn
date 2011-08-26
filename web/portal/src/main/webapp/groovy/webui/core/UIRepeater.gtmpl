@@ -16,6 +16,7 @@
 %>
 <div id="$uicomponent.id">
     <table class="UIGrid" cellspacing="0" cellpadding="0">
+        <thead>            
             <tr>
                 <%if(name != null) {%>
                     <%for(field in beanFields) { %>
@@ -34,6 +35,8 @@
                     <%}%>
                 <%}%>
             </tr>
+        </thead>
+        <tbody class="FeedBox">			
 			<% 
 			boolean even = true;
 			for (bean in uicomponent.getBeans())  { 
@@ -84,5 +87,6 @@
         <%
             }
         %>
+        </tbody>        
     </table>
 </div>
