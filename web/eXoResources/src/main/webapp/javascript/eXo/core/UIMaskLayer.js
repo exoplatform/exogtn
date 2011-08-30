@@ -64,8 +64,6 @@ UIMaskLayer.prototype.showAjaxLoading = function(mask){
 	var ajaxLoading = document.getElementById("AjaxLoadingMask");
 	ajaxLoading.style.top = document.documentElement.scrollTop + "px";
 	ajaxLoading.style.display = "block";
-	eXo.core.Browser.setOpacity(mask,30);
-	mask.style.backgroundColor = "black";	
 }
  
 /**
@@ -275,7 +273,7 @@ UIMaskLayer.prototype.setPosition = function() {
 	  top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
 	} else {
 	  left = (blockContainer.offsetWidth - object.offsetWidth) / 2 ;
-	  top = (Browser.getBrowserHeight() - object.offsetHeight) / 2 +  topPos ;
+	  top = topPos ;
 	}
 	
 	object.style.left = left + "px" ;
