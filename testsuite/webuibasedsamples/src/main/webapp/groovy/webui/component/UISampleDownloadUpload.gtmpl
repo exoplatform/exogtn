@@ -35,7 +35,7 @@ inputName = uicomponent.getInputName();
 		        }
 		      %>
 		      	<%if (downloadLink != null){ %>
-		      		<%for(index=0;index<=2;index++) { %>
+		      		<%for(index = 0; index < downloadLink.length; index++) { %>
 		      			<%if (downloadLink[index] != null){ %>
 							<tr>
 								<td>

@@ -21,6 +21,7 @@ package org.exoplatform.upload;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -114,6 +115,7 @@ public class UploadService
       if (itemList == null || itemList.size() != 1 || itemList.get(0).isFormField())
       {
          log.debug("Please upload 1 file per request");
+         removeUploadResource(uploadId);
          return;
       }
 
@@ -127,6 +129,17 @@ public class UploadService
       // commons-fileupload will store the temp file with name *.tmp
       // we need to rename it to our desired name
       fileItem.getStoreLocation().renameTo(new File(storeLocation));
+      File fileStore = new File(storeLocation);
+      if (!fileStore.exists())
+         try
+         {
+            fileStore.createNewFile();
+         }
+         catch (IOException e)
+         {
+            throw new RuntimeException(e);
+         }
+      
 
       upResource.setFileName(fileName);
       upResource.setMimeType(fileItem.getContentType());

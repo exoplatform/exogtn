@@ -105,3 +105,13 @@
 	margin-right: 10px; /* orientation=rt */
 	width: 18px;
 }
+
+.UIUploadInput {
+	text-align: left;
+	overflow: hidden;
+}
+
+.UIForm .HorizontalLayout .UIUploadInput .file {
+	width: 226px;
+}
+
