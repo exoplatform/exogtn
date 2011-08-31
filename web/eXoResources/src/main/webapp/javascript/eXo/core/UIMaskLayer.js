@@ -45,10 +45,10 @@ UIMaskLayer.prototype.createTransparentMask = function() {
 	mask.style.height = "100%" ;
 };
 */
-UIMaskLayer.prototype.createTransparentMask = function() {
+UIMaskLayer.prototype.createTransparentMask = function(position) {
 	var Browser = eXo.core.Browser ;
 	var ajaxLoading = document.getElementById("AjaxLoadingMask") ;
-	var maskLayer = eXo.core.UIMaskLayer.createMask("UIPortalApplication", ajaxLoading, 0) ;
+	var maskLayer = eXo.core.UIMaskLayer.createMask("UIPortalApplication", ajaxLoading, 0, position) ;
 	Browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.setPosition) ;
 	ajaxLoading.style.display = "none";
 	Browser.setOpacity(maskLayer,0);
@@ -260,21 +260,37 @@ UIMaskLayer.prototype.setPosition = function() {
 	} else {
 		topPos = document.body.scrollTop ;
 	}
-	if (position == "TOP-LEFT") {
-	  left = 0 ;
-	  top = 0 ;
-	} else if (position == "TOP-RIGHT") {
-		return ;
-	} else if (position == "BOTTOM-LEFT") {
-	  left = 0 ;
-	  top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
-	} else if (position == "BOTTOM-RIGHT") {
-	  left = blockContainer.offsetWidth - object.offsetWidth ;
-	  top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
-	} else {
-	  left = (blockContainer.offsetWidth - object.offsetWidth) / 2 ;
-	  top = topPos ;
-	}
+
+	switch (position) {
+   case "TOP-LEFT":
+      top = topPos ;
+      left = 0 ;
+      break;
+   case "TOP-RIGHT":
+      top = topPos;
+      left = blockContainer.offsetWidth - object.offsetWidth ;
+      break;
+   case "TOP-CENTER":
+      top = topPos;
+      left = (blockContainer.offsetWidth - object.offsetWidth) / 2 ;
+      break;
+   case "BOTTOM-LEFT":
+      left = 0 ;
+      top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
+      break;
+   case "BOTTOM-CENTER":
+      left = (blockContainer.offsetWidth - object.offsetWidth) / 2 ;
+      top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
+      break;
+   case "BOTTOM-RIGHT":
+      left = blockContainer.offsetWidth - object.offsetWidth ;
+      top = Browser.getBrowserHeight() - object.offsetHeight + topPos ;
+      break;
+   default :
+      // By default, the mask layer always displays at the center
+      left = (blockContainer.offsetWidth - object.offsetWidth) / 2 ;
+      top = (Browser.getBrowserHeight() - object.offsetHeight) / 2 +  topPos ;
+   }
 	
 	object.style.left = left + "px" ;
 	object.style.top = top + "px" ;

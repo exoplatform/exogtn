@@ -550,7 +550,7 @@ function HttpResponseHandler(){
 		 
 		Browser = eXo.core.Browser; 
 		if(eXo.portal.AjaxRequest.maskLayer == null ){
-			eXo.portal.AjaxRequest.maskLayer = eXo.core.UIMaskLayer.createTransparentMask();
+			eXo.portal.AjaxRequest.maskLayer = eXo.core.UIMaskLayer.createTransparentMask("TOP-CENTER");
 		}
 		instance.to = setTimeout(function() {
 			if(eXo.portal.AjaxRequest.maskLayer != null) {
