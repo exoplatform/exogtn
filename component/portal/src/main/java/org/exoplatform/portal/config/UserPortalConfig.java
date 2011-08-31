@@ -40,6 +40,8 @@ public class UserPortalConfig implements Serializable
    /** . */
    private UserPortalContext userPortalContext;
 
+   private UserPortal userPortal;
+
    public UserPortalConfig()
    {
       this.portal = null;
@@ -60,7 +62,11 @@ public class UserPortalConfig implements Serializable
 
    public UserPortal getUserPortal()
    {
-      return new UserPortalImpl(service, portalName, portal, accessUser, userPortalContext);
+      if (userPortal == null)
+      {
+         userPortal = new UserPortalImpl(service, portalName, portal, accessUser, userPortalContext);
+      }
+      return userPortal;
    }
 
    public PortalConfig getPortalConfig()

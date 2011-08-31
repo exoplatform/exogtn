@@ -170,7 +170,7 @@ public class UIMainActionListener
       private UserNode resolveNode(UserNode selectedNode, UserNodeFilterConfig filterConfig) throws Exception
       {         
          UserNavigation currNav = selectedNode.getNavigation();
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          if (currNav.getKey().getType().equals(SiteType.USER))
          {            
             return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);
@@ -198,10 +198,11 @@ public class UIMainActionListener
          UIPortal uiPortal = uiApp.getCurrentSite();
 
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UserPortalConfig userConfig =
             service.getUserPortalConfig(uiPortal.getName(), event.getRequestContext().getRemoteUser());
          if (userConfig == null)
-            userConfig = uiApp.getUserPortalConfig();
+            userConfig = pcontext.getUserPortalConfig();
          
          //Todo nguyenanhkien2a@gmail.com
          //Check editing permission
@@ -217,7 +218,6 @@ public class UIMainActionListener
             return;
          }
          
-         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          uiWorkingWS.setBackupUIPortal(uiPortal);
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);

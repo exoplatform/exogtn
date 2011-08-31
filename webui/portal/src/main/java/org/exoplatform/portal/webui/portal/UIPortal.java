@@ -169,8 +169,8 @@ public class UIPortal extends UIContainer
    {
       if (navPath == null)
       {
-         UIPortalApplication uiApp = Util.getUIPortalApplication();
-         navPath = uiApp.getUserPortalConfig().getUserPortal().getDefaultPath(null);
+         PortalRequestContext prc = Util.getPortalRequestContext();
+         navPath = prc.getUserPortalConfig().getUserPortal().getDefaultPath(null);
       }
       return navPath;
    }
@@ -213,8 +213,8 @@ public class UIPortal extends UIContainer
    
    public UserNavigation getUserNavigation() throws Exception
    {
-      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
-      return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
+      PortalRequestContext prc = Util.getPortalRequestContext();
+      return prc.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
    }
    
    /**

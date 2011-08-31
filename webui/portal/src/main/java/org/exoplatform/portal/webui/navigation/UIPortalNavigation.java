@@ -134,7 +134,7 @@ public class UIPortalNavigation extends UIComponent
       }
       else
       {
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          List<UserNavigation> navigations = userPortal.getNavigations();
          for (UserNavigation userNav : navigations)
          {
@@ -157,7 +157,7 @@ public class UIPortalNavigation extends UIComponent
    {
       treeNode_ = new TreeNode();
 
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       List<UserNavigation> listNavigations = userPortal.getNavigations();
 
       List<UserNode> childNodes = new LinkedList<UserNode>();
@@ -186,7 +186,7 @@ public class UIPortalNavigation extends UIComponent
    public UserNode resolvePath(String path) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       
       UserNode node;
       if (context.getRemoteUser() != null)
@@ -212,7 +212,7 @@ public class UIPortalNavigation extends UIComponent
       {
          return null;
       }
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
       userPortal.updateNode(node, navigationScope, queue);
       for (NodeChange<UserNode> change : queue)
@@ -300,7 +300,7 @@ public class UIPortalNavigation extends UIComponent
 
    private UserNode getCurrentNavigation() throws Exception
    {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
       try 
       {
@@ -336,7 +336,7 @@ public class UIPortalNavigation extends UIComponent
             return;
          }
 
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
 
          UserNode node = expandTree.getNode();
          userPortal.updateNode(node, event.getSource().navigationScope, null);

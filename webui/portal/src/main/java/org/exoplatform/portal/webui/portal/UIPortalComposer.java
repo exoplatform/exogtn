@@ -211,7 +211,7 @@ public class UIPortalComposer extends UIContainer
          //caught in the ApplicationLifecycle
          rebuildUIPortal(uiPortalApp, editPortal, dataStorage);
       }
-      uiPortalApp.getUserPortalConfig().setPortalConfig(portalConfig);
+      prContext.getUserPortalConfig().setPortalConfig(portalConfig);
       PortalConfig pConfig = dataStorage.getPortalConfig(portalName);
       if (pConfig != null)
       {
@@ -253,7 +253,7 @@ public class UIPortalComposer extends UIContainer
    private void rebuildUIPortal(UIPortalApplication uiPortalApp, UIPortal uiPortal, DataStorage storage) throws Exception
    {
       PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getSiteType().getName(), uiPortal.getName());
-      UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
+      UserPortalConfig userPortalConfig = Util.getPortalRequestContext().getUserPortalConfig();
       userPortalConfig.setPortalConfig(portalConfig);
       uiPortal.getChildren().clear();
       PortalDataMapper.toUIPortal(uiPortal, userPortalConfig.getPortalConfig());
@@ -477,10 +477,10 @@ public class UIPortalComposer extends UIContainer
                storage.getPortalConfig(uiPortal.getSiteKey().getTypeName(), uiPortal.getSiteKey().getName());
             if (pConfig != null)
             {
-               uiPortalApp.getUserPortalConfig().setPortalConfig(pConfig);
+               prContext.getUserPortalConfig().setPortalConfig(pConfig);
             }
             uiPortal.getChildren().clear();
-            PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig().getPortalConfig());
+            PortalDataMapper.toUIPortal(uiPortal, prContext.getUserPortalConfig().getPortalConfig());
 
             //Update the cache of UIPortal from UIPortalApplication
             uiPortalApp.putCachedUIPortal(uiPortal);
