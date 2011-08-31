@@ -388,45 +388,4 @@ public class UIPortalNavigation extends UIComponent
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
-
-   //Expand all will not be allowed - The nodes are lazy loaded now
-/*   
-   static public class ExpandAllNodeActionListener extends EventListener<UIPortalNavigation>
-   {
-      public void execute(Event<UIPortalNavigation> event) throws Exception
-      {
-         UIPortalNavigation uiNavigation = event.getSource();
-         // reload TreeNodes
-         uiNavigation.loadTreeNodes();
-         TreeNode treeNode = uiNavigation.getTreeNodes();
-
-         expandAllNode(treeNode);
-
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
-      }
-
-      public void expandAllNode(TreeNode treeNode) throws Exception
-      {
-
-         if (treeNode.getChildren().size() > 0)
-         {
-            for (TreeNode child : treeNode.getChildren())
-            {
-//               PageNode expandNode = child.getNode();
-//               PageNavigation selectNav = child.getNavigation();
-//
-//               // set node to child tree
-//               if (expandNode.getChildren().size() > 0)
-//               {
-//                  child.setChildren(expandNode.getChildren(), selectNav);
-//               }
-
-               // expand child tree
-               expandAllNode(child);
-            }
-         }
-      }
-   }
-*/
-
 }
