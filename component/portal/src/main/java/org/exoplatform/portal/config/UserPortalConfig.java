@@ -62,7 +62,12 @@ public class UserPortalConfig implements Serializable
 
    public UserPortal getUserPortal()
    {
-      if (userPortal == null)
+      return getUserPortal(false);
+   }
+  
+   public UserPortal getUserPortal(boolean isNewlyCreated)
+   {
+      if (isNewlyCreated || userPortal == null)
       {
          userPortal = new UserPortalImpl(service, portalName, portal, accessUser, userPortalContext);
       }
