@@ -36,6 +36,8 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.picocontainer.Startable;
 
 import java.util.*;
@@ -122,32 +124,38 @@ public class UserPortalConfigService implements Startable
             navigations.add(navigation);
          }
 
-         Collection<?> groups = null;
-         if (userACL_.getSuperUser().equals(accessUser))
-         {
-            groups = orgService_.getGroupHandler().getAllGroups();
-         }
-         else
-         {
-            groups = orgService_.getGroupHandler().findGroupsOfUser(accessUser);
-         }
-         for (Object group : groups)
-         {
-            Group m = (Group)group;
-            String groupId = m.getId().trim();
-            if (groupId.equals(userACL_.getGuestsGroup()))
-            {
-               continue;
-            }
-            navigation = storage_.getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
-            if (navigation == null)
-            {
-               continue;
-            }
-            navigation.setModifiable(userACL_.hasEditPermission(navigation));
-            navigations.add(navigation);
-         }
-      }
+
+          Set<String> groupsId = null;
+          if (userACL_.getSuperUser().equals(accessUser))
+          {
+             groupsId = new HashSet<String>();
+             Collection<Group> groups = orgService_.getGroupHandler().getAllGroups();
+             for(Group group : groups)
+             {
+                 groupsId.add(group.getId());
+             }
+          }
+          else
+          {
+              ConversationState conversionState = ConversationState.getCurrent();
+              Identity identity = conversionState.getIdentity();
+              groupsId = identity.getGroups();
+          }
+          for (String groupId : groupsId)
+          {
+             if (groupId.equals(userACL_.getGuestsGroup()))
+             {
+                continue;
+             }
+             navigation = storage_.getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
+             if (navigation == null)
+             {
+                continue;
+             }
+             navigation.setModifiable(userACL_.hasEditPermission(navigation));
+             navigations.add(navigation);
+          }
+       }
       Collections.sort(navigations, new Comparator<PageNavigation>()
       {
          public int compare(PageNavigation nav1, PageNavigation nav2)
