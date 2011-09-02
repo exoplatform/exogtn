@@ -32,6 +32,9 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
+import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -223,6 +226,40 @@ public class TestUserPortal extends AbstractPortalTest
       //
       test.execute("root");
       test.execute();
+   }
+
+   public void testRefreshNavigations()
+   {
+      UnitTest test = new UnitTest()
+      {
+         public void doExecute() throws Exception
+         {
+
+            //
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal portal = userPortalCfg.getUserPortal();
+
+            //
+            NavigationServiceImpl service = new NavigationServiceImpl(mgr);
+            SiteKey navKey = SiteKey.group("/organization/management");
+            NavigationContext nav = new NavigationContext(navKey, new NavigationState(1));
+
+            //
+            NavigationContext got = service.loadNavigation(navKey);
+            assertEquals(null, got);
+            assertEquals(null, portal.getNavigation(navKey));
+
+            //
+            service.saveNavigation(nav);
+            assertEquals(null, portal.getNavigation(navKey));
+            portal.refresh();
+            assertNotNull(portal.getNavigation(navKey));
+
+         }
+      };
+
+      //
+      test.execute("root");
    }
 
    public void testFilterWithVisibility()
