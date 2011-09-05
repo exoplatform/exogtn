@@ -65,9 +65,9 @@ public interface UserPortal
    UserNavigation getNavigation(SiteKey key)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 
-   /**
-     * Refresh the current user navigations.
-     */
+  /**
+   * Refresh the current user portal.
+   */
    void refresh();
 
    /**
