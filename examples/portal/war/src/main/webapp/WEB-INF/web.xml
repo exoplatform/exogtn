@@ -268,8 +268,8 @@
 			<url-pattern>/dologin</url-pattern>
 			<url-pattern>/private/*</url-pattern>
 			<url-pattern>/standalone/*</url-pattern>
-			<url-pattern>/groups/*</url-pattern>
-			<url-pattern>/users/*</url-pattern>
+			<url-pattern>/g/*</url-pattern>
+			<url-pattern>/u/*</url-pattern>
 			<http-method>POST</http-method>
 			<http-method>GET</http-method>
 		</web-resource-collection>
