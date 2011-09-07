@@ -503,10 +503,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    {
       for (String owner : config.getPredefinedOwner())
       {
-         if (createPortalConfig(config, owner))
-         {
-            config.createdOwners.add(owner);
-         }
+         createPortalConfig(config, owner);
       }
    }
 
@@ -514,10 +511,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    {
       for (String owner : config.getPredefinedOwner())
       {
-         if (config.createdOwners.contains(owner))
-         {
-            createPage(config, owner);
-         }
+         createPage(config, owner);
       }
    }
 
@@ -540,48 +534,50 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   public boolean createPortalConfig(NewPortalConfig config, String owner) throws Exception
+   public void createPortalConfig(NewPortalConfig config, String owner) throws Exception
    {
-      String type = config.getOwnerType();
-      PortalConfig currentPortalConfig = dataStorage_.getPortalConfig(type, owner);
-      if (currentPortalConfig == null)
+      try
       {
-         try
-         {
-            UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
+         String type = config.getOwnerType();
+         UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
 
-            if (obj == null)
-            {
-               // Ensure that the PortalConfig has been defined
-               // The PortalConfig could be empty if the related PortalConfigListener
-               // has been launched after starting this service
-               PortalConfig cfg = dataStorage_.getPortalConfig(type, owner);
-               if (cfg == null)
-               {
-                  cfg = new PortalConfig(type);
-                  cfg.setPortalLayout(new Container());
-                  cfg.setName(owner);
-                  dataStorage_.create(cfg);
-                  return true;
-               }
-            }
-            else
-            {
-               PortalConfig pconfig = obj.getObject();
-               // We use that owner value because it may have been fixed for group names
-               owner = pconfig.getName();
-               dataStorage_.create(pconfig);
-               return true;
-            }
-         }
-         catch (IOException e)
+         if (obj == null)
          {
-            log.error("Could not load portal configuration", e);
+            // Ensure that the PortalConfig has been defined
+            // The PortalConfig could be empty if the related PortalConfigListener
+            // has been launched after starting this service
+            PortalConfig cfg = dataStorage_.getPortalConfig(type, owner);
+            if (cfg == null)
+            {
+               cfg = new PortalConfig(type);
+               cfg.setPortalLayout(new Container());
+               cfg.setName(owner);
+               dataStorage_.create(cfg);
+            }
+            return;
+         }
+
+         //
+         PortalConfig pconfig = obj.getObject();
+
+         // We use that owner value because it may have been fixed for group names
+         owner = pconfig.getName();
+
+         //
+         PortalConfig currentPortalConfig = dataStorage_.getPortalConfig(type, owner);
+         if (currentPortalConfig == null)
+         {
+            dataStorage_.create(pconfig);
+         }
+         else
+         {
+            dataStorage_.save(pconfig);
          }
       }
-
-      //
-      return false;
+      catch (IOException e)
+      {
+         log.error("Could not load portal configuration", e);
+      }
    }
 
    public void createPage(NewPortalConfig config, String owner) throws Exception
