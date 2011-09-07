@@ -231,7 +231,6 @@ function getModule(params)
       addDependency(new Project("com.google.inject.extensions", "guice-multibindings", "jar", "2.0")).
       addDependency(new Project("org.apache.httpcomponents", "httpclient", "jar", "4.0")).
       addDependency(new Project("org.apache.httpcomponents", "httpcore", "jar", "4.0.1")).
-      addDependency(new Project("commons-lang", "commons-lang", "jar", "2.6")).
       addDependency(new Project("rome", "rome", "jar", "1.0")).
       addDependency(new Project("joda-time", "joda-time", "jar", "1.6")).
       addDependency(new Project("org.json", "json", "jar", "20070829")).
