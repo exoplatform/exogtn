@@ -104,7 +104,7 @@ public class PortalRequestHandler extends WebRequestHandler
     */
    @SuppressWarnings("unchecked")
    @Override
-   public void execute(ControllerContext controllerContext) throws Exception
+   public boolean execute(ControllerContext controllerContext) throws Exception
    {
       HttpServletRequest req = controllerContext.getRequest();
       HttpServletResponse res = controllerContext.getResponse();
@@ -132,17 +132,18 @@ public class PortalRequestHandler extends WebRequestHandler
 
       if (requestSiteName == null) {
          res.sendRedirect(req.getContextPath());
-         return;
+         return true;
       }
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
       PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, requestLocale);
       if (context.getUserPortalConfig() == null)
       {
-         context.sendError(HttpServletResponse.SC_NOT_FOUND);
+         return false;
       }
       else
       {
          processRequest(context, app);
+         return true;
       }
    }
 

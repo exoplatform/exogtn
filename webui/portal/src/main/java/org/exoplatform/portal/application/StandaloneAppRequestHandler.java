@@ -59,7 +59,7 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
    }
    
    @Override
-   public void execute(ControllerContext controllerContext) throws Exception
+   public boolean execute(ControllerContext controllerContext) throws Exception
    {
       HttpServletRequest req = controllerContext.getRequest();
       HttpServletResponse res = controllerContext.getResponse();
@@ -73,5 +73,6 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
       StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestPath);
       processRequest(context, app);
-   }     
+      return true;
+   }
 }

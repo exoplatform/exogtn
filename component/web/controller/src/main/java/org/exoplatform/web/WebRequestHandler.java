@@ -52,8 +52,9 @@ abstract public class WebRequestHandler extends BaseComponentPlugin
     *
     * @param context the controller context
     * @throws Exception any exception
+    * @return true if the handler was able to handle the request
     */
-   abstract public void execute(ControllerContext context) throws Exception;
+   abstract public boolean execute(ControllerContext context) throws Exception;
 
    /**
     * Destroy callback.

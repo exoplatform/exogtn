@@ -310,50 +310,56 @@ public class WebAppController
          Iterator<Map<QualifiedName, String>> matcher = router.matcher(portalPath, req.getParameterMap());
 
          //
-         Map<QualifiedName, String> parameters = null;
-         if (matcher.hasNext())
-         {
-            parameters = matcher.next();
-         }
+         boolean started = false;
+         boolean processed = false;
 
          //
-         if (parameters != null)
+         try
          {
-            String handlerKey = parameters.get(HANDLER_PARAM);
-            if (handlerKey != null)
+            while (matcher.hasNext() && !processed)
             {
-               WebRequestHandler handler = handlers.get(handlerKey);
-               if (handler != null)
+               if (!started)
                {
-                  if (debug)
-                  {
-                     log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
-                  }
-
-                  //
                   RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
-
-                  //
-                  try
-                  {
-                     handler.execute(new ControllerContext(this, router, req, res, parameters));
-                  }
-                  finally
-                  {
-                     RequestLifeCycle.end();
-                  }
+                  started = true;
                }
-               else
+
+               //
+               Map<QualifiedName, String> parameters = matcher.next();
+               String handlerKey = parameters.get(HANDLER_PARAM);
+               if (handlerKey != null)
                {
-                  log.error("Invalid handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
-                  res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                  WebRequestHandler handler = handlers.get(handlerKey);
+                  if (handler != null)
+                  {
+                     if (debug)
+                     {
+                        log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
+                     }
+
+                     //
+                     processed = handler.execute(new ControllerContext(this, router, req, res, parameters));
+                  }
+                  else
+                  {
+                     log.debug("No handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
+                  }
                }
             }
          }
-         else
+         finally
          {
-            log.error("Could not associate the request path=" + portalPath + ", parameters=" + parameters + " with an handler");
-            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            if (started)
+            {
+               RequestLifeCycle.end();
+            }
+         }
+
+         //
+         if (!processed)
+         {
+            log.error("Could not associate the request path=" + portalPath + " with an handler");
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
          }
       }
       else
