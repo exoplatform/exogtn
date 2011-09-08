@@ -19,12 +19,6 @@
 
 .UIGrid {
 	margin: auto;
-	border: 1px solid #EAEAEA;
-	border-top:1px solid #EDEDED;
-	border-collapse:separate;	
-	-moz-border-radius:3px; 
-	-webkit-border-radius:3px; 
-	border-radius:3px ; 
 }
 
 .UIGrid .center {
@@ -33,32 +27,17 @@
 
 .UIGrid th {
 	line-height: 20px;
-	background: #e1e1e1 url('background/ThGridRepeatBg1x19.png') repeat-x;
-	padding: 10px 17px;
+	background: #e1e1e1 url('background/ThGridRepeatBg1x28.png') repeat-x;
+	padding: 5px 10px;
 	text-align:left;/* orientation=lt */
 	text-align:right;/* orientation=rt */
+	border-left: 1px solid #fff;/* orientation=lt */
+	border-right: 1px solid #fff;/* orientation=rt */
 }
 
-.UIGrid th:first-child {
-	-moz-border-radius-topleft:2px;/* orientation=lt */
-	-webkit-border-top-left-radius:2px;/* orientation=lt */
-	border-top-left-radius:2px;/* orientation=lt */
-	-moz-border-radius-topright:2px; /* orientation=rt */	
-	-webkit-border-top-right-radius:2px;/* orientation=rt */
-	border-top-right-radius:2px;/* orientation=rt */
-}
-
-.UIGrid th:last-child {
-	-moz-border-radius-topright:2px;/* orientation=lt */ 		
-	-webkit-border-top-right-radius:2px;/* orientation=lt */
-	border-top-right-radius:2px;/* orientation=lt */
-	-moz-border-radius-topleft:2px; /* orientation=rt */
-	-webkit-border-top-left-radius:2px; /* orientation=rt */
-	border-top-left-radius:2px; /* orientation=rt */
-}
 
 .UIGrid td {
-	padding: 10px 17px;
+	padding: 5px 10px;
 	border: 1px solid #fff;
 	border-right: 0; /* orientation=lt */
 	border-left: 0; /* orientation=rt */	
@@ -66,7 +45,7 @@
 }
 
 .UIGrid .OddRow {
-	background-color:#fff;
+	background-color:#f9f9f9;
 }
 
 .UIGrid .EvenRow {
@@ -76,28 +55,6 @@
 .UIGrid .OddRow td {
 	border-bottom:0;
 	border-top:0;
-}
-
-.UIGrid .EvenRow:last-child td {
-	border-bottom:2px solid #fff;
-}
-
-.UIGrid tr:last-child td:last-child {
-	-moz-border-radius-bottomright:2px; /* orientation=lt */
-	-webkit-border-bottom-right-radius:2px;/* orientation=lt */
-	border-bottom-right-radius:2px;/* orientation=lt */
-	-moz-border-radius-bottomleft:2px;/* orientation=rt */ 		
-	-webkit-border-bottom-left-radius:2px;/* orientation=rt */
-	border-bottom-left-radius:2px;/* orientation=rt */
-}
-
-.UIGrid tr:last-child td:first-child {
-	-moz-border-radius-bottomleft:2px;/* orientation=lt */ 		
-	-webkit-border-bottom-left-radius:2px;/* orientation=lt */
-	border-bottom-left-radius:2px;/* orientation=lt */
-	-moz-border-radius-bottomright:2px; /* orientation=rt */
-	-webkit-border-bottom-right-radius:2px;/* orientation=rt */
-	border-bottom-right-radius:2px;/* orientation=rt */
 }
 
 .UIGrid .ActionContainer {
