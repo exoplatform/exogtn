@@ -27,6 +27,7 @@
 
   <page>
     <name>page1</name>
+    <title>site 1</title>
     <portlet-application>
       <portlet>
         <application-ref>site1</application-ref>

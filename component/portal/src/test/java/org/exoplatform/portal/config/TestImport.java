@@ -42,13 +42,16 @@ import org.gatein.mop.api.workspace.Workspace;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class TestImport extends AbstractGateInTest
 {
-
+   private Set<String> clearProperties = new HashSet<String>();
+   
    public void testMixin() throws Exception
    {
       KernelBootstrap bootstrap = new KernelBootstrap();
@@ -58,9 +61,9 @@ public class TestImport extends AbstractGateInTest
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
 
       //
-      System.setProperty("override.1", "false");
-      System.setProperty("import.mode.1", "conserve");
-      System.setProperty("import.portal.1", "navigation1");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "conserve");
+      setSystemProperty("import.portal.1", "navigation1");
 
       //
       bootstrap.boot();
@@ -83,10 +86,10 @@ public class TestImport extends AbstractGateInTest
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
-      System.setProperty("import.portal.0", "navigation2");
-      System.setProperty("override.1", "false");
-      System.setProperty("import.mode.1", "merge");
-      System.setProperty("import.portal.1", "navigation1");
+      setSystemProperty("import.portal.0", "navigation2");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "navigation1");
 
       //
       bootstrap.boot();
@@ -115,9 +118,9 @@ public class TestImport extends AbstractGateInTest
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
 
       //
-      System.setProperty("override.1", "false");
-      System.setProperty("import.mode.1", "conserve");
-      System.setProperty("import.portal.1", "site1");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "site1");
 
       //
       bootstrap.boot();
@@ -143,9 +146,9 @@ public class TestImport extends AbstractGateInTest
       bootstrap.dispose();
 
       //
-      System.setProperty("override.1", "false");
-      System.setProperty("import.mode.1", "conserve");
-      System.setProperty("import.portal.1", "site2");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "conserve");
+      setSystemProperty("import.portal.1", "site2");
 
       //
       bootstrap.boot();
@@ -170,5 +173,149 @@ public class TestImport extends AbstractGateInTest
       assertNull(page2);
       RequestLifeCycle.end();
       bootstrap.dispose();
+   }
+   
+   public void testPageImporterInConserveMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "conserve");
+      setSystemProperty("import.portal.1", "site2");
+      //
+      bootstrap.boot();
+
+      //
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      Page home = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(home);
+      assertEquals("site 1", home.getTitle());
+      
+      Page sitemap = dataStorage.getPage("portal::classic::page 2");
+      assertNull(sitemap);
+
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testPageImporterInInsertMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+      
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "insert");
+      setSystemProperty("import.portal.1", "site2");
+      //
+      bootstrap.boot();
+
+      //
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      Page home = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(home);
+      assertEquals("site 1", home.getTitle());
+      
+      Page sitemap = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(sitemap);
+      assertEquals("site 2", sitemap.getTitle());
+
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testPageImporterInMergeMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+      
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "site2");
+      //
+      bootstrap.boot();
+
+      //
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      Page home = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(home);
+      assertEquals("site 2", home.getTitle());
+      
+      Page sitemap = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(sitemap);
+      assertEquals("site 2", sitemap.getTitle());
+
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testPageImporterInOverwriteMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "overwrite");
+      setSystemProperty("import.portal.1", "site2");
+      //
+      bootstrap.boot();
+
+      //
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      Page home = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(home);
+      assertEquals("site 2", home.getTitle());
+      
+      Page sitemap = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(sitemap);
+      assertEquals("site 2", sitemap.getTitle());
+
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   protected void setSystemProperty(String key, String value)
+   {
+      clearProperties.add(key);
+      System.setProperty(key, value);
+   }
+   
+   @Override
+   protected void tearDown() throws Exception
+   {
+      super.tearDown();
+      for (String key : clearProperties)
+      {
+         System.clearProperty(key);
+      }
+      clearProperties.clear();
    }
 }

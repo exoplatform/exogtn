@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
+import org.exoplatform.portal.mop.importer.PageImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
@@ -115,6 +116,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    /** . */
    private DescriptionService descriptionService_;
+
+   final Set<String> createdOwners = new HashSet<String>();
 
    public NewPortalConfigListener(
       UserPortalConfigService owner,
@@ -505,7 +508,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       {
          if (createPortalConfig(config, owner))
          {
-            config.createdOwners.add(owner);
+            this.createdOwners.add(owner);
          }
       }
    }
@@ -514,7 +517,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    {
       for (String owner : config.getPredefinedOwner())
       {
-         if (config.createdOwners.contains(owner))
+         if (this.createdOwners.contains(owner))
          {
             createPage(config, owner);
          }
@@ -596,8 +599,18 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       {
          RequestLifeCycle.begin(PortalContainer.getInstance());
          try
-         {
-            dataStorage_.create(page);
+         {      //
+            ImportMode importMode;
+            if (config.getImportMode() != null)
+            {
+               importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
+            }
+            else
+            {
+               importMode = owner_.getDefaultImportMode();
+            }
+            PageImporter importer = new PageImporter(importMode, page, dataStorage_);
+            importer.perform();
          }
          finally
          {

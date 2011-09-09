@@ -27,6 +27,7 @@
 
   <page>
     <name>page1</name>
+    <title>site 2</title>
     <portlet-application>
       <portlet>
         <application-ref>site2</application-ref>
@@ -39,6 +40,7 @@
   
    <page>
      <name>page2</name>
+     <title>site 2</title>
      <portlet-application>
        <portlet>
          <application-ref>site2</application-ref>
