@@ -355,7 +355,6 @@ UIMaskLayer.prototype.enablePageDesktop = function(enabled) {
 
 UIMaskLayer.prototype.resizeMaskLayer = function() {
 	var maskLayer = document.getElementById("MaskLayer");
-	console.log("akjsdfkajsdf");
 	if (maskLayer) {
       var offsetParent = maskLayer.offsetParent;
       if (offsetParent && (eXo.core.Browser.findPosX(offsetParent) != 0
