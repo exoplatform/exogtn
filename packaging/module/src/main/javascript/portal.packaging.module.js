@@ -225,6 +225,9 @@ function getModule(params)
       addDependency(new Project("commons-io", "commons-io", "jar", "1.4")).
       addDependency(new Project("commons-codec", "commons-codec", "jar", "1.4")).
       addDependency(new Project("net.oauth.core", "oauth", "jar", "20100527")).
+      addDependency(new Project("net.oauth.core", "oauth-provider", "jar", "20100527")).
+      addDependency(new Project("net.oauth.core", "oauth-consumer", "jar", "20090617")).
+      addDependency(new Project("net.oauth.core", "oauth-httpclient4", "jar", "20090913")).
       addDependency(new Project("com.google.guava", "guava", "jar", "r07")).
       addDependency(new Project("com.google.inject", "guice", "jar", "2.0")).
       addDependency(new Project("com.google.inject.extensions", "guice-jmx", "jar", "2.0")).
