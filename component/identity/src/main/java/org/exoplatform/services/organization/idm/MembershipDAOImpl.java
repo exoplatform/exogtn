@@ -19,7 +19,9 @@
 
 package org.exoplatform.services.organization.idm;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListenerStack;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
@@ -65,7 +67,20 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public void addMembershipEventListener(MembershipEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
+   }
+
+   public void removeMembershipEventListener(MembershipEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+      listeners_.remove(listener);
    }
 
    final public Membership createMembershipInstance()
@@ -119,6 +134,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.flush();
 
       if (g == null)
       {
@@ -197,6 +214,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
@@ -278,6 +296,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.flush();
 
       Membership m = new MembershipImpl(id);
 
@@ -377,6 +396,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.flush();
 
       Collection<Role> roles = new HashSet();
 
@@ -473,6 +493,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
@@ -564,6 +585,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.flush();
 
       if (userName == null)
       {
@@ -667,6 +690,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.flush();
 
       Collection<Role> roles = new HashSet();
 
@@ -740,9 +764,15 @@ public class MembershipDAOImpl implements MembershipHandler
       return result;
    }
 
+
    public Collection findMembershipsByGroup(Group group) throws Exception
    {
       return findMembershipsByGroupId(group.getId());
+   }
+
+   public ListAccess<Membership> findAllMembershipsByGroup(Group group) throws Exception
+   {
+      return new ListAccessImpl(Membership.class, (List)findMembershipsByGroup(group));
    }
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception
@@ -758,6 +788,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
@@ -780,12 +812,13 @@ public class MembershipDAOImpl implements MembershipHandler
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
+      Group g = orgService.getGroupHandler().findGroupById(groupId);
+
       for (Role role : roles)
       {
          if (isCreateMembership(role.getRoleType().getName()))
          {
             MembershipImpl m = new MembershipImpl();
-            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
             m.setGroupId(g.getId());
             m.setUserName(role.getUser().getId());
             m.setMembershipType(role.getRoleType().getName());
@@ -855,6 +888,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.flush();
 
       Membership m = new MembershipImpl(id);
 

@@ -66,7 +66,20 @@ public class UserProfileDAOImpl implements UserProfileHandler
 
    public void addUserProfileEventListener(UserProfileEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
+   }
+
+   public void removeUserProfileEventListener(UserProfileEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+      listeners_.remove(listener);
    }
 
    final public UserProfile createUserProfileInstance()

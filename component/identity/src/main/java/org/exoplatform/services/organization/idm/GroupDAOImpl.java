@@ -71,7 +71,20 @@ public class GroupDAOImpl implements GroupHandler
 
    public void addGroupEventListener(GroupEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
+   }
+
+   public void removeGroupEventListener(GroupEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+      listeners_.remove(listener);
    }
 
    final public Group createGroupInstance()
@@ -235,6 +248,9 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+
+         orgService.flush();
+
          jbidGroup =
             getIdentitySession().getPersistenceManager().
                findGroup(plGroupName, orgService.getConfiguration().getGroupType(group.getParentId()));
@@ -253,6 +269,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          Collection<org.picketlink.idm.api.Group> oneLevelChilds =
             getIdentitySession().getRelationshipManager().findAssociatedGroups(jbidGroup, null, true, false);
 
@@ -308,6 +326,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          allRoles = getIdentitySession().getRoleManager().findRoles(userName, membershipType);
       }
       catch (Exception e)
@@ -333,6 +353,8 @@ public class GroupDAOImpl implements GroupHandler
 
          try
          {
+            orgService.flush();
+
             groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
          }
          catch (Exception e)
@@ -462,6 +484,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          plGroups.addAll(getIdentitySession().getRelationshipManager().
                findAssociatedGroups(jbidGroup, null, true, false));
       }
@@ -591,6 +615,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          allGroups = getIdentitySession().getRelationshipManager().findRelatedGroups(user, null, null);
       }
       catch (Exception e)
@@ -638,6 +664,9 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+
+         orgService.flush();
+
          plGroups
             .addAll(getIdentitySession().getRelationshipManager().findAssociatedGroups(getRootGroup(), null, true, true));
       }
@@ -746,6 +775,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          attrs = getIdentitySession().getAttributesManager().getAttributes(jbidGroup);
       }
       catch (Exception e)
@@ -869,6 +900,8 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
+         orgService.flush();
+
          parents = getIdentitySession().getRelationshipManager().findAssociatedGroups(jbidGroup, null, false, false);
       }
       catch (Exception e)

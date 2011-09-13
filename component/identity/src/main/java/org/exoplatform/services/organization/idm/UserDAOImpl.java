@@ -21,8 +21,6 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
@@ -37,6 +35,7 @@ import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.query.UserQueryBuilder;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.SimpleAttribute;
+import org.picketlink.idm.impl.api.model.SimpleUser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -108,7 +107,20 @@ public class UserDAOImpl implements UserHandler
 
    public void addUserEventListener(UserEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
+   }
+
+   public void removeUserEventListener(UserEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+      listeners_.remove(listener);
    }
 
    public User createUserInstance()
@@ -145,12 +157,19 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.flush();
+
          session.getPersistenceManager().createUser(user.getUserName());
       }
       catch (IdentityException e)
       {
          log.info("Identity operation error: ", e);
 
+      }
+
+      if (getIntegrationCache() != null)
+      {
+         getIntegrationCache().invalidateAll();
       }
 
       persistUserInfo(user, session);
@@ -214,6 +233,8 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.flush();
+
          foundUser = session.getPersistenceManager().findUser(userName);
       }
       catch (IdentityException e)
@@ -254,6 +275,11 @@ public class UserDAOImpl implements UserHandler
       {
          log.info("Cannot remove user: " + userName + "; ", e);
 
+      }
+
+      if (getIntegrationCache() != null)
+      {
+         getIntegrationCache().invalidateAll();
       }
 
       if (broadcast)
@@ -316,7 +342,19 @@ public class UserDAOImpl implements UserHandler
 
    public ListAccess<User> findAllUsers() throws Exception
    {
-      throw new UnsupportedOperationException();
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findAllUsers",
+            null
+         );
+      }
+
+      UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
+
+      return new IDMUserListAccess(this, service_, qb, 20, true);
    }
 
 //
@@ -361,6 +399,8 @@ public class UserDAOImpl implements UserHandler
       {
          try
          {
+            orgService.flush();
+
             IdentitySession session = service_.getIdentitySession();
             org.picketlink.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
 
@@ -407,6 +447,69 @@ public class UserDAOImpl implements UserHandler
          );
       }
 
+      ListAccess list = findUsersByQuery(q);
+
+      return new LazyPageList(list, 20);
+   }
+
+   //
+
+   public ListAccess<User> findUsersByQuery(Query q) throws Exception
+   {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUsersByQuery",
+            new Object[]{
+               "q", q
+            }
+         );
+      }
+
+      // if only condition is email which is unique then delegate to other method as it will be more efficient
+      if (q.getUserName() == null &&
+         q.getEmail() != null &&
+         q.getFirstName() == null &&
+         q.getLastName() == null)
+      {
+         final User uniqueUser = findUserByEmail(q.getEmail());
+
+         if (uniqueUser != null)
+         {
+            return new ListAccess<User>()
+            {
+               public User[] load(int index, int length) throws Exception, IllegalArgumentException
+               {
+                  return new User[]{uniqueUser};
+               }
+
+               public int getSize() throws Exception
+               {
+                  return 1;
+               }
+            };
+         }
+      }
+
+
+      // otherwise use PLIDM queries
+
+      IDMUserListAccess list;
+
+      IntegrationCache cache = getIntegrationCache();
+
+      if (cache != null)
+      {
+         list = cache.getGtnUserLazyPageList(getCacheNS(), q);
+         if (list != null)
+         {
+            return list;
+         }
+      }
+
+      orgService.flush();
 
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
@@ -430,14 +533,26 @@ public class UserDAOImpl implements UserHandler
          qb.attributeValuesFilter(UserDAOImpl.USER_LAST_NAME, new String[]{q.getLastName()});
       }
 
-      return new LazyPageList(new IDMUserListAccess(this, service_, qb, 20, false), 20);
-   }
 
-   //
 
-   public ListAccess<User> findUsersByQuery(Query query) throws Exception
-   {
-      throw new UnsupportedOperationException();
+      if (q.getUserName() == null &&
+         q.getEmail() == null &&
+         q.getFirstName() == null &&
+         q.getLastName() == null)
+      {
+         list = new IDMUserListAccess(this, service_, qb, 20, true);
+      }
+      else
+      {
+         list = new IDMUserListAccess(this, service_, qb, 20, false);
+      }
+
+      if (cache != null)
+      {
+         cache.putGtnUserLazyPageList(getCacheNS(), q, list);
+      }
+
+      return list;
    }
 
    public LazyPageList findUsersByGroup(String groupId) throws Exception
@@ -454,23 +569,7 @@ public class UserDAOImpl implements UserHandler
          );
       }
 
-
-      UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
-
-      org.picketlink.idm.api.Group jbidGroup = null;
-      try
-      {
-         jbidGroup = orgService.getJBIDMGroup(groupId);
-      }
-      catch (Exception e)
-      {
-         log.info("Cannot obtain group: " + groupId + "; ", e);
-
-      }
-
-      qb.addRelatedGroup(jbidGroup);
-
-      return new LazyPageList(new IDMUserListAccess(this, service_, qb, 20, false), 20);
+      return new LazyPageList(findUsersByGroupId(groupId), 20);
    }
 
    public User findUserByEmail(String email) throws Exception
@@ -494,6 +593,8 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.flush();
+
          plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
       }
       catch (IdentityException e)
@@ -526,7 +627,35 @@ public class UserDAOImpl implements UserHandler
 
    public ListAccess<User> findUsersByGroupId(String groupId) throws Exception
    {
-      throw new UnsupportedOperationException();
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUsersByGroupId",
+            new Object[]{
+               "groupId", groupId
+            }
+         );
+      }
+
+
+      UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
+
+      org.picketlink.idm.api.Group jbidGroup = null;
+      try
+      {
+         jbidGroup = orgService.getJBIDMGroup(groupId);
+      }
+      catch (Exception e)
+      {
+         log.info("Cannot obtain group: " + groupId + "; ", e);
+
+      }
+
+      qb.addRelatedGroup(jbidGroup);
+
+      return new IDMUserListAccess(this, service_, qb, 20, false);
    }
 
 //
@@ -565,6 +694,7 @@ public class UserDAOImpl implements UserHandler
 
    public void persistUserInfo(User user, IdentitySession session) throws Exception
    {
+      orgService.flush();
 
       AttributesManager am = session.getAttributesManager();
 
@@ -629,9 +759,11 @@ public class UserDAOImpl implements UserHandler
 
    }
 
-   public static User getPopulatedUser(String userName, IdentitySession session) throws Exception
+   public User getPopulatedUser(String userName, IdentitySession session) throws Exception
    {
       Object u = null;
+
+      orgService.flush();
 
       try
       {
@@ -656,8 +788,9 @@ public class UserDAOImpl implements UserHandler
 
    }
 
-   public static void populateUser(User user, IdentitySession session) throws Exception
+   public void populateUser(User user, IdentitySession session) throws Exception
    {
+      orgService.flush();
 
       AttributesManager am = session.getAttributesManager();
 
@@ -665,7 +798,7 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
-         attrs = am.getAttributes(user.getUserName());
+         attrs = am.getAttributes(new SimpleUser(user.getUserName()));
       }
       catch (IdentityException e)
       {
@@ -754,4 +887,26 @@ public class UserDAOImpl implements UserHandler
       }
    }
 
+   public PicketLinkIDMOrganizationServiceImpl getOrgService()
+   {
+      return orgService;
+   }
+
+   private IntegrationCache getIntegrationCache()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getIntegrationCache();
+   }
+
+   /**
+    * Returns namespace to be used with integration cache
+    * @return
+    */
+   private String getCacheNS()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getRealmName();
+   }
 }
