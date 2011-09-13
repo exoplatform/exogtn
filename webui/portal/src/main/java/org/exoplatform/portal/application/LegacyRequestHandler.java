@@ -88,32 +88,34 @@ public class LegacyRequestHandler extends WebRequestHandler
    {
       String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
       String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
+      
+      SiteKey siteKey = SiteKey.portal(requestSiteName);
+      String uri = requestPath;
 
       // Resolve the user node
       UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
-      UserPortal userPortal = cfg.getUserPortal();
-      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
-      UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
-
-      //
-      SiteKey siteKey;
-      String uri;
-      if (userNode != null)
+      if (cfg != null)
       {
-         siteKey = userNode.getNavigation().getKey();
-         uri = userNode.getURI();
-      }
-      else
-      {
-         siteKey = SiteKey.portal("classic");
-         uri = "";
-      }
+         UserPortal userPortal = cfg.getUserPortal();
+         UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
+         UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
+         
+         //         
+         if (userNode != null)
+         {
+            siteKey = userNode.getNavigation().getKey();
+            uri = userNode.getURI();
+         }
+         else
+         {
+            uri = "";
+         }
+      }      
 
       //
       PortalURLContext urlContext = new PortalURLContext(context, siteKey);
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
-      // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
       url.setMimeType(MimeType.PLAIN);
 
