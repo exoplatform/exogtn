@@ -76,7 +76,7 @@ PortalDragDrop.prototype.init = function(e) {
     PortalDragDrop.backupDragObjectWidth = dragObject.offsetWidth ;
         
     /*Case: dragObject out of UIPortal*/
-    
+    var componentBlockWidth = 300;
     if(isAddingNewly) {
       var cloneObject = dragObject.cloneNode(true) ;
       dragObject.parentNode.insertBefore(cloneObject, dragObject) ;
@@ -88,7 +88,7 @@ PortalDragDrop.prototype.init = function(e) {
     } else {
     	previewBlock = PortalDragDrop.createPreview();
     	dragObject.parentNode.insertBefore(previewBlock, dragObject);
-    	dragObject.style.width = "300px";
+    	dragObject.style.width = componentBlockWidth + "px";
     	var componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock") ;
     	var editBlock = eXo.core.DOMUtil.findFirstChildByClass(componentBlock, "div", "EDITION-BLOCK");
 	    if(editBlock) {
@@ -99,9 +99,19 @@ PortalDragDrop.prototype.init = function(e) {
     dragObject.isAddingNewly = isAddingNewly;
     dragObject = dndEvent.dragObject;
     dragObject.style.position = "absolute" ;
-    if(eXo.core.I18n.isLT()) dragObject.style.left = originalDragObjectLeft + "px" ;
-    else dragObject.style.right = (PortalDragDrop.positionRootObj.offsetWidth - originalDragObjectLeft - dragObject.offsetWidth) + "px" ;
     dragObject.style.top = originalDragObjectTop + "px" ;
+    var dragObjectLeft = originalDragObjectLeft;
+    
+    if (PortalDragDrop.deltaXDragObjectAndMouse > componentBlockWidth/2) {
+       if ((PortalDragDrop.backupDragObjectWidth - PortalDragDrop.deltaXDragObjectAndMouse) > componentBlockWidth/2) {
+          dragObjectLeft = originalDragObjectLeft + PortalDragDrop.deltaXDragObjectAndMouse - componentBlockWidth/2;
+       } else {
+          dragObjectLeft = originalDragObjectLeft + PortalDragDrop.backupDragObjectWidth - componentBlockWidth;
+       }
+    }
+    
+    if (eXo.core.I18n.isLT()) dragObject.style.left = dragObjectLeft + "px";
+    else dragObject.style.right = PortalDragDrop.positionRootObj.offsetWidth - dragObject.offsetWidth - dragObjectLeft + "px";
     
     eXo.portal.isInDragging = true;
   }
