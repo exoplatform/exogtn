@@ -478,12 +478,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
   private void deleteSiteConfigTemplates(NewPortalConfigListener other, List<SiteConfigTemplates> result, String templateType) {
     for (SiteConfigTemplates siteConfigTemplatesToDelete : other.templateConfigs) {
-      Set<String> portalTemplates = siteConfigTemplatesToDelete.getTemplates(templateType);
-      if(portalTemplates != null && portalTemplates.size() > 0) {
+      Set<String> portalTemplatesToDelete = siteConfigTemplatesToDelete.getTemplates(templateType);
+      if(portalTemplatesToDelete != null && portalTemplatesToDelete.size() > 0) {
         int i = 0;
         while (i < result.size()) {
           SiteConfigTemplates siteConfigTemplates = result.get(i);
-          Set<String> portalTemplatesToDelete = siteConfigTemplates.getTemplates(templateType);
+          Set<String> portalTemplates = siteConfigTemplates.getTemplates(templateType);
           if(portalTemplatesToDelete != null && portalTemplatesToDelete.size() > 0) {
             portalTemplates.removeAll(portalTemplatesToDelete);
           }
