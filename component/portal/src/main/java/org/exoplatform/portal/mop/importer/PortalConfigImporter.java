@@ -20,16 +20,16 @@
 package org.exoplatform.portal.mop.importer;
 
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class PageImporter
+public class PortalConfigImporter
 {
    /** . */
-   private final Page src;
+   private final PortalConfig src;
 
    /** . */
    private final DataStorage service;
@@ -40,18 +40,18 @@ public class PageImporter
    /** . */
    private boolean isFirstStartup;
 
-   public PageImporter(boolean isFirstStartup, ImportMode importMode, Page page, DataStorage dataStorage_)
+   public PortalConfigImporter(boolean isFirstStartup, ImportMode importMode, PortalConfig portal, DataStorage dataStorage_)
    {
       this.isFirstStartup = isFirstStartup;
       this.mode = importMode;
-      this.src = page;
+      this.src = portal;
       this.service = dataStorage_;
    }
 
    public void perform() throws Exception
    {
-      Page existingPage = service.getPage(src.getPageId());
-      Page dst;
+      PortalConfig existingPortalConfig = service.getPortalConfig(src.getType(), src.getName());
+      PortalConfig dst = null;
 
       //
       switch (mode)
@@ -67,7 +67,7 @@ public class PageImporter
             }
             break;
          case INSERT:
-            if (existingPage == null)
+            if (existingPortalConfig == null)
             {
                dst = src;
             }
@@ -86,7 +86,14 @@ public class PageImporter
       
       if (dst != null)
       {
-         service.create(dst);
+         if (existingPortalConfig == null)
+         {
+            service.create(dst);
+         }
+         else
+         {
+            service.save(dst);
+         }
       }
    }
 }

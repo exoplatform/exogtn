@@ -33,6 +33,7 @@ import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.importer.PageImporter;
+import org.exoplatform.portal.mop.importer.PortalConfigImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
@@ -118,6 +119,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private DescriptionService descriptionService_;
 
    final Set<String> createdOwners = new HashSet<String>();
+   
+   private boolean isFirstStartup = false;
 
    public NewPortalConfigListener(
       UserPortalConfigService owner,
@@ -200,34 +203,34 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private boolean performImport()
+   private boolean performImport() throws Exception
    {
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
+         POMSession session = pomMgr.getSession();
+
+         // Obtain the status
+         Workspace workspace = session.getWorkspace();
+         boolean perform = !workspace.isAdapted(Imported.class);
+
+         // We mark it
+         if (perform)
+         {
+            Imported imported = workspace.adapt(Imported.class);
+            imported.setCreationDate(new Date());
+            session.save();
+         }
+
+         isFirstStartup = (perform && (dataStorage_.getPortalConfig(defaultPortal) == null));
+
          if (overrideExistingData)
          {
             return true;
          }
-         else
-         {
-            POMSession session = pomMgr.getSession();
 
-            // Obtain the status
-            Workspace workspace = session.getWorkspace();
-            boolean perform = !workspace.isAdapted(Imported.class);
-
-            // We mark it
-            if (perform)
-            {
-               Imported imported = workspace.adapt(Imported.class);
-               imported.setCreationDate(new Date());
-               session.save();
-            }
-
-            //
-            return perform;
-         }
+         //
+         return perform;
       }
       finally
       {
@@ -252,7 +255,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             {
                try
                {
-                  initPortletPreferencesDB(ele);
+                  initPortalConfigDB(ele);
                }
                catch (Exception e)
                {
@@ -263,7 +266,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             {
                try
                {
-                  initPortalConfigDB(ele);
+                  initPortletPreferencesDB(ele);
                }
                catch (Exception e)
                {
@@ -327,11 +330,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             for (NewPortalConfig ele : configs)
             {
-               initPortletPreferencesDB(ele);
+               initPortalConfigDB(ele);
             }
             for (NewPortalConfig ele : configs)
             {
-               initPortalConfigDB(ele);
+               initPortletPreferencesDB(ele);
             }
          }
          finally
@@ -546,45 +549,36 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    public boolean createPortalConfig(NewPortalConfig config, String owner) throws Exception
    {
       String type = config.getOwnerType();
-      PortalConfig currentPortalConfig = dataStorage_.getPortalConfig(type, owner);
-      if (currentPortalConfig == null)
+      UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
+      
+      ImportMode importMode;
+      if (config.getImportMode() != null)
       {
-         try
-         {
-            UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
-
-            if (obj == null)
-            {
-               // Ensure that the PortalConfig has been defined
-               // The PortalConfig could be empty if the related PortalConfigListener
-               // has been launched after starting this service
-               PortalConfig cfg = dataStorage_.getPortalConfig(type, owner);
-               if (cfg == null)
-               {
-                  cfg = new PortalConfig(type);
-                  cfg.setPortalLayout(new Container());
-                  cfg.setName(owner);
-                  dataStorage_.create(cfg);
-                  return true;
-               }
-            }
-            else
-            {
-               PortalConfig pconfig = obj.getObject();
-               // We use that owner value because it may have been fixed for group names
-               owner = pconfig.getName();
-               dataStorage_.create(pconfig);
-               return true;
-            }
-         }
-         catch (IOException e)
-         {
-            log.error("Could not load portal configuration", e);
-         }
+         importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
       }
-
-      //
-      return false;
+      else
+      {
+         importMode = owner_.getDefaultImportMode();
+      }
+      
+      PortalConfig pConfig = (obj != null) ? obj.getObject() : null;
+      if (pConfig == null)
+      {
+         pConfig = new PortalConfig(type);
+         pConfig.setPortalLayout(new Container());
+         pConfig.setName(owner);
+      }
+      
+      PortalConfigImporter portalImporter = new PortalConfigImporter(isFirstStartup, importMode, pConfig, dataStorage_);
+      try
+      {
+         portalImporter.perform();
+         return true;
+      }
+      catch (Exception ex)
+      {
+         return false;
+      }
    }
 
    public void createPage(NewPortalConfig config, String owner) throws Exception
@@ -609,7 +603,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             {
                importMode = owner_.getDefaultImportMode();
             }
-            PageImporter importer = new PageImporter(importMode, page, dataStorage_);
+            PageImporter importer = new PageImporter(isFirstStartup, importMode, page, dataStorage_);
             importer.perform();
          }
          finally

@@ -25,7 +25,6 @@ import org.exoplatform.component.test.KernelBootstrap;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -40,7 +39,6 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.mop.api.workspace.Workspace;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -178,32 +176,44 @@ public class TestImport extends AbstractGateInTest
    public void testPageImporterInConserveMode() throws Exception
    {
       KernelBootstrap bootstrap = new KernelBootstrap();
+      
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.mode.0", "conserve");
       setSystemProperty("import.portal.0", "site1");
-
+      
+      //
+      bootstrap.boot();
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      Page page1 = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(page1);
+      assertEquals("site 1", page1.getTitle());
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+      
       bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
       setSystemProperty("override.1", "false");
       setSystemProperty("import.mode.1", "conserve");
       setSystemProperty("import.portal.1", "site2");
-      //
-      bootstrap.boot();
-
-      //
-      PortalContainer container = bootstrap.getContainer();
-      RequestLifeCycle.begin(container);
-      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      Page home = dataStorage.getPage("portal::classic::page1");
-      assertNotNull(home);
-      assertEquals("site 1", home.getTitle());
       
-      Page sitemap = dataStorage.getPage("portal::classic::page 2");
-      assertNull(sitemap);
+      bootstrap.boot();
+      container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      page1 = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(page1);
+      assertEquals("site 1", page1.getTitle());
+      
+      Page page2 = dataStorage.getPage("portal::classic::page 2");
+      assertNull(page2);
 
       RequestLifeCycle.end();
       bootstrap.dispose();
+
    }
    
    public void testPageImporterInInsertMode() throws Exception
@@ -226,13 +236,13 @@ public class TestImport extends AbstractGateInTest
       PortalContainer container = bootstrap.getContainer();
       RequestLifeCycle.begin(container);
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      Page home = dataStorage.getPage("portal::classic::page1");
-      assertNotNull(home);
-      assertEquals("site 1", home.getTitle());
+      Page page1 = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(page1);
+      assertEquals("site 1", page1.getTitle());
       
-      Page sitemap = dataStorage.getPage("portal::classic::page2");
-      assertNotNull(sitemap);
-      assertEquals("site 2", sitemap.getTitle());
+      Page page2 = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(page2);
+      assertEquals("site 2", page2.getTitle());
 
       RequestLifeCycle.end();
       bootstrap.dispose();
@@ -258,13 +268,13 @@ public class TestImport extends AbstractGateInTest
       PortalContainer container = bootstrap.getContainer();
       RequestLifeCycle.begin(container);
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      Page home = dataStorage.getPage("portal::classic::page1");
-      assertNotNull(home);
-      assertEquals("site 2", home.getTitle());
+      Page page1 = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(page1);
+      assertEquals("site 2", page1.getTitle());
       
-      Page sitemap = dataStorage.getPage("portal::classic::page2");
-      assertNotNull(sitemap);
-      assertEquals("site 2", sitemap.getTitle());
+      Page page2 = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(page2);
+      assertEquals("site 2", page2.getTitle());
 
       RequestLifeCycle.end();
       bootstrap.dispose();
@@ -290,14 +300,87 @@ public class TestImport extends AbstractGateInTest
       PortalContainer container = bootstrap.getContainer();
       RequestLifeCycle.begin(container);
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      Page home = dataStorage.getPage("portal::classic::page1");
-      assertNotNull(home);
-      assertEquals("site 2", home.getTitle());
+      Page page1 = dataStorage.getPage("portal::classic::page1");
+      assertNotNull(page1);
+      assertEquals("site 2", page1.getTitle());
       
-      Page sitemap = dataStorage.getPage("portal::classic::page2");
-      assertNotNull(sitemap);
-      assertEquals("site 2", sitemap.getTitle());
+      Page page2 = dataStorage.getPage("portal::classic::page2");
+      assertNotNull(page2);
+      assertEquals("site 2", page2.getTitle());
 
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testPortalConfigImporterInConserveMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+
+      bootstrap.boot();
+      
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      PortalConfig portal = service.getPortalConfig("classic");
+      Container layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site1/layout", service.getId(layoutPortlet.getState()));
+      
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+      
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "conserve");
+      setSystemProperty("import.portal.1", "site2");
+      
+      //
+      bootstrap.boot();
+      
+      container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      portal = service.getPortalConfig("classic");
+      layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site1/layout", service.getId(layoutPortlet.getState()));
+      
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testPortalConfigImporterInMergeMode() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport0-configuration.xml");
+      setSystemProperty("import.portal.0", "site1");
+
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "site2");
+      //
+      bootstrap.boot();
+      
+      PortalContainer container = bootstrap.getContainer();
+      RequestLifeCycle.begin(container);
+      DataStorage service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      PortalConfig portal = service.getPortalConfig("classic");
+      Container layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site2/layout", service.getId(layoutPortlet.getState()));
+      
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
