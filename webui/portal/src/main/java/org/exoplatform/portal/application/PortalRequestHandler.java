@@ -21,7 +21,10 @@ package org.exoplatform.portal.application;
 
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.StaleModelException;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
@@ -138,13 +141,26 @@ public class PortalRequestHandler extends WebRequestHandler
       PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, requestLocale);
       if (context.getUserPortalConfig() == null)
       {
-         return false;
+         DataStorage storage = (DataStorage)PortalContainer.getComponent(DataStorage.class);
+         PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteType, requestSiteName);
+         if (persistentPortalConfig == null)
+         {
+            return false;
+         }
+         else if(req.getRemoteUser() == null)
+         {
+            context.requestAuthenticationLogin();
+         }
+         else
+         {
+            context.sendError(HttpServletResponse.SC_FORBIDDEN);
+         }         
       }
       else
       {
          processRequest(context, app);
-         return true;
       }
+      return true;
    }
 
    @SuppressWarnings("unchecked")
