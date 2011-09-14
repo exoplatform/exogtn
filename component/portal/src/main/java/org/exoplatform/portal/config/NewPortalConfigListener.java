@@ -51,7 +51,6 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.Workspace;
 import org.jibx.runtime.*;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -195,6 +194,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          Workspace workspace = session.getWorkspace();
          Imported imported = workspace.adapt(Imported.class);
          imported.setLastModificationDate(new Date());
+         imported.setStatus(Imported.DONE);
          session.save();
       }
       finally
@@ -208,11 +208,13 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
+         
          POMSession session = pomMgr.getSession();
 
          // Obtain the status
          Workspace workspace = session.getWorkspace();
          boolean perform = !workspace.isAdapted(Imported.class);
+
 
          // We mark it
          if (perform)
@@ -220,10 +222,23 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             Imported imported = workspace.adapt(Imported.class);
             imported.setCreationDate(new Date());
             session.save();
+            
+            // for legacy checking
+            if (dataStorage_.getPortalConfig(defaultPortal) != null)
+            {
+               perform = false;
+            }
+            else
+            {
+               isFirstStartup = true;
+            }
          }
-
-         isFirstStartup = (perform && (dataStorage_.getPortalConfig(defaultPortal) == null));
-
+         else
+         {
+            Imported imported = workspace.adapt(Imported.class);
+            perform = Imported.WANT_REIMPORT.equals(imported.getStatus());
+         }
+         
          if (overrideExistingData)
          {
             return true;
@@ -319,9 +334,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-
-         //
-         touchImport();
       }
       else
       {
@@ -361,10 +373,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             ele.getPredefinedOwner().clear();
          }
-
-         //
-         touchImport();
       }
+      
+      //
+      touchImport();
    }
 
    String getDefaultPortal()

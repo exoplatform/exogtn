@@ -145,7 +145,7 @@ public class TestImport extends AbstractGateInTest
 
       //
       setSystemProperty("override.1", "false");
-      setSystemProperty("import.mode.1", "conserve");
+      setSystemProperty("import.mode.1", "merge");
       setSystemProperty("import.portal.1", "site2");
 
       //
@@ -169,6 +169,72 @@ public class TestImport extends AbstractGateInTest
       assertEquals("site1/page1", service.getId(page1Portlet.getState()));
       Page page2 = service.getPage("portal::classic::page2");
       assertNull(page2);
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+   
+   public void testWantReimport() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+
+      //
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "site1");
+
+      //
+      bootstrap.boot();
+      PortalContainer container = bootstrap.getContainer();
+      DataStorage service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      RequestLifeCycle.begin(container);
+      POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      Workspace workspace = mgr.getSession().getWorkspace();
+      assertTrue(workspace.isAdapted(Imported.class));
+      long when1 = workspace.adapt(Imported.class).getCreationDate().getTime();
+      PortalConfig portal = service.getPortalConfig("classic");
+      Container layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site1/layout", service.getId(layoutPortlet.getState()));
+      Page page1 = service.getPage("portal::classic::page1");
+      assertEquals(1, page1.getChildren().size());
+      Application<Portlet> page1Portlet = (Application<Portlet>)page1.getChildren().get(0);
+      assertEquals("site1/page1", service.getId(page1Portlet.getState()));
+      workspace.adapt(Imported.class).setStatus(Imported.WANT_REIMPORT);
+      mgr.getSession().save();
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+
+      //
+      setSystemProperty("override.1", "false");
+      setSystemProperty("import.mode.1", "merge");
+      setSystemProperty("import.portal.1", "site2");
+
+      //
+      bootstrap.boot();
+      container = bootstrap.getContainer();
+      service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      RequestLifeCycle.begin(container);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      workspace = mgr.getSession().getWorkspace();
+      assertTrue(workspace.isAdapted(Imported.class));
+      long when2 = workspace.adapt(Imported.class).getCreationDate().getTime();
+      assertEquals(when1, when2);
+      portal = service.getPortalConfig("classic");
+      layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site2/layout", service.getId(layoutPortlet.getState()));
+      page1 = service.getPage("portal::classic::page1");
+      assertEquals(1, page1.getChildren().size());
+      page1Portlet = (Application<Portlet>)page1.getChildren().get(0);
+      assertEquals("site2/page1", service.getId(page1Portlet.getState()));
+      Page page2 = service.getPage("portal::classic::page2");
+      assertNotNull(page2);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
