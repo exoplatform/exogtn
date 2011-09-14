@@ -563,15 +563,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       String type = config.getOwnerType();
       UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
       
-      ImportMode importMode;
-      if (config.getImportMode() != null)
-      {
-         importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
-      }
-      else
-      {
-         importMode = owner_.getDefaultImportMode();
-      }
+      ImportMode importMode = getRightMode(config.getImportMode());
       
       PortalConfig pConfig = (obj != null) ? obj.getObject() : null;
       if (pConfig == null)
@@ -581,7 +573,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          pConfig.setName(owner);
       }
       
-      PortalConfigImporter portalImporter = new PortalConfigImporter(isFirstStartup, importMode, pConfig, dataStorage_);
+      PortalConfigImporter portalImporter = new PortalConfigImporter(importMode, pConfig, dataStorage_);
       try
       {
          portalImporter.perform();
@@ -606,16 +598,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          RequestLifeCycle.begin(PortalContainer.getInstance());
          try
          {      //
-            ImportMode importMode;
-            if (config.getImportMode() != null)
-            {
-               importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
-            }
-            else
-            {
-               importMode = owner_.getDefaultImportMode();
-            }
-            PageImporter importer = new PageImporter(isFirstStartup, importMode, page, dataStorage_);
+            ImportMode importMode = getRightMode(config.getImportMode());
+
+            PageImporter importer = new PageImporter(importMode, page, dataStorage_);
             importer.perform();
          }
          finally
@@ -637,15 +622,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       PageNavigation navigation = obj.getObject();
 
       //
-      ImportMode importMode;
-      if (config.getImportMode() != null)
-      {
-         importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
-      }
-      else
-      {
-         importMode = owner_.getDefaultImportMode();
-      }
+      ImportMode importMode = getRightMode(config.getImportMode());
 
       //
       Locale locale;
@@ -973,5 +950,25 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    {
       page.setOwnerId(fixOwnerName(page.getOwnerType(), page.getOwnerId()));
       fixOwnerName((Container)page);
+   }
+   
+   private ImportMode getRightMode(String mode)
+   {
+      ImportMode importMode;
+      if (mode != null)
+      {
+         importMode = ImportMode.valueOf(mode.trim().toUpperCase());
+      }
+      else
+      {
+         importMode = owner_.getDefaultImportMode();
+      }
+      
+      if (isFirstStartup && (importMode == ImportMode.CONSERVE || importMode == ImportMode.INSERT))
+      {
+         return ImportMode.MERGE;
+      }
+      
+      return importMode;
    }
 }

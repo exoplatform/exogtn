@@ -37,12 +37,8 @@ public class PortalConfigImporter
    /** . */
    private final ImportMode mode;
 
-   /** . */
-   private boolean isFirstStartup;
-
-   public PortalConfigImporter(boolean isFirstStartup, ImportMode importMode, PortalConfig portal, DataStorage dataStorage_)
+   public PortalConfigImporter(ImportMode importMode, PortalConfig portal, DataStorage dataStorage_)
    {
-      this.isFirstStartup = isFirstStartup;
       this.mode = importMode;
       this.src = portal;
       this.service = dataStorage_;
@@ -57,14 +53,7 @@ public class PortalConfigImporter
       switch (mode)
       {
          case CONSERVE:
-            if (isFirstStartup)
-            {
-               dst = src;
-            }
-            else
-            {
-               dst = null;
-            }
+            dst = null;
             break;
          case INSERT:
             if (existingPortalConfig == null)

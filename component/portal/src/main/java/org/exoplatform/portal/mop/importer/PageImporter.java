@@ -37,12 +37,8 @@ public class PageImporter
    /** . */
    private final ImportMode mode;
 
-   /** . */
-   private boolean isFirstStartup;
-
-   public PageImporter(boolean isFirstStartup, ImportMode importMode, Page page, DataStorage dataStorage_)
+   public PageImporter(ImportMode importMode, Page page, DataStorage dataStorage_)
    {
-      this.isFirstStartup = isFirstStartup;
       this.mode = importMode;
       this.src = page;
       this.service = dataStorage_;
@@ -57,14 +53,7 @@ public class PageImporter
       switch (mode)
       {
          case CONSERVE:
-            if (isFirstStartup)
-            {
-               dst = src;
-            }
-            else
-            {
-               dst = null;
-            }
+            dst = null;
             break;
          case INSERT:
             if (existingPage == null)
