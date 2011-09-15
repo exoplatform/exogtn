@@ -89,6 +89,24 @@
 	background: url('background/DefaultContainerIcon.gif') no-repeat right 1px; /* orientation=rt */
 } 
 
+.UIColumnContainer .ControlIcon {
+  float: right;/* orientation=lt */
+  float: left;/* orientation=rt */
+  width: 28px; 
+  height: 20px;
+  cursor: pointer;
+  background: url('/eXoResources/skin/PortletThemes/background/DefaultTheme.png') no-repeat center;
+}
+
+.UIColumnContainer .ArrowDownIcon {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 22px; height: 16px; 
+	background: url('background/ArrowDown.gif') no-repeat center top;
+	margin: 3px 0px 0px 2px; /* orientation=lt */
+	margin: 3px 2px 0px 0px; /* orientation=rt */
+}
+
 .EDITION-BLOCK  .PortletIcon {
 	background: url('background/Earth.gif') no-repeat left center; /* orientation=lt */
 	background: url('background/Earth.gif') no-repeat right center; /* orientation=rt */

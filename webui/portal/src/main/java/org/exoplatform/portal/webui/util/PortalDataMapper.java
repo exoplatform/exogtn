@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.util;
 
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
@@ -34,6 +33,7 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.container.UIColumnContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.container.UITabContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -410,6 +410,10 @@ public class PortalDataMapper
          if(UITabContainer.TAB_CONTAINER.equals(container.getFactoryId()))
          {
             uiTempContainer = uiContainer.createUIComponent(context, UITabContainer.class, null, null);
+         }
+         else if (UIColumnContainer.COLUMN_CONTAINER.equals(container.getFactoryId()))
+         {
+            uiTempContainer = uiContainer.createUIComponent(context, UIColumnContainer.class, null, null);
          }
          else
          {

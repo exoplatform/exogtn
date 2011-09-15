@@ -101,6 +101,7 @@ DragDrop.prototype.onMouseMove = function(evt) {
 } ;
 
 DragDrop.prototype.onDrop = function(evt) {
+  if(!evt) evt = window.event ;
   /* should not remove this or move this line to  destroy since the onMouseMove method keep calling */
   if(eXo.core.DragDrop.dropCallback != null) {
     var dndEvent = eXo.core.DragDrop.dndEvent ;
