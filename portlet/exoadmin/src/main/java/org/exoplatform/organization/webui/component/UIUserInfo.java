@@ -32,6 +32,8 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -124,9 +126,12 @@ public class UIUserInfo extends UIFormTabPane
          if (uiUserInfo.getUserName().equals(event.getRequestContext().getRemoteUser()))
          {
             UserProfileHandler hanlder = service.getUserProfileHandler();
-            UserProfile userProfile = hanlder.findUserProfileByName(event.getRequestContext().getRemoteUser());
+            UserProfile userProfile = hanlder.findUserProfileByName(uiUserInfo.getUserName());
+            User user = service.getUserHandler().findUserByName(uiUserInfo.getUserName());
+            ConversationState state = ConversationState.getCurrent();
+            state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
+           
             String language = userProfile.getAttribute(Constants.USER_LANGUAGE);
-
             UIPortalApplication uiApp = Util.getUIPortalApplication();            
             if (language == null || language.trim().length() < 1)
                return;
