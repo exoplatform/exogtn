@@ -107,7 +107,10 @@ UIUserSelector.prototype.getKeynum = function(event) {
  * @param {Object} evt event
  */
 UIUserSelector.prototype.captureInput = function(input, action) {
-  if(typeof(input) == "string") input = document.getElementById(input) ;
+  if(typeof(input) == "string") {
+  	var uiform = document.getElementById("UIUserSelector");
+  	input = eXo.core.DOMUtil.findDescendantById(uiform, input);
+  }
 	input.form.onsubmit = eXo.webui.UIUserSelector.cancelSubmit ;
   input.onkeypress= eXo.webui.UIUserSelector.onEnter ;
 } ;
