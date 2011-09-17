@@ -204,12 +204,6 @@
 	filter: alpha(opacity=30);
 }
 
-.UIPortletMask {
-	opacity: 0;
-	filter: alpha(opacity=0);
-	background: #ffffff;
-}
-
 .UIPageBodyMask {
 	opacity: 0;
 	filter: alpha(opacity=0);

@@ -145,7 +145,6 @@ public class UIContainerForm extends UIFormTabPane
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.setFullRender(true);
-         Util.showComponentLayoutMode(UIContainer.class);
       }
    }
 }

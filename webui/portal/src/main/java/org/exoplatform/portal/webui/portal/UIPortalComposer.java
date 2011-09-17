@@ -537,12 +537,10 @@ public class UIPortalComposer extends UIContainer
             if (portalMode % 2 == 0)
             {
                uiPortalApp.setModeState(UIPortalApplication.APP_VIEW_EDIT_MODE);
-               Util.showComponentEditInViewMode(UIPortlet.class);
             }
             else
             {
                uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-               Util.showComponentLayoutMode(UIPortlet.class);
             }
          }
          else if (uiComponent instanceof UIContainerList)
@@ -551,16 +549,12 @@ public class UIPortalComposer extends UIContainer
             if (portalMode % 2 == 0)
             {
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
-               Util.showComponentEditInViewMode(org.exoplatform.portal.webui.container.UIContainer.class);
             }
             else
             {
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
-               Util.showComponentLayoutMode(org.exoplatform.portal.webui.container.UIContainer.class);
             }
          }
-         event.getRequestContext().addUIComponentToUpdateByAjax(
-            Util.getUIPortalApplication().getChildById(UIPortalApplication.UI_WORKING_WS_ID));
       }
    }
 

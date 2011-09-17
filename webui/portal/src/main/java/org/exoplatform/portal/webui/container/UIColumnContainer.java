@@ -76,13 +76,8 @@ public class UIColumnContainer extends UIContainer
             UIColumnContainer.insertColumn(uiSelectedColumn, false);
          }
 
-         Util.showComponentLayoutMode(uiSelectedColumn.getClass());
-
          PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
-         UIPortalApplication uiPortalApp = uiParent.getAncestorOfType(UIPortalApplication.class);
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.addUIComponentToUpdateByAjax(uiParent);
       }
 
    }
