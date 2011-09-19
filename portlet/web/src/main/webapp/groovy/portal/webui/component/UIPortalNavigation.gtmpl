@@ -46,7 +46,7 @@
 		   arrowIcon = "ArrowIcon";
 		   MimeResponse res = _ctx.getRequestContext().getResponse();
 		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
-		   resourceURL.setResourceID(res.encodeURL(node.getURI()));
+		   resourceURL.setResourceID(node.getURI());
 		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
 
@@ -91,7 +91,7 @@
 					
 					if (node.getChildrenCount() > 0) {
 					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
-						resourceURL.setResourceID(res.encodeURL(node.getURI()));										
+						resourceURL.setResourceID(node.getURI());										
 	%>			
 					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=resourceURL.toString() %>">
 				<%	} else { %>
