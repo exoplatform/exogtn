@@ -88,6 +88,10 @@
        </dependency>
        
        <!-- Missing packaging dependencies -->
+<dependency><groupId>net.sf.ehcache</groupId><artifactId>ehcache</artifactId><version>1.6.0</version><type>jar</type></dependency><!-- 1.6.0-->
+<dependency><groupId>de.odysseus.juel</groupId><artifactId>juel-api</artifactId><version>2.1.2</version><type>jar</type></dependency><!-- 2.1.2-->
+<dependency><groupId>de.odysseus.juel</groupId><artifactId>juel-impl</artifactId><version>2.1.2</version><type>jar</type></dependency><!-- 2.1.2-->
+<dependency><groupId>org.jsecurity</groupId><artifactId>jsecurity</artifactId><version>0.9.0</version><type>jar</type></dependency><!-- 0.9.0-->
 <dependency><groupId>org.gatein.wci</groupId><artifactId>wci-exo</artifactId><version>${org.gatein.wci.version}</version></dependency>
 <dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat</artifactId><version>${org.gatein.wci.version}</version></dependency>
 <dependency><groupId>commons-pool</groupId><artifactId>commons-pool</artifactId><version>${commons-pool.version}</version></dependency>
