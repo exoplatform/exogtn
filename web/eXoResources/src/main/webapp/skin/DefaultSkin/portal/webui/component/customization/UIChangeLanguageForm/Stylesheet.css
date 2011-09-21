@@ -17,10 +17,8 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIChangeLanguageForm {	
-}
-
-.UIChangeLanguageForm .UIFormTabPane .TabPaneContent .UITabContentContainer {
+.UIChangeLanguageForm .UIItemSelector {
+	margin: 5px 0;
 }
 
 .UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemListContainer {
@@ -48,14 +46,13 @@
 	padding: 0px; 
 }
 
-.UIChangeLanguageForm .UIItemSelector .ItemDetailContainer {
-	background: #ffffff; 
-	border: solid 1px #a4a4a4; 
-	padding: 6px;  
+.UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetailContainer {
+	background: transparent;
+	border: none;
 }
 
 .UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetail {
-	border: solid 1px #d2d2d2; 
+	border: none; 
 	height: 227px; 
 	overflow: auto;
 	margin: 0px; 
@@ -74,8 +71,8 @@
 
 .UIChangeLanguageForm .ItemDetail .SelectedItem {
 	height: 24px; 
-	color: #f27e01; 
 	border-bottom: solid 1px #e9e7e7; 
+	font-weight: bold;
 }
 
 .UIChangeLanguageForm .ItemDetail .NormalItem .Icon {
@@ -109,10 +106,22 @@
 }
 
 .UIChangeLanguageForm .UITabPane .TabPaneContent {
-	padding: 0px; 
+	padding: 5px; 
+}
+
+.UIChangeLanguageForm .UITabPane .TabPaneContent .WorkingArea {
+	background: #ffffff;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.UIChangeLanguageForm .UITabPane .UITabContentContainer .UITabContent {
+	padding: 0;
+	border: none;
 }
 
 .UIChangeLanguageForm .UITabPane .TabPaneContent .UITabContentContainer { 
-	border: 1px solid #d4d4d4; 
-	border-top: none; 
+	border: none; 
+	background: transparent;
 }

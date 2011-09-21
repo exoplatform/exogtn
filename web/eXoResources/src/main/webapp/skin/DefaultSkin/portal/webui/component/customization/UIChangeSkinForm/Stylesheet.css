@@ -17,9 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIChangeSkinForm {	
-}
-
 .UIChangeSkinForm .UIItemSelector .RightColumnStyle .ItemListContainer {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
@@ -70,15 +67,11 @@
 }
 
 .UIChangeSkinForm .UITabPane .TabPaneContent .UITabContentContainer { 
-	border: 1px solid #d4d4d4; 
-	border-top: none; 
+	border: none; 
+	background: transparent;
 }
 
 .UIChangeSkinForm .UITabPane .UITabContentContainer .UITabContent {
-	border: 1px solid white; 
-	border-top: none; 
-}
-
-.UIChangeSkinForm .UITabPane .TabPaneContent {
-	padding: 0px; 
+	padding: 0;
+	border: 0;
 }

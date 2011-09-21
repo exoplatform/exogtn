@@ -27,14 +27,15 @@
 								<%uicomponent.renderChild(UIItemSelector.class); %>
 							</div>
 						</div>
+					<div class="UIAction">
+						<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeSkin('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
+						<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
+					</div>
 					</div>
 				</div>
 			</div>	
 			
-			<div class="UIAction">
-				<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeSkin('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
-				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
-			</div>
+			
 						
 		</div>	
 	</div>

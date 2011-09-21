@@ -59,7 +59,6 @@
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	padding: 5px;
 }
 
 .UIMaskWorkspace .BottomLeftDecorator {
@@ -86,7 +85,7 @@
 /***********************************	UITabContent	************************************/
 
 .UIMaskWorkspace .UIFormTabPane {
-	padding: 10px;
+	padding: 0px;
 }
 
 .UIMaskWorkspace .UITabContent {

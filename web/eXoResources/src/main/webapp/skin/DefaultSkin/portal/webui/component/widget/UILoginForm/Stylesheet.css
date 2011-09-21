@@ -22,6 +22,9 @@
 	padding: 30px 17px 30px 10px; /* orientation=lt */
 	padding: 30px 10px 30px 17px; /* orientation=rt */
 	background: #ebebeb;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 /*##############################- LoginBox Style-################################*/
