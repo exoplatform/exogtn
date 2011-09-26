@@ -1,14 +1,90 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../User_Guide.ent">
-%BOOK_ENTITIES;
-]>
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
 <chapter id="chap-User_Guide-Gadgets_Administration">
-	<title>Portlets and Gadgets Administration</title>
-	<!-- 
-	<xi:include href="gadgetsAdmin/Manage_Gadgets_in_User_Workspace.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	 -->
-	<xi:include href="gadgetsAdmin/Import_Portlets_and_Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="gadgetsAdmin/Manage_Portlets_and_Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <title>Category, Portlets and Gadgets Administration</title>
+  <para>To administrate category, portlet and gadget, you first need to go to
+    <guilabel>Application Registry</guilabel>
+    by selecting<guilabel>Group</guilabel>, then<guilabel>Administration</guilabel>, and
+    <guilabel>Application Registry</guilabel>
+    on the Toolbar.
+    The form to organize portlets/gadgets into different categories will be displayed as below
+  </para>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="images/Categories.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="images/Categories.png" format="PNG" align="center" contentwidth="100mm"/>
+    </imageobject>
+  </mediaobject>
+  <para>Details:</para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/No1.png" format="PNG" contentwidth="6mm"/>"
+          </imageobject>
+        </inlinemediaobject>
+        <emphasis role="bold">Tab bar</emphasis>
+        consists of three items, including Categories
+        , Portlet, Gadget.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/No2.png" format="PNG" contentwidth="6mm"/>"
+          </imageobject>
+        </inlinemediaobject>
+        <emphasis role="bold">Action bar</emphasis>
+        consists of some actions related to a category.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/No3.png" format="PNG" contentwidth="6mm"/>"
+          </imageobject>
+        </inlinemediaobject>
+        <emphasis role="bold">Left pane</emphasis>
+        lists all categories and portlets of each category.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/No4.png" format="PNG" contentwidth="6mm"/>"
+          </imageobject>
+        </inlinemediaobject>
+        <emphasis role="bold">Breadcrumb bar</emphasis>
+        is the path from a specific category to a specific portlet in that category.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/No5.png" format="PNG" contentwidth="6mm"/>"
+          </imageobject>
+        </inlinemediaobject>
+
+        <emphasis role="bold">Right pane</emphasis>
+        provides detailed information of a specific portlet.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <!--
+   <xi:include href="gadgetsAdmin/Manage_Gadgets_in_User_Workspace.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    -->
+  <xi:include href="gadgetsAdmin/Manage_Category.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+  <xi:include href="gadgetsAdmin/Manage_Portlets_and_Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </chapter>
 

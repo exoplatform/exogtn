@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
+<section id="sect-User_Guide-Manage_Categories">
+  <title>Manage Categories</title>
+
+  <section id="sect-User_Guide-Manage_Categories-Add_New_Category">
+    <title>Add a new category</title>
+    <procedure>
+      <step>
+        <para>
+          Click
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/AddCategorybutton.png" format="PNG" contentwidth="6mm"/>"
+            </imageobject>
+          </inlinemediaobject>
+          on the action bar to open the form to add a new category.
+        </para>
+        <para>Details:</para>
+        <para>In the<emphasis role="bold">Category Setting</emphasis>tab:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term>Category name</term>
+            <listitem>
+              <para>
+                The category's name that you want to add. This field is required and its length must be between 3 and 30
+                characters.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Display name</term>
+            <listitem>
+              <para>
+                The display name of the category and its length must be between 3 and 30 characters.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Description</term>
+            <listitem>
+              <para>
+                A brief description of the category. Any length from 0 to 255 characters is allowed.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </step>
+      <step>
+        <para>Enter values in the Category Setting tab.</para>
+      </step>
+      <step>
+        <para>Set access permission for your category. Accordingly, another users can only view and use portlets in your
+          category to which they have access.
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/Permission2.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/Permission2.png" format="PNG" align="center" scalefit="1" contentwidth="130mm"/>
+          </imageobject>
+        </mediaobject>
+        <para>For more details about how to set access permission, refer to<xref
+                linkend="sect-User_Guide-Manage_Permissions"/>.
+        </para>
+      </step>
+      <step>
+        <para>Click
+          <guibutton>Save</guibutton>
+          to accept adding a new category to the categories list. Your newly created category will be added to the list
+          in the left pane.
+        </para>
+      </step>
+    </procedure>
+  </section>
+  <section id="sect-User_Guide-Manage_Categories-Edit_Category">
+    <title>Edit a Category</title>
+    <procedure>
+      <step>
+        <para>
+          Click the Edit icon located next to the title bar.
+        </para>
+      </step>
+      <step>
+        <para>
+          Update the category information.
+        </para>
+      </step>
+      <step>
+        <para>
+          Click the
+          <emphasis role="bold">Save</emphasis>
+          button to apply changes.
+        </para>
+      </step>
+    </procedure>
+  </section>
+  <section id="sect-User_Guide-Manage_Categories-Delete_a_Category">
+    <title>Delete a Category</title>
+    <procedure>
+      <step>
+        <para>
+          Click the Trash can icon located next to the title bar.
+        </para>
+      </step>
+      <step>
+        <para>
+          Click
+          <emphasis role="bold">OK</emphasis>
+          to accept deleting in the confirmation message.
+        </para>
+      </step>
+    </procedure>
+  </section>
+  <section id="sect-User_Guide-Manage_Categories-Add_PortletsGadgets_to_the_specific_Category">
+    <title>Add Portlets/Gadgets to a Category</title>
+    <para>This function helps you add portlets to a specific category easily as follows:</para>
+    <procedure>
+      <step>
+        <para>
+          Click the
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/plus-icon1.png" format="PNG" contentwidth="6mm"/>"
+            </imageobject>
+          </inlinemediaobject>
+          icon located next to the category name to which you want to add portlets/gadgets.
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scalefit="1" contentwidth="160mm"/>
+          </imageobject>
+        </mediaobject>
+        <variablelist>
+          <varlistentry>
+            <term>Display name</term>
+            <listitem>
+              <para>
+                The display name of a portlet/gadget.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Application Type</term>
+            <listitem>
+              <para>
+                Either Portlet or Gadget.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </step>
+      <step>
+        <para>
+          Enter the display name and select an application type.
+        </para>
+      </step>
+      <step>
+        <para>
+          Select a portlet/gadget by checking the radio button.
+        </para>
+      </step>
+      <step>
+        <para>
+          Click the
+          <emphasis role="bold">Save</emphasis>
+          button to add the selected portlet/gadget to the category.
+        </para>
+      </step>
+    </procedure>
+    <para>The selected portlet/gadget will be added to the category in the left pane.</para>
+  </section>
+</section>
+
+

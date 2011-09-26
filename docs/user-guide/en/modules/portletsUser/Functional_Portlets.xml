@@ -1,117 +1,211 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
-%BOOK_ENTITIES;
-]>
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
 <section id="sect-User_Guide-Functional_Portlets">
-	<title>Functional Portlets</title>
-	<para>
-		Portlets are pluggable user interface components that are managed and displayed within a portal. Functional Portlets support all functions of a Portal. They are built into the portal and are accessed via toolbar links as required when actioning portal tasks. 
-	</para>
-	<para>
-		&PRODUCT; provides the following portlets by default:
-	</para>
+  <title>Functional Portlets</title>
+  <para>
+    Portlets are pluggable user interface components that are managed and displayed within a portal. Functional
+    Portlets support all functions of a Portal. They are built into the portal and are accessed via toolbar links as
+    required when actioning portal tasks.
+  </para>
+  <para>
+    &PRODUCT; provides the following portlets by default:
+  </para>
+  <section id="sect-User_Guide-Functional_Portlets-Register">
+    <title>Register portlet</title>
+    <para>This portlet is used to register a new account, including User Name, Password, Confirm Password, First
+      Name, Last Name, Email Address, and Text validation.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/registerPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Accounts">
+    <title>Account portlet</title>
+    <para>
+      The Account portlet allows users to register a new account and choose a preferred language for displaying
+      the Portal interface.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/Account.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Organization">
+    <title>Organization portlet</title>
+    <para>
+      The Organization portlet is used to manage user information, groups of users and groups memberships.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/OrganizationPortlet1.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Application_Registry">
+    <title>Application Registry portlet</title>
+    <para>
+      The Application Registry portlet is used to manage different application categories. You can add, edit, set
+      permissions and delete a category and its applications.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/ApplicationRegistry.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Group_Navigation">
+    <title>Group Navigation portlet</title>
+    <para>The Group Navigation portlet is to manage the navigation of different groups. In this portlet, you can
+      add, edit, or delete a specific navigation.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/GroupNavigationPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Page_Management">
+    <title>Page Management portlet</title>
+    <para>The Page Management portlet is used to manage all pages on the portal. In the Page Management portlet, you
+      can add, edit, or delete a specific page.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/PageManagementPortlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/PageManagementPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Portal_Navigation">
+    <title>Portal Navigation portlet</title>
+    <para>The Portal Navigation portlet is to manage all portals in GateIn. In the Portal Navigation portlet, you
+      can add, edit, or delete a portal.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/PortalNavigationPortlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/PortalNavigationPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Star_Toolbar">
+    <title>Star Toolbar portlet</title>
+    <para>The Star Toolbar portlet displays a list of actions: Change Language, Change Skin, Sign out.</para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="120mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-Tabbed_Dashboard">
+    <title>Tabbed Dashboard portlet</title>
+    <para>The portlet displays Dashboard tabs that you can add gadgets inside by dragging and dropping them.</para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/tabbedDashboard.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/tabbedDashboard.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-User_Info">
+    <title>User Info portlet</title>
+    <para>The portlet displays personal information of a specific user that can be viewed and edited.</para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/UserInfoPortlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/UserInfoPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-User_Toolbar_Dashboard">
+    <title>User Toolbar Dashboard portlet</title>
+    <para>The portlet displays the main dashboard menu that you can go inside to create dashboard tabs, add, or
+      remove gadgets for each tab.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/UserToolbarDashboardPortlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/UserToolbarDashboardPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
 
-	<variablelist>
-	  <varlistentry>
-		<term><emphasis role="bold">Account Portlet</emphasis></term>
-		<listitem>
-			<para>
-				The Account Portlet allows users to register a new account and choose a preferred language for displaying the Portal interface.
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Account.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-		<term><emphasis role="bold">Organization Portlet</emphasis></term>
-		<listitem>
-			<para>
-				The Organization Portlet is used to manage user information, groups of users and groups memberships.
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
-	<varlistentry>
-		<term><emphasis role="bold">Application Registry Portlet</emphasis></term>
-		<listitem>
-			<para>
-				The Application Registry  Portlet is used to manage different application categories. You can add, edit, set permissions and delete a category and its applications.
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
-<!--
-	<varlistentry>
-		<term><emphasis role="bold">Internationalization Portlet</emphasis></term>
-		<listitem>
-			<para>
-				This Portlet is used to translate a word or a phrase from the current language to another language.
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" align="center" contentwidth="400" align="center"/>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
--->
-    <!-- Doesn't exist anymore AFAIK
-	<varlistentry>
-		<term>Administration Toolbar Portlet</term>
-		<listitem>
-			<para>
-				This Portlet supports administration actions in &PRODUCT;.
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Administration.png" format="PNG" align="center" contentwidth="400" align="center"/>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
-    -->
-	<varlistentry>
-		<term><emphasis role="bold">Star Toolbar Portlet</emphasis></term>
-		<listitem>
-			<para>
-				The Star Toolbar Portlet is used to change the default language, the skin of the portal or to sign out.
-			</para>
-                        <mediaobject>
-				<imageobject role="html">
-					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110"/>
-				</imageobject>
-				<imageobject role="fo">
-					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry>
-	<!--<varlistentry>
-		<term>User Toolbar Portlet</term>
-		<listitem>
-			<para>
-				This Portlet supports all user actions in &PRODUCT;.
-			</para>
-			<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/UserToolbar.png" format="PNG" align="center"></imagedata>
-				</imageobject>
-			</mediaobject>
-		</listitem>
-	</varlistentry> -->
-	</variablelist>
+  </section>
+  <section id="sect-User_Guide-Functional_Portlets-User_Toolbar_Group">
+    <title>User Toolbar Group portlet</title>
+    <para>
+      The portlet displays the main group menu that you can go inside to create, edit and delete a specific group
+      and the navigation for each group.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/UserToolbarGroupPortlet.png" format="PNG" align="center" scale="100"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/UserToolbarGroupPortlet.png" format="PNG" align="center" scalefit="1"
+                   contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <!--
+      <varlistentry>
+          <term><emphasis role="bold">Internationalization Portlet</emphasis></term>
+          <listitem>
+              <para>
+                  This Portlet is used to translate a word or a phrase from the current language to another language.
+              </para>
+              <mediaobject>
+                  <imageobject>
+                      <imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" align="center" contentwidth="400" align="center"/>
+                  </imageobject>
+              </mediaobject>
+          </listitem>
+      </varlistentry>
+  -->
+  <!-- Doesn't exist anymore AFAIK
+<varlistentry>
+  <term>Administration Toolbar Portlet</term>
+  <listitem>
+    <para>
+      This Portlet supports administration actions in &PRODUCT;.
+    </para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/Administration.png" format="PNG" align="center" contentwidth="400" align="center"/>
+      </imageobject>
+    </mediaobject>
+  </listitem>
+</varlistentry>
+  -->
+
 </section>
 
 

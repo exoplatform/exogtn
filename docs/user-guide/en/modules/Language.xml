@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-User_Guide-Language_administration">
+<section id="sect-User_Guide-Language_administration">
 	<title>Language administration</title>
 	<xi:include href="language/Change_Interface_Language.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="language/Right_To_Left_Support_(RTL).xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
@@ -11,5 +11,5 @@
 	<!-- 
 	<xi:include href="language/Internationalization_Portlet.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	 -->
-</chapter>
+</section>
 

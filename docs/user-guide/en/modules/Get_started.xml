@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../User_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-User_Guide-Get_started">
+	<title>Get started</title>
+    <section id="sec-User_Guide-Get_started-Glossary">
+        <title>Glossary</title>
+        <xi:include href="terms/Portal_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Portlet_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Toolbar_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Navigation_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Gadget_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Public_mode_and_Private_mode.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="terms/Permission_levels.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </section>
+    <section id="sect-User_Guide-Get_started-Accounts">
+        <title>Accounts</title>
+        <xi:include href="account/Register_New_Accounts.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="account/Sign_in_and_Sign_out.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="account/Remember_User_Account.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="account/Change_Account_Settings.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="account/Account_and_Password_Retrieval.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </section>
+    <section id="sect-User_Guide-Get_started-manage_language">
+        <title>Manage Language</title>
+        <xi:include href="language/Change_Interface_Language.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="language/Right_To_Left_Support_(RTL).xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="language/Multi-Language_Navigation_Nodes.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </section>
+</chapter>
+

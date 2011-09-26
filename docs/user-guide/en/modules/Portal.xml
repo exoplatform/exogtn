@@ -5,11 +5,15 @@
 ]>
 <chapter id="chap-User_Guide-Portal_Administration">
 	<title>Portal Administration</title>
+  <note>
+    <para>The functions stated in this section are advanced and for users as administrators only.</para>
+  </note>
 	<xi:include href="portal/Toolbar.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Manage_Portals.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
  	<xi:include href="portal/Manage_Navigation_Nodes.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> 
 	<xi:include href="portal/Manage_Pages.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/User_Management.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="portal/Manage_Page_Navigation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Manage_Permission.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
 

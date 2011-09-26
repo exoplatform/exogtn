@@ -4,7 +4,72 @@
 %BOOK_ENTITIES;
 ]>
 <chapter id="chap-User_Guide-Introduction">
-        <title>Introduction</title>
+        <title>Preface</title>
+    <section id="sec-User_Guide-Introduction-Overview">
+        <title>Overview</title>
+        <para>
+            Beginning as an open source project in the year 2002, eXo is well-known as the industry's first Java portlet
+            container. With the aim of dominating the potential portal market through robust and easy-to-use
+            applications, eXo Project succeeded in attracting consumers in the whole world. eXo actually opened the
+            floodgates to various options in many markets, and customers have been choosing eXo as the best method for
+            their success.
+        </para>
+        <para>
+            Today, eXo is a rapidly growing global company, with U.S. headquarters in San Francisco, California, global
+            headquarters in France, and offices in Tunisia, Ukraine, and Vietnam. eXo has established technology
+            leadership and proven values by their large European installed base and strategic partnerships with Red Hat,
+            Capgemini, Atos Origin, and Bull.
+        </para>
+        <para>
+            &PRODUCT; is the perfect merge between Red Hat and eXo Platform in creating a new generation of Open Source
+            portal that is robust and intuitive. With GateIn, both normal users and enterprises can enjoy many
+            personalization and collaboration applications wherever and whenever. Advantages generated in GateIn, such
+            as the interactive user interface, customizable look and feel, flexible internationalization and
+            localization, facilitate the birth of many useful applications with a variety of rich utilities in the world
+            market.
+        </para>
+    </section>
+    <section id="sec-User_Guide-Introduction-Purpose">
+        <title>
+            Purpose of the guide
+        </title>
+        <para>The guide was written as a handbook, aiming at instructing step-by-step on how to use and to implement
+            this application to the utmost. The information included here will give basic steps that makes easy for
+            users to follow through in-depth examples and clear explanations about the eXo Platform technology. Whether
+            you major in technology or not, you are able to learn about or to work on GateIn easily and efficiently.
+        </para>
+    </section>
+    <section id="sec-User_Guide-Introduction-References">
+        <title>References and Related Sources</title>
+        <itemizedlist id="item-User_Guide-References_and_Related_Sources-Information">
+            <title>Information</title>
+            <listitem>
+                <para>
+                    <ulink type="http" url="http://www.exoplatform.com/">eXo Home Page</ulink>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <ulink type="http" url="http://wiki.exoplatform.com/xwiki/bin/view/Main/WebHome/">eXo Wiki</ulink>
+                </para>
+            </listitem>
+        </itemizedlist>
+        <itemizedlist id="item-User_Guide-References_and_Related_Sources-Support">
+            <title>Support</title>
+            <listitem>
+                <para>
+                    <ulink type="http" url="http://forums.exoplatform.org/">Forums</ulink>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <ulink type="http" url="http://faq.exoplatform.org/index.html">FAQs</ulink>
+                </para>
+            </listitem>
+        </itemizedlist>
+    </section>
+</chapter>
+<!--
 	<para>
 		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single j2ee deployment archive. The aim is to provide an intuitive user-friendly portal and a framework to address the needs of today's Web 2.0 applications.
 	</para>
@@ -16,9 +81,7 @@
 			<imagedata fileref="images/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
-	<para>
-		This book introduces and provides detailed information about most features and capabilities of &PRODUCT; such as user/group management and access permissions, using portlets and changing basic interface objects such as skins, language and page orientation.
-	</para>
+
 	<para>
 		Refer to <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Reference Guide</ulink> for detailed information on all aspects of the project.
 	</para>
@@ -77,6 +140,5 @@
 			</listitem>
 		</itemizedlist>
 	</section>
-
-</chapter>
+-->
 
