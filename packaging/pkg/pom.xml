@@ -102,7 +102,7 @@
 
 <dependency><groupId>commons-digester</groupId><artifactId>commons-digester</artifactId><version>${commons-digester.version}</version><type>jar</type></dependency><!-- 1.8.1-->
 <dependency><groupId>commons-dbcp</groupId><artifactId>commons-dbcp</artifactId><version>${commons-dbcp.version}</version><type>jar</type></dependency>
-<dependency><groupId>asm</groupId><artifactId>asm</artifactId><version>${asm.version}</version><type>jar</type></dependency><!-- 1.5.3-->
+<dependency><groupId>asm</groupId><artifactId>asm</artifactId><version>${asm.version}</version><type>jar</type></dependency><!-- 3.1-->
 <dependency><groupId>jcr</groupId><artifactId>jcr</artifactId><version>${jcr.version}</version><type>jar</type></dependency><!-- 1.0-->
 <dependency><groupId>stax</groupId><artifactId>stax-api</artifactId><version>${stax.version}</version><type>jar</type></dependency><!-- 1.0-->
 <dependency><groupId>html-parser</groupId><artifactId>html-parser</artifactId><version>${html-parser.version}</version><type>jar</type></dependency><!-- 1.6-->
@@ -111,6 +111,12 @@
 <dependency><groupId>org.gatein.wsrp</groupId><artifactId>wsrp-admin-gui</artifactId><version>${org.gatein.wsrp.version}</version><type>war</type></dependency><!-- 1.1.1-GA-->
 <dependency><groupId>commons-httpclient</groupId><artifactId>commons-httpclient</artifactId><version>${commons-httpclient.version}</version><type>jar</type></dependency><!-- 3.1-->
 <dependency><groupId>org.gatein.pc</groupId><artifactId>pc-controller</artifactId><version>${org.gatein.pc.version}</version><type>jar</type></dependency><!-- 2.1.1-GA-->
+<dependency><groupId>net.oauth.core</groupId><artifactId>oauth-consumer</artifactId><version>20090617</version><type>jar</type></dependency>
+<dependency><groupId>c3p0</groupId><artifactId>c3p0</artifactId><version>0.9.1.2</version><type>jar</type></dependency>
+<dependency><groupId>rhino</groupId><artifactId>js</artifactId><version>${rhino.version}</version><type>jar</type></dependency>
+<dependency><groupId>org.jgroups</groupId><artifactId>jgroups</artifactId><version>2.6.20.Final</version><type>jar</type></dependency>
+<dependency><groupId>log4j</groupId><artifactId>log4j</artifactId><version>1.2.14</version><type>jar</type></dependency>
+<dependency><groupId>org.jboss.cache</groupId><artifactId>jbosscache-core</artifactId><version>3.2.7.GA</version><type>jar</type></dependency>
 
 <!-- Tomcat PKG -->
 <dependency><groupId>org.javassist</groupId><artifactId>javassist</artifactId><version>${javassist.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
@@ -120,9 +126,6 @@
 
 <!-- JBoss PKG -->
 <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-log4j12</artifactId><version>${org.slf4j.version}</version><type>jar</type></dependency><!-- 1.5.8-->
-
-<dependency><groupId>commons-dbcp</groupId><artifactId>commons-dbcp</artifactId></dependency>
-<dependency><groupId>commons-pool</groupId><artifactId>commons-pool</artifactId></dependency>
 
    </dependencies>
 

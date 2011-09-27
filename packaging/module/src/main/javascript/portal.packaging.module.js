@@ -228,11 +228,11 @@ function getModule(params)
       addDependency(new Project("net.oauth.core", "oauth-provider", "jar", "20100527")).
       addDependency(new Project("net.oauth.core", "oauth-consumer", "jar", "20090617")).
       addDependency(new Project("net.oauth.core", "oauth-httpclient4", "jar", "20090913")).
-      addDependency(new Project("com.google.guava", "guava", "jar", "r07")).
+      addDependency(new Project("com.google.guava", "guava", "jar", "r09")).
       addDependency(new Project("com.google.inject", "guice", "jar", "2.0")).
       addDependency(new Project("com.google.inject.extensions", "guice-jmx", "jar", "2.0")).
       addDependency(new Project("com.google.inject.extensions", "guice-multibindings", "jar", "2.0")).
-      addDependency(new Project("org.apache.httpcomponents", "httpclient", "jar", "4.0")).
+      addDependency(new Project("org.apache.httpcomponents", "httpclient", "jar", "4.0.1")).
       addDependency(new Project("org.apache.httpcomponents", "httpcore", "jar", "4.0.1")).
       addDependency(new Project("rome", "rome", "jar", "1.0")).
       addDependency(new Project("joda-time", "joda-time", "jar", "1.6")).
@@ -245,7 +245,7 @@ function getModule(params)
       addDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.1")).
       addDependency(new Project("net.sf.ehcache", "ehcache", "jar", "1.6.0")).
       addDependency(new Project("com.ibm.icu", "icu4j", "jar", "3.8")).
-      addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.12")).
+      addDependency(new Project("net.sourceforge.nekohtml", "nekohtml", "jar", "1.9.14")).
       addDependency(new Project("xerces", "xercesImpl", "jar", "2.9.1")).
       addDependency(new Project("com.thoughtworks.xstream", "xstream", "jar", "1.3.1")).
       addDependency(new Project("caja", "caja", "jar", "r4251")).
