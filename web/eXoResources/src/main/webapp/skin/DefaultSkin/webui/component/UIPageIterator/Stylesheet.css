@@ -22,6 +22,10 @@
 	height:22px;
 }
 
+*+html .UIPageIterator {	
+	overflow:hidden;
+}
+
 .UIPageIterator a {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
