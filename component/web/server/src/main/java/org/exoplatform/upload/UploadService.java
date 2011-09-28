@@ -312,6 +312,7 @@ public class UploadService
 
       // Create a new file upload handler
       ServletFileUpload upload = new ServletFileUpload(factory);
+      upload.setHeaderEncoding("UTF-8");
       ProgressListener listener = new ProgressListener()
       {
          public void update(long pBytesRead, long pContentLength, int pItems)
