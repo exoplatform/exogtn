@@ -46,29 +46,6 @@
 	margin-bottom: 3px;
 }
 
-.UIToolbar .LargeToolbar .LeftToolbar {
-	height: 64px; 
-	line-height: 64px;
-	background: url('background/LargeToolbar.gif') no-repeat left top; /* orientation=lt */
-	background: url('background/LargeToolbar-rt.gif') no-repeat left top; /* orientation=rt */
-	padding-left: 8px; /* orientation=lt */
-	padding-left: 94px; /* orientation=rt */
-}
-
-.UIToolbar .LargeToolbar .RightToolbar {
-	height: 64px; 
-	line-height: 64px;
-	background: url('background/LargeToolbar.gif') no-repeat right top; /* orientation=lt */
-	background: url('background/LargeToolbar-rt.gif') no-repeat right top; /* orientation=rt */
-	padding-right: 94px; /* orientation=lt */
-	padding-right: 8px; /* orientation=rt */
-}
-
-.UIToolbar .LargeToolbar .MiddleToolbar {
-	height: 64px;
-	line-height: 64px; 
-	background: url('background/LargeToolbar.gif') repeat-x left -64px;
-}
 
 .UIToolbar .LargeToolbar a {
 	color: #7E9BC9; 
@@ -93,6 +70,7 @@
 	float: right; /* orientation=rt */
 	margin: 3px 8px 0px 10px;
 	width: 2px; height: 50px;
+	background:none;
 }
 
 .UIToolbar .LargeToolbar .UserButton {
@@ -153,21 +131,7 @@
 	height: 32px;
 }
 
-.UIToolbar .BlueLargeToolbar .LeftToolbar {
-	background: url('background/BlueLargeToolbar.gif') no-repeat left top;
-	padding-left: 5px;
-	border-bottom: 1px solid #9a9a9a;
-}
 
-.UIToolbar .BlueLargeToolbar .RightToolbar {
-	background: url('background/BlueLargeToolbar.gif') no-repeat right top;
-	padding-right: 5px;
-}
-
-.UIToolbar .BlueLargeToolbar .MiddleToolbar {
-	height: 32px;
-	background: url('background/BlueLargeToolbar.gif') repeat-x center -61px;
-}
 
 .UIToolbar .BlueLargeToolbar a {
 	color: #7e9bc9; font-weight: bold;
@@ -214,6 +178,10 @@
 	background-repeat: no-repeat;
 	height: 26px; line-height: 26px;
 	color: #363636;
+	font-weight:normal;
+}
+.UIToolbar .BlueLargeToolbar .SelectItemButton {
+	font-weight:bold;
 }
 
 .UIToolbar .BlueLargeToolbar .OrganizeIcon {

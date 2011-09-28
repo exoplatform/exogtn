@@ -20,11 +20,6 @@
 .UINodeIconSelector {	
 }
 
-.UINodeIconSelector .LeftColumnStyle .ItemListContainer .ItemList {
-	height: 240px;
-	background: white url('background/IconsBoxBg100x65.gif') no-repeat bottom center;
-}
-
 .UINodeIconSelector .LeftColumnStyle .ItemListContainer .ItemDetailList {
 	height: 263px;
 }
@@ -35,7 +30,7 @@
 }
 
 .UINodeIconSelector .LeftColumnStyle .UIDropDownControl .UIDropDownAnchor {
-	width: 175px; /* orientation=rt */
+	width: 220px; /* orientation=rt */
 }
 
 .UINodeIconSelector .SelectedIconInfo {

@@ -98,7 +98,7 @@
 	padding-left: 4px; /* orientation=lt */
 	padding-right: 4px; /* orientation=rt */
 	border: 1px solid gray;
-	width: 180px; height: 16px;
+	width: 180px; height: 15px;
 }
 
 .UIFormTabPane .UISearch .UISearchForm .QuickSet select {

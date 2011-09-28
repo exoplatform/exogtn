@@ -41,8 +41,8 @@
 }
 
 .UIWizard .UIWizardContent .WizardStepTitleBar {
-	height: 29px;
-	background: url('background/WizardStepBar.gif') repeat-x top;
+	padding: 15px 0;
+	background:#fff;
 	border: solid 1px #aeaeae; border-bottom: none;
 }
 
@@ -51,7 +51,7 @@
 	float: right; /* orientation=rt */
 	width: 25px; height: 28px; 
 	background: url('background/WizardIcon.gif') no-repeat left bottom;
-	margin: 0px 8px 0px 10px;
+	margin: 0px 5px;
 }
 
 .UIWizard .UIWizardContent .WizardStepTitleBar .WizardTitle {
@@ -59,6 +59,7 @@
 	float: right; /* orientation=rt */
 	height: 28px; line-height: 28px;	
 	font-weight: bold;
+	color:#464646;
 }
 
 .UIWizard .UIWizardContent .WizardStepTitleBar .HelpIcon {
@@ -77,7 +78,7 @@
 	height: 28px; line-height: 28px; 
 	padding-left: 10px; /* orientation=lt */
 	padding-right: 10px; /* orientation=rt */
-	color: #0683f7;
+	color: #777;
 }
 
 .UIWizard .UIWizardContent .WizardStepContent {
@@ -85,22 +86,20 @@
 }
 
 .UIWizard .UIWizardContent .WizardStepContent .UIWizardPageSetInfo {
-	padding: 10px;
-	background: #f5f5f5;
+	background: #fff;
 }
 
 .UIWizard .UIWizardContent .WizardControlBar {
 	height: 34px;
 	border: solid 1px #b7b7b7;
-	background: url('background/WizardStepBar.gif') repeat-x bottom;
+	background:#fff;
 }
 
 .UIWizard .UIWizardContent .WizardControlBar .StepNavigationBar {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	height: 34px; 
 	line-height: 34px;
-	width: 49%;
 }
 
 .UIWizard .UIWizardContent .WizardControlBar .StepNavigationBar a{
@@ -129,9 +128,9 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	height: 33px; line-height: 33px;
-	font-weight: bold;
 	margin: 0px 10px 0px 15px; /* orientation=lt */
 	margin: 0px 15px 0px 10px; /* orientation=rt */
+	color:#777;
 }
 
 .UIWizard .UIWizardContent .WizardControlBar .OverflowContainer {
@@ -140,28 +139,26 @@
 }
 
 .UIWizard .UIWizardContent .UIDropDownControl {
-	width: 220px;
-	position: static;
+	width: 210px;
+	position: static;	
+	margin:10px 10px 0 10px;
 }
 
 .UIWizard .UIWizardContent .UIDropDownControl .UIDropDownAnchor {
-	width: 220px;
+	width: 210px;
 }
 
 /*========================== End Wizard Content ==============================*/
 /*========================== Start ActionBar ==============================*/
 
 .UIWizard .UIWizardContent .WizardControlBar .ActionBar {
-	width: 50%;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	padding-right: 7px; /* orientation=lt */
-	padding-left: 7px; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */	
 }
 .UIWizard .UIWizardContent .UIAction {
-	padding: 8px 0 0;
-	text-align: right; /* orientation=lt */
-	text-align: left; /* orientation=rt */
+	padding: 5px 0 0;
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 }
 
 /*========================== Start UIWizard Welcome ==============================*/
@@ -186,7 +183,7 @@
 .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	width: 240px;
+	width: 246px;
 }
 
 .UIWizard .UIWizardPageSetInfo .NoPageSelecter .SelectedPageInfo {
@@ -195,25 +192,16 @@
 }
 
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo {
-	border: 1px #b7b7b7 solid;
-	margin-left: 250px; /* orientation=lt */
-	margin-right: 250px; /* orientation=rt */
-	padding: 1px;
+	margin-left: 246px; /* orientation=lt */
+	margin-right: 246px; /* orientation=rt */
+	padding: 1px 0 1px 1px;
 }
 
-.UIWizard .UIWizardPageSetInfo .SelectedPageInfo .PageInfoContainer {
-	background: #efefef;
-	padding: 22px 0px;
-	border:	solid 1px #cdcdcd;
- }
-
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo .PageNodeInfo {
-	width: 90%; height: 25px; 
-	line-height: 25px;
-	background: white;
+	height: 36px; 
+	line-height: 36px;
+	background: url('background/WizardStepBar.gif') repeat-x top;
 	margin: auto;
-	border: solid 1px #b7b7b7;
-	overflow: hidden;
 }
 
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo .Icon {
@@ -221,28 +209,27 @@
 	float: right; /* orientation=rt */
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/MiniOrangeBoxPage.gif') no-repeat;
 	width: 16px; height: 16px;
-	margin: 5px 0px 0px 6px; /* orientation=lt */
-	margin: 5px 6px 0px 0px; /* orientation=rt */
+	margin: 9px 0px 0px 6px; /* orientation=lt */
+	margin: 9px 6px 0px 0px; /* orientation=rt */
 }
 
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo .Label {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	padding: 0px 5px;
-	font-weight: bold;
 }
 
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo .Info {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	padding: 0px 5px;
-	color: #0683f7; 
+	color: #777; 
 	background: none;
 }
 
 .UIWizard .UIWizardPageSetInfo .UIFormWithTitle {
-	margin-top: 5px;
-	width: 90%;
+	margin-top: 1px;
+	width: 100%;
 	overflow: hidden;
 }
 
@@ -253,6 +240,7 @@
 .UIWizard .UIWizardPageSetInfo .UIFormWithTitle .HorizontalLayout {
 	background: white;
 	height: auto;
+	border:none;
 }
 
 .UIWizard .UIWizardPageSetInfo .UIFormWithTitle textarea {
@@ -267,23 +255,28 @@
 /*========================== Start UIWizard Step 3 ==============================*/
 
 .UIWizard .UIItemSelector {
-	padding: 10px;
 	background: #f4f4f4;
 	margin: 0px;
 }
 
-.UIWizard .UIItemSelector .ItemListContainer {
-	width: 250px;
+.UIWizard .UIItemSelector .RightColumnStyle .ItemListContainer {
+	width: 230px;
 	height: auto;
+	float:left;/* orientation=lt */
+	float:right;/* orientation=rt */
 }
 
-.UIWizard .UIItemSelector .ItemDetailList {
-	background: #ffffff;
+.UIWizard .UIItemSelector  .RightColumnStyle .ItemDetailList {
+	margin: 0 0 0 230px;/* orientation=lt */
+	margin:0 230px 0 0;/* orientation=rt */
+	padding: 0 0 0 1px;
 }
 
 .UIWizard .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetail {
-	height: 260px;
-	padding-top: 21px;
+	height: 280px;
+	padding-top: 21px;	
+	border:none;
+	border-left: 1px solid #b7b7b7;
 }
 
 .UIWizard .LayoutHolder {
@@ -295,17 +288,46 @@
 .UIWizard .LayoutHolder .LayoutLabel {
 	height: 30px; line-height: 30px; 
 	margin: auto;
-	text-align: center;
-}
-
-.UIWizard .UIContainerConfigOptions {
-	margin: 0px 3px;
+	text-align: center;	
+	color:#777;
 }
 
 .UIWizard .UITrees {
-	overflow: hidden;
+	overflow: hidden;	
+	background:#f5f5f5;
+	border:none;
 }
 
 .UIWizard .TreeContainer {
-	height: 259px;
+	height: 290px;
 }
+
+.UIWizard .UITrees .Node .NodeSelected {
+	color:#525760;
+}
+
+.UIWizard .UIVerticalSlideTabs {
+	background:#fff;
+	border-right: 1px solid #B7B7B7;
+}
+
+.UIWizard  .UIFormWithTitle .TitleBar  {
+	background:#f4f4f4;
+	border:none;
+}
+
+.UIWizard  .UIItemSelector .RightColumnStyle {
+	width:100%;
+}
+
+.UIWizard .UIItemSelector  .ItemListContainer .ItemList {
+	border:none;
+}
+
+.UIWizard  .UIItemSelector  .ItemList .Item .ItemTitle {
+  background-position:10px center  ; /* orientation=lt */  
+  background-position: 95% center  ; /* orientation=rt */
+  padding-left:24px;/* orientation=lt */
+  padding-right:24px;/* orientation=rt */
+} 
+

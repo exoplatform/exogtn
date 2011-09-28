@@ -36,7 +36,7 @@
 .UIPageSearchForm .UISearchContainer .QuickSet .SearchLabel {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	font-weight: bold;
+	color: #464646;
 	height: 20px;
 	line-height: 20px;
 	padding-left: 10px; /* orientation=lt */

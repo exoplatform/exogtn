@@ -23,23 +23,8 @@
 	height: 39px;
 }
 
-.UIBarStyle .BarStyle2 .LeftBar {
-	background: url('background/BarStyle2.gif') no-repeat top left;
-	padding: 0px 0px 0px 6px;
-	height: 39px;
-}
 
-.UIBarStyle .BarStyle2 .RightBar {
-	background: url('background/BarStyle2.gif') no-repeat top right;
-	padding: 0px 6px 0px 0px;
-	height: 39px;
-}
 
-.UIBarStyle .BarStyle2 .MiddleBar {
-	height: 39px;
-	line-height: 39px;
-	background: url('background/BarStyle2.gif') repeat-x bottom;
-}
 /*###########################-SmoothNavy40Style-###########################*/
 
 .UIBarStyle .SmoothNavy40Style {

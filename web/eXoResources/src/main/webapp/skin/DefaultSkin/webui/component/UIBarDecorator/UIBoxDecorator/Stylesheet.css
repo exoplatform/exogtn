@@ -106,7 +106,7 @@
 
 .DecoratorBox .BarDecorator {
 	background: url('background/TitleBar.gif') repeat-x;
-	border: 1px solid #bdbcbd;
+	border: 1px solid #E2E2E2;
 	height:22px;
 	margin:1px;
 }

@@ -119,7 +119,7 @@
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/DustBin.gif') no-repeat right center; /* orientation=rt */
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
-	line-height: 21px;
+	line-height: 20px;
 }
  
 .UIPermissionSelector .PermissionInfoContainer .SelectPermissionIcon	{
@@ -127,6 +127,6 @@
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectPermission.gif') no-repeat right center; /* orientation=rt */
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
-	line-height: 21px;
+	line-height: 20px;
 	height: auto; width: auto;
 } 

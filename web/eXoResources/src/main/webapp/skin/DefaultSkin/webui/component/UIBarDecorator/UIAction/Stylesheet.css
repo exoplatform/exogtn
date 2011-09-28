@@ -110,18 +110,18 @@
 
 .UIAction .SimpleStyle1	{
 	background: transparent url(background/SimpleStyle1.gif) repeat-x center;
-	line-height: 20px;
-	padding: 0px 4px;
-	border: 1px solid #b8babf;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+	line-height: 22px;
+	padding: 0px 8px;
+	border: 1px solid #acacac;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
 }
 
 .UIAction .SimpleStyle1 .PageProfileIcon {
 	background: transparent url(background/PageProfileIcon.gif) no-repeat left; /* orientation=lt */
 	background: transparent url(background/PageProfileIcon.gif) no-repeat right; /* orientation=rt */
-	line-height: 20px;
+	line-height: 22px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
 	white-space: nowrap;
@@ -130,7 +130,7 @@
 .UIAction .SimpleStyle1 .ViewAsBlockIcon {
 	background: transparent url(background/ViewAsBlockIcon.gif) no-repeat left; /* orientation=lt */
 	background: transparent url(background/ViewAsBlockIcon.gif) no-repeat right; /* orientation=rt */
-	line-height: 20px;
+	line-height: 22px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
 	white-space: nowrap;

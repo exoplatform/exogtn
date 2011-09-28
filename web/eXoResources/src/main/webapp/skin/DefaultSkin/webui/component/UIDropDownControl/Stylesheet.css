@@ -50,7 +50,6 @@
 }
 
 .UIDropDownControl .RightMiddelItem .ItemListContent {
-	width: 100%;
 	overflow: hidden;
 }
 
@@ -90,7 +89,6 @@
 }
 
 .UIDropDownControl .DropDownSelectLabel {
-	font-weight: bold;
 	font-size: 10px;
 	overflow: hidden;
 	line-height: 19px;

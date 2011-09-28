@@ -101,7 +101,8 @@
 }
 
 .UIPopupWindow .Content .UIPageBrowser {
-	padding: 7px 4px 0px 8px;
+	padding: 7px 4px 0px 8px;/* orientation=lt */
+	padding: 7px 8px 0px 4px; /* orientation=rt */
 	width: 96%;
 	margin: auto;
 }
@@ -128,31 +129,34 @@
 .UIPortalComposer .CollapseIcon {
 	background: url(background/ExpandIcon.gif) no-repeat left; /* orientation=lt */
 	background: url(background/ExpandIcon-rt.gif) no-repeat right; /* orientation=rt */
-	width: 16px; 
+	width: 10px; 
 	height: 14px;
 	float: left;  /* orientation=lt */
 	float: right;  /* orientation=rt */
-	margin: 8px 5px;
+	margin: 8px 0 8px 10px; /* orientation=lt */
+	margin: 8px 10px 8px 0px;/* orientation=rt */
 	cursor: pointer;
 }
 
 .UIPortalComposer .ExpandIcon {
 	background: url(background/GrayDownIcon.png) no-repeat left; /* orientation=lt */
 	background: url(background/GrayDownIcon.png) no-repeat right; /* orientation=rt */
-	width: 16px; 
+	width: 14px; 
 	height: 14px;
 	float: left;  /* orientation=lt */
 	float: right;  /* orientation=rt */
-	margin: 8px 5px;
+	margin: 8px 0px 8px 10px;/* orientation=lt */
+	margin: 8px 10px 8px 0px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UIPortalComposer .CloseButton {
 	background: url(background/CloseIcon.gif) no-repeat right bottom; /* orientation=lt */
 	background: url(background/CloseIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
-	width: 23px;
-	margin: 5px 5px 0px 2px; /* orientation=lt */
-	margin: 5px 2px 0px 5px; /* orientation=rt */
+	width: 14px;
+	margin: 6px 5px 0px 5px; /* orientation=lt */
+	margin: 6px 5px 0px 5px; /* orientation=rt */
+	height: 14px;
 }
 
 .UIPortalComposer .SaveButton {
@@ -161,17 +165,17 @@
 	cursor: pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	height: 17px;
+	height: 14px;
 	margin: 6px 0px 0px 2px; /* orientation=lt */
 	margin: 6px 2px 0px 0px; /* orientation=rt */
-	width: 23px;
+	width: 14px;
 }
 
 .UIPortalComposer .BackButton {
 	background: url(background/BackIcon.gif) no-repeat right bottom; /* orientation=lt */
 	background: url(background/BackIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
-	width: 23px;
-	height: 17px;
+	width: 14px;
+	height: 14px;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 	margin: 6px 0px 0px 0px;
@@ -183,10 +187,10 @@
 	cursor: pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	height: 17px;
-	margin: 6px 0px 0px 2px; /* orientation=lt */
-	margin: 6px 2px 0px 0px; /* orientation=rt */
-	width: 23px;
+	height: 14px;
+	margin: 6px 0px 0px 6px; /* orientation=lt */
+	margin: 6px 6px 0px 0px; /* orientation=rt */
+	width: 14px;
 }
 
 .UIPortalComposer .UITabPane {

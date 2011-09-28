@@ -62,7 +62,6 @@
 						
 							<div class="UIAction">
 								<% if (uicomponent.isShowActions()) { %>
-											<a href="javascript:void(0);" onclick="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".label.abort")%></a>
 								<%
 									String action = "next";
 									if(step == children.size()){
@@ -73,6 +72,8 @@
 										}
 								%>	
 										<a href="javascript:void(0);" onclick="$actionLink" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".label."+action)%></a>
+										<a href="javascript:void(0);" onclick="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".label.abort")%></a>
+	
 								<% 
 								int showBack = step;
 								if (uicomponent.getClass().getName().contains("Edit"))	showBack++; 
