@@ -24,7 +24,6 @@
 
 .UIDashboardPortlet {
 	background: #fff;
-	border: 1px solid #b7b7b7;
 	border-top: none;
 	height: 100%;
 }
@@ -48,19 +47,16 @@
 	padding: 10px;
 }
 
-.UITabPaneDashboard {
-	padding: 0 9px;
-}
-
 /*-------------------UITabPaneDashboard-------------------*/
 
 .UITabPaneDashboard  {
 	height: auto;
 	background-color: #ededed;
 	border: 1px solid #e1e1e1;
-	padding: 0px 9px;
-	margin: 0 9px;
+	padding: 0px 4px;
+	margin: 0 8px;
 }
+
 .UITabPaneDashboard .UITab {	
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
@@ -68,10 +64,10 @@
 	height: 19px;
 	line-height: 17px;
 	border: 1px solid #d4d4d4;
-	padding:0px 6px 0px 9px;/* orientation=lt */
-	padding:0px 9px 0px 6px;/* orientation=rt */
-	margin: 4px 2px 0px 0px;/* orientation=lt */
-	margin: 4px 0px 0px 2px;/* orientation=rt */
+	padding:0px 6px 0px 10px;/* orientation=lt */
+	padding:0px 10px 0px 6px;/* orientation=rt */
+	margin: 4px 4px 0px 0px;/* orientation=lt */
+	margin: 4px 0px 0px 4px;/* orientation=rt */
 }
 
 
@@ -86,28 +82,31 @@
 	text-align: right;/* orientation=rt */
 	height: 13px;
 	padding:0;
+	margin-top:2px;
 }
 
-
+*+html .UITabPaneDashboard input {
+	margin-top:1px;/*For IE7*/
+}
 .UITabPaneDashboard .UITab .Tablabel, .UITabPaneDashboard span {
 	font-weight:normal;
-	line-height: 14px;	
+	line-height: 18px;	
 }
 
 
 .UITabPaneDashboard .UITab .CloseIcon {
 	background: url('background/IconClose.png') no-repeat center;
-	width: 14px;
-	height: 13px;
+	width: 8px;
+	height: 8px;
 	cursor: pointer;	
 	display:inline-block;
-	margin-left: 3px;/* orientation=lt */
-	margin-right: 3px;/* orientation=rt */
-	vertical-align: middle;
+	margin-left: 16px;/* orientation=lt */
+	margin-right: 16px;/* orientation=rt */
+	
 }
 
-.UITabPaneDashboard .SelectedTab .CloseIcon {
-	margin:0;
+*+html .UITabPaneDashboard .UITab .CloseIcon {
+	vertical-align: 2px;/*For IE7*/
 }
 
 .UITabPaneDashboard .AddDashboard {
