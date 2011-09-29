@@ -24,6 +24,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.validator.Validator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,145 +59,75 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
 
    private HashMap<String, String> msgKeys = new HashMap<String, String>();
 
-   /**
-    * Instantiates a new uI form input set with action.
-    * 
-    * @param name the name
-    */
    public UIFormInputSetWithAction(String name)
    {
       setId(name);
       setComponentConfig(getClass(), null);
    }
 
-   /**
-    * Checks if is show action info.
-    * 
-    * @return true, if is show action info
-    */
    public boolean isShowActionInfo()
    {
       return isShowActionInfo;
    }
 
-   /**
-    * Show action info.
-    * 
-    * @param isShow the is show
-    */
    public void showActionInfo(boolean isShow)
    {
       isShowActionInfo = isShow;
    }
 
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInputSet#processRender(org.exoplatform.webui.application.WebuiRequestContext)
-    */
+   @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
       super.processRender(context);
    }
 
-   /**
-    * Sets the actions.
-    * 
-    * @param actionList the action list
-    * @param values the values
-    */
    public void setActions(String[] actionList, String[] values)
    {
       actions = actionList;
-      values = values;
+      this.values = values;
    }
 
-   /**
-    * Gets the input set actions.
-    * 
-    * @return the input set actions
-    */
    public String[] getInputSetActions()
    {
       return actions;
    }
 
-   /**
-    * Gets the action values.
-    * 
-    * @return the action values
-    */
    public String[] getActionValues()
    {
       return values;
    }
 
-   /**
-    * Gets the form name.
-    * 
-    * @return the form name
-    */
    public String getFormName()
    {
       UIForm uiForm = getAncestorOfType(UIForm.class);
       return uiForm.getId();
    }
 
-   /**
-    * Checks if is show only.
-    * 
-    * @return true, if is show only
-    */
    public boolean isShowOnly()
    {
       return isShowOnly;
    }
 
-   /**
-    * Sets the checks if is show only.
-    * 
-    * @param isShowOnly the new checks if is show only
-    */
    public void setIsShowOnly(boolean isShowOnly)
    {
-      isShowOnly = isShowOnly;
+      this.isShowOnly = isShowOnly;
    }
 
-   /**
-    * Checks if is delete only.
-    * 
-    * @return true, if is delete only
-    */
    public boolean isDeleteOnly()
    {
       return isDeleteOnly;
    }
 
-   /**
-    * Sets the checks if is delete only.
-    * 
-    * @param isDeleteOnly the new checks if is delete only
-    */
    public void setIsDeleteOnly(boolean isDeleteOnly)
    {
-      isDeleteOnly = isDeleteOnly;
+      this.isDeleteOnly = isDeleteOnly;
    }
 
-   /**
-    * Sets the list info field.
-    * 
-    * @param fieldName the field name
-    * @param listInfor the list infor
-    */
    public void setListInfoField(String fieldName, List<String> listInfor)
    {
       listInfo.put(fieldName, listInfor);
    }
 
-   /**
-    * Gets the list info field.
-    * 
-    * @param fieldName the field name
-    * @return the list info field
-    */
    public List<String> getListInfoField(String fieldName)
    {
       if (listInfo.containsKey(fieldName))
@@ -204,23 +135,11 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
       return null;
    }
 
-   /**
-    * Sets the info field.
-    * 
-    * @param fieldName the field name
-    * @param fieldInfo the field info
-    */
    public void setInfoField(String fieldName, String fieldInfo)
    {
       info.put(fieldName, fieldInfo);
    }
 
-   /**
-    * Gets the info field.
-    * 
-    * @param fieldName the field name
-    * @return the info field
-    */
    public String getInfoField(String fieldName)
    {
       if (info.containsKey(fieldName))
@@ -228,23 +147,11 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
       return null;
    }
 
-   /**
-    * Sets the action info.
-    * 
-    * @param fieldName the field name
-    * @param actionNames the action names
-    */
    public void setActionInfo(String fieldName, String[] actionNames)
    {
       actionInfo.put(fieldName, actionNames);
    }
 
-   /**
-    * Gets the action info.
-    * 
-    * @param fieldName the field name
-    * @return the action info
-    */
    public String[] getActionInfo(String fieldName)
    {
       if (actionInfo.containsKey(fieldName))
@@ -252,138 +159,75 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
       return null;
    }
 
-   /**
-    * Sets the field actions.
-    * 
-    * @param fieldName the field name
-    * @param actionNames the action names
-    */
    public void setFieldActions(String fieldName, String[] actionNames)
    {
       fieldActions.put(fieldName, actionNames);
    }
 
-   /**
-    * Gets the field actions.
-    * 
-    * @param fieldName the field name
-    * @return the field actions
-    */
    public String[] getFieldActions(String fieldName)
    {
       return fieldActions.get(fieldName);
    }
 
-   /**
-    * Sets the checks if is view.
-    * 
-    * @param isView the new checks if is view
-    */
    public void setIsView(boolean isView)
    {
-      isView = isView;
+      this.isView = isView;
    }
 
-   /**
-    * Checks if is view.
-    * 
-    * @return true, if is view
-    */
    public boolean isView()
    {
       return isView;
    }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#getBindingField()
-    */
-   public String getBindingField()
-   {
-      return null;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#getValidators()
-    */
-   public List getValidators()
-   {
-      return null;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#addValidator(java.lang.Class, java.lang.Object[])
-    */
-   @SuppressWarnings("unused")
-   public UIFormInput addValidator(Class clazz, Object... params) throws Exception
-   {
-      return this;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#getValue()
-    */
-   public Object getValue() throws Exception
-   {
-      return null;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#setValue(java.lang.Object)
-    */
-   @SuppressWarnings("unused")
-   public UIFormInput setValue(Object value) throws Exception
-   {
-      return null;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#getTypeValue()
-    */
-   public Class getTypeValue()
-   {
-      return null;
-   }
-
-   /**
-    * Sets the introduction.
-    * 
-    * @param fieldName the field name
-    * @param msgKey the msg key
-    */
+   
    public void setIntroduction(String fieldName, String msgKey)
    {
       msgKeys.put(fieldName, msgKey);
    }
 
-   /**
-    * Gets the msg key.
-    * 
-    * @param fieldName the field name
-    * @return the msg key
-    */
    public String getMsgKey(String fieldName)
    {
       return msgKeys.get(fieldName);
    }
 
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInput#getLabel()
-    */
+   @Override
+   public String getBindingField()
+   {
+      return null;
+   }
+
+   @Override
+   public List<Validator> getValidators()
+   {
+      return null;
+   }
+
+   @Override
+   public UIFormInput addValidator(Class clazz, Object... params) throws Exception
+   {
+      return this;
+   }
+
+   @Override
+   public Object getValue() throws Exception
+   {
+      return null;
+   }
+
+   @Override
+   public UIFormInput setValue(Object value) throws Exception
+   {
+      return null;
+   }
+
+   @Override
+   public Class getTypeValue()
+   {
+      return null;
+   }
+
+   @Override
    public String getLabel()
    {
       return getId();
-   }
-
-   /**
-    * Adds the validator.
-    * 
-    * @param validator the validator
-    * @return the uI form input
-    * @throws Exception the exception
-    */
-   @SuppressWarnings("unused")
-   public UIFormInput addValidator(Class validator) throws Exception
-   {
-      return null;
    }
 }
