@@ -70,7 +70,6 @@ function getModule(params)
       addDependency(new Project("org.gatein.pc", "pc-controller", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-federation", "jar", pcVersion)).
       addDependency(new Project("org.gatein.wci", "wci-wci", "jar", wciVersion)).
-      addDependency(new Project("org.gatein.wci", "wci-tomcat", "jar", wciVersion)).
       addDependency(new Project("org.gatein.wci", "wci-exo", "jar", wciVersion)).
       addDependency(new Project("org.gatein.common", "common-common", "jar", commonVersion)).
       addDependency(new Project("log4j", "log4j", "jar", "1.2.14")).
@@ -79,6 +78,10 @@ function getModule(params)
       addDependency(new Project("org.apache.portals.bridges", "portals-bridges-common", "jar", "1.0.4")).
       addDependency(new Project("org.jboss", "jboss-common-core", "jar", "2.2.9.GA"));
 
+   if(eXo.server.Tomcat || eXo.server.Jboss || eXo.server.JbossEar)
+   {
+     module.component.pc.addDependency(new Project("org.gatein.wci", "wci-tomcat6", "jar", wciVersion));
+   }
 
    module.component.wsrp = new Project("org.exoplatform.portal", "gatein.portal.component.wsrp", "jar", module.version)
       .addDependency(new Project("org.gatein.wsrp", "wsrp-producer", "war", wsrpVersion))

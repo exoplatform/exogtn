@@ -1,23 +1,31 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
- * 
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- * 
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- */
+/*
+* Copyright (C) 2003-2009 eXo Platform SAS.
+*
+* This is free software; you can redistribute it and/or modify it
+* under the terms of the GNU Lesser General Public License as
+* published by the Free Software Foundation; either version 2.1 of
+* the License, or (at your option) any later version.
+*
+* This software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this software; if not, write to the Free
+* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 
-package org.exoplatform.web.login;
+package org.exoplatform.web.security;
+
+import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.security.security.AbstractTokenService;
+import org.exoplatform.web.security.security.CookieTokenService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.Credentials;
+import org.gatein.wci.security.WCILoginController;
 
 import java.io.IOException;
 
@@ -26,35 +34,26 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.exoplatform.container.web.AbstractHttpServlet;
-import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.security.AbstractTokenService;
-import org.exoplatform.web.security.security.CookieTokenService;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-
 /**
- * @author <a href="mailto:trong.tran@exoplatform.com">Tran The Trong</a>
+ * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class PortalLoginController extends AbstractHttpServlet
-{
+public class PortalLoginController extends WCILoginController {
 
    /** . */
    private static final Logger log = LoggerFactory.getLogger(PortalLoginController.class);
 
-   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+   @Override
+   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
    {
+      super.doGet(req, resp);
+      
       String username = req.getParameter("username");
       String password = req.getParameter("password");
-
+      
       //
       if (username != null && password != null)
       {
-         log.debug("Found username and password and set credentials in http session");
-         Credentials credentials = new Credentials(username, password);
-         req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
-
          // if we do have a remember me
          String rememberme = req.getParameter("rememberme");
          if ("true".equals(rememberme))
@@ -64,6 +63,7 @@ public class PortalLoginController extends AbstractHttpServlet
             {
                //Create token
                AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+               Credentials credentials = (Credentials)req.getSession().getAttribute(Credentials.CREDENTIALS);
                String cookieToken = tokenService.createToken(credentials);
 
                log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
@@ -93,16 +93,5 @@ public class PortalLoginController extends AbstractHttpServlet
       //
       String redirectURI = req.getContextPath() + "/dologin?initialURI=" + uri;
       resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
-   }
-
-   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-   {
-      doGet(req, resp);
-   }
-
-   @Override
-   protected boolean requirePortalEnvironment()
-   {
-      return true;
    }
 }

@@ -20,12 +20,15 @@
 package org.exoplatform.web.login;
 
 import org.exoplatform.container.web.AbstractHttpServlet;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
-import org.exoplatform.web.security.security.TransientTokenService;
+import org.exoplatform.web.security.security.TicketConfiguration;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.ServletContainer;
+import org.gatein.wci.security.Credentials;
+import org.gatein.wci.impl.DefaultServletContainerFactory;
+import org.gatein.wci.security.WCIController;
 
 import java.io.IOException;
 
@@ -33,7 +36,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Initiate the login dance.
@@ -51,20 +53,26 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    public static final String COOKIE_NAME = "rememberme";
 
    /** . */
-   public static final String CREDENTIALS = "credentials";
+   public static final long LOGIN_VALIDITY =
+           1000 * TicketConfiguration.getInstance(TicketConfiguration.class).getValidityTime();
+
+   /** . */
+   private WCIController wciController;
+
+   /** . */
+   private ServletContainer servletContainer = DefaultServletContainerFactory.getInstance().getServletContainer();
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
       resp.setContentType("text/html; charset=UTF-8");
-      HttpSession session = req.getSession();
 
-      // Looking for credentials stored in the session
-      Credentials credentials = (Credentials)session.getAttribute(InitiateLoginServlet.CREDENTIALS);
+      Credentials credentials = getWCIController().getCredentials(req, resp);
 
       //
       if (credentials == null)
       {
+         //
          String token = getRememberMeTokenCookie(req);
          if (token != null)
          {
@@ -83,14 +91,14 @@ public class InitiateLoginServlet extends AbstractHttpServlet
 
                // This allows the customer to define another login page without
                // changing the portal
-               showLoginForm(req, resp);
+               getWCIController().showLoginForm(req, resp);
             }
             else
             {
                // Send authentication request
                log.debug("Login initiated with no credentials in session but found token " + token + " with existing credentials, " +
                   "performing authentication");
-               sendAuth(req, resp, credentials.getUsername(), token);
+               getWCIController().sendAuth(req, resp, credentials.getUsername(), token);
             }
          }
          else
@@ -98,66 +106,19 @@ public class InitiateLoginServlet extends AbstractHttpServlet
             // This allows the customer to define another login page without
             // changing the portal
             log.debug("Login initiated with no credentials in session and no token cookie, redirecting to login page");
-            showLoginForm(req, resp);
+            getWCIController().showLoginForm(req, resp);
          }
       }
       else
       {
-         // We create a temporary token just for the login time
-         TransientTokenService tokenService = AbstractTokenService.getInstance(TransientTokenService.class);
-         String token = tokenService.createToken(credentials);
-         req.getSession().removeAttribute(InitiateLoginServlet.CREDENTIALS);
-
-         // Send authentication request
-         log.debug("Login initiated with credentials in session, performing authentication");
-         sendAuth(req, resp, credentials.getUsername(), token);
+         // WCI authentication
+         servletContainer.login(req, resp, credentials, LOGIN_VALIDITY, wciController.getInitialURI(req));
       }
-   }
-
-   private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-   {
-      String initialURI = getInitialURI(req);
-      try
-      {
-         String queryString = (String)req.getAttribute("javax.servlet.forward.query_string");
-         if (req.getAttribute("javax.servlet.forward.query_string") != null)
-         {
-            initialURI = initialURI + "?" + queryString;
-         }
-         req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
-         getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
-      }
-      finally
-      {
-         req.removeAttribute("org.gatein.portal.login.initial_uri");
-      }
-   }
-
-   private String getInitialURI(HttpServletRequest req)
-   {
-      String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
-      if (initialURI == null)
-      {
-         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
-      }
-      return initialURI;
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
       doGet(req, resp);
-   }
-
-   private void sendAuth(HttpServletRequest req, HttpServletResponse resp, String jUsername, String jPassword) throws IOException
-   {
-      String initialURI = getInitialURI(req);      
-      if (!initialURI.endsWith("/")) 
-      {
-         initialURI += "/";
-      }
-      String url = initialURI + "j_security_check?j_username=" + jUsername + "&j_password=" + jPassword;
-      url = resp.encodeRedirectURL(url);
-      resp.sendRedirect(url);
    }
 
    /**
@@ -189,5 +150,12 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    protected boolean requirePortalEnvironment()
    {
       return true;
+   }
+
+   private WCIController getWCIController() {
+      if (wciController == null) {
+         wciController = new GateinWCIController(getServletContext());
+      }
+      return wciController;
    }
 }

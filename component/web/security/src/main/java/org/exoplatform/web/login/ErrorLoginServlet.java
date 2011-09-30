@@ -27,6 +27,7 @@ import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.WCIController;
 
 import java.io.IOException;
 
@@ -63,6 +64,8 @@ public class ErrorLoginServlet extends AbstractHttpServlet
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
+      WCIController wciController = new GateinWCIController(getServletContext());
+
       PortalContainer pContainer = PortalContainer.getInstance();
       ServletContext context = pContainer.getPortalContext();
       // Unregister the token cookie
@@ -73,34 +76,9 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       resp.setContentType("text/html; charset=UTF-8");
  
       // This allows the customer to define another login page without changing the portal
-      showLoginForm(req, resp);
+      wciController.showLoginForm(req, resp);
    }
       
-   private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-   {
-      String initialURI = req.getHeader("referer");
-      if (initialURI == null || initialURI.length() == 0)
-      {
-         initialURI = req.getContextPath();
-         log.debug("No initial URI found, will use default " + initialURI + " instead ");
-      }
-      else
-      {
-         log.debug("Found initial URI from referer " + initialURI);
-      }
-
-      //
-      try
-      {
-         req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
-         getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
-      }
-      finally
-      {
-         req.removeAttribute("org.gatein.portal.login.initial_uri");
-      }
-   }
-
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
       doGet(req, resp);
