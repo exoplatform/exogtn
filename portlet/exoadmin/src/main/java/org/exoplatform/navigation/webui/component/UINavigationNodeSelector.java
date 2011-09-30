@@ -394,7 +394,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode node;
          if (ParameterValidation.isNullOrEmpty(nodeID))
          {
-            node = uiNodeSelector.getRootNode();
+            node = uiNodeSelector.getSelectedNode();
+            if(node == null) node = uiNodeSelector.getRootNode();
          }
          else
          {
