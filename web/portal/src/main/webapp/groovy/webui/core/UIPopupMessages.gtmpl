@@ -8,8 +8,8 @@
 	 */  
 %>
 <%
-	import org.gatein.common.text.EntityEncoder;
-
+  import org.gatein.common.text.EntityEncoder;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;	
 	String popupId = uicomponent.getId();
 	
 	def rcontext = _ctx.getRequestContext();
@@ -55,7 +55,7 @@
 			println "						<li class=\"MessageContainer\">";
 			println "							<span class=\"PopupIcon ${messType}Icon\">";
 			String msgValue = mess.getMessage();
-			EntityEncoder entityEncoder = EntityEncoder.FULL;
+			EntityEncoder entityEncoder = HTMLEntityEncoder.getInstance();
 			println entityEncoder.encode(msgValue);
 			println "						 </span>";
 			println "					 </li>";

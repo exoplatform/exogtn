@@ -22,8 +22,8 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.commons.utils.ExceptionUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.pc.ExoPortletState;
-import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
@@ -54,6 +54,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
@@ -75,15 +76,14 @@ import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 
-import javax.portlet.PortletMode;
-import javax.servlet.http.Cookie;
-
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.portlet.PortletMode;
+import javax.servlet.http.Cookie;
 
 /** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 8, 2006 */
 @ComponentConfigs({
@@ -115,7 +115,7 @@ public class UIPortletForm extends UIFormTabPane
                      addValidator(MandatoryValidator.class).setEditable(false)).
       addUIFormInput(new UIFormStringInput("windowId", "windowId", null).setEditable(false)).*/
             addUIFormInput(new UIFormInputInfo("displayName", "displayName", null)).addUIFormInput(
-         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60).addValidator(ExpressionValidator.class, "[^\\<\\>]*", 
+         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60).addValidator(NotHTMLTagValidator.class,
                "UIPortletForm.msg.InvalidPortletTitle"))
          .addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?",
@@ -125,8 +125,8 @@ public class UIPortletForm extends UIFormTabPane
          new UIFormCheckBoxInput("showInfoBar", "showInfoBar", false)).addUIFormInput(
          new UIFormCheckBoxInput("showPortletMode", "showPortletMode", false)).addUIFormInput(
          new UIFormCheckBoxInput("showWindowState", "showWindowState", false)).addUIFormInput(
-         new UIFormTextAreaInput("description", "description", null).addValidator(StringLengthValidator.class, 0,
-            255).addValidator(ExpressionValidator.class, "[^\\<\\>]*", "UIPortletForm.msg.InvalidPortletDescription"));
+                  new UIFormTextAreaInput("description", "description", null).addValidator(StringLengthValidator.class,
+                        0, 255).addValidator(NotHTMLTagValidator.class, "UIPortletForm.msg.InvalidPortletDescription"));
       addUIFormInput(uiSettingSet);
       UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "icon");
       addUIFormInput(uiIconSelector);

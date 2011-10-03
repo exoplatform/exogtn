@@ -1,7 +1,8 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
-	import org.gatein.common.text.EntityEncoder;
+  import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
@@ -40,8 +41,9 @@
 				if(isCurrent) clazz = "ArrowIcon";
 				else clazz = "";
 				href = nodeURL.toString();
-                EntityEncoder entityEncoder = EntityEncoder.FULL;
-                label = entityEncoder.encode(uicomponent.getPortalLabel(portalName));
+                EntityEncoder entityEncoder = HTMLEntityEncoder.getInstance();
+                label = uicomponent.getPortalLabel(portalName);
+                label = entityEncoder.encode(label);
 				print """
 					<li class="MenuItem $clazz">
 						<a href="$href" class="ItemIcon SiteIcon">$label</a>						

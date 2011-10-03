@@ -19,17 +19,16 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -38,15 +37,14 @@ import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
@@ -122,8 +120,7 @@ public class UIGadgetEditor extends UIForm
    {
       UIFormTextAreaInput uiInputSource = getUIFormTextAreaInput(FIELD_SOURCE);
       UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
-      String encoded = StringEscapeUtils.escapeHtml(StringEscapeUtils.unescapeHtml(uiInputSource.getValue()));
-      uiInputSource.setValue(encoded);
+      uiInputSource.setValue(uiInputSource.getValue());
       if(this.isEdit()) {
     	  uiInputName.setEditable(false);
       }
@@ -135,12 +132,6 @@ public class UIGadgetEditor extends UIForm
    {
       int idx = fullName.indexOf('.');
       return (idx > 0) ? fullName.substring(0, idx) : fullName;
-   }
-
-   private String appendTail(String name)
-   {
-      int idx = name.indexOf('.');
-      return (idx > 0) ? name : name + ".xml";
    }
 
    public void setDirPath(String dirPath)

@@ -28,12 +28,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.stream.FactoryConfigurationError;
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.io.Writer;
 
 /**
  * An high performance and custom DOM serializer based on stax {@link XMLStreamWriter}.

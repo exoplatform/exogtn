@@ -48,7 +48,7 @@ RssAggregator.prototype.timeToPrettyString = function(B) {
 
 RssAggregator.prototype.renderFeed = function(feedObj) {
   if(feedObj.rc != 200 && feedObj.data == undefined) {
-    document.write("the url: " + feedurl + " is down or invalid");
+    document.write("the url: " + gadgets.util.escapeString(feedurl) + " is down or invalid");
     return;
   }
     this.feed = feedObj.data;
@@ -103,7 +103,7 @@ RssAggregator.prototype.renderFeed = function(feedObj) {
             }
 		}
     } else {
-        document.write("No feed found at " + feedurl);
+        document.write("No feed found at " + gadgets.util.escapeString(feedurl));
     }
     gadgets.window.adjustHeight();
 }

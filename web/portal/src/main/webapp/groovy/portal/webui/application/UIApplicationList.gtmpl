@@ -1,7 +1,10 @@
 <%
 import org.gatein.common.text.EntityEncoder;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
+
 def categories = uicomponent.getCategories();
 def selectedCategory = uicomponent.getSelectedCategory();
+EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 %>
 <div class="UIOrganizerManagement" id="$uicomponent.id">
 	<div class="AppRegistryContainer">
@@ -14,16 +17,15 @@ def selectedCategory = uicomponent.getSelectedCategory();
 			 			<% 
 			 				String cTab, cName, description, displayName;
 			 				boolean isSelected = false;
-							for(category in categories) { 					 
+							for(category in categories) {
 								cName	= category.getName();
 								displayName =category.getDisplayName();
 								if(displayName == null || displayName.length() < 1 ) displayName = cName;
-								EntityEncoder encoder = EntityEncoder.FULL;
 								displayName = encoder.encode(displayName);								
 								if(selectedCategory != null && cName == selectedCategory.getName()) {
 									isSelected = true;
 									cTab = "SelectedTab";
-								}else {
+								} else {
 									isSelected = false;
 									cTab = "NormalTab";
 								}
@@ -34,12 +36,12 @@ def selectedCategory = uicomponent.getSelectedCategory();
 										<%= displayName %>
 									</a>
 								</div>
-							<% if(isSelected) { %>
+							<% if (isSelected) { %>
 								<div class="UIVTabContent" style="display: block">
 								<%
-								for(application in uicomponent.getApplications()) {
-									String applicationLabel = application.getDisplayName();
-									if(applicationLabel.length() > 30) applicationLabel = applicationLabel.substring(0, 27) + "...";
+								for (application in uicomponent.getApplications()) {
+								    String applicationName = encoder.encode(application.getDisplayName());
+								    String applicationDescription = encoder.encode(application.getDescription());
 									String srcBG = application.getIconURL();
 									String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 								%>
@@ -47,9 +49,9 @@ def selectedCategory = uicomponent.getSelectedCategory();
 										<div class="VTabContentBG">
 											<div class="OverflowContainer">
 												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" onError="src='$srcBGError'"  alt=""/>
-												<div class="ContentInfo" title="<%= application.getDisplayName() %>" style="cursor:move;">
-													<div class="LabelTab">$applicationLabel</div>
-													<div class="LableText"><%= application.getDescription() %></div>
+												<div class="ContentInfo" title="$applicationName" style="cursor:move;">
+													<div class="LabelTab">$applicationName</div>
+													<div class="LableText">$applicationDescription</div>
 												</div>
 												<div class="ClearLeft"><span></span></div>
 											</div>
