@@ -48,6 +48,11 @@ function getProduct(version) {
   product.addDependencies(portal.sample.extension) ;
   product.addDependencies(portal.sample.skin) ;
 
+  if(eXo.server.Jboss || eXo.server.JbossEar)
+  {
+    product.addDependencies(portal.wsrp.extension);
+  }
+
   product.addDependencies(portal.ibm.jdk.support);
 
   product.addServerPatch("tomcat", portal.server.tomcat.patch) ;

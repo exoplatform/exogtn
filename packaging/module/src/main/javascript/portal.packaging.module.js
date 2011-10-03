@@ -83,15 +83,13 @@ function getModule(params)
      module.component.pc.addDependency(new Project("org.gatein.wci", "wci-tomcat6", "jar", wciVersion));
    }
 
-   module.component.wsrp = new Project("org.exoplatform.portal", "gatein.portal.component.wsrp", "jar", module.version)
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-producer", "war", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-admin-gui", "war", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-producer-lib", "jar",wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-common", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp1-ws", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp2-ws", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-consumer", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-integration-api", "jar", wsrpVersion));
+
+   if(eXo.server.Jboss || eXo.server.JbossEar)
+   {
+     module.wsrp = {};
+     module.wsrp.extension = new Project("org.gatein.integration", "extension-ear-as5", "ear", module.version);
+   }
+
 
    module.component.scripting =
    new Project("org.exoplatform.portal", "exo.portal.component.scripting", "jar", module.version).
@@ -185,7 +183,6 @@ function getModule(params)
       addDependency(module.component.resources).
       addDependency(module.component.identity).
       addDependency(module.component.pc).
-      addDependency(module.component.wsrp).
       addDependency(module.webui.eXo).
 
       addDependency(kernel.container).
