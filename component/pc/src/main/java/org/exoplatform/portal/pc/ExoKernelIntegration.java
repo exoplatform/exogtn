@@ -19,14 +19,17 @@
 
 package org.exoplatform.portal.pc;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.bridge.BridgeInterceptor;
+import org.gatein.pc.federation.FederatedPortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.federation.impl.FederatingPortletInvokerService;
-import org.gatein.pc.mc.PortletApplicationDeployer;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 import org.gatein.pc.portlet.aspects.CCPPInterceptor;
 import org.gatein.pc.portlet.aspects.ConsumerCacheInterceptor;
@@ -40,6 +43,7 @@ import org.gatein.pc.portlet.aspects.SessionInvalidatorInterceptor;
 import org.gatein.pc.portlet.aspects.ValveInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
+import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
@@ -54,6 +58,7 @@ import org.picocontainer.Startable;
 public class ExoKernelIntegration implements Startable
 {
 
+   /** . */
    protected PortletApplicationDeployer portletApplicationRegistry;
 
    /** Exo Context */
@@ -61,6 +66,9 @@ public class ExoKernelIntegration implements Startable
 
    /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
    private final ResourceBundleService resourceBundleService;
+
+   /** . */
+ 	private Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
 
    /**
     * We enforce the dependency with the ResourceBundleService since it must be stared before the
@@ -84,12 +92,24 @@ public class ExoKernelIntegration implements Startable
       portletApplicationRegistry = new ExoPortletApplicationDeployer();
       portletApplicationRegistry.setContainerPortletInvoker(containerPortletInvoker);
 
+      // activate schema validation for portlet.xml if needed
+ 	 	String validation = PropertyManager.getProperty("gatein.portlet.validation");
+ 	 	boolean validated = validation == null || "true".equals(validation.trim().toLowerCase());
+ 	 	log.debug("portlet xml validation is " + (validated ? "enabled" : " disabled"));
+ 	 	portletApplicationRegistry.setSchemaValidated(validated);
+
       //Container Stack
       ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
       
-      // Federating portlet invoker
-      FederatingPortletInvoker federatingPortletInvoker = new FederatingPortletInvokerService();
-      
+      // Check if we already have a federating portlet invoker
+      final ExoContainer topContainer = ExoContainerContext.getTopContainer();
+      FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker)topContainer.getComponentInstanceOfType(FederatingPortletInvoker.class);
+      if (federatingPortletInvoker == null)
+      {
+         federatingPortletInvoker = new FederatingPortletInvokerService();
+         topContainer.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
+      }
+
       EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
       eventPayloadInterceptor.setNext(portletContainerDispatcher);
       RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =
@@ -128,16 +148,20 @@ public class ExoKernelIntegration implements Startable
       producerStateManagementPolicy.setPersistLocally(false);
 
       // The producer state converter
-      StateConverter producerStateConverter = new ExoStateConverter();//StateConverterV0();
+      StateConverter producerStateConverter = new ExoStateConverter();
 
       // The producer portlet invoker
       ProducerPortletInvoker producerPortletInvoker = new ProducerPortletInvoker();
       producerPortletInvoker.setNext(containerPortletInvoker);
-      federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
-
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
+
+      // register the producer portlet invoker if it hasn't been already
+      if(!federatingPortletInvoker.isResolved(PortletInvoker.LOCAL_PORTLET_INVOKER_ID))
+      {
+         federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
+      }
 
       // The consumer portlet invoker
       PortletCustomizationInterceptor portletCustomizationInterceptor = new PortletCustomizationInterceptor();

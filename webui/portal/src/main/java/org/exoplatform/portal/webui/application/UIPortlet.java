@@ -40,6 +40,8 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.DeleteComponentActionListener;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -47,8 +49,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
@@ -111,7 +111,7 @@ import java.util.UUID;
 public class UIPortlet<S, C extends Serializable> extends UIApplication
 {
 
-   protected static Logger log = LoggerFactory.getLogger(UIPortlet.class);
+   protected static final Log log = ExoLogger.getLogger("portal:UIPortlet");
 
    static final public String DEFAULT_THEME = "Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme";
    private static final String WSRP_URL = "wsrp-url";

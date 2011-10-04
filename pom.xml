@@ -47,10 +47,10 @@
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-Beta03</org.gatein.common.version>
       <org.gatein.wci.version>2.1.0-Beta06</org.gatein.wci.version>
-      <org.gatein.pc.version>2.2.0-GA</org.gatein.pc.version>
+      <org.gatein.pc.version>2.3.0-Beta06</org.gatein.pc.version>
       <org.picketlink.idm>1.3.0.Alpha04</org.picketlink.idm>
       <org.gatein.mop.version>1.1.0-Beta07</org.gatein.mop.version>
-      <org.gatein.wsrp.version>2.1.0-Beta05</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>2.1.0-Beta07</org.gatein.wsrp.version>
       <org.slf4j.version>1.5.8</org.slf4j.version>
       <commons-pool.version>1.5.5</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
@@ -58,7 +58,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.1.0</version.chromattic>
       <version.reflect>1.1.0-beta12</version.reflect>
-      <org.staxnav.version>0.9.5</org.staxnav.version>
+      <org.staxnav.version>0.9.6</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
 
       <!-- EXOGTN-106 : forced at packaging level -->
@@ -348,11 +348,6 @@
          <dependency>
             <groupId>org.gatein.pc</groupId>
             <artifactId>pc-federation</artifactId>
-            <version>${org.gatein.pc.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.pc</groupId>
-            <artifactId>pc-mc</artifactId>
             <version>${org.gatein.pc.version}</version>
          </dependency>
          <dependency>

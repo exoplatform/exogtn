@@ -66,7 +66,6 @@ function getModule(params)
       addDependency(new Project("org.gatein.pc", "pc-api", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-bridge", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-portlet", "jar", pcVersion)).
-      addDependency(new Project("org.gatein.pc", "pc-mc", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-controller", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-federation", "jar", pcVersion)).
       addDependency(new Project("org.gatein.wci", "wci-wci", "jar", wciVersion)).
