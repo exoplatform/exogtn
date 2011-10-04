@@ -3,11 +3,8 @@
    import org.exoplatform.webui.form.UIForm;
    import java.text.DateFormat;
    import java.text.SimpleDateFormat;
-<<<<<<< HEAD
-=======
    import org.gatein.common.text.EntityEncoder;
    import org.exoplatform.commons.utils.HTMLEntityEncoder;
->>>>>>> 679f384... Updated to revision 7598.
 
    String[] beanFields = uicomponent.getBeanFields();
    String[] beanActions = uicomponent.getBeanActions();
@@ -66,10 +63,7 @@
       %>
       <tr class="$rowClass">
          <%
-<<<<<<< HEAD
-=======
                EntityEncoder encoder = HTMLEntityEncoder.getInstance();
->>>>>>> 679f384... Updated to revision 7598.
                for (field in beanFields)
                {
 			      def fieldValue = uicomponent.getFieldValue(bean, field);
