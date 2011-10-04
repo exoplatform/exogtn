@@ -205,6 +205,11 @@
 	height: 290px;
 }
 
+.UIItemSelector .RightColumnBigItemStyle .ItemDetailList {
+	margin:0 225px 0 0; /* orientation=lt */
+	margin: 0 0 0 225px; /* orientation=rt */
+}
+
 .UIItemSelector .RightColumnBigItemStyle .ItemListContainer .ItemListTitle {
 	font-size: 12px; text-align: center;
 	height: 19px; line-height: 19px;
