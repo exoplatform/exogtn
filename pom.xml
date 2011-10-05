@@ -58,7 +58,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.1.0</version.chromattic>
       <version.reflect>1.1.0-beta12</version.reflect>
-      <org.staxnav.version>0.9.4</org.staxnav.version>
+      <org.staxnav.version>0.9.5</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
 
       <!-- EXOGTN-106 : forced at packaging level -->
