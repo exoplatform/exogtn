@@ -110,7 +110,8 @@ eXo.loadJS = function(path, module, callback, context, params) {
  * @return full url request
  */
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
-  var url = eXo.env.server.portalURLTemplate.replace("{portal:componentId}", targetComponentId);
+  var url = decodeURIComponent(eXo.env.server.portalURLTemplate);
+  url = url.replace("{portal:componentId}", targetComponentId);
   url = url.replace("{portal:action}", actionName);
   
   if(params != null) {

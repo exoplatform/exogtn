@@ -814,7 +814,7 @@ public class UIPortalApplication extends UIApplication
       urlTemplate.setPath(pcontext.getNodePath());
       urlTemplate.setResource(EMPTY_COMPONENT);
       urlTemplate.setAction("{portal:action}");
-      
-      return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
+
+      return urlTemplate.toString();
    }
 }
