@@ -20,6 +20,8 @@ package org.exoplatform.portal.resource.compressor.impl;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,7 @@ import org.exoplatform.services.log.Log;
 
 public class ResourceCompressorService implements ResourceCompressor
 {
-
+   /** . */
    private Log log = ExoLogger.getLogger(ResourceCompressorService.class);
 
    private Map<ResourceType, List<ResourceCompressorPlugin>> plugins;
@@ -95,6 +97,13 @@ public class ResourceCompressorService implements ResourceCompressor
       return null;
    }
 
+   @Override
+   final public boolean isSupported(ResourceType resourceType)
+   {
+      return (getHighestPriorityCompressorPlugin(resourceType) != null);
+   }
+
+   @Override
    final public void compress(Reader input, Writer output, ResourceType resourceType)
       throws ResourceCompressorException, IOException
    {
@@ -107,6 +116,15 @@ public class ResourceCompressorService implements ResourceCompressor
       {
          throw new ResourceCompressorException("There is no compressor for " + resourceType + " type");
       }
+   }
+   
+   @Override
+   public String compress(String input, ResourceType resourceType) throws ResourceCompressorException, IOException
+   {
+      StringReader reader = new StringReader(input);
+      StringWriter writer = new StringWriter();
+      compress(reader, writer, resourceType);
+      return writer.toString();
    }
 
    public ResourceCompressorPlugin getHighestPriorityCompressorPlugin(ResourceType resourceType)

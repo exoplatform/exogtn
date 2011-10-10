@@ -32,7 +32,7 @@ public class GetTestCase extends TestCase
 {
    public void testGet()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals("foo_value", futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -45,7 +45,7 @@ public class GetTestCase extends TestCase
 
    public void testNullValue()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals(null, futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -58,7 +58,7 @@ public class GetTestCase extends TestCase
 
    public void testThrowException()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals(null, futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -67,5 +67,33 @@ public class GetTestCase extends TestCase
          }
       }, "foo"));
       Assert.assertFalse(futureCache.data.containsKey("foo"));
+   }
+
+   public void testReentrancy()
+   {
+      final FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
+      String res = futureCache.get(new Callable<String>()
+      {
+         public String call() throws Exception
+         {
+            try
+            {
+               futureCache.get(new Callable<String>()
+               {
+                  public String call() throws Exception
+                  {
+                     // Should not go there
+                     throw new AssertionError();
+                  }
+               }, "foo");
+               return "fail";
+            }
+            catch (IllegalStateException expected)
+            {
+               return "pass";
+            }
+         }
+      }, "foo");
+      assertEquals("pass", res);
    }
 }
