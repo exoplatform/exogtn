@@ -19,9 +19,11 @@
 
 package org.exoplatform.commons.xml;
 
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.w3c.dom.Attr;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -145,9 +147,13 @@ public class DOMSerializer
          for (int i = 0;i < length;i++)
          {
             Node child = children.item(i);
-            if (child instanceof CharacterData)
+            if(child instanceof CDATASection) 
             {
-               writer.writeCData(((CharacterData)child).getData());
+               writer.writeCData(((CDATASection)child).getData());
+            }
+            else if (child instanceof CharacterData)
+            {
+               writeTextData(writer, ((CharacterData)child).getData());
             }
             else if (child instanceof Element)
             {
@@ -158,5 +164,27 @@ public class DOMSerializer
          // Close
          writer.writeEndElement();
       }
+   }
+
+   private static void writeTextData(XMLStreamWriter writer, String data) throws XMLStreamException
+   {
+      StringBuilder builder = new StringBuilder();
+
+      for(int i = 0; i < data.length(); i++)
+      {
+         char c = data.charAt(i);
+         String encodedValue = HTMLEntityEncoder.getInstance().lookupEntityName(c);
+
+         if(encodedValue == null)
+         {
+            builder.append(c);
+         }
+         else
+         {
+            builder.append(encodedValue);
+         }
+      }
+
+      writer.writeCharacters(builder.toString());
    }
 }

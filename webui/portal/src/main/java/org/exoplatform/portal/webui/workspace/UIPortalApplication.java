@@ -670,7 +670,13 @@ public class UIPortalApplication extends UIApplication
                w.write("</div>");
             }
          }
-
+         w.write("<div class=\"MarkupHeadElements\">");
+         List<String> headElems = ((PortalRequestContext)context).getExtraMarkupHeadersAsStrings();
+         for (String elem : headElems)
+         {
+            w.write(elem);
+         }
+         w.write("</div>");
          w.write("<div class=\"PortalResponseScript\">");
          pcontext.getJavascriptManager().writeJavascript(w);
          w.write("eXo.core.Browser.onLoad();\n");
