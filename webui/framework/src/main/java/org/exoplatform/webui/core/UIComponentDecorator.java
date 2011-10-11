@@ -48,14 +48,15 @@ public class UIComponentDecorator extends UIComponent
       return uicomponent_;
    }
 
-   public void setUIComponent(UIComponent uicomponent)
+   public UIComponent setUIComponent(UIComponent uicomponent)
    {
-      if (uicomponent_ != null)
-         uicomponent_.setRendered(false);
-      uicomponent_ = uicomponent;
-      if (uicomponent_ == null)
-         return;
-      uicomponent_.setParent(this);
+      UIComponent oldOne = uicomponent_;
+      uicomponent_= uicomponent;
+      if(uicomponent_ != null) 
+      {
+         uicomponent_.setParent(this);
+      }
+      return oldOne;
    }
 
    @SuppressWarnings("unchecked")
