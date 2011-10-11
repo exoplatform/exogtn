@@ -34,50 +34,63 @@
     <packaging>jdocbook</packaging>
     <name>GateIn Reference Guide en</name>
 
-    <build>
+   <build>
       <plugins>
-        <!-- Zip the reference guide -->
-        <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-           <executions> 
-	    <execution>
-             	<id>doc-zip-packaging</id>
-                <phase>package</phase>
-                <goals>
-                   <goal>single</goal>
-                </goals>
-                <configuration>
-                  <descriptors>
-                    <descriptor>html-zip.xml</descriptor>
-                  </descriptors>
-                </configuration>
-             </execution>
-           </executions>
-        </plugin>
-
-        <!-- Attach the doc to the pom in maven repo -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>target/${project.artifactId}-${project.version}.zip</file>
-                  <type>zip</type>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
+         <!-- Attach the doc to the pom in maven repo -->
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>doc-zip-packaging</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+                  <configuration>
+                     <descriptors>
+                        <descriptor>html-zip.xml</descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>add-source</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                     <goal>add-source</goal>
+                  </goals>
+                  <configuration>
+                     <sources>
+                        <source>en</source>
+                     </sources>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>attach-artifacts</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attach-artifact</goal>
+                  </goals>
+                  <configuration>
+                     <artifacts>
+                        <artifact>
+                           <file>target/docbook/publish/en-US/pdf/${project.name}.pdf</file>
+                           <type>pdf</type>
+                        </artifact>
+                        <artifact>
+                           <file>target/${project.artifactId}-${project.version}.zip</file>
+                           <type>zip</type>
+                        </artifact>
+                     </artifacts>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
       </plugins>
-    </build>
+   </build>
 </project>
