@@ -40,6 +40,16 @@
 
    <description>GateIn WSRP Integration extension parent</description>
 
+   <modules>
+     <module>extension-config</module>
+     <module>extension-component</module>
+     <module>extension-war</module>
+     <module>extension-ear</module>
+     <module>extension-ear-as5</module>
+     <module>extension-ear-as6</module>
+   </modules>
+
+   <!--
    <profiles>
       <profile>
          <id>default</id>
@@ -94,4 +104,5 @@
          </modules>
       </profile>
    </profiles>
+   -->
 </project>
