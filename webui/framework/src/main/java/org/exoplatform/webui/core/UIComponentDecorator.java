@@ -51,9 +51,16 @@ public class UIComponentDecorator extends UIComponent
    public UIComponent setUIComponent(UIComponent uicomponent)
    {
       UIComponent oldOne = uicomponent_;
-      uicomponent_= uicomponent;
-      if(uicomponent_ != null) 
+      if (uicomponent_ != null)
+         uicomponent_.setParent(null);
+      uicomponent_ = uicomponent;
+      if (uicomponent_ != null)
       {
+         UIComponent oldParent = uicomponent_.getParent();
+         if (oldParent != null && oldParent != this && oldParent instanceof UIComponentDecorator)
+         {
+            ((UIComponentDecorator)oldParent).setUIComponent(null);
+         }
          uicomponent_.setParent(this);
       }
       return oldOne;

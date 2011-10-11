@@ -95,7 +95,6 @@ public class UIMaskWorkspace extends UIComponentDecorator
 
    public UIComponent setUIComponent(UIComponent uicomponent)
    {
-      super.setUIComponent(uicomponent);
       UIComponent oldOne = super.setUIComponent(uicomponent);
       setShow(uicomponent != null);
       return oldOne;
