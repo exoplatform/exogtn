@@ -19,12 +19,13 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
+import java.util.regex.Pattern;
 
 /**
  * Created by The eXo Platform SARL
@@ -37,7 +38,7 @@ import org.exoplatform.webui.form.UIFormInput;
 @Serialized
 public class ExpressionValidator implements Validator
 {
-   private String expression_;
+   private Pattern pattern;
 
    private String key_;
 
@@ -46,15 +47,15 @@ public class ExpressionValidator implements Validator
    {
    }
 
-   public ExpressionValidator(final String expression)
+   public ExpressionValidator(final String regex)
    {
-      expression_ = expression;
+      pattern = Pattern.compile(regex);
       key_ = "ExpressionValidator.msg.value-invalid";
    }
 
-   public ExpressionValidator(final String exp, final String key)
+   public ExpressionValidator(final String regex, final String key)
    {
-      expression_ = exp;
+      pattern = Pattern.compile(regex);
       key_ = key;
    }
 
@@ -64,11 +65,13 @@ public class ExpressionValidator implements Validator
       {
          return;
       }
-      
-      String value = ((String)uiInput.getValue()).trim();
-      if (value.matches(expression_))
+      if (uiInput.getValue() != null)
       {
-         return;
+         String value = ((String)uiInput.getValue()).trim();
+         if (pattern.matcher(value).find())
+         {
+            return;
+         }
       }
 
       //  modified by Pham Dinh Tan

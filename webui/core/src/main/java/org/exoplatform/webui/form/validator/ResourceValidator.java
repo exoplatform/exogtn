@@ -33,6 +33,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * 14 March, 2006
  * 
  * Validates whether the value is composed of letters, numbers or '_'
+ * First character could not be digit '_' '-' or '.'
  */
 @Serialized
 public class ResourceValidator implements Validator

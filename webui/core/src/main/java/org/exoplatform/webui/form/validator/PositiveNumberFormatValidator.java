@@ -53,24 +53,26 @@ public class PositiveNumberFormatValidator implements Validator
       {
          label = uiInput.getName();
       }
+      Object[] args = {label, uiInput.getBindingField()};
+      
       String s = (String)uiInput.getValue();
-      boolean error = false;
-      for (int i = 0; i < s.length(); i++)
+      
+      if(s.charAt(0) == '0' && s.length() > 1) 
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+      else if(s.charAt(0) == '-' && s.length() > 1 && s.charAt(1) == '0')
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+      
+      int value;
+      try 
       {
-         char c = s.charAt(i);
-         if (Character.isDigit(c) || (s.charAt(0) == '-' && i == 0))
-         {
-            error = true;
-            continue;
-         }
-         error = false;
-         Object[] args = {label, uiInput.getBindingField()};
+         value = Integer.parseInt(s);
+      } 
+      catch(NumberFormatException e) 
+      {
          throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
       }
-      if (error == true && s.charAt(0) == '-')
-      {
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
-      }
+      
+      if(value >= 0) return;
+      throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
    }
 }

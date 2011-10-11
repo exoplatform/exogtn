@@ -31,7 +31,10 @@ import org.exoplatform.webui.form.UIFormInput;
  * Author : dang.tung
  *          tungcnw@gmail.com
  * Dec 12, 2007  
+ * 
+ * Validates whether this value is composed of letters, numbers, '_', '-',  or space
  */
+
 @Serialized
 public class SpecialCharacterValidator implements Validator
 {

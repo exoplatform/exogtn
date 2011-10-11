@@ -50,20 +50,22 @@ public class NumberFormatValidator implements Validator
       }
       catch (Exception e)
       {
-         label = uiInput.getName();
+         label = uiInput.getName().trim();
       }
-      label = label.trim();
+      Object[] args = {label};
+      
       String s = (String)uiInput.getValue();
-      for (int i = 0; i < s.length(); i++)
+      if(s.charAt(0) == '0' && s.length() > 1) 
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+      else if(s.charAt(0) == '-' && s.length() > 1 && s.charAt(1) == '0')
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+      try
       {
-         char c = s.charAt(i);
-         if (Character.isDigit(c) || (s.charAt(0) == '-' && i == 0 && s.length() > 1))
-         {
-            continue;
-         }
-         Object[] args = {label};
+         Integer.parseInt(s);
+      } 
+      catch(NumberFormatException e)
+      {
          throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
       }
    }
-
 }
