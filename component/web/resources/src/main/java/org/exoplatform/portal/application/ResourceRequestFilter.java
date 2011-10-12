@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.commons.utils.*;
+import org.exoplatform.commons.utils.BinaryOutput;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.portal.resource.ResourceRenderer;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -34,15 +34,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-
 import javax.imageio.ImageIO;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -149,8 +148,15 @@ public class ResourceRequestFilter extends AbstractFilter
          }
          catch (Exception e)
          {
-            log.error("Could not render css " + uri, e);
-            httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            if (e instanceof SocketException)
+            {
+               //Should we print something/somewhere exception message
+            }
+            else
+            {
+               log.error("Could not render css " + uri, e);
+               httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
          }
       }
       else
