@@ -428,12 +428,14 @@ function HttpResponseHandler(){
 	        
 
 	instance.updateHtmlHead = function(response) {
+		if (!response) return;      
 		cleanHtmlHead(response);
 		var DOMUtil = eXo.core.DOMUtil;
-		var head = document.getElementsByTagName("head")[0];                                                            
-		var markupHeadElements = response.markupHeadElements;           
-
-		if (markupHeadElements.titles.length != 0) {
+		var head = document.getElementsByTagName("head")[0]; 								
+		var markupHeadElements = response.markupHeadElements;
+		if (!markupHeadElements) return;
+		
+		if (markupHeadElements.titles && markupHeadElements.titles.length != 0) {
 			var oldTitle = DOMUtil.getChildrenByTagName(head, "title")[0];
 			var newTitle = markupHeadElements.titles[markupHeadElements.titles.length - 1];
 			if (oldTitle) {
@@ -454,17 +456,19 @@ function HttpResponseHandler(){
 		var DOMUtil = eXo.core.DOMUtil;
 		var head = document.getElementsByTagName("head")[0];            
 		var portletResponses = response.portletResponses;
-		if (portletResponses != null) {
+		if (portletResponses) {
 			for (var i = 0; i < portletResponses.length; i++) {
 				removeExtraHead(portletResponses[i].portletId);
 			}
 		}
 
-		var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
-		for (var i = 0; i < portletFragments.length; i++) {
-			removeExtraHead(portletFragments[i].parentNode.id);
+		if (response.data) {
+			var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
+			for (var i = 0; i < portletFragments.length; i++) {
+				removeExtraHead(portletFragments[i].parentNode.id);
+			}
 		}
-
+		
 		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
 		var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");           
 		var exHeads = DOMUtil.getElementsBy(function(elem) {
@@ -500,7 +504,9 @@ function HttpResponseHandler(){
 	}
 
 	function appendElementsToHead(elements) {
-		var head = document.getElementsByTagName("head")[0];
+		if (!elements) return;
+		var head = document.getElementsByTagName("head")[0]; 
+		
 		for (var i = 0; i < elements.length; i++) {
 			head.appendChild(elements[i]);
 		}
