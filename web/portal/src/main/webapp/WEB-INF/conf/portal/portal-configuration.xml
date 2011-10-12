@@ -339,10 +339,10 @@
               <string>MOPSessionManager</string>
             </field>
             <field name="maxSize">
-              <int>5000</int>
+              <int>${cache.config.MOPSessionManager.maxSize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>600</long>
+              <long>${cache.config.MOPSessionManager.liveTime:600}</long>
             </field>
           </object>
         </object-param>
@@ -362,10 +362,10 @@
               <string>MOPSessionManager</string>
             </field>
             <field name="expirationTimeout">
-              <long>600000</long>
+              <long>${cache.config.MOPSessionManager.expirationTimeout:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>5000</int>
+             <int>${cache.config.MOPSessionManager.maxNodes:5000}</int>
             </field> 
             <field name="distributed">
               <boolean>true</boolean>
@@ -390,10 +390,10 @@
               <string>NavigationService</string>
             </field>
             <field name="maxSize">
-              <int>5000</int>
+              <int>${cache.config.NavigationService.maxSize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>600</long>
+              <long>${cache.config.NavigationService.liveTime:600}</long>
             </field>
           </object>
         </object-param>
@@ -413,10 +413,10 @@
               <string>NavigationService</string>
             </field>
             <field name="expirationTimeout">
-              <long>600000</long>
+              <long>${cache.config.NavigationService.expirationTimeout:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>5000</int>
+             <int>${cache.config.NavigationService.maxNodes:5000}</int>
             </field>
             <field name="distributed">
               <boolean>true</boolean>
@@ -434,17 +434,17 @@
       <description>add Exo Cache Config</description>
       <init-params>
         <object-param>
-          <name>cache.config.NavigationService</name>
+          <name>cache.config.DescriptionService</name>
           <description>The JBoss Cache configuration for the dezcription service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
             <field name="name">
               <string>DescriptionService</string>
             </field>
             <field name="maxSize">
-              <int>5000</int>
+              <int>${cache.config.DescriptionService.maxSize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>600</long>
+              <long>${cache.config.DescriptionService.liveTime:600}</long>
             </field>
           </object>
         </object-param>
@@ -457,17 +457,17 @@
       <description>add Exo Cache Config</description>
       <init-params>
         <object-param>
-          <name>cache.config.ConfigurationService</name>
+          <name>cache.config.DescriptionService</name>
           <description>The JBoss Cache configuration for the description service</description>
           <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
               <string>DescriptionService</string>
             </field>
             <field name="expirationTimeout">
-              <long>600000</long>
+              <long>${cache.config.DescriptionService.expirationTimeout:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>5000</int>
+             <int>${cache.config.DescriptionService.maxNodes:5000}</int>
             </field>
             <field name="distributed">
               <boolean>true</boolean>
