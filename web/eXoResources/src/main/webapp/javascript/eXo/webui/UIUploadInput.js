@@ -47,7 +47,7 @@ UIUploadInput.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
 	  if(response.upload[uploadId[i]] == undefined || response.upload[uploadId[i]].percent == undefined) {
 		  this.createEntryUpload(uploadId[i], isAutoUpload);
 	  } else if(response.upload[uploadId[i]].percent == 100)  {
-		  this.showUploaded(uploadId[i], decodeURIComponent(response.upload[uploadId[i]].fileName));
+		  this.showUploaded(uploadId[i], response.upload[uploadId[i]].fileName);
 	  } 
   }
 };
@@ -102,7 +102,7 @@ UIUploadInput.prototype.showUploaded = function(id, fileName) {
   selectFileFrame.style.display = "block" ;
 
   var fileNameLabel = eXo.core.DOMUtil.findFirstDescendantByClass(selectFileFrame, "div", "FileNameLabel") ;
-  if(fileName != null) fileNameLabel.innerHTML += " " + fileName;
+  if(fileName != null) fileNameLabel.innerHTML = decodeURIComponent(fileName);
 
   var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ProgressBarFrame") ;
   progressBarFrame.style.display = "none" ;
@@ -144,7 +144,9 @@ UIUploadInput.prototype.refeshProgress = function(uploadId, isAutoUpload) {
     blueProgressBar.style.width = percent + "%" ;
     progressBarLabel.innerHTML = percent + "%" ;
     
-    if(percent == 100) this.showUploaded(id, "");
+    if(percent == 100) {
+       this.showUploaded(id, response.upload[id].fileName);
+    }
   }
   
   if(this.listUpload.length < 1) return;
@@ -196,27 +198,16 @@ UIUploadInput.prototype.abortUpload = function(id, isAutoUpload) {
 UIUploadInput.prototype.doUpload = function(id, isAutoUpload) {
   var DOMUtil = eXo.core.DOMUtil;  
   var container = parent.document.getElementById('UploadInputContainer' + id);  
-  var infoUploaded = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "FileNameLabel") ;
-	this.displayUploadButton(id);
+  this.displayUploadButton(id);
   if(id instanceof Array) {
     for(var i = 0; i < id.length; i++) {
       this.doUpload(id[i], isAutoUpload);    
     }
   } else {
     var file = document.getElementById('file' + id);
-    if(file == null || file == undefined) return;
-    if(file.value == null || file.value == '') return;
+    if (file == null || file == undefined) return;
+    if (file.value == null || file.value == '') return;
     var temp = file.value;
-
-    if (temp.indexOf('/') != -1) {
-      temp = temp.substr((temp.lastIndexOf('/') + 1), temp.length - 1) ;
-    }
-  
-    if (temp.indexOf('\\') != -1) {
-      temp = temp.substr((temp.lastIndexOf('\\') + 1), temp.length - 1) ;
-    }
-  
-    infoUploaded.innerHTML = temp ;
 
     var progressBarFrame = DOMUtil.findFirstDescendantByClass(container, "div", "ProgressBarFrame");
     progressBarFrame.style.display = "block";
