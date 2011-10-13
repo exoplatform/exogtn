@@ -68,84 +68,104 @@ public class EmailAddressValidator implements Validator
          return;
       
       String s = (String)uiInput.getValue();
-      int atIndex = s.indexOf('@'); 
-      if(atIndex == -1)
-         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-            ApplicationMessage.WARNING));
-      
-      String emailName = s.substring(0, atIndex);
-      String emailAddress = s.substring(atIndex + 1);
-      
-      if(emailAddress.lastIndexOf('.') == -1)
-         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-            ApplicationMessage.WARNING));
-      
-      if (checkEmail(emailName.toCharArray(), emailAddress.toCharArray()))
-         return;
-      throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-         ApplicationMessage.WARNING));
-   }
-   
-   private boolean checkEmail(char[] emailName, char[] emailAddress)
-   {
-      if(!isAlphabet(emailName[0]) || !isAlphabet(emailAddress[0])) return false;
-      else if(!isAlphabet(emailName[emailName.length - 1]) && !isDigit(emailName[emailName.length - 1])) return false;
-      else if(!isAlphabet(emailAddress[emailAddress.length - 1]) && !isDigit(emailAddress[emailAddress.length - 1])) return false;
-      else 
+      int atIndex = s.indexOf('@');
+      if (atIndex == -1)
       {
-         for(int i = 0; i < emailName.length; i++)
+         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
+            ApplicationMessage.WARNING));
+      }
+      
+      String localPart = s.substring(0, atIndex);
+      String domainName = s.substring(atIndex + 1);
+
+      if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+      {
+         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
+            ApplicationMessage.WARNING));
+      }
+   }
+
+   private boolean validateLocalPart(char[] localPart)
+   {
+      if(!isAlphabet(localPart[0]) || !isAlphabetOrDigit(localPart[localPart.length -1]))
+      {
+         return false;
+      }
+
+      for(int i = 1; i < localPart.length -1; i++)
+      {
+         char c = localPart[i];
+         char next = localPart[i+1];
+
+         if(isAlphabetOrDigit(c) || (isLocalPartSymbol(c) && isAlphabetOrDigit(next)))
          {
-            if(isDigit(emailName[i]) || isAlphabet(emailName[i])) continue;
-            else if(isEmailNameSymbol(emailName[i]) && !isEmailNameSymbol(emailName[i + 1])) continue;
-            return false;
+            continue;
          }
-         
-         for(int i = 0; i < emailAddress.length; i++)
-         {
-            if(isDigit(emailAddress[i]) || isAlphabet(emailAddress[i])) continue;
-            else if(isEmailAddressSymbol(emailAddress[i]) && !isEmailAddressSymbol(emailAddress[i + 1])) continue;
-            return false;
-         }
-         
-         int lastDot = -1;
-         for(int i = emailAddress.length - 1; i >=0; i--)
-         {
-            if(emailAddress[i] == '.') lastDot = i;
-         }
-         
-         if(lastDot == -1) return false;
          else
          {
-            for(int i= emailAddress.length - 1; i >= lastDot; i--)
-            {
-               if(emailAddress[i] == '-') return false;
-            }
+            return false;
          }
       }
       return true;
    }
+
+   private boolean validateDomainName(char[] domainName)
+   {
+      if(!isAlphabet(domainName[0]) || !isAlphabetOrDigit(domainName[domainName.length -1]))
+      {
+         return false;
+      }
+
+      //Check if there is no non-alphabet following the last dot
+      boolean foundValidLastDot = false;
+      for(int i = 1; i < domainName.length -1; i++)
+      {
+         char c = domainName[i];
+         char next = domainName[i+1];
+
+         if(c == '.')
+         {
+            foundValidLastDot = true;
+         }
+         else if(!isAlphabet(c))
+         {
+            foundValidLastDot = false;
+         }
+
+         if(isAlphabetOrDigit(c) || (isDomainNameSymbol(c) && isAlphabetOrDigit(next)))
+         {
+            continue;
+         }
+         else
+         {
+            return false;
+         }
+      }
+      return foundValidLastDot;
+   }
    
    private boolean isAlphabet(char c)
    {
-      if(c >= 'a' && c <='z') return true;
-      return false;
+      return c >= 'a' && c <= 'z';
    }
    
    private boolean isDigit(char c)
    {
-      if(c >= '0' && c <= '9') return true;
-      return false;
+      return c >= '0' && c <= '9';
+   }
+
+   private boolean isAlphabetOrDigit(char c)
+   {
+      return isAlphabet(c) || isDigit(c);
    }
    
-   private boolean isEmailNameSymbol(char c)
+   private boolean isLocalPartSymbol(char c)
    {
-      if(c == '_' || c == '.') return true;
-      return false;
+      return c == '_' || c == '.';
    }
    
-   private boolean isEmailAddressSymbol(char c)
+   private boolean isDomainNameSymbol(char c)
    {
-      if(c == '-' || c == '.') return true;
-      return false;
+      return c == '-' || c == '.';
    }
 }

@@ -76,44 +76,63 @@ public class UsernameValidator implements Validator
             ApplicationMessage.WARNING));
       }
       
-      if(!isAlphabet(buff[buff.length - 1]) && !isDigit(buff[buff.length - 1]))
+      if(!isAlphabetOrDigit(buff[buff.length - 1]))
       {
          Object[] args = {label, buff[buff.length - 1]};
          throw new MessageException(new ApplicationMessage("LastCharacterUsernameValidator.msg", args,
             ApplicationMessage.WARNING));
       }
       
-      for(int i = 0; i < buff.length; i++)
+      for(int i = 1; i < buff.length -1; i++)
       {
-         if(isAlphabet(buff[i]) || isDigit(buff[i])) continue;
-         else if(isSymbol(buff[i]) ) 
+         char c = buff[i];
+
+         if (isAlphabetOrDigit(c))
          {
-            if(isAlphabet(buff[i + 1]) || isDigit(buff[i + 1])) continue;
-            Object[] args = {label, buff[i], buff[i + 1]};
-            throw new MessageException(new ApplicationMessage("ConsecutiveSymbolValidator.msg", args,
-               ApplicationMessage.WARNING));
+            continue;
          }
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args,
-            ApplicationMessage.WARNING));
+
+         if (isSymbol(c))
+         {
+            char next = buff[i + 1];
+            if (isSymbol(next))
+            {
+               Object[] args = {label, buff[i], buff[i + 1]};
+               throw new MessageException(new ApplicationMessage("ConsecutiveSymbolValidator.msg", args,
+                  ApplicationMessage.WARNING));
+            }
+            else if (!isAlphabetOrDigit(next))
+            {
+               Object[] args = {label};
+               throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+            }
+         }
+         else
+         {
+            Object[] args = {label};
+            throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+         }
       }
    }
    
    private boolean isAlphabet(char c)
    {
-      if(c >= 'a' && c <='z') return true;
-      return false;
+      return c >= 'a' && c <= 'z';
    }
    
    private boolean isDigit(char c)
    {
-      if(c >= '0' && c <= '9') return true;
-      return false;
+      return c >= '0' && c <= '9';
    }
    
    private boolean isSymbol(char c)
    {
-      if(c == '_' || c == '.') return true;
-      return false;
+      return c == '_' || c == '.';
    }
+
+   private boolean isAlphabetOrDigit(char c)
+   {
+      return isAlphabet(c) || isDigit(c);
+   }
+
 }
