@@ -124,7 +124,6 @@ public class UploadService
       if (fileName == null)
          fileName = uploadId;
       fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
-      fileName = EntityEncoder.FULL.encode(fileName);
       String storeLocation = uploadLocation_ + "/" + uploadId + "." + fileName;
 
       

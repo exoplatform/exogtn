@@ -101,7 +101,8 @@ public class UploadHandler extends WebRequestHandler
             }
             value.append("\n    \"").append(uploadIds[i]).append("\": {");
             value.append("\n      \"percent\":").append('\"').append((int)percent).append("\",");
-            value.append("\n      \"fileName\":").append('\"').append(encodeName(upResource.getFileName()))
+            String fileName = EntityEncoder.FULL.encode(upResource.getFileName());
+            value.append("\n      \"fileName\":").append('\"').append(encodeName(fileName))
                .append("\"");
             value.append("\n    }");
             if (i < uploadIds.length - 1)
