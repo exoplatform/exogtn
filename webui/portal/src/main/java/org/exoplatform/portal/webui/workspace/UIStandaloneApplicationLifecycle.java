@@ -125,7 +125,6 @@ public class UIStandaloneApplicationLifecycle extends Lifecycle<UIStandaloneAppl
       ResourceResolver resolver = uicomponent.getTemplateResourceResolver(context, template);
       WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, context);
       bcontext.put(UIComponent.UICOMPONENT, uicomponent);
-      bcontext.put(uicomponent.getUIComponentName(), uicomponent);
       renderTemplate(template, bcontext);
    }
 
