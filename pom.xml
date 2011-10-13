@@ -82,6 +82,9 @@
 
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
+      
+      <!-- Required for Maven 3 to deploy in webdav -->
+      <version.wagon-webdav-jackrabbit>1.0-beta-7</version.wagon-webdav-jackrabbit>
 
      <!-- maven-release-plugin -->
      <!-- we don't distribute this version of gatein thus we don't generate
