@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.container;
 
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -39,8 +38,7 @@ public class UIContainerActionListener
       {
 
          UIContainer uiContainer = event.getSource();
-         UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIContainerForm containerForm = uiMaskWS.createUIComponent(UIContainerForm.class, null, null);
          containerForm.setValues(uiContainer);
