@@ -37,7 +37,7 @@ public class URLValidator implements Validator, Serializable
 {
 
    static private final String IP_REGEX =
-      "(((((25[0-5])|(2[0-4][0-9])|([01]?[0-9]?[0-9]))\\.){3}((25[0-4])|(2[0-4][0-9])|(1?[1-9]?[1-9])))|(0\\.){3}0)";
+      "(((((25[0-5])|(2[0-4][0-9])|([01]?[0-9]?[0-9]))\\.){3}((25[0-4])|(2[0-4][0-9])|((1?[1-9]?[1-9])|([1-9]0))))|(0\\.){3}0)";
 
    static public final String URL_REGEX = "^((ht|f)tp(s?)://)" //protocol 
       + "(\\w+(:\\w+)?@)?" //username:password@

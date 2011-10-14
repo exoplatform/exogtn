@@ -54,6 +54,8 @@ public class TestWebuiValidator extends TestCase
       assertTrue(expected(validator, "ftps://255.255.0.1"));
       assertTrue(expected(validator, "ftp://0.0.0.0"));
       assertTrue(expected(validator, "http://127.0.0.1"));
+      assertTrue(expected(validator, "https://192.168.4.90"));
+      assertTrue(expected(validator, "https://192.168.4.90:8080"));
       assertTrue(expected(validator, "http://127.0.0.1:8080"));
       assertFalse(expected(validator, "http://127.0.0.01"));
       assertFalse(expected(validator, "ftp://255.255.255.255"));
