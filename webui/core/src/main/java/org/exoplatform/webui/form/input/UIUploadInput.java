@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.exoplatform.upload.UploadService.UploadUnit;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.form.UIFormInputBase;
@@ -65,6 +66,11 @@ public class UIUploadInput extends UIFormInputBase<String>
 
    public UIUploadInput(String name, String bindingExpression,int limitFile, int limitSize)
    {
+      this(name, bindingExpression, limitFile, limitSize, UploadUnit.MB);
+   }
+   
+   public UIUploadInput(String name, String bindingExpression, int limitFile, int limitSize, UploadUnit unit)
+   {
       super(name, bindingExpression, String.class);
       if(limitFile > 1) this.limitFile = limitFile ;
       uploadId = new String[this.limitFile] ;
@@ -75,7 +81,7 @@ public class UIUploadInput extends UIFormInputBase<String>
       UploadService service = getApplicationComponent(UploadService.class);
       for(int i = 0; i < uploadId.length; i++)
       {
-         service.addUploadLimit(uploadId[i], Integer.valueOf(limitSize));
+         service.addUploadLimit(uploadId[i], Integer.valueOf(limitSize), unit);
       }
       setComponentConfig(UIUploadInput.class, null);
    }

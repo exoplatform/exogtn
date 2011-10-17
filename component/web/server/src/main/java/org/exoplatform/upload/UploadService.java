@@ -56,19 +56,24 @@ public class UploadService
 
    private String uploadLocation_;
 
-   private int defaultUploadLimitMB_;
+   private UploadLimit defaultUploadLimitMB_;
 
-   private Map<String, Integer> uploadLimitsMB_ = new LinkedHashMap<String, Integer>();
+   private Map<String, UploadLimit> uploadLimits = new LinkedHashMap<String, UploadLimit>();
    
    public static String UPLOAD_RESOURCES_STACK = "uploadResourcesStack";
-
+   
+   public static enum UploadUnit 
+   {
+      KB, MB, GB
+   };
+   
    public UploadService(PortalContainerInfo pinfo, InitParams params) throws Exception
    {
       String tmpDir = System.getProperty("java.io.tmpdir");
       if (params == null || params.getValueParam("upload.limit.size") == null)
-         defaultUploadLimitMB_ = 0; // 0 means unlimited
+         defaultUploadLimitMB_ = new UploadLimit(0, UploadUnit.MB); // 0 means unlimited
       else
-         defaultUploadLimitMB_ = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
+         defaultUploadLimitMB_ = new UploadLimit(Integer.parseInt(params.getValueParam("upload.limit.size").getValue()), UploadUnit.MB);
       uploadLocation_ = tmpDir + "/" + pinfo.getContainerName() + "/eXoUpload";
       File uploadDir = new File(uploadLocation_);
       if (!uploadDir.exists())
@@ -235,7 +240,7 @@ public class UploadService
          for (String id : uploadIds)
          {
             removeUploadResource(id);
-            uploadLimitsMB_.remove(id);
+            uploadLimits.remove(id);
          }
       }
    }
@@ -286,10 +291,23 @@ public class UploadService
     */
    public void addUploadLimit(String uploadId, Integer limitMB)
    {
-      if (limitMB == null)
-         uploadLimitsMB_.put(uploadId, Integer.valueOf(defaultUploadLimitMB_));
+      addUploadLimit(uploadId, limitMB, UploadUnit.MB);
+   }
+   
+   public void addUploadLimit(String uploadId, Integer limit, UploadUnit unit) 
+   {
+      if (limit == null)
+      {
+         uploadLimits.put(uploadId, defaultUploadLimitMB_);
+      }
+      else if(unit == null)
+      {
+         uploadLimits.put(uploadId, new UploadLimit(limit, UploadUnit.MB));
+      }
       else
-         uploadLimitsMB_.put(uploadId, limitMB);
+      {
+         uploadLimits.put(uploadId, new UploadLimit(limit, unit));
+      }
    }
 
    /**
@@ -297,9 +315,9 @@ public class UploadService
     * 
     * @return all upload limit sizes
     */
-   public Map<String, Integer> getUploadLimitsMB()
+   public Map<String, UploadLimit> getUploadLimits()
    {
-      return uploadLimitsMB_;
+      return uploadLimits;
    }
 
    private ServletFileUpload makeServletFileUpload(final UploadResource upResource)
@@ -330,26 +348,61 @@ public class UploadService
    private boolean isLimited(UploadResource upResource, double contentLength)
    {
       // by default, use the limit set in the service
-      int limitMB = defaultUploadLimitMB_;
+      UploadLimit limit = defaultUploadLimitMB_;
       // if the limit is set in the request (specific for this upload) then use
       // this value instead of the default one
-      if (uploadLimitsMB_.containsKey(upResource.getUploadId()))
+      if (uploadLimits.containsKey(upResource.getUploadId()))
       {
-         limitMB = uploadLimitsMB_.get(upResource.getUploadId()).intValue();
+         limit = uploadLimits.get(upResource.getUploadId());
       }
 
-      double estimatedSizeMB = (contentLength / 1024) / 1024;
-      if (limitMB > 0 && estimatedSizeMB > limitMB)
+      double estimatedSize = contentLength / limit.division;
+      if (limit.getLimit() > 0 && estimatedSize > limit.getLimit())
       { // a limit set to 0 means unlimited         
          if (log.isDebugEnabled())
          {
-            log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > " + limitMB
-               + " MB");
+            log.debug("Upload cancelled because file bigger than size limit : " + estimatedSize + " " + limit.unit + " > " + limit.getLimit()
+               + " " + limit.unit);
          }
          return true;
       }
       return false;
    }
 
-   
+   public static class UploadLimit
+   {
+      private int limit;
+      
+      private int division;
+      
+      private UploadUnit unit;
+      
+      public UploadLimit(int limit, UploadUnit unit)
+      {
+         this.limit = limit;
+         this.unit = unit;
+         if(unit == UploadUnit.KB) 
+         {
+            division = 1024;
+         }
+         else if(unit == UploadUnit.MB)
+         {
+            division = 1024 * 1024;
+         }
+         else if(unit == UploadUnit.GB)
+         {
+            division = 1024 * 1024 * 1024;
+         }
+      }
+      
+      public int getLimit()
+      {
+         return limit;
+      }
+      
+      public String getUnit()
+      {
+         return unit.toString();
+      }
+   }
 }

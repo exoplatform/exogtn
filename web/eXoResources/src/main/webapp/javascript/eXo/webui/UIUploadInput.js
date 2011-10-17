@@ -108,17 +108,17 @@ UIUploadInput.prototype.showUploaded = function(id, fileName) {
   progressBarFrame.style.display = "none" ;
 };
 
-UIUploadInput.prototype.refeshProgress = function(uploadId, isAutoUpload) {
+UIUploadInput.prototype.refreshProgress = function(uploadId, isAutoUpload) {
   var list =  this.listUpload;
   if(list.length < 1) return;
-  var url = this.progressURL + uploadId;
+  var url = this.progressURL;
 
   for(var i = 0; i < list.length; i++){
     url = url + "&uploadId=" + list[i];
   }
   var responseText = ajaxAsyncGetRequest(url, false);
   if(this.listUpload.length > 0) {
-    setTimeout("eXo.webui.UIUploadInput.refeshProgress('" +uploadId+ "', " +isAutoUpload+ ");", this.refreshTime); 
+    setTimeout("eXo.webui.UIUploadInput.refreshProgress('" +uploadId+ "', " +isAutoUpload+ ");", this.refreshTime); 
   }
     
   var response;
@@ -133,7 +133,9 @@ UIUploadInput.prototype.refeshProgress = function(uploadId, isAutoUpload) {
   	if (response.upload[id].status == "failed") {
   		this.abortUpload(id, isAutoUpload);
   		var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div", "LimitMessage").innerHTML ;
-  		alert(message.replace("{0}", response.upload[id].size)) ;
+  		message = message.replace("{0}", response.upload[id].size);
+  		message = message.replace("{1}", response.upload[id].unit);
+  		alert(message);
   		continue;
   	}
     var element = document.getElementById('ProgressIframe' + id);
@@ -232,7 +234,7 @@ UIUploadInput.prototype.doUpload = function(id, isAutoUpload) {
     
     if(this.listUpload.length == 0) {
       this.listUpload.push(id);
-      setTimeout("eXo.webui.UIUploadInput.refeshProgress('" + id + "', " + isAutoUpload + ");", this.refreshTime);
+      setTimeout("eXo.webui.UIUploadInput.refreshProgress('" + id + "', " + isAutoUpload + ");", this.refreshTime);
     } else {
       this.listUpload.push(id);
     }

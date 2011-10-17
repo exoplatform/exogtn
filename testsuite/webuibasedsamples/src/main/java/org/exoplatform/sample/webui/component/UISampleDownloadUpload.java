@@ -4,6 +4,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService.UploadUnit;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -35,10 +36,10 @@ public class UISampleDownloadUpload extends UIForm
    public UISampleDownloadUpload() throws Exception
    {
       addUIFormInput(new UIFormUploadInput("name0", "value0"));
-      addUIFormInput(new UIFormUploadInput("name1", "value1", 100));
+      addUIFormInput(new UIFormUploadInput("name1", "value1", 1));
       addUIFormInput(new UIFormUploadInput("name2", "value2", 200));
       
-      addUIFormInput(new UIUploadInput("name3", "name3", 2, 300));
+      addUIFormInput(new UIUploadInput("name3", "name3", 2, 300, UploadUnit.KB));
       UIUploadInput input = new UIUploadInput("name4", "name4", 2, 300);
       input.setAutoUpload(false);
       addUIFormInput(input);
