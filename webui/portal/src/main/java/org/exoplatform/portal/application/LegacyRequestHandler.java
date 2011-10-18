@@ -92,27 +92,25 @@ public class LegacyRequestHandler extends WebRequestHandler
       SiteKey siteKey = SiteKey.portal(requestSiteName);
       String uri = requestPath;
 
-      // Resolve the user node
-      UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
-      if (cfg != null)
+      // Resolve the user node if node path is indicated
+      if (!requestPath.equals(""))
       {
-         UserPortal userPortal = cfg.getUserPortal();
-         UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
-         UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
-         
-         //         
-         if (userNode != null)
+         UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
+         if (cfg != null)
          {
-            siteKey = userNode.getNavigation().getKey();
-            uri = userNode.getURI();
-         }
-         else
-         {
-            uri = "";
-         }
-      }      
+            UserPortal userPortal = cfg.getUserPortal();
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
+            UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
 
-      //
+            if (userNode != null)
+            {
+               siteKey = userNode.getNavigation().getKey();
+               uri = userNode.getURI();
+            }
+         }
+      }
+
+     //
       PortalURLContext urlContext = new PortalURLContext(context, siteKey);
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
