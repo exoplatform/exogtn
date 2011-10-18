@@ -123,31 +123,23 @@ a {
 }
 
 .AjaxLoadingMask {
-  width: 180px; height: 110px;
-  background: white;
-  border: 1px solid #66667e;
-  padding: 1px;
-}
-
-.AjaxLoadingMask .LoadingContainer {
-  height: 108px;
-  background: #ffffff;
-  border: solid 1px #a8a9bb;
+  background: #4c4c4c;
+  -moz-border-radius: 0px 0px 7px 7px;
+  -webkit-border-radius: 0px 0px 7px 7px;
+  border-radius: 0px 0px 7px 7px;
+  padding: 10px 20px;
+  opacity: 0.9;
 }
 
 .AjaxLoadingMask .LoadingText {
-  text-align: center;
-  padding: 10px 0px 5px 0px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.AjaxLoadingMask .LoadingProgressBar {
-  width: 32px; height: 40px;
-  background: url('../../../background/LoadingProgress.gif') no-repeat center;
-  margin: auto;
-}
-
-.AjaxLoadingMask .UIAction .ActionButton{
-  float: none;
+.AjaxLoadingMask .CloseLoadIcon {
+  background: url("/eXoResources/skin/DefaultSkin/background/CloseLoadIcon.png") no-repeat scroll center center transparent;    
+  padding: 0px 6px;
 }
 
 .FloatLeft {

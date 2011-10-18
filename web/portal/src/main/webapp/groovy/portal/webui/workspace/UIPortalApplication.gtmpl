@@ -117,8 +117,5 @@
 			
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
 			<span class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></span>
-			<span class="LoadingProgressBar"></span>
-
-			<a href="javascript:ajaxAbort();" class="CloseLoadIcon">&nbsp;</a>
-		
+			<a href="javascript:ajaxAbort();" class="CloseLoadIcon">&nbsp;</a>		
 		</div>
