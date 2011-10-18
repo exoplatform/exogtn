@@ -276,7 +276,7 @@
             <imagedata fileref="images/editPortlet1.png" format="PNG" align="center" scalefit="1" contentwidth="90mm"/>
           </imageobject>
         </mediaobject>
-        <para>Normally, a portlet has four tabs: Portlet Setting, Select Icon, Decoration Themes and Access Permission.
+        <para>Normally, a portlet has four tabs: Window Setting, Select Icon, Decoration Themes and Access Permission.
           In addition, some portlets may also have Edit Mode or Preferences. The administrator can change the interface
           of a portlet by changing values in the Edit Mode tab or in the Preferences Tab.
         </para>
@@ -291,10 +291,10 @@
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Portlet Title</term>
+            <term>Window Title</term>
             <listitem>
               <para>
-                The portlet title with the length between 3 and 60 characters..
+                The window title with the length between 3 and 60 characters..
               </para>
             </listitem>
           </varlistentry>
