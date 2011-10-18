@@ -396,11 +396,18 @@ function UIDashboard() {
 				DOMUtil.findFirstChildByClass(categories[i], "div", "ItemsContainer").style.display = "none";
 			}
 			DOMUtil.findFirstChildByClass(category, "div", "GadgetTab").className = "GadgetTab " + selectedType;
-			categoryContent.style.display = "block";
+			categoryContent.style.display = "block";	
 		} else {
 			DOMUtil.findFirstChildByClass(category, "div", "GadgetTab").className = "GadgetTab " + normalStyle;
 			categoryContent.style.display = "none";
 		}
+		
+		var popupContent = DOMUtil.findAncestorByClass(clickElement, "PopupContent");
+		if(eXo.core.Browser.getBrowserHeight() - 100 < categoriesContainer.offsetHeight) {
+			popupContent.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
+		}	else {
+			popupContent.style.height = "auto";
+		}	
 	};
 	/**
 	 * Change disabled object to enable state
