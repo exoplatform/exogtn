@@ -37,7 +37,7 @@
 		<div class="FileName">
 			<div class="FileNameLabel"><span></span></div>
 		</div>
-		<div class="RemoveFile" title="Remove Uploaded" onclick="eXo.webui.UIUploadInput.deleteUpload('<%=uploadId[i];%>', <%=isAutoUpload;%>);"></div>
+		<div class="RemoveFile" title="<%= _ctx.appRes("UIFormUploadInput.label.remove"); %>" onclick="eXo.webui.UIUploadInput.deleteUpload('<%=uploadId[i];%>', <%=isAutoUpload;%>);"></div>
 	</div>
 	<iframe height="0" width="0" name="UploadIFrame<%=uploadId[i];%>" id="UploadIFrame<%=uploadId[i];%>" style="display: none;">
 		<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
