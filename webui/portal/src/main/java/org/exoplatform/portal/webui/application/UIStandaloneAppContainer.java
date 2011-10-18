@@ -28,6 +28,7 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -161,7 +162,7 @@ public class UIStandaloneAppContainer extends UIContainer
             tokenService.deleteToken(token);
          }
 
-         req.getSession().invalidate();
+         LogoutControl.wantLogout();
          Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);

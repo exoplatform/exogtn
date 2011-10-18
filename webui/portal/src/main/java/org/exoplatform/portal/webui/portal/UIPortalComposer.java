@@ -50,6 +50,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -506,7 +507,7 @@ public class UIPortalComposer extends UIContainer
             if (editPortal.getName().equals(prContext.getPortalOwner()))
             {
                HttpServletRequest request = prContext.getRequest();
-               request.getSession().invalidate();
+               LogoutControl.wantLogout();
                prContext.setResponseComplete(true);
                prContext.getResponse().sendRedirect(request.getContextPath());
                return;
