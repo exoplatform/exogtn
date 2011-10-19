@@ -53,8 +53,7 @@
 
 .UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetail {
 	border: none; 
-	height: 227px; 
-	overflow: auto;
+	height: auto; 
 	margin: 0px; 
 }
 
