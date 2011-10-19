@@ -300,6 +300,8 @@
 
 .UIWizard .TreeContainer {
 	height: 290px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .UIWizard .UITrees .Node .NodeSelected {
