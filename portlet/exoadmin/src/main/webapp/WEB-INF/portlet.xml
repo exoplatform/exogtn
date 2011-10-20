@@ -142,6 +142,12 @@
          <short-title>Group Navigation Portlet</short-title>
          <keywords>Administration</keywords>
       </portlet-info>
+      <portlet-preferences>
+       <preference>
+         <name>level</name>
+         <value>2</value>
+       </preference>
+     </portlet-preferences>
       <supported-publishing-event>
          <name>NavigationChange</name>
       </supported-publishing-event>
@@ -171,6 +177,13 @@
          <short-title>Portal Navigation Portlet</short-title>
          <keywords>System</keywords>
       </portlet-info>
+      
+      <portlet-preferences>
+       <preference>
+         <name>level</name>
+         <value>2</value>
+       </preference>
+     </portlet-preferences>
    </portlet>
 
    <portlet>

@@ -102,8 +102,9 @@ public class UINavigationNodeSelector extends UIContainer
    
    private Map<String, Map<Locale, State>> userNodeLabels;
 
-   private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
-
+   private static final Scope DEFAULT_SCOPE = Scope.GRANDCHILDREN;
+   private Scope navigationScope = DEFAULT_SCOPE;
+   
    public UINavigationNodeSelector() throws Exception
    {
       UIRightClickPopupMenu rightClickPopup =
@@ -152,12 +153,12 @@ public class UINavigationNodeSelector extends UIContainer
       try
       {
          this.rootNode =
-            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, NODE_SCOPE, filterConfig, null));
+            new TreeNode(edittedNavigation, userPortal.getNode(edittedNavigation, navigationScope, filterConfig, null));
          
          TreeNode node = this.rootNode;
          if (this.rootNode.getChildren().size() > 0)
          {
-            node = rebaseNode(this.rootNode.getChild(0), NODE_SCOPE);
+            node = rebaseNode(this.rootNode.getChild(0), navigationScope);
             if (node == null)
             {
                initTreeData();
@@ -305,6 +306,16 @@ public class UINavigationNodeSelector extends UIContainer
       return getRootNode().findNode(nodeID);
    }
    
+   public void setScope(Scope scope)
+   {
+      this.navigationScope = scope;
+   }
+   
+   public Scope getScope()
+   {
+      return this.navigationScope;
+   }
+   
    private void invokeI18NizedLabels(TreeNode node)
    {
       DescriptionService descriptionService = this.getApplicationComponent(DescriptionService.class);
@@ -324,7 +335,7 @@ public class UINavigationNodeSelector extends UIContainer
    {
       protected TreeNode rebaseNode(TreeNode node, UINavigationNodeSelector selector) throws Exception
       {
-         return rebaseNode(node, UINavigationNodeSelector.NODE_SCOPE, selector);
+         return rebaseNode(node, selector.getScope(), selector);
       }
       
       protected TreeNode rebaseNode(TreeNode node, Scope scope, UINavigationNodeSelector selector) throws Exception
