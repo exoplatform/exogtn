@@ -42,7 +42,10 @@ import org.gatein.common.util.ParameterValidation;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl"
+@ComponentConfig(
+   lifecycle = UIApplicationLifecycle.class,
+   template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl",
+   events = {@EventConfig(listeners = UIUserToolBarGroupPortlet.NavigationChangeActionListener.class)}
 )
 public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
 {
