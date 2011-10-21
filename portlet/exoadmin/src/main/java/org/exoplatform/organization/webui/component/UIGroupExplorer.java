@@ -65,8 +65,8 @@ public class UIGroupExplorer extends UIContainer
       sibblingsGroup_ = service.getGroupHandler().findGroups(null);
 
       //  if not administrator
-      if (!GroupManagement.isAdministrator(null))
-         sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
+      if (!GroupManagement.isAdministrator())
+         sibblingsGroup_ = GroupManagement.getRelatedGroups(sibblingsGroup_);
 
       tree.setSibbling((List)convertGroups(sibblingsGroup_));
       tree.setIcon("GroupAdminIcon");
@@ -94,8 +94,8 @@ public class UIGroupExplorer extends UIContainer
       {
          sibblingsGroup_ = service.getGroupHandler().findGroups(null);
          //    if not administrator
-         if (!GroupManagement.isAdministrator(null))
-            sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
+         if (!GroupManagement.isAdministrator())
+            sibblingsGroup_ = GroupManagement.getRelatedGroups(sibblingsGroup_);
          uiTree.setSibbling((List)convertGroups(sibblingsGroup_));
          uiTree.setSelected(null);
          uiTree.setChildren(null);
@@ -124,10 +124,10 @@ public class UIGroupExplorer extends UIContainer
       sibblingsGroup_ = service.getGroupHandler().findGroups(parentGroup);
 
       // if not administrator
-      if (!GroupManagement.isAdministrator(null))
+      if (!GroupManagement.isAdministrator())
       {
-         childrenGroup_ = GroupManagement.getRelatedGroups(null, childrenGroup_);
-         sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
+         childrenGroup_ = GroupManagement.getRelatedGroups(childrenGroup_);
+         sibblingsGroup_ = GroupManagement.getRelatedGroups(sibblingsGroup_);
       }
 
       for (Object group : sibblingsGroup_)

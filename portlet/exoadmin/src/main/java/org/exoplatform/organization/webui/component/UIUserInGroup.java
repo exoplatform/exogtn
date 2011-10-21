@@ -147,11 +147,10 @@ public class UIUserInGroup extends UIContainer
       if (group != null)
       {
          String groupId = group.getId();
-         String currentUser = Util.getPortalRequestContext().getRemoteUser();
 
          // show action if user is administrator or manager of current group
          boolean showAction =
-            GroupManagement.isAdministrator(currentUser) || GroupManagement.isManagerOfGroup(currentUser, groupId);
+            GroupManagement.isAdministrator() || GroupManagement.isManagerOfGroup(groupId);
 
          if (!showAction)
          {

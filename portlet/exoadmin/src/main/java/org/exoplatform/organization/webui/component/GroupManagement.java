@@ -53,11 +53,10 @@ public class GroupManagement
       return acl;
    }
 
-   public static boolean isMembershipOfGroup(String username, String membership, String groupId) throws Exception
+   private static boolean isMembershipOfGroup(String membership, String groupId) throws Exception
    {
       boolean ret = false;
-      if (username == null)
-         username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
+      String username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
       OrganizationService orgService = getOrganizationService();
       Collection groups = orgService.getGroupHandler().findGroupByMembership(username, membership);
       for (Object group : groups)
@@ -71,16 +70,14 @@ public class GroupManagement
       return ret;
    }
 
-   public static boolean isManagerOfGroup(String username, String groupId) throws Exception
+   public static boolean isManagerOfGroup(String groupId) throws Exception
    {
-      return isMembershipOfGroup(username, getUserACL().getAdminMSType(), groupId);
+      return isMembershipOfGroup(getUserACL().getAdminMSType(), groupId);
    }
 
-   public static boolean isMemberOfGroup(String username, String groupId) throws Exception
+   private static boolean isMemberOfGroup(String username, String groupId) throws Exception
    {
       boolean ret = false;
-      if (username == null)
-         username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
       OrganizationService orgService = getOrganizationService();
       Collection groups = orgService.getGroupHandler().findGroupsOfUser(username);
       for (Object group : groups)
@@ -94,28 +91,17 @@ public class GroupManagement
       return ret;
    }
 
+   /**
+    * @deprecated Use {@link UserACL#isUserInGroup(String)} instead
+    */
    public static boolean isRelatedOfGroup(String username, String groupId) throws Exception
    {
-      boolean ret = false;
-      if (username == null)
-         username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
-      OrganizationService orgService = getOrganizationService();
-      Collection groups = orgService.getGroupHandler().findGroupsOfUser(username);
-      for (Object group : groups)
-      {
-         if (((Group)group).getId().startsWith(groupId))
-         {
-            ret = true;
-            break;
-         }
-      }
-      return ret;
+      throw new UnsupportedOperationException("This method is not supported anymore");
    }
 
-   public static Collection getRelatedGroups(String username, Collection groups) throws Exception
+   public static Collection getRelatedGroups(Collection groups) throws Exception
    {
-      if (username == null)
-         username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
+      String username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
       List relatedGroups = new ArrayList();
       OrganizationService orgService = getOrganizationService();
       Collection userGroups = orgService.getGroupHandler().findGroupsOfUser(username);
@@ -142,30 +128,17 @@ public class GroupManagement
       return ret;
    }
 
-   public static boolean isAdministrator(String username) throws Exception
+   public static boolean isAdministrator() throws Exception
    {
-      if (username == null)
-         username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
-      if (username.equals(getUserACL().getSuperUser())) 
+      String username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
+      if (getUserACL().getSuperUser().equals(username))
+      {
          return true;
+      }
       return isMemberOfGroup(username, getUserACL().getAdminGroups());
    }
 
-   //  public static boolean isSuperUser(String username) throws Exception {
-   //    if (username == null)
-   //      username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
-   //    return isMemberOfGroup(username, getUserACL().getAdminGroups());
-   //  }
-
-   //  public static boolean isPlatformAdminGroup(String groupId) {
-   //    return groupId.equals(PLATFORM_ADMIN_GROUP);
-   //  }
-   //  
-   //  public static boolean isPlatformUsersGroup(String groupId) {
-   //    return groupId.equals(PLATFORM_USERS_GROUP);
-   //  }
-
-   public static boolean isSuperUserOfGroup(String username, String groupId)
+   public static boolean isSuperUserOfGroup(String groupId)
    {
       try
       {
@@ -175,7 +148,7 @@ public class GroupManagement
          //        return false;
          //      
          boolean ret =
-            (GroupManagement.isManagerOfGroup(username, groupId) || (GroupManagement.isAdministrator(username)));
+            (GroupManagement.isManagerOfGroup(groupId) || (GroupManagement.isAdministrator()));
          // finally, user must be manager of that group
          return ret;
       }

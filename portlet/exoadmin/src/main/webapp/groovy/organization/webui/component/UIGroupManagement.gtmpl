@@ -21,8 +21,8 @@
 					 String groupId = null;
 					 if (group != null)
 					 		groupId = group.getId();
-					 if (GroupManagement.isAdministrator(null) ||
-					 		((groupId != null) && GroupManagement.isSuperUserOfGroup(null, groupId))) {
+					 if (GroupManagement.isAdministrator() ||
+					 		((groupId != null) && GroupManagement.isSuperUserOfGroup(groupId))) {
 				%>
 						<% actionLink = uicomponent.event("DeleteGroup","delete"); %>
 						<a class="TreeActionIcon RemoveGroupIcon" href="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.DeleteGroup")%>"><span></span></a>
