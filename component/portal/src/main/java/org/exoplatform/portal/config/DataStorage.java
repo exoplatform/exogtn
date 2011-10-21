@@ -224,6 +224,8 @@ public interface DataStorage
     * @throws Exception any exception
     */
    public List<String> getAllPortalNames() throws Exception;
+   
+   public List<String> getAllGroupNames() throws Exception;
 
    /**
     * Returns a String array that contains two elements. The first one is the site type and the second one is site name. <br/>
