@@ -123,7 +123,7 @@
 <dependency><groupId>antlr</groupId><artifactId>antlr</artifactId><version>${antlr.version}</version><type>jar</type></dependency><!-- 2.7.6rc1-->
 <dependency><groupId>cglib</groupId><artifactId>cglib</artifactId><version>${cglib.version}</version><type>jar</type></dependency><!-- 2.2-->
 <dependency><groupId>org.exoplatform.tool</groupId><artifactId>exo.tool.webunit</artifactId><version>${exo.tool.webunit.version}</version><type>jar</type></dependency><!-- 3.4.GA-->
-<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat6</artifactId><version>2.1.0-Beta06</version><type>jar</type></dependency>
+<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat6</artifactId><version>2.1.0-GA</version><type>jar</type></dependency>
 
 <!-- JBoss PKG -->
 <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-log4j12</artifactId><version>${org.slf4j.version}</version><type>jar</type></dependency><!-- 1.5.8-->
