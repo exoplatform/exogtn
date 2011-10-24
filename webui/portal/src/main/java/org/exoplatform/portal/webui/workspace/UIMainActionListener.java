@@ -19,10 +19,11 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import java.lang.reflect.Method;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -31,9 +32,7 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
-import org.exoplatform.portal.webui.page.UIPageFactory;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -47,7 +46,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import java.lang.reflect.Method;
 
 /**
  * Created by The eXo Platform SAS 
@@ -57,59 +55,6 @@ import java.lang.reflect.Method;
  */
 public class UIMainActionListener
 {
-
-   static public class EditCurrentPageActionListener extends EventListener<UIWorkingWorkspace>
-   {
-      public void execute(Event<UIWorkingWorkspace> event) throws Exception
-      {
-         UIPortalApplication uiApp = Util.getUIPortalApplication();
-         UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-
-         // check edit permission for page
-         UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
-         UIPage uiPage = (UIPage)pageBody.getUIComponent();
-         if (uiPage == null)
-         {
-            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", null));
-            return;
-         }
-         Page page = PortalDataMapper.toPageModel(uiPage);
-
-         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(page))
-         {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditPage-Permission", null));
-            return;
-         }
-
-         uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-
-         UIPortalComposer portalComposer =
-            uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
-         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
-         portalComposer.setShowControl(true);
-         portalComposer.setEditted(false);
-         portalComposer.setCollapse(false);
-
-         UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         uiToolPanel.setShowMaskLayer(false);
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-
-         // We clone the edited UIPage object, that is required for Abort action
-         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
-         UIPage newUIPage = clazz.createUIPage(null);
-         PortalDataMapper.toUIPage(newUIPage, page);
-         uiToolPanel.setWorkingComponent(newUIPage);
-
-         // Remove current UIPage from UIPageBody
-         pageBody.setUIComponent(null);
-
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-         Util.getPortalRequestContext().setFullRender(true);
-      }
-   }
-
    static public class PageCreationWizardActionListener extends EventListener<UIWorkingWorkspace>
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
