@@ -21,34 +21,25 @@ package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.StandaloneAppRequestContext;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.web.login.InitiateLoginServlet;
-import org.exoplatform.web.security.security.AbstractTokenService;
-import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.url.MimeType;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.url.ComponentURL;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @ComponentConfig(lifecycle = UIStandaloneApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl")
 public class UIStandaloneApplication extends UIApplication
@@ -65,6 +56,10 @@ public class UIStandaloneApplication extends UIApplication
    private Orientation orientation_ = Orientation.LT;
 
    private boolean isSessionOpen = false;
+
+   public static final UIComponent EMPTY_COMPONENT = new UIComponent(){
+      public String getId() { return "{portal:componentId}"; };
+   };
 
    public UIStandaloneApplication() throws Exception
    {
@@ -192,5 +187,27 @@ public class UIStandaloneApplication extends UIApplication
    public int getModeState()
    {
       return modeState;
+   }
+
+   /**
+    * Return the portal url template which will be sent to client ( browser )
+    * and used for JS based portal url generation.
+    *
+    * <p>The portal url template are calculated base on the current request and site state.
+    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&portal:action={portal:action}" ;</code>
+    *
+    * @return return portal url template
+    * @throws java.io.UnsupportedEncodingException
+    */
+   public String getPortalURLTemplate() throws UnsupportedEncodingException
+   {
+      PortalRequestContext pcontext = Util.getPortalRequestContext();
+      ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
+      urlTemplate.setMimeType(MimeType.PLAIN);
+      urlTemplate.setPath(pcontext.getNodePath());
+      urlTemplate.setResource(EMPTY_COMPONENT);
+      urlTemplate.setAction("{portal:action}");
+
+      return urlTemplate.toString();
    }
 }
