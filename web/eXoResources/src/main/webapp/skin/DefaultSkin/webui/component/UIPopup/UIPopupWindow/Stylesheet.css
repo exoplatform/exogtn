@@ -48,14 +48,13 @@
 }
 
 .UIPopupWindow .PopupTitle {
-	margin: 4px 25px 0px 9px; /* orientation=lt */
-	margin: 4px 9px 0px 25px; /* orientation=rt */
-	line-height: 20px; 
+	margin: 0 25px 0px 9px; /* orientation=lt */
+	margin: 0 9px 0px 25px; /* orientation=rt */
+	line-height: 30px; 
 	vertical-align: middle;
 	cursor: move;
 	font-size: 12px;
 	font-weight: bold;
-	font-family: Arial, Verdana, Verdana, sans-serif;
 	color: #515151;
 	display: block;
 }
@@ -63,8 +62,8 @@
 .UIPopupWindow .CloseButton {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	margin: 5px 3px 0px 0px; /* orientation=lt */
-	margin: 5px 0px 0px 3px; /* orientation=rt */
+	margin: 5px 5px 0px 0px; /* orientation=lt */
+	margin: 5px 0px 0px 5px; /* orientation=rt */
 	cursor: pointer;
 	width: 18px; 
 	height: 18px;
@@ -75,10 +74,9 @@
 .UIPopupWindow > .OverflowContainer {
 	background: url('background/PortalComposer.png') repeat-x left top;
 	height: 30px;
-	padding-top: 5px;
-	-moz-border-radius: 5px 5px 0px 0px;
-	-webkit-border-radius: 5px 5px 0px 0px;
-	border-radius: 5px 5px 0px 0px;
+	-moz-border-radius: 3px 3px 0px 0px;
+	-webkit-border-radius: 3px 3px 0px 0px;
+	border-radius: 3px 3px 0px 0px;
 }
 
 .UIPopupWindow .PopupContent {
