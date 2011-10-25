@@ -22,16 +22,22 @@ function UIVirtualList() {}
 UIVirtualList.prototype.init = function(componentId) {
   var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;  
-  uiVirtualList.style.height = "300px";    
+  
+  var virtualHeight = 300;     
   
   //If parent of virtualList have style.display = none --> can't get virtualList's height
   var tmp = uiVirtualList;
-  if (uiVirtualList.offsetHeight == 0) {
+  if (tmp.offsetHeight == 0) {
 	  tmp = uiVirtualList.cloneNode(true);
 	  tmp.style.visibility = "hidden";
+	  tmp.style.display = "block";
 	  document.body.appendChild(tmp);
-  }
-  var virtualHeight = tmp.offsetHeight;
+  }  
+  
+  if (eXo.core.DOMUtil.getStyle(tmp, "height")) {
+	  virtualHeight = tmp.offsetHeight;	  
+  }    
+  uiVirtualList.style.height = virtualHeight + "px";
   
   var children = eXo.core.DOMUtil.getChildrenByTagName(tmp,"div");  
   var childrenHeight = 0;

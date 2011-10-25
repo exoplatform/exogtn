@@ -82,10 +82,16 @@
       <portlet>
         <application-ref>exoadmin</application-ref>
         <portlet-ref>PageManagementPortlet</portlet-ref>
+        <preferences>
+        	<preference>
+        		<name>pageListHeight</name>
+        		<value>375</value>
+        	</preference>
+        </preferences>
       </portlet>
       <title>Page Management</title>
       <access-permissions>manager:/platform/administrators</access-permissions>
-      <show-info-bar>false</show-info-bar>
+      <show-info-bar>false</show-info-bar>      
     </portlet-application>
   </page>
   

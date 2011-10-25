@@ -10,8 +10,12 @@
     rcontext.getJavascriptManager().importJavascript('eXo.webui.UIVirtualList');
     
     String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
+    String css = "";
+    if (uicomponent.getHeight() > 0) {
+       css = "height: " + uicomponent.getHeight() + "px";
+    }
 %>
-<div id="$uicomponent.id" style="overflow:auto;" 
+<div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css" 
   onscroll="eXo.webui.UIVirtualList.scrollMove(this,'$url');">    
   	<% uicomponent.renderChildren();%>
   <% 

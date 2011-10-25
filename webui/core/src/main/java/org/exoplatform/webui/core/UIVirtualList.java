@@ -35,6 +35,8 @@ public class UIVirtualList extends UIComponentDecorator
 {
 
    private int pageSize = 1;
+   
+   private int height;
 
    public int getPageSize()
    {
@@ -44,6 +46,16 @@ public class UIVirtualList extends UIComponentDecorator
    public void setPageSize(int pageSize)
    {
       this.pageSize = pageSize;
+   }
+
+   public int getHeight()
+   {
+      return height;
+   }
+
+   public void setHeight(int height)
+   {
+      this.height = height;
    }
 
    public String event(String name, String beanId) throws Exception

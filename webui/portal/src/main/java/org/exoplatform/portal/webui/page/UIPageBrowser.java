@@ -221,6 +221,12 @@ public class UIPageBrowser extends UIContainer
       this.showAddNewPage = showAddNewPage;
    }
 
+   public void setPageListHeight(int height) 
+   {
+      UIVirtualList virtualList = getChild(UIVirtualList.class);
+      virtualList.setHeight(height);
+   }
+   
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       super.processDecode(context);
