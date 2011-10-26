@@ -59,9 +59,8 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.PortletContext;
-import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.StatefulPortletContext;
+import org.gatein.pc.api.info.PreferenceInfo;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
@@ -79,8 +78,10 @@ import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.Set;
 
 import javax.portlet.PortletMode;
 import javax.servlet.http.Cookie;
@@ -288,40 +289,59 @@ public class UIPortletForm extends UIFormTabPane
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
       getChild(UIFormInputThemeSelector.class).getChild(UIItemThemeSelector.class).setSelectedTheme(
          uiPortlet.getSuitedTheme(null));
-      WebuiRequestContext contextres = WebuiRequestContext.getCurrentInstance();
-      ResourceBundle res = contextres.getApplicationResourceBundle();
       if (hasEditMode())
       {
          uiPortlet.setCurrentPortletMode(PortletMode.EDIT);
       }
       else
       {
+         Map<String, String> portletPreferenceMaps = new HashMap<String, String>();
+         org.gatein.pc.api.Portlet portlet = uiPortlet.getProducedOfferedPortlet();
+         Set<String> keySet = portlet.getInfo().getPreferences().getKeys();
 
-         //
+         for (String key : keySet)
+         {
+            PreferenceInfo preferenceInfo = portlet.getInfo().getPreferences().getPreference(key);
+            if (!preferenceInfo.isReadOnly())
+            {
+               String ppValue = (preferenceInfo.getDefaultValue().size() > 0) ? preferenceInfo.getDefaultValue().get
+                  (0) : "";
+               portletPreferenceMaps.put(key, ppValue);
+            }
+         }
+
          Portlet pp = uiPortlet.getPreferences();
          if (pp != null)
          {
-            UIFormInputSet uiPortletPrefSet = getChildById(FIELD_PORTLET_PREF);
-            uiPortletPrefSet.getChildren().clear();
             for (Preference pref : pp)
             {
                if (!pref.isReadOnly())
                {
-                  UIFormStringInput templateStringInput =
-                     new UIFormStringInput(pref.getName(), null, pref.getValues().get(0));
-                  templateStringInput.setLabel(res.getString("UIPortletForm.tab.label.Template"));
-                  templateStringInput.addValidator(MandatoryValidator.class);
-                  uiPortletPrefSet.addUIFormInput(templateStringInput);
+                  portletPreferenceMaps.put(pref.getName(), (pref.getValues().size() > 0) ? pref.getValues().get(0) :
+                  "");
                }
-
-            }
-            if (uiPortletPrefSet.getChildren().size() > 0)
-            {
-               uiPortletPrefSet.setRendered(true);
-               setSelectedTab(FIELD_PORTLET_PREF);
-               return;
             }
          }
+
+         if (portletPreferenceMaps.size() > 0)
+         {
+            Set<String> ppKeySet = portletPreferenceMaps.keySet();
+            UIFormInputSet uiPortletPrefSet = getChildById(FIELD_PORTLET_PREF);
+            uiPortletPrefSet.getChildren().clear();
+            for (String ppKey : ppKeySet)
+            {
+               String ppValue = portletPreferenceMaps.get(ppKey);
+               UIFormStringInput preferenceStringInput = new UIFormStringInput(ppKey, null, ppValue);
+               preferenceStringInput.setLabel(ppKey);
+               preferenceStringInput.addValidator(MandatoryValidator.class);
+               uiPortletPrefSet.addUIFormInput(preferenceStringInput);
+            }
+
+            uiPortletPrefSet.setRendered(true);
+            setSelectedTab(FIELD_PORTLET_PREF);
+            return;
+         }
+
          setSelectedTab("PortletSetting");
       }
    }
@@ -335,12 +355,6 @@ public class UIPortletForm extends UIFormTabPane
       {
          return;
       }
-
-      //
-      PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
-      PortletContext portletContext = uiPortlet_.getPortletContext();
-
-      //
 
       PropertyChange[] propertyChanges = new PropertyChange[uiFormInputs.size()];
 
