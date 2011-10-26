@@ -231,7 +231,7 @@ public class UIPortalComponentActionListener
          if (newComponent)
          {
             portalComposer.updateWorkspaceComponent();
-            pcontext.setFullRender(true);
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
          }
 
          UIWorkingWorkspace uiWorkingWS = uiApp.getChild(UIWorkingWorkspace.class);
@@ -491,7 +491,7 @@ public class UIPortalComponentActionListener
          {
             uiApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist", new String[]{portalName}));
             context.addUIComponentToUpdateByAjax(uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));    
-            context.setFullRender(true);
+            context.ignoreAJAXUpdateOnPortlets(true);
             return;
          }
 

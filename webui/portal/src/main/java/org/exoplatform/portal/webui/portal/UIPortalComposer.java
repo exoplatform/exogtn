@@ -469,7 +469,7 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setSessionOpen(PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()));
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         prContext.setFullRender(true);
+         prContext.ignoreAJAXUpdateOnPortlets(true);
         
          if (uiComposer.isPortalExist(editPortal))
          {
@@ -586,7 +586,7 @@ public class UIPortalComposer extends UIContainer
          }
 
          event.getSource().updateWorkspaceComponent();
-         Util.getPortalRequestContext().setFullRender(true);
+         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
       }
    }
 
@@ -660,7 +660,7 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         prContext.setFullRender(true);
+         prContext.ignoreAJAXUpdateOnPortlets(true);
 
          UIPortal uiPortal = uiPortalApp.getCurrentSite();
          uiPortal.setRenderSibling(UIPortal.class);
@@ -713,7 +713,7 @@ public class UIPortalComposer extends UIContainer
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, ApplicationMessage.WARNING));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-            pContext.setFullRender(true);
+            pContext.ignoreAJAXUpdateOnPortlets(true);
             
             UserNode currentNode = uiPortal.getSelectedUserNode();
             SiteKey siteKey = currentNode.getNavigation().getKey();
@@ -773,7 +773,7 @@ public class UIPortalComposer extends UIContainer
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         pContext.setFullRender(true);
+         pContext.ignoreAJAXUpdateOnPortlets(true);
          
          UserNode currentNode = uiPortal.getSelectedUserNode();
          SiteKey siteKey = currentNode.getNavigation().getKey();

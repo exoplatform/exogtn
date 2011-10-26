@@ -91,7 +91,7 @@ public class UINavigationManagement extends UIContainer
          UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         prContext.setFullRender(true);
+         prContext.ignoreAJAXUpdateOnPortlets(true);
 
          UserNavigation navigation = uiNodeSelector.getEdittedNavigation();
          SiteKey siteKey = navigation.getKey();

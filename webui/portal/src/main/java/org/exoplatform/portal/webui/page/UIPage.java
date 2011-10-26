@@ -180,7 +180,7 @@ public class UIPage extends UIContainer
 
       PortalRequestContext prContext = Util.getPortalRequestContext();
       prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-      prContext.setFullRender(true);
+      prContext.ignoreAJAXUpdateOnPortlets(true);
    }
 
    public static class EditCurrentPageActionListener extends EventListener<UIPage>

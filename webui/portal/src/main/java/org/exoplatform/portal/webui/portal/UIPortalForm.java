@@ -351,7 +351,7 @@ public class UIPortalForm extends UIFormTabPane
             
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            prContext.setFullRender(true);
+            prContext.ignoreAJAXUpdateOnPortlets(true);
          }
 
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();

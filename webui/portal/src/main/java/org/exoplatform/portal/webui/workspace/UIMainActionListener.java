@@ -175,7 +175,7 @@ public class UIMainActionListener
 
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       }
    }
 
