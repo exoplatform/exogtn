@@ -268,6 +268,7 @@ public class UIPageForm extends UIFormTabPane
       {
          UIPageForm uiPageForm = event.getSource();
          UIPortalApplication uiPortalApp = uiPageForm.getAncestorOfType(UIPortalApplication.class);
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
 
          UIPage uiPage = uiPageForm.getUIPage();
@@ -283,7 +284,8 @@ public class UIPageForm extends UIFormTabPane
 
          uiMaskWS.setUIComponent(null);
          uiMaskWS.setShow(false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+         pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
       }
    }
 

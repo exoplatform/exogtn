@@ -19,6 +19,17 @@
 
 package org.exoplatform.portal.webui.portal; 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -39,6 +50,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -62,17 +74,6 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.exoplatform.webui.organization.UIPermissionSelector;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -355,8 +356,13 @@ public class UIPortalForm extends UIFormTabPane
          }
 
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
-         uiMaskWorkspace.setUIComponent(null);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
+         uiMaskWorkspace.setUIComponent(null);         
+         WebuiRequestContext rContext = event.getRequestContext();
+         if (!uiForm.getId().equals("CreatePortal")) 
+         {
+            rContext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+         }         
+         rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
 
