@@ -88,10 +88,10 @@ public class UIStandaloneApplicationLifecycle extends Lifecycle<UIStandaloneAppl
       PortalPrinter childWriter = new PortalPrinter(responseOutputStream, true, 25000, true);
 
       context.setWriter(childWriter);
-      processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIPortalApplicationChildren.gtmpl");
+      processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIStandaloneApplicationChildren.gtmpl");
 
       context.setWriter(parentWriter);
-      processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl");
+      processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIStandaloneApplication.gtmpl");
 
       try
       {

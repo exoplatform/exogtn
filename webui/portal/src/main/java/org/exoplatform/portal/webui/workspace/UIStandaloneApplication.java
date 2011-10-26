@@ -41,7 +41,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-@ComponentConfig(lifecycle = UIStandaloneApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl")
+@ComponentConfig(lifecycle = UIStandaloneApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIStandaloneApplication.gtmpl")
 public class UIStandaloneApplication extends UIApplication
 {
    public static final int NORMAL_MODE = 0;
