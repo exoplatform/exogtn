@@ -43,7 +43,8 @@
 .UIOrganizationPortlet .UIToolbar .LargeToolbar	{
 	width: 100%;
 	margin: 0px 0px 5px 0px;
-	border-bottom: 1px solid #eeeeee;
+	border: 1px solid #ececec;
+	background:#f6f6f6;
 }
 
 .UIOrganizationPortlet .UISearch	{
@@ -77,8 +78,8 @@
 	height: 25px;
 	line-height: 25px; 
 	vertical-align: middle;
-	background:#F5F5F5;
-	border: #e2e2e2;
+	background:#F6F6F6;
+	border:1px solid #e3e2e2;
 }
 
 .UIOrganizationPortlet .UIToolbar .LargeToolbar .ManagementIconContainer {
@@ -230,7 +231,7 @@
 
 .UIOrganizationPortlet .UIGroupManagement .GroupPanel {
 	overflow: hidden;
-	padding-top: 3px;
+	padding-top: 5px;
 	height: auto;
 }
 
@@ -313,7 +314,7 @@
 /*#######################	UIMemberShipManagement #################################*/
 
 .UIOrganizationPortlet .UIMembershipTypeForm {
-	padding-top: 10px; 
+	padding-top: 5px;
 }
 
 .UIOrganizationPortlet .UIMembershipTypeForm .UIFormGrid {

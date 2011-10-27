@@ -129,6 +129,8 @@
 /*##############################- BlueLargeToolbar style -#########################*/
 .UIToolbar .BlueLargeToolbar {
 	height: 32px;
+    background:#f6f6f6;
+    border: 1px solid #ebebeb;
 }
 
 

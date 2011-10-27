@@ -30,7 +30,7 @@
 .UIPageSearchForm .UISearchContainer .QuickSet {
 	overflow: hidden;
 	width: 100%;
-	padding-top: 9px;
+	padding-top: 6px;
 }
 
 .UIPageSearchForm .UISearchContainer .QuickSet .SearchLabel {
@@ -71,6 +71,7 @@
 	border: solid 1px gray;
 	font-size: 12px;
 	margin: 0 5px 0 10px;
+    border: 1px solid #c3c3c3;
 }
 
 .UIPageSearchForm .UISearchContainer .QuickSet input {
@@ -80,6 +81,6 @@
 	margin: 0px 10px 0px 5px; /* orientation=rt */
 	padding-left: 4px; /* orientation=lt */
 	padding-right: 4px; /* orientation=rt */
-	border: 1px solid gray;
+	border: 1px solid #c3c3c3;
 	width: 160px; height: 16px;
 }

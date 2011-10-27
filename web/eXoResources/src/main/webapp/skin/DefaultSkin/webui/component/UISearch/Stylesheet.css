@@ -20,7 +20,6 @@
 .UISearch {
 	height: 39px;
 	line-height: 39px;
-	padding-bottom: 2px;
 }
 
 .UISearch .UISearchForm {
@@ -30,7 +29,7 @@
 .UISearch .UISearchForm .QuickSet {
 	overflow: hidden;
 	width: 100%;
-	padding-top: 9px;
+	padding-top: 6px;
 }
 
 .UISearch .UISearchForm .QuickSet .SearchTitle {
@@ -86,8 +85,8 @@
 	float: right; /* orientation=rt */
 	width: 115px; 
 	padding: 1px;
-	border: solid 1px gray;
-	font-size: 11px;
+    border: 1px solid #c3c3c3;
+    font-size: 11px;
 }
 
 .UISearch .UISearchForm .QuickSet input {
@@ -97,7 +96,7 @@
 	margin: 0px 10px 0px 5px; /* orientation=rt */
 	padding-left: 4px; /* orientation=lt */
 	padding-right: 4px; /* orientation=rt */
-	border: 1px solid gray;
+	border: 1px solid #c3c3c3;
 	width: 180px; height: 15px;
 }
 
