@@ -182,6 +182,6 @@ public class StandaloneAppURLContext implements URLContext
       }
 
       //
-      return writer.toString();
+      return buffer.toString();
    }
 }
