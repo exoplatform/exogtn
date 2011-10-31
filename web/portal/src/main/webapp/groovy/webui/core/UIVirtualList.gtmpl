@@ -3,6 +3,7 @@
     import org.exoplatform.webui.bean.UIDataFeed;
     
     boolean hasNext = uicomponent.getDataFeed().hasNext();
+    boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
     rcontext.getJavascriptManager().importJavascript('eXo.core.DOMUtil');
@@ -16,13 +17,9 @@
     }
 %>
 <div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css" 
-  onscroll="eXo.webui.UIVirtualList.scrollMove(this,'$url');">    
-  	<% uicomponent.renderChildren();%>
+  onscroll="eXo.webui.UIVirtualList.onScroll(this,'$url');">    
+  <% uicomponent.renderChildren();%>
   <% 
-    if (!hasNext) {
-      rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.loadFinished('$uicomponent.id');");
-    }
-    rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.init('$uicomponent.id');");
-       
+    rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight);");
   %>
 </div>

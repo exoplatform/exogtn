@@ -19,15 +19,11 @@
 
 package org.exoplatform.navigation.webui.component;
 
-import javax.portlet.PortletRequest;
-
-import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
@@ -46,24 +42,8 @@ public class UIPageManagementPortlet extends UIPortletApplication
    public UIPageManagementPortlet() throws Exception
    {            
       UIPageBrowser pageBrowser = addChild(UIPageBrowser.class, null, null); 
-      pageBrowser.setShowAddNewPage(true);      
+      pageBrowser.setShowAddNewPage(true);
+      UIVirtualList virtualList = pageBrowser.getChild(UIVirtualList.class);
+      virtualList.setAutoAdjustHeight(true);
    }
-
-   @Override
-   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
-   {
-      PortletRequest portletRequest = ((PortletRequestContext)context).getRequest(); 
-      String pref = portletRequest.getPreferences().getValue(PAGE_LIST_HEIGHT, "0");
-      int height = 0;
-      try 
-      {
-         height = Integer.parseInt(pref);         
-      }
-      catch (NumberFormatException ex) 
-      {         
-      }
-      getChild(UIPageBrowser.class).setPageListHeight(height);
-      super.processRender(app, context);
-   }
-      
 }

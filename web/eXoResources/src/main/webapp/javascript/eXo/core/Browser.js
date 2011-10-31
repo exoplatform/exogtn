@@ -98,7 +98,7 @@ function Browser() {
   version: 2.5.2
  */
 Browser.prototype.detectBrowser = function() {
-	
+  
     /**
      * Internet Explorer version number or 0.  Example: 6
      * @property ie
@@ -175,8 +175,8 @@ Browser.prototype.detectBrowser = function() {
      * @type float
      */
     this.air = 0;
-	
-	
+  
+  
     var ua=navigator.userAgent, m;
 
     // Modern KHTML browsers should qualify as Safari X-Grade
@@ -233,11 +233,11 @@ Browser.prototype.detectBrowser = function() {
 }
 
 Browser.prototype.managerResize = function() {
-	if(eXo.core.Browser.currheight != document.documentElement.clientHeight) {
- 		clearTimeout(eXo.core.Browser.breakStream) ;
- 		eXo.core.Browser.breakStream = setTimeout(eXo.core.Browser.onResize, 100) ;
- 	}
- 	eXo.core.Browser.currheight = document.documentElement.clientHeight;
+  if(eXo.core.Browser.currheight != document.documentElement.clientHeight) {
+    clearTimeout(eXo.core.Browser.breakStream) ;
+    eXo.core.Browser.breakStream = setTimeout(eXo.core.Browser.onResize, 100) ;
+  }
+  eXo.core.Browser.currheight = document.documentElement.clientHeight;
 }
 
 Browser.prototype.initCommon = function() {
@@ -249,7 +249,7 @@ Browser.prototype.initCommon = function() {
 Browser.prototype.initIE = function() {
   this.browserType = "ie" ;
   this.createHttpRequest = function() {
-  	 return new ActiveXObject("Msxml2.XMLHTTP") ; 
+     return new ActiveXObject("Msxml2.XMLHTTP") ; 
   }
   this.eventListener = function(object, event, operation) {
     event = "on" + event ;
@@ -273,9 +273,9 @@ Browser.prototype.initSafari = function() {
   this.eventListener = function(object, event, operation) { object.addEventListener(event, operation, false) ; }
   this.setOpacity = function(component, value) { component.style.opacity = value/100 ; }
   this.getEventSource = function(e) {
-  	var targ = e.target ;
-  	if (targ.nodeType == 3) targ = targ.parentNode ;
-  	return targ ;
+    var targ = e.target ;
+    if (targ.nodeType == 3) targ = targ.parentNode ;
+    return targ ;
   }
 } ;
 
@@ -331,10 +331,10 @@ Browser.prototype.addOnLoadCallback = function(id, method) {
  * and clean the array
  */
 Browser.prototype.onLoad = function() {
-	var callback = eXo.core.Browser.onLoadCallback ;
+  var callback = eXo.core.Browser.onLoadCallback ;
   for(var name in callback.properties) {
     var method = callback.get(name) ;
-  	if (typeof(method) == "function") try{method()}catch(e){};
+    if (typeof(method) == "function") try{method()}catch(e){};
   }
   this.onLoadCallback = new eXo.core.HashMap();
 } ;
@@ -349,7 +349,7 @@ Browser.prototype.addOnResizeCallback = function(id, method) {
  */
 
 Browser.prototype.onResize = function(event) {
-	var callback = eXo.core.Browser.onResizeCallback ;
+  var callback = eXo.core.Browser.onResizeCallback ;
  for(var name in callback.properties) {
    var method = callback.get(name) ;
    if (typeof(method) == "function") method(event) ;
@@ -366,12 +366,12 @@ Browser.prototype.addOnScrollCallback = function(id, method) {
  */
 Browser.prototype.onScroll = function(event) {
   var callback = eXo.core.Browser.onScrollCallback ;
-	for(var name in callback.properties) {
+  for(var name in callback.properties) {
     var method = callback.get(name) ;
     try {
-    	if (typeof(method) == "function") method(event) ;
+      if (typeof(method) == "function") method(event) ;
     }catch(err){}
-	}
+  }
 } ;
 /************************************TO BROWSER PAGE CLASS************************************************/
 Browser.prototype.getBrowserType = function() {  
@@ -464,7 +464,7 @@ Browser.prototype.findMouseRelativeX = function(object, e, isRTL) {
    * */
 //TODO: TanPD: Remove it to fix PORTAL-3603. Temporary remove it for testing.  
 //  if(eXo.core.Browser.isIE7()) {
-//  	posXObject = posXObject / 2 ;
+//    posXObject = posXObject / 2 ;
 //  }
   
   if (!e) e = window.event ;
@@ -499,45 +499,71 @@ Browser.prototype.findMouseRelativeY = function(object, e) {
  * Set Position for a Component in a container
  */
 Browser.prototype.setPositionInContainer = function(container, component, posX, posY) {
-	var offsetX = component.offsetLeft ;
-	var offsetY = component.offsetTop ;
+  var offsetX = component.offsetLeft ;
+  var offsetY = component.offsetTop ;
 
-	var posXInContainer = eXo.core.Browser.findPosXInContainer(component, container) ;
-	var posYInContainer = eXo.core.Browser.findPosYInContainer(component, container) ;
+  var posXInContainer = eXo.core.Browser.findPosXInContainer(component, container) ;
+  var posYInContainer = eXo.core.Browser.findPosYInContainer(component, container) ;
 
-	var deltaX = posX - (posXInContainer - offsetX) ;
-	var deltaY = posY - (posYInContainer - offsetY) ;
+  var deltaX = posX - (posXInContainer - offsetX) ;
+  var deltaY = posY - (posYInContainer - offsetY) ;
 
-	component.style.left = deltaX + "px" ;
-	component.style.top = deltaY + "px" ;
+  component.style.left = deltaX + "px" ;
+  component.style.top = deltaY + "px" ;
 } ;
 /* 
  * Set Cookie
  */
 Browser.prototype.setCookie = function(name,value,expiredays) {
-	var exdate = new Date() ;
-	exdate.setDate(exdate.getDate() + expiredays) ;
-	document.cookie = name + "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString()) ;
+  var exdate = new Date() ;
+  exdate.setDate(exdate.getDate() + expiredays) ;
+  document.cookie = name + "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString()) ;
 } ;
 /* 
  * Get Cookie
  */
 Browser.prototype.getCookie = function(name) {
-	if (document.cookie.length > 0) {
-		var start = document.cookie.indexOf(name + "=")
-		if (start != -1) {
-			start = start + name.length + 1 ;
-	    var end = document.cookie.indexOf(";",start) ;
-	    if (end == -1) end = document.cookie.length ;
-	    	return unescape(document.cookie.substring(start,end)) ;
-	  } 
-	}
-	return "" ;
+  if (document.cookie.length > 0) {
+    var start = document.cookie.indexOf(name + "=")
+    if (start != -1) {
+      start = start + name.length + 1 ;
+      var end = document.cookie.indexOf(";",start) ;
+      if (end == -1) end = document.cookie.length ;
+        return unescape(document.cookie.substring(start,end)) ;
+    } 
+  }
+  return "" ;
 } ;
 
 Browser.prototype.isDesktop = function() {
-	if(document.getElementById("UIPageDesktop")) return true ;
-	return false ;
+  if(document.getElementById("UIPageDesktop")) return true ;
+  return false ;
+}
+
+/**
+ * Return the height of free space in the page if it is available.
+ * Otherwise, returns a negative which is equal to the height of content not visible on the screen.
+ */
+Browser.prototype.getHeightOfFreeSpace = function() {
+  var elements = document.body.children;
+  var height = 0; 
+  var ln = elements.length ;
+  for(var k = 0; k < ln; k++) {
+    height += elements[k].offsetHeight ;
+  }
+  return (this.getBrowserHeight() - height);
+}
+
+/**
+ * Adjust height of the element to fill up free space if any
+ */
+Browser.prototype.fillUpFreeSpace = function(elemt) {
+  var height = eXo.core.Browser.getHeightOfFreeSpace();
+  if (height > 0)
+  {
+    height += elemt.offsetHeight;
+    elemt.style.height = height + "px";
+  }
 }
 /************************************************************************************/
 eXo.core.Browser = new Browser() ;

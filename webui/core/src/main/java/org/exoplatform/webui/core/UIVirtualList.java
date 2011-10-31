@@ -38,6 +38,8 @@ public class UIVirtualList extends UIComponentDecorator
    
    private int height;
 
+   private boolean autoAdjustHeight;
+
    public int getPageSize()
    {
       return pageSize;
@@ -56,6 +58,16 @@ public class UIVirtualList extends UIComponentDecorator
    public void setHeight(int height)
    {
       this.height = height;
+   }
+   
+   public boolean isAutoAdjustHeight()
+   {
+      return autoAdjustHeight;
+   }
+   
+   public void setAutoAdjustHeight(boolean bln)
+   {
+      autoAdjustHeight = bln;
    }
 
    public String event(String name, String beanId) throws Exception
@@ -101,13 +113,17 @@ public class UIVirtualList extends UIComponentDecorator
             return;
          }
          
-         if (!dataFeed.hasNext())
+         if (dataFeed.hasNext())
          {
             rContext.getJavascriptManager().addJavascript(
-               "eXo.webui.UIVirtualList.loadFinished('" + virtualList.getId() + "');");
+               "eXo.webui.UIVirtualList.updateList('" + virtualList.getId() + "', true);");
          }
-         rContext.getJavascriptManager().addJavascript(
-            "eXo.webui.UIVirtualList.updateList('" + virtualList.getId() + "');");
+         else
+         {
+            rContext.getJavascriptManager().addJavascript(
+               "eXo.webui.UIVirtualList.updateList('" + virtualList.getId() + "', false);");
+         }
+         
          rContext.addUIComponentToUpdateByAjax((UIComponent)dataFeed);
       }
    }
