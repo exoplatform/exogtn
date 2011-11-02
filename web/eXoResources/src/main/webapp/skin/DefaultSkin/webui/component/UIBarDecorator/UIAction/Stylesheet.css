@@ -66,7 +66,7 @@
 
 .UIAction .SimpleStyle {
 	line-height: 20px;
-	background: url('background/SimpleStyle.gif') repeat-x center;
+	background: url('background/SimpleStyle.gif') repeat-x left bottom;
 	text-align: center;	
 	padding: 0px 12px;
 	white-space: nowrap;

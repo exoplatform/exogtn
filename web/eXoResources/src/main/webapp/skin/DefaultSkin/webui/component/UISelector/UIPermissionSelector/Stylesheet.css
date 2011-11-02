@@ -18,7 +18,6 @@
  */
 
 .UIPermissionSelector {	
-	padding: 10px;
 }
 
 .UIPermissionSelector .PermissionSelectorTitleBar {
@@ -42,10 +41,6 @@
 	float: right; /* orientation=rt */
 }
 
-.UIPermissionSelector .PermissionInfoContainer .InfoContentContainer {
-	padding: 5px 0px 0px 0px;
-}
-
 .UIPermissionSelector .PermissionInfoContainer .PermissionTypeBar {
 	height: 21px; line-height: 21px;
 	background: url('background/TypeBarBG1x22.gif') repeat-x; 
@@ -61,14 +56,13 @@
 }
 
 .UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo {
-	border: solid 1px #d5d5d5;
+	border-bottom: solid 1px #ededed;
 	background: white;
-	margin: 0px 10px;
-	padding: 15px 0px 15px 0px;
+	padding: 0px 30px;
 }
 
-.UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo .Icon{
-	margin: 0px 5px 0px 15px;
+.UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo .Icon {
+	background: url('background/InfoIcon.gif') no-repeat left top;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 }
@@ -79,15 +73,13 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	font-weight: bold;
+	color: #363636;
 }
 
 .UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo .Label {
-	margin: 8px 0px 5px 0px;
+	margin: 8px 0px 5px 22px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	width: 100px;
-	text-align: right; /* orientation=lt */
-	text-align: left; /* orientation=rt */
 }
 
 .UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo .Info {
@@ -114,19 +106,18 @@
 	color: black;
 }
 
-.UIPermissionSelector .PermissionInfoContainer .DeletePermissionIcon	{
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/DustBin.gif') no-repeat left center; /* orientation=lt */
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/DustBin.gif') no-repeat right center; /* orientation=rt */
-	padding-left: 22px; /* orientation=lt */
-	padding-right: 22px; /* orientation=rt */
+.UIPermissionSelector .UIAction a {
 	line-height: 20px;
+	color: #363636;
+	font-size: 12px;
+	font-family: verdana;
+}
+
+.UIPermissionSelector .UIAction a:hover {
+	color: #058EE6;
 }
  
 .UIPermissionSelector .PermissionInfoContainer .SelectPermissionIcon	{
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectPermission.gif') no-repeat left center; /* orientation=lt */
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectPermission.gif') no-repeat right center; /* orientation=rt */
-	padding-left: 22px; /* orientation=lt */
-	padding-right: 22px; /* orientation=rt */
-	line-height: 20px;
-	height: auto; width: auto;
+	background: none;
+	width: auto;
 } 

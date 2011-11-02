@@ -29,19 +29,13 @@
 }
 
 .UITabSelector .UIHorizontalTabs .LeftHorizontalTabs{
-	background: url('background/TabSelector.gif') no-repeat left top;
-	padding-left: 2px;
 }
 
 .UITabSelector .UIHorizontalTabs .RightHorizontalTabs{
-	background: url('background/TabSelector.gif') no-repeat right top;
-	padding-right: 2px;
 }
 
 .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs {
 	height: 31px;
-	padding: 0px;
-	background: url('background/TabSelector.gif') repeat-x left -31px;
 	padding: 0px;
 }
 
@@ -56,11 +50,10 @@
 .UITabSelector .UIHorizontalTabs .LineSeparator {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	background: url('background/TabSelector.gif') no-repeat left -91px;
-	height: 29px;	
-	width: 2px;
-	line-height: 29px;
-	margin-top: 2px;
+	background: #434343;
+	height: 12px;	
+	width: 1px;
+	margin-top: 10px;
 }
 
 /*
@@ -68,33 +61,22 @@
 */
 .UITabSelector .FlatTabStyle .NormalTab {
 	line-height: 29px;
-	margin: 2px 0px 0px 0px;
+	margin: 0px;
 	color: #202020; font-weight: normal;
-}
-
-.UITabSelector .FlatTabStyle .NormalTab .MiddleTab {
-	line-height: 29px;
 	cursor: pointer;
-	padding: 0px 6px;
 }
 
 .UITabSelector .FlatTabStyle .TabIcon {
-	margin: 1px 4px 0px 0px; /* orientation=lt */
-	margin: 1px 0px 0px 4px; /* orientation=rt */
 	width: auto;
 	height: auto;
-	padding-left: 25px; /* orientation=lt */
-	padding-right: 25px; /* orientation=rt */
 }
 
 .UITabSelector .FlatTabStyle .UIPermissionSelector24x24Icon {
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconEditPermission.gif) no-repeat left; /* orientation=lt */
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconEditPermission-rt.gif) no-repeat right; /* orientation=rt */
+	background: none;
 }
 
 .UITabSelector .FlatTabStyle .UIListPermissionSelector24x24Icon {
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission.gif) no-repeat left; /* orientation=lt */
-	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission-rt.gif) no-repeat right; /* orientation=rt */
+	background: none;
 }
 
 .UITabSelector .FlatTabStyle	a.Title {
@@ -102,38 +84,79 @@
 	margin-right: 30px; /* orientation=rt */
 	line-height: 28px;
 	margin: 0px;
-	font-weight: bold;
-	color: gray; 
+	color: #0053a7;
+	font-size: 12px;
+	font-family: verdana;
 }
 
 .UITabSelector .FlatTabStyle	a.Title:hover {
-	color: #058ee6; 
+	text-decoration: underline;
 }
 
 /*
 	minh.js.exo
 */
 
-.UITabSelector .FlatTabStyle .SelectedTab {
-	line-height: 29px;
-	margin: 2px 0px 0px 0px;
-	font-weight: normal; color: #307dcc;
+.UITabSelector .UIHorizontalTabs .SelectedTab .MiddleTab {
+	border: none;
 }
 
-.UITabSelector .FlatTabStyle .SelectedTab .MiddleTab {
+.UITabSelector .FlatTabStyle .SelectedTab {
 	line-height: 29px;
-	background: url('background/TabSelector.gif') repeat-x left -62px;
-	padding: 0px 6px;
+	margin: 0px;
+	font-weight: normal; color: #307dcc;
 	border:0;
+}
+
+.UITabSelector .FlatTabStyle .SelectedTab a.Title {
+	color: #4c4c4c;
+	font-weight: bold;
+}
+
+.UITabSelector .FlatTabStyle .SelectedTab a.Title:hover {
+	text-decoration: none;
 }
 
 /************************************ List Permission Selector *******************************/
 
 .UIAccessGroup {
-	padding: 10px;
 }
 
 .UIAccessGroup .UIGrid {
-	width: 95%;
+	width: 100%;
 }
 
+.UIAccessGroup .UIGrid th {
+	font-size: 12px;
+	font-family: verdana;
+	text-align: center;
+	color: #363636;
+}
+
+.UIAccessGroup .UIGrid .Text {
+	font-size: 12px;
+	font-family: verdana;
+	color: #454343;
+}
+
+.UIAccessGroup .PublicCheck {
+	color: #4c4c4c;
+	margin-bottom: 10px;
+	font-size: 12px;
+	font-family: verdana;
+}
+
+.UITabSelector .UIAction {
+	padding: 20px 0px;
+}
+
+.UITabSelector .UIAction .ActionButton .Icon {
+	padding: 0px;
+	font-size: 12px;
+	background: none;
+	color: #363636;
+}
+
+.UITabSelector .UIAction .ActionButton .Icon:hover {
+	color: #058EE6;
+}
