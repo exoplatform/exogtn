@@ -24,17 +24,7 @@
 }
 
 .UIManagement .ManagementBlock {
-	background: #f8f8f8 url('background/BgEvenRow.gif') repeat-x left top;
-	margin-bottom: 1px;
 	_width: 97%;
-}
-
-.UIManagement .EvenRow {
-	background: #f8f8f8 url('background/BgEvenRow.gif') repeat-x left top;
-}
-
-.UIManagement .OddRow {
-	background: #eaeaea url('background/BgOddRow.gif') repeat-x left top;
 }
 
 .UIManagement table.ManagementBlock td {
@@ -44,8 +34,6 @@
 
 .UIManagement table.ManagementBlock td.Content {
 	vertical-align: middle;
-	background: url('background/LineBg.gif') no-repeat right center; /* orientation=lt */
-	background: url('background/LineBg-rt.gif') no-repeat left center; /* orientation=rt */
 	padding: 5px 15px;
 	width: 27%;
 	overflow: hidden;
@@ -69,8 +57,8 @@
 .UIManagement .ManagementBlock .Image {
 	_width: 8%;
 	line-height: 41px;
-	padding: 5px 0px 6px 20px; /* orientation=lt */
-	padding: 5px 20px 6px 0px; /* orientation=rt */
+	padding: 6px 0px 6px 20px; /* orientation=lt */
+	padding: 6px 20px 6px 0px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .Image img {
@@ -79,8 +67,9 @@
 }
 
 .UIManagement .ManagementBlock .Label {
-	color: #000;
 	font-weight: bold;
+	font-size: 12px;
+	color: #4c4c4c;
 }
 
 .UIManagement .ManagementBlock .ActionBlock {
@@ -90,7 +79,7 @@
 }
 
 .UIManagement .ManagementBlock .ActionBlock a {
-	line-height: 16px;
+	line-height: 18px;
 	width: 110px;
 	display: block;
 	float: left; /* orientation=lt */
@@ -100,6 +89,8 @@
 	margin-right: 15px; /* orientation=lt */
 	margin-left: 15px; /* orientation=rt */
 	white-space: normal;
+	font-size: 12px;
+	color: #4c4c4c;
 }
 
 .UIManagement .ManagementBlock .ActionBlock a:hover {
@@ -116,14 +107,25 @@
 	background: url('background/MiniIcon-rt.gif') no-repeat right -48px; /* orientation=rt */
 }
 
-.UIManagement .ManagementBlock .DeleteIcon {
+.UIManagement .ManagementBlock .EditPortIcon {
 	background: url('background/MiniIcon.gif') no-repeat left -98px; /* orientation=lt */
 	background: url('background/MiniIcon-rt.gif') no-repeat right -98px; /* orientation=rt */
+}
+
+.UIManagement .ManagementBlock .DeleteIcon {
+	background: url('background/MiniIcon.gif') no-repeat left -128px; /* orientation=lt */
+	background: url('background/MiniIcon-rt.gif') no-repeat right -128px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .EditProIcon{
 	background: url('background/MiniIcon.gif') no-repeat left 2px; /* orientation=lt */
 	background: url('background/MiniIcon-rt.gif') no-repeat right 2px; /* orientation=rt */
+}
+
+.UIManagement .UIAction {
+	border-top: 1px solid #ededed;
+	margin-top: 10px;
+	text-align: center;
 }
 
 /***********************UIAddGroupNavigation************************/

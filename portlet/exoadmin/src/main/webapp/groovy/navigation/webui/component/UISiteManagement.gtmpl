@@ -19,13 +19,12 @@
   String deletePortalLabel = _ctx.appRes("UISiteManagement.label.deletePortal");
 %>
 <div class="UISiteManagement UIManagement" id="<%=uicomponent.getId();%>">
-      <%
-            for (portalConfig in uicomponent.getPortalConfigs())  {           
-      %>
-                <table class="ManagementBlock" style="table-layout: fixed">
-                    <tr>
-                        <td class="Image"><img src="/exoadmin/skin/navigation/webui/component/background/PlImg.gif" alt=""/></td>
-                        <td class="Content">
+	  <%
+		    for (portalConfig in uicomponent.getPortalConfigs())  {		      
+	  %>
+		      	<table class="ManagementBlock" style="table-layout: fixed">
+		      		<tr>
+				      	<td class="Content">
                            <div class="Label"><%=uicomponent.getFieldValue(portalConfig, 'name') %></div>
                            <%
                            String siteLabel = uicomponent.getFieldValue(portalConfig, 'label');
@@ -44,7 +43,7 @@
                         <td class="ActionBlock">
                                 <a href="<%=uicomponent.event("EditPortalLayout", portalConfig.getName());%>" class="EditLayoutIcon">$editLayoutLabel</a>
                                 <a href="<%=uicomponent.event("EditNavigation", portalConfig.getName());%>" class="EditNavIcon">$editNavigationLabel</a>
-                                <a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'EditPortalProperties', true, [{name:'portalName',value:'<%=portalConfig.getName()%>'}]))" class="EditNavIcon">$editPortalPropLabel</a>
+                                <a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'EditPortalProperties', true, [{name:'portalName',value:'<%=portalConfig.getName()%>'}]))" class="EditPortIcon">$editPortalPropLabel</a>
                                 
                                 <% if(defaultPortalName != null && !defaultPortalName.equals(portalConfig.getName())) {%>
                                     <a href="<%=uicomponent.url("DeletePortal", portalConfig.getName());%>" class="DeleteIcon">$deletePortalLabel</a>
@@ -58,7 +57,7 @@
     <%
         if(uicomponent.getPortalConfigs() != null && uicomponent.getPortalConfigs().size() > 0){
     %>
-    <div class="UIAction"> 
+    <div class="UIAction">
 		<a href="javascript:void(0);" onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'CreatePortal', true))" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.addNewPortal")%></a>
 	</div>
 	<%
