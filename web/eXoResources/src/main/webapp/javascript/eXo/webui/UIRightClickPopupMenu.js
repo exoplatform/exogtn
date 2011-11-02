@@ -80,7 +80,7 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 	if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
 		return;
 	}
-	var objId = encodeURI(contextMenu.objId.replace(/'/g, "\\'"));
+	var objId = encodeURIComponent(contextMenu.objId.replace(/'/g, "\\'"));
 	
 	if (href.indexOf("javascript") == -1) {
 		elemt.setAttribute('href', href + "&objectId=" + objId) ;
