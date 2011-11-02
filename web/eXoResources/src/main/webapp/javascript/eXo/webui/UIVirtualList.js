@@ -23,85 +23,77 @@ UIVirtualList.prototype.init = function(componentId, hasNext, autoAdjustHeight) 
   var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;  
   
-  var virtualHeight = 300;     
+  if (!hasNext)
+  {
+    uiVirtualList.isFinished = true;
+  }
   
-  //If parent of virtualList have style.display = none --> can't get virtualList's height
-  var tmp = uiVirtualList;
-  if (tmp.offsetHeight == 0) {
-	  tmp = uiVirtualList.cloneNode(true);
-	  tmp.style.visibility = "hidden";
-	  tmp.style.display = "block";
-	  document.body.appendChild(tmp);
-  }  
+  var virtualHeight = eXo.core.DOMUtil.getStyle(uiVirtualList, 'height', true);
   
-  if (eXo.core.DOMUtil.getStyle(tmp, "height")) {
-	  virtualHeight = tmp.offsetHeight;	  
-  }    
+  if (virtualHeight == 0)
+  {
+    virtualHeight = 300;
+  }
+
   uiVirtualList.style.height = virtualHeight + "px";
   
   if (autoAdjustHeight)
   {
+    uiVirtualList.autoAdjustHeight = autoAdjustHeight;
     eXo.core.Browser.fillUpFreeSpace(uiVirtualList);
   }
-  
-  var children = eXo.core.DOMUtil.getChildrenByTagName(tmp,"div");  
-  var childrenHeight = 0;
-  for (var i=0; i<children.length;i++) {
-  	childrenHeight += children[i].offsetHeight;  	
-  }
-  
-  if (tmp !== uiVirtualList) {
-	  document.body.removeChild(tmp);	  
-  }
 
-  if (childrenHeight <= uiVirtualList.offsetHeight)
+  uiVirtualList.scrollTop = 0;
+  
+  this.loadIfNeeded(uiVirtualList);
+}
+
+UIVirtualList.prototype.loadIfNeeded = function(uiVirtualList)
+{
+  if (uiVirtualList.clientHeight == uiVirtualList.scrollHeight)
   {
-    if (hasNext && childrenHeight != 0)
+    if (uiVirtualList.isFinished)
     {
-      uiVirtualList.onscroll();
-    }
-    else
-    {
-      uiVirtualList.isFinished = true;
-      if (autoAdjustHeight)
+      if (uiVirtualList.autoAdjustHeight)
       {
         uiVirtualList.style.height = "auto";
       }
     }
+    else
+    {
+      uiVirtualList.onscroll();
+    }
   }
-  uiVirtualList.isInitiated = true;
-  uiVirtualList.scrollTop = 0;
 }
 
 UIVirtualList.prototype.getFeedBox = function(componentId) {
-	var DOMUtil = eXo.core.DOMUtil;
-	var uiVirtualList = document.getElementById(componentId);
-	var feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "div","FeedBox");
-	if (feedBox == null) {
-		feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "tbody","FeedBox");
-	}	
-	return feedBox;
+  var DOMUtil = eXo.core.DOMUtil;
+  var uiVirtualList = document.getElementById(componentId);
+  var feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "div","FeedBox");
+  if (feedBox == null) {
+    feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "tbody","FeedBox");
+  } 
+  return feedBox;
 }
 
 UIVirtualList.prototype.onScroll = function(uiVirtualList, url) {
-	if (uiVirtualList.isFinished || uiVirtualList.isLocked) return;
-	var DOMUtil = eXo.core.DOMUtil;	
-	var componentHeight = uiVirtualList.offsetHeight;
-	var scrollPosition = uiVirtualList.scrollTop;
-	var scrollerHeight = uiVirtualList.scrollHeight;	
-	var scrollable_gap = scrollerHeight - (scrollPosition + componentHeight);	
-	// if scrollbar reaches bottom	
-	if (scrollable_gap <= 1) {		
-		var feedBox = this.getFeedBox(uiVirtualList.id);
-		var appendHTML = feedBox.innerHTML;
-		uiVirtualList.storeHTML = appendHTML;
-		uiVirtualList.isLocked = true;
-		ajaxGet(url);
-	}
+  if (uiVirtualList.isFinished || uiVirtualList.inProgress) return;
+  var DOMUtil = eXo.core.DOMUtil; 
+  var componentHeight = uiVirtualList.offsetHeight;
+  var scrollPosition = uiVirtualList.scrollTop;
+  var scrollerHeight = uiVirtualList.scrollHeight;  
+  var scrollable_gap = scrollerHeight - (scrollPosition + componentHeight); 
+  // if scrollbar reaches bottom  
+  if (scrollable_gap <= 1) {    
+    var feedBox = this.getFeedBox(uiVirtualList.id);
+    var html = feedBox.innerHTML;
+    uiVirtualList.backupHTML = html;
+    uiVirtualList.inProgress = true;
+    ajaxGet(url);
+  }
 }
 
 UIVirtualList.prototype.updateList = function(componentId, hasNext) {
-  
   var DOMUtil = eXo.core.DOMUtil;
   var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;
@@ -112,21 +104,20 @@ UIVirtualList.prototype.updateList = function(componentId, hasNext) {
   }
  
   var feedBox = this.getFeedBox(uiVirtualList.id);
-  var loadedContent = uiVirtualList.storeHTML;
+  var loadedContent = uiVirtualList.backupHTML;
   
   if (eXo.core.Browser.browserType != "ie") {
-  	feedBox.innerHTML = loadedContent + feedBox.innerHTML; 
-  } else {  	
-  	var index = uiVirtualList.innerHTML.indexOf(feedBox.className);
-  	index = uiVirtualList.innerHTML.indexOf(">", index) + 1;
-  	var firstSec = uiVirtualList.innerHTML.substring(0, index);
-  	var secondSec = uiVirtualList.innerHTML.substring(index);  	
-  	uiVirtualList.innerHTML = firstSec + loadedContent + secondSec;  	
+    feedBox.innerHTML = loadedContent + feedBox.innerHTML; 
+  } else {    
+    var index = uiVirtualList.innerHTML.indexOf(feedBox.className);
+    index = uiVirtualList.innerHTML.indexOf(">", index) + 1;
+    var firstSec = uiVirtualList.innerHTML.substring(0, index);
+    var secondSec = uiVirtualList.innerHTML.substring(index);   
+    uiVirtualList.innerHTML = firstSec + loadedContent + secondSec;   
   }
-	uiVirtualList.isLocked = false;
-  if (!uiVirtualList.isFinished && !uiVirtualList.isInitiated) {
-  	this.init(componentId);
-  }
+  uiVirtualList.inProgress = false;
+  
+  this.loadIfNeeded(uiVirtualList);
 }
 
 eXo.webui.UIVirtualList = new UIVirtualList();
