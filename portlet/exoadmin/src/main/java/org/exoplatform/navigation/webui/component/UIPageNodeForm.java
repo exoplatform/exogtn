@@ -120,7 +120,6 @@ public class UIPageNodeForm extends UIFormTabPane
    public UIPageNodeForm() throws Exception
    {
       super("UIPageNodeForm");
-      
       UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");      
       UICheckBoxInput uiDateInputCheck =
          new UICheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
@@ -571,6 +570,7 @@ public class UIPageNodeForm extends UIFormTabPane
          
          uiForm.setSelectedLocale(languageSelection.getValue());
          label.setValue(uiForm.getLabelOnLocale(uiForm.getSelectedLocale()));
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
    
@@ -652,7 +652,6 @@ public class UIPageNodeForm extends UIFormTabPane
          UIPageNodeForm uiForm = event.getSource();
          UIPageSelector pageSelector = uiForm.findFirstComponentOfType(UIPageSelector.class);
 
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
 
          UIFormInputSet uiInputSet = pageSelector.getChild(UIFormInputSet.class);
@@ -733,8 +732,8 @@ public class UIPageNodeForm extends UIFormTabPane
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
             return;
          }
-
          pageSelector.setPage(page);
+         event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector);
       }
    }
    
