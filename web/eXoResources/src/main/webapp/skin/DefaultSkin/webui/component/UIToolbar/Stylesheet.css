@@ -173,8 +173,8 @@
 .UIToolbar .BlueLargeToolbar .ItemButton {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	padding-left: 35px; /* orientation=lt */
-	padding-right: 35px; /* orientation=rt */
+	padding-left: 40px; /* orientation=lt */
+	padding-right: 40px; /* orientation=rt */
 	margin: 0 10px; display: block;
 	background-image: url('background/BlueLargeToolbar.gif');
 	background-repeat: no-repeat;

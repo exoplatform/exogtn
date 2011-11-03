@@ -19,14 +19,7 @@
 
 /*####################- HorizontalLayout -#################*/
 
-.UIForm .HorizontalLayout {
-  border: 1px solid #e3e2e2;
-  background: #F7F7F7;
-  padding: 10px;
-}	
-  
 .UIFormGrid {
-	width: auto;
 	margin: auto;
 }
 
