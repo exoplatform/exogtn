@@ -20,18 +20,19 @@
 .UIRightClickPopupMenu {
 	display: none;
 	position: absolute;
+	background: #ffffff;
+	border: 1px solid #c6c6c6;
+	-moz-box-shadow: 1px 3px 5px #BDBDCE;
+	-webkit-box-shadow: 1px 3px 5px #BDBDCE;
+	box-shadow: 1px 3px 5px #BDBDCE;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 }
 
-.UIContextMenuContainer {
-	background: #c4c4c4;
-	border: 1px solid #7e7e7f;
+.UIRightClickPopupMenu .MenuItem {
+	padding: 0 10px;
 } 
-
-.UIRightClickPopupMenu .UIRightPopupMenuContainer {
-	margin: 1px;
-	padding: 5px 0px;
-	background: #f6f6f6;
-}
 
 .UIRightClickPopupMenu .RightClickCustomItem {
 	display: none;
@@ -45,13 +46,14 @@
 	cursor: pointer;
 	white-space: nowrap;
 	display: block;
-	background-position: 6px center; /* orientation=lt */
-	background-position: 95% center; /* orientation=rt */
 }
 
-.UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover {
+.UIRightClickPopupMenu .MenuItem:hover {
+	background: #eaeaea;
+}
+
+.UIRightClickPopupMenu .MenuItem:hover .ItemIcon {
 	color: orange;
-	background-color: #dee4f2;
 }
 
 .UIRightClickPopupMenu .AddNode16x16Icon {
