@@ -66,9 +66,6 @@ public class UIRegisterInputSet extends UIFormInputWithActions
    public UIRegisterInputSet(String name) throws Exception{
       super(name);
       
-//      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
-//                     .addValidator(StringLengthValidator.class, 3, 30).addValidator(ResourceValidator.class)
-//                     .addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$", "ResourceValidator.msg.Invalid-char"));
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
          .addValidator(UsernameValidator.class, 3, 30));
       
