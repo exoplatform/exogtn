@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.workspace;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
@@ -59,7 +60,6 @@ import org.exoplatform.webui.url.ComponentURL;
 
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -102,8 +102,6 @@ public class UIPortalApplication extends UIApplication
 
    private int modeState = NORMAL_MODE;
 
-   private String lastRequestURI;
-
    private Orientation orientation_ = Orientation.LT;
 
    final static public String UI_WORKING_WS_ID = "UIWorkingWorkspace";
@@ -124,7 +122,9 @@ public class UIPortalApplication extends UIApplication
 
    private boolean isAjaxInLastRequest;
 
-   private String lastNonAjaxRequestUri;
+   private RequestNavigationData lastNonAjaxRequestNavData;
+
+   private RequestNavigationData lastRequestNavData;
 
    private String lastPortal;
    
@@ -299,9 +299,9 @@ public class UIPortalApplication extends UIApplication
       return modeState;
    }
 
-   public void setLastRequestURI(String uri)
+   public void setLastRequestNavData(RequestNavigationData navData)
    {
-      this.lastRequestURI = uri;
+      this.lastRequestNavData = navData;
    }
 
    /**
@@ -524,7 +524,9 @@ public class UIPortalApplication extends UIApplication
    public void processAction(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
-      String requestURI = pcontext.getRequestURI();
+      //String requestURI = pcontext.getRequestURI();
+      RequestNavigationData requestNavData = pcontext.getNavigationData();
+
       boolean isAjax = pcontext.useAjax();
 
       if (!isAjax)
@@ -532,21 +534,21 @@ public class UIPortalApplication extends UIApplication
          if (isAjaxInLastRequest)
          {
             isAjaxInLastRequest = false;
-            if (requestURI.equals(lastNonAjaxRequestUri) && !requestURI.equals(lastRequestURI))
+            if (requestNavData.equals(lastNonAjaxRequestNavData) && !requestNavData.equals(lastRequestNavData))
             {
                NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE).setNode(getCurrentSite().getSelectedUserNode());
                pcontext.sendRedirect(nodeURL.toString());
                return;
             }
          }
-         lastNonAjaxRequestUri = requestURI;
+         lastNonAjaxRequestNavData = requestNavData;
       }
 
       isAjaxInLastRequest = isAjax;
 
-      if (!requestURI.equals(lastRequestURI))
+      if (!requestNavData.equals(lastRequestNavData))
       {
-         lastRequestURI = requestURI;
+         lastRequestNavData = requestNavData;
 
          StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
          js.append(pcontext.getRequestURI()).append("\";\n");
@@ -565,7 +567,7 @@ public class UIPortalApplication extends UIApplication
 
       if (!isAjax)
       {
-         lastNonAjaxRequestUri = requestURI;
+         lastNonAjaxRequestNavData = requestNavData;
       }
       
       if (pcontext.isResponseComplete())

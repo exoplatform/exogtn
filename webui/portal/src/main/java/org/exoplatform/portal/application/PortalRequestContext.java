@@ -35,6 +35,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.URLFactoryService;
@@ -697,4 +698,11 @@ public class PortalRequestContext extends WebuiRequestContext
          return Util.getPortalRequestContext().getLocale();
       }
    };
+
+   public RequestNavigationData getNavigationData()
+   {
+      return new RequestNavigationData(controllerContext.getParameter(QualifiedName.create("gtn", "sitetype")),
+         controllerContext.getParameter(QualifiedName.create("gtn", "sitename")),
+         controllerContext.getParameter(QualifiedName.create("gtn", "path")));
+   }
 }
