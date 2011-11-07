@@ -18,12 +18,20 @@
  */
 package org.exoplatform.portal.application;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 /**
 * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
 * @date 11/4/11
 */
 public class RequestNavigationData
 {
+   public final static QualifiedName REQUEST_PATH = QualifiedName.create("gtn", "path");
+
+   public final static QualifiedName REQUEST_SITE_TYPE = QualifiedName.create("gtn", "sitetype");
+
+   public final static QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
+
    protected final String siteType;
 
    protected final String siteName;
