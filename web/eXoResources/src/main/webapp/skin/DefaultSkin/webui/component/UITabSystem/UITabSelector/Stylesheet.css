@@ -146,6 +146,10 @@
 	font-family: verdana;
 }
 
+.UIAccessGroup .PublicCheck .UIFormGrid .FieldLabel {
+	width: 50%;
+}
+
 .UITabSelector .UIAction {
 	padding: 20px 0px;
 }
