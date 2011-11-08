@@ -131,8 +131,11 @@
 /***********************UIAddGroupNavigation************************/
 
 .UIAddGroupNavigation {
-	background: white; 
-	padding: 0px; 
+}
+
+.UIAddGroupNavigation .UIVirtualList {
+	background: #fff;
+	border: 1px solid #e2e2e2;
 }
 
 .UIAddGroupNavigation .AddGroupIcon {
@@ -151,9 +154,10 @@
 .UIAddGroupNavigation .WarningAddGroup {
 	text-align: center;
 	padding: 15px 0px;
-	background: #FED8D8;
+	background: #ffffbb;
+	color: #252525;
 	margin: 10px;
-	font-size: 13px;
+	border: 1px solid #e2e2e2;
 }
 
 /********************UINavigationManagement****************/
