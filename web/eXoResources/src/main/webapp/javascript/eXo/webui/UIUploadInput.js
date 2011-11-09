@@ -30,47 +30,42 @@ function UIUploadInput() {
 /**
  * Initialize upload and create a upload request to server
  * @param {String} uploadId identifier upload
- * @param {boolean} isAutoUpload auto upload or none
  */
-UIUploadInput.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
+UIUploadInput.prototype.initUploadEntry = function(uploadId, isDynamicMode) {
+  if(isDynamicMode && uploadId.length > 1) {
+    isDynamicMode = true;
+  } else {
+    isDynamicMode = false;
+  }
   for(var i = 0; i < uploadId.length; i++) {
     var url = this.progressURL + uploadId[i] ;
-	var responseText = ajaxAsyncGetRequest(url, false);
-	
-	var response;
+    var responseText = ajaxAsyncGetRequest(url, false);
+    var response;
     try {
       eval("response = "+responseText);
     } catch(err) {
       return;  
     }
 
-	  if(response.upload[uploadId[i]] == undefined || response.upload[uploadId[i]].percent == undefined) {
-		  this.createEntryUpload(uploadId[i], isAutoUpload);
-	  } else if(response.upload[uploadId[i]].percent == 100)  {
-		  this.showUploaded(uploadId[i], response.upload[uploadId[i]].fileName);
-	  } 
+    if(response.upload[uploadId[i]] == undefined || response.upload[uploadId[i]].percent == undefined) {
+      this.createEntryUpload(uploadId[i], isDynamicMode);
+    } else if(response.upload[uploadId[i]].percent == 100)  {
+      this.showUploaded(uploadId[i], response.upload[uploadId[i]].fileName);
+    } 
   }
 };
 
-UIUploadInput.prototype.createEntryUpload = function(id, isAutoUpload) {
+UIUploadInput.prototype.createEntryUpload = function(id, isDynamicMode) {
   var div = document.getElementById('UploadInput' + id);
-    
+  var url = document.getElementById('RemoveInputUrl' + id).value;
+  var label = document.getElementById('RemoveInputLabel').value;
   var inputHTML = "<input id='file" +id+ "' class='file' name='file' type='file' onkeypress='return false;'";
-
-  if(isAutoUpload) {
-    inputHTML += " onchange='eXo.webui.UIUploadInput.upload(\"" +id+ "\", " +isAutoUpload+ ");' >";    
-  } else {
-    inputHTML += " >"
+  inputHTML += " onchange='eXo.webui.UIUploadInput.upload(\"" +id+ "\");'/>";    
+  if(isDynamicMode) {
+    inputHTML += "<a class='ActionLabel' href='javascript:void(0)' onclick=\"" +url+ "\">" +label+ "</a>";
   }
-  
   div.style.display = 'block';
   div.innerHTML = inputHTML; 
-
-	if(!isAutoUpload) {
-		var prefixId = id.substring(0, id.indexOf('-'));
-		var img = document.getElementById('IconUpload' + prefixId + '-0');
-		img.style.display = 'block';
-	}
 };
 
 UIUploadInput.prototype.displayUploadButton = function(id) {
@@ -108,7 +103,7 @@ UIUploadInput.prototype.showUploaded = function(id, fileName) {
   progressBarFrame.style.display = "none" ;
 };
 
-UIUploadInput.prototype.refreshProgress = function(uploadId, isAutoUpload) {
+UIUploadInput.prototype.refreshProgress = function(uploadId) {
   var list =  this.listUpload;
   if(list.length < 1) return;
   var url = this.progressURL;
@@ -118,7 +113,7 @@ UIUploadInput.prototype.refreshProgress = function(uploadId, isAutoUpload) {
   }
   var responseText = ajaxAsyncGetRequest(url, false);
   if(this.listUpload.length > 0) {
-    setTimeout("eXo.webui.UIUploadInput.refreshProgress('" +uploadId+ "', " +isAutoUpload+ ");", this.refreshTime); 
+    setTimeout("eXo.webui.UIUploadInput.refreshProgress('" +uploadId+ "');", this.refreshTime); 
   }
     
   var response;
@@ -131,7 +126,7 @@ UIUploadInput.prototype.refreshProgress = function(uploadId, isAutoUpload) {
   for(id in response.upload) {
     var container = parent.document.getElementById('UploadInputContainer' + id);
   	if (response.upload[id].status == "failed") {
-  		this.abortUpload(id, isAutoUpload);
+  		this.abortUpload(id);
   		var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div", "LimitMessage").innerHTML ;
   		message = message.replace("{0}", response.upload[id].size);
   		message = message.replace("{1}", response.upload[id].unit);
@@ -155,11 +150,11 @@ UIUploadInput.prototype.refreshProgress = function(uploadId, isAutoUpload) {
 
   if (element) {
     element.innerHTML = "Uploaded "+ percent + "% " +
-                        "<span onclick='parent.eXo.webui.UIUploadInput.abortUpload("+uploadId+", "+isAutoUpload+")'>Abort</span>";
+                        "<span onclick='parent.eXo.webui.UIUploadInput.abortUpload(\"" +uploadId+ "\")'>Abort</span>";
   }
 };
 
-UIUploadInput.prototype.deleteUpload = function(id, isAutoUpload) {
+UIUploadInput.prototype.deleteUpload = function(id, isDynamicMode) {
   var url = this.deleteURL + id;
   var request =  eXo.core.Browser.createHttpRequest();
   request.open('GET', url, false);
@@ -170,10 +165,10 @@ UIUploadInput.prototype.deleteUpload = function(id, isAutoUpload) {
   var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "SelectFileFrame") ;
   selectFileFrame.style.display = "none" ;
 
-  this.createEntryUpload(id, isAutoUpload);
+  this.createEntryUpload(id, isDynamicMode);
 };
 
-UIUploadInput.prototype.abortUpload = function(id, isAutoUpload) {
+UIUploadInput.prototype.abortUpload = function(id, isDynamicMode) {
   this.listUpload.remove(id);
   var url = this.abortURL + id;
   var request =  eXo.core.Browser.createHttpRequest();
@@ -188,7 +183,7 @@ UIUploadInput.prototype.abortUpload = function(id, isAutoUpload) {
   var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ProgressBarFrame") ;
   progressBarFrame.style.display = "none" ;
 
-  this.createEntryUpload(id, isAutoUpload);
+  this.createEntryUpload(id, isDynamicMode);
 };
 
 /**
@@ -197,13 +192,13 @@ UIUploadInput.prototype.abortUpload = function(id, isAutoUpload) {
  * @param {String} id
  */
 
-UIUploadInput.prototype.doUpload = function(id, isAutoUpload) {
+UIUploadInput.prototype.doUpload = function(id) {
   var DOMUtil = eXo.core.DOMUtil;  
   var container = parent.document.getElementById('UploadInputContainer' + id);  
   this.displayUploadButton(id);
   if(id instanceof Array) {
     for(var i = 0; i < id.length; i++) {
-      this.doUpload(id[i], isAutoUpload);    
+      this.doUpload(id[i]);    
     }
   } else {
     var file = document.getElementById('file' + id);
@@ -234,16 +229,19 @@ UIUploadInput.prototype.doUpload = function(id, isAutoUpload) {
     
     if(this.listUpload.length == 0) {
       this.listUpload.push(id);
-      setTimeout("eXo.webui.UIUploadInput.refreshProgress('" + id + "', " + isAutoUpload + ");", this.refreshTime);
+      setTimeout("eXo.webui.UIUploadInput.refreshProgress('" + id + "');", this.refreshTime);
     } else {
       this.listUpload.push(id);
     }
+    
+    var container = parent.document.getElementById('UploadInputContainer' + id);
+    var UploadInput = eXo.core.DOMUtil.findDescendantById(container, 'UploadInput' + id);
+    UploadInput.style.display = "none";
   }
 };
 
-UIUploadInput.prototype.upload = function(id, isAutoUpload) {
-  if(isAutoUpload) setTimeout("eXo.webui.UIUploadInput.doUpload('" + id + "', " + isAutoUpload + ")", this.delayTime);  
-  else this.doUpload(id, isAutoUpload);
+UIUploadInput.prototype.upload = function(id) {
+  setTimeout("eXo.webui.UIUploadInput.doUpload('" + id + "')", this.delayTime);  
 };
 
 eXo.webui.UIUploadInput = new UIUploadInput();
