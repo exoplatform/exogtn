@@ -68,7 +68,7 @@ public class ExpressionValidator implements Validator
       if (uiInput.getValue() != null)
       {
          String value = ((String)uiInput.getValue()).trim();
-         if (pattern.matcher(value).find())
+         if (pattern.matcher(value).matches())
          {
             return;
          }
