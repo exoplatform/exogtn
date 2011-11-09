@@ -185,6 +185,8 @@
 	background: url('background/PortletLayoutDecorator.gif') repeat-x center -89px;
 	height: 69px;
 	padding: 10px 0;
+	word-wrap: break-word;
+	overflow-y: hidden;
 }
 
 /*############### End Decorator ###################################################*/

@@ -116,7 +116,7 @@ public class UIPortletForm extends UIFormTabPane
                      addValidator(MandatoryValidator.class).setEditable(false)).
       addUIFormInput(new UIFormStringInput("windowId", "windowId", null).setEditable(false)).*/
             addUIFormInput(new UIFormInputInfo("displayName", "displayName", null)).addUIFormInput(
-         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60).addValidator(NotHTMLTagValidator.class,
+         new UIFormStringInput("title", "title", null).addValidator(NotHTMLTagValidator.class,
                "UIPortletForm.msg.InvalidPortletTitle"))
          .addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?",
