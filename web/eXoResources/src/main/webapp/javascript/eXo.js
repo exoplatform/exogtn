@@ -94,10 +94,7 @@ eXo.loadJS = function(path, module, callback, context, params) {
   eXo.core.Loader.register(module, path);
   eXo.core.Loader.init(module, callback, context, params);
   
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
-    eXo.session.itvInit() ;
-  }
+  eXo.session.resetItv();
 } ;
 
 /**
@@ -137,19 +134,34 @@ eXo.session.itvTime = null ;
 eXo.session.itvObj = null;
 
 eXo.session.itvInit = function() {
-	if(!eXo.session.openUrl) eXo.session.openUrl = eXo.env.server.createPortalURL("UIPortal", "Ping", false) ;
-	if(!eXo.session.itvTime) eXo.session.itvTime = 1800;
-	if(eXo.session.itvTime > 0) eXo.session.itvObj = window.setTimeout("eXo.session.itvOpen()", (eXo.session.itvTime - 10)*1000) ;
+	if (!eXo.session.openUrl) eXo.session.openUrl = eXo.env.server.createPortalURL("UIPortal", "Ping", false) ;
+	if (!eXo.session.itvTime) eXo.session.itvTime = 1800;
+	eXo.session.startItv();
 } ;
 
-eXo.session.itvOpen = function() {
+eXo.session.startItv = function() {
+   if (eXo.session.itvTime > 0) eXo.session.itvObj = window.setTimeout("eXo.session.openItv()", (eXo.session.itvTime - 10)*1000) ;
+} ;
+
+eXo.session.openItv = function() {
 	var result = ajaxAsyncGetRequest(eXo.session.openUrl, false) ;
 	if(!isNaN(result)) eXo.session.itvTime = parseInt(result) ;
 } ;
 
-eXo.session.itvDestroy = function() {
-	window.clearTimeout(eXo.session.itvObj) ;
-	eXo.session.itvObj = null ;
+eXo.session.destroyItv = function () {
+   window.clearTimeout(eXo.session.itvObj) ;
+   eXo.session.itvObj = null ;
+} ;
+
+eXo.session.resetItv = function() {
+   if (eXo.session.canKeepState && eXo.env.portal.accessMode == 'private') {
+      if (eXo.session.itvObj) {
+         eXo.session.destroyItv();
+         eXo.session.startItv() ;
+      } else if (eXo.session.isOpen) {
+         eXo.session.itvInit() ;
+      }
+   }
 } ;
 
 eXo.debug = function(message) {
@@ -158,4 +170,4 @@ eXo.debug = function(message) {
 		message = "DEBUG: " + message;
 		eXo.webui.UINotification.addMessage(message);
 	}
-}
+} ;

@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -466,7 +465,6 @@ public class UIPortalComposer extends UIContainer
          uiEditWS.setRendered(false);
          uiPortal = (UIPortal)siteBody.getUIComponent();
 
-         uiPortalApp.setSessionOpen(PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()));
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.ignoreAJAXUpdateOnPortlets(true);
@@ -483,9 +481,10 @@ public class UIPortalComposer extends UIContainer
             uiPortal.getChildren().clear();
             PortalDataMapper.toUIPortal(uiPortal, prContext.getUserPortalConfig().getPortalConfig());
 
-            //Update the cache of UIPortal from UIPortalApplication
+            //Update the cache of UIPortal and portal properties from UIPortalApplication
             uiPortalApp.putCachedUIPortal(uiPortal);
             uiPortalApp.setCurrentSite(uiPortal);
+            uiPortalApp.reloadPortalProperties();
             
             //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
             //temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires
@@ -501,6 +500,8 @@ public class UIPortalComposer extends UIContainer
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
             JavascriptManager jsManager = prContext.getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            jsManager.addJavascript("eXo.session.isOpen=" + uiPortalApp.isSessionOpen() + ";");
+            jsManager.addJavascript("eXo.session.canKeepState=" + uiPortalApp.canKeepState() + ";");
          }
          else
          {
@@ -763,14 +764,6 @@ public class UIPortalComposer extends UIContainer
          uiPortal.setUIPage(pageId, uiPage);
          uiPortal.refreshUIPage();
          
-         if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
-         {
-            uiPortalApp.setSessionOpen(true);
-         }
-         else
-         {
-            uiPortalApp.setSessionOpen(false);
-         }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          pContext.ignoreAJAXUpdateOnPortlets(true);

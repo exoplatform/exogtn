@@ -50,6 +50,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -318,16 +319,20 @@ public class UIPortalForm extends UIFormTabPane
             PortalDataMapper.toUIPortal(uiPortal, pConfig);
 
             uiForm.invokeSetBindingBean(uiPortal);
-            //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
             if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
             {
                PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
                dataService.save(portalConfig);
                UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
+
+               // Reload portal properties if editing current portal
                if (prContext.getPortalOwner().equals(uiForm.getPortalOwner()))
                {
                   prContext.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
                   uiPortalApp.reloadPortalProperties();
+                  JavascriptManager jsManager = prContext.getJavascriptManager();
+                  jsManager.addJavascript("eXo.session.isOpen=" + uiPortalApp.isSessionOpen() + ";");
+                  jsManager.addJavascript("eXo.session.canKeepState=" + uiPortalApp.canKeepState() + ";");
                }
                
                // We should use IPC to update some portlets in the future instead of

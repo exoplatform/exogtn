@@ -26,6 +26,7 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
@@ -114,8 +115,10 @@ public class UIPortalApplication extends UIApplication
 
    private String skin_ = SkinService.DEFAULT_SKIN;
 
+   // TODO isSessionOpen field is only compatible with other products, should be removed
+   @Deprecated
    private boolean isSessionOpen = false;
-   
+
    private Map<SiteKey, UIPortal> all_UIPortals;
    
    private UIPortal currentSite;
@@ -127,6 +130,8 @@ public class UIPortalApplication extends UIApplication
    private RequestNavigationData lastRequestNavData;
 
    private String lastPortal;
+   
+   private String sessionAlive_;
    
    /**
     * The constructor of this class is used to build the tree of UI components
@@ -147,13 +152,6 @@ public class UIPortalApplication extends UIApplication
       log = ExoLogger.getLogger("portal:UIPortalApplication");
       PortalRequestContext context = PortalRequestContext.getCurrentInstance();
 
-//      userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
-//      if (userPortalConfig_ == null)
-//         throw new Exception("Can't load user portal config");
-      
-      // dang.tung - set portal language by user preference -> browser ->
-      // default
-      // ------------------------------------------------------------------------------
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
 
       Locale locale = context.getLocale();
@@ -264,14 +262,31 @@ public class UIPortalApplication extends UIApplication
       this.all_UIPortals.remove(new SiteKey(ownerType, ownerId));
    }
 
+   public String getSessionAlive()
+   {
+      return sessionAlive_;
+   }
+
+   /**
+    * Return <code>true</code> if session always is kept by portal, otherwise return <code>false</code>
+    * 
+    * @return
+    */
    public boolean isSessionOpen()
    {
+      isSessionOpen = sessionAlive_ == null ? false : sessionAlive_.equals(PortalProperties.SESSION_ALWAYS);
       return isSessionOpen;
    }
 
-   public void setSessionOpen(boolean isSessionOpen)
+   /**
+    * Return <code>true</code> if session can be kept by an application or portal itself,
+    * otherwise return <code>false</code>
+    * 
+    * @return
+    */
+   public boolean canKeepState()
    {
-      this.isSessionOpen = isSessionOpen;
+      return sessionAlive_ == null ? false : !sessionAlive_.equals(PortalProperties.SESSION_NEVER);
    }
 
    public Orientation getOrientation()
@@ -796,6 +811,8 @@ public class UIPortalApplication extends UIApplication
          if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
             skin_ = userPortalConfigSkin;
       }
+
+      sessionAlive_ = context.getUserPortalConfig().getPortalConfig().getSessionAlive();
    }
    
    /**

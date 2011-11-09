@@ -708,10 +708,7 @@ function doRequest(method, url, queryString, callback) {
   request.callBack = callback ;
   eXo.portal.CurrentRequest = request ;
   request.process() ;
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen  && eXo.env.portal.accessMode == 'private') {
-	  eXo.session.itvInit() ;
-  }
+  eXo.session.resetItv();
 }	;
 
 /**
@@ -757,10 +754,7 @@ function ajaxRequest(method, url, async, queryString) {
   {
     request.send(null);
   }
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
-    eXo.session.itvInit() ;
-  }
+  eXo.session.resetItv();
 	if(!async) return request.responseText ;
 }
 

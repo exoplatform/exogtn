@@ -75,15 +75,14 @@
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
 			<% 
-				UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
-				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
-				boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
+			   boolean canKeepState = uicomponent.canKeepState();
+			   boolean isSessionOpen = uicomponent.isSessionOpen();
 			%>
 			eXo.portal.portalMode = <%= uicomponent.getModeState() %>;
-			eXo.session.level = "$sessionAliveLevel";
 			eXo.session.canKeepState = $canKeepState;
-			eXo.session.isOpen = <%=uicomponent.isSessionOpen()%> ;
+			eXo.session.isOpen = $isSessionOpen;
 			eXo.session.itvTime = ${((PortalRequestContext)rcontext).getRequest().getSession().getMaxInactiveInterval()} ;
+			<% if(canKeepState && isSessionOpen) { %> eXo.session.itvInit() ;<% } %>
 		</script>
 		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
 		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
