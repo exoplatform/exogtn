@@ -61,7 +61,7 @@ public class TestBindingInputSet extends TestCase
          
          assertEquals(model.getValue1(), "value1-0");
          assertNull(model.getValue2());
-         assertEquals(model.getValue3(), "value3-0");
+         assertNull(model.getValue3());
       }
       catch (Exception e)
       {
