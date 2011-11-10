@@ -3,258 +3,250 @@
         <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
         %BOOK_ENTITIES;
         ]>
-<section id="sect-User_Guide-User_management">
-  <title>Manage Users and Groups</title>
-  <para>
-    Several tools are offered to assist Administrators manage users, groups and memberships easily and effectively.
+<section>
+  <para xml:id="sect-User_Guide-User_management">
+    As an administrator, you can easily add users, edit their information, manage users, groups and memberships easily and effectively.
   </para>
-  <para>You first need to:</para>
-  <itemizedlist>
-    <listitem>
-      <para>
-        Mouse-over
-        <emphasis role="bold">Group</emphasis>
-        in the <emphasis role="bold">Toolbar</emphasis>.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        Highlight
-        <emphasis role="bold">Organization</emphasis>
-        and then click <emphasis role="bold">Users and groups management</emphasis>.
-      </para>
-    </listitem>
-  </itemizedlist>
+  <para>To perform these actions, you first need to hover your cursor over <inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+      </imageobject>
+    </inlinemediaobject>
+    at the top right of the site, then select
+    <emphasis role="bold">User.</emphasis>
+  </para>
 
-  <!--
- <menuchoice>
-   <guimenu>Group</guimenu>
-   <guimenuitem>Organization</guimenuitem>
-   <guimenuitem>Users and groups management</guimenuitem>
- </menuchoice> -->
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
 
-  <mediaobject>
-    <imageobject role="html">
-      <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scale="1" contentwidth="70"/>
-    </imageobject>
-    <imageobject role="fo">
-      <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="100mm"/>
-    </imageobject>
-  </mediaobject>
-  <para>The Organization form will be shown that enables you to manage users, groups and memberships.</para>
-
+  <section id="sect-User_Guide-User_Management-Add_a_user">
+    <title>Add a user</title>
+    <procedure>
+      <step>
+        <para>
+          Click
+          <emphasis role="bold">Add Users</emphasis>
+          from the drop-down menu.
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" contentwidth="150mm"/>
+          </imageobject>
+        </mediaobject>
+        <para>The
+          <emphasis role="bold">Create New Account</emphasis>
+          window will open with two tabs: <emphasis role="bold">Account Settings</emphasis> and <emphasis role="bold">User Profile.</emphasis>
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" contentwidth="150mm"/>
+          </imageobject>
+        </mediaobject>
+      </step>
+      <step>
+        <para>
+          Fill all fields in the
+          <emphasis role="bold">Account Settings</emphasis>
+          tab which must be completed. For more details on these fields, see <link linkend="Create_New_Account_form_details">here.</link>
+        </para>
+        <para>
+          Further information about the user, such as nickname, or birthday, can be added in the
+          <emphasis role="bold">User Profile</emphasis>
+          tab that is not required.
+        </para>
+      </step>
+      <step>
+        <para>
+          Click
+          <emphasis role="bold">Save</emphasis>
+          to accept your new account. If you want to refresh the input information, simply click
+          <emphasis role="bold">Reset.</emphasis>
+        </para>
+      </step>
+    </procedure>
+  </section>
   <section id="sect-User_Guide-User_Management-Manage_users">
     <title>Manage users</title>
-    <para>
-      As an administrator, you can easily find, edit information of user via the
-      <guilabel>User Management</guilabel>
-      tab in the
-      <emphasis role="bold">Organization</emphasis>
-      form. By default, all existing registered users will shown:
+    <para>By clicking <emphasis role="bold">Groups And Roles,</emphasis> you will see the <emphasis role="bold">Organization</emphasis> form which allows
+      you to manage users, groups and memberships.
     </para>
     <mediaobject>
-      <imageobject>
-        <imagedata fileref="images/UserManage.png" format="PNG" align="center" width="444"/>
+      <imageobject role="html">
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" contentwidth="100mm"/>
       </imageobject>
     </mediaobject>
     <para>
-      Administrators can see all existing registered users and search, edit or even delete them. Each user's groups and
-      memberships (roles) in these groups are also available. You cannot add users to a group but you can remove them
-      from the group.
+      As an administrator, you can easily find, edit information of users, and even remove them from the system via the
+      <emphasis role="bold">User Management</emphasis> tab. By default, all registered users will be shown in this tab.
     </para>
-
-
-    <section id="sect-User_Guide-User_Management-Add_a_user">
-      <title>Add a user</title>
-      <para>
-        To add a new user to the portal user lists follow these steps:
-      </para>
-      <procedure>
-        <step>
-          <para>
-            Mouse-over
-            <emphasis role="bold">Group</emphasis>
-            in the <emphasis role="bold">Toolbar</emphasis>.
-          </para>
-        </step>
-        <step>
-          <para>
-            Highlight
-            <emphasis role="bold">Organization</emphasis>
-            and then click <emphasis role="bold">New Staff</emphasis>.
-          </para>
-          <para>
-            The
-            <emphasis role="bold">New Staff</emphasis>
-            window will open:
-          </para>
-          <mediaobject>
-            <imageobject role="html">
-              <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110"/>
-            </imageobject>
-            <imageobject role="fo">
-              <imagedata fileref="images/NewStaff.png" format="PNG" align="center" contentwidth="150mm"/>
-            </imageobject>
-          </mediaobject>
-          <para>
-            This window has two tabs:
-            <emphasis role="bold">Account Settings</emphasis>
-            and<emphasis role="bold">User Profile</emphasis>.
-          </para>
-        </step>
-        <step>
-          <para>
-            To create a new user all of the fields in the
-            <emphasis role="bold">Account Settings</emphasis>
-            tab must be completed.
-          </para>
-          <para>
-            Further information about the user (such as nickname and birthday) can be added in the
-            <emphasis role="bold">User Profile</emphasis>
-            tab. This information is not required for the creation of the account.
-          </para>
-        </step>
-        <step>
-          <para>
-            Click either
-            <emphasis role="bold">Save</emphasis>
-            or
-            <emphasis role="bold">Reset</emphasis>
-            to create or discard the new account.
-          </para>
-        </step>
-      </procedure>
-    </section>
-
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="100mm"/>
+      </imageobject>
+    </mediaobject>
+    <para>
+      Via the <emphasis role="bold">User Management</emphasis> tab, you also can define each user belonging to user groups and his
+      memberships (roles) in these groups. You cannot add users to a group but can remove them from the group.
+    </para>
     <section id="sect-User_Guide-User_Management-Search_a_user">
       <title>Search for users</title>
       <para>
-        The Administrator can search for specific users by username, first name, last name or email address.
+        You can search for specific users by username, first name, last name or email address.
       </para>
       <procedure>
         <step>
           <para>
-            Select the information type (name, email, etc) to search against
+            Type the search term related to the user you want to search. You do not need to enter an exact term.
           </para>
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/SearchUser.png" format="PNG" align="center" width="444"/>
             </imageobject>
-          </mediaobject>
-        </step>
-        <step>
-          <para>
-            Type in a partial/full string which identifies the user record being searched. Note that wild cards are not
-            supported at this release.
-          </para>
-        </step>
-        <step>
-          <para>
-            Click the magnifying glass icon to begin the search.
-          </para>
-        </step>
-      </procedure>
-    </section>
-
-    <section id="sect-User_Guide-User_Management-Edit_a_user">
-      <title>Edit user information</title>
-      <procedure>
-        <step>
-          <para>
-            Locate the user you wish to edit.
-          </para>
-        </step>
-        <step>
-          <para>
-            Click the edit icon (next to the trash icon).
-          </para>
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444"/>
+            <imageobject role="fo">
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" contentwidth="560"/>
             </imageobject>
           </mediaobject>
         </step>
         <step>
           <para>
+            Select the information type you want to search against.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click 
+ 			<inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Search_button.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject>, or hit the <emphasis role="bold">Enter</emphasis> key to perform your search.
+          </para>
+        </step>
+      </procedure>
+    </section>
+    <section id="sect-User_Guide-User_Management-Edit_a_user">
+      <title>Edit user information</title>
+      <procedure>
+        <step>
+          <para>
+            Locate the user you want to edit his information.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              </imageobject>
+            </inlinemediaobject>
+            corresponding to the user with the information you want to edit.
+          </para>
+        </step>
+        <step>
+          <para>
             Select the
             <emphasis role="bold">Account Info</emphasis>
-            tab to edit the main user information set including first name, last name or email address.
+            tab to edit main information of the user, including <emphasis role="bold">First Name, Last Name,</emphasis> or <emphasis role="bold">Email Address.</emphasis>
           </para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" contentwidth="560"/>
+            </imageobject>
+          </mediaobject>
           <variablelist>
             <varlistentry>
-              <term>User Name</term>
+              <term>
+                <emphasis role="bold">Username</emphasis>
+              </term>
               <listitem>
                 <para>
                   The
-                  <emphasis role="bold">User Name</emphasis>
-                  field cannot be changed. Other fields
-                  <emphasis role="bold">First Name</emphasis>
-                  ,
-                  <emphasis role="bold">Last Name</emphasis>
-                  ,
-                  <emphasis role="bold">Email Address</emphasis>
-                  can be changed.
+                  <emphasis role="bold">Username</emphasis>
+                  cannot be changed.
                 </para>
               </listitem>
             </varlistentry>
             <varlistentry>
-              <term>Change Password</term>
+              <term>
+                <emphasis role="bold">Change Password</emphasis>
+              </term>
               <listitem>
                 <para>
                   The
                   <emphasis role="bold">Change Password</emphasis>
-                  option allows an administrator to set a new password for a user. When the
+                  option allows an administrator to set a new password for the selected user. When the
                   <emphasis role="bold">Change Password</emphasis>
                   option is unchecked,
                   <emphasis role="bold">New Password</emphasis>
                   and
                   <emphasis role="bold">Confirm Password</emphasis>
-                  are hidden. Passwords must contain at least 6 characters and can contain letters, numbers and
+                  are hidden. Passwords must contain at least 6 characters, including letters, numbers and
                   punctuation marks.
                 </para>
               </listitem>
             </varlistentry>
           </variablelist>
+		  <para>For more details on these fields, see <link linkend="Create_New_Account_form_details">here.</link>
+		  </para>
         </step>
         <step>
           <para>
             Select the
             <emphasis role="bold">User Profile</emphasis>
-            tab to edit additional information about the user's profile such as the birthdate or the job title as well
-            as some home and business metadata. You may also switch the default display language for that user.
+            tab to edit the personal information of the selected user, including
+            <emphasis role="bold">Profile,</emphasis>
+            <emphasis role="bold">Home</emphasis>
+            and
+            <emphasis role="bold">Business.</emphasis>
+			You may also switch the default display language for that user by selecting
+            another language from the <emphasis role="bold">Language</emphasis> field where all available languages are displayed in the alphabetical order.
           </para>
         </step>
         <step>
           <para>
             Select the
             <emphasis role="bold">User Membership</emphasis>
-            tab to see a user's group membership information.
+            tab to see the group membership information of the user.
           </para>
-          <mediaobject>
+          <para>
+            The
+            <emphasis role="bold">User Membership</emphasis>
+            tab displays which groups the selected user belongs to.
+          </para>
+          <para>
+            To remove the user from a group, click 
+            <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Demo3.png" format="PNG" align="center" width="444"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
             </imageobject>
-          </mediaobject>
-          <variablelist>
-            <varlistentry>
-              <term>User Membership</term>
-              <listitem>
-                <para>
-                  The
-                  <emphasis role="bold">User Membership</emphasis>
-                  tab displays which group(s) the selected user belongs to. In the above figure, the user "demo" is a
-                  member of two groups: "guests" and "users". The parent group of both is "platform".
-                </para>
-                <para>
-                  To remove the user from a group, click the trash can icon.
-                </para>
-              </listitem>
-            </varlistentry>
-          </variablelist>
+          </inlinemediaobject>.
+          </para>
         </step>
         <step>
           <para>
-            Click the <emphasis role="bold">Save</emphasis>.
+            Click <emphasis role="bold">Save</emphasis> to accept your changes.
           </para>
         </step>
       </procedure>
@@ -265,19 +257,25 @@
       <procedure>
         <step>
           <para>
-            Locate the user you wish to delete
+            Locate the user you wish to delete.
           </para>
         </step>
         <step>
           <para>
-            Click the trash icon corresponding to the user who you want to delete in the main User Management form.
+            Click 
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject> corresponding to the user you want to delete in the main <emphasis role="bold">User Management</emphasis> form.
           </para>
         </step>
         <step>
           <para>
             Click
             <emphasis role="bold">OK</emphasis>
-            to confirm.
+            in the confirmation message
+            to accept your deletion.
           </para>
         </step>
       </procedure>
@@ -288,32 +286,34 @@
   <section id="sect-User_Guide-User_Management-Manage_groups">
     <title>Manage groups</title>
     <para>Select the
-      <emphasis>Group Management</emphasis>
-      tab in the Organization form. This tab is used to add new, edit or delete a group.
-    </para>
-    <para>
-      By default, all existing groups will be displayed on the left pane. This tab is used to add new, edit or delete a
-      group. The right pane shows information about the selected group including information about the members in the
-      specific group along with a small form to add a new user to a group.
+      <emphasis role="bold">Group Management</emphasis>
+      tab in the <emphasis role="bold">Organization</emphasis> form. This tab is used to add, edit or delete a group.
+      You can also add or delete a user to a group and edit the user membership in the group.
     </para>
     <mediaobject>
       <imageobject>
         <imagedata fileref="images/GroupManage.png" format="PNG" align="center" width="444"/>
       </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/GroupManage.png" format="PNG" align="center" scalefit="1" contentwidth="484mm"/>
+      </imageobject>
     </mediaobject>
+    <para>
+      By default, all existing groups will be displayed on the left pane.
+      The right pane shows information of the selected group and of its members with the <emphasis role="bold">Add Member</emphasis> form.
+    </para>
+
 
     <section id="sect-User_Guide-User_Management-Add_a_new_group">
-      <title>Add a New Group</title>
+      <title>Add a new group</title>
       <procedure>
         <step>
           <para>
-            Choose the path to create a new group by selecting the group from the list on the left pane or by clicking
+            Select the path to create a new group by clicking the group from the left pane or by clicking
             <inlinemediaobject>
-              <mediaobject>
               <imageobject role="html">
                 <imagedata fileref="images/arrow-blue-arrow.png" format="PNG"/>
               </imageobject>
-              </mediaobject>
             </inlinemediaobject>
             if you want to create a group at a higher level. The selected path is displayed in the breadcrumb bar.
           </para>
@@ -330,16 +330,16 @@
           <para>
             Click
             <inlinemediaobject>
-              <mediaobject>
               <imageobject role="html">
-                <imagedata fileref="images/plus-icon.png" format="PNG"/>
+                <imagedata fileref="images/plus_icon.png" format="PNG"/>
               </imageobject>
-              </mediaobject>
             </inlinemediaobject>
-            in the left pane. The
-            <emphasis role="bold">Add New Group</emphasis>
-            form will be displayed on the right pane.
-          </para>
+            in the left pane.
+			</para>
+			<para>
+			The
+            <emphasis role="bold">Add Group</emphasis>
+            form will be displayed in the right pane.
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/AddGroup.png" format="PNG" align="center" width="444"/>
@@ -348,57 +348,65 @@
               <imagedata fileref="images/AddGroup.png" format="PNG" align="center" contentwidth="110mm"/>
             </imageobject>
           </mediaobject>
-          <variablelist>
-            <varlistentry>
-              <term>
-                <emphasis role="bold">Group Name</emphasis>
-              </term>
-              <listitem>
-                <para>
-                  The name of the new group. This field is required and any length from 3 to 30 characters is allowed.
-                  Once saved this name cannot be edited.
-                </para>
-              </listitem>
-            </varlistentry>
-            <varlistentry>
-              <term>
+		  </para>
+		  <para><emphasis role="bold">Details:</emphasis></para>
+      <table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>
+                Field
+              </entry>
+              <entry>
+                Description
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+           <row>
+              <entry>
+                 <emphasis role="bold">Group Name</emphasis>
+              </entry>
+              <entry>
+                 Name of the group that is required and unique within the portal with its length from 3 to 30 characters. 
+                 Only letters, numbers and underscore characters are allowed for the <emphasis role="bold">Group Name</emphasis> field.
+              </entry>
+            </row>
+            <row>
+              <entry>
                 <emphasis role="bold">Label</emphasis>
-              </term>
-              <listitem>
-                <para>
-                  The display name of the group. Any length from 3 to 30 characters is allowed.
-                </para>
-              </listitem>
-            </varlistentry>
-            <varlistentry>
-              <term>
+              </entry>
+              <entry>
+                The display name of the group with any length from 3 to 50 characters.
+              </entry>
+            </row>
+             <row>
+              <entry>
                 <emphasis role="bold">Description</emphasis>
-              </term>
-              <listitem>
-                <para>
-                  A description of the group. Any length from 3 to 30 characters is allowed.
-                </para>
-              </listitem>
-            </varlistentry>
-          </variablelist>
+              </entry>
+              <entry>
+                 A description of the group with any length from 0 to 255 characters.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
         </step>
         <step>
           <para>
-            Fill in the required fields. Only letters, numbers and underscore characters are allowed for the
-            <emphasis role="bold">Group Name</emphasis>
-            field. The name must be unique within the portal.
+            Fill in the required fields. Once being saved, the <emphasis role="bold">Group Name</emphasis> cannot be edited.
           </para>
         </step>
         <step>
           <para>
             Click
             <emphasis role="bold">Save</emphasis>
+            to accept creating the new group.
           </para>
         </step>
       </procedure>
       <note>
-        <para>When a new group is added, the group creator will become the manager of that group. The creator's username
-          will be added in the created group with the "manager" membership.
+        <para>The creator will automatically become the manager of that group. The creator's username will be added to the created group with the "manager" membership.
         </para>
       </note>
     </section>
@@ -408,123 +416,60 @@
       <procedure>
         <step>
           <para>
-            Find the group in the existing tree and click the label
-          </para>
-        </step>
-        <step>
-          <para>
-            Click the edit icon to display the
-            <emphasis role="bold">Edit Current Group</emphasis>
-            window.
-          </para>
-        </step>
-        <step>
-          <para>
-            Make the desired changes in the appropriate fields. You can not change the Group Name, however you may
-            change to the
-            <emphasis role="bold">Label</emphasis>
-            field. You are also able to edit the
-            <emphasis role="bold">Description</emphasis>
-            field.
+            Click the group you want to edit in the left pane.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis> to accept changes.
-          </para>
-        </step>
-      </procedure>
-    </section>
-
-    <section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">
-      <title>Add a new user to a group</title>
-      <procedure>
-        <step>
-          <para>
-            Find the group in the existing tree and click its label. Existing group memberships are listed on the
-            left hand side along with the
-            <emphasis role="bold">Add Member</emphasis>
-            window.
-          </para>
-          <mediaobject>
+            <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG"/>
             </imageobject>
-          </mediaobject>
-        </step>
-        <step>
-          <para>
-            Click the magnify glass to open up the User selector.
-          </para>
-          <para>
-            Refer to
-            <xref linkend="sect-User_Guide-User_Management-Search_a_user"/>
-            for instructions on how to locate a user.
-          </para>
-          <para>
-            Check the box next to the user name then click
-            <emphasis role="bold">Add</emphasis>.
-          </para>
-        </step>
-        <step>
-          <para>
-            Select the membership appropriate for this user. If the desired membership does not appear you may try to
-            click the refresh icon to get the latest list.
-          </para>
-        </step>
-        <step>
-          <para>
-            Click
-            <emphasis role="bold">Save</emphasis> to accept adding the selected user to a specific group with the selected membership type.
-          </para>
-        </step>
-      </procedure>
-      <note><para>By default, the 'manager" membership has the highest right in a group.
-A user can have several membership types in a group. To do that, you have to use the <emphasis role="bold">Add member</emphasis> form for each membership type.
-After adding, the user's membership information is also updated. You can check it by opening the <emphasis role="bold">User Management</emphasis> form and editing the user you just added.</para></note>
-    </section>
-
-    <section id="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group">
-      <title>Edit the user membership in a group</title>
-      <procedure>
-        <step>
-          <para>
-            Click the edit icon corresponding to a specific user with a membership in the Action column.
+          </inlinemediaobject> in the left pane to show the
+            <emphasis role="bold">Edit Current Group</emphasis>
+            form of the selected group.
           </para>
           <mediaobject>
             <imageobject role="html">
-              <imagedata fileref="images/EditMember1.png" format="PNG" align="center"/>
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
             </imageobject>
           </mediaobject>
         </step>
         <step>
           <para>
-            Select a membership type in the <guilabel>Membership</guilabel> drop-down list.
+            Make changes on the fields, except <emphasis role="bold">Group Name.</emphasis>
           </para>
         </step>
         <step>
           <para>
-            Click <emphasis role="bold">Save</emphasis> to accept adding a new membership, or <guibutton>Reset</guibutton> to clear entered values..
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept your changes.
           </para>
         </step>
       </procedure>
     </section>
 
-    <section id="sect-User_Guide-User_Management-Delete_a_group">
+     <section id="sect-User_Guide-User_Management-Delete_a_group">
       <title>Delete a group</title>
       <procedure>
         <step>
           <para>
-            Find the group in the tree
+            Click the group you want to delete in the left pane.
           </para>
         </step>
         <step>
           <para>
-            Click the trash icon in the row of the membership type you want to delete..
+            Click
+            <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject> in the row of the membership type you want to delete.
           </para>
           <mediaobject>
             <imageobject role="html">
@@ -537,29 +482,159 @@ After adding, the user's membership information is also updated. You can check i
         </step>
         <step>
           <para>
-            Click<emphasis role="bold">OK</emphasis> .
+            Click
+            <emphasis role="bold">OK</emphasis>
+            in the confirmation message to accept your deletion.
           </para>
         </step>
       </procedure>
       <note>
-        <para>After being deleted, all information related to that group, such as users and navigation is also deleted.
-You cannot delete the mandatory groups, including Platform; Platform/guests; Platform/users.</para>
+        <para>After being deleted, all information related to that group, such as users and navigation, is also deleted.
+          You cannot delete the mandatory groups, including <emphasis>Platform, Platform/Administration, Platform/Guests, Platform/Visitors.</emphasis>
+        </para>
       </note>
     </section>
 
+    <section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">
+      <title>Add a user to a group</title>
+      <procedure>
+        <step>
+          <para>
+            Select the group to which you want to add a new user in the left pane.
+          </para>
+        </step>
+        <step>
+          <para>Enter the exact Username of the user that you want to add to the selected group (you can add many usernames separated by commas);
+                <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+          </mediaobject>
+          </para>
+          <para>Or, enter at least one character if you are not sure about the exact spelling and do the further followings:
+              <para><emphasis role="bold">i.</emphasis> Click 
+                <inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Search_icon.png" format="PNG"/>
+                  </imageobject>
+                </inlinemediaobject>
+                to search by your entered characters.
+              </para>
+            <para>After you have clicked
+                <inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Search_icon.png" format="PNG"/>
+                  </imageobject>
+                </inlinemediaobject>
+                , there will be a list of all existing users whose <emphasis role="bold">Usernames</emphasis> include the entered characters. For
+                example, if you enter 'o', you will get the following result.
+              </para>
+              <mediaobject>
+                <imageobject role="html">
+                  <imagedata fileref="images/Select_user_form.png" format="PNG" align="center" scale="110"/>
+                </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/Select_user_form.png" format="PNG" align="center" scalefit="1"
+                             contentwidth="150mm"/>
+                </imageobject>
+              </mediaobject>
+              <para>
+               <emphasis role="bold">ii.</emphasis> Select the checkboxes corresponding to users you want to add to the group.
+              </para>
+              <para>
+                After clicking <emphasis role="bold">Add,</emphasis> you will see the complete <emphasis role="bold">Usernames</emphasis> in the <emphasis role="bold">Add
+                Member</emphasis> form.
+              </para>
+              <mediaobject>
+                <imageobject role="html">
+                  <imagedata fileref="images/Added_member_form.png" format="PNG" align="center" scale="110"/>
+                </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/Added_member_form.png" format="PNG" align="center" scalefit="1"
+                             contentwidth="150mm"/>
+                </imageobject>
+              </mediaobject>
+            </para>
+        </step>
+        <step>
+          <para>
+            Select the membership for the users from the <emphasis role="bold">Membership</emphasis> list. You can click
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/Refresh_button.png" format="PNG"/>
+              </imageobject>
+            </inlinemediaobject>
+            to update the memberships list in case of any changes.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept adding the selected users to the specific group with the specified membership type.
+          </para>
+        </step>
+      </procedure>
+      <note>
+        <para>By default, the "manager" membership has the highest right in a group.
+          A user can have several membership types in a group. To do that, you have to use the
+          <emphasis role="bold">Add Member</emphasis>
+          form for each membership type. The user's membership information is hereafter updated. You can check it by opening the
+          <emphasis role="bold">User Management</emphasis>
+          form and editing the user you just added.
+        </para>
+      </note>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group">
+      <title>Edit a user membership in a group</title>
+      <procedure>
+        <step>
+          <para>
+            Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject> corresponding to a specific user with a membership in the <emphasis role="bold">Action</emphasis> column in the right pane.
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/EditMember1.png" format="PNG" align="center"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Change the membership of the selected user by selecting another value in the
+            <emphasis role="bold">Membership</emphasis>
+            list.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to complete your changes.
+          </para>
+        </step>
+      </procedure>
+    </section>
   </section>
 
   <section id="sect-User_Guide-User_Management-Manage_memberships">
     <title>Manage memberships</title>
     <para>
-      The role of a user in a specific group is managed using the <emphasis role="bold">Membership Management</emphasis> tab.
+      The role of a user in a specific group is managed by using the
+      <emphasis role="bold">Membership Management</emphasis>
+      tab.
     </para>
     <para>
-      By default, three membership types are available:<emphasis>Manager</emphasis>,
-      <emphasis>Member</emphasis>
-      and<emphasis>Validator</emphasis>. By definition, <emphasis>Manager</emphasis> has got the highest rights in a group.
+      By default, eight membership types available in eXo Platform include <emphasis>Member, Author, Editor, Manager, Redactor,
+      Validator, Webdesigner,</emphasis> and <emphasis>Publisher.</emphasis> The "Manager" has the highest right in a group.
     </para>
-
     <mediaobject>
       <imageobject>
         <imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" width="444"/>
@@ -571,16 +646,18 @@ You cannot delete the mandatory groups, including Platform; Platform/guests; Pla
       <procedure>
         <step>
           <para>
-            In the
+            Enter values into the fields of the
             <emphasis role="bold">Add/Edit Membership</emphasis>
-            form, enter the values for the membership name field (required) and the description field (optional). Only
-            letters, digits, dots, dashes and underscores are allowed for the membership name.
+            form. The <emphasis role="bold">Membership Name</emphasis> field is required, and only letters, digits, dots, dashes and underscores are allowed without ANY SPACES.
           </para>
         </step>
         <step>
           <para>
-            Click the
-            <emphasis role="bold">Save</emphasis> to accept adding a new membership, or <guibutton>Reset</guibutton> to clear entered values.
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept adding a new membership, or
+            <emphasis role="bold">Reset</emphasis>
+            to clear entered values.
           </para>
         </step>
       </procedure>
@@ -591,19 +668,28 @@ You cannot delete the mandatory groups, including Platform; Platform/guests; Pla
       <procedure>
         <step>
           <para>
-            Click the edit icon corresponding to the membership type you want to edit in the Action column. Information about the selected membership type will be updated automatically in the <emphasis role="bold">Add/Edit Membership</emphasis> form.
+            Click
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              </imageobject>
+            </inlinemediaobject>
+            corresponding to the membership type you want to edit in the <emphasis role="bold">Action</emphasis> column. Information about the selected
+            membership type will be updated automatically in the
+            <emphasis role="bold">Add/Edit Membership</emphasis>
+            form.
           </para>
         </step>
         <step>
           <para>
-            Make the desired changes to the description. You cannot change <guilabel>Membership
-          </guilabel> name.
+            Make your desired changes on the <emphasis role="bold">Description</emphasis> field. You cannot change the <emphasis role="bold">Membership Name.</emphasis>
           </para>
         </step>
         <step>
           <para>
             Click
             <emphasis role="bold">Save</emphasis>
+            to accept your changes.
           </para>
         </step>
       </procedure>
@@ -614,13 +700,19 @@ You cannot delete the mandatory groups, including Platform; Platform/guests; Pla
       <procedure>
         <step>
           <para>
-            Click the trash icon in the Action column.
+            Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject>
+            in the <emphasis role="bold">Action</emphasis> column.
           </para>
         </step>
         <step>
           <para>
             Click
             <emphasis role="bold">OK</emphasis>
+            in the confirmation message to accept your deletion.
           </para>
         </step>
       </procedure>

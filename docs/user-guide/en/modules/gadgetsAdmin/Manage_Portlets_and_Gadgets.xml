@@ -4,24 +4,31 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-Manage_Portlets_and_Gadgets">
-  <title>Manage Portlets and Gadgets</title>
-  <!--
-       <para>
-       Portlets and gadgets are organized in different categories. Each category contains one or several portlets or gadgets. You can also mix portlets and gadgets into one category. By default all gadgets are placed in the <emphasis>Gadgets</emphasis> category.
-     </para>    -->
+  <title>Manage portlets and gadgets</title>
+  <para>To manage portlets and gadgets in a portal, you first need to hover your cursor over
+    <inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+      </imageobject>
+    </inlinemediaobject>
+    on the Administration bar, and select <emphasis role="bold">Applications.</emphasis> The
+    <emphasis role="bold">Manage Applications</emphasis> page will appear.
+    	<mediaobject>
+					<imageobject role="html">
+						<imagedata fileref="images/Manage_Applications_page.png" format="PNG" align="center" scale="110"/>
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Manage_Applications_page.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
+					</imageobject>
+				</mediaobject>
+  </para>
+     <para>
+       Portlets and gadgets are organized into different categories. Each category contains one or several portlets or gadgets. You can also mix portlets and gadgets into one category. 
+       By default, all gadgets are placed in the <emphasis>Gadgets</emphasis> category.
+     </para>
   <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet">
     <title>Import portlets and gadgets</title>
     <para>This feature enables you to import default portlets and gadgets into different categories as follows:</para>
-    <note>
-      <!--<title>Technical Information about the Portlet Import</title>-->
-      <para>
-        The Application Registry looks in all webapps of your application server for a file located at
-        WEB-INF/portlet.xml and registers the portlets found there. When the user clicks on "Auto Import" the portlets
-        of all webapps are imported. If there is a portlet.xml file in a webapp a new category is created whose name is
-        the webapp war name (or the webapp folder name). All the portlets that are configured in the portlet.xml file
-        are added to the new category.
-      </para>
-    </note>
     <procedure>
       <step>
         <para>Click
@@ -35,45 +42,18 @@
       </step>
       <step>
         <para>Click
-          <guibutton>OK</guibutton>
-          to accept importing portlets and gadgets automatically in the confirmation window.
+          <emphasis role="bold">OK</emphasis>
+          in the confirmation message to accept importing portlets and gadgets automatically.
         </para>
         <para>All portlets and gadgets of all categories will be imported and listed on the left pane.</para>
       </step>
-      <!--
-      <step>
-        <para>
-          In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> then <emphasis role="bold">Application Registry</emphasis>:
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/Org1.png" format="PNG" align="center" scale="90" />
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/Org1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Click <emphasis role="bold">Import Applications</emphasis> on the right hand side. A confirmation message should appear as such:
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/local.png" format="PNG" align="center" scale="110" />
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/local.png" format="PNG" align="center" scalefit="1" contentwidth="110mm" />
-          </imageobject>
-        </mediaobject>
-      </step> -->
     </procedure>
   </section>
 
   <section id="sect-User_Guide-Dashboard_Portlet-View_Information">
-    <title>View/Edit detailed information of portlet/gadget</title>
-    <para>To view detailed information of portlet/gadget, simply select one portlet/gadget in the left pane. The
-      detailed information of that portlet will be shown on the right pane.
+    <title>View/Edit detailed information of a portlet/gadget</title>
+    <para>To view details of a portlet/gadget, simply select one portlet/gadget in the left pane. The
+      details of that portlet will be shown on the right pane.
     </para>
     <mediaobject>
       <imageobject role="html">
@@ -91,7 +71,7 @@
         </term>
         <listitem>
           <para>
-            All portlets and gadgets grouped by categories
+            All portlets and gadgets grouped by categories.
           </para>
         </listitem>
       </varlistentry>
@@ -101,19 +81,25 @@
         </term>
         <listitem>
           <para>
-            shows detail information about a portlet: Name, Display name, Description and Portlet preferences.
+            Details of a portlet: Name, Display Name, Description.
           </para>
         </listitem>
       </varlistentry>
     </variablelist>
-    <para>To edit a portlet, click
+	<citetitle>
+    <para xml:id="sect-User_Guide-Dashboard_Portlet-View_Information-Edit_portlet"><emphasis role="bold">Edit a portlet</emphasis></para>
+	</citetitle>
+      <procedure>
+        <step>
+          <para>Click
       <inlinemediaobject>
         <imageobject>
           <imagedata fileref="images/edit-icon.png" format="PNG" contentwidth="6mm"/>"
         </imageobject>
       </inlinemediaobject>
-      on the top corner of right pane. The form to edit will appear:
-    </para>
+      on the top corner of right pane. 
+      </para>
+      <para>The <emphasis role="bold">Edit Application Information</emphasis> form will appear.
     <mediaobject>
       <imageobject role="html">
         <imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="110"/>
@@ -123,273 +109,179 @@
                    contentwidth="110mm"/>
       </imageobject>
     </mediaobject>
-    <para>Make changes in fields, except <guilabel>Application Name</guilabel>.
     </para>
+    </step>
+    <step>
+    <para>Make changes on these fields, except <emphasis role="bold">Application Name.</emphasis>
+    </para>
+    </step>
+    </procedure>
   </section>
 
-  <section id="sect-User_Guide-Dashboard_Portlet-Display_Gadgets">
-    <title>Display Gadgets</title>
+  <section id="sect-User_Guide-Dashboard_Portlet-Edit_Specific_Portlet">
+    <title>Edit a specific portlet</title>
     <para>
-      You can change the number of columns available in the Dashboard Portlet.
+      This section tells you how to access the edit mode of a portlet and edit it. 
     </para>
     <procedure>
       <step>
-        <para>
-          Click <emphasis role="bold">Site Editor</emphasis>, then select
-          <emphasis role="bold">Edit Page</emphasis>
+        <para>Define your desired portlet to check if this portlet has been existing in the portal or page. If not, drag and drop it from <emphasis role="bold">Edit Inline Composer</emphasis> to the main portal body while <link linkend="proc-User_Guide-Manage_Portals-Edit_Layout">editing the portal's layout,</link> or from <emphasis role="bold">Page Editor</emphasis> to the main page body in the <link linkend="sect-User_Guide-Page_Creation_Wizard-Rearrange_Page_Layout_and_Portlets">Step 3 while creating a page</link> and/or while <link linkend="sect-User_Guide-Manage_Pages-Edit_a_Page">editing a page.</link>
+        </para> 
+      </step>
+	  <step>
+		<para>Hover your cursor over your desired portlet and click 
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Edit_portlet_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject>
+          at the upper left corner of that portlet.
         </para>
+        <para>
+          The <emphasis role="bold">Edit</emphasis> form will be displayed.
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/Edit_portlet_form.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/Edit_portlet_form.png" format="PNG" align="center" scalefit="1"
+                       contentwidth="150mm"/>
+          </imageobject>
+        </mediaobject>
+		</para>
+		  <para>
+          Normally, a portlet has four tabs:
+          <emphasis role="bold">Window Settings, Select Icon, Decoration Themes</emphasis>
+          and <emphasis role="bold">Access Permission.</emphasis> However, some portlets may also have
+          <emphasis role="bold">Edit Mode</emphasis> and <emphasis role="bold">Preferences</emphasis> tabs.
+          For example, IFrame and Dashboard portlets have the <emphasis role="bold">Edit Mode</emphasis> tab where administrators can define the interface details.
+        </para>
+		</step>
+		<step>
+		<para>Make changes on fields in the various tabs. 
+		</para>
+		<itemizedlist>
+		<listitem>
+		<para>
+        The <emphasis role="bold">Window Settings</emphasis> tab allows you to change values related to settings of your selected portlet.
+		</para>
+		<para><emphasis role="bold">Details:</emphasis>
+		</para>
+		<table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>
+                Field
+              </entry>
+              <entry>
+                Description
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+           <row>
+              <entry>
+                <emphasis role="bold">Display Name</emphasis>
+              </entry>
+              <entry>
+                The display name of portlet which cannot be changed.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Window Title</emphasis>
+              </entry>
+              <entry>
+               The portlet title with the length between 3 and 60 characters.
+              </entry>
+            </row>
+             <row>
+              <entry>
+                <emphasis role="bold">Width</emphasis>
+              </entry>
+              <entry>
+              The portlet's vertical size. The value of this field must be in numeric format.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Height</emphasis>
+              </entry>
+              <entry>
+                The portlet's horizontal size. The value of this field must be in numeric format.
+              </entry>
+            </row>
+            <row>
+            <entry><emphasis role="bold">Show Info Bar</emphasis>
+            </entry>
+            <entry>
+             The option enables the information bar to be shown or hidden. If the <emphasis role="bold">Show Info Bar</emphasis> checkbox is not selected, portlet mode and window state will not be displayed in that portlet.
+            </entry>
+            </row>
+              <row>
+              <entry>
+                <emphasis role="bold">Show Portlet Mode</emphasis>
+              </entry>
+              <entry>
+                  The option enables the portlet mode to be shown or hidden.
+				</entry>
+            </row>
+			<row>
+              <entry>
+                <emphasis role="bold">Show Window State</emphasis>
+              </entry>
+              <entry>
+                The option enables the portlet's window state to be shown or not.
+              </entry>
+            </row>
+              <row>
+              <entry>
+                <emphasis role="bold">Description</emphasis>
+              </entry>
+              <entry>
+                The brief information of the portlet. The length must be between 0 and 255 characters.
+              </entry>
+            </row>
+         </tbody>
+        </tgroup>
+      </table>
+	  </listitem>
+	  <listitem>
+	  <para>The <emphasis role="bold">Select Icon</emphasis> tab allows you to select an icon for the portlet. By clicking <emphasis role="bold">Get Default,</emphasis> you do not have to select any icon from the list, the suitable icon will be got automatically.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para>
+	  The <emphasis role="bold">Decoration Themes</emphasis> tab allows you to select a theme for the portlet from the themes list. By clicking <emphasis role="bold">Get Default,</emphasis> you do not have to choose any theme, it will be automatically set.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para>
+	  The <emphasis role="bold">Access Permission</emphasis> tab allows you to set the access permission on the portlet. The portlet can be made public to everyone or restricted to specific groups.
+	  </para>
+	  <note>
+	  <para>See the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set access permission on a portlet</link> section for details on how to assign the access permission on a portlet.
+	  </para>
+	  </note>
+	  </listitem>
+	  </itemizedlist>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Edit Portlet</emphasis>
-          button (which is displayed a pencil icon when you mouse-over the portlet in edit mode). It will show a dialog
-          to change the number of columns to display gadgets.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/Column.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/Column.png" format="PNG" align="center" scalefit="1" contentwidth="120mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Change the number of columns and click the
-          <emphasis role="bold">Save</emphasis>
-          button to accept the changes.
-        </para>
+          <emphasis role="bold">Save And Close</emphasis> to accept your changes.
+        </para>      
       </step>
     </procedure>
-
-  </section>
-
-
-  <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Set_Access_Permission_on_Portlets">
-    <title>Set Access Permission on Portlets</title>
-
-    <procedure>
-      <step>
-        <para>
-          In the
-          <emphasis role="bold">Group</emphasis>
-          menu, select
-          <emphasis role="bold">Administration</emphasis>
-          and then <emphasis role="bold">Application Registry</emphasis>.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="160mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Select a category in the Category pane that includes the portlet you want to set permissions on. All portlets
-          of that category will be listed underneath.
-        </para>
-      </step>
-      <step>
-        <para>
-          To set permission for a portlet:
-        </para>
-        <itemizedlist>
-          <listitem>
-            <para>
-              Click the
-              <emphasis role="bold">Add Permission</emphasis>
-              button to add access permissions to more groups.
-            </para>
-            <mediaobject>
-              <imageobject role="html">
-                <imagedata fileref="images/AddPermission.png" format="PNG" align="center" scale="110"/>
-              </imageobject>
-              <imageobject role="fo">
-                <imagedata fileref="images/AddPermission.png" format="PNG" align="center" scalefit="1"
-                           contentwidth="150mm"/>
-              </imageobject>
-            </mediaobject>
-          </listitem>
-          <listitem>
-            <para>
-              Or check
-              <emphasis role="bold">Make it public</emphasis>
-              to allow everyone to access.
-            </para>
-          </listitem>
-        </itemizedlist>
-        <para>
-          Whenever the user creates or modifies a page, he or she can only see and use gadgets/portlets that fulfill two
-          conditions: the portlet is in a
-          <emphasis role="bold">category</emphasis>
-          which the user has access permission too and the user has access permission on the
-          <emphasis role="bold">portlet</emphasis>
-        </para>
-      </step>
-    </procedure>
-  </section>
-
-  <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Edit_Specific_Portlet">
-    <title>Edit a specific portlet</title>
-    <para>This section tells you how to access the edit mode of a portlet and edit it.</para>
-    <procedure>
-      <step>
-        <para>Create or edit a page as stated in Section 4.1.3, Edit a portal. In this step, there will be a container
-          that contains and arranges portlets as contents of that page. You can add a portlet to that page by dragging
-          it from the left pane and dropping it into this container space.
-        </para>
-      </step>
-      <step>
-        <para>Open the form to edit a portlet by clicking
-          <inlinemediaobject>
-            <imageobject>
-              <imagedata fileref="images/edit-icon1.png" format="PNG" contentwidth="6mm"/>"
-            </imageobject>
-          </inlinemediaobject>
-          at the upper left corner of that portlet:
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/editPortlet.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/editPortlet.png" format="PNG" align="center" scalefit="1" contentwidth="90mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>Enter new values that you want to edit in this form, then click
-          <guibutton>Save</guibutton>
-          to save new values:
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/editPortlet1.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/editPortlet1.png" format="PNG" align="center" scalefit="1" contentwidth="90mm"/>
-          </imageobject>
-        </mediaobject>
-        <para>Normally, a portlet has four tabs: Window Setting, Select Icon, Decoration Themes and Access Permission.
-          In addition, some portlets may also have Edit Mode or Preferences. The administrator can change the interface
-          of a portlet by changing values in the Edit Mode tab or in the Preferences Tab.
-        </para>
-        <para>The Portlet Setting tab includes:</para>
-        <variablelist>
-          <varlistentry>
-            <term>Display Name</term>
-            <listitem>
-              <para>
-                The display name of portlet.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Window Title</term>
-            <listitem>
-              <para>
-                The window title with the length between 3 and 60 characters..
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Width</term>
-            <listitem>
-              <para>
-                The portlet's vertical size. The value of this field must be in numeric format.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Height</term>
-            <listitem>
-              <para>
-                The portlet's horizontal size. The value of this field must be in numeric format.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Show Info Bar</term>
-            <listitem>
-              <para>
-                The option enables the information bar to be shown or hidden.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Show Portlet Mode</term>
-            <listitem>
-              <para>
-                The option enables the portlet mode to be shown or hidden.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Show Window State</term>
-            <listitem>
-              <para>
-                The option enables the portlet's window state to be shown or not.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Description</term>
-            <listitem>
-              <para>
-                The brief information about the portlet. The length must be between 0 and 255 characters.
-              </para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-        <note>
-          <para>If Show Info Bar is not checked, portlet mode and window state will not be displayed in that portlet.
-          </para>
-        </note>
-        <para>The Select Icon tab enables you to select an icon for the portlet. By clicking Get Default, you do not
-          have to choose any icon from the list, the suitable icon will be gotten automatically.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/selectIconTab.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/selectIconTab.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
-          </imageobject>
-        </mediaobject>
-        <para>The Decoration Themes tab enables you to select a theme for the portlet from the themes list. By clicking
-          <guilabel>Get Default</guilabel>, you do not have to choose any theme, it will be automatically set.
-        </para>
-        <para>The Access Permission tab enables you to set the access permission on the portlet. The portlet can be made
-          public to everyone or restricted to specific groups. See more details at <xref
-                  linkend="sect-User_Guide-Manage_Permissions"/>.
-        </para>
-      </step>
-    </procedure>
-    <note>
-      <para>Some portlets have Edit Mode and Preferences tabs.</para>
-      <para>The
-        <emphasis role="bold">Mode tab</emphasis>
-        where administrator can define the interface details.
-      </para>
-    </note>
   </section>
   <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget">
-    <title>Add a Gadget</title>
+    <title>Add a gadget</title>
     <para>
-      In the
-      <emphasis role="bold">Group</emphasis>
-      menu, select
-      <emphasis role="bold">Administration</emphasis>
-      then <emphasis role="bold">Application Registry</emphasis>. Click the
+      To add a gadget, you first need to turn into the
       <emphasis role="bold">Gadget</emphasis>
-      icon.
+      page by selecting
+      <emphasis role="bold">Gadget</emphasis> on the tab bar of the <emphasis role="bold">Manage Applications</emphasis> page.
     </para>
     <mediaobject>
       <imageobject role="html">
@@ -400,26 +292,21 @@
       </imageobject>
     </mediaobject>
     <para>
-      You may add a remote gadget using its URL or create a brand-new one:
+      You can add a remote gadget using its URL or create a new gadget into the list.
     </para>
-
+	<citetitle>
+    <para xml:id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget-Add_remote_gadget"><emphasis role="bold">Add a remote gadget</emphasis></para>
+	</citetitle>
     <procedure>
-      <title>Add a remote Gadget</title>
       <step>
         <para>
-          Click <emphasis role="bold">Add a remote gadget</emphasis>:
+          Click the <emphasis role="bold">Add a Remote Gadget</emphasis> link.
         </para>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/AddGadgetnew.png" format="PNG" align="center" width="444"/>
-          </imageobject>
-        </mediaobject>
       </step>
       <step>
         <para>
-          Enter the URL of the remote gadget in the
-          <emphasis role="bold">URL</emphasis>
-          field.
+          Enter the link of your desired gadget which is in the <emphasis>.xml</emphasis> format in the
+          <emphasis role="bold">Gadget URL</emphasis> field.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -433,68 +320,95 @@
       </step>
       <step>
         <para>
-          Click <emphasis role="bold">Add</emphasis>. The new remote gadget will be appear in gadget list on left pane of
-          the Dashboard portlet.
+          Click
+          <emphasis role="bold">Add</emphasis>
+          to accept your inputted URL.
+        </para>
+        <para>
+          The selected gadget will be added to the gadgets list in the left pane with its details in the right pane.
         </para>
       </step>
     </procedure>
+	<citetitle>
+    <para xml:id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget-Create_new_gadget"><emphasis role="bold">Create a new gadget</emphasis></para>
+	</citetitle>
     <procedure>
-      <title>Create a new Gadget</title>
       <step>
         <para>
-          Click <emphasis role="bold">Create a new gadget</emphasis>:
+          Click the <emphasis role="bold">Create a New Gadget</emphasis> link.
         </para>
+      </step>
+      <step>
+        <para>
+          Enter values in the form. 
+        </para>
+        <para>
+      For example:
         <mediaobject>
           <imageobject role="html">
-            <imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scale="110"/>
+            <imagedata fileref="images/Add_new_gadget.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scalefit="1"
+            <imagedata fileref="images/Add_new_gadget.png" format="PNG" align="center" scalefit="1"
                        contentwidth="150mm"/>
           </imageobject>
         </mediaobject>
+       </para>
       </step>
       <step>
         <para>
-          Populate the
-          <literal>Source</literal>
-          field with the XML code of the new gadget.
+          Click
+          <emphasis role="bold">Save</emphasis>
+          to accept creating your new gadget.
         </para>
       </step>
     </procedure>
+    <note>
+      <para>
+        To add the newly added remote gadget to a specific category, simply click the "Click here to add into categories" link at
+        the bottom of the right pane. The table listing all categories will appear that allows you to select your desired
+        category.
+      </para>
+      <para>
+        To update information of the added gadget, simply click
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/Refresh_button.png" format="PNG"/>
+          </imageobject>
+        </inlinemediaobject>
+        to refresh information.
+      </para>
+    </note>
+	<itemizedlist>
+	<listitem>
     <para>
-      You can edit or refresh a gadget using the icons in the top right of the
-      <emphasis role="bold">Gadget Details</emphasis>
-      pane.
+      You can delete a local gadget using 
+      <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+            </imageobject>
+      </inlinemediaobject> corresponding to each gadget in the left gadgets list.
     </para>
-    <para>
-      You can delete a local gadget using the trashcan icon to the right of the appropriate gadget in the gadget list.
-    </para>
-    <mediaobject>
-      <imageobject>
-        <imagedata fileref="images/ActionGadget.png" format="PNG" align="center" width="444"/>
-      </imageobject>
-    </mediaobject>
+	</listitem>
+	</itemizedlist>
   </section>
-
   <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Gadget_to_the_Dashboard_Portlet">
-    <title>Add a new Gadget to the Dashboard Portlet</title>
+    <title>Add a new gadget from Dashboard</title>
     <para>
-      See
-      <xref linkend="sect-User_Guide-Dashboard_Portlet-Add_Gadgets"/>
-      for instructions on how to add new gadgets to the dashboard.
+      See the <link linkend="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">Add more external gadgets from Dashboard</link> section for instructions on how to add new gadgets from the dashboard.
     </para>
   </section>
-
-
   <section id="sect-User_Guide-Manage_Gadgets-Edit_a_Gadget">
-    <title>Edit a Gadget</title>
+    <title>Edit a gadget</title>
     <para>
-      Click the
-      <emphasis role="bold">Edit Gadget</emphasis>
-      icon located in the header of the
+      Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject>  
+      located in the header of the
       <emphasis role="bold">Gadget Details</emphasis>
-      page to display the following window:
+      page to display the following window.
     </para>
     <mediaobject>
       <imageobject>
@@ -502,31 +416,4 @@
       </imageobject>
     </mediaobject>
   </section>
-
-  <!--Covered in section above SM
-     <section id="sect-User_Guide-Manage_Gadgets-Refresh_a_Gadget">
-       <title>Refresh a Gadget</title>
-         <para>
-           Click the <emphasis role="bold">Refresh information</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window:
-         </para>
-
-     </section>
-
-     <section id="sect-User_Guide-Manage_Gadgets-Delete_a_Gadget">
-       <title>Delete a Gadget</title>
-
-         <para>
-           Click the trash can icon located next to the name of the gadget. An alert message should pop up asking for confirmation:
-         </para>
-         <mediaobject>
-           <imageobject>
-             <imagedata fileref="images/Delete.png" format="PNG" align="center" />
-           </imageobject>
-         </mediaobject>
-     </section> -->
-
 </section>
-
-
-
-

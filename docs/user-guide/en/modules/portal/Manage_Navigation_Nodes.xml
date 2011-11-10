@@ -4,48 +4,45 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
-  <title>Manage Navigation Nodes</title>
   <para>
-    If you are the portal administrator (or the administrator has granted you the appropriate permission privileges) you
-    can execute all actions related to portal nodes. These actions include adding new nodes or editing, copying, moving,
-    deleting or cloning existing nodes.
+    If you are the portal administrator or the portal administrator has granted you the appropriate permission
+    privileges, you can execute some special actions related to portal nodes, including copying, editing, cutting, cloning, deleting, adding existing nodes.
+    To do so, you first need to go to the nodes list by following steps described in the <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Edit navigation</link> section, then right-clicking your desired node to open the drop-down menu.
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scale="110"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" contentwidth="150mm"/>
+    </imageobject>
+  </mediaobject>
   </para>
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
     <title>Add a new node</title>
     <procedure>
-      <step>
-        <para>
-          Click on
-          <emphasis role="bold">Site</emphasis>
-          then click on
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/EditNavigation.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/EditNavigation.png" format="PNG" align="center" contentwidth="150mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Select a node from list (to create a new node like sub-node of the selected node) or click the
-          <emphasis role="bold">Up</emphasis>
-          icon to create a new node at the root level of the portal.
-        </para>
-      </step>
-
-      <step>
-        <para>
-          Right-click on the selected navigation or node and select
-          <emphasis role="bold">Add new Node</emphasis>
-          option. The
-          <emphasis role="bold">Add new node</emphasis>
-          form appears:
-        </para>
+      <step><para>
+          Select
+          <emphasis role="bold">Add New Node</emphasis> to create a node as a sub-node of the selected node.
+		  </para>
+		  <itemizedlist>
+		  <listitem>
+		  <para>
+          If you want to create a new node at the root level of the portal, click
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Up_arrow.png" format="PNG"/>
+            </imageobject>
+          </inlinemediaobject>, then right-click the empty space and select <emphasis role="bold">Add New Node.</emphasis>
+		  </para>
+		  </listitem>
+		  <listitem>
+		  <para>Or, simply click the <emphasis role="bold">Add Node</emphasis> button.</para>
+		  </listitem>
+		  </itemizedlist>
+		<para>The <emphasis role="bold">Add/Edit Page Node</emphasis> form appears.</para>
+		</step>
+		<step>
+		<para>Enter values in the <emphasis role="bold">Page Node Settings</emphasis> tab.
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110"/>
@@ -54,148 +51,208 @@
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" contentwidth="150mm"/>
           </imageobject>
         </mediaobject>
-        <para>
-          The
-          <emphasis role="bold">Page Node Setting</emphasis>
-          tab includes:
-        </para>
-
-
-        <variablelist>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Uri</emphasis>
-            </term>
-            <listitem>
-              <para>
-                An identification of the node. The Uri is automatically created after adding a new node
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Node name</emphasis>
-            </term>
-            <listitem>
-              <para>
-                The name of the node. This field is required and must be unique. Only alpha, digit and underscore
-                characters are allowed for this field and it must have at least 3 characters.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Label</emphasis>
-            </term>
-            <listitem>
-              <para>
-                The display name of the node on the screen. This field is not required and may be changed. This field
-                must have a length between 3 and 120 characters.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Visible</emphasis>
-            </term>
-            <listitem>
-              <para>
-                This check box allow to hide (and show) the page and its node at the navigation bar, the page navigation
-                and the site map
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Publication date &amp; time</emphasis>
-            </term>
-            <listitem>
-              <para>
-                This option allows publishing this node for a period of time.
-                <emphasis>Start Publication Date</emphasis>
+		</para>
+		<para><emphasis role="bold">Details:</emphasis></para>
+  <table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>
+                Field
+              </entry>
+              <entry>
+                Description
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+		    <row>
+              <entry>
+                <emphasis role="bold">Asterisk (*)</emphasis>
+              </entry>
+              <entry>
+                This mark next to each field means that it is required to enter values in the field.
+              </entry>
+            </row>
+           <row>
+              <entry>
+                <emphasis role="bold">Uri</emphasis>
+              </entry>
+              <entry>
+                An identification of the node that is auto-created after the new node has been created.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Node Name</emphasis>
+              </entry>
+              <entry>
+                The node name which must be unique. Only alphabetic, numeric and underscore characters are allowed with
+                its length from 3 to 30 characters and without ANY SPACES.
+              </entry>
+            </row>
+             <row>
+              <entry>
+                <emphasis role="bold">Extended Label Mode</emphasis>
+              </entry>
+              <entry>
+                Tick this checkbox to activate the extended label mode for your page node's label.
+                If this checkbox is deselected, the <emphasis role="bold">Language</emphasis> field will disappear.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Language</emphasis>
+              </entry>
+              <entry>
+                Select your desired language for the node label from the drop-down menu.
+              </entry>
+            </row>
+            <row>
+            <entry>
+            <emphasis role="bold">Label</emphasis>
+            </entry>
+            <entry>
+            The display name of the node on the screen in the selected language.
+                This field is not required and may be changed.
+                Its length must be between 3 and 120 characters, including SPACES.
+                For example, if you want to create a French label for your node, first select the <emphasis role="bold">Extended Label Mode</emphasis> checkbox.
+                Next, from the <emphasis role="bold">Language</emphasis> drop-down list, select your desired language and enter your French label into the <emphasis role="bold">Label</emphasis> field.
+            </entry>
+            </row>
+              <row>
+              <entry>
+                <emphasis role="bold">Visible</emphasis>
+              </entry>
+              <entry>
+                This checkbox enables the page and its node to be shown or hidden at the navigation bar and sitemap.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Publication Date &amp; Time</emphasis>
+              </entry>
+              <entry>
+                This option enables this node to be published for a given period. Two fields, including
+                <emphasis role="bold">Start Publication Date</emphasis>
                 and
                 <emphasis>End Publication Date</emphasis>
-                only appear when this option is selected.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Start Publication Date</emphasis>
-            </term>
-            <listitem>
-              <para>
+                only display when this option is checked.
+              </entry>
+            </row>
+              <row>
+              <entry>
+                <emphasis role="bold">Start Publication Date</emphasis>
+              </entry>
+              <entry>
                 The start date and time to publish the node.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">End Publication Date</emphasis>
-            </term>
-            <listitem>
-              <para>
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">End Publication Date</emphasis>
+              </entry>
+              <entry>
                 The end date and time to publish the node.
-              </para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-        <para>
-          In the
-          <emphasis role="bold">Page Selector</emphasis>
-          tab, you can select a page or not for this node.
+              </entry>
+            </row>
+         </tbody>
+        </tgroup>
+      </table>
+	   <note>
+            <para>
+              You can set date and time by clicking
+              <emphasis role="bold">Start Publication Date</emphasis>
+              and
+              <emphasis role="bold">End Publication Date</emphasis>
+              and selecting a date from the calendar pop-up.
+            </para>
+          </note>
+	  </step>
+	  <step>
+        <para>Select a page for this node in the <emphasis role="bold">Page Selector</emphasis> tab if you want.
+			<mediaobject>
+					<imageobject role="html">
+						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center" scale="110"/>
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
+					</imageobject>
+				</mediaobject>
         </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/PageSelector.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/PageSelector.png" format="PNG" align="center" contentwidth="150mm"/>
-          </imageobject>
-        </mediaobject>
-        <variablelist>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Page Id</emphasis>
-            </term>
-            <listitem>
-              <para>
-                The identification string of the page.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Name</emphasis>
-            </term>
-            <listitem>
-              <para>
-                The selected page's name.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-              <emphasis role="bold">Title</emphasis>
-            </term>
-            <listitem>
-              <para>
+		<para><emphasis role="bold">Details:</emphasis></para>
+ <table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>
+                Field
+              </entry>
+              <entry>
+                Description
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+           <row>
+              <entry>
+                <emphasis role="bold">Page Id</emphasis>
+              </entry>
+              <entry>
+                The identification string of the page which is created automatically.              
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Name</emphasis>
+              </entry>
+              <entry>
+               The selected page's name.
+              </entry>
+            </row>
+             <row>
+              <entry>
+                <emphasis role="bold">Title</emphasis>
+              </entry>
+              <entry>
                 The selected page's title.
-              </para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Clear Page</emphasis>
+              </entry>
+              <entry>
+                Remove the inputted page information from fields.
+              </entry>
+            </row>
+            <row>
+            <entry><emphasis role="bold">Create Page</emphasis>
+            </entry>
+            <entry>
+          Create a new page with the inputted name and the title.
+            </entry>
+            </row>
+              <row>
+              <entry>
+                <emphasis role="bold">Search and Select Page</emphasis>
+              </entry>
+              <entry>
+                Search and select an existing page.
+              </entry>
+            </row>
+         </tbody>
+        </tgroup>
+      </table>
         <para>
-          You do not have to enter values in these fields. They are automatically populated after selecting an existing
-          page by clicking the
-          <emphasis role="bold">Search and Select Page</emphasis>
-          button.
+          You do not need to enter values in these fields. They are automatically recorded after you have selected an
+          existing page by clicking
+          <emphasis role="bold">Search and Select Page.</emphasis>
         </para>
         <para>
           The
           <emphasis role="bold">Select Page</emphasis>
-          form appears:
-        </para>
+          form appears.
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110"/>
@@ -204,6 +261,7 @@
             <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" contentwidth="150mm"/>
           </imageobject>
         </mediaobject>
+		</para>
         <para>
           This window lists all existing pages of
           <emphasis role="bold">Portal</emphasis>
@@ -211,47 +269,34 @@
           <emphasis role="bold">Group</emphasis>
           with basic information for each page.
         </para>
-        <para>
-          To select a page for creating a node, simply select a page from the list or search for a specific page as
+        <para xml:id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
+          You can select a page for creating a node by simply clicking 
+		  <inlinemediaobject>
+                <imageobject>
+                  <imagedata fileref="images/Select_page_icon.png" format="PNG"/>
+                </imageobject>
+              </inlinemediaobject>, or search for a specific page as
           follows:
         </para>
-        <procedure id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
-          <step>
-            <para>
+            <para><emphasis role="bold">i.</emphasis>
               Enter your page title into the
               <emphasis role="bold">Title</emphasis>
-              field to do search to Title;
+              field to search by title;
             </para>
-            <mediaobject>
-              <imageobject role="html">
-                <imagedata fileref="images/NewSearch1.png" format="PNG" align="center" scale="130"/>
-              </imageobject>
-              <imageobject role="fo">
-                <imagedata fileref="images/NewSearch1.png" format="PNG" align="center" contentwidth="150mm"/>
-              </imageobject>
-            </mediaobject>
-            <para>
+            <para> 
               Or, enter the site name into the
               <emphasis role="bold">Site Name</emphasis>
-              field to do search to the page's site name;
+              field to search by the page's site name;
             </para>
-
             <para>
-              Or, enter values into both fields to futher limit your search results by both
-              <emphasis role="bold">Title</emphasis>
-              and <emphasis role="bold">Site Name</emphasis>.
+              Or, enter values into both fields to further limit your search results by both
+              <emphasis role="bold">Title</emphasis> and <emphasis role="bold">Site Name.</emphasis>
             </para>
-          </step>
-          <step>
-            <para>
-              Select the area in which you wish to search into the
+          <para><emphasis role="bold">ii.</emphasis> Select the area in which you want to search into the
               <emphasis role="bold">Type</emphasis>
               field.
             </para>
-          </step>
-          <step>
-            <para>
-              Click
+            <para><emphasis role="bold">iii.</emphasis> Click 
               <inlinemediaobject>
                 <imageobject>
                   <imagedata fileref="images/Search_button.png" format="PNG"/>
@@ -259,363 +304,222 @@
               </inlinemediaobject>
               to perform your search. All pages matching your search criteria will be listed.
             </para>
-          </step>
-          <step>
-            <para>
-              Click
+            <para><emphasis role="bold">iv.</emphasis> Click
               <inlinemediaobject>
                 <imageobject>
                   <imagedata fileref="images/Select_page_icon.png" format="PNG"/>
                 </imageobject>
               </inlinemediaobject>
-              on the row of the page you wish to select.
+              on the row of the page to select.
             </para>
-          </step>
-        </procedure>
+        <para>
+          After selecting a page, the details of this page will be displayed in the
+          <emphasis role="bold">Page Selector</emphasis>
+          form.
+        </para>
+      </step>
+      <step>
+        <para>
+          Select one icon in the
+          <emphasis role="bold">Icon</emphasis>
+          tab if you want.
+        </para>
+      </step>
+      <step>
+        <para>
+          Click
+          <emphasis role="bold">Save</emphasis>
+          to accept the new node page, or
+          <emphasis role="bold">X</emphasis>
+          to close the form.
+        </para>
       </step>
     </procedure>
-    <para>
-      After selecting a page, the details of this page will be displayed in the
-      <emphasis role="bold">Page Selector</emphasis>
-      form.
-    </para>
-    <para>
-      After configuring the page node settings, the page selector and the node's icon, click the
-      <emphasis role="bold">Save</emphasis>
-      button to accept or the
-      <emphasis role="bold">Cancel</emphasis>
-      button to quit without creating a new node.
-    </para>
-    <note>To select a page, you must be a member in the Access Permission or Edit Permission list of the selected pages.
-      When the page type is 'User', you can not select a page of another users.
-      If you do not have the access permission for any page in the list, please contact your administrator to get
-      appropriate permissions.
+    <note>
+	<para>To select a page, you must be a member in the <emphasis role="bold">Access Permission</emphasis> or <emphasis role="bold">Edit Permission</emphasis> list of the selected pages.
+      When the page type is 'User', you cannot select a page of another users.
+	</para>
+	<para>
+      If you do not have the access permission for any page in the list, please contact your administrator to get appropriate permissions.
+	</para>
     </note>
   </section>
 
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">
     <title>Edit a node</title>
-    <para>This function is used to edit the node setting and re-select a page for a node.</para>
+    <para>This function is used to edit the node settings and reselect a page for a node.</para>
     <procedure>
       <step>
         <para>
-          Click <emphasis role="bold">Site</emphasis>, then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
-        </para>
-      </step>
-      <step>
-        <para>
-          Right-click the selected node and select
+          Select 
           <emphasis role="bold">Edit this Node</emphasis>
-          option.
+          from the drop-down menu to open the form with all similar fields when you <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">Add a new node.</link>
         </para>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/EditNode1.png" format="PNG" align="center"/>
-          </imageobject>
-        </mediaobject>
-        <para>
-          This will display a form to edit this node:
-        </para>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/PageNodeSetting.png" format="PNG" align="center" width="444"/>
-          </imageobject>
-        </mediaobject>
       </step>
       <step>
         <para>
-          In the
-          <emphasis role="bold">Page Node Setting</emphasis>
-          tab you can change the value of these fields:
+          Change values in fields of the current node, except the <emphasis role="bold">Node Name.</emphasis>
         </para>
-        <itemizedlist>
-          <listitem>
-            <para>Label</para>
-          </listitem>
-          <listitem>
-            <para>Visible</para>
-          </listitem>
-          <listitem>
-            <para>Publication Date &amp; time</para>
-          </listitem>
-        </itemizedlist>
       </step>
       <step>
         <para>
-          After you finish making the desired changes, click the
+          Click
           <emphasis role="bold">Save</emphasis>
-          button to accept changes or
-          <emphasis role="bold">Cancel</emphasis>
-          button to exit without change.
-        </para>
-        <!--	<mediaobject>
-                  <imageobject>
-                    <imagedata fileref="images/PageSelector6.png" format="PNG" align="center" width="444" />
-                  </imageobject>
-                </mediaobject> -->
-      </step>
-      <step>
-        <para>
-          In the
-          <emphasis role="bold">Page Selector</emphasis>
-          tab you can also search and select another page for this node by clicking the
-          <emphasis role="bold">Search and Select Page</emphasis>
-          button.
-        </para>
-        <para>
-          You can see more details on how to select a page for a node in<xref
-                linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node"/>.
-        </para>
-        </step>
-      <step>
-        <para>
-          After you finish edit any another page required for this node, click the
-          <emphasis role="bold">Save</emphasis>
-          button to accept changing or
-          <emphasis role="bold">Cancel</emphasis>
-          button to leave without saving any changes.
+          to complete your changes.
         </para>
       </step>
     </procedure>
   </section>
 
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Copy_a_node">
-    <title>Copy a node</title>
-    <para>These functions are used to reproduce a node to another place.</para>
+    <title>Copy/Paste a node</title>
+    <para>These functions are used to reproduce a node in another place.</para>
     <procedure>
       <step>
         <para>
+          Select
+          <emphasis role="bold">Copy Node</emphasis> from the drop-down menu.
+        </para>
+      </step>
+      <step>
+        <para>
+          Right-click the position you want to paste this node and select
+          <emphasis role="bold">Paste Node.</emphasis>
+        </para>
+      </step>
+      <step>
+        <para>
           Click
-          <emphasis role="bold">Site</emphasis>,
-          then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
+          <emphasis role="bold">Save</emphasis>
+          to accept your changes.
         </para>
-      </step>
-      <step>
-        <para>
-          Right-click the selected node and select
-          <emphasis role="bold">Copy node</emphasis>
-          option.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/CopyNode3.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/CopyNode3.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Select the position that you want to paste this node and select
-          <emphasis role="bold">Paste Node</emphasis>
-          option. Click the mark icon to <emphasis role="bold">Save</emphasis>.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
       </step>
     </procedure>
-    <note>Two same node names in the same place are not allowed.</note>
+    <note>
+	<para>Two same node names in the same place are NOT allowed.
+	</para>
+	</note>
   </section>
 
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Clone_nodes">
-    <title>Clone nodes</title>
+    <title>Clone a node</title>
     <para>
       The
-      <emphasis role="bold">Clone node</emphasis>
-      function allows you to copy a node.
-    </para>
-    <para>
-      The differences between
-      <emphasis role="bold">clone node</emphasis>
-      and
-      <emphasis role="bold">copy node</emphasis>
-      is that the clone node has its own page and which has the same content as the selected node.
-    </para>
-    <para>
-      Therefore there will be a new page that has the same name as the cloned node's page shown in the page list when
-      you access <emphasis role="bold">Manage Pages</emphasis>.
+      <emphasis role="bold">Clone Node</emphasis>
+      function allows you to copy a node. The difference between <emphasis role="bold">cloning</emphasis> and <emphasis role="bold">copying</emphasis> a node 
+      is that the cloned node has its own page with the same content as the selected node.
+      Therefore, there will be a new page that has the same name as the cloned node's page shown in the pages list when
+      you access the <emphasis role="bold">Pages Management</emphasis> page.
     </para>
     <procedure>
       <step>
         <para>
+          Select
+          <emphasis role="bold">Clone Node</emphasis>
+          from the drop-down menu.
+        </para>
+      </step>
+      <step>
+        <para>
+          Right-click the position that you want to paste this node and select
+          <emphasis role="bold">Paste Node.</emphasis>
+        </para>
+        <para>
+          The cloned node will be reproduced in a new place.
+        </para>
+      </step>
+      <step>
+        <para>
           Click
-          <emphasis role="bold">Site</emphasis>
-          then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
+          <emphasis role="bold">Save</emphasis>
+          to accept your changes.
         </para>
-      </step>
-      <step>
-        <para>
-          Right-click selected node and select
-          <emphasis role="bold">Clone node</emphasis>
-          option.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/CloneNode2.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/CloneNode2.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          Select the position that you want to paste this node and select
-          <emphasis role="bold">Paste Node</emphasis>
-          option. Click the mark icon to <emphasis role="bold">Save</emphasis>.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
       </step>
     </procedure>
   </section>
 
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Cut_a_node">
     <title>Cut a node</title>
+    <para>This function enables you to change the position of a specific node, such as changing the page path.</para>
     <procedure>
       <step>
         <para>
-          Click
-          <emphasis role="bold">Site</emphasis>
-          then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
+          Select
+          <emphasis role="bold">Cut Node</emphasis>
+          from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
-          Right-click the selected node and select
-          <emphasis role="bold">Cut node</emphasis>
-          option.
+          Select the position that you want to paste this node and click
+          <emphasis role="bold">Paste Node.</emphasis>
         </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/CutNode4.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/CutNode4.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
       </step>
       <step>
-        <para>
-          Select the position that you want to paste this node and select
-          <emphasis role="bold">Paste Node</emphasis>
-          option. Mark icon to <emphasis role="bold">Save</emphasis>.
+        <para>Click
+          <emphasis role="bold">Save</emphasis>
+          to accept your change.
         </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
+        <para>The cut node will be moved to your newly selected place.</para>
       </step>
     </procedure>
-    <note>Two same node names in the same place are not allowed.</note>
+    <note>
+	<para>Two same node names in the same place are not allowed.
+	</para>
+	</note>
   </section>
 
   <section id="sect-User_Guide-Manage_Navigation_Nodes-Delete_a_node">
     <title>Delete a node</title>
+    <para>This function is used to remove a node linking to a page. After the node has been removed, the page has been still existing.</para>
     <procedure>
       <step>
         <para>
+          Select
+          <emphasis role="bold">Delete Node</emphasis>
+          from the drop-down menu.
+        </para>
+      </step>
+      <step>
+        <para>
           Click
-          <emphasis role="bold">Site</emphasis>
-          then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
-        </para>
-      </step>
-      <step>
-        <para>
-          Right-click the selected node and select
-          <emphasis role="bold">Delete node</emphasis>
-          option.
-        </para>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/DeleteNode2.png" format="PNG" align="center"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" contentwidth="130mm"/>
-          </imageobject>
-        </mediaobject>
-      </step>
-      <step>
-        <para>
-          It will display an alert message confirming the removal of the node. Click the
           <emphasis role="bold">OK</emphasis>
-          button to accept the deletion or
-          <emphasis role="bold">Cancel</emphasis>
-          button to quit without deleting the node.
+          in the confirmation message to accept your deletion.
         </para>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/http.png" format="PNG" align="center"/>
-          </imageobject>
-        </mediaobject>
+      </step>
+      <step>
+        <para>Click
+          <emphasis role="bold">Save</emphasis>
+          to accept your change.
+        </para>
       </step>
     </procedure>
-    <note>You, even as an administrator, cannot cut or delete FOUR system navigations, including <guilabel>Group Navigation</guilabel>, <guilabel> Portal Navigation</guilabel>,<guilabel>Register</guilabel> and <guilabel>NotFound</guilabel>. Also, you cannot cut or delete these system nodes which have been copied or cloned in the new positions. However, you can cut or delete them through cutting or deleting the node containing them, except system nodes.</note>
   </section>
 
   <section id="sect-User_Guide-Change_Node_Order">
-    <title>Change Node Order</title>
+    <title>Change nodes order</title>
     <para>
-      You can easily change the position of nodes in the navigation bar following these steps:
+      You can easily move the position of nodes up or down in the navigation bar following these steps:
     </para>
     <procedure>
       <step>
         <para>
-          Click
-          <emphasis role="bold">Site</emphasis>,
-          then click
-          <emphasis role="bold">Edit Navigation</emphasis>
-          of the portal you want to modify.
-        </para>
-      </step>
-      <step>
-        <para>
-          Select the node that you want to move. Right-click the selected node and then click
-          <emphasis role="bold">Move up</emphasis>
+          Select
+          <emphasis role="bold">Move Up</emphasis>
           or
-          <emphasis role="bold">Move down</emphasis>
+          <emphasis role="bold">Move Down</emphasis>
+          from the drop-down menu.
         </para>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/MoveUpDown.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
       </step>
       <step>
         <para>
-          The selected node will be moved up or down within the list.
+          Click
+          <emphasis role="bold">Save</emphasis>
+          to accept your changes.
         </para>
       </step>
     </procedure>
   </section>
-
 </section>
 
 
