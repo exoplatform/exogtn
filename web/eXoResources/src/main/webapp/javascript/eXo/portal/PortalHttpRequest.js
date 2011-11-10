@@ -708,7 +708,7 @@ function doRequest(method, url, queryString, callback) {
   request.callBack = callback ;
   eXo.portal.CurrentRequest = request ;
   request.process() ;
-  eXo.session.resetItv();
+  eXo.session.startItv();
 }	;
 
 /**
@@ -754,7 +754,7 @@ function ajaxRequest(method, url, async, queryString) {
   {
     request.send(null);
   }
-  eXo.session.resetItv();
+  eXo.session.startItv();
 	if(!async) return request.responseText ;
 }
 

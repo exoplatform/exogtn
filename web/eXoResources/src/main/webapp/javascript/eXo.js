@@ -94,7 +94,7 @@ eXo.loadJS = function(path, module, callback, context, params) {
   eXo.core.Loader.register(module, path);
   eXo.core.Loader.init(module, callback, context, params);
   
-  eXo.session.resetItv();
+  eXo.session.startItv();
 } ;
 
 /**
@@ -132,15 +132,26 @@ eXo.portal.logout = function() {
 eXo.session.openUrl = null ;
 eXo.session.itvTime = null ;
 eXo.session.itvObj = null;
+eXo.session.initialized = false;
 
 eXo.session.itvInit = function() {
-	if (!eXo.session.openUrl) eXo.session.openUrl = eXo.env.server.createPortalURL("UIPortal", "Ping", false) ;
-	if (!eXo.session.itvTime) eXo.session.itvTime = 1800;
-	eXo.session.startItv();
+   if (!eXo.session.initialized && eXo.session.canKeepState && eXo.env.portal.accessMode == 'private') {
+      if (!eXo.session.openUrl) eXo.session.openUrl = eXo.env.server.createPortalURL("UIPortal", "Ping", false) ;
+      if (!eXo.session.itvTime) eXo.session.itvTime = 1800;
+      eXo.session.initialized = true;
+      eXo.session.openItv();
+   }
 } ;
 
 eXo.session.startItv = function() {
-   if (eXo.session.itvTime > 0) eXo.session.itvObj = window.setTimeout("eXo.session.openItv()", (eXo.session.itvTime - 10)*1000) ;
+   if (eXo.session.initialized) {
+      eXo.session.destroyItv();
+      if (eXo.session.canKeepState && eXo.env.portal.accessMode == 'private') {
+         if (eXo.session.itvTime > 0) eXo.session.itvObj = window.setTimeout("eXo.session.openItv()", (eXo.session.itvTime - 10) * 1000) ;
+      }
+   } else if (eXo.session.isOpen) {
+      eXo.session.itvInit();
+   }
 } ;
 
 eXo.session.openItv = function() {
@@ -151,17 +162,6 @@ eXo.session.openItv = function() {
 eXo.session.destroyItv = function () {
    window.clearTimeout(eXo.session.itvObj) ;
    eXo.session.itvObj = null ;
-} ;
-
-eXo.session.resetItv = function() {
-   if (eXo.session.canKeepState && eXo.env.portal.accessMode == 'private') {
-      if (eXo.session.itvObj) {
-         eXo.session.destroyItv();
-         eXo.session.startItv() ;
-      } else if (eXo.session.isOpen) {
-         eXo.session.itvInit() ;
-      }
-   }
 } ;
 
 eXo.debug = function(message) {
