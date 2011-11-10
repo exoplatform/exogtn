@@ -19,13 +19,10 @@
 				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
 			<para>
-				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-Beta02/sso-packaging-1.1.0-Beta02.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
+				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-GA/sso-packaging-1.1.0-GA.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
 			</para>
 			<para>
 				It is recommended that you should not run any portal extensions that could override the data when manipulating the <filename>gatein.ear</filename> file directly.
-			</para>
-			<para>
-				Remove <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</literal> and <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</literal> which are packaged with &PRODUCT; by default.
 			</para>
 		</section>
 
@@ -34,7 +31,7 @@
 	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
 		<title>Central Authentication Service (CAS)</title>
 		<para>
-			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the CAS Single-Sign-On Framework. Details about CAS can be found <ulink url="http://www.ja-sig.org/products/cas/">here</ulink>.
+			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the CAS Single-Sign-On Framework. Details about CAS can be found <ulink url="http://www.jasig.org/cas">here</ulink>.
 		</para>
 		<para>
 			The integration consists of two steps: installing/configuring a CAS server and setting up the portal to use the CAS server.
@@ -48,9 +45,10 @@
 				<title>Obtaining CAS</title>
 				<para>
 					CAS can be downloaded from <ulink type="http" url="http://www.jasig.org/cas/download">http://www.jasig.org/cas/download</ulink>.
+               Tested version, which should work with these instructions is <emphasis role="bold">CAS 3.3.5</emphasis>, however other versions can also work without problems.
 				</para>
 				<para>
-					Extract the downloaded file into a suitable location. This location will be referred to as <literal>$CAS_HOME</literal> in the following example.
+					Extract the downloaded file into a suitable location. This location will be referred to as <literal>$CAS_HOME</literal> in the following instructions.
 				</para>
 			</section>
 			
@@ -222,14 +220,19 @@
 							<para>
 							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
 							</para>
-<programlisting language="xml">&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
 
 						</listitem>
@@ -491,14 +494,19 @@ realmName=gatein-domain;
 							<para>
 								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
 							</para>
-<programlisting language="xml">&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
 						</listitem>
 						<listitem>
@@ -669,6 +677,12 @@ realmName=gatein-domain;
 				<para>
 					Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
 				</para>
+            <note>
+               <para>
+                  There is also possibility to use OpenAM instead of OpenSSO server. OpenAM is free and integration steps with &PRODUCT; and OpenAM are very similar as with OpenSSO. More info is
+                  <ulink type="http" url="http://community.jboss.org/wiki/GateInAndOpenAMIntegration">here</ulink> .
+               </para>
+            </note>
 			</section>
 			
 			<section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
@@ -763,22 +777,22 @@ realmName=gatein-domain;
                      <para>Create the default configuration.</para>
                </step>
                <step>
-                     <para>Login as <literal>an admin</literal> and then go to the "Configuration" tab -> "Authentication" -> "Core" link ->
-                        add a new value and fill in the class name "org.gatein.sso.opensso.plugin.AuthenticationPlugin".
+                     <para>Login as <literal>an admin</literal> and then go to the <emphasis role="bold">Configuration</emphasis> tab -> <emphasis role="bold">Authentication</emphasis> -> <emphasis role="bold">Core</emphasis> link ->
+                        add a new value and fill in the class name <emphasis role="bold">org.gatein.sso.opensso.plugin.AuthenticationPlugin</emphasis>.
                         This step is really important. If not, AuthenticationPlugin is not available among other the OpenSSO authentication modules.
                      </para>
                </step>
                <step>
-                  <para>Go to the "Access control" tab and create the new realm called "gatein".</para>
+                  <para>Go to the <emphasis role="bold">Access control</emphasis> tab and create the new realm called <emphasis role="bold">gatein</emphasis>.</para>
                </step>
                <step>
-                  <para>Go to the "gatein" realm and click the "Authentication" tab. At the bottom of the "Authentication chaining" section, click "ldapService".
-                     Here, change the selection from "Datastore", which is the default module in the authentication chain, to "AuthenticationPlugin".
+                  <para>Go to the "gatein" realm and click the <emphasis role="bold">Authentication</emphasis> tab. At the bottom of the <emphasis role="bold">Authentication chaining</emphasis> section, click <emphasis role="bold">ldapService</emphasis>.
+                     Here, change the selection from "Datastore", which is the default module in the authentication chain, to <emphasis role="bold">AuthenticationPlugin</emphasis>.
                      This enables the authentication of "gatein" realm by using the GateIn REST service instead of the OpenSSO LDAP server.</para>
                </step>
                <step>
                   <para>
-                     Go to "Advanced properties" and change UserProfile from "Required" to "Dynamic". This step is needed
+                     Go to <emphasis role="bold">Advanced properties</emphasis> and change UserProfile from <emphasis role="bold">Required</emphasis> to <emphasis role="bold">Dynamic</emphasis>. This step is needed
                      because &PRODUCT; users are not in the OpenSSO Datastore (LDAP server), so their profiles can not be obtained
                      if "Required" is active. By using "Dynamic", all new users are automatically
                      created in the OpenSSO datastore after successful authentication.
@@ -786,8 +800,8 @@ realmName=gatein-domain;
                </step>
                <step>
                   <para>
-                     Increase the user privileges to allow the REST access. Go to "Access control" ->
-                     Top level realm -> "Privileges" tab -> All authenticated users, and check the last two checkboxes:
+                     Increase the user privileges to allow the REST access. Go to <emphasis role="bold">Access control</emphasis> ->
+                     <emphasis role="bold">Top level realm</emphasis> -> <emphasis role="bold">Privileges</emphasis> tab -> <emphasis role="bold">All authenticated users</emphasis>, and check the last two checkboxes:
                      <itemizedlist>
                         <listitem><para>Read and write access only for policy properties.</para></listitem>
                         <listitem><para>Read and write access to all realm and policy properties.</para></listitem>
@@ -795,10 +809,9 @@ realmName=gatein-domain;
                   </para>
                </step>
                <step>
-                  <para>Do the same for the "gatein" realm.</para>
+                  <para>Repeat previous step with increasing privileges for <emphasis role="bold">gatein</emphasis> realm as well.</para>
                </step>
             </procedure>
-            <para>Also, instead of configuring OpenSSO manually as above, you can refer to the available configuration files <ulink url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.0.1-GA/sso-packaging-1.0.1-GA.zip">here</ulink>.</para>
          </section>
 		</section>
 		
@@ -816,14 +829,19 @@ realmName=gatein-domain;
 							<para>
 								In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment on this section
 							</para>
-<programlisting language="xml">&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
 
 						</listitem>
@@ -979,8 +997,8 @@ realmName=gatein-domain;
 		<title>SPNEGO</title>
 		<para>SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) is
 			used to authenticate transparently through the web browser after the
-			user has been authenticated when logging in.</para>
-		<para>See the following typical usecase:</para>
+            user has been authenticated when logging-in his session.</para>
+        <para>A typical use case is the following:</para>
 		<procedure>
 			<step>
 				<para>The user logs into the desktop, such as a Windows machine.</para>
@@ -998,7 +1016,7 @@ realmName=gatein-domain;
 			</step>
 			<step>
 				<para>JBoss EAP/AS uses the background GSS messages with the Active
-					Directory (or any Kerberos server) to validate the user.</para>
+					Directory (or any Kerberos Server) to validate the Kerberos ticket from user.</para>
 			</step>
 			<step>
 				<para>The User has a seamless SSO into the web application.</para>
@@ -1007,19 +1025,25 @@ realmName=gatein-domain;
     
   <section id="SPNEGO_server_configuration">
     <title>SPNEGO Server Configuration</title>
+    <para>
+       In this section, we will describe some necessary steps for setup Kerberos server on Linux. This server will then be used for SPNEGO authentication against &PRODUCT;
+    </para>
     <note>
-      <para>Information stated here only describes basic steps for you to configure the SPNEGO server. If you are already familiar with SPNEGO, jump to the <xref linkend="Single_Sign_On-SPNEGO-GateIn_Configuration" /> to see how to integrate SPNEGO with &PRODUCT;.</para>
+      <para>If you don't have Linux but you are using Windows and Active Directory domain,
+         then these informations are not important for you and you may jump to the <xref linkend="Single_Sign_On-SPNEGO-GateIn_Configuration" /> to see how to integrate SPNEGO with &PRODUCT;.
+         Please note that Kerberos setup is also dependent on your Linux distribution and so steps can be slightly different in your environment.
+      </para>
     </note>
     <procedure>
         <step>
-          <para>Correct the setup of network on the machine. For example, if you are using the "server.local.network" domain as your machine where Kerberos and &PRODUCT; are localed,
-          add the line containing the machine's IP address to the <emphasis role="bold">/etc/host </emphasis> file.
+          <para>Correct the setup of network on the machine. For example, if you are using the "server.local.network" domain as your machine where Kerberos and &PRODUCT; are located,
+          add the line containing the machine's IP address to the <emphasis role="bold">/etc/hosts</emphasis> file.
           </para>
           <programlisting>
 192.168.1.88  server.local.network
           </programlisting>
           <note>
-          <para>It is not recommended you use loopback addresses.</para>
+          <para>It is not recommended to use loopback addresses.</para>
           </note>
         </step>
         <step>
@@ -1173,10 +1197,19 @@ kinit -A demo
 </programlisting>
           <itemizedlist>
             <listitem>
-              <para>If the setup works well, you are required to enter the password created for this user in Step 5.</para>
+              <para>If the setup works well, you are required to enter the password created for this user in Step 5.
+                 Without the -A, the kerberos ticket validation involved reverse DNS lookups, which can get very cumbersome to debug if your network's DNS setup is not great.
+                 This is a production level security feature, which is not necessary in this development setup. In production environment, it will be better to avoid -A option.
+              </para>
             </listitem>
             <listitem>
-              <para>If you want to login with another user, use this command.</para>
+               <para>After successful login to Kerberos, you can see your Kerberos ticket when using this command.</para>
+<programlisting>
+klist
+</programlisting>
+            </listitem>
+            <listitem>
+              <para>If you want to logout and destroy your ticket, use this command.</para>
 <programlisting>
 kdestroy
 </programlisting>
@@ -1184,6 +1217,31 @@ kdestroy
           </itemizedlist>
       </step>
     </procedure>
+  </section>
+  <section id="Single_Sign_On-CAS_Central_Clients">
+        <title>Clients</title>
+          <para>After performing all configurations above, you need to enable the <emphasis role="bold">Negotiate authentication </emphasis> of Firefox in client machines so that clients could be authenticated by &PRODUCT; as follows:
+          </para>
+    <procedure>
+          <step>
+            <para>Start Firefox, then enter the command: <emphasis role="bold">about:config </emphasis> into the address field.</para>
+          </step>
+          <step>
+            <para>Enter <emphasis role="bold">network.negotiate-auth</emphasis> and set the value as below:</para>
+<programlisting>
+network.negotiate-auth.allow-proxies = true
+network.negotiate-auth.delegation-uris = .local.network
+network.negotiate-auth.gsslib (no-value)
+network.negotiate-auth.trusted-uris = .local.network
+network.negotiate-auth.using-native-gsslib = true
+</programlisting>
+          </step>
+    </procedure>
+     <note>
+        <para>
+          Consult documentation of your OS or web browser if using different browser than Firefox.
+        </para>
+     </note>
   </section>
   <section id="Single_Sign_On-SPNEGO-GateIn_Configuration">
 			<title>&PRODUCT; Configuration</title>
@@ -1194,10 +1252,8 @@ kdestroy
 			<procedure>
 				<step>
 					<para>
-						Activate the Host authentication under the <emphasis role="bold">conf/login-config.xml </emphasis> file adding the following host login module:
+                        Activate the Host authentication under the <emphasis role="bold">JBOSS_HOME/server/default/conf/login-config.xml </emphasis> file by adding the following host login module:
           </para>
-						
-                        Under conf/login-config.xml, add the following host login module:
                         <programlisting><![CDATA[<!-- SPNEGO domain -->
 <application-policy name="host">
   <authentication>
@@ -1213,15 +1269,17 @@ kdestroy
  </application-policy>
 ]]></programlisting>
 
-						<para>The 'keyTab' value should point to the keytab file that was
-						generated by the kadmin kerberos tool. See the <xref linkend="SPNEGO_server_configuration"/> section for more details.
+            <para>
+               The 'keyTab' value should point to the keytab file that was
+               generated by the kadmin kerberos tool. When using Kerberos on Linux, it should be value of parameter <emphasis role="bold">admin_keytab</emphasis> from kdc.conf file.
+               See the <xref linkend="SPNEGO_server_configuration"/> section for more details.
             </para>
 				</step>
 				
         <step>
 					<para>
 						Extend the core authentication mechanisms to support SPNEGO under
-						<emphasis role="bold">deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</emphasis> by
+                        <emphasis role="bold">JBOSS_HOME/server/default/deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</emphasis> by
 						adding the 'SPNEGO' authenticators property.
           </para>
 
@@ -1253,7 +1311,7 @@ kdestroy
     <!-- Add this entry -->
     <entry>
       <key>SPNEGO</key>
-      <value>org.jboss.security.negotiation.NegotiationAuthenticator</value>
+        <value>org.gatein.sso.spnego.GateInNegotiationAuthenticator</value>
     </entry>
   </map>
 </property>
@@ -1261,51 +1319,137 @@ kdestroy
 </programlisting>
 				</step>
 				<step>
-					<para>Add the &PRODUCT; SSO module binaries by copying <emphasis role="bold">$GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent.jar</emphasis>, and <emphasis role="bold">$GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-spnego.jar</emphasis> to the <emphasis role="bold">deploy/gatein.ear/lib</emphasis> directory.
+                   <para>
+                     Add the GateIn SSO module binaries by copying <emphasis role="bold">GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent-VERSION.jar</emphasis> to the <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> directory.
+                     File <emphasis role="bold">GATEIN_SSO_HOME/spnego/gatein.ear/lib/spnego-VERSION.jar</emphasis> needs to be copied to the <emphasis role="bold">JBOSS_HOME/server/default/lib</emphasis> directory.
           </para>
 				</step>
 				<step>
 					<para>
-						Modify the <emphasis role="bold">deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below, then comment on other parts.
+                      Download library <filename>jboss-negotiation-2.0.4.GA</filename> from location
+                      <ulink type="html" url="https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar">https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar</ulink>
+                      and copy this file to <filename>JBOSS_HOME/server/default/lib</filename> directory as well.
+                   </para>
+                </step>
+                <step>
+                    <para>
+                        Modify the <emphasis role="bold">JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below:
           </para>
 
 						<programlisting language="xml"><![CDATA[
-<login-module code="org.gatein.sso.spnego.SPNEGOLoginModule" flag="required">
-  <module-option name="password-stacking">useFirstPass</module-option>
-  <module-option name="serverSecurityDomain">host</module-option>
-</login-module>
-<login-module code="org.gatein.sso.agent.login.SPNEGORolesModule" flag="required">
-  <module-option name="password-stacking">useFirstPass</module-option>
-  <module-option name="portalContainerName">portal</module-option>
-  <module-option name="realmName">gatein-domain</module-option>
-</login-module>]]>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+  <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-form-auth-domain">
+    <authentication>
+      <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
+        <module-option name="portalContainerName">portal</module-option>
+        <module-option name="realmName">gatein-domain</module-option>
+      </login-module>
+      <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule" flag="required">
+        <module-option name="portalContainerName">portal</module-option>
+        <module-option name="realmName">gatein-domain</module-option>
+      </login-module>
+
+      <!-- Uncomment this part to check on each login if user is member of "/platform/users" group and if not
+           create such membership -->
+      <!--
+      <login-module code="org.exoplatform.services.organization.idm.CustomMembershipLoginModule" flag="required">
+        <module-option name="portalContainerName">portal</module-option>
+        <module-option name="realmName">gatein-domain</module-option>
+        <module-option name="membershipType">member</module-option>
+        <module-option name="groupId">/platform/users</module-option>
+      </login-module>
+      -->
+
+      <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+        <module-option name="portalContainerName">portal</module-option>
+<!-- logout needs to be performed from 'gatein-domain' as it is used for JaasSecurityManager. -->
+        <module-option name="realmName">gatein-domain</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+
+  <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
+    <authentication>
+     <login-module
+         code="org.gatein.sso.spnego.SPNEGOLoginModule"
+         flag="requisite">
+         <module-option name="password-stacking">useFirstPass</module-option>
+         <module-option name="serverSecurityDomain">host</module-option>
+	 <module-option name="removeRealmFromPrincipal">true</module-option>
+	 <module-option name="usernamePasswordDomain">gatein-form-auth-domain</module-option>
+      </login-module>
+      <login-module
+         code="org.gatein.sso.agent.login.SPNEGORolesModule"
+         flag="required">
+      <module-option name="password-stacking">useFirstPass</module-option>
+      <module-option name="portalContainerName">portal</module-option>
+      <module-option name="realmName">gatein-domain</module-option>
+      </login-module>
+   </authentication>
+  </application-policy>
+
+</deployment>
+]]>
 </programlisting>
+                   <para>
+                      This activates SPNEGO LoginModules with fallback to FORM authentication. When SPNEGO is not available and it needs to fallback to FORM, it will use <emphasis role="bold">gatein-form-auth-domain</emphasis> security domain.
+                      More details below.
+                   </para>
 				</step>
 				<step>
 					<para>
-						Modify <emphasis role="bold">gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
+                        Modify <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
 
 						<programlisting language="xml"><![CDATA[
-<!--
-<login-config>
-  <auth-method>FORM</auth-method>
-  <realm-name>gatein-domain</realm-name>
-  <form-login-config>
-    <form-login-page>/initiatelogin</form-login-page>
-    <form-error-page>/errorlogin</form-error-page>
-  </form-login-config>
-</login-config>
+<!--	<login-config>
+	  <auth-method>FORM</auth-method>
+	  <realm-name>gatein-domain</realm-name>
+		<form-login-config>
+		  <form-login-page>/initiatelogin</form-login-page>
+			<form-error-page>/errorlogin</form-error-page>
+	  </form-login-config>
+	</login-config>
 -->
- 
-<login-config>
-  <auth-method>SPNEGO</auth-method>
-  <realm-name>SPNEGO</realm-name>
-</login-config>]]>
+    <login-config>
+      <auth-method>SPNEGO</auth-method>
+      <realm-name>SPNEGO</realm-name>
+      <form-login-config>
+	     <form-login-page>/initiatelogin</form-login-page>
+	     <form-error-page>/errorlogin</form-error-page>
+     </form-login-config>
+    </login-config>
+]]>
 </programlisting>
-          <para>This integrates SPNEGO support into the Portal web archive by switching the authentication mechanism from the default "FORM"-based to "SPNEGO"-based authentication.</para>
+          <para>
+             This integrates SPNEGO support into the Portal web archive by switching the authentication mechanism from the default "FORM"-based to "SPNEGO"-based authentication.
+             You can notice that SPNEGO part also contains element <emphasis role="bold">form-login-config</emphasis>, which is needed if you want to enable fallback to FORM based authentication.
+             In this case, portal will try to authenticate user with his Kerberos ticket through SPNEGO. If user don't have Kerberos ticket, he will be redirected to FORM (&PRODUCT; login screen).
+             So first attempt is for login with SPNEGO and next attempt is for login with FORM, which is used only if login through SPNEGO is not successful (For example user don't have
+             valid Kerberos ticket or his browser doesn't support SPNEGO with our Kerberos server).
+          </para>
+          <para>
+             If you don't want fallback to FORM, you can disable form-login-config part and have only:
+                        <programlisting language="xml"><![CDATA[
+    <login-config>
+      <auth-method>SPNEGO</auth-method>
+      <realm-name>SPNEGO</realm-name>
+<!--      <form-login-config>
+	     <form-login-page>/initiatelogin</form-login-page>
+	     <form-error-page>/errorlogin</form-error-page>
+     </form-login-config>
+-->
+    </login-config>
+]]>
+</programlisting>
+          In this case user needs to authenticate through SPNEGO and if that fails, FORM is not shown but user has authentication error with HTTP code 401.
+          </para>
 				</step>
 				<step>
-					<para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the <emphasis role="bold">web.xml </emphasis> at the top of the Filter chain.</para> 
+                    <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the
+                       <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
+                    </para>
 
 <programlisting><![CDATA[
 <filter>
@@ -1317,49 +1461,58 @@ kdestroy
     <param-value>/portal/private/classic</param-value>
   </init-param>
 </filter>
+
+<filter>
+ <filter-name>SPNEGOFilter</filter-name>
+ <filter-class>org.gatein.sso.agent.filter.SPNEGOFilter</filter-class>
+</filter>
+
 <filter-mapping>
   <filter-name>LoginRedirectFilter</filter-name>
   <url-pattern>/*</url-pattern>
-</filter-mapping>]]>
+</filter-mapping>
+
+<filter-mapping>
+  <filter-name>SPNEGOFilter</filter-name>
+  <url-pattern>/login</url-pattern>
+</filter-mapping>
+]]>
 </programlisting>
 					
 				</step>
 				<step>
 					<para>
-						Start the &PRODUCT; portal using the command below.</para>
-						<programlisting>sudo ./run.sh -Djava.security.krb5.realm=LOCAL.NETWORK -Djava.security.krb5.kdc=server.local.network -c PROFILE -b server.local.network</programlisting>
-          <para>The PROFILE parameter in the above command should be replaced with the server profile modified in the above configuration. For example, if you are configuring the default profile, your command will be.</para>
-          <programlisting>sudo ./run.sh -Djava.security.krb5.realm=LOCAL.NETWORK -Djava.security.krb5.kdc=server.local.network -c default -b server.local.network</programlisting>
-				</step>
-				<step>
-					<para>Login to Kerberos with the command.</para>
-						<programlisting>kinit -A demo</programlisting>
-						<para>You should be able to click the 'Sign In' link on the &PRODUCT; portal
-						and the 'demo' user from the &PRODUCT; portal should be automatically
-						logged in.</para>
-				</step>
-			</procedure>
-		</section>
-      <section id="Single_Sign_On-CAS_Central_Clients">
-        <title>Clients</title>
-          <para>After performing all configurations above, you need to enable the <emphasis role="bold">Negotiate authentication </emphasis> of Firefox in clients so that clients could be authenticated by &PRODUCT; as follows:
-          </para>
-    <procedure> 
-          <step>
-            <para>Start Firefox, then enter the command: <emphasis role="bold">about:config </emphasis> into the address field.</para>
-          </step>
-          <step>
-            <para>Enter <emphasis role="bold">network.negotiate-auth</emphasis> and set the value as below:</para>
+          In <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
 <programlisting>
-network.negotiate-auth.allow-proxies = true
-network.negotiate-auth.delegation-uris = .local.network
-network.negotiate-auth.gsslib (no-value)
-network.negotiate-auth.trusted-uris = .local.network
-network.negotiate-auth.using-native-gsslib = true
+<![CDATA[
+<!--
+<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+-->
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+]]>
 </programlisting>
-          </step>
-    </procedure>
+          </para>
+        </step>
+        <step>
+                    <para>
+                        Start the &PRODUCT; portal using the command below.
+                    </para>
+                    <programlisting>sudo ./run.sh -Djava.security.krb5.realm=LOCAL.NETWORK -Djava.security.krb5.kdc=server.local.network -c default -b server.local.network</programlisting>
+        </step>
+        <step>
+                    <para>Login to Kerberos with the command.</para>
+                        <programlisting>kinit -A demo</programlisting>
+                        <para>You should be able to click the 'Sign In' link on the &PRODUCT; portal
+                        and the 'demo' user from the &PRODUCT; portal should be automatically
+                        logged in.
+                    </para>
+                </step>
+                <step>
+                   <para>
+                      Let's try to destroy kerberos ticket with command <programlisting>kdestroy</programlisting> Then try to login again. You will now be placed to login screen of &PRODUCT; because you don't have active Kerberos ticket. You can login with predefined account and password "demo"/"gtn" .
+                   </para>
+                </step>
+            </procedure>
+        </section>
     </section>
-	</section>
 </section>
-
