@@ -88,9 +88,15 @@ public class UIGroupExplorer extends UIContainer
 
       UITree uiTree = getChild(UITree.class);
       UIGroupDetail uiGroupDetail = uiGroupManagement.getChild(UIGroupDetail.class);
-      UIGroupInfo uiGroupInfo = uiGroupDetail.getChild(UIGroupInfo.class);
+      UIGroupInfo uiGroupInfo = uiGroupDetail.getChild(UIGroupInfo.class);      
 
-      if (groupId == null)
+      selectedGroup_ = null;
+      if (groupId != null)
+      {
+         selectedGroup_ = service.getGroupHandler().findGroupById(groupId);
+      }
+      
+      if (selectedGroup_ == null)
       {
          sibblingsGroup_ = service.getGroupHandler().findGroups(null);
          //    if not administrator
@@ -103,15 +109,6 @@ public class UIGroupExplorer extends UIContainer
          selectedGroup_ = null;
          uiGroupInfo.setGroup(null);
          return;
-      }
-
-      if (groupId != null)
-      {
-         selectedGroup_ = service.getGroupHandler().findGroupById(groupId);
-      }
-      else
-      {
-         selectedGroup_ = null;
       }
 
       String parentGroupId = null;
@@ -163,7 +160,7 @@ public class UIGroupExplorer extends UIContainer
    }
 
    public Group getCurrentGroup()
-   {
+   {      
       return selectedGroup_;
    }
 
@@ -193,6 +190,10 @@ public class UIGroupExplorer extends UIContainer
    @SuppressWarnings("unused")
    public void processRender(WebuiRequestContext context) throws Exception
    {
+      if (!context.useAjax()) 
+      {
+         changeGroup(selectedGroup_ == null ? null : selectedGroup_.getId());
+      }
       renderChildren();
    }
 
