@@ -48,6 +48,8 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.javascript.Javascript;
+import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -333,6 +335,16 @@ public class UIPortalApplication extends UIApplication
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
       return service.getAvailableScriptsPaths();
+   }
+
+   /**
+    * Get all JavaScript path which available on selected portal site
+    * @return
+    */
+   public Collection<PortalJScript> getPortalJScripts()
+   {
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      return service.getPortalJScripts(Util.getUIPortal().getName());
    }
 
    public Collection<Skin> getPortalSkins()

@@ -27,6 +27,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
+import org.gatein.wci.WebAppListener;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -41,7 +42,7 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class GateInSkinConfigDeployer extends AbstractResourceHandler
+public class GateInSkinConfigDeployer implements WebAppListener
 {
 
    /** . */
