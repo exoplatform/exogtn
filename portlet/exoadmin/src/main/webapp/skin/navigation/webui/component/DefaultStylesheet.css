@@ -34,7 +34,7 @@
 
 .UIManagement table.ManagementBlock td.Content {
 	vertical-align: middle;
-	padding: 5px 15px;
+	padding: 15px;
 	width: 27%;
 	overflow: hidden;
 	white-space: normal;
@@ -80,7 +80,7 @@
 
 .UIManagement .ManagementBlock .ActionBlock a {
 	line-height: 18px;
-	width: 110px;
+	width: 120px;
 	display: block;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
