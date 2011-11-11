@@ -83,9 +83,7 @@ public class UIMainActionListener
          UserNode resolvedNode = resolveNode(selectedNode, filterConfig);                 
          if (resolvedNode == null)
          {
-            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-            context.getUIApplication().addMessage(new ApplicationMessage("UIPortalManagement.msg.node.deleted", null));         
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
             return;
          }
 
