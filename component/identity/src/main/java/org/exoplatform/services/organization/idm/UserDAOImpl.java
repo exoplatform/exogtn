@@ -27,6 +27,7 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.organization.impl.NewUserEventListener;
 import org.exoplatform.services.organization.impl.UserImpl;
 import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
@@ -225,18 +226,6 @@ public class UserDAOImpl implements UserHandler
       if (foundUser == null)
       {
          return null;
-      }
-
-      try
-      {
-         // Remove all memberships and profile first
-         orgService.getMembershipHandler().removeMembershipByUser(userName, false);
-         orgService.getUserProfileHandler().removeUserProfile(userName, false);
-      }
-      catch (Exception e)
-      {
-         log.info("Cannot cleanup user relationships: " + userName + "; ", e);
-
       }
 
       User exoUser = getPopulatedUser(userName, session);
@@ -551,7 +540,10 @@ public class UserDAOImpl implements UserHandler
    {
       for (UserEventListener listener : listeners_)
       {
-         listener.preDelete(user);
+         if(!(listener instanceof NewUserEventListener))
+         {
+            listener.preDelete(user);
+         }
       }
    }
 
