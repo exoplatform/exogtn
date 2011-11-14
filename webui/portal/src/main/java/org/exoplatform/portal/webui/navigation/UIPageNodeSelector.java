@@ -19,13 +19,18 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -44,6 +49,8 @@ public class UIPageNodeSelector extends UIContainer
    private UserNode selectedNode;
    
    private UserPortal userPortal;
+   
+   private UserNodeFilterConfig userFilterConfig;
 
    public UIPageNodeSelector() throws Exception
    {
@@ -55,7 +62,11 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanIconField("icon");
       uiTree.setBeanChildCountField("childrenCount");
 
-      userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();      
+      userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
+      
+      UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
+      filterConfigBuilder.withReadWriteCheck();
+      userFilterConfig = filterConfigBuilder.build();
    }  
    
    public void configure(UserNode node) throws Exception
@@ -90,16 +101,45 @@ public class UIPageNodeSelector extends UIContainer
       if (parent != null)
       {        
          tree.setChildren(node.getChildren());
-         tree.setSibbling(parent.getChildren());
+         tree.setSibbling(getChildren(parent));
          tree.setParentSelected(parent);
       }
       else
       {
          tree.setChildren(null);
-         tree.setSibbling(node.getChildren());
+         tree.setSibbling(getChildren(node));
          tree.setParentSelected(node);
       }
       selectedNode = node;
+   }
+   
+   private Collection<UserNode> getChildren(UserNode parent) throws Exception
+   {
+      Collection<UserNode> children = parent.getChildren();
+      List<UserNode> holder = new LinkedList<UserNode>();
+      for(UserNode child : children)
+      {
+         UserNode nodeResolved = resolveNode(child, userFilterConfig);
+         if (nodeResolved != null)
+         {
+            holder.add(nodeResolved);
+         }
+      }
+      return holder;
+   }
+   
+   private UserNode resolveNode(UserNode selectedNode, UserNodeFilterConfig filterConfig) throws Exception
+   {         
+      UserNavigation currNav = selectedNode.getNavigation();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
+      if (currNav.getKey().getType().equals(SiteType.USER))
+      {            
+         return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);
+      }
+      else
+      {
+         return userPortal.resolvePath(currNav, filterConfig, selectedNode.getURI());
+      }
    }
    
    private UserNode updateNode(UserNode node) throws Exception
