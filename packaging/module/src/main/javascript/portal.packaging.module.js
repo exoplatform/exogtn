@@ -36,7 +36,7 @@ function getModule(params)
    
    var mopVersion =  "${org.gatein.mop.version}";
    var chromatticVersion =  "${version.chromattic}";
-   var reflectVersion =  "${version.reflect}";
+   var reflextVersion =  "${version.reflext}";
    var idmVersion = "${org.picketlink.idm}";
    var pcVersion = "${org.gatein.pc.version}";
    var wciVersion = "${org.gatein.wci.version}";
@@ -132,11 +132,11 @@ function getModule(params)
       addDependency(new Project("org.chromattic", "chromattic.core", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.apt", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.ext", "jar", chromatticVersion)).
-      addDependency(new Project("org.reflext", "reflext.api", "jar", reflectVersion)).
-      addDependency(new Project("org.reflext", "reflext.core", "jar", reflectVersion)).
-      addDependency(new Project("org.reflext", "reflext.spi", "jar", reflectVersion)).
-      addDependency(new Project("org.reflext", "reflext.jlr", "jar", reflectVersion)).
-      addDependency(new Project("org.reflext", "reflext.api", "jar", reflectVersion)).
+      addDependency(new Project("org.reflext", "reflext.api", "jar", reflextVersion)).
+      addDependency(new Project("org.reflext", "reflext.core", "jar", reflextVersion)).
+      addDependency(new Project("org.reflext", "reflext.spi", "jar", reflextVersion)).
+      addDependency(new Project("org.reflext", "reflext.jlr", "jar", reflextVersion)).
+      addDependency(new Project("org.reflext", "reflext.api", "jar", reflextVersion)).
       addDependency(module.component.web.security);
 
    module.component.identity =
