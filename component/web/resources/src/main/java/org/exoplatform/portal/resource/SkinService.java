@@ -919,19 +919,20 @@ public class SkinService extends AbstractResourceService implements Startable
       StringBuffer tmpBuilder = new StringBuffer();
       while (matcher.find()) 
       {
-         if (!matcher.group(2).startsWith("\"/")) {
-            if (!matcher.group(2).startsWith("'/")) {
-               if (!matcher.group(2).startsWith("/")) {
-                  StringBuilder strReplace = new StringBuilder();
-                  strReplace.append(matcher.group(1));
-                  strReplace.append(basePath);
-                  strReplace.append(matcher.group(2));
-                  strReplace.append(matcher.group(3));
-                  
-                  matcher.appendReplacement(tmpBuilder, strReplace.toString());          
-               }             
+         String imgURL = matcher.group(2).trim();
+         if (!imgURL.startsWith("\"/") && !imgURL.startsWith("'/") && !imgURL.startsWith("/")) 
+         {
+            if (!imgURL.startsWith("http://") && !imgURL.startsWith("https://")) 
+            {
+               StringBuilder strReplace = new StringBuilder();
+               strReplace.append(matcher.group(1));
+               strReplace.append(basePath);
+               strReplace.append(imgURL);
+               strReplace.append(matcher.group(3));
+               
+               matcher.appendReplacement(tmpBuilder, strReplace.toString());                         
             }
-         }                  
+         }
       }
       matcher.appendTail(tmpBuilder);
       return tmpBuilder.toString();

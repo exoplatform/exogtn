@@ -207,14 +207,31 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       String path = "/background/url/file.css";
       String css =
          "background:url(images/foo.gif);\n" +
-         "background:url('/images/foo.gif');\n" +
+         "background:url('/absolute/path/images/foo.gif');\n" +
+         "aaa; background: #fff url(\"/absolute/path/images/foo.gif\") no-repeat center -614px; ccc;\n" +
          "aaa; background: #fff url('images/foo.gif') no-repeat center -614px; ccc;";
       
       resResolver.addResource(path, css);
       assertEquals(
          "background:url(/background/url/images/foo.gif);\n" + 
-         "background:url('/images/foo.gif');\n" +
+         "background:url('/absolute/path/images/foo.gif');\n" +
+         "aaa; background: #fff url(\"/absolute/path/images/foo.gif\") no-repeat center -614px; ccc;\n" +
          "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;",
          skinService.getCSS(path));
+      
+      String externalPath = "/test/external/file.css"; 
+      String externalCSS =
+               "background:url(http://Other/images/foo.gif);\n" +
+               "background:url('http://Other/images/foo.gif');\n" +
+               "aaa; background: #fff url(\"http://images/foo.gif\") no-repeat center -614px; ccc;\n" +
+               "aaa; background: #fff url('https://Other/images/foo.gif') no-repeat center -614px; ccc;";
+      
+      resResolver.addResource(externalPath, externalCSS);
+      assertEquals(
+         "background:url(http://Other/images/foo.gif);\n" +
+         "background:url('http://Other/images/foo.gif');\n" +
+         "aaa; background: #fff url(\"http://images/foo.gif\") no-repeat center -614px; ccc;\n" +
+         "aaa; background: #fff url('https://Other/images/foo.gif') no-repeat center -614px; ccc;",
+         skinService.getCSS(externalPath));      
    }
 }
