@@ -149,16 +149,17 @@ public class TestWebuiValidator extends TestCase
       assertFalse(expected(validator, "-01"));
    }
    
+   /* \u00e9 is 'é' character  */
    public void testSpecialCharacterValidator()
    {
       Validator validator= new SpecialCharacterValidator();
-      assertTrue(expected(validator,"aAzZ  caffé"));
-      assertFalse(expected(validator,"aAzZ\tcaffé"));
-      assertFalse(expected(validator,"aAzZ\ncaffé"));
-      assertFalse(expected(validator,"aAzZ \rcaffé"));
-      assertFalse(expected(validator,"\tcaffé"));
-      assertFalse(expected(validator,"\ncaffé"));
-      assertFalse(expected(validator,"\rcaffé"));
+      assertTrue(expected(validator,"aAzZ  caff\u00e9"));
+      assertFalse(expected(validator,"aAzZ\tcaff\u00e9"));
+      assertFalse(expected(validator,"aAzZ\ncaff\u00e9"));
+      assertFalse(expected(validator,"aAzZ \rcaff\u00e9"));
+      assertFalse(expected(validator,"\tcaff\u00e9"));
+      assertFalse(expected(validator,"\ncaff\u00e9"));
+      assertFalse(expected(validator,"\rcaff\u00e9"));
       assertTrue(expected(validator,"\n"));
       assertTrue(expected(validator, "\t"));
       assertTrue(expected(validator, "\n"));
@@ -167,26 +168,26 @@ public class TestWebuiValidator extends TestCase
    public void testResourceValidator()
    {
       Validator validator = new ResourceValidator();
-      assertTrue(expected(validator, "caffé_-.--"));
-      assertFalse(expected(validator, "_caffé"));
-      assertFalse(expected(validator, "0caffé"));
+      assertTrue(expected(validator, "caff\u00e9_-.--"));
+      assertFalse(expected(validator, "_caff\u00e9"));
+      assertFalse(expected(validator, "0caff\u00e9"));
    }
    
    public void testNameValidator()
    {
       Validator validator = new NameValidator();
-      assertTrue(expected(validator, "caffé_-.*"));
-      assertTrue(expected(validator, "*caffé"));
-      assertTrue(expected(validator, "0caffé"));
+      assertTrue(expected(validator, "caff\u00e9_-.*"));
+      assertTrue(expected(validator, "*caff\u00e9"));
+      assertTrue(expected(validator, "0caff\u00e9"));
    }
    
    public void testIdentifierValidator()
    {
       Validator validator = new IdentifierValidator();
-      assertTrue(expected(validator, "caffé-_"));
-      assertTrue(expected(validator, "caffé01"));
-      assertFalse(expected(validator, "-caffé"));
-      assertFalse(expected(validator, "01caffé"));
+      assertTrue(expected(validator, "caff\u00e9-_"));
+      assertTrue(expected(validator, "caff\u00e901"));
+      assertFalse(expected(validator, "-caff\u00e9"));
+      assertFalse(expected(validator, "01caff\u00e9"));
    }
 
    public boolean expected(Validator validator, final String input)
