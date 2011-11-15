@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -47,6 +49,21 @@ public class DoLoginServlet extends HttpServlet
          initialURI = req.getContextPath();
       }
 
+      try
+      {
+         URI uri = new URI(initialURI);
+
+         if (uri.isAbsolute() && !(uri.getHost().equals(req.getServerName())))
+         {
+            log.warn("Cannot redirect to an URI outside of the current host when using a login redirect. Redirecting to the portal context path instead.");
+            initialURI = req.getContextPath();
+         }
+      }
+      catch (URISyntaxException e)
+      {
+         log.warn("Initial URI in login link is malformed. Redirecting to the portal context path instead.");
+         initialURI = req.getContextPath();
+      }
       //
       resp.sendRedirect(resp.encodeRedirectURL(initialURI));
    }
