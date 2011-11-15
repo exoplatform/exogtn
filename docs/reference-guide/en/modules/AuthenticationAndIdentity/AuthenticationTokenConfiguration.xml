@@ -20,10 +20,10 @@
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implementing the Token Service API</title>
+		<title>Implement the Token Service API</title>
 		<para>
-			All token services used in the &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
-         The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
+			All token services used in the &PRODUCT; authentication must be implemented by subclassing an <emphasis >AbstractTokenService</emphasis> abstract class.
+         The following <emphasis >AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
 <programlisting language="java">
@@ -39,15 +39,15 @@
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
-		<title>Configuring token services</title>
+		<title>Configure token services</title>
 		<para>
 			The token services configuration includes specifying the token validity period. The token service is configured as a portal component (in the portal scope, as opposed to the root scope - more about that in Foundations chapter).
 		</para>
 		<para>
-			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis>, so it has a property which specifies the validity period of the token.
+			In the example below, CookieTokenService is a subclass of AbstractTokenService, so it has a property which specifies the validity period of the token.
 		</para>
 		<para>
-			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <emphasis role="bold">service.configuration</emphasis>.
+			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <emphasis >service.configuration</emphasis>.
 		</para>
 		<para>
 			This property must have three values.
@@ -91,7 +91,7 @@
 		</programlistingco>
 		
 		<para>
-			In this case, the service name is <emphasis role="bold">jcr-token</emphasis> and the token expiration time is one week.
+			In this case, the service name is <emphasis >jcr-token</emphasis> and the token expiration time is one week.
 		</para>
 		<para>
 			&PRODUCT; supports <emphasis>four</emphasis> time units:

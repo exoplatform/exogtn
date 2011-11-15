@@ -20,13 +20,13 @@
    public boolean isTR() { ... }
 </programlisting>
 	<para>
-		The object defining the Orientation for the current request is the <literal>UIPortalApplication</literal>. However, it should be accessed at runtime using the <literal>RequestContext</literal> that delegates to the <literal>UIPortalApplication</literal>.
+		The object defining the Orientation for the current request is the <emphasis>UIPortalApplication</emphasis>. However, it should be accessed at runtime using the <emphasis>RequestContext</emphasis> that delegates to the <emphasis>UIPortalApplication</emphasis>.
 	</para>
 	<para>
-		In case of <literal>PortalRequestContext</literal>, it directly delegates as the <literal>PortalRequestContext</literal> has a reference to the current <literal>UIPortalApplication</literal>.
+		In case of <emphasis>PortalRequestContext</emphasis>, it directly delegates as the <emphasis>PortalRequestContext</emphasis> has a reference to the current <emphasis>UIPortalApplication</emphasis>.
 	</para>
 	<para>
-		In case of a different context, such as the <literal>PortletRequestContext</literal>, it delegates to the parent context given the fact that the root <literal>RequestContext</literal> is always a <literal>PortalRequestContext</literal>.
+		In case of a different context, such as the <emphasis>PortletRequestContext</emphasis>, it delegates to the parent context given the fact that the root <emphasis>RequestContext</emphasis> is always a <emphasis>PortalRequestContext</emphasis>.
 	</para>
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
 		<title>Groovy templates</title>
@@ -75,7 +75,7 @@
 			The skin service handles stylesheet rewriting to accommodate the orientation. It works by appending -lt or -rt to the stylesheet name.
 		</para>
 		<para>
-			For instance: <filename>/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet-rt.css</filename> will return the same stylesheet as <filename>/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css</filename> but processed for the RT orientation. The <parameter>-lt</parameter> suffix is optional.
+			For instance: <emphasis>/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet-rt.css</emphasis> will return the same stylesheet as <emphasis>/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css</emphasis> but processed for the RT orientation. The <parameter>-lt</parameter> suffix is optional.
 		</para>
 		<para>
 			Stylesheet authors can annotate their stylesheet to create content that depends on the orientation.
@@ -151,7 +151,7 @@ padding: 0px 0px 0px 5px; /* orientation=rt */
 			The web resource filter uses the same naming pattern as the skin service. When an image ends with the -rt suffix, the portal will attempt to locate the original image and create a mirror of it.
 		</para>
 		<para>
-			For instance: requesting the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif</filename> returns a mirror of the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif</filename>.
+			For instance: requesting the image <emphasis>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif</emphasis> returns a mirror of the image <emphasis>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif</emphasis>.
 		</para>
 		<note>
 			<para>
@@ -175,7 +175,7 @@ padding-left: 2px; /* orientation=rt */
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
 		<title>Client side JavaScript</title>
 		<para>
-			The <literal>eXo.core.I18n</literal> object provides the following parameters for orientation:
+			The <emphasis>eXo.core.I18n</emphasis> object provides the following parameters for orientation:
 		</para>
 		<variablelist>
 			<varlistentry>

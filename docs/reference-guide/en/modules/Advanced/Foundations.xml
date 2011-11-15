@@ -12,11 +12,11 @@
          &PRODUCT; is built as a set of services on top of the dependency injection kernel. The kernel provides configuration, lifecycle handling, component scopes, and some core services.
       </para>
       <para>
-         Service components exist in two scopes. The first scope is represented by <emphasis role="bold">RootContainer</emphasis> - it contains services that exist independently of any portal, and can be
+         Service components exist in two scopes. The first scope is represented by RootContainer - it contains services that exist independently of any portal, and can be
          accessed by all portals.
       </para>
       <para>
-         The second scope is portal-private in the form of <emphasis role="bold">PortalContainer</emphasis>. Each portal lives in an instance of PortalContainer.
+         The second scope is portal-private in the form of PortalContainer. Each portal lives in an instance of PortalContainer.
          This scope contains services that are common for a set of portals, and services which should not be shared by all portals.
       </para>
       <para>
@@ -37,21 +37,21 @@
       </para>
       <para>
          Whenever your portal application has to be integrated more closely with GateIn services, the way to do it is by
-         looking up these services through PortalContainer. Be careful though - only officially documented services
+         looking up these services through <emphasis>PortalContainer</emphasis>. Be careful though - only officially documented services
          should be accessed this way, and used according to documentation, as most of the services are an implementation
          detail of GateIn, and subject to change without notice.
       </para>
    </section>
 
    <section id="sect-Reference_Guide-Foundations-Configuring_services">
-      <title>Configuring services</title>
+      <title>Configure services</title>
 
-      <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis role="bold">configuration.xml</emphasis> configuration files.
+      <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis>configuration.xml</emphasis> configuration files.
          The location of the configuration files determines if services are placed into the RootContainer scope, or into the PortalContainer scope.
-         All configuration.xml files located at <emphasis role="bold">conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
+         All <emphasis>configuration.xml</emphasis> files located at <emphasis>conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
       services configured at the RootContainer scope.
-      All configuration.xml files located at <emphasis role="bold">conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at the PortalContainer scope.
-      Additionally, <emphasis role="bold">portal extensions</emphasis> can contain configuration in <emphasis role="bold">WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at the PortalContainer scope.
+      All configuration.xml files located at <emphasis>conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at the PortalContainer scope.
+      Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <emphasis>WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at the PortalContainer scope.
       </para>
       <note>
          <para>Portal extensions are described later.</para>
@@ -64,9 +64,9 @@
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
          <title>Components</title>
-         <para>A service component is defined in the <emphasis role="bold">configuration.xml file</emphasis> by using <emphasis role="bold">&lt;component&gt;</emphasis> element.</para>
-         <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis role="bold">&lt;type&gt;</emphasis></para>
-         <para>Every component has a <emphasis role="bold">&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
+         <para>A service component is defined in the <emphasis>configuration.xml file</emphasis> by using <emphasis>&lt;component&gt;</emphasis> element.</para>
+         <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis>&lt;type&gt;</emphasis></para>
+         <para>Every component has a <emphasis>&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
          If the key is loaded as a class, the Class or String object will be used as a key.</para>
          <para>The usual approach is to specify an interface as a key.</para>
 
@@ -94,12 +94,12 @@
          <title>External Plugins</title>
          <para>GateIn Kernel supports non-component objects that can be configured, instantiated, and injected into registered components, using method calls.
          The mechanism is called 'plugins', and allows portal extensions to add additional configurations to core services.</para>
-         <para>The external plugin is defined by using the <emphasis role="bold">&lt;external-component-plugins&gt;</emphasis> wrapper element which contains one or more
-            <emphasis role="bold">&lt;component-plugin&gt;</emphasis> definitions. &lt;external-component-plugins&gt; uses <emphasis role="bold">&lt;target-component&gt;</emphasis> to specify a target service component that will receive injected objects.</para>
+         <para>The external plugin is defined by using the <emphasis>&lt;external-component-plugins&gt;</emphasis> wrapper element which contains one or more
+            <emphasis>&lt;component-plugin&gt;</emphasis> definitions. <emphasis>&lt;external-component-plugins&gt;</emphasis> uses <emphasis>&lt;target-component&gt;</emphasis> to specify a target service component that will receive injected objects.</para>
          <para>Every &lt;component-plugin&gt; defines an implementation type, and a method on the target component
-            to use for the injection (<emphasis role="bold">&lt;set-method&gt;</emphasis>). </para>
-         <para>A plugin implementation class has to implement the <emphasis role="bold">org.exoplatform.container.component. ComponentPlugin</emphasis> interface.</para>
-         <para>In the following example, <emphasis role="bold">PortalContainerDefinitionPlugin</emphasis> implements ComponentPlugin:</para>
+            to use for the injection (<emphasis>&lt;set-method&gt;</emphasis>). </para>
+         <para>A plugin implementation class has to implement the <emphasis>org.exoplatform.container.component. ComponentPlugin</emphasis> interface.</para>
+         <para>In the following example, <emphasis>PortalContainerDefinitionPlugin</emphasis> implements ComponentPlugin:</para>
          <example>
             <title>PortalContainerDefinitionPlugin</title>
          <programlisting language="xml"><![CDATA[
@@ -134,7 +134,7 @@
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Includes">
          <title>Includes, and special URLs</title>
-         <para>It is possible to break the <emphasis role="bold">configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
+         <para>It is possible to break the <emphasis>configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
          The included files are complete configuration.xml documents, not fragments of text.</para>
          <para>The following is an example configuration.xml which 'outsources' its content into several files:</para>
          <programlisting language="xml"><![CDATA[
@@ -150,21 +150,21 @@
          ]]></programlisting>
 
          <para>The special URL is used to refer to another configuration file.
-            The URL schema <emphasis role="bold">'war:'</emphasis> means that the path following is resolved that is related to the current PortalContainer's servlet context resource path, starting at <emphasis role="bold">WEB-INF</emphasis> as the root.</para>
+            The URL schema <emphasis>'war:'</emphasis> means that the path following is resolved that is related to the current PortalContainer's servlet context resource path, starting at <emphasis>WEB-INF</emphasis> as the root.</para>
          <note>
             <para>The current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</para>
          </note>
-         <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis role="bold">unified servlet context</emphasis> (as explaned in a later section).</para>
-         <para>To include the resolved path related to the current classpath (context classloader), use the <emphasis role="bold">'jar:'</emphasis> URL schema.</para>
+         <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis>unified servlet context</emphasis> (as explaned in a later section).</para>
+         <para>To include the resolved path related to the current classpath (context classloader), use the <emphasis>'jar:'</emphasis> URL schema.</para>
       </section>
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars">
          <title>Special variables</title>
-         <para>The configuration files may contain a <emphasis role="bold">special variable</emphasis> reference <emphasis>${container.name.suffix}</emphasis>. This variable resolves to the name of the current portal container, prefixed by underscore (_).
+         <para>The configuration files may contain a <emphasis>special variable</emphasis> reference <emphasis>${container.name.suffix}</emphasis>. This variable resolves to the name of the current portal container, prefixed by underscore (_).
          This facilitates reuse of configuration files in cases where portal specific unique names need to be assigned to some resources
          (For example, JNDI names, Database / DataSource names, JCR repository names).</para>
          <para>This variable is only defined when there is a current PortalContainer available - only for PortalContainer scoped services.</para>
-         <para>A good example for this is <emphasis role="bold">HibernateService</emphasis>:</para>
+         <para>A good example for this is <emphasis>HibernateService</emphasis>:</para>
          <example id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example">
             <title>HibernateService using variables</title>
          <programlisting language="xml"><![CDATA[
@@ -211,20 +211,20 @@
       <title>InitParams configuration object</title>
 
       <para>
-         <literal>InitParams</literal> are the configuration object that is essentially a map of key-value pairs,
-         where key is always a <literal>String</literal>, and value can be any type that can be described
+         <emphasis>InitParams</emphasis> are the configuration object that is essentially a map of key-value pairs,
+         where key is always a <emphasis>String</emphasis>, and value can be any type that can be described
          using the kernel configuration.xml.
       </para>
 
       <para>
-         Service components that form &PRODUCT; insfrastructure use the <literal>InitParams</literal> object to configure themselves.
+         Service components that form &PRODUCT; insfrastructure use the <emphasis>InitParams</emphasis> object to configure themselves.
          A component can have one instance of InitParams injected at most. If the service component's constructor takes InitParams
          as any of the parameters, it will automatically be injected at the component instantiation time. The xml configuration
          for a service component that expects the InitParams object must include the &lt;init-params&gt; element (even if the empty one).
       </para>
 
       <para>
-         To learn about how the kernel xml configuration syntax looks for creating <literal>InitParams</literal> instances, see the following example.
+         To learn about how the kernel xml configuration syntax looks for creating <emphasis>InitParams</emphasis> instances, see the following example.
       </para>
 
       <example>
@@ -255,7 +255,7 @@
       <para>
          For &lt;properties-param&gt;, the value specification is in the form of one or more &lt;property&gt; elements,
          each of which specifies two strings - a property name, and a property value. Each &lt;properties-params&gt;
-         defines one <literal>java.util.Properties</literal> instance. Also, see
+         defines one <emphasis>java.util.Properties</emphasis> instance. Also, see
          <xref linkend="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example"/> for an example.
       </para>
 
@@ -277,7 +277,7 @@
 
       <para>
          For &lt;value-param&gt;, the value specification is in the form of &lt;value&gt; element, which defines
-         one <literal>String</literal> instance.         
+         one <emphasis>String</emphasis> instance.         
       </para>
 
       <example>
@@ -313,8 +313,8 @@
 
       <para>
       For &lt;values-param&gt;, the value specification is in the form of one or more &lt;value&gt; elements,
-         each of which represents one <literal>String</literal> instance, where all the <literal>String</literal> values
-         are then collected into a <literal>java.util.List</literal> instance.
+         each of which represents one <emphasis>String</emphasis> instance, where all the <emphasis>String</emphasis> values
+         are then collected into a <emphasis>java.util.List</emphasis> instance.
       </para>
 
       <example>
@@ -358,11 +358,11 @@
       
       <para>
          Also see <xref linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example" />
-         for an example of specifying a field of the <literal>Collection</literal> type. 
+         for an example of specifying a field of the <emphasis>Collection</emphasis> type. 
       </para>
 
       <para>
-      The <literal>InitParams</literal> structure - the names and types of entries is specific for each service,
+      The <emphasis>InitParams</emphasis> structure - the names and types of entries is specific for each service,
          as it is the code inside service components's class that decides what entry names to look up and what types
          it expects to find.
       </para>
@@ -370,28 +370,28 @@
 
 
    <section id="sect-Reference_Guide-Foundations-Configuring_portal">
-      <title>Configuring a portal container</title>
+      <title>Configure a portal container</title>
 
       <para>
-         A <emphasis role="bold">portal container</emphasis> is defined by several attributes.
+         A <emphasis>portal container</emphasis> is defined by several attributes.
       </para>
 
       <para>
-         First, there is a <emphasis role="bold">portal container name</emphasis>, which is always equal to the URL context to which the current portal is bound.
+         First, there is a <emphasis>portal container name</emphasis>, which is always equal to the URL context to which the current portal is bound.
       </para>
 
       <para>
-         Second, there is a <emphasis role="bold">REST context name</emphasis>, which is used for REST access to portal application - every portal has
+         Second, there is a <emphasis>REST context name</emphasis>, which is used for REST access to portal application - every portal has
          exactly one (unique) REST context name.
       </para>
 
       <para>
-         Then, there is a <emphasis role="bold">realm name</emphasis> which is the name of security realm used for authentication when users log into the
+         Then, there is a <emphasis>realm name</emphasis> which is the name of security realm used for authentication when users log into the
          portal.
       </para>
 
       <para>
-         Finally, there is a list of <emphasis role="bold">Dependencies</emphasis> - other web applications, whose resources are visible to current
+         Finally, there is a list of <emphasis>Dependencies</emphasis> - other web applications, whose resources are visible to current
          portal (via extension mechanism described later), and are searched in the specified order.
       </para>
 
@@ -486,16 +486,16 @@
       </note>
 
       <para>
-         Every <emphasis role="bold">portal container</emphasis> is represented by a <emphasis role="bold">PortalContainer instance</emphasis>, including:
+         Every <emphasis>portal container</emphasis> is represented by a <emphasis>PortalContainer instance</emphasis>, including:
          <itemizedlist>
             <listitem>
-               <para>Associated <emphasis role="bold">ExoContainerContext</emphasis> containing information about the portal.</para>
+               <para>Associated <emphasis>ExoContainerContext</emphasis> containing information about the portal.</para>
             </listitem>
             <listitem>
-               <para><emphasis role="bold">Unified servlet context</emphasis> for web-archive-relative resource loading.</para>
+               <para><emphasis>Unified servlet context</emphasis> for web-archive-relative resource loading.</para>
             </listitem>
             <listitem>
-               <para><emphasis role="bold">Unified classloader</emphasis> for classpath based resource loading.</para>
+               <para><emphasis>Unified classloader</emphasis> for classpath based resource loading.</para>
             </listitem>
             <listitem>
                <para>Methods for retrieving services.</para>
@@ -504,17 +504,17 @@
       </para>
 
       <para>
-         <emphasis role="bold">Unified servlet context</emphasis>, and <emphasis role="bold">unified classloader</emphasis> are part of the <emphasis role="bold">extension mechanism</emphasis> (explained in next section),
+         <emphasis>Unified servlet context</emphasis>, and <emphasis>unified classloader</emphasis> are part of the <emphasis>extension mechanism</emphasis> (explained in next section),
          and provide standard APIs (ServletContext, ClassLoader) with the specific resource loading behavior - visibility into the associated web application archives, configured with Dependencies property of PortalContainerDefinition. Resources from other web applications are queried in the order specified by Dependencies.
          The later entries in the list override the previous ones.
       </para>
    </section>
 
    <section id="sect-Reference_Guide-Foundations-Extension_mechanism">
-      <title>GateIn Extension Mechanism, and Portal Extensions</title>
+      <title>GateIn Extension Mechanism and Portal Extensions</title>
 
       <para>
-         <emphasis role="bold">Extension mechanism</emphasis> is a functionality that makes it possible to override the portal resources in an almost
+         <emphasis>Extension mechanism</emphasis> is a functionality that makes it possible to override the portal resources in an almost
          plug-and-play fashion - just drop in a .war archive with the resources, and configure its position on the portal's
          classpath.
          This way any customizations of the portal do not have to involve unpacking and repacking the original portal
@@ -523,13 +523,13 @@
       </para>
 
       <para>
-         A web archive packaged in a way to be used through the extension mechanism is called <emphasis role="bold">portal extension</emphasis>.
+         A web archive packaged in a way to be used through the extension mechanism is called <emphasis>portal extension</emphasis>.
       </para>
       <para>
          There are two steps necessary to create a portal extension.
       </para>
       <para>
-         First, declare <emphasis role="bold">PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
+         First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
       </para>
       <example><title>Example of a portal extension called sample-ext:</title>
 
@@ -567,13 +567,13 @@
 
 
    <section id="sect-Reference_Guide-Foundations-Multiple_portals">
-      <title>Running Multiple Portals</title>
+      <title>Run Multiple Portals</title>
 
       <para>
          It is possible to run several independent portal containers - each bound to a different URL context - within
-         the same JVM instance. This kind of setup is very efficient from administration and resource consumption. The most elegant way to <emphasis role="bold">reuse</emphasis> configuration for different coexisting portals is by way of extension
-         mechanism - by <emphasis role="bold">inheriting</emphasis> resources and configuration from existing web archives, and just <emphasis role="bold">adding</emphasis> extra resources to it,
-         and <emphasis role="bold">overriding</emphasis> those that need to be changed by including modified copies.
+         the same JVM instance. This kind of setup is very efficient from administration and resource consumption. The most elegant way to <emphasis>reuse</emphasis> configuration for different coexisting portals is by way of extension
+         mechanism - by <emphasis>inheriting</emphasis> resources and configuration from existing web archives, and just <emphasis>adding</emphasis> extra resources to it,
+         and <emphasis>overriding</emphasis> those that need to be changed by including modified copies.
       </para>
 
       <para>
@@ -584,9 +584,9 @@
 
       <para>
          At any point during request processing, or lifecycle event processing, your application can retrieve this
-         information through <emphasis role="bold">org.exoplatform.container. ExoContainerContext</emphasis>.
-         Sometimes your application needs to make sure that the proper <emphasis role="bold">PortalContainer</emphasis>
-         - the source of <emphasis role="bold">ExoContainerContext</emphasis> - is associated with the current call.
+         information through <emphasis>org.exoplatform.container. ExoContainerContext</emphasis>.
+         Sometimes your application needs to make sure that the proper <emphasis>PortalContainer</emphasis>
+         - the source of <emphasis>ExoContainerContext</emphasis> - is associated with the current call.
       </para>
 
       <para>
@@ -595,18 +595,18 @@
          sure the servlet/filter is associated with the current container.
       </para>
       <para>
-         The proper way to do that is to make your servlet extend <emphasis role="bold">org.exoplatform.container.web. AbstractHttpServlet</emphasis>
+         The proper way to do that is to make your servlet extend <emphasis>org.exoplatform.container.web. AbstractHttpServlet</emphasis>
          class.
-         This will not only properly initialize the current <emphasis role="bold">PortalContainer</emphasis> for you, but will also set the current thread's
+         This will not only properly initialize the current <emphasis>PortalContainer</emphasis> for you, but will also set the current thread's
          context classloader to one that looks for resources in the associated web applications in the order specified by
-         <emphasis role="bold">Dependencies</emphasis> configuration (as explained in Extension mechanism section).
+         <emphasis>Dependencies</emphasis> configuration (as explained in Extension mechanism section).
       </para>
       <para>
-         Similarly for filters, make sure your filter class extends <emphasis role="bold">org.exoplatform.container.web. AbstractFilter</emphasis>.
-         Both <emphasis role="bold">AbstractHttpServlet</emphasis>, and <emphasis role="bold">AbstractFilter</emphasis> have the same method <emphasis role="bold">getContainer()</emphasis>,
-         which returns the current <emphasis role="bold">PortalContainer</emphasis>.
+         Similarly for filters, make sure your filter class extends <emphasis>org.exoplatform.container.web. AbstractFilter</emphasis>.
+         Both <emphasis>AbstractHttpServlet</emphasis>, and <emphasis>AbstractFilter</emphasis> have the same method <emphasis>getContainer()</emphasis>,
+         which returns the current <emphasis>PortalContainer</emphasis>.
 
-         If your servlet handles the requests by implementing the <emphasis role="bold">service()</emphasis> method, you need to rename that method to match
+         If your servlet handles the requests by implementing the <emphasis>service()</emphasis> method, you need to rename that method to match
          the following signature:</para>
          <programlisting language="java"><![CDATA[
 /**
@@ -622,8 +622,8 @@ protected void onService(ExoContainer container, HttpServletRequest req,
          </para>
       </note>
       <para>
-         You may also need to access portal information within your <emphasis role="bold">HttpSessionListener</emphasis>. Again, make sure to extend the
-         provided abstract class - <emphasis role="bold">org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
+         You may also need to access portal information within your <emphasis>HttpSessionListener</emphasis>. Again, make sure to extend the
+         provided abstract class - <emphasis>org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
          Also, modify your method signatures as follows:</para>
          <programlisting language="java"><![CDATA[
 /**
@@ -646,27 +646,27 @@ protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event
 protected boolean requirePortalEnvironment();
          ]]></programlisting>
        <para>
-         If this method returns true, the current thread's context classloader is set up according to the <emphasis role="bold">Dependencies</emphasis>
+         If this method returns true, the current thread's context classloader is set up according to the <emphasis>Dependencies</emphasis>
          configuration, and availability of the associated web applications. If it returns false, the standard
          application separation rules are used for resource loading (effectively turning off the
-         extension mechanism). This method exists on <emphasis role="bold">AbstractHttpServlet</emphasis> and <emphasis role="bold">AbstractFilter</emphasis> as well, where there is a
+         extension mechanism). This method exists on <emphasis>AbstractHttpServlet</emphasis> and <emphasis>AbstractFilter</emphasis> as well, where there is a
          default implementation that automatically returns true, when it detects there is a current PortalContainer
          present. Otherwises, it returns false.
 
       </para>
 
       <para>
-         The followings explain how to properly perform the <emphasis role="bold">ServletContextListener</emphasis> based initialization, when you need
+         The followings explain how to properly perform the <emphasis>ServletContextListener</emphasis> based initialization, when you need
          to access the current PortalContainer.
       </para>
 
       <para>
          GateIn has no direct control over the deployment of application archives (.war, .ear files) - it is the
-         application server performing the deployment. For the <emphasis role="bold">extension mechanism</emphasis> to work properly, the applications,
-         associated with the portal via the <emphasis role="bold">Dependencies</emphasis> configuration, have to be deployed before the portal, that depends
+         application server performing the deployment. For the <emphasis>extension mechanism</emphasis> to work properly, the applications,
+         associated with the portal via the <emphasis>Dependencies</emphasis> configuration, have to be deployed before the portal, that depends
          on them, is initialized. On the other hand, these applications may require an already initialized PortalContainer
          to properly initialize themselves - we have a recursive dependency problem. To resolve this problem, a
-         mechanism of <emphasis role="bold">initialization tasks</emphasis>, and <emphasis role="bold">task queues</emphasis>, was put in place. Web applications that depend on the current
+         mechanism of <emphasis>initialization tasks</emphasis>, and <emphasis>task queues</emphasis>, was put in place. Web applications that depend on the current
          PortalContainer for their initialization have to avoid performing their initialization directly in some
          ServletContextListener executed during their deployment (before any PortalContainer was initialized). Instead,
          a web application should package its initialization logic into an init task of the appropriate type, and only use
@@ -712,17 +712,17 @@ public class GadgetRegister implements ServletContextListener
       ]]></programlisting>
 
       <para>
-         The above example uses <emphasis role="bold">PortalContainerPostInitTask</emphasis>, which gets executed after the portal container has been
+         The above example uses <emphasis>PortalContainerPostInitTask</emphasis>, which gets executed after the portal container has been
          initialized. In some cases, you may want to execute the initialization after portal container was instantiated,
-         but before it was initialized - use <emphasis role="bold">PortalContainerPreInitTask</emphasis> in that case. Or, you may want to execute
-         initialization after all the post-init tasks have been executed - use <emphasis role="bold">PortalContainerPostCreateTask</emphasis> in that case.
+         but before it was initialized - use <emphasis>PortalContainerPreInitTask</emphasis> in that case. Or, you may want to execute
+         initialization after all the post-init tasks have been executed - use <emphasis>PortalContainerPostCreateTask</emphasis> in that case.
       </para>
 
       <para>
-         Also, you may need to pay attention to <emphasis role="bold">LoginModules</emphasis>. If you use custom LoginModules which require
-         the current ExoContainer, make sure they extend <emphasis role="bold">org.exoplatform.services.security.jaas.AbstractLoginModule</emphasis> for
+         Also, you may need to pay attention to <emphasis>LoginModules</emphasis>. If you use custom LoginModules which require
+         the current ExoContainer, make sure they extend <emphasis>org.exoplatform.services.security.jaas.AbstractLoginModule</emphasis> for
          the proper initialization. AbstractLoginModule also takes care of the basic configuration - it recognizes two
-         initialization options - <emphasis role="bold">portalContainerName</emphasis>, and <emphasis role="bold">realmName</emphasis> whose values you can access via protected fields of
+         initialization options - <emphasis>portalContainerName</emphasis>, and <emphasis>realmName</emphasis> whose values you can access via protected fields of
          the same name.
       </para>
 

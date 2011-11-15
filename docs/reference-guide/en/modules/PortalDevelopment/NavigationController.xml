@@ -24,23 +24,22 @@
         <title>Controller in Action</title>
         <section>
           <title>Controller</title>
-          <para>The <code>WebAppController</code> is the component of GateIn that processes HTTP invocations and transforms them into a portal request. It has been improved with the addition of a request mapping engine (<emphasis role="bold">controller</emphasis>) whose role is to make the HTTP request decouple and create a portal request. The mapping engine makes two essential tasks:</para>
+          <para>The <code>WebAppController</code> is the component of GateIn that processes HTTP invocations and transforms them into a portal request. It has been improved with the addition of a request mapping engine (<emphasis >controller</emphasis>) whose role is to make the HTTP request decouple and create a portal request. The mapping engine makes two essential tasks:</para>
           <itemizedlist>
             <listitem>
-              <para>Create a <emphasis role="bold">Map&lt;QualifiedName, String&gt;</emphasis> from an incoming HTTP request.</para>
+              <para>Create a <emphasis >Map&lt;QualifiedName, String&gt;</emphasis> from an incoming HTTP request.</para>
             </listitem>
             <listitem>
-              <para>Render a <emphasis role="bold">Map&lt;QualifiedName, String&gt; </emphasis> as an HTTP URL.</para>
+              <para>Render a <emphasis >Map&lt;QualifiedName, String&gt; </emphasis> as an HTTP URL.</para>
             </listitem>
           </itemizedlist>
-          <para>The goal of the controller (mapping engine) is to <emphasis role="bold">decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contain data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
+          <para>The goal of the controller (mapping engine) is to <emphasis>decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contain data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
           <para>The controller configuration is declarative in an .xml file, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Building_controller">
           <title>Building controller</title>
-          <para>The controller configuration that contains the routing rules is loaded from the <emphasis role="bold">controller.xml</emphasis> file that is retrieved in the GateIn configuration directory. Its location is determined by the <emphasis role="bold">gatein.controller.config</emphasis> property.</para>
-          <para>
-            <emphasis role="bold">WebAppController</emphasis> loads and initializes the mapping engine.</para>
+          <para>The controller configuration that contains the routing rules is loaded from the <emphasis>controller.xml</emphasis> file that is retrieved in the GateIn configuration directory. Its location is determined by the <emphasis >gatein.controller.config</emphasis> property.</para>
+          <para>WebAppController loads and initializes the mapping engine.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -57,7 +56,7 @@
 ]]></programlisting>
           </programlistingco>
           <para>GateIn's extension project can define their own routing table, thanks to the extension mechanism.</para>
-          <para>The <emphasis role="bold">controller.xml</emphasis> file can be changed and reloaded at runtime. This helps the test of different configurations easily (configuration loading operations) and provides more insight into the routing engine (the findRoutes operation). See <emphasis role="bold">Rebuiding controller</emphasis> below for more details.</para>
+          <para>The <emphasis >controller.xml</emphasis> file can be changed and reloaded at runtime. This helps the test of different configurations easily (configuration loading operations) and provides more insight into the routing engine (the findRoutes operation). See <emphasis >Rebuiding controller</emphasis> below for more details.</para>
           <itemizedlist>
             <listitem>
               <para>
@@ -69,7 +68,7 @@
           <para>It provides the following attributes and operations:</para>
           <itemizedlist>
             <listitem>
-              <para>Attribute configurationPath: the "read-only" configuration path of the <emphasis role="bold">controller.xml</emphasis> file.</para>
+              <para>Attribute configurationPath: the "read-only" configuration path of the <emphasis >controller.xml</emphasis> file.</para>
             </listitem>
             <listitem>
               <para>Operation loadConfiguration: load a new configuration file from a specified XML path.</para>
@@ -87,7 +86,7 @@
           <para>Most of the controller configuration cares about defining rules (Routing table - contains routes object) that will drive the resolution. Routes are processed during the controller initialization to give a tree of node.</para>
           <itemizedlist>
             <listitem>
-              <para> Each node is related to its parent with a matching rule that can either be an <emphasis role="bold">exact string matching</emphasis> or a <emphasis role="bold">regular expression matching</emphasis>.
+              <para> Each node is related to its parent with a matching rule that can either be an <emphasis >exact string matching</emphasis> or a <emphasis >regular expression matching</emphasis>.
               </para>
             </listitem>
             <listitem>
@@ -97,7 +96,7 @@
           <para>A parameter is defined by a qualified name and there are three kinds of parameters explained in the sections below.</para>
           <section id="sect-Reference_Guide-Navigation_Controller-Controller_Config-Route_Parameter">
             <title>
-              <emphasis role="bold">Route parameters</emphasis>
+              <emphasis >Route parameters</emphasis>
             </title>
             <para>Route parameters defines a fixed value associate with a qualified name.</para>
             <itemizedlist>
@@ -109,7 +108,7 @@
               </listitem>
             </itemizedlist>
             <para>
-              <emphasis role="bold">Example:</emphasis>
+              <emphasis role ="bold">Example:</emphasis>
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -121,7 +120,7 @@
 </route>
 ]]></programlisting>
             </programlistingco>
-            <para>This configuration matches the request path "<emphasis role="bold">/foo</emphasis>" to the map (gtn:handler=portal). Conversely, it renders the (gtn:handler=portal) map as the "<emphasis role="bold">/foo</emphasis>" URL. This example shows two concepts:</para>
+            <para>This configuration matches the request path "<emphasis >/foo</emphasis>" to the map (gtn:handler=portal). Conversely, it renders the (gtn:handler=portal) map as the "<emphasis >/foo</emphasis>" URL. This example shows two concepts:</para>
             <itemizedlist>
               <listitem>
                 <para>exact path matching ("/foo")</para>
@@ -133,10 +132,10 @@
           </section>
           <section id="sect-Reference_Guide-Navigation_Controller-Controller_Config-Path_Parameters">
             <title>
-              <emphasis role="bold">Path parameters - <emphasis role="italic">Regular expression support</emphasis>
+              <emphasis >Path parameters - <emphasis role="italic">Regular expression support</emphasis>
               </emphasis>
             </title>
-            <para>Path parameters allow to associate a portion of the request path with a parameter. Such parameter will match any non empty portions of text except the <emphasis role="bold">/</emphasis> character (that is the [^/]+ regular expression) otherwise they can be associated with a regular expression for matching specific patterns. Path parameters are mandatory for matching since they are a part of the request path, however it is allowed to write regular expression matching an empty value.</para>
+            <para>Path parameters allow to associate a portion of the request path with a parameter. Such parameter will match any non empty portions of text except the <emphasis >/</emphasis> character (that is the [^/]+ regular expression) otherwise they can be associated with a regular expression for matching specific patterns. Path parameters are mandatory for matching since they are a part of the request path, however it is allowed to write regular expression matching an empty value.</para>
             <itemizedlist>
               <listitem>
                 <para>Routing: route is accepted if the regular expression is matched.</para>
@@ -148,10 +147,10 @@
             <para>
               <emphasis role="bold">Encoding</emphasis>
             </para>
-            <para>Path parameters may contain the '/' character which is a reserved char for the URI path. This case is specially handled by the navigation controller by using a special character to replace the '/' literals. By default, the character is the colon <emphasis role="bold">":"</emphasis> and can be changed to other possible values (see controller XML schema for possible values) to give a greater amount of flexibility.</para>
-            <para>This encoding is applied only when the encoding is performed for parameters having a mode set to the <code>default-form</code> value, for instance, it does not happen for navigation node URI (for which <emphasis role="bold">/</emphasis> are encoded literally). The separator escape char can still be used but under it is percent escaped form, so by default, a path parameter value containing the colon <emphasis role="bold">":"</emphasis> would be encoded as <code>%3A</code> and conversely the <code>%3A</code> value will be decoded as the colon <emphasis role="bold">":"</emphasis>.</para>
+            <para>Path parameters may contain the '/' character which is a reserved char for the URI path. This case is specially handled by the navigation controller by using a special character to replace the '/' literals. By default, the character is the colon <emphasis >":"</emphasis> and can be changed to other possible values (see controller XML schema for possible values) to give a greater amount of flexibility.</para>
+            <para>This encoding is applied only when the encoding is performed for parameters having a mode set to the <code>default-form</code> value, for instance, it does not happen for navigation node URI (for which <emphasis >/</emphasis> are encoded literally). The separator escape char can still be used but under it is percent escaped form, so by default, a path parameter value containing the colon <emphasis >":"</emphasis> would be encoded as <code>%3A</code> and conversely the <code>%3A</code> value will be decoded as the colon <emphasis >":"</emphasis>.</para>
             <para>
-              <emphasis role="bold">Example: No pattern is define, the default one [^/]+ will be used:</emphasis>
+              <emphasis >Example: No pattern is define, the default one [^/]+ will be used:</emphasis>
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -170,7 +169,7 @@ Path "/foo"      <--> the map (gtn:path=foo)
 Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
 ]]></programlisting>
             </programlistingco>
-            <para>If the request path contains another "/" char, it will not work. The default encoding mode is <emphasis role="bold">default-form</emphasis>. In the example above, "/foo/bar" is not matched, so the system returns an empty parameter map.</para>
+            <para>If the request path contains another "/" char, it will not work. The default encoding mode is <emphasis >default-form</emphasis>. In the example above, "/foo/bar" is not matched, so the system returns an empty parameter map.</para>
             <para>However, this problem could be solved with the following configuration:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -207,7 +206,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
                 </itemizedlist>
               </listitem>
               <listitem>
-                <para><emphasis role="bold">Rendering</emphasis>:</para>
+                <para><emphasis role="bold" >Rendering</emphasis>:</para>
                 <itemizedlist>
                   <listitem>
                     <para>For required parameters, the system will select a route to render an URL when the parameter is present and matched in the map.</para>
@@ -219,7 +218,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
               </listitem>
             </itemizedlist>
             <para>
-              <emphasis role="bold">Example:</emphasis>
+              <emphasis role ="bold">Example:</emphasis>
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -313,7 +312,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
           <title>Routing</title>
           <para>GateIn defines a set of parameters in its routing table, for each client request, the mapping engine processes the request path and return the defined parameters with their values as a Map&lt;QualifiedName, String&gt;</para>
           <para>
-            <emphasis role="bold">gtn:handler</emphasis>
+            <emphasis >gtn:handler</emphasis>
           </para>
           <para>The gtn:handler names is one of the most important qualified name as it determines which handler will take care of the request processing just after the controller has determined the parameter map. The handler value is used to make a lookup in the handler map of the controller. An handler is a class that extends the <code>WebRequestHandler</code> class and implements the <code>execute(ControllerContext)</code> method. Several handlers are available by default:</para>
           <itemizedlist>
@@ -333,7 +332,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
               <para>default: HTTP redirection to the default portal of the container.</para>
             </listitem>
             <listitem>
-              <para>staticResource: serve static resources like image, CSS or JavaScript and more in <emphasis role="bold">portal.war</emphasis> (see <xref linkend="sect-Reference_Guide-Navigation_Controller-Static_resource_handler"/>).</para>
+              <para>staticResource: serve static resources like image, CSS or JavaScript and more in <emphasis >portal.war</emphasis> (see <xref linkend="sect-Reference_Guide-Navigation_Controller-Static_resource_handler"/>).</para>
             </listitem>
           </itemizedlist>
           <para>
@@ -351,10 +350,10 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering">
           <title>Rendering</title>
-          <para>The <emphasis role="bold">controller</emphasis> is designed to render a Map&lt;QualifiedName, String&gt; as an HTTP URL according to its routing table, but to integrate it for easy usage in WebUI Framework of GateIn, you need some more components:</para>
+          <para>The <emphasis >controller</emphasis> is designed to render a Map&lt;QualifiedName, String&gt; as an HTTP URL according to its routing table, but to integrate it for easy usage in WebUI Framework of GateIn, you need some more components:</para>
           <section>
             <title>
-              <emphasis role="bold">PortalURL</emphasis>
+              <emphasis >PortalURL</emphasis>
             </title>
             <para>
               <code>PortalURL</code> plays a similar role at the portal level. Its main role is to abstract the creation of an URL for a resource managed by the portal.</para>
@@ -373,7 +372,7 @@ public abstract class PortalURL<R, U extends PortalURL<U>>
                 <para>The <code>R</code> generic type represents the type of the resource managed by the portal.</para>
               </listitem>
               <listitem>
-                <para>The <code>U</code> generic type is also described as <emphasis role="bold">self bound generic type</emphasis>. This design pattern allows a class to return subtypes of itself in the class declaring the generic type. Java Enums are based on this principle (<code>class Enum&lt;E extends Enum&lt;E&gt;&gt;</code>).</para>
+                <para>The <code>U</code> generic type is also described as <emphasis >self bound generic type</emphasis>. This design pattern allows a class to return subtypes of itself in the class declaring the generic type. Java Enums are based on this principle (<code>class Enum&lt;E extends Enum&lt;E&gt;&gt;</code>).</para>
               </listitem>
             </itemizedlist>
             <para>A portal URL has various methods but certainly the most important method is the <code>toString()</code> method that generates an URL targeting to the resource. The remaining methods are <code>getter</code> and <code>setter</code> used to mutate the URL configuration, those options will affect the URL representation when it is generated.</para>
@@ -674,7 +673,7 @@ String uri = nodeURL.setNode(node).toString();
         </section>
         <section>
           <title>portal.war's web.xml changes</title>
-          <para><emphasis role="bold">DoLoginServlet declaration</emphasis>:</para>
+          <para><emphasis >DoLoginServlet declaration</emphasis>:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -688,7 +687,7 @@ String uri = nodeURL.setNode(node).toString();
 </servlet-mapping>
 ]]></programlisting>
           </programlistingco>
-          <para>Delare <emphasis role="bold">portal servlet</emphasis> as the default servlet:</para>
+          <para>Delare <emphasis >portal servlet</emphasis> as the default servlet:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -698,11 +697,11 @@ String uri = nodeURL.setNode(node).toString();
 </servlet-mapping>
 ]]></programlisting>
           </programlistingco>
-          <para>Some mapping declarations for portal servlet are unused,so you should remove them: <emphasis role="bold">
+          <para>Some mapping declarations for portal servlet are unused,so you should remove them: <emphasis >
               <emphasis role="italic">/private/* /public/* /admin/* /upload/* /download/*</emphasis>
             </emphasis>
           </para>
-          <para><emphasis role="bold">Add some security constraints</emphasis>:</para>
+          <para><emphasis >Add some security constraints</emphasis>:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[

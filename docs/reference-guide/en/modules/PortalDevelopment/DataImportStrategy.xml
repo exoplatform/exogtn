@@ -26,22 +26,22 @@
       <itemizedlist>
          <listitem>
             <para>
-               <literal>CONSERVE</literal>           
+               <emphasis>CONSERVE</emphasis> 
             </para>
          </listitem>
          <listitem>
             <para>
-               <literal>MERGE</literal>           
+               <emphasis>MERGE</emphasis>
             </para>
          </listitem>
          <listitem>
             <para>
-               <literal>INSERT</literal>           
+               <emphasis>INSERT</emphasis>
             </para>
          </listitem>
          <listitem>
             <para>
-               <literal>OVERWRITE</literal>           
+               <emphasis>OVERWRITE</emphasis>
             </para>
          </listitem>
       </itemizedlist> 
@@ -50,7 +50,7 @@
         set whenever NewPortalConfigListener is initiated. If the mode is not set,
         the default value will be used in this case. The default value is configurable as
         a UserPortalConfigService initial param. For example, the bellow configuration
-        means that default value is <literal>MERGE</literal>
+        means that default value is <emphasis>MERGE</emphasis>
       </para>
       <programlisting role="XML"><![CDATA[
 <component>
@@ -82,16 +82,16 @@
          The navigation data import strategy will be processed to the import mode level as the followings:
          <itemizedlist>
             <listitem>
-               <literal>CONSERVE</literal>: If the navigation exists, leave it untouched. Otherwise, import data.
+               <emphasis>CONSERVE</emphasis>: If the navigation exists, leave it untouched. Otherwise, import data.
             </listitem>
             <listitem>
-               <literal>INSERT</literal>: Insert the missing description data, but add only new nodes. Other modifications remains untouched.
+               <emphasis>INSERT</emphasis>: Insert the missing description data, but add only new nodes. Other modifications remains untouched.
             </listitem>
             <listitem>
-               <literal>MERGE</literal>: Merge the description data, add missing nodes and update same name nodes.
+               <emphasis>MERGE</emphasis>: Merge the description data, add missing nodes and update same name nodes.
             </listitem>
             <listitem>
-               <literal>OVERWRITE</literal>: Always destroy the previous data and recreate it.
+               <emphasis>OVERWRITE</emphasis>: Always destroy the previous data and recreate it.
             </listitem>
          </itemizedlist>
          <para>
@@ -164,10 +164,10 @@
          <itemizedlist>
             <listitem>
                <para>
-                  Case 1: Import mode is <literal>CONSERVE</literal>.
+                  Case 1: Import mode is <emphasis>CONSERVE</emphasis>.
                </para>
                <para>
-                  With the <literal>CONSERVE</literal> mode, data are only imported when they do not exist. So, if
+                  With the <emphasis>CONSERVE</emphasis> mode, data are only imported when they do not exist. So, if
                   the navigation has been created by the <emphasis>navigation1</emphasis> definition, the <emphasis>navigation2</emphasis> definition
                   does not affect anything on it. We have the result as following
                </para>
@@ -179,7 +179,7 @@
             </listitem>
             <listitem>
                <para>
-                  Case 2: Import mode is <literal>INSERT</literal>.
+                  Case 2: Import mode is <emphasis>INSERT</emphasis>.
                </para>
                <para>
                   If a node does not exist, the importer will add new nodes to the navigation tree. You will see the following result:
@@ -196,10 +196,10 @@
             </listitem>
             <listitem>
                <para>
-                  Case 3: Import mode is <literal>MERGE</literal>.
+                  Case 3: Import mode is <emphasis>MERGE</emphasis>.
                </para>
                <para>
-                  The <literal>MERGE</literal> mode indicates that a new node is added to the navigation tree, and
+                  The <emphasis>MERGE</emphasis> mode indicates that a new node is added to the navigation tree, and
                   updates the node data (such node label and node icon in the example) if it exists. 
                </para>
                <mediaobject>
@@ -210,10 +210,10 @@
             </listitem>
             <listitem>
                <para>
-                  Case 4: Import mode is <literal>OVERWRITE</literal>.
+                  Case 4: Import mode is <emphasis>OVERWRITE</emphasis>.
                </para>
                <para>
-                  Everything will be destroyed and replaced with new data if the <literal>OVERWRITE</literal> mode is used.
+                  Everything will be destroyed and replaced with new data if the <emphasis>OVERWRITE</emphasis> mode is used.
                </para>
                <mediaobject>
                   <imageobject>
@@ -230,19 +230,19 @@
             PortalConfig defines the portal name, permission, layout and some properties
             of a site. These information are configured in the <emphasis>portal.xml</emphasis>, <emphasis>group.xml</emphasis> or
             <emphasis>user.xml</emphasis>, depending on the site type. The PortalConfig importer performs a strategy
-            that is based on the mode defined in NewPortalConfigListener, including <literal>CONSERVE</literal>,
-            <literal>INSERT</literal>, <literal>MERGE</literal> or <literal>OVERWRITE</literal>. Let's see how the import mode affects in the process of
+            that is based on the mode defined in NewPortalConfigListener, including <emphasis>CONSERVE</emphasis>,
+            <emphasis>INSERT</emphasis>, <emphasis>MERGE</emphasis> or <emphasis>OVERWRITE</emphasis>. Let's see how the import mode affects in the process of
             portal data performance:
          </para>
          <itemizedlist>
             <listitem>
-               <literal>CONSERVE</literal>: There is nothing to be imported. The existing data will be kept without any changes.
+               <emphasis>CONSERVE</emphasis>: There is nothing to be imported. The existing data will be kept without any changes.
             </listitem>
             <listitem>
-               <literal>INSERT</literal>: When the portal config does not exist, create the new portal defined by the portal config definition. Otherwise, do nothing.
+               <emphasis>INSERT</emphasis>: When the portal config does not exist, create the new portal defined by the portal config definition. Otherwise, do nothing.
             </listitem>
             <listitem>
-               <literal>MERGE</literal> and <literal>OVERWRITE</literal> have the same behavior. The new portal config will be created if it does not exist or update portal properties defined by the portal config definition.
+               <emphasis>MERGE</emphasis> and <emphasis>OVERWRITE</emphasis> have the same behavior. The new portal config will be created if it does not exist or update portal properties defined by the portal config definition.
             </listitem>
          </itemizedlist>
       </section>
@@ -254,8 +254,8 @@
       </section>
       <note>
          <para>
-            If the Import mode is <literal>CONSERVE</literal> or <literal>INSERT</literal>, the data import strategy always performs
-            as the <literal>MERGE</literal> mode in the first data initialization of the Portal.
+            If the Import mode is <emphasis>CONSERVE</emphasis> or <emphasis>INSERT</emphasis>, the data import strategy always performs
+            as the <emphasis>MERGE</emphasis> mode in the first data initialization of the Portal.
          </para>
       </note>
    </section>

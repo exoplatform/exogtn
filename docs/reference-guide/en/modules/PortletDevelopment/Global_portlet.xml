@@ -31,7 +31,7 @@
   <section id="sect-Reference_Guide-Global_Portlet-Global_metadata">
     <title>Global metadata</title>
     <para>The Global metadata is declared in the
-            <emphasis role="italic">portlet.xml</emphasis> file conforming with Portlet 2.0 &apos;s XSD.
+            <emphasis>portlet.xml</emphasis> file conforming with Portlet 2.0 &apos;s XSD.
         </para>
     <programlisting role="XML">&lt;portlet-app version=&quot;1.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;
              xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -40,15 +40,15 @@
 &lt;/portlet-app&gt;</programlisting>
     <section id="sect-Reference_Guide-Global_Portlet-Location">
       <title>Location</title>
-      <para>The path to the global <emphasis role="italic">portlet.xml</emphasis> is value of <emphasis role="italic">gatein.portlet.config</emphasis> in the <emphasis role="italic">configuration.properties</emphasis> file and varied by hosting
+      <para>The path to the global <emphasis>portlet.xml</emphasis> is value of <emphasis >gatein.portlet.config</emphasis> in the <emphasis >configuration.properties</emphasis> file and varied by hosting
             application servers.
         </para>
-      <para><emphasis role="bold">For Tomcat</emphasis>: <emphasis role="italic">TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
-      <para><emphasis role="bold">For JBoss</emphasis>: <emphasis role="italic">JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
+      <para><emphasis role="bold">For Tomcat</emphasis>: <emphasis>TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
+      <para><emphasis role="bold">For JBoss</emphasis>: <emphasis>JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
     </section>
     <section id="sect-Reference_Guide-Global_Portlet-Global_metadata_elements">
       <title>Global metadata elements</title>
-      <para>The global <emphasis role="italic">portlet.xml</emphasis> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
+      <para>The global <emphasis >portlet.xml</emphasis> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
             Specification with some restrictions. In this file, the following elements are supported:
         </para>
       <orderedlist>
@@ -64,7 +64,7 @@
       </orderedlist>
       <section id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter">
         <title>Portlet filter</title>
-        <para>Portlet filter mappings declared in the global<emphasis role="italic"> portlet.xml</emphasis> file are applied across portlet applications. With
+        <para>Portlet filter mappings declared in the global<emphasis > portlet.xml</emphasis> file are applied across portlet applications. With
                 the XML configuration below, the filter ApplicationMonitoringFilter involves in request handling on any
                 deployed portlet.
         </para>
@@ -79,7 +79,7 @@
           <para>
               <emphasis role="bold">Application Monitoring Filter</emphasis>
               supports four lifecycle phases as the order below:
-              <emphasis role="italic">ACTION_PHASE/ EVENT_PHASE/ RENDER_PHASE/ RESOURCE_PHASE</emphasis>
+              <emphasis >ACTION_PHASE/ EVENT_PHASE/ RENDER_PHASE/ RESOURCE_PHASE</emphasis>
               and
               records statistic information on deployed portlets.
               The filter alternates actual monitoring mechanism in WebUI Framework.
@@ -87,7 +87,7 @@
       </section>
       <section id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode">
         <title>Portlet Mode and Window State</title>
-        <para>The global <emphasis role="italic">portlet.xml</emphasis> file is considered as an alternative place to declare custom Portlet Modes and Window States.
+        <para>The global <emphasis>portlet.xml</emphasis> file is considered as an alternative place to declare custom Portlet Modes and Window States.
             </para>
       </section>
     </section>

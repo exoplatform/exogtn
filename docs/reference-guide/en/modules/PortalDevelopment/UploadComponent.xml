@@ -36,7 +36,7 @@
 	<section id="sect-Reference_Guide-Upload_Component-Upload_Service">
 		<title>Upload Service</title>
 		<para>
-			The service is defined by the class: <literal>org.exoplatform.upload.UploadService</literal>;
+			The service is defined by the class: <emphasis>org.exoplatform.upload.UploadService</emphasis>;
 		</para>
 		<para>
 			This can be configured with the following xml code:
@@ -66,7 +66,7 @@
 			<title>How to use the upload component</title>
 			<step>
 				<para>
-					Create an object type <literal>org.exoplatform.webui.form.UIFormUploadInput</literal>.
+					Create an object type <emphasis>org.exoplatform.webui.form.UIFormUploadInput</emphasis>.
 				</para>
 				<para>
 					Two constructors are available for this:
@@ -92,7 +92,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 			</step>
 			<step>
 				<para>
-					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename>:
+					To obtain the limit from the <emphasis>xml</emphasis> configuration, this piece of code can be added to the either <emphasis>portlet.xml</emphasis> or <emphasis>portlet-preferences.xml</emphasis>:
 				</para>
 				
 <programlisting language="xml">&#60;preference&#62;
@@ -107,7 +107,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 			</step>
 			<step>
 				<para>
-					Use the <literal>getUploadDataAsStream()</literal> method to get the uploaded data:
+					Use the <emphasis>getUploadDataAsStream()</emphasis> method to get the uploaded data:
 				</para>
 				
 <programlisting language="java">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(&#34;upload&#34;);
@@ -133,7 +133,7 @@ jcrData.setValue(inputStream);
 					</listitem>
 				</orderedlist>
 				<para>
-					Use the<literal>removeUpload()</literal> method defined in the upload service to purge the file:
+					Use the<emphasis>removeUpload()</emphasis> method defined in the upload service to purge the file:
 				</para>
 				
 <programlisting language="java">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;

@@ -5,7 +5,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Skinning_Portal">
-  <title>Skinning the portal</title>
+  <title>Skin the portal</title>
 
   <section id="sect-Reference_Guide-Skin_Configuration-Overview">
     <title>Overview</title>
@@ -127,14 +127,14 @@ common graphic resource reuse and ease of development
       </para>
       <para>
         The default skin of the portal is called
-        <literal>Default</literal>. To change this value, add a
-        <literal>skin</literal> tag in the
-        <literal>02portal.war/WEB-INF/conf/portal/portal/classic/portal.xml</literal>
+        <emphasis>Default</emphasis>. To change this value, add a
+        <emphasis>skin</emphasis> tag in the
+        <emphasis>02portal.war/WEB-INF/conf/portal/portal/classic/portal.xml</emphasis>
         configuration file.
       </para>
       <para>
         To change the skin to
-        <literal>MySkin,</literal>
+        <emphasis>MySkin,</emphasis>
         you would make the following changes:
       </para>
 
@@ -156,12 +156,12 @@ common graphic resource reuse and ease of development
       skin contains CSS styles for the portal's components but
       also shares components that may be reused in portlets. When &PRODUCT;
       generates a portal page markup, it inserts the stylesheet links in the page's
-      <literal>head</literal> tag.
+      <emphasis>head</emphasis> tag.
     </para>
 
     <para>
       There are two main types of CSS links that will appear in the
-      <literal>head</literal> tag: a link to the portal skin CSS file and a link 
+      <emphasis>head</emphasis> tag: a link to the portal skin CSS file and a link 
       to the portlet skin CSS files.
     </para>
 
@@ -225,13 +225,13 @@ common graphic resource reuse and ease of development
       <title>Skin configuration</title>
 
       <para>&PRODUCT; automatically discovers web archives that contain a
-      file descriptor for skins (<filename>WEB-INF/gatein-resources.xml</filename>). This file is
+      file descriptor for skins (<emphasis>WEB-INF/gatein-resources.xml</emphasis>). This file is
       reponsible for specifying the portal, portlet and window decorators to be deployed into the
       skin service.
       </para>
       
       <para>The full schema can be found in the lib directory:</para>
-      <filename>exo.portal.component.portal.jar/gatein_resources_1_0.xsd</filename>
+      <emphasis>exo.portal.component.portal.jar/gatein_resources_1_0.xsd</emphasis>
     
       <para>Here is an example where a skin (MySkin) with its CSS location is defined, and a few window decorator skins are specified: 
       </para>
@@ -266,7 +266,7 @@ common graphic resource reuse and ease of development
     <para>
       Any new web applications containing skinning CSS files will
       need to have the following added to their
-      <literal>web.xml</literal>
+      <emphasis>web.xml</emphasis>
      :
     </para>
 
@@ -282,8 +282,8 @@ common graphic resource reuse and ease of development
   </section>
 
     <note>
-      <para>The <literal>display-name</literal> element also needs to
-      be specified in the <literal>web.xml</literal> for the skinning service to work properly
+      <para>The <emphasis>display-name</emphasis> element also needs to
+      be specified in the <emphasis>web.xml</emphasis> for the skinning service to work properly
       with the web application.</para>
     </note>
     
@@ -292,7 +292,7 @@ common graphic resource reuse and ease of development
   <section id="sect-Reference_Guide-Skin_Configuration-Default_Skin">
     <title>The Default Skin</title>
     <para>
-    The default skin for &PRODUCT; is located as part of the <literal>01eXoResource.war</literal>.
+    The default skin for &PRODUCT; is located as part of the <emphasis>01eXoResource.war</emphasis>.
     The main files associated with the skin are shown below:
     </para>
     
@@ -379,8 +379,8 @@ skin/Stylesheet.css</programlisting>
 		  it easier for new skins to reuse parts of the default skin.
 		  </para>
 		  <para>To reuse the CSS stylesheet from the default portal skin, you need to refer to the default skin from eXoResources.
-		  For example, to include the window decorators from the default skin within a new portal skin, you need to use this import: </para>
-		  <programlisting language="css">@import url(/eXoResources/skin/Portlet/Stylesheet.css);</programlisting>
+		  For example, to include the window decorators from the default skin within a new portal skin, you need to use this import: <emphasis>@import url(/eXoResources/skin/Portlet/Stylesheet.css);</emphasis></para>
+		  
 		  <note>
 		  <para>When the portal skin is added to the page, it merges all the CSS stylesheets into a single file.</para>
 		  </note>
@@ -392,7 +392,7 @@ skin/Stylesheet.css</programlisting>
   </section>
 
   <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin">
-    <title>Creating New Skins</title>
+    <title>Create New Skins</title>
 
     <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_new_portal_skin">
       <title>Creating a New Portal Skin</title>
@@ -400,7 +400,7 @@ skin/Stylesheet.css</programlisting>
       <para>
         A new portal needs to be added to the portal through the skin service. The web application
         which contains the skin will need to be properly configured for the skin service to discover them. This 
-        means that ResourceRequestFilter and gatein-resources.xml should be configured properly.
+        means that <emphasis>ResourceRequestFilter</emphasis> and <emphasis>gatein-resources.xml</emphasis> should be configured properly.
       </para>
 
       <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal-skin-configuration">
@@ -419,7 +419,7 @@ skin/Stylesheet.css</programlisting>
 &lt;/gatein-resources&gt;
       </programlisting>
       <para>The default portal skin and window styles are defined in
-    <filename>01eXoResources.war/WEB-INF/gatein-resources.xml</filename>.
+    <emphasis>01eXoResources.war/WEB-INF/gatein-resources.xml</emphasis>.
     </para>
       <note>
       <para>
@@ -459,12 +459,12 @@ skin/Stylesheet.css</programlisting>
          In order for the default skin to know about the skin icon for a new portal skin, the preview screenshot
          needs to be placed in:</para>
          
-         <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</filename>
+         <emphasis>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</emphasis>
          <para>
          The CSS stylesheet for the default portal needs to have the following updated with the preview icon CSS class. For a skin named 
          <emphasis
             role="bold">MySkin</emphasis>, you need to update the following:</para>
-         <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
+         <emphasis>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</emphasis>
          <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
             role="bold">MySkinImage</emphasis> {
   margin: auto;
@@ -494,7 +494,7 @@ skin/Stylesheet.css</programlisting>
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_configuration">
 	<title>Window Style Configuration</title>
 	<para>
-	Window Styles are defined within the gatein-resources.xml file which is used by the skin service to 
+	Window Styles are defined within the <emphasis>gatein-resources.xml</emphasis> file which is used by the skin service to 
 	deploy the window style into the portal. Window styles can belong in with a window style category, this
 	category and the window styles need to be specified in the resources file.
 	</para>
@@ -512,8 +512,8 @@ skin/Stylesheet.css</programlisting>
   &lt;/style-theme&gt;
 &lt;/window-style&gt;</programlisting>
 
-    <para>The windows style configuration for the default skin is configured in:</para>
-    <filename>01eXoResources.war/WEB-INF/gatein-resources.xml</filename>
+    <para>The windows style configuration for the default skin is configured in:<emphasis> 01eXoResources.war/WEB-INF/gatein-resources.xml</emphasis></para>
+    <emphasis>01eXoResources.war/WEB-INF/gatein-resources.xml</emphasis>
 
     <note><para>
     When a window style is defined in the gatein-resources.xml file, it will be available
@@ -532,7 +532,7 @@ skin/Stylesheet.css</programlisting>
 	The CSS class must be included as part of the current portal skin for displaying the window decorators.
 	</para>
 	<para>The location of the window decorator CSS classes for the default portal theme is located at:</para>
-	<filename>01eXoResources.war/skin/PortletThemes/Stylesheet.css</filename>
+	<emphasis>01eXoResources.war/skin/PortletThemes/Stylesheet.css</emphasis>
 	
 	<para></para>
         <para>Create the CSS file:</para>
@@ -670,8 +670,8 @@ skin/Stylesheet.css</programlisting>
 <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Set_default_window_style">
 <title>How to Set the Default Window Style</title>
 To set the default window style to be used for a portal, you need to specify the CSS classes
-for a theme called <literal>DefaultTheme</literal>.
-<note><para>You do not need to specify the DefaultTheme in gatein-resources.xml.</para></note>
+for a theme called <emphasis>DefaultTheme</emphasis>.
+<note><para>You do not need to specify the DefaultTheme in <emphasis>gatein-resources.xml</emphasis>.</para></note>
 </section>
   </section>
   
@@ -681,16 +681,16 @@ for a theme called <literal>DefaultTheme</literal>.
     <para>Portlets often require additional styles that may not be defined by
     the portal skin. &PRODUCT; allows you to define additional
     stylesheets for each portlet and will append the corresponding
-    <literal>link</literal> tags to the <literal>head</literal>.</para>
+    <emphasis>link</emphasis> tags to the <emphasis>head</emphasis>.</para>
 
     <para>The link ID will be of the form
     <parameter>{portletAppName}{PortletName}</parameter>. For example:
-    <literal>ContentPortlet</literal> in <literal>content.war</literal> will
+    <emphasis>ContentPortlet</emphasis> in <emphasis>01eXoResources.war/WEB-INF/gatein-resources.xml</emphasis><emphasis>content.war</emphasis><emphasis>01eXoResources.war/WEB-INF/gatein-resources.xml</emphasis> will
     give
-    <parameter>id="content<literal>ContentPortlet".</literal></parameter></para>
+    <parameter>id="content<emphasis>ContentPortlet".</emphasis></parameter></para>
 
     <para>To define a new CSS file to include whenever a portlet is available on a portal page, the
-    following fragment needs to be added to gatein-resources.xml.</para>
+    following fragment needs to be added to <emphasis>gatein-resources.xml</emphasis>.</para>
     
     <programlisting language="xml">&lt;portlet-skin&gt;
   &lt;application-name&gt;portletAppName&lt;/application-name&gt;
@@ -706,7 +706,7 @@ for a theme called <literal>DefaultTheme</literal>.
   &lt;css-path&gt;/skin/OtherSkinStylesheet.css&lt;/css-path&gt;
 &lt;/portlet-skin&gt;</programlisting>
 
-    <para>This will load the DefaultStylesheet.css or OtherSkinStylesheet.css when the Default skin or OtherSkin is used respectively.</para>
+    <para>This will load the <emphasis>DefaultStylesheet.css</emphasis> or <emphasis>OtherSkinStylesheet.css</emphasis> when the Default skin or OtherSkin is used respectively.</para>
     <note><para>If the current portal skin is not defined as part of the supported
     skins, the portlet CSS class will not be loaded. It is recommended that you update
     portlet skins whenever a new portal skin is created.</para></note>
@@ -720,7 +720,7 @@ for a theme called <literal>DefaultTheme</literal>.
 
       <itemizedlist>
         <listitem>
-          <para><filename>skin/DefaultSkin/portletIcons/<replaceable>icon_name.png</replaceable></filename>.</para>
+          <para><emphasis>skin/DefaultSkin/portletIcons/<replaceable>icon_name.png</replaceable></emphasis>.</para>
         </listitem>
       </itemizedlist>
 
@@ -731,12 +731,12 @@ for a theme called <literal>DefaultTheme</literal>.
 
       <itemizedlist>
         <listitem>
-          <para><filename>skin/DefaultSkin/portletIcons/AccountPortlet.png</filename></para>
+          <para><emphasis>skin/DefaultSkin/portletIcons/AccountPortlet.png</emphasis></para>
         </listitem>
       </itemizedlist>
       <note>
       <para>
-      You must use <literal>skin/DefaultSkin/portletIcons/</literal> for the directory to store the
+      You must use <emphasis>skin/DefaultSkin/portletIcons/</emphasis> for the directory to store the
       portlet icon regardless of what skin is going to be used.
       </para>
       </note>
@@ -748,7 +748,7 @@ for a theme called <literal>DefaultTheme</literal>.
     These classes are included as part of the portal skin. Please see the portlet specification for a list of the 
     default classes that should be available.</para>
     <para>For the default portal skin, the portlet specification CSS classes are defined in:</para>
-    <filename>eXoResources.war/skin/Portlet/Stylesheet.css</filename>
+    <emphasis>eXoResources.war/skin/Portlet/Stylesheet.css</emphasis>
     </section>
 </section>
   
@@ -767,16 +767,16 @@ for a theme called <literal>DefaultTheme</literal>.
       parsed at the server startup time and all the @import and url(...)
       references are rewritten to support a single flat file. The result is
       stored in a cache directly used from the
-      <literal>ResourceRequestFilter</literal>.</para>
+      <emphasis>ResourceRequestFilter</emphasis>.</para>
 
       <para>Although the optimization is useful for production environments,
       it may be easier to deactivate this optimization while debugging
       stylesheets. To do so, set the java system property
-      <literal>exo.product.developing</literal> to
-      <literal>true</literal>.</para>
+      <emphasis>exo.product.developing</emphasis> to
+      <emphasis>true</emphasis>.</para>
 
       <para>For example, the property can be passed as a JVM parameter with the
-      <literal>-D</literal> option when running GateIn.</para>
+      <emphasis>-D</emphasis> option when running GateIn.</para>
       <programlisting>sh $JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting>
 
       <orderedlist numeration="arabic">

@@ -11,7 +11,7 @@
 			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain other than the container (the website that &#39;contains&#39; the app), it is unable to interfere with the portal by modifying the code or cookies.
 		</para>
 		<para>
-			An example would hosting the portal from <emphasis role="bold">http://www.sample.com</emphasis> and the gadgets from <emphasis role="bold">http://www.samplemodules.com</emphasis>.
+			An example would hosting the portal from http://www.sample.com and the gadgets from http://www.samplemodules.com.
 		</para>
 		<para>
 			To do this, configure a parameter called <emphasis>gadgets.hostName</emphasis>. The value is the <emphasis>path/to/gadgetServer</emphasis> in <literal>GadgetRegisteryService</literal>:
@@ -99,7 +99,7 @@
 		<section id="sect-Reference_Guide-Configuration-Gadget_proxy_and_concat_configuration">
 			<title>Gadget proxy and concat configuration</title>
 			<para>
-				These servers have to be on the same domain as the gadget server. You can configure the container in <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>.
+				These servers have to be on the same domain as the gadget server. You can configure the container in <emphasis>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</emphasis>.
 			</para>
 			
 <programlisting language="javascript">&#34;gadgets.content-rewrite&#34; : {

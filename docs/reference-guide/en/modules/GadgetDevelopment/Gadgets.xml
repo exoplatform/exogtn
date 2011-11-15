@@ -9,7 +9,7 @@
 		A gadget is a mini web application, embedded in a web page and running on an application server platform. These small applications help users perform various tasks.
 	</para>
 	<para>
-		&PRODUCT; supports gadgets, such as Todo, Calendar, Calculator, Weather Forecasts and RSS Reader.
+		&PRODUCT; supports gadgets, such as <emphasis role="bold">Todo</emphasis>, <emphasis role="bold">Calendar</emphasis>, <emphasis role ="bold">Calculator</emphasis>, <emphasis bold ="bold">Weather Forecasts</emphasis> and <emphasis role="center">RSS Reader</emphasis>.
 	</para>
 	<variablelist id="vari-Reference_Guide-Gadgets-Default_Gadgets">
 		<title>Default Gadgets:</title>

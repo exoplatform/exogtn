@@ -7,12 +7,12 @@
 	<title>Organization API</title>
 	<para>
 		The
-		<literal>exo.platform.services.organization</literal>
+		<emphasis>exo.platform.services.organization</emphasis>
 		package has five main components: user, user profile, group,
 		membership type and membership.
 		There is an additional component that serves as an entry point into
 		Organization API -
-		<literal>OrganizationService</literal>
+		<emphasis>OrganizationService</emphasis>
 		component
 		that provides the handling functionality for the five components.
 	</para>
@@ -28,22 +28,22 @@
 	</para>
 	<para>
 		The
-		<literal>User</literal>
+		<emphasis>User</emphasis>
 		component contains basic information about the user, such as
 		username, password, first name, last name, and email. The
-		<literal>User Profile</literal>
+		<emphasis>User Profile</emphasis>
 		component contains extra information about a user, such as user's
 		personal information, and business information.
 		You can also add additional information about a user if your application
 		requires it.
 		The
-		<literal>Group</literal>
+		<emphasis>Group</emphasis>
 		component contains a group graph. The
-		<literal>Membership Type</literal>
+		<emphasis>Membership Type</emphasis>
 		component
 		contains a list of predefined membership types.
 		Finally, the
-		<literal>Membership</literal>
+		<emphasis>Membership</emphasis>
 		component connects a User, a Group and a Membership Type.
 	</para>
 	<para>
@@ -53,7 +53,7 @@
 		group.
       </para>
 	<para>
-		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component. These handler objects are used to manage each of the five components, including UserHandler, UserProfileHandler, GroupHandler, MembershipTypeHandler, and MembershipHandler.
+		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component. These handler objects are used to manage each of the five components, including <emphasis>UserHandler</emphasis>, <emphasis>UserProfileHandler</emphasis>, <emphasis>GroupHandler</emphasis>, <emphasis>MembershipTypeHandler</emphasis>, and<emphasis> MembershipHandler</emphasis>.
       </para>
 	<para>
 		The five central API components are really designed like persistent

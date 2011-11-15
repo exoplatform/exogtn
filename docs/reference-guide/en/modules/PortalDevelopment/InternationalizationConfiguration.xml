@@ -17,16 +17,16 @@
 			</para>
 		</note>
 		<para>
-			All &PRODUCT; applications contain property files for various languages. They are packaged with the portlets applications in a <filename>WEB-INF/classes/locale/</filename> directory.
+			All &PRODUCT; applications contain property files for various languages. They are packaged with the portlets applications in a <emphasis>WEB-INF/classes/locale/</emphasis> directory.
 		</para>
 		<para>
-			These files are located in the <literal>classes</literal> folder of the WEB-INF directory to be loaded by the ClassLoader.
+			These files are located in the <emphasis>classes</emphasis> folder of the WEB-INF directory to be loaded by the ClassLoader.
 		</para>
 		<para>
-			All resource files are in a subfolder named <literal>locale</literal>.
+			All resource files are in a subfolder named <emphasis>locale</emphasis>.
 		</para>
 		<para>
-			For example, the translations for the <emphasis>NavigationPortlet</emphasis> are located in <literal>web.war/WEB-INF/classes/locale/portlet/portal.</literal>
+			For example, the translations for the <emphasis>NavigationPortlet</emphasis> are located in <emphasis>web.war/WEB-INF/classes/locale/portlet/portal.</emphasis>
 		</para>
 		
 <programlisting>NavigationPortlet_de.properties
@@ -39,7 +39,7 @@ NavigationPortlet_uk.properties
 NavigationPortlet_ar.xml
 </programlisting>
 		<para>
-			Those files contain typical <literal>key=value</literal> Java EE properties. For example, the French one:
+			Those files contain typical <emphasis>key=value</emphasis> Java EE properties. For example, the French one:
 		</para>
 		
 <programlisting>javax.portlet.title=Portlet Navigation
@@ -67,7 +67,7 @@ NavigationPortlet_ar.xml
 			Various languages are available in the portal package. The configuration below will define which languages shown in the &#34;Change Language&#34; section and made available to users.
 		</para>
 		<para>
-			The <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation contains the following section:
+			The <emphasis>02portal.war:/WEB-INF/conf/common/common-configuration.xml</emphasis> file of your installation contains the following section:
 		</para>
 		
 <programlisting language="xml">&#60;component&#62;
@@ -85,7 +85,7 @@ NavigationPortlet_ar.xml
 			This configuration points to the locale configuration file.
 		</para>
 		<para>
-			The locale configuration file (<filename>02portal.war:/WEB-INF/conf/common/locales-config.xml</filename>) contains the following code:
+			The locale configuration file (<emphasis>02portal.war:/WEB-INF/conf/common/locales-config.xml</emphasis>) contains the following code:
 		</para>
 		<programlistingco>
 			<areaspec>
@@ -154,7 +154,7 @@ NavigationPortlet_ar.xml
 	<section id="sect-Reference_Guide-Internationalization_Configuration-ResourceBundleService">
 		<title>ResourceBundleService</title>
 		<para>
-			The resource bundle service is configured in: <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename>:
+			The resource bundle service is configured in: <emphasis>02portal.war:/WEB-INF/conf/common/common-configuration.xml</emphasis>:
 		</para>
 		<programlistingco>
 			<areaspec>
@@ -229,7 +229,7 @@ NavigationPortlet_ar.xml
 			The previous example shows bundle definitions for the navigation of the classic portal and of four different groups. Each of these resource bundles occupies a different sphere, they are independent of each other and they are not included in the <parameter>portal.resource.names</parameter> parameter.
 		</para>
 		<para>
-			The properties for a group must be in the <filename>WEB-INF/classes/locale/navigation/group/</filename> folder. <literal>/WEB-INF/classes/locale/navigation/group/organization/management/executive-board_en.properties</literal>, for example.
+			The properties for a group must be in the <emphasis>WEB-INF/classes/locale/navigation/group/</emphasis> folder. <emphasis>/WEB-INF/classes/locale/navigation/group/organization/management/executive-board_en.properties</emphasis>, for example.
 		</para>
 		<para>
 			The folder and file names must correspond to the group hierarchy. The group name &#34;<parameter>executive-board</parameter>&#34; is followed by the iso 639 code.
@@ -238,7 +238,7 @@ NavigationPortlet_ar.xml
 			For each language defined in <parameter>LocalesConfig</parameter> must have a resource file defined. If the name of a group is changed the name of the folder and/or files of the correspondent navigation resource bundles must also be changed.
 		</para>
 		<para>
-			Content of <filename>executive-board_en.properties</filename>: 
+			Content of <emphasis>executive-board_en.properties</emphasis>: 
 <programlisting>organization.title=Organization
 organization.newstaff=New Staff
 organization.management=Management
@@ -266,12 +266,12 @@ organization.management=Management
 			
 			<step>
 				<para>
-					Create the file <literal>GadgetPortlet_es.properties</literal> in: <filename>WEB-INF/classes/locale/portlet/gadget/GadgetPortlet</filename>.
+					Create the file <emphasis>GadgetPortlet_es.properties</emphasis> in: <emphasis>WEB-INF/classes/locale/portlet/gadget/GadgetPortlet</emphasis>.
 				</para>
 			</step>
 			<step>
 				<para>
-					In <filename>portlet.xml</filename>, add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> (&#39;es&#39; is the 2 letters code for Spanish), the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages:
+					In <emphasis>portlet.xml</emphasis>, add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> (&#39;es&#39; is the 2 letters code for Spanish), the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages:
 				</para>
 				
 <programlisting language="xml">&#60;supported-locale&#62;en&#60;/supported-locale&#62;
@@ -314,7 +314,7 @@ organization.management=Management
 
 	</section>
 	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">
-        <title>Translating the language selection form</title>	
+        <title>Translate the language selection form</title>	
 	    <mediaobject>
            <imageobject>
               <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" valign="middle"
@@ -323,14 +323,14 @@ organization.management=Management
         </mediaobject>
         <para>When choosing a language as on the screenshot above, the user is presented with a list of languages on the left side in the current chosen language
         and on the right side, the same language translated into its own language. 
-        Those texts are obtained from the JDK API <literal>java.util.Locale.getDisplayedLanguage()</literal> and <literal>java.util.Locale.getDisplayedCountry()</literal> (if needed) and all languages may not be translated and can also depend on the JVM currently used.
-        It is still possible to override those values by editing the <literal>locale.portal.webui</literal> resource bundle, to do so edit the file <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_xx_yy.properties</filename> where <literal>xx_yy</literal>
+        Those texts are obtained from the JDK API <emphasis>java.util.Locale.getDisplayedLanguage()</emphasis> and <emphasis>java.util.Locale.getDisplayedCountry()</emphasis> (if needed) and all languages may not be translated and can also depend on the JVM currently used.
+        It is still possible to override those values by editing the <emphasis>locale.portal.webui</emphasis> resource bundle, to do so edit the file <emphasis>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_xx_yy.properties</emphasis> where <emphasis>xx_yy</emphasis>
         represents the country code of the language in which you want to translate a particular language.
-        In that file, add or modify a key such as <literal>Locale.xx_yy</literal> with the value being the translated string.
+        In that file, add or modify a key such as <emphasis>Locale.xx_yy</emphasis> with the value being the translated string.
         </para>
         <example>
            <title>Changing the displayed text for Traditional Chinese in French</title>
-           <para>First edit <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</filename> where <literal>ne</literal> is the country code for French, and add
+           <para>First edit <emphasis>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</emphasis> where <emphasis>ne</emphasis> is the country code for French, and add
            the following key into it:
            <programlisting>
               Locale.zh_TW=Chinois traditionnel

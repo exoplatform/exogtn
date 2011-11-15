@@ -40,7 +40,7 @@
 			<title>How to deactivate the ajax-loading mask</title>
 			<step>
 				<para>
-					Generate a script to make an asynchronous ajax-call. Use the <literal>uicomponent.doAsync()</literal> method rather than the <literal>uicomponent.event()</literal> method.
+					Generate a script to make an asynchronous ajax-call. Use the <emphasis>uicomponent.doAsync()</emphasis> method rather than the <emphasis>uicomponent.event()</emphasis> method.
 				</para>
 				<para>
 					For example:
@@ -51,14 +51,14 @@
 			</step>
 			<step>
 				<para>
-					The <literal>doAsync()</literal> method automatically adds the following new parameter to the parameters list; <literal>asyncparam = new Parameter(AJAX ASYNC,&#34;true&#34;); (AJAX ASYNC == &#34;ajax async&#34;)</literal>
+					The <emphasis>doAsync()</emphasis> method automatically adds the following new parameter to the parameters list; <emphasis>asyncparam = new Parameter(AJAX ASYNC,&#34;true&#34;); (AJAX ASYNC == &#34;ajax async&#34;)</emphasis>
 				</para>
 				<para>
 					This request is asynchronous and the ajax-loading mask will not deployed.
 				</para>
 				<note>
 					<para>
-						An asynchronous request can still be made using the <literal>uicomponent.event()</literal>. When using this method, the asyncparam must be added manually.
+						An asynchronous request can still be made using the <emphasis>uicomponent.event()</emphasis>. When using this method, the asyncparam must be added manually.
 					</para>
 				</note>
 			</step>
@@ -72,14 +72,14 @@
 	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">
 		<title>Synchronous issue</title>
 		<para>
-			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <literal>bAsync</literal> parameter.
+			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <emphasis>bAsync</emphasis> parameter.
 		</para>
 		
 <programlisting language="javascript">var bAsync = false; // Synchronous
 request.open(instance.method, instance.url, bAsync);
 </programlisting>
 		<para>
-			However, to work with browsers that do not support the <emphasis>Synchronous</emphasis> requests, <literal>bAsync</literal> is always set to true (Ajax request will always be asynchronous).
+			However, to work with browsers that do not support the <emphasis>Synchronous</emphasis> requests, <emphasis>bAsync</emphasis> is always set to true (Ajax request will always be asynchronous).
 		</para>
 		<!-- 		
 <programlisting>var bAsync = false; // Synchronous

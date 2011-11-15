@@ -8,8 +8,8 @@
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			The default permission configuration for the portal is defined through <literal>org.exoplatform.portal.config.UserACL</literal>
-         component configuration in the file <filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>.
+			The default permission configuration for the portal is defined through <emphasis>org.exoplatform.portal.config.UserACL</emphasis>
+         component configuration in the file <emphasis>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</emphasis>.
 		</para>
 		<para>
 			It defines 8 permissions types:
@@ -27,7 +27,7 @@
 				<term>portal.administrator.groups</term>
 				<listitem>
 					<para>
-						Any member of those groups are considered administrators. The default value is <literal>/platform/administrators</literal>.
+						Any member of those groups are considered administrators. The default value is <emphasis>/platform/administrators</emphasis>.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -35,7 +35,7 @@
 				<term>portal.administrator.mstype</term>
 				<listitem>
 					<para>
-						Any user with that membership type would be considered administrator or the associated group with the <literal>manager</literal> by default.
+						Any user with that membership type would be considered administrator or the associated group with the <emphasis>manager</emphasis> by default.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -44,7 +44,7 @@
 				<listitem>
 					<para>
 						This list defines all groups that will be able to manage the different portals. Members of this group
-                  also have the permission to create new portals. The format is <literal>membership:/group/subgroup</literal>.
+                  also have the permission to create new portals. The format is <emphasis>membership:/group/subgroup</emphasis>.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -122,8 +122,8 @@
 		<title>Overwrite Portal Default Permissions</title>
 
       <para>When creating the custom portals and portal extensions, it is possible to override the default configuration by
-      using <literal>org.exoplatform.portal.config.PortalACLPlugin</literal>, configuring it as an external-plugin of
-      <literal>org.exoplatform.portal.config.UserACL</literal> service:</para>
+      using <emphasis>org.exoplatform.portal.config.PortalACLPlugin</emphasis>, configuring it as an external-plugin of
+      <emphasis>org.exoplatform.portal.config.UserACL</emphasis> service:</para>
 
 <programlisting language="xml">&#60;external-component-plugins&#62;
     &#60;target-component&#62;org.exoplatform.portal.config.UserACL&#60;/target-component&#62;

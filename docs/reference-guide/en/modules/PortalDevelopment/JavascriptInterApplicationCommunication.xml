@@ -31,7 +31,7 @@
 			</listitem>
 		</itemizedlist>
 		<para>
-			A subscription to a topic will receive any subtopic messages. For example, the application subscribed to &#34;<literal>/eXo/application</literal>&#34; will receive messages sent on the &#34;<literal>/eXo/application/map</literal>&#34; topic. A message sent on &#34;<literal>/eXo</literal>&#34; would not be received.
+			A subscription to a topic will receive any subtopic messages. For example, the application subscribed to &#34;<emphasis>/eXo/application</emphasis>&#34; will receive messages sent on the &#34;<emphasis>/eXo/application/map</emphasis>&#34; topic. A message sent on &#34;<emphasis>/eXo</emphasis>&#34; would not be received.
 		</para>
 		<variablelist id="vari-Reference_Guide-Overview-Subscription_Topics">
 			<title>Subscription Topics</title>
@@ -104,7 +104,7 @@
 	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Library">
 		<title>Library</title>
 		<para>
-			The Inter Application Communication library is found in <filename>01eXoResources.war:/javascript/eXo/core/Topic.js</filename>
+			The Inter Application Communication library is found in <emphasis>01eXoResources.war:/javascript/eXo/core/Topic.js</emphasis>
 		</para>
 		
 <programlisting language="javascript">/**
@@ -154,7 +154,7 @@ Topic.prototype.initCometdBridge = function() { ... }
 				<term>Subscribe</term>
 				<listitem>
 					<para>
-						The <literal>subscribe</literal> function is used to subscribe a callback to a topic. It uses the following parameters:
+						The <emphasis>subscribe</emphasis> function is used to subscribe a callback to a topic. It uses the following parameters:
 					</para>
 					<variablelist>
 						<varlistentry>
@@ -186,7 +186,7 @@ Topic.prototype.initCometdBridge = function() { ... }
 				<term>Publish</term>
 				<listitem>
 					<para>
-						The <literal>publish</literal> function is used to publish an event to the other subscribered applications through the given channels. Its parameters are:
+						The <emphasis>publish</emphasis> function is used to publish an event to the other subscribered applications through the given channels. Its parameters are:
 					</para>
 					<variablelist>
 						<varlistentry>
@@ -220,7 +220,7 @@ Topic.prototype.initCometdBridge = function() { ... }
 				<term>Unsubscribe</term>
 				<listitem>
 					<para>
-						The <literal>unsubscribe</literal> function is used to unsubscribe a callback to a topic. The required parameters are:
+						The <emphasis>unsubscribe</emphasis> function is used to unsubscribe a callback to a topic. The required parameters are:
 					</para>
 					<variablelist>
 						<varlistentry>

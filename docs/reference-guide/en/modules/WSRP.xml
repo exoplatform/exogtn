@@ -74,84 +74,84 @@
    </sect1>
 
    <sect1 id="wsrp-Deploy_GateIn_wsrp_services">
-      <title>Deploying &PRODUCT_NAME;'s WSRP services</title>
+      <title>Deploy &PRODUCT_NAME;'s WSRP services</title>
       <para>
          &PRODUCT_NAME; provides a complete support of WSRP 1.0 standard interfaces and offers services to both consumers and
          producers. The WSRP support is provided by the following files, assuming
-         <code>$GATEIN_HOME</code>
+         <emphasis>$GATEIN_HOME</emphasis>
          is
          where &PRODUCT_NAME; has been installed,
-         <code>$WSRP_VERSION</code>
+         <emphasis>$WSRP_VERSION</emphasis>
          (at the time of the writing, it was &WSRP_VERSION;)
          is the version of the WSRP component and
-         <code>$PORTAL_VERSION</code>
+         <emphasis>$PORTAL_VERSION</emphasis>
          (at the time of the writing, it was &PORTAL_VERSION;)
          is the current &PRODUCT_NAME; version:
          <itemizedlist>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/wsrp-admin-gui.war</filename>, which contains the WSRP Configuration portlet
+                  <emphasis>$GATEIN_HOME/wsrp-admin-gui.war</emphasis>, which contains the WSRP Configuration portlet
                   with which you can configure consumers to access remote servers and how the WSRP producer is
                   configured.
                </para>
             </listitem>
             <listitem>
-               <para><filename>$GATEIN_HOME/wsrp-producer.war</filename>, which contains the WSRP producer web
+               <para><emphasis>$GATEIN_HOME/wsrp-producer.war</emphasis>, which contains the WSRP producer web
                   application.
                </para>
             </listitem>
             <listitem>
-               <para><filename>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</filename>, which contains common classes
+               <para><emphasis>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</emphasis>, which contains common classes
                   needed by the different WSRP libraries.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</filename>, which contains the WSRP
+                  <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</emphasis>, which contains the WSRP
                   consumer.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</filename>, which contains the
+                  <emphasis>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</emphasis>, which contains the
                   API classes needed to integrate the WSRP component into portals.
                </para>
 
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</filename>, which contains the classes
+                  <emphasis>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</emphasis>, which contains the classes
                   needed by the WSRP producer.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</filename>, which contains the generated
+                  <emphasis>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</emphasis>, which contains the generated
                   JAX-WS classes for WSRP v.1.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</filename>, which contains the generated
+                  <emphasis>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</emphasis>, which contains the generated
                   JAX-WS classes for WSRP version 2.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which
+                  <emphasis>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</emphasis>, which
                   contains the code to integrate the WSRP service into &PRODUCT_NAME;.
                </para>
             </listitem>
          </itemizedlist>
          If you are not going to use WSRP in &PRODUCT_NAME;, you can remove
-         <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>
+         <emphasis>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</emphasis>
          from your &PRODUCT_NAME; distribution to easily deactivate the
          <ulink url="http://community.jboss.org/wiki/WSRPserviceremovalprocedure"> WSRP support</ulink>. Of course, if you want to trim your
          installation, you can also remove all the files mentioned above.
       </para>
 
       <sect2 id="wsrp-ports">
-         <title>If you consider the WSRP use when running &PRODUCT_NAME; on a non-default port or hostname</title>
+         <title>WSRP use when running &PRODUCT_NAME; on a non-default port or hostname</title>
          <para>
             JBoss WS (the web service stack that &PRODUCT_NAME; uses), you need to pay attention to details of updating the
             port and host name used in WSDL. See the
@@ -180,7 +180,7 @@
    </sect1>
 
    <sect1 id="wsrp-Make_portlet_remotable">
-      <title>Making a portlet remotable</title>
+      <title>Make a portlet remotable</title>
       <note>
          <para>
             Only JSR-286 (Portlet 2.0) portlets can be made remotable as the mechanism to expose a portlet to WSRP
@@ -188,11 +188,11 @@
          </para>
       </note>
       <para>&PRODUCT_NAME; does
-         <emphasis role="bold">NOT</emphasis> expose local portlets for consumption
+         not expose local portlets for consumption
          by remote WSRP consumers by default. To make a portlet remotely available, it must be made "remotable" by marking
          it as such in the associated
-         <filename>portlet.xml</filename>. This is accomplished by using a specific
-         <code>org.gatein.pc.remotable container-runtime-option</code>. Setting its value to
+         <emphasis>portlet.xml</emphasis>. This is accomplished by using a specific
+         <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>. Setting its value to
          <code>true</code>
          makes the portlet available for the remote consumption, while setting its value to
          <code>false</code>
@@ -275,23 +275,23 @@
          WSRP
          producer.
          Note, however, that it is possible to override the default behavior: specifying a value for the
-         <code>org.gatein.pc.remotable container-runtime-option</code>
+         <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>
          at the
          <code>portlet</code>
          level will take precedence over the default. In the example above, the
-         <varname>RemotelyExposedPortlet</varname>
+         <emphasis>RemotelyExposedPortlet</emphasis>
          inherits the remotable status defined at the
          <code>portlet-app</code>
-         level since it does not specify a value for the<code>org.gatein.pc.remotable container-runtime-option</code>.
-         The<varname>NotRemotelyExposedPortlet</varname>, however, overrides the default behavior and is not remotely
+         level since it does not specify a value for the <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>.
+         The <emphasis>NotRemotelyExposedPortlet</emphasis>, however, overrides the default behavior and is not remotely
          exposed. Note that in the absence of a top-level
-         <code>org.gatein.pc.remotable container-runtime-option</code>
-         value set to<code>true</code>, portlets are NOT remotely exposed.
+         <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>
+         value set to<code>true</code>, portlets are not remotely exposed.
       </para>
    </sect1>
 
    <sect1 id="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">
-      <title>Consuming &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</title>
+      <title>Consume &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</title>
       <para>WSRP Consumers vary a lot as far as how they are configured. Most of them require you to specify
          the URL for the Producer's WSDL definition. Please refer to your Consumer's documentation for specific
          instructions. For instructions on how to do so in &PRODUCT_NAME;, please
@@ -301,17 +301,17 @@
       <para>
          &PRODUCT_NAME;'s Producer is automatically set up when you deploy a portal instance with the WSRP service.
          You can access the WSDL file at
-         <filename>http://{hostname}:{port}/wsrp-producer/v2/MarkupService?wsdl</filename>. If you wish to use only the
+         <emphasis>http://{hostname}:{port}/wsrp-producer/v2/MarkupService?wsdl</emphasis>. If you wish to use only the
          WSRP 1 compliant version of the producer, please use the WSDL file found at
-         <filename>http://{hostname}:{port}/wsrp-producer/v1/MarkupService?wsdl</filename>.
+         <emphasis>http://{hostname}:{port}/wsrp-producer/v1/MarkupService?wsdl</emphasis>.
          The default hostname is
-         <literal>localhost</literal>
+         <emphasis>localhost</emphasis>
          and the default port is 8080.
       </para>
    </sect1>
 
    <sect1 id="wsrp-consumer_configuration">
-      <title>Consuming remote WSRP portlets in &PRODUCT_NAME;</title>
+      <title>Consume remote WSRP portlets in &PRODUCT_NAME;</title>
       <sect2 id="wsrp-consumer_configuration-Overview">
          <title>Overview</title>
          <para>
@@ -326,13 +326,13 @@
          <para>
             As a way to test the WSRP producer service and to check that the portlets that you want to expose remotely
             are correctly published via WSRP, a default consumer named
-            <literal>self</literal>, that consumes the portlets exposed by &PRODUCT_NAME;'s producer,
+            <emphasis>self</emphasis>, that consumes the portlets exposed by &PRODUCT_NAME;'s producer,
             has been configured.
          </para>
       </sect2>
 
       <sect2 id="wsrp-consumer_configuration-Configure_remote_producer_walkthrough">
-         <title>Configuring a remote producer walk-through</title>
+         <title>Configure a remote producer walk-through</title>
          <para>
             Let's work through the steps of defining access to a remote producer so that its portlets can be
             consumed within &PRODUCT_NAME;. You need to configure access to the Oracle's public WSRP producer. First,
@@ -412,8 +412,8 @@
             </note>
 
             <para>
-               Next, you need create a new Consumer called <literal>oracle</literal>. Type
-               "<literal>oracle</literal>" in
+               Next, you need create a new Consumer called <emphasis>oracle</emphasis>. Type
+               "<emphasis>oracle</emphasis>" in
                the "Create a consumer named:" field, then click "Create consumer":
                <mediaobject>
                   <imageobject>
@@ -441,12 +441,12 @@
                   </imageobject>
                </mediaobject>
                The Consumer for the
-               <literal>oracle</literal>
+               <emphasis>oracle</emphasis>
                Producer should now be available as a portlet provider and be ready to be used.
             </para>
             <para>
                Now, assuming that the producer required a value for an
-               <literal>email</literal>
+               <emphasis>email</emphasis>
                registration property, &PRODUCT_NAME;'s WSRP consumer would have informed you that you were missing some
                information:
                <mediaobject>
@@ -464,7 +464,7 @@
                   </para>
 
                </note>
-               If you entered "<literal>example@example.com</literal>" as the value for the registration property and
+               If you entered "<emphasis>example@example.com</emphasis>" as the value for the registration property and
                press "Save &amp;
                Refresh" once more, you would have seen something similar to:
                <mediaobject>
@@ -481,7 +481,7 @@
 
             <para>While it is recommended that you use the WSRP Configuration portlet to configure Consumers, eXo Platform provides an
                alternative way to configure consumers by editing the .xml file located at
-               <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
+               <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>.
             </para>
             <programlisting language="xml"><![CDATA[
 <?xml version='1.0' encoding='UTF-8' ?>
@@ -509,11 +509,11 @@
 </deployments>]]></programlisting>
             <para>
                The file as shown above specifies access to two producers:
-               <literal>self</literal>, which consumes &PRODUCT_NAME;'s own WSRP producer albeit in a version that
+               <emphasis>self</emphasis>, which consumes &PRODUCT_NAME;'s own WSRP producer albeit in a version that
                assumes that the producer requires a value for an
-               <literal>email</literal>
+               <emphasis>email</emphasis>
                registration property, and
-               <literal>oracle</literal>, which consumes Oracle's public producer, both in configurations as shown in
+               <emphasis>oracle</emphasis>, which consumes Oracle's public producer, both in configurations as shown in
                the walk-through above.
             </para>
             <para>We will look at the details of the meaning of elements later on.</para>
@@ -542,7 +542,7 @@
             <para>
                More specifically, if you want to add the WSRP portlet to a category, you can access these portlets by
                selecting
-               <literal>wsrp</literal>
+               <emphasis>wsrp</emphasis>
                in the Application Type drop-down menu:
                <mediaobject>
                   <imageobject>
@@ -556,17 +556,17 @@
       </sect2>
 
       <sect2 id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML">
-         <title>Configuring access to remote producers via XML</title>
+         <title>Configure access to remote producers via XML</title>
 
          <para>While it is recommended that you use the WSRP Configuration portlet to configure Consumers, eXo Platform provides an
             alternative way to configure consumers by editing the XML file located at
-            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
+            <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>.
             <note>
                <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
                   in
-                  <filename>
+                  <emphasis>
                      $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
-                  </filename>
+                  </emphasis>
                </para>
             </note>
             <note>
@@ -574,7 +574,7 @@
                   time the WSRP service starts and the associated information is then put under control of JCR (Java
                   Content Repository). The subsequent launches of the WSRP service will use the JCR-stored information for
                   all producers that are already known to &PRODUCT_NAME;. More specifically, the
-                  <filename>wsrp-consumers-config.xml</filename>
+                  <emphasis>wsrp-consumers-config.xml</emphasis>
                   file is scanned for producer identifiers.
                   Any identifier that is already known will be by-passed and the JCR information associated with this
                   remote producer will be used. The information defined at the XML level is only processed for producer
@@ -584,7 +584,7 @@
                   <xref linkend="consumer_gui"/>)
                   <emphasis>AND</emphasis>
                   remove the associated information in
-                  <filename>wsrp-consumers-config.xml</filename>
+                  <emphasis>wsrp-consumers-config.xml</emphasis>
                   (if such information exists) as the producer will be re-created the next time the WSRP is launched if
                   that information is not removed.
                </para>
@@ -599,23 +599,23 @@
 
             <para>First, you need to provide an identifier for the producer we are configuring so that you can refer to it
                afterwards. This is accomplished via the mandatory
-               <literal>id</literal>
+               <emphasis>id</emphasis>
                attribute of the
-               <literal>&lt;wsrp-producer&gt;</literal>
+               <emphasis>&lt;wsrp-producer&gt;</emphasis>
                element.
             </para>
 
             <para>&PRODUCT_NAME; also needs to learn about the remote producer's end-points to be able to connect to the
                remote web services and perform WSRP invocations. This is accomplished by specifying the URL for the
                WSDL description for the remote WSRP service, using the
-               <literal>&lt;endpoint-wsdl-url&gt;</literal>
+               <emphasis>&lt;endpoint-wsdl-url&gt;</emphasis>
                element.
             </para>
 
             <para>Both the
-               <literal>id</literal>
+               <emphasis>id</emphasis>
                attribute and
-               <literal>&lt;endpoint-wsdl-url&gt;</literal>
+               <emphasis>&lt;endpoint-wsdl-url&gt;</emphasis>
                elements are required for a functional remote producer configuration.
             </para>
          </sect3>
@@ -631,9 +631,9 @@
                (such as the list of offered portlets) for a given duration. The rate at which the information is
                refreshed is
                defined by the
-               <literal>expiration-cache</literal>
+               <emphasis>expiration-cache</emphasis>
                attribute of the
-               <literal>&lt;wsrp-producer&gt;</literal>
+               <emphasis>&lt;wsrp-producer&gt;</emphasis>
                element which specifies the refreshing period in seconds. For example, providing a value of 120 for
                expiration-cache means that the producer information will not be refreshed for 2 minutes after it has
                been somehow accessed. If no value is provided, &PRODUCT_NAME; will always access the remote producer
@@ -644,9 +644,9 @@
 
             <para>It is also possible to define a timeout after which the WS operations are considered as failed. This is
                helpful to avoid blocking the WSRP service, waiting forever on the service that does not answer. Use the
-               <literal>ws-timeout</literal>
+               <emphasis>ws-timeout</emphasis>
                attribute of the
-               <literal>&lt;wsrp-producer&gt;</literal>
+               <emphasis>&lt;wsrp-producer&gt;</emphasis>
                element to specify how many milliseconds the WSRP service will wait for a response from the remote
                producer before timing out and giving up.
             </para>
@@ -663,16 +663,16 @@
             </para>
 
             <para>Registration configuration is done via the
-               <literal>&lt;registration-data&gt;</literal>
+               <emphasis>&lt;registration-data&gt;</emphasis>
                element. Since &PRODUCT_NAME; can generate the mandatory information for you, if the remote producer does
                not require any registration properties, you only need to provide an empty
-               <literal>&lt;registration-data&gt;</literal>
+               <emphasis>&lt;registration-data&gt;</emphasis>
                element. Values for the registration properties
                required by the remote producer can be provided via the
-               <literal>&lt;property&gt;</literal>
+               <emphasis>&lt;property&gt;</emphasis>
                elements. See the example below for more details. Additionally, you can override the default consumer
                name automatically provided by &PRODUCT_NAME; via the
-               <literal>&lt;consumer-name&gt;</literal>
+               <emphasis>&lt;consumer-name&gt;</emphasis>
                element. If you select to provide a consumer name, please remember that this should uniquely identify
                your consumer.
             </para>
@@ -684,9 +684,9 @@
 
          <para>
             Here is the configuration of the
-            <literal>selfv1</literal> and <literal>selfv2</literal>
+            <emphasis>selfv1</emphasis> and <emphasis>selfv2</emphasis>
             consumers as found in
-            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+            <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>
             with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
          </para>
 
@@ -746,7 +746,7 @@
       <title>Consumers maintenance</title>
 
       <sect2 id="wsrp-Consumers_maintenance-Modify_currently_held_registration">
-         <title>Modifying a currently held registration</title>
+         <title>Modify a currently held registration</title>
 
          <sect3 id="wsrp-Consumers_maintenance-Modify_currently_held_registration-Registration_modification_for_service_upgrade">
             <title>Registration modification for service upgrade</title>
@@ -766,7 +766,7 @@
                configured in
                <xref linkend="consumer_gui"/>.
                If you recall, the producer was requiring registration and required a value to be provided for the
-               <literal>email</literal>
+               <emphasis>email</emphasis>
                property.
             </para>
             <para>
@@ -774,12 +774,12 @@
                need to tell the producer that our registration data have been modified. Let's see how to do this.
                In case that you want to configure access to the producer as previously described, please go to the configuration screen for
                the
-               <literal>self</literal>
+               <emphasis>self</emphasis>
                producer and modify the value of
-               <literal>email</literal>
+               <emphasis>email</emphasis>
                to
-               <literal>foo@example.com</literal>
-               instead of<literal>example@example.com</literal>:
+               <emphasis>foo@example.com</emphasis>
+               instead of<emphasis>example@example.com</emphasis>:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
@@ -814,10 +814,10 @@
                consumers. In this case, invoking operations on the producer will be failed with an
                <exceptionname>OperationFailedFault</exceptionname>. &PRODUCT_NAME; will attempt to help you in this
                situation. Let's walk through an example using the
-               <literal>self</literal>
+               <emphasis>self</emphasis>
                producer. Let's assume that
                registration is requiring a valid value for an
-               <literal>email</literal>
+               <emphasis>email</emphasis>
                registration property (as we have seen so far). If you go to the configuration screen for this producer,
                you should see:
                <mediaobject>
@@ -828,7 +828,7 @@
                </mediaobject>
 
                Now suppose that the administrator of the producer also requires a value to be provided for a
-               <literal>name</literal>
+               <emphasis>name</emphasis>
                registration property. We will actually see how to perform this operation
                in &PRODUCT_NAME; when we examine how to configure &PRODUCT_NAME;'s producer in
                <xref linkend="producer_config"/>.
@@ -844,7 +844,7 @@
 
                As you can see, the configuration screen now shows the currently held registration information and
                the expected information from the producer. Enter a value for the
-               <literal>name</literal>
+               <emphasis>name</emphasis>
                property
                and then click "Modify registration". If all went on well and the producer accepted your new registration
                data, you should see something similar to:
@@ -926,7 +926,7 @@
       </sect2>
 
       <sect2 id="wsrp-Consumers_maintenance-Import_export_portlets">
-         <title>Importing and exporting portlets</title>
+         <title>Import and export portlets</title>
          <para>Import and export are new functionalities added in WSRP 2. Exporting a portlet allows a consumer to get
             an opaque representation of the portlet which can then be use by the corresponding import operation to
             reconstitute it. It is mostly used in migration scenarios during batch operations. Since &PRODUCT_NAME;
@@ -986,11 +986,11 @@
             select which portlet you want to import by checking the checkbox next to its name. Next, you need to select
             the content of which window the imported portlet will replace. This process is done in three steps. Let's
             assume in this example that you have the following page called
-            <literal>page1</literal>
+            <emphasis>page1</emphasis>
             and containing two windows called
-            <literal>NetUnity WSRP 2 Interop - Cache Markup (remote)</literal>
+            <emphasis>NetUnity WSRP 2 Interop - Cache Markup (remote)</emphasis>
             and
-            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            <emphasis>/samples-remotecontroller-portlet.RemoteControl (remote)</emphasis>
             as shown below:</para>
          <mediaobject>
             <imageobject>
@@ -998,13 +998,13 @@
             </imageobject>
          </mediaobject>
          <para>In this example, we want to replace the content of the
-            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            <emphasis>/samples-remotecontroller-portlet.RemoteControl (remote)</emphasis>
             by the content of the
-            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            <emphasis>/ajaxPortlet.JSFAJAXPortlet</emphasis>
             portlet that we previously exported. To do so, we will check the checkbox next to the
-            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            <emphasis>/ajaxPortlet.JSFAJAXPortlet</emphasis>
             portlet name to indicate that we want to import its data and then select the
-            <literal>page1</literal>
+            <emphasis>page1</emphasis>
             in the list of available pages. The screen will then refresh to display the list of available windows on
             that page, similar to the one seen below:
          </para>
@@ -1015,7 +1015,7 @@
          </mediaobject>
          <para>Note that, at this point, we still need to select the window which content we want to replace before
             being able to complete the import operation. Let's select the
-            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            <emphasis>/samples-remotecontroller-portlet.RemoteControl (remote)</emphasis>
             window, at which point the "Import" button will become enabled, indicating that we now have all the
             necessary data to perform the import. If all goes well, pressing that button should result in a screen
             similar to the one below:
@@ -1026,11 +1026,11 @@
             </imageobject>
          </mediaobject>
          <para>If you now take a look at the
-            <literal>page1</literal>
+            <emphasis>page1</emphasis>
             page, you should now see that the content
-            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            <emphasis>/samples-remotecontroller-portlet.RemoteControl (remote)</emphasis>
             window has been replaced by the content of the
-            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            <emphasis>/ajaxPortlet.JSFAJAXPortlet</emphasis>
             imported portlet and the window renamed appropriately:
          </para>
          <mediaobject>
@@ -1041,7 +1041,7 @@
       </sect2>
 
       <sect2 id="wsrp-Consumers_maintenance-Erase_local_registration_data">
-         <title>Erasing local registration data</title>
+         <title>Erase local registration data</title>
          <para>
             There are rare cases where it might be required to erase the local information without being able to
             deregister first. This is the case when a consumer is registered with a producer that has been modified by
@@ -1070,18 +1070,18 @@
    </sect1>
 
    <sect1 id="producer_config">
-      <title>Configuring &PRODUCT_NAME;'s WSRP Producer</title>
+      <title>Configure &PRODUCT_NAME;'s WSRP Producer</title>
       <sect2 id="producer_config-Overview"> 
          <title>Overview</title>
          <para>
             You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
             is the preferred way, or by editing the
-            <filename>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</filename>
+            <emphasis>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</emphasis>
             file. Several aspects can be modified with respects to whether the registration is required for consumers to
             access the Producer's services. An XML Schema for the configuration format is available at
-            <filename>
+            <emphasis>
                $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
-            </filename>.
+            </emphasis>.
          </para>
       </sect2>
       <sect2 id="producer_config-Default_configuration">
@@ -1095,7 +1095,7 @@
             <classname>RegistrationPolicy</classname>
             paired with the default
             <classname>RegistrationPropertyValidator</classname>. You need to look into property
-            validators in greater detail later in<xref linkend="registration-configuration"/>. This allows you to customize how Portal's WSRP Producer decides whether a given registration property
+            validators in greater detail later in <xref linkend="registration-configuration"/>. This allows you to customize how Portal's WSRP Producer decides whether a given registration property
             is valid or not.
          </para>
          <para>
@@ -1151,7 +1151,7 @@
             there. We will keep the default value. See
             <xref linkend="custom_registration"/>
             for more details. Let's add, however, a registration property called
-            <literal>email</literal>. Click "Add property" and enter the appropriate information in the fields,
+            <emphasis>email</emphasis>. Click "Add property" and enter the appropriate information in the fields,
             providing a description for the registration property that can be used by consumers to figure out its
             purpose:
             <mediaobject>
