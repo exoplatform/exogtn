@@ -57,12 +57,12 @@
 
 .UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo {
 	border-bottom: solid 1px #ededed;
-	background: white;
+	background: none;
 	padding: 0px 30px;
 }
 
 .UIPermissionSelector .PermissionInfoContainer .SelectedPermissionInfo .Icon {
-	background: url('background/InfoIcon.gif') no-repeat left top;
+	background: url('background/InfoIcon.png') no-repeat left top;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 }

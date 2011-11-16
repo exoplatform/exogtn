@@ -37,6 +37,7 @@
 .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs {
 	height: 31px;
 	padding: 0px;
+	background: none;
 }
 
 .UITabSelector .UIHorizontalTabs .TabsContainer {
@@ -99,6 +100,7 @@
 
 .UITabSelector .UIHorizontalTabs .SelectedTab .MiddleTab {
 	border: none;
+	background: none;
 }
 
 .UITabSelector .FlatTabStyle .SelectedTab {

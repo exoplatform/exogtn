@@ -132,8 +132,7 @@
 
 .UIMaskWorkspace .UITabPane .TabPaneContent .CSSContent .UITabContent {
 	height: auto;
-	border: 1px solid white;
-	border-top: none;
+	border: none;
 	margin: auto;
 	overflow: hidden;
 }
