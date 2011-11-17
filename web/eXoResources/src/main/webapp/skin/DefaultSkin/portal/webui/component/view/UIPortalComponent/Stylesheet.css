@@ -107,6 +107,8 @@
 
 .PortletLayoutDecorator .CPortletLayoutDecorator {
 	background: url('background/PortletLayoutDecorator.gif') repeat-x center -89px;
+	word-wrap: break-word;
+	overflow-y: hidden;
 }
 
 .PortletLayoutDecorator .FixHeight {
