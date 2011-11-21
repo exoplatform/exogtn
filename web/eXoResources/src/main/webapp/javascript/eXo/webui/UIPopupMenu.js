@@ -146,8 +146,7 @@ UIPopupMenu.prototype.hide = function(object) {
  * @param {Object} object to hide
  */
 UIPopupMenu.prototype.show = function(object) {
-	if(typeof(object) == "string") object = document.getElementById(object);
-	object.style.display = "block" ;
+	this.superClass.show(object);
 	object.style.visibility = "";
 } ;
 
