@@ -169,24 +169,29 @@ public class UIFormInputSet extends UIContainer
       {
          if (inputEntry.isRendered())
          {
-            String label;
-            try
+            String label = "";
+            boolean hasLabel = false;
+            if (inputEntry instanceof UIFormInputBase)
             {
-               label = uiForm.getLabel(res, inputEntry.getId());
-               if (inputEntry instanceof UIFormInputBase)
-                  ((UIFormInputBase)inputEntry).setLabel(label);
-            }
-            catch (MissingResourceException ex)
-            {
-               //label = "&nbsp;" ;
-               label = inputEntry.getName();
-               System.err.println("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
+               UIFormInputBase formInputBase = (UIFormInputBase) inputEntry;
+               if (formInputBase.getLabel() != null)
+               {
+                  label = uiForm.getLabel(res, formInputBase.getLabel());
+               }
+               else
+               {
+                  label = uiForm.getLabel(res, formInputBase.getId());
+               }
+               if (formInputBase.getLabel() != null || (label != formInputBase.getId()))
+               {
+                  hasLabel = true;
+               }
             }
             w.write("<tr>");
             w.write("<td class=\"FieldLabel\">");
-            
-            // if missing resource, don't print out the label.
-            if(!label.equals(inputEntry.getName()))
+
+            // if missing resource and the label hasn't been set before, don't print out the label.
+            if (hasLabel)
             {
                w.write(label);
             }
