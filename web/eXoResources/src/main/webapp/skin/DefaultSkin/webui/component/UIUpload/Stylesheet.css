@@ -115,3 +115,34 @@
 	width: 226px;
 }
 
+/******* UIMockContainer **********/
+.UIMockContainer {
+	padding: 10px 0px;
+}
+
+.UIMockContainer .UIUploadInput {
+	padding-bottom: 5px;
+}
+
+.UIMockContainer .UIForm .HorizontalLayout {
+	padding-top: 10px;
+}
+
+.UIMockContainer .UIForm .HorizontalLayout .UIUploadInput .file {
+	width: 200px;
+}
+
+.UIMockContainer .ActionLabel {
+	background: url('background/AddIcon.png') no-repeat left center;
+	padding: 2px 0px 2px 20px;
+	color: #464646;
+}
+
+.UIMockContainer .ActionLabel:hover {
+	color: #058EE6;
+}
+
+.UIMockContainer .UploadInput .ActionLabel {
+	background: none;
+	padding: 0px;
+}
