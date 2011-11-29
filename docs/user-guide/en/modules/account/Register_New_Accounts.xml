@@ -15,7 +15,7 @@
       <para>
         Click
         <emphasis role="bold">Register</emphasis>
-        on the top part of your selected portal.
+        on the top of the portal if you are in the ACME sample site.
 		</para>
       <mediaobject>
         <imageobject role="html">
@@ -25,10 +25,21 @@
           <imagedata fileref="images/Register.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
         </imageobject>
       </mediaobject>
+	  <para>
+	  If you are in the ACME Social intranet, click <emphasis role="bold">Register</emphasis> at the bottom of the portal.
+	  </para>
+	  <mediaobject>
+        <imageobject role="html">
+          <imagedata fileref="images/Register2.png" format="PNG" align="center" scale="110"/>
+        </imageobject>
+        <imageobject role="fo">
+          <imagedata fileref="images/Register2.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+        </imageobject>
+      </mediaobject>
       <para>
         The
         <emphasis role="bold">Create New Account</emphasis>
-        page appears as below.
+        page appears as below:
       </para>
       <mediaobject>
         <imageobject role="html">
