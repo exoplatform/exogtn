@@ -343,6 +343,11 @@ UIPortal.prototype.removeComponent = function(componentId) {
 		var comp = document.getElementById(componentId);
 		var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
 		
+		var parent = comp.parentNode;
+		if (eXo.core.DOMUtil.getChildrenByTagName(parent, "div").length === 1 && !eXo.core.DOMUtil.hasClass(parent, "EmptyContainer")) {
+			eXo.core.DOMUtil.addClass(parent, "EmptyContainer");
+		}
+		
 		//Check if the removing component is a column
 		if (comp.parentNode.nodeName.toUpperCase() == "TD") eXo.core.DOMUtil.removeElement(comp.parentNode);
 		else eXo.core.DOMUtil.removeElement(comp);
