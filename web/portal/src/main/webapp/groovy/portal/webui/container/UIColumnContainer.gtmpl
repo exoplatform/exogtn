@@ -58,7 +58,7 @@
 								<%/*Begin InfoBar*/%>
 									<div class="BlueRoundedStyle FixHeight ClearFix">
 
-										<span class="DragControlArea" title="<%=_ctx.appRes("UIColumnContainer.title.DragControlArea")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"></span>
+										<div class="DragControlArea" title="<%=_ctx.appRes("UIColumnContainer.title.DragControlArea")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"></div>
 										<% 
 											String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event)";
 											String strTitle = uicomponent.getTitle() != null ?

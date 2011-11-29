@@ -109,37 +109,32 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 				var dragControlArea = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "DragControlArea");
 				
 				var portletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "PortletIcon");
-				var editPortletPropertiesIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "EditPortletPropertiesIcon");
-				var deletePortletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "DeletePortletIcon");
-				
 				var contarnerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "ContainerIcon");
-				var editContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "EditContainerIcon");
-				var deleteContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "DeleteContainerIcon");
+
+				var editIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "EditIcon");
+				var deleteIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "DeleteIcon");				
 				
 				var uiInfoBarWidth =  dragControlArea.offsetWidth;
+
+				if(DOMUtil.hasClass(portlet, "UIPortlet")) {
+					uiInfoBarWidth += portletIcon.offsetWidth;										
+				}
 				
-				if(DOMUtil.hasClass(portlet, "UIPortlet")){
-					uiInfoBarWidth += portletIcon.offsetWidth;
+				if(DOMUtil.hasClass(portlet, "UIContainer")) {
+					uiInfoBarWidth += contarnerIcon.offsetWidth;
 					
-					if(editPortletPropertiesIcon){
-						uiInfoBarWidth += editPortletPropertiesIcon.offsetWidth;
-					}
-					
-					if(deletePortletIcon){
-						uiInfoBarWidth += deletePortletIcon.offsetWidth;
+					var controlIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "ControlIcon");
+					if (controlIcon) {
+						uiInfoBarWidth += controlIcon.offsetWidth;						
 					}
 				}
 				
-				if(DOMUtil.hasClass(portlet, "UIContainer")){
-					uiInfoBarWidth += contarnerIcon.offsetWidth
-					
-					if(editContainerIcon){
-						uiInfoBarWidth += editContainerIcon.offsetWidth;
-					}
-					
-					if(deleteContainerIcon){
-						uiInfoBarWidth += deleteContainerIcon.offsetWidth;
-					}
+				if(editIcon) {
+					uiInfoBarWidth += editIcon.offsetWidth;
+				}
+				
+				if(deleteIcon) {
+					uiInfoBarWidth += deleteIcon.offsetWidth;
 				}
 	
 				uiInfoBar.style.width= uiInfoBarWidth + 35 + "px";
