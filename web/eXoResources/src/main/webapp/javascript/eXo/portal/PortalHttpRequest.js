@@ -536,7 +536,10 @@ function HttpResponseHandler(){
 	    } else {
 	    	target = document.getElementById(blockToUpdate.blockId) ;
 	    }
-	    if(target == null) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;
+	    if(target == null) {
+	    	alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;
+	    	return ;
+    	}
 	    var newData =  eXo.core.DOMUtil.findDescendantById(blockToUpdate.data, blockToUpdate.blockId) ;
 	   	//var newData =  blockToUpdate.data.getElementById(blockToUpdate.blockId) ;
 	    if(newData == null) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
@@ -622,9 +625,13 @@ function HttpResponseHandler(){
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  //Handle the portal responses
-	  instance.updateBlocks(response.blocksToUpdate) ;
-		instance.updateHtmlHead(response);
-	  instance.executeScript(response.script) ;
+	  try {
+		  instance.updateBlocks(response.blocksToUpdate);
+		  instance.updateHtmlHead(response);
+		  instance.executeScript(response.script) ;
+	  } catch (error) {
+		  alert(error.message) ;
+	  }
 	  /**
        * Clears the instance.to timeout if the request takes less time than expected to get response
        * Removes the transparent mask so the UI is available again, with cursor "auto"
