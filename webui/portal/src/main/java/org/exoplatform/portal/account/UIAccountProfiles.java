@@ -41,8 +41,10 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UsernameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -66,13 +68,14 @@ public class UIAccountProfiles extends UIForm
 
       UIFormStringInput userName = new UIFormStringInput("userName", "userName", username);
       userName.setReadOnly(true);
-      addUIFormInput(userName.addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30)
-         .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class,
-            Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));
+      addUIFormInput(userName.addValidator(MandatoryValidator.class).addValidator(UsernameValidator.class, 3, 30));
+      
       addUIFormInput(new UIFormStringInput("firstName", "firstName", useraccount.getFirstName()).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      
       addUIFormInput(new UIFormStringInput("lastName", "lastName", useraccount.getLastName()).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      
       addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(
          MandatoryValidator.class).addValidator(EmailAddressValidator.class));
    }
