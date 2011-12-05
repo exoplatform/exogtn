@@ -4,8 +4,9 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Toolbar">
+    <title>About Administration bar</title>
   <para xml:id="sect-User_Guide-Toolbar-Introduction_Administration_bar">
-    The Administration bar is a toolbar which allows users and administrators to execute tasks within the portal quickly and easily.
+    The <emphasis role="bold">Administration</emphasis> bar is a toolbar which allows users and administrators to execute tasks within the portal quickly and easily.
   <mediaobject>
     <imageobject role="html">
       <imagedata fileref="images/AdministrationBar.png" format="PNG" align="center" scale="110"/>
@@ -15,6 +16,7 @@
     </imageobject>
   </mediaobject>
    </para>
+    <para>Depending on the role of each user, he/she can see different actions on the <emphasis>Administration</emphasis> bar.</para>
   <section id="sect-User_Guide-Toolbar-User_Actions">
     <title>User actions in the Administration bar</title>
     <variablelist>

@@ -10,7 +10,7 @@
   </para>
   <para>
     Details about permission types and levels can also be found in the
-    <link linkend="Platform_User_Guide.eXo_Platform.Tutorials.Glossary.Permission">Permission</link> section.
+    <link linkend="Platform_User_Guide.eXo_Platform.Get_started.Glossary.Permission">Permission</link> section.
   </para>
   <section id="sect-User_Guide-Manage_Permission-Set_Portal_Permission">
     <title>Set permissions on a portal</title>

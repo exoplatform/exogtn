@@ -264,7 +264,7 @@
 		</para>
 		</listitem>
 		<listitem>
-			<para>Also, <link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">delete the portal</link> by clicking <emphasis role="bold">Delete.</emphasis>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete the portal</link> by clicking <emphasis role="bold">Delete.</emphasis>
 			</para>
 		</listitem>
 		</itemizedlist>
@@ -331,7 +331,7 @@
 		  </para>
       <note>
 	  <para>
-        For more information about actions, which can be done in the <link linkend="Navigation_Management_window">Navigation Management</link> form, see the <link linkend="Platform_User_Guide.Manage_Organization.Manage_Navigation_Nodes">Manage navigation nodes</link> section.
+        For more information about actions, which can be done in the <link linkend="Navigation_Management_window">Navigation Management</link> form, see the <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Navigation_Nodes">Manage navigation nodes</link> section.
 	  </para>
 	  </note>
 	 </section>

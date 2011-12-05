@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Manage_Page_Navigation">
   <title>Manage page navigation</title>
   <para>
-    Navigation types in eXo Platform are outlined in the <link linkend="Platform_User_Guide.Manage_Organization.Manage_Navigation_Nodes">Manage navigation nodes.</link>
+    Navigation types in eXo Platform are outlined in the <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Navigation_Nodes">Manage navigation nodes.</link>
   </para>
 
   <section id="User_Guide-Manage_Page_Navigation-Portals_page_navigation">
@@ -75,7 +75,7 @@
         </imageobject>
       </mediaobject>
       <para>In this form, you can edit the group's page navigation through doing many actions, such as adding a new node
-        to this group, cloning, moving up/down, and more. To learn more about specific actions, refer to the <link linkend="Platform_User_Guide.Manage_Organization.Manage_Navigation_Nodes">Manage navigation nodes</link> section.
+        to this group, cloning, moving up/down, and more. To learn more about specific actions, refer to the <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Navigation_Nodes">Manage navigation nodes</link> section.
       </para>
     </section>
     <section id="User_Guide-Manage_Page_Navigation-Group_Page_navigation-Create_new_Navigation">
