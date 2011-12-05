@@ -16,11 +16,12 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
+
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-   <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000"/>
-   
-   <!-- Configure the TransactionManager -->
-   <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup" />
+  <!-- The cluster name should be changed by the kernel cache configuration -->
+  <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-gatein">
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
+  </clustering>
 
 </jbosscache>
