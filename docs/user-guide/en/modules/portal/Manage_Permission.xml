@@ -204,7 +204,7 @@
   <!-- Set_Page_Permission -->
   <section id="sect-User_Guide-Manage_Permission-Set_Page_Permission">
     <title>Set permissions on a page</title>
-	<para>Before setting permissions on a page, you need to pay attention to the following cases:
+<!--	<para>Before setting permissions on a page, you need to pay attention to the following cases:
 	</para>
     <itemizedlist>
         <listitem>
@@ -241,8 +241,8 @@
             </listitem>
           </itemizedlist>
         </listitem>
-      </itemizedlist>
-	       <para xml:id="sect-User_Guide-Manage_Permission-Set_Page_Permission-ways_Permissions_tab"> To set permissions on a page, you first need to go to the <emphasis role="bold">Permission Settings</emphasis> tab via different ways:
+      </itemizedlist>    -->
+	       <para xml:id="sect-User_Guide-Manage_Permission-Set_Page_Permission-ways_Permissions_tab"> To set permissions on a page, you first need to go to the <link linkend="Manage_Pages.Permission_Settings">Permission Settings</link> tab via different ways:
       </para>
       <para>
         <emphasis role="bold">Via Edit Page:</emphasis>
