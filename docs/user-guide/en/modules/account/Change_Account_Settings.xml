@@ -58,6 +58,11 @@
       </para>
     </step>
   </procedure>
+    <note>
+          <para>
+          The email address changed must be in the valid format. See details about the <emphasis role="bold">Email Address</emphasis> format <link linkend="Create_New_Account_form_details">here</link>.
+          </para>
+      </note>
   <citetitle>
   <para>
     <emphasis role="bold">Change your password</emphasis>

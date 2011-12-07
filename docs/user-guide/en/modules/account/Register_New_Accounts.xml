@@ -79,7 +79,8 @@
                 <emphasis role="bold">Username</emphasis>
               </entry>
               <entry>
-                The name used to log in. Only alpha, digit, underscore, dash and dot characters are allowed with its length from 3 to 30 characters.
+                The name used to log in. Only lowercase (a - z), digit (0 - 9), underscore (_), dash (-) and dot (.) characters are allowed with its length from 3 to 30 characters.
+                The first and last characters of the username must be lowercase or digit ones.
               </entry> 
             </row>
             <row>
@@ -120,7 +121,21 @@
 			<emphasis role="bold">Email Address</emphasis>
 			</entry>
 			<entry>
-			The user's email address that must be in the correct form, such as <replaceable>username@abc.com.</replaceable>
+			<para>The user's email address that must be in the correct form, such as <replaceable>username@abc.com.</replaceable> </para>
+            <para>There are two parts in the email address, called local part and domain (e.g, local_part@domain): </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>Local part: Only lowercase (a - z), digit (0 - 9), underscore (_), dash (-) and dot (.) characters are allowed,
+                        and the first and last characters of this part must be lowercase or digit ones.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Domain: Only lowercase (a - z), digit (0 - 9), dash (-) and dot (.) characters are allowed, and
+                        the first and last characters of this part must be lowercase or digit ones. Note that the dot (.) character is required.
+                        </para>
+                    </listitem>
+                </itemizedlist>
 			</entry>
 			</row>
 			<row>
