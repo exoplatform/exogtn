@@ -10,6 +10,7 @@
     To do so, you first need to go to the nodes list by following steps described in the <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Edit navigation</link> section, then right-clicking your desired node to open the drop-down menu.
   <mediaobject>
     <imageobject role="html">
+
       <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
@@ -353,7 +354,7 @@
         <para>
           Select 
           <emphasis role="bold">Edit this Node</emphasis>
-          from the drop-down menu to open the form with all similar fields when you <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">Add a new node.</link>
+          from the drop-down menu to open the form with all similar fields when you <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">add a new node.</link>
         </para>
       </step>
       <step>
