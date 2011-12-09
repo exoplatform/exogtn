@@ -142,7 +142,10 @@ public class GroupPortalConfigListener extends GroupEventListener
          }
 
          // Create the portal from the template
-         portalConfigService.createGroupSite(groupId);
+         if(isNew) 
+         {
+            portalConfigService.createGroupSite(groupId);
+         }
       }
       finally
       {
