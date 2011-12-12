@@ -5,8 +5,9 @@
 ]>
 <section id="sect-User_Guide-Sign_In_and_Sign_Out">
   <title>Sign in &amp; Sign out</title>
-  <section id="sect-User_Guide-Sign_in">
-  <title>Sign in a portal</title>
+  <cititle>
+  <para xml:id="sect-User_Guide-Sign_in"><emphasis role="bold">Sign in a portal</emphasis></para>
+      </cititle>
   <para>
     To enter the portal in the private mode, you just need to use your registered account. In eXo Platform 3.5, you can sign in the portal via two ways:
   </para>
@@ -102,9 +103,11 @@
       portal, you will be automatically authenticated for your next visit.
     </para>
   </note>
-  </section>
-  <section id="sect-User_Guide-Sign_Out">
-    <title>Sign out a portal</title>
+    <cititle>
+  <para xml:id="sect-User_Guide-Sign_Out">
+    <emphasis role="bold">Sign out a portal</emphasis>
+    </para>
+      </cititle>
     <para>
       This feature ends your authenticated session and returns you to the anonymous portal. To sign out, simply hover your cursor over your display name at the top right corner of the site, then select <emphasis role="bold">Logout</emphasis> from the drop-down menu.
     <mediaobject>
@@ -116,5 +119,4 @@
       </imageobject>
     </mediaobject>
 	</para>
-  </section>
 </section>

@@ -13,8 +13,10 @@
       <emphasis role="bold">3</emphasis>
       specific steps:
     </para>
-    <section id="sect-User_Guide-Page_Creation_Wizard-Select_Navigation_Node_and_Create_Page">
-      <title>Select a navigation node and create the page</title>
+    <citetitle>
+        <para xml:id="sect-User_Guide-Page_Creation_Wizard-Select_Navigation_Node_and_Create_Page">
+      <emphasis role="bold">Select a navigation node and create the page</emphasis></para>
+      </citetitle>
       <para>In the first step, you have to set <emphasis role="bold">Node Name</emphasis> and <emphasis role="bold">Display Name</emphasis> of your page. You are also able to decide
         the pages visibility and the publication period of the page.
       </para>
@@ -184,10 +186,11 @@
           </para>
         </step>
       </procedure>
-    </section>
-
-    <section id="sect-User_Guide-Page_Creation_Wizard-Select_Page_Layout_Template">
-      <title>Select a page layout template</title>
+      <citetitle>
+      <para xml:id="sect-User_Guide-Page_Creation_Wizard-Select_Page_Layout_Template">
+      <emphasis role="bold">Select a page layout template</emphasis>
+      </para>
+      </citetitle>
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/PageWizard2.png" format="PNG" width="444"/>
@@ -209,9 +212,11 @@
           </para>
         </step>
       </procedure>
-    </section>
-    <section id="sect-User_Guide-Page_Creation_Wizard-Rearrange_Page_Layout_and_Portlets">
-      <title>Arrange the page layout</title>
+    <citetitle>
+    <para xml:id="sect-User_Guide-Page_Creation_Wizard-Rearrange_Page_Layout_and_Portlets">
+      <emphasis role="bold">Arrange the page layout</emphasis>
+      </para>
+     </citetitle>
 	   <para>In this step, you can arrange the page's layout as follows:
 	   </para>
 	   <itemizedlist>
@@ -343,7 +348,6 @@
         </inlinemediaobject>
         to close without saving your changes.</para>
       </note>
-    </section>
   </section>
   <section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
     <title>Add a new page using Page Management</title>

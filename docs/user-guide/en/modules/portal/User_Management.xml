@@ -3,10 +3,35 @@
         <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
         %BOOK_ENTITIES;
         ]>
-<section>
-  <para xml:id="sect-User_Guide-User_management">
-    As an administrator, you can easily add users, edit their information, manage users, groups and memberships easily and effectively.
-  </para>
+<section xml:id="sect-User_Guide-User_management">
+    <abstract>
+ <para>This chapter covers the following topics: </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-User_Guide-User_Management-Add_a_user">Add a user</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-User_Guide-User_Management-Manage_users">Manage users</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-User_Guide-User_Management-Manage_groups">Manage groups</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-User_Guide-User_Management-Manage_memberships">Manage memberships</link>
+          </emphasis> </para>
+      </listitem>
+    </itemizedlist>
   <para>To perform these actions, you first need to hover your cursor over <inlinemediaobject>
       <imageobject>
         <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
@@ -24,6 +49,7 @@
         <imagedata fileref="images/Manage_users.png" format="PNG" align="center" contentwidth="100mm"/>
       </imageobject>
     </mediaobject>
+</abstract>
 
   <section id="sect-User_Guide-User_Management-Add_a_user">
     <title>Add a user</title>
