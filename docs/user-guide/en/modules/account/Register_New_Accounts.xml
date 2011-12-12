@@ -176,7 +176,7 @@
 	Click 
 		<inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Glass_icon.png" format="PNG"/>
+              <imagedata fileref="images/Glass_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> to check if your entered username already exists or not.
 	</para>
