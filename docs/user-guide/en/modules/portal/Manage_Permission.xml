@@ -24,7 +24,7 @@
             Hover your cursor over
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+                <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             in the Administration bar, then click <emphasis role="bold">Portal --> Sites.</emphasis>
@@ -34,7 +34,7 @@
               </imageobject>
               <imageobject role="fo">
                 <imagedata fileref="images/Permission_new_portals.png" format="PNG" align="center" scalefit="1"
-                           contentwidth="150mm"/>
+                           width="70mm"/>
               </imageobject>
             </mediaobject>
           </para>
@@ -60,7 +60,7 @@
             Hover your cursor over
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+                <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             in the Administration bar, then click <emphasis role="bold">Portal --> Sites.</emphasis>
@@ -116,8 +116,11 @@
 	  </note>
       <para>After entering into the <link linkend="sect-User_Guide-Manage_Permission-Set_Portal_Permission-Open_Permission Settings_tab">Permission Settings</link> tab, you first need to select the <emphasis role="bold">Access Permission Settings</emphasis> sub-tab to set the access permissions on a portal. 
       <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" width="444"/>
+        <imageobject role="html">
+          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="0" width="150mm"/>
+        </imageobject>
+        <imageobject role="fo">
+          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="1" width="100mm"/>
         </imageobject>
       </mediaobject>
 	</para>
@@ -141,7 +144,7 @@
               <imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" width="444"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
           </mediaobject>
 		   </para>
@@ -286,10 +289,10 @@
             Hover your cursor over
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+                <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
-            on the Administration bar, and select
+            on the <emphasis role="bold"> Administration</emphasis> bar, and select
             <emphasis role="bold">Portal --> Pages</emphasis>
             to open the
             <emphasis role="bold">Pages Management</emphasis>
@@ -302,7 +305,7 @@
             <emphasis role="bold">Page Id</emphasis>
             column, then click <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> in the <emphasis role="bold">Action</emphasis> column. You will be taken to the <emphasis role="bold">Page Editor</emphasis> window.
           </para>
@@ -409,7 +412,7 @@
           Hover your cursor over
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+              <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           in the Administration bar, then select
@@ -418,8 +421,11 @@
           <emphasis role="bold">Manage Applications</emphasis>
           page.
           <mediaobject>
-            <imageobject>
+            <imageobject role="html">
               <imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+              <imageobject role="fo">
+              <imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
         </para>
@@ -429,7 +435,7 @@
           Select one category from the list of available categories in the left pane, then click 
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>.
             </para>
@@ -467,7 +473,7 @@
               <imagedata fileref="images/Application1.png" format="PNG" align="center" width="444"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Application1.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/Application1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
         </para>

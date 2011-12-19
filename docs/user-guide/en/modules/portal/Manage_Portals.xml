@@ -16,7 +16,7 @@
           Hover your cursor over
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+              <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           on the Administration bar, then select <emphasis role="bold">Portal --> Sites</emphasis> from the drop-down menu.
@@ -26,7 +26,7 @@
             <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddPortal.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -44,7 +44,7 @@
               <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scale="100"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
           </mediaobject>
         </para>
@@ -71,7 +71,7 @@
             <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scale="100"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
  <para><emphasis role="bold">Details:</emphasis></para>
@@ -173,7 +173,7 @@
         <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scale="110"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+        <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
 	</para>
@@ -222,7 +222,7 @@
             Hover your cursor over
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+                <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             to open the drop-down menu.
@@ -282,12 +282,12 @@
         You can rearrange elements in the portal body by dragging and dropping them into your desired positions. Also, you can edit or remove any element by hovering your cursor over it and selecting 
 		<inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon1.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon1.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>, or 	
 		  <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_element_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_element_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> respectively.
       <mediaobject>
@@ -313,7 +313,7 @@
               <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
           </mediaobject>
 		  </para>
@@ -325,7 +325,7 @@
               <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="100"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scalefit="1" width="70mm"/>
             </imageobject>
           </mediaobject>
 		  </para>
@@ -344,7 +344,7 @@
           <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" contentwidth="150mm"/>
+          <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scalefit="1" width="100mm"/>
         </imageobject>
       </mediaobject>
 	  </para>

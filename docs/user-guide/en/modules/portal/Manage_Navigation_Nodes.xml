@@ -14,7 +14,7 @@
       <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" contentwidth="150mm"/>
+      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scalefit="1" width="100mm"/>
     </imageobject>
   </mediaobject>
   </para>
@@ -31,7 +31,7 @@
           If you want to create a new node at the root level of the portal, click
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Up_arrow.png" format="PNG"/>
+              <imagedata fileref="images/Up_arrow.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>, then right-click the empty space and select <emphasis role="bold">Add New Node.</emphasis>
 		  </para>
@@ -49,7 +49,7 @@
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scalefit="1" width="100mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -177,7 +177,7 @@
 						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
+						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" width="100mm"/>
 					</imageobject>
 				</mediaobject>
         </para>
@@ -259,7 +259,7 @@
             <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -274,7 +274,7 @@
           You can select a page for creating a node by simply clicking 
 		  <inlinemediaobject>
                 <imageobject>
-                  <imagedata fileref="images/Select_page_icon.png" format="PNG"/>
+                  <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
                 </imageobject>
               </inlinemediaobject>, or search for a specific page as
           follows:
@@ -300,7 +300,7 @@
             <para><emphasis role="bold">iii.</emphasis> Click 
               <inlinemediaobject>
                 <imageobject>
-                  <imagedata fileref="images/Search_button.png" format="PNG"/>
+                  <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3mm"/>
                 </imageobject>
               </inlinemediaobject>
               to perform your search. All pages matching your search criteria will be listed.
@@ -308,7 +308,7 @@
             <para><emphasis role="bold">iv.</emphasis> Click
               <inlinemediaobject>
                 <imageobject>
-                  <imagedata fileref="images/Select_page_icon.png" format="PNG"/>
+                  <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
                 </imageobject>
               </inlinemediaobject>
               on the row of the page to select.

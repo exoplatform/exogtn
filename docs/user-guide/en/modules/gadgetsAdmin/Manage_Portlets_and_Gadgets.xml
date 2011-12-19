@@ -8,7 +8,7 @@
   <para>To manage portlets and gadgets in a portal, you first need to hover your cursor over
     <inlinemediaobject>
       <imageobject>
-        <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+        <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
       </imageobject>
     </inlinemediaobject>
     on the Administration bar, and select <emphasis role="bold">Applications.</emphasis> The
@@ -18,7 +18,7 @@
 						<imagedata fileref="images/Manage_Applications_page.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Manage_Applications_page.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
+						<imagedata fileref="images/Manage_Applications_page.png" format="PNG" align="center"  scalefit="1" width="150mm"/>
 					</imageobject>
 				</mediaobject>
   </para>
@@ -34,7 +34,7 @@
         <para>Click
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" contentwidth="6mm"/>"
+              <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="15mm"/>"
             </imageobject>
           </inlinemediaobject>
           at the right corner on the action bar.
@@ -61,7 +61,7 @@
       </imageobject>
       <imageobject role="fo">
         <imagedata fileref="images/InformationPortlet.png" format="PNG" align="center" scalefit="1"
-                   contentwidth="110mm"/>
+                   width="150mm"/>
       </imageobject>
     </mediaobject>
     <variablelist>
@@ -94,7 +94,7 @@
           <para>Click
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/edit-icon.png" format="PNG" contentwidth="6mm"/>"
+          <imagedata fileref="images/edit-icon.png" format="PNG" scalefit="1" width="4mm"/>"
         </imageobject>
       </inlinemediaobject>
       on the top corner of right pane. 
@@ -106,7 +106,7 @@
       </imageobject>
       <imageobject role="fo">
         <imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scalefit="1"
-                   contentwidth="110mm"/>
+                   width="110mm"/>
       </imageobject>
     </mediaobject>
     </para>
@@ -132,7 +132,7 @@
 		<para>Hover your cursor over your desired portlet and click 
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Edit_portlet_icon.png" format="PNG"/>
+              <imagedata fileref="images/Edit_portlet_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           at the upper left corner of that portlet.
@@ -145,7 +145,7 @@
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/Edit_portlet_form.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
+                       width="150mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -288,7 +288,7 @@
         <imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scale="110"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+        <imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -314,7 +314,7 @@
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
+                       width="100mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -350,7 +350,7 @@
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/Add_new_gadget.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
+                       width="150mm"/>
           </imageobject>
         </mediaobject>
        </para>
@@ -373,7 +373,7 @@
         To update information of the added gadget, simply click
         <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/Refresh_button.png" format="PNG"/>
+            <imagedata fileref="images/Refresh_button.png" format="PNG" scalefit="1" width="4mm"/>
           </imageobject>
         </inlinemediaobject>
         to refresh information.
@@ -385,7 +385,7 @@
       You can delete a local gadget using 
       <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
       </inlinemediaobject> corresponding to each gadget in the left gadgets list.
     </para>
@@ -403,7 +403,7 @@
     <para>
       Click <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>  
       located in the header of the
@@ -411,8 +411,11 @@
       page to display the following window.
     </para>
     <mediaobject>
-      <imageobject>
+      <imageobject role="html">
         <imagedata fileref="images/Source.png" format="PNG" align="center" width="444"/>
+      </imageobject>
+        <imageobject role="fo">
+        <imagedata fileref="images/Source.png" format="PNG" align="center" scalefit="1" width="100mm"/>
       </imageobject>
     </mediaobject>
   </section>

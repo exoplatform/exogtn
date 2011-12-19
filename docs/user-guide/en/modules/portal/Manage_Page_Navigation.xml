@@ -27,7 +27,7 @@
           <para>The page navigation of a user will be created automatically when the user is created (registered).
           </para>
           <para>Only the user who is the owner of the user page navigation can edit it.</para>
-          <para>Noone can create a user page navigation so that no one can delete it. The navigation will be deleted
+          <para>No one can create a user page navigation so that no one can delete it. The navigation will be deleted
             automatically when its user is deleted.
           </para>
     </note>
@@ -40,7 +40,7 @@
     <para>To manage the group's page navigation, hover your cursor over
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+          <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
         </imageobject>
       </inlinemediaobject>
       on the Administration bar, then select
@@ -70,8 +70,8 @@
           <imagedata fileref="images/GroupPageNavigationManagement.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/GroupPageNups list will be displayed with thavigationManagement.png" format="PNG" align="center"
-                     contentwidth="150mm"/>
+          <imagedata fileref="images/GroupPageNavigationManagement.png" format="PNG" align="center" scalefit="1"
+                     width="100mm"/>
         </imageobject>
       </mediaobject>
       <para>In this form, you can edit the group's page navigation through doing many actions, such as adding a new node
@@ -125,7 +125,7 @@
               <imagedata fileref="images/PageNavigationForm.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/PageNavigationForm.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/PageNavigationForm.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
           </mediaobject>
 		  </para>

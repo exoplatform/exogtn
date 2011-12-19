@@ -36,7 +36,7 @@
 	
   <para>To perform these actions, you first need to hover your cursor over <inlinemediaobject>
       <imageobject>
-        <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+        <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
       </imageobject>
     </inlinemediaobject>
     at the top right of the site, then select
@@ -45,10 +45,10 @@
 
     <mediaobject>
       <imageobject role="html">
-        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scalefit="0" width="100mm"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" contentwidth="100mm"/>
+        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scalefit="1" width="100mm"/>
       </imageobject>
     </mediaobject>
 
@@ -64,10 +64,10 @@
         </para>
         <mediaobject>
           <imageobject role="html">
-            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scale="110"/>
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="0" width="100mm"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="1" width="100mm"/>
           </imageobject>
         </mediaobject>
         <para>The
@@ -79,7 +79,7 @@
             <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" contentwidth="150mm"/>
+            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scalefit="1" width="100mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -112,10 +112,10 @@
     </para>
     <mediaobject>
       <imageobject role="html">
-        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="0" width="100"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" contentwidth="100mm"/>
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="1" width="100mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -124,10 +124,10 @@
     </para>
     <mediaobject>
       <imageobject role="html">
-        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scale="1" contentwidth="70"/>
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="70"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="100mm"/>
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scalefit="1" width="100mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -146,10 +146,10 @@
           </para>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" width="444"/>
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" contentwidth="560"/>
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="0" width="100mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -163,7 +163,7 @@
             Click 
  			<inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Search_button.png" format="PNG"/>
+              <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3mm"/>
             </imageobject>
           </inlinemediaobject>, or hit the <emphasis role="bold">Enter</emphasis> key to perform your search.
           </para>
@@ -183,7 +183,7 @@
             Click
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/edit_icon.png" format="PNG"/>
+                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             corresponding to the user with the information you want to edit.
@@ -196,11 +196,11 @@
             tab to edit main information of the user, including <emphasis role="bold">First Name, Last Name,</emphasis> or <emphasis role="bold">Email Address.</emphasis>
           </para>
           <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444"/>
+            <imageobject role="html">
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444mm"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Demo1.png" format="PNG" align="center" contentwidth="560"/>
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
           </mediaobject>
           <variablelist>
@@ -267,7 +267,7 @@
             To remove the user from a group, click 
             <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>.
           </para>
@@ -293,7 +293,7 @@
             Click 
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> corresponding to the user you want to delete in the main <emphasis role="bold">User Management</emphasis> form.
           </para>
@@ -319,11 +319,11 @@
       You can also add or delete a user to a group and edit the user membership in the group.
     </para>
     <mediaobject>
-      <imageobject>
+      <imageobject role="html">
         <imagedata fileref="images/GroupManage.png" format="PNG" align="center" width="444"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/GroupManage.png" format="PNG" align="center" scalefit="1" contentwidth="484mm"/>
+        <imagedata fileref="images/GroupManage.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -340,7 +340,7 @@
             Select the path to create a new group by clicking the group from the left pane or by clicking
             <inlinemediaobject>
               <imageobject role="html">
-                <imagedata fileref="images/arrow-blue-arrow.png" format="PNG"/>
+                <imagedata fileref="images/arrow-blue-arrow.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             if you want to create a group at a higher level. The selected path is displayed in the breadcrumb bar.
@@ -359,7 +359,7 @@
             Click
             <inlinemediaobject>
               <imageobject role="html">
-                <imagedata fileref="images/plus_icon.png" format="PNG"/>
+                <imagedata fileref="images/plus_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             in the left pane.
@@ -452,7 +452,7 @@
             Click
             <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> in the left pane to show the
             <emphasis role="bold">Edit Current Group</emphasis>
@@ -463,7 +463,7 @@
               <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -495,7 +495,7 @@
             Click
             <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> in the row of the membership type you want to delete.
           </para>
@@ -504,7 +504,7 @@
               <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -534,8 +534,11 @@
         <step>
           <para>Enter the exact Username of the user that you want to add to the selected group (you can add many usernames separated by commas);
                 <mediaobject>
-            <imageobject>
+            <imageobject role="html">
               <imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+                    <imageobject role="fo">
+              <imagedata fileref="images/AddMember1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
           </para>
@@ -543,7 +546,7 @@
               <para><emphasis role="bold">i.</emphasis> Click 
                 <inlinemediaobject>
                   <imageobject>
-                    <imagedata fileref="images/Search_icon.png" format="PNG"/>
+                    <imagedata fileref="images/Search_icon.png" format="PNG" scalefit="1" width="4mm"/>
                   </imageobject>
                 </inlinemediaobject>
                 to search by your entered characters.
@@ -551,7 +554,7 @@
             <para>After you have clicked
                 <inlinemediaobject>
                   <imageobject>
-                    <imagedata fileref="images/Search_icon.png" format="PNG"/>
+                    <imagedata fileref="images/Search_icon.png" format="PNG" scalefit="1" width="4mm"/>
                   </imageobject>
                 </inlinemediaobject>
                 , there will be a list of all existing users whose <emphasis role="bold">Usernames</emphasis> include the entered characters. For
@@ -563,7 +566,7 @@
                 </imageobject>
                 <imageobject role="fo">
                   <imagedata fileref="images/Select_user_form.png" format="PNG" align="center" scalefit="1"
-                             contentwidth="150mm"/>
+                             width="100mm"/>
                 </imageobject>
               </mediaobject>
               <para>
@@ -579,7 +582,7 @@
                 </imageobject>
                 <imageobject role="fo">
                   <imagedata fileref="images/Added_member_form.png" format="PNG" align="center" scalefit="1"
-                             contentwidth="150mm"/>
+                             width="100mm"/>
                 </imageobject>
               </mediaobject>
             </para>
@@ -589,7 +592,7 @@
             Select the membership for the users from the <emphasis role="bold">Membership</emphasis> list. You can click
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/Refresh_button.png" format="PNG"/>
+                <imagedata fileref="images/Refresh_button.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             to update the memberships list in case of any changes.
@@ -621,7 +624,7 @@
           <para>
             Click <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> corresponding to a specific user with a membership in the <emphasis role="bold">Action</emphasis> column in the right pane.
           </para>
@@ -664,8 +667,11 @@
       Validator, Webdesigner,</emphasis> and <emphasis>Publisher.</emphasis> The "Manager" has the highest right in a group.
     </para>
     <mediaobject>
-      <imageobject>
+      <imageobject role="html">
         <imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" width="444"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
 
@@ -699,7 +705,7 @@
             Click
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/edit_icon.png" format="PNG"/>
+                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
             corresponding to the membership type you want to edit in the <emphasis role="bold">Action</emphasis> column. Information about the selected
@@ -730,7 +736,7 @@
           <para>
             Click <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
             in the <emphasis role="bold">Action</emphasis> column.

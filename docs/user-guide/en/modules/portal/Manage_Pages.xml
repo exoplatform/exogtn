@@ -224,8 +224,11 @@
 		<para>Add your desired applications, containers or gadgets by dragging and dropping them from <emphasis role="bold">Page Editor</emphasis> to the main page body.
 		</para>
       <mediaobject>
-        <imageobject>
+        <imageobject role="html">
           <imagedata fileref="images/PageWizard3.png" format="PNG" width="444"/>
+        </imageobject>
+          <imageobject role="fo">
+          <imagedata fileref="images/PageWizard3.png" format="PNG" scalefit="1" width="150mm"/>
         </imageobject>
       </mediaobject>
 	  <para><emphasis role="bold">Details:</emphasis></para>
@@ -312,12 +315,12 @@
         Rearrange elements in the page body by dragging and dropping them into your desired positions. Also, you can edit or remove any element by hovering your cursor over it and selecting 
 		<inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon1.png" format="PNG"/>
+              <imagedata fileref="images/edit_icon1.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>, or 	
 		  <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_element_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_element_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> respectively.
 		</para>
@@ -335,7 +338,7 @@
         Click
         <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/Finish_icon1.png" format="PNG"/>
+            <imagedata fileref="images/Finish_icon1.png" format="PNG" scalefit="1" width="4mm"/>
           </imageobject>
         </inlinemediaobject>
         in the
@@ -343,7 +346,7 @@
         window to save all changes, or
         <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/Discard_change_icon.png" format="PNG"/>
+            <imagedata fileref="images/Discard_change_icon.png" format="PNG" scalefit="1" width="4mm"/>
           </imageobject>
         </inlinemediaobject>
         to close without saving your changes.</para>
@@ -357,7 +360,7 @@
           Hover your cursor over
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+              <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           to open the drop-down menu.
@@ -370,8 +373,11 @@
           to go to the 
           <emphasis role="bold">Pages Management</emphasis> page.
         <mediaobject>
-          <imageobject>
+          <imageobject role="html">
             <imagedata fileref="images/ManagePage.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+            <imageobject role="fo">
+            <imagedata fileref="images/ManagePage.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -385,8 +391,11 @@
           form with the <emphasis role="bold">Page Settings</emphasis> tab.
         </para>
         <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scale="110"/>
+          <imageobject role="html">
+            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="0" width="100mm"/>
+          </imageobject>
+            <imageobject role="fo">
+            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="1" width="100mm"/>
           </imageobject>
         </mediaobject>
 		<para><emphasis role="bold">Details:</emphasis></para>
@@ -573,7 +582,7 @@
               <imagedata fileref="images/EditNodePage.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/EditNodePage.png" format="PNG" align="center" contentwidth="150mm"/>
+              <imagedata fileref="images/EditNodePage.png" format="PNG" align="center" scalefit="1" width="70mm"/>
             </imageobject>
           </mediaobject>
         </para>
@@ -583,7 +592,7 @@
               <para><emphasis role="bold">i.</emphasis> Hover your cursor over
                 <inlinemediaobject>
                   <imageobject>
-                    <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+                    <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
                   </imageobject>
                 </inlinemediaobject>
                 and select
@@ -595,7 +604,7 @@
               <para><emphasis role="bold">ii.</emphasis> Click
               <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/edit_icon.png " format="PNG"/>
+              <imagedata fileref="images/edit_icon.png " format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> 
              corresponding to the page you want to edit.</para>
@@ -608,7 +617,7 @@
             <imagedata fileref="images/PageEditor.png" format="PNG" align="center" scale="1" contentwidth="70"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/PageEditor.png" format="PNG" align="center" contentwidth="100mm"/>
+            <imagedata fileref="images/PageEditor.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -701,7 +710,7 @@
           then select
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Finish_icon1.png" format="PNG"/>
+              <imagedata fileref="images/Finish_icon1.png" format="PNG" scalefit="1" width="3mm"/>
             </imageobject>
           </inlinemediaobject>
           in
@@ -709,7 +718,7 @@
           for all changes to take effect, or
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Discard_change_icon.png" format="PNG"/>
+              <imagedata fileref="images/Discard_change_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           to abort.
@@ -726,7 +735,7 @@
           Hover your cursor over
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
+              <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
           and select
@@ -741,7 +750,7 @@
           Click
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> 
           in the row of the page you want to delete.

@@ -38,7 +38,7 @@
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/All_gadgets_workspace.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
+                       width="50mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -64,7 +64,7 @@
         </imageobject>
         <imageobject role="fo">
           <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scalefit="1"
-                     contentwidth="160mm"/>
+                     width="100mm"/>
         </imageobject>
       </mediaobject>
     </procedure>
@@ -81,22 +81,27 @@
       </imageobject>
       <imageobject role="fo">
         <imagedata fileref="images/ChangGadget.png" format="PNG" align="center" scalefit="1"
-                   contentwidth="120mm"/>
+                   width="150mm"/>
       </imageobject>
     </mediaobject>
 	<citetitle>
-    <para><emphasis role="bold">Change preferences of a gadget (for example, RSS Reader)</emphasis></para>
+    <para><emphasis role="bold">Change preferences of a gadget</emphasis></para>
 	</citetitle>
+    <para>The following is an example of changing preferences of the <emphasis role="bold">RSS Reader</emphasis> gadget.</para>
     <procedure>
       <step>
-        <para>Click the edit icon to open the edit form of the RSS gadget.</para>
+        <para>Click <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/edit_gadget.png" format="PNG" scalefit="1" width="4mm"/>
+          </imageobject>
+        </inlinemediaobject> to open the edit form of the RSS gadget.</para>
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/RSSGatein.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/RSSGatein.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="120mm"/>
+                       width="100mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -158,7 +163,7 @@
             <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" contentwidth="90mm"/>
+            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" width="70mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -167,7 +172,7 @@
           Click 
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/plus_icon.png" format="PNG"/>
+              <imagedata fileref="images/plus_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> 
          to add the new gadget to the page.
