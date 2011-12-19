@@ -32,6 +32,8 @@
           </emphasis> </para>
       </listitem>
     </itemizedlist>
+	</abstract>
+	
   <para>To perform these actions, you first need to hover your cursor over <inlinemediaobject>
       <imageobject>
         <imagedata fileref="images/sawtooth_icon.png" format="PNG"/>
@@ -49,7 +51,7 @@
         <imagedata fileref="images/Manage_users.png" format="PNG" align="center" contentwidth="100mm"/>
       </imageobject>
     </mediaobject>
-</abstract>
+
 
   <section id="sect-User_Guide-User_Management-Add_a_user">
     <title>Add a user</title>
