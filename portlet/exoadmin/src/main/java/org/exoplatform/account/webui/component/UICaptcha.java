@@ -52,7 +52,7 @@ public class UICaptcha extends UIFormStringInput
 
       // context.getPortalContextPath() + "/captcha?v=" +  Calendar.getInstance().getTimeInMillis()
 
-      String random = "&v=" + Calendar.getInstance().getTimeInMillis();
+      String random = "&amp;v=" + Calendar.getInstance().getTimeInMillis();
 
       context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString()  + random + "\" /><br/>");
       super.processRender(context);

@@ -2,12 +2,8 @@
   	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
-  import org.gatein.common.text.EntityEncoder;
-	import org.exoplatform.commons.utils.HTMLEntityEncoder;
-	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
-	import org.exoplatform.web.url.navigation.NavigationResource;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -15,9 +11,7 @@
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');	
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
-	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();     
 	PortalURL nodeURL = nodeurl();
 
 	public void renderChildrenContainer(UserNode node, PortalURL nodeURL) {
@@ -45,10 +39,7 @@
 		String getNodeURL = "";
 		if (node.getChildrenCount() > 0) {
 		   arrowIcon = "ArrowIcon";
-		   MimeResponse res = _ctx.getRequestContext().getResponse();
-		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
-		   resourceURL.setResourceID(node.getURI());
-		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		   getNodeURL = "exo:getNodeURL='" + uicomponent.createServeResourceURL(node.getURI()) + "'";
 		}
 
 		String label = node.getEncodedResolvedLabel();
@@ -77,8 +68,6 @@
 %>
 <ul class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >	
 	<%
-		MimeResponse res = _ctx.getRequestContext().getResponse();
-		
 		def rootNodes = uicomponent.getNavigations();
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		if(rootNodes != null) {
@@ -91,10 +80,8 @@
 					}
 					
 					if (node.getChildrenCount() > 0) {
-					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
-						resourceURL.setResourceID(node.getURI());										
-	%>			
-					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=resourceURL.toString() %>">
+	%>
+					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=uicomponent.createServeResourceURL(node.getURI()) %>">
 				<%	} else { %>
 					<li class="UITab $tabStyleNavigation">
 				<%  } 						

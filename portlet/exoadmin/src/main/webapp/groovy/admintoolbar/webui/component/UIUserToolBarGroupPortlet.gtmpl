@@ -4,8 +4,6 @@
 	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.mop.user.UserNavigation;
-	import javax.portlet.MimeResponse;
-	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
@@ -58,11 +56,8 @@
 		
 		def getNodeURL = "";
 		if (hasChild) {
-		    def groupId = node.getNavigation().getKey().getName();
-			MimeResponse res = _ctx.getRequestContext().getResponse();
-			ResourceURL resourceURL = res.createResourceURL();			
-			resourceURL.setResourceID(groupId + "::" + node.getURI());	
-			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		   def groupId = node.getNavigation().getKey().getName();
+			getNodeURL = "exo:getNodeURL='" + uicomponent.createServeResourceURL(groupId + "::" + node.getURI()) + "'";
 		}
 		
 		print """

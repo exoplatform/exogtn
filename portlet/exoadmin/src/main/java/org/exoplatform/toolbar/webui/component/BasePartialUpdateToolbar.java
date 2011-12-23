@@ -19,6 +19,8 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -164,28 +166,27 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
    {
       JSONObject json = new JSONObject();
       String nodeId = node.getId();
-      
-      json.put("label", node.getEncodedResolvedLabel());      
-      json.put("hasChild", node.getChildrenCount() > 0);            
+
+      json.put("label", node.getEncodedResolvedLabel());
+      json.put("hasChild", node.getChildrenCount() > 0);
       json.put("isSelected", nodeId.equals(getSelectedNode().getId()));
-      json.put("icon", node.getIcon());       
-      
-      ResourceURL rsURL = res.createResourceURL();
-      rsURL.setResourceID(getResourceIdFromNode(node, navId));
-      json.put("getNodeURL", rsURL.toString());                  
-      
+      json.put("icon", node.getIcon());
+
+      String strResourceURL = createServeResourceURL(getResourceIdFromNode(node, navId));
+      json.put("getNodeURL", strResourceURL);
+
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
          NodeURL url = Util.getPortalRequestContext().createURL(NodeURL.TYPE, resource);
          json.put("actionLink", url.setAjax(false).toString());
-      }                
-      
+      }
+
       JSONArray childs = new JSONArray();
       for (UserNode child : node.getChildren())
       {
          childs.put(toJSON(child, navId, res));
-      }      
+      }
       json.put("childs", childs);
       return json;
    }
@@ -217,7 +218,18 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       }
       return false;
    }
-   
+
+   protected String createServeResourceURL(String nodeUri) throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      MimeResponse response = context.getResponse();
+      ResourceURL resourceUrl = response.createResourceURL();
+      resourceUrl.setResourceID(nodeUri);
+      Writer w = new StringWriter();
+      resourceUrl.write(w, true);
+      return w.toString();
+   }
+
    protected abstract String getResourceIdFromNode(UserNode node, String navId) throws Exception;
    
    protected abstract UserNode getNodeFromResourceID(String resourceId) throws Exception;

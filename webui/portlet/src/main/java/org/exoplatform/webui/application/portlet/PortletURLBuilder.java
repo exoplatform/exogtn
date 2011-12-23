@@ -19,10 +19,16 @@
 
 package org.exoplatform.webui.application.portlet;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import javax.portlet.PortletURL;
 
@@ -33,6 +39,7 @@ import javax.portlet.PortletURL;
 public class PortletURLBuilder extends URLBuilder<UIComponent>
 {
 
+   private static Log log = ExoLogger.getLogger(PortletURLBuilder.class);
    /** . */
    private final PortletURL url;
 
@@ -43,18 +50,18 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
 
    public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return createURL(true, confirm, targetComponent, action, targetBeanId, params);
+      return createURL(true, confirm, targetComponent, action, targetBeanId, true, params);
    }
 
    public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return createURL(false, confirm, targetComponent, action, targetBeanId, params);
+      return createURL(false, confirm, targetComponent, action, targetBeanId, true, params);
    }
 
    private String createURL(
       boolean ajax,
       String confirm,
-      UIComponent targetComponent, String action, String targetBeanId,
+      UIComponent targetComponent, String action, String targetBeanId, boolean escapeXML,
       Parameter[] params)
    {
       // Clear URL
@@ -98,7 +105,22 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
          url.setProperty("gtn:lang", locale.toString());
       }
 
-      //
-      return url.toString();
+      if (escapeXML)
+      {
+         Writer w = new StringWriter();
+         try
+         {
+            url.write(w, true);
+         }
+         catch (IOException e)
+         {
+            log.error("Error in create URL process", e);
+         }
+         return w.toString();
+      }
+      else
+      {
+         return url.toString();
+      }
    }
 }

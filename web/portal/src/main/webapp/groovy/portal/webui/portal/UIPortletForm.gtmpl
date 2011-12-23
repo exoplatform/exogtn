@@ -123,7 +123,7 @@
 		</div>	
 	</div>
 </div>
-<script language="javascript">
+<script type="text/javascript">
 		eXo.UIPortletForm = {
 				hideSaveButton : function(comp) {
 						var DOMUtil = eXo.core.DOMUtil;

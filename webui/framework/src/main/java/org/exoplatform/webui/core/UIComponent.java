@@ -43,6 +43,8 @@ abstract public class UIComponent
 {
    private static final Log log = ExoLogger.getLogger("webui:UIComponent");
 
+   final static private String COMPONENT_PREFIX = "c_";
+
    final static public String OBJECTID = "objectId";
 
    final static public String UICOMPONENT = "uicomponent";
@@ -68,7 +70,7 @@ abstract public class UIComponent
    {
       if (id == null)
       {
-         this.id = Integer.toString(hashCode());
+         this.id = COMPONENT_PREFIX + Integer.toString(hashCode());
       }
       else
       {

@@ -25,7 +25,6 @@ import javax.portlet.MimeResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -124,44 +123,43 @@ public class UINavigationPortlet extends UIPortletApplication
       MimeResponse res = context.getResponse();
       for (UserNode child : childs)
       {
-         jsChilds.put(toJSON(child, res));
+         jsChilds.put(toJSON(child, res, uiPortalNavigation));
       }
       return jsChilds;
    }
 
-   private JSONObject toJSON(UserNode node, MimeResponse res) throws Exception
+   private JSONObject toJSON(UserNode node, MimeResponse res, UIPortalNavigation uiPortalNavigation) throws Exception
    {
       JSONObject json = new JSONObject();
       String nodeId = node.getId();
-      
-      json.put("label", node.getEncodedResolvedLabel());      
-      json.put("hasChild", node.getChildrenCount() > 0);            
-      
+
+      json.put("label", node.getEncodedResolvedLabel());
+      json.put("hasChild", node.getChildrenCount() > 0);
+
       UserNode selectedNode = Util.getUIPortal().getNavPath();
       json.put("isSelected", nodeId.equals(selectedNode.getId()));
-      json.put("icon", node.getIcon());      
-      
-      ResourceURL rsURL = res.createResourceURL();
-      rsURL.setResourceID(node.getURI());
-      json.put("getNodeURL", rsURL.toString());            
-            
+      json.put("icon", node.getIcon());
+
+      String resourceURL = uiPortalNavigation.createServeResourceURL(node.getURI());
+      json.put("getNodeURL", resourceURL);
+
       if (node.getPageRef() != null)
       {
          NavigationResource resource = new NavigationResource(node);
          NodeURL url = Util.getPortalRequestContext().createURL(NodeURL.TYPE, resource);
          url.setAjax(isUseAjax());
          json.put("actionLink", url.toString());
-      } 
-      
+      }
+
       JSONArray childs = new JSONArray();
       for (UserNode child : node.getChildren())
       {
-         childs.put(toJSON(child, res));
-      }      
+         childs.put(toJSON(child, res, uiPortalNavigation));
+      }
       json.put("childs", childs);
       return json;
    }
-   
+
    public boolean isUseAjax()
    {
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();

@@ -62,6 +62,8 @@ public class PortalDataMapper
 
    protected static final Log log = ExoLogger.getLogger("portal:PortalDataMapper");
 
+   private static final String PORTLET_PREFIX = "p_";
+
    @SuppressWarnings("unchecked")
    public static ModelObject buildModelObject(UIComponent uiComponent)
    {
@@ -151,7 +153,7 @@ public class PortalDataMapper
       }
 
       //
-      model.setStorageName(uiPortlet.getStorageName());
+      model.setStorageName(uiPortlet.getStorageName().substring(PORTLET_PREFIX.length()));
       model.setState(state.getApplicationState());
       model.setTitle(uiPortlet.getTitle());
       model.setWidth(uiPortlet.getWidth());
@@ -397,7 +399,7 @@ public class PortalDataMapper
             UIPortlet uiPortlet = uiContainer.createUIComponent(context, UIPortlet.class, null, null);
             uiPortlet.setStorageId(application.getStorageId());
             if(application.getStorageName()!=null) {
-              uiPortlet.setStorageName(application.getStorageName());
+              uiPortlet.setStorageName(PORTLET_PREFIX + application.getStorageName());
             }
             toUIPortlet(uiPortlet, application);
             uiComponent = uiPortlet;

@@ -32,7 +32,7 @@
 	if(uicomponent.isShow()) show = "block";
 %>
 
-<div class="UIPopupWindow UIDragObject NormalStyle" exo:minWidth="200" exo:minHeight="200" id="$popupId" style="$widthStyle display: $show;">
+<div class="UIPopupWindow UIDragObject NormalStyle" id="$popupId" style="$widthStyle display: $show;">
 	<div class="OverflowContainer ClearFix">
 		<%if( showCloseButton ) {%>
 			<!-- <div class="CloseButton" title="Close Window" onclick="<%=uicomponent.event("ClosePopup")%>"><span></span></div> -->

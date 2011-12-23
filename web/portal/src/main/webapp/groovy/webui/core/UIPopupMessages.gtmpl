@@ -45,22 +45,24 @@
 	}
 	boolean printMessages(List messages, String messType, boolean isSelected) {
 		String style = "style=\"display: none;\"";
-		if(messages.size() > 0 && !isSelected) {
-			style = "";
-			isSelected = true;
+		if(messages.size() > 0) {
+		   if (!isSelected) {
+		      style = "";
+				isSelected = true;
+		   }
+			println "<ul class=\"UITabContent PopupMessageBox $messType\" $style>";
+			for(mess in messages) {
+				if(mess.messageKey == null) continue;
+				println "  <li class=\"MessageContainer\">";
+				println "     <span class=\"PopupIcon ${messType}Icon\">";
+				String msgValue = mess.getMessage();
+				EntityEncoder entityEncoder = HTMLEntityEncoder.getInstance();
+				println entityEncoder.encode(msgValue);
+				println "     </span>";
+				println "  </li>";
+			}
+			println "</ul>";
 		}
-		println "			<ul class=\"UITabContent PopupMessageBox $messType\" $style>";
-		for(mess in messages) {
-			if(mess.messageKey == null) continue;
-			println "						<li class=\"MessageContainer\">";
-			println "							<span class=\"PopupIcon ${messType}Icon\">";
-			String msgValue = mess.getMessage();
-			EntityEncoder entityEncoder = HTMLEntityEncoder.getInstance();
-			println entityEncoder.encode(msgValue);
-			println "						 </span>";
-			println "					 </li>";
-		}
-		println "		</ul>";
 		return isSelected;
 	}
 

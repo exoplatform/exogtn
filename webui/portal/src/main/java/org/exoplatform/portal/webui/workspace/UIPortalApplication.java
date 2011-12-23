@@ -833,7 +833,7 @@ public class UIPortalApplication extends UIApplication
     * and used for JS based portal url generation.
     * 
     * <p>The portal url template are calculated base on the current request and site state.
-    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&portal:action={portal:action}" ;</code>
+    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&amp;portal:action={portal:action}" ;</code>
     * 
     * @return return portal url template
     * @throws UnsupportedEncodingException
@@ -842,7 +842,6 @@ public class UIPortalApplication extends UIApplication
    {
       PortalRequestContext pcontext = Util.getPortalRequestContext();
       ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
-      urlTemplate.setMimeType(MimeType.PLAIN);
       urlTemplate.setPath(pcontext.getNodePath());
       urlTemplate.setResource(EMPTY_COMPONENT);
       urlTemplate.setAction("{portal:action}");

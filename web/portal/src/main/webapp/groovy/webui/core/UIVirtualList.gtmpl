@@ -10,7 +10,7 @@
     rcontext.getJavascriptManager().importJavascript('eXo.core.Browser');
     rcontext.getJavascriptManager().importJavascript('eXo.webui.UIVirtualList');
     
-    String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
+    String url = uicomponent.url("LoadNext") + "&amp;ajaxRequest=true"; 
     String css = "";
     if (uicomponent.getHeight() > 0) {
        css = "height: " + uicomponent.getHeight() + "px";
