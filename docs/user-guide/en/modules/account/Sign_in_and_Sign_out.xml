@@ -22,8 +22,7 @@
             <imagedata fileref="images/Default_account1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Default_account1.png" format="PNG" align="center" scalefit="1"
-                       contentwidth="150mm"/>
+            <imagedata fileref="images/Default_account1.png" format="PNG" align="center" width="100mm" scalefit="1"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -37,8 +36,7 @@
               <imagedata fileref="images/Default_account2.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Default_account2.png" format="PNG" align="center" scalefit="1"
-                         contentwidth="150mm"/>
+              <imagedata fileref="images/Default_account2.png" format="PNG" align="center" width="100mm" scalefit="1"/>
             </imageobject>
           </mediaobject>
         </para>
@@ -61,8 +59,7 @@
                 <imagedata fileref="images/Sign_in_form.png" format="PNG" align="center" scale="110"/>
               </imageobject>
               <imageobject role="fo">
-                <imagedata fileref="images/Sign_in_form.png" format="PNG" align="center" scalefit="1"
-                           contentwidth="150mm"/>
+                <imagedata fileref="images/Sign_in_form.png" format="PNG" align="center" width="100mm" scalefit="1"/>
               </imageobject>
             </mediaobject>
           </para>
@@ -115,7 +112,7 @@
         <imagedata fileref="images/Sign_out1.png" format="PNG" align="center" scale="110"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Sign_out1.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+        <imagedata fileref="images/Sign_out1.png" format="PNG" align="center" width="70mm" scalefit="1"/>
       </imageobject>
     </mediaobject>
 	</para>

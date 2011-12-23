@@ -22,8 +22,8 @@
           <imagedata fileref="images/Register.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/Register.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
-        </imageobject>
+          <imagedata fileref="images/Register.png" format="PNG" align="center" width="100mm" scalefit="1"/>
+        </imageobject> 
       </mediaobject>
 	  <para>
 	  If you are in the ACME Social intranet, click <emphasis role="bold">Register</emphasis> at the bottom of the portal.
@@ -33,7 +33,7 @@
           <imagedata fileref="images/Register2.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/Register2.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+          <imagedata fileref="images/Register2.png" format="PNG" align="center" width="100mm" scalefit="1"/>
         </imageobject>
       </mediaobject>
       <para>
@@ -46,7 +46,7 @@
           <imagedata fileref="images/AccountSetting.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/AccountSetting.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
+          <imagedata fileref="images/AccountSetting.png" format="PNG" align="center" width="100mm" scalefit="1"/>
         </imageobject>
       </mediaobject>
 
