@@ -14,7 +14,7 @@
       <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+      <imagedata fileref="images/Nodes_navigation_list.png" format="PNG" align="center" scalefit="1" width="70mm"/>
     </imageobject>
   </mediaobject>
   </para>

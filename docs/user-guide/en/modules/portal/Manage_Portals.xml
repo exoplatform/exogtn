@@ -313,7 +313,7 @@
               <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+              <imagedata fileref="images/EditNavigation1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
             </imageobject>
           </mediaobject>
 		  </para>

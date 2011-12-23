@@ -48,7 +48,7 @@
         <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scalefit="0" width="100mm"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+        <imagedata fileref="images/Manage_users.png" format="PNG" align="center" scalefit="1" width="70mm"/>
       </imageobject>
     </mediaobject>
 
@@ -67,7 +67,7 @@
             <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="0" width="100mm"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="1" width="70mm"/>
           </imageobject>
         </mediaobject>
         <para>The
@@ -115,7 +115,7 @@
         <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="0" width="100"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="1" width="70mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -127,7 +127,7 @@
         <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="70"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
     <para>
@@ -149,7 +149,7 @@
               <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="1" width="100mm"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="0" width="100mm"/>
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="0" width="80mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -163,7 +163,7 @@
             Click 
  			<inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3mm"/>
+              <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3.5mm"/>
             </imageobject>
           </inlinemediaobject>, or hit the <emphasis role="bold">Enter</emphasis> key to perform your search.
           </para>
@@ -180,10 +180,10 @@
         </step>
         <step>
           <para>
-            Click
+            Click 
             <inlinemediaobject>
               <imageobject>
-                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
+                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="3.5mm"/>
               </imageobject>
             </inlinemediaobject>
             corresponding to the user with the information you want to edit.
@@ -293,7 +293,7 @@
             Click 
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="3mm"/>
             </imageobject>
           </inlinemediaobject> corresponding to the user you want to delete in the main <emphasis role="bold">User Management</emphasis> form.
           </para>
