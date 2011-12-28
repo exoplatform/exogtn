@@ -76,7 +76,7 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       resp.setContentType("text/html; charset=UTF-8");
  
       // This allows the customer to define another login page without changing the portal
-      wciController.showLoginForm(req, resp);
+      wciController.showErrorLoginForm(req, resp);
    }
       
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
