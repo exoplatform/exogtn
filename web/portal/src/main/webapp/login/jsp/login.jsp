@@ -29,7 +29,7 @@
 <%@ page language="java" %>
 <%
   String contextPath = request.getContextPath() ;
-
+  String lang = request.getLocale().getLanguage();
   String username = request.getParameter("j_username");
   if(username == null) username = "";
  	String password = request.getParameter("j_password");
@@ -53,7 +53,7 @@
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=lang%>" lang="<%=lang%>">
   <head>
     <title>Login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>   
@@ -81,16 +81,16 @@
                 <% } %>
           		<table> 
 	              <tr class="FieldContainer">
-		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>
-		              <td><input class="UserName" name="username" value="<%=username%>"/></td>
+		              <td class="FieldLabel"><label for="username"><%=res.getString("UILoginForm.label.UserName")%></label></td>
+		              <td><input class="UserName" name="username" id="username" value="<%=username%>"/></td>
 			          </tr>
 		            <tr class="FieldContainer" id="UIPortalLoginFormControl" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event);">
-		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%></td>
-		              <td><input class="Password" type="password" name="password" value=""/></td>
+		              <td class="FieldLabel"><label for="password"><%=res.getString("UILoginForm.label.password")%></label></td>
+		              <td><input class="Password" type="password" name="password" id="password" value=""/></td>
 		            </tr>
 		            <tr class="FieldContainer" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event);">
-		              <td class="FieldLabel"><input type="checkbox" name="rememberme" value="true"/></td>
-		              <td><%=res.getString("UILoginForm.label.RememberOnComputer")%></td>
+		              <td class="FieldLabel"><input type="checkbox" name="rememberme" id="rememberme" value="true"/></td>
+		              <td><label for="rememberme"><%=res.getString("UILoginForm.label.RememberOnComputer")%></label></td>
 		            </tr>
 		          </table>
 		          <div id="UIPortalLoginFormAction" class="LoginButton" onclick="login();">

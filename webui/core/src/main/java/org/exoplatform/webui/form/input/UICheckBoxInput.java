@@ -19,13 +19,15 @@
 
 package org.exoplatform.webui.form.input;
 
-import java.io.Writer;
-
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
+
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *  <p>Represent an html checkbox input <br/> 
@@ -128,22 +130,21 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
    public void processRender(WebuiRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
-      w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
-      w.write(name);
-      w.write("\"");
+      Map<String, String> attributes = new HashMap<String, String>();
+      attributes.put("type", "checkbox");
+      attributes.put("name", name);
+      attributes.put("class", "checkbox");
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
-         w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
+         attributes.put("onclick", renderOnChangeEvent(uiForm));
       }
       if (isChecked())
-         w.write(" checked");
+         attributes.put("checked", "checked");
       if (isDisabled())
-         w.write(" disabled");
+         attributes.put("disabled", "disabled");
 
-      renderHTMLAttributes(w);
-
-      w.write("/>");
+      renderInputBaseComponent(w, "input", attributes);
       if (this.isMandatory())
          w.write(" *");
    }

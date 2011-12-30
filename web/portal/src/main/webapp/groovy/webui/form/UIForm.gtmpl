@@ -14,7 +14,9 @@
 									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
 								%>												
 									<td class="FieldLabel">
+									   <label for="$field.id">
 										<%=uicomponent.getLabel(field.getName()) %>
+										</label>
 									</td>
 									<td class="FieldComponent"><% uiform.renderField(field) %></td>
 								<%} else {%>

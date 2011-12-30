@@ -148,13 +148,6 @@
 .UIForm .VerticalLayout {
 }
 
-.UIForm .VerticalLayout	label {
-	text-align: left; /* orientation=lt */
-	text-align: right; /* orientation=rt */
-	font-weight: bold;
-	margin-bottom: 15px;
-}
-
 .UIForm .VerticalLayout input {
 	width: 170px;
 	border:	1px solid gray;

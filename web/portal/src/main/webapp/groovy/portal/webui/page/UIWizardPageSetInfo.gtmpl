@@ -1,7 +1,7 @@
 <%	
 	import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 	import org.exoplatform.webui.core.UIComponent;
-  import org.gatein.common.text.EntityEncoder;
+   import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
 	String nodeName = "/"; 	
@@ -42,11 +42,12 @@
 									List children = uiform.getChildren();		
 									int bound = children.size() - 1;
 									for(i in 1..bound) { 
-										if(children.get(i).isRendered()) {								 
+										if(children.get(i).isRendered()) {
+										   UIComponent child = children.get(i);
 								%>
 											<tr>
-												<td class="FieldLabel"><%=uicomponent.getLabel(children.get(i).getName())+": " %></td>
-												<td class="FieldComponent"><% uiform.renderField(children.get(i)) %></td>
+												<td class="FieldLabel"><label for="$child.id"><%=uicomponent.getLabel(child.getName())%>: </label></td>
+												<td class="FieldComponent"><% uiform.renderField(child) %></td>
 											</tr>
 								<%
 										}

@@ -36,8 +36,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.URLValidator;
 
-import java.net.URI;
-
 /**
  * Created by The eXo Platform SAS
  * Oct 15, 2008  
@@ -51,7 +49,9 @@ public class UIAddGadgetForm extends UIForm
 
    public UIAddGadgetForm() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, null));
+      UIFormStringInput gadgetURIField = new UIFormStringInput(FIELD_URL, FIELD_URL, null);
+      gadgetURIField.setHTMLAttribute("title", "Gadget URI");
+      addUIFormInput(gadgetURIField);
    }
 
    static public class AddGadgetByUrlActionListener extends EventListener<UIAddGadgetForm>

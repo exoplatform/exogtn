@@ -11,7 +11,7 @@
 									var executeScript = "<%=quickSearchlink%>";
 								</script>
 						      <div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event, executeScript)">
-								<div class="SearchTitle"><%=_ctx.appRes("UISearch.label.Search")%>:</div>
+								<div class="SearchTitle"><label for="searchTerm"><%=_ctx.appRes("UISearch.label.Search")%>:</label></div>
 								<% 
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();
 									for(field in QuickSearchInputSet.getChildren()) {

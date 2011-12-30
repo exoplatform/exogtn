@@ -44,9 +44,9 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +113,9 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
    public UIUserSelector() throws Exception
    {
       addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null));
-      addUIFormInput(new UIFormSelectBox(FIELD_FILTER, FIELD_FILTER, getFilters()));
+      UIFormSelectBox filterSelectBox = new UIFormSelectBox(FIELD_FILTER, FIELD_FILTER, getFilters());
+      filterSelectBox.setHTMLAttribute("title", "#{UIUserSelector.label.filter}");
+      addUIFormInput(filterSelectBox);
       addUIFormInput(new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null));
       isShowSearch_ = true;
       OrganizationService service = getApplicationComponent(OrganizationService.class);
@@ -132,22 +134,22 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       uiGroup.getChild(UIBreadcumbs.class).setId("BreadcumbsGroupSelector");
    }
 
-   @SuppressWarnings("unchecked")
    public List<User> getData() throws Exception
    {
       if (getMulti())
       {
          for (Object obj : uiIterator_.getCurrentPageData())
          {
-            User user = (User)obj;
-            UIFormCheckBoxInput<Boolean> uiFormCheckBoxInput = getUIFormCheckBoxInput(user.getUserName());
-            if (uiFormCheckBoxInput == null)
+            String username = ((User)obj).getUserName();
+            UICheckBoxInput uiCheckBoxInput = getUICheckBoxInput(username);
+            if (uiCheckBoxInput == null)
             {
-               uiFormCheckBoxInput = new UIFormCheckBoxInput<Boolean>(user.getUserName(), user.getUserName(), false);
-               addUIFormInput(uiFormCheckBoxInput);
+               uiCheckBoxInput = new UICheckBoxInput(username, username, false);
+               uiCheckBoxInput.setHTMLAttribute("title", "Select " + username);
+               addUIFormInput(uiCheckBoxInput);
             }
             
-            uiFormCheckBoxInput.setChecked(uiIterator_.isSelectedItem(user.getUserName()));
+            uiCheckBoxInput.setChecked(uiIterator_.isSelectedItem(username));
          }
       }
       return new ArrayList<User>(uiIterator_.getCurrentPageData());
@@ -393,7 +395,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       for (Object o : this.uiIterator_.getCurrentPageData())
       {
          User u = (User) o;
-         UIFormCheckBoxInput input = this.getUIFormCheckBoxInput(u.getUserName());
+         UICheckBoxInput input = this.getUICheckBoxInput(u.getUserName());
          if (input != null)
          {
             this.uiIterator_.setSelectedItem(u.getUserName(), input.isChecked());

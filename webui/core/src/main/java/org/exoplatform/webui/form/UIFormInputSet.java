@@ -30,7 +30,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import java.io.Writer;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -175,41 +174,50 @@ public class UIFormInputSet extends UIContainer
       {
          if (inputEntry.isRendered())
          {
-            String label = "";
-            boolean hasLabel = false;
-            if (inputEntry instanceof UIFormInputBase)
-            {
-               UIFormInputBase formInputBase = (UIFormInputBase) inputEntry;
-               if (formInputBase.getLabel() != null)
-               {
-                  label = uiForm.getLabel(res, formInputBase.getLabel());
-               }
-               else
-               {
-                  label = uiForm.getLabel(res, formInputBase.getId());
-               }
-               if (formInputBase.getLabel() != null || (label != formInputBase.getId()))
-               {
-                  hasLabel = true;
-               }
-            }
             w.write("<tr>");
-            w.write("<td class=\"FieldLabel\">");
-
-            // if missing resource and the label hasn't been set before, don't print out the label.
-            if (hasLabel)
-            {
-               w.write(label);
-            }
-            w.write("</td>");
-            w.write("<td class=\"FieldComponent\">");
-            renderUIComponent(inputEntry);
-            w.write("</td>");
+            printElementWrapper(uiForm, inputEntry, w, res);
             w.write("</tr>");
          }
       }
       w.write("</table>");
       w.write("</div>");
+   }
+
+   protected void printElementWrapper(UIForm uiForm, UIComponent inputEntry, Writer w, ResourceBundle res)
+         throws Exception
+   {
+      String label = "";
+      boolean hasLabel = false;
+      if (inputEntry instanceof UIFormInputBase)
+      {
+         UIFormInputBase formInputBase = (UIFormInputBase) inputEntry;
+         if (formInputBase.getLabel() != null)
+         {
+            label = uiForm.getLabel(res, formInputBase.getLabel());
+         }
+         else
+         {
+            label = uiForm.getLabel(res, formInputBase.getId());
+         }
+         if (formInputBase.getLabel() != null || (label != formInputBase.getId()))
+         {
+            hasLabel = true;
+         }
+      }
+
+      w.write("<td class=\"FieldLabel\">");
+
+      // if missing resource and the label hasn't been set before, don't print out the label.
+      if (hasLabel)
+      {
+         w.write("<label for=\"" + inputEntry.getId() + "\">");
+         w.write(label);
+         w.write("</label>");
+      }
+      w.write("</td>");
+      w.write("<td class=\"FieldComponent\">");
+      renderUIComponent(inputEntry);
+      w.write("</td>");
    }
 
    static public class SelectComponentActionListener extends EventListener<UIFormInputSet>

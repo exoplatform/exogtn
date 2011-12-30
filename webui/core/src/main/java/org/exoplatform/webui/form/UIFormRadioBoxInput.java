@@ -25,7 +25,9 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -97,7 +99,6 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
       return this;
    }
 
-   @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
       if (isDisabled())
@@ -122,26 +123,7 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
       for (int i = index; i < options_.size(); i++)
       {
          SelectItemOption<String> si = options_.get(i);
-         String checked = "";
-         if (si.getValue().equals(value_))
-            checked = " checked='checked'";
-         //      if(align_ == VERTICAL_ALIGN) w.write("<div style='overflow:hidden; width: 100%'>");
-         //if(align_ == VERTICAL_ALIGN) w.write("<div style='clear:both;'><span></span></div>") ;
-         if (align_ == VERTICAL_ALIGN)
-            w.write("<div>");
-         w.write("<input class='radio' type='radio'");
-         if (readonly_)
-            w.write(" readonly ");
-         if (isDisabled())
-            w.write(" disabled ");
-         w.write(checked);
-         w.write(" name='");
-         w.write(getName());
-         w.write("'");
-         w.write(" value='");
-         w.write(si.getValue());
-         w.write("'/>");
-         w.write(" <span>");
+         String inputId = getId() + "_" + si.getValue();
          String label = getId() + ".label." + si.getLabel();
          try
          {
@@ -151,11 +133,26 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
          {
             label = si.getLabel();
          }
+         if (align_ == VERTICAL_ALIGN)
+            w.write("<div>");
+         Map<String, String> attributes = new HashMap<String, String>();
+         attributes.put("type", "radio");
+         attributes.put("name", getName());
+         attributes.put("class", "radio");
+         attributes.put("value", si.getValue());
+         if (si.getValue().equals(value_))
+            attributes.put("checked", "checked");
+         if (readonly_)
+            attributes.put("readonly", "readonly");
+         if (isDisabled())
+            attributes.put("disabled", "disabled");
+
+         renderInputBaseComponent(w, "input", inputId, attributes);
+         w.write("<label for = \"" + inputId + "\">");
          w.write(label);
-         w.write("</span>");
+         w.write("</label>");
          if (align_ == VERTICAL_ALIGN)
             w.write("</div>");
-         //      if(align_ == VERTICAL_ALIGN) w.write("</div>");
 
          if (topRender_ == 1)
          {

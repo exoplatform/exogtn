@@ -16,9 +16,11 @@
 								<%fieldName = uicomponent.getLabel(field.getName());%>
 								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
 									<td class="FieldLabel">
+									   <label for="$field.id">
 										<%if(fieldName != null && fieldName.length() > 0) {%> 
 											<%=uicomponent.getLabel(field.getName()) %>
 										<%}%>
+										</label>
 									</td>
 									<% if(field instanceof UIFormInputBase && field.isEditable()) { %>
 										<td class="FieldComponent"><% uiform.renderField(field) %></td>

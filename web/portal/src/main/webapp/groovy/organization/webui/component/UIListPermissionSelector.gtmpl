@@ -11,8 +11,8 @@
 	<div class="PublicCheck">
 		<table class="UIFormGrid">
 			<tr>
-				<td class="FieldLabel"><%=uicomponent.getLabel(uiPublicMode.getId())%></td>
-				<td class="FieldComponent"><%uicomponent.renderChild(UIFormCheckBoxInput.class)%></td>
+				<td class="FieldLabel"><label for="$uiPublicMode.id"><%=uicomponent.getLabel(uiPublicMode.getId())%></label></td>
+				<td class="FieldComponent"><%uicomponent.renderChild(uiPublicMode)%></td>
 			</tr>
 		</table>
 	</div>

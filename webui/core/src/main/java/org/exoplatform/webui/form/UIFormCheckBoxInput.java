@@ -20,6 +20,8 @@
 package org.exoplatform.webui.form;
 
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -29,7 +31,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
  * @param <T> The type of value that is expected
  * @deprecated use {@link org.exoplatform.webui.form.input.UICheckBoxInput} instead 
  */
-@SuppressWarnings("hiding")
 @Serialized
 @Deprecated
 public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
@@ -135,28 +136,28 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    public void processRender(WebuiRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
-      w.write("<input type='checkbox' name='");
-      w.write(name);
-      w.write("'");
-      w.write(" value='");
+      Map<String, String> attributes = new HashMap<String, String>();
+      attributes.put("type", "checkbox");
+      attributes.put("name", name);
+      attributes.put("class", "checkbox");
       if (value_ != null)
-         w.write(String.valueOf(value_));
-      w.write("' ");
+         attributes.put("value", String.valueOf(value_));
+
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
-         w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
+         attributes.put("onclick", renderOnChangeEvent(uiForm));
       }
       if (checked)
-         w.write(" checked ");
+         attributes.put("checked", "checked");
       if (isDisabled())
-         w.write(" disabled ");
+         attributes.put("disabled", "disabled");
 
-      renderHTMLAttributes(w);
-
-      w.write(" class='checkbox'/>");
-      if (this.isMandatory())
+      renderInputBaseComponent(w, "input", attributes);
+      if (isMandatory())
+      {
          w.write(" *");
+      }
    }
 
 }

@@ -45,7 +45,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</td>
+						<td class="FieldLabel"><label for="pageName"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</label></td>
 						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageName");%>
@@ -55,7 +55,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</td>
+						<td class="FieldLabel"><label for="pageTitle"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</label></td>
 						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageTitle");%>

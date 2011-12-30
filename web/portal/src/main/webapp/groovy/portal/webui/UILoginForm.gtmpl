@@ -27,16 +27,16 @@
 							<div class="VerticalLayout">
 								<table class="UIFormGrid">
 									<tr class="UserNameField">
-										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.UserName")%></td>
-										<td><input class="UserName" name="username"/></td>
+										<td class="FieldLabel"><label for="$uicomponent.id-username"><%=_ctx.appRes("UILoginForm.label.UserName")%></label></td>
+										<td><input class="UserName" type="text" name="username" id="$uicomponent.id-username"/></td>
 									</tr>
 									<tr class="PasswordField" id="UIPortalLoginFormControl" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
-										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.password")%></td>
-										<td><input class="Password" type="password" name="password"/></td>
+										<td class="FieldLabel"><label for="$uicomponent.id-password"><%=_ctx.appRes("UILoginForm.label.password")%></label></td>
+										<td><input class="Password" type="password" name="password" id="$uicomponent.id-password"/></td>
 									</tr> 								
 									<tr class="RememberField" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
-										<td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
-										<td><%=_ctx.appRes("UILoginForm.label.RememberOnComputer")%></td>
+										<td class="FieldLabel"><input id="$uicomponent.id-rememberme" type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
+										<td><label for="$uicomponent.id-rememberme"><%=_ctx.appRes("UILoginForm.label.RememberOnComputer")%></label></td>
 									</tr>
 								</table>
 							<div class="ForgetPass"><a href="<%= uicomponent.event("ForgetPassword") %>"><%=_ctx.appRes("UILoginForm.label.forgot")%></a></div>

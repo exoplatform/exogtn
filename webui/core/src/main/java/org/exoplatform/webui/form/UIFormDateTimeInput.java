@@ -31,7 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
@@ -184,7 +186,6 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       months_ = symbols.getMonths();
    }
 
-   @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
       if (input != null) {
@@ -194,7 +195,6 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
-
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       formatPattern(requestContext.getLocale());
       String monthNames_ = "";
@@ -208,7 +208,7 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       }
 
       String value = getValue();
-      
+
       if (value != null && value.length() > 0)
       {
          value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(value);
@@ -217,38 +217,28 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       {
          value = "";
       }
-      
 
       JavascriptManager jsManager = context.getJavascriptManager();
       jsManager.importJavascript("eXo.webui.UICalendar");
       jsManager.addJavascript("eXo.webui.UICalendar.setFirstDayOfWeek(" + Calendar.getInstance(context.getLocale()).getFirstDayOfWeek() + ");");
       Writer w = context.getWriter();
 
-      w.write("<input type=\"text\" onfocus='eXo.webui.UICalendar.init(this,");
-      w.write(String.valueOf(isDisplayTime_));
-      w.write(",\"");
-      w.write(getDatePattern_());
-      w.write("\"");
-      w.write(",\"");
-      w.write(value);
-      w.write("\"");
-      w.write(",\"");
-      w.write(monthNames_);
-      w.write("\"");
-      w.write(");' onkeyup='eXo.webui.UICalendar.show();' name='");
-      w.write(getName());
-      w.write('\'');
-      w.write(" value=\"");
-      w.write(value);
-      w.write('\"');
-      w.write(" onclick='event.cancelBubble = true' onkeydown='eXo.webui.UICalendar.onTabOut(event)'");
-      if(isReadOnly())
-      {
-         w.write(" readonly ");
-      }
+      Map<String, String> attributes = new HashMap<String, String>();
+      attributes.put("type", "text");
+      attributes.put("value", value);
+      if (isReadOnly())
+         attributes.put("readonly", "readonly");
 
-      renderHTMLAttributes(w);
+      String onFocus = "eXo.webui.UICalendar.init(this," + String.valueOf(isDisplayTime_) + ",'" + getDatePattern_()
+            + "','" + value + "','" + monthNames_ + "');";
+      String onKeyUp = "eXo.webui.UICalendar.show();";
+      String onKeyDown = "eXo.webui.UICalendar.onTabOut(event)";
+      String onClick = "event.cancelBubble = true";
+      attributes.put("onfocus", onFocus);
+      attributes.put("onkeyup", onKeyUp);
+      attributes.put("onkeydown", onKeyDown);
+      attributes.put("onclick", onClick);
 
-      w.write("/>");
+      renderInputBaseComponent(w, "input", attributes);
    }
 }
