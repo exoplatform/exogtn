@@ -77,9 +77,7 @@
           </step>
           <step>
           <para>Select
-              <emphasis role="bold">Edit Portal's Config,</emphasis> then select the
-                  <emphasis role="bold">Permission Settings</emphasis>
-                  tab.
+              <emphasis role="bold">Edit Portal's Config --> Permission Settings</emphasis> tab.
           </para>
           </step>
           </procedure>

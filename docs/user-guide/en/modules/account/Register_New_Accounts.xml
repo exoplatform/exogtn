@@ -122,7 +122,7 @@
 			</entry>
 			<entry>
 			<para>The user's email address that must be in the correct form, such as <replaceable>username@abc.com.</replaceable> </para>
-            <para>There are two parts in the email address, called local part and domain (e.g, local_part@domain): </para>
+            <para>There are two parts in the email address, called local part and domain (for example, local_part@domain): </para>
                 <itemizedlist>
                     <listitem>
                         <para>Local part: Only lowercase (a - z), digit (0 - 9), underscore (_), dash (-) and dot (.) characters are allowed,
@@ -159,7 +159,7 @@
       <para>
         Click
         <emphasis role="bold">Subscribe</emphasis>
-        to accept your new account or
+        to accept your new account, or
         <emphasis role="bold">Reset</emphasis>
         to clear all your entered values. If your registration is not successful, there will be warning messages which indicate invalid fields.
       </para>

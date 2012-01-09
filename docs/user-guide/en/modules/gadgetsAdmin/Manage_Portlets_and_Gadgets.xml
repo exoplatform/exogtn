@@ -129,7 +129,7 @@
         </para> 
       </step>
 	  <step>
-		<para>Hover your cursor over your desired portlet and click 
+		<para>Hover your cursor over your desired portlet, then click 
           <inlinemediaobject>
             <imageobject>
               <imagedata fileref="images/Edit_portlet_icon.png" format="PNG" scalefit="1" width="4mm"/>
@@ -406,16 +406,16 @@
               <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>  
-      located in the header of the
+      located at the header of the
       <emphasis role="bold">Gadget Details</emphasis>
       page to display the following window.
     </para>
     <mediaobject>
       <imageobject role="html">
-        <imagedata fileref="images/Source.png" format="PNG" align="center" width="444"/>
+        <imagedata fileref="images/Source.png" format="PNG" align="center" width="150mm"/>
       </imageobject>
         <imageobject role="fo">
-        <imagedata fileref="images/Source.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+        <imagedata fileref="images/Source.png" format="PNG" align="center" scalefit="1" width="150mm"/>
       </imageobject>
     </mediaobject>
   </section>

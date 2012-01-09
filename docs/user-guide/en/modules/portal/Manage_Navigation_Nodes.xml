@@ -137,7 +137,7 @@
                 This option enables this node to be published for a given period. Two fields, including
                 <emphasis role="bold">Start Publication Date</emphasis>
                 and
-                <emphasis>End Publication Date</emphasis>
+                <emphasis role="bold">End Publication Date</emphasis>
                 only display when this option is checked.
               </entry>
             </row>
@@ -314,7 +314,7 @@
               on the row of the page to select.
             </para>
         <para>
-          After selecting a page, the details of this page will be displayed in the
+          After selecting a page, you will see the page details in the 
           <emphasis role="bold">Page Selector</emphasis>
           form.
         </para>
@@ -452,8 +452,8 @@
       </step>
       <step>
         <para>
-          Select the position that you want to paste this node and click
-          <emphasis role="bold">Paste Node.</emphasis>
+          Select the position that you want to paste this node, then click
+          <emphasis role="bold">Paste Node</emphasis>.
         </para>
       </step>
       <step>

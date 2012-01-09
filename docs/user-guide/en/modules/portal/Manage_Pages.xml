@@ -528,7 +528,7 @@
               </listitem>
           </itemizedlist>
               <para>To reassign the <emphasis>access</emphasis>
-              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">Access Permission</link> section.
+              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">Access permission</link> section.
               </para>
               </listitem>
               <listitem>
@@ -550,7 +550,7 @@
               </listitem>
           </itemizedlist>
                   <para>To reassign the <emphasis>edit</emphasis>
-              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">Edit Permission</link> section.</para>
+              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">Edit permission</link> section.</para>
               </listitem>
           </itemizedlist>
       </step>
