@@ -46,6 +46,7 @@ import org.gatein.common.logging.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -301,6 +302,18 @@ public class WebAppController
    public void service(HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       boolean debug = log.isDebugEnabled();
+      try
+      {
+         if (req.getCharacterEncoding() == null)
+         {
+            // Set UTF-8 as default encoding for request
+            req.setCharacterEncoding("UTF-8");
+         }
+      }
+      catch (UnsupportedEncodingException e)
+      {
+         log.error("Encoding not supported", e);
+      }
       String portalPath = req.getRequestURI().substring(req.getContextPath().length());
       Router router = routerRef.get();
 

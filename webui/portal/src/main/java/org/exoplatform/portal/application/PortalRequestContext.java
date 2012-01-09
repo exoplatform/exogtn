@@ -60,7 +60,6 @@ import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -188,14 +187,6 @@ public class PortalRequestContext extends WebuiRequestContext
 
       //TODO use the encoding from the locale-config.xml file
       response_.setContentType("text/html; charset=UTF-8");
-      try
-      {
-         request_.setCharacterEncoding("UTF-8");
-      }
-      catch (UnsupportedEncodingException e)
-      {
-         log.error("Encoding not supported", e);
-      }
 
       // Query parameters from the request will be set in the servlet container url encoding and not
       // necessarly in utf-8 format. So we need to directly parse the parameters from the query string.
