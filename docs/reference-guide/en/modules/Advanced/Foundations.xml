@@ -25,7 +25,7 @@
                <imagedata fileref="images/Advanced/Foundations/PortalContainers.png" format="PNG" align="center" scale="100" />
             </imageobject>
             <imageobject role="fo">
-               <imagedata fileref="images/Advanced/Foundations/PortalContainers.png" format="PNG" align="center" contentwidth="150mm" />
+               <imagedata fileref="images/Advanced/Foundations/PortalContainers.png" format="PNG" align="center" scalefit="1" width="100mm" />
             </imageobject>
          </mediaobject>
       </para>

@@ -372,9 +372,13 @@
             <para>
                You should see a screen similar to:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/config_init.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                />
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_init.png" format="PNG" align="center" scalefit="1" width="150mm"
+                                />
                   </imageobject>
                </mediaobject>
                This screen presents all the configured Consumers associated with their status and possible actions on
@@ -416,9 +420,13 @@
                "<emphasis>oracle</emphasis>" in
                the "Create a consumer named:" field, then click "Create consumer":
                <mediaobject>
-                  <imageobject>
-                     <imagedata fileref="images/WSRP/config_create.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                  <imageobject role="html">
+                     <imagedata fileref="images/WSRP/config_create.png" format="PNG" align="center"
+                                />
+                  </imageobject>
+                    <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_create.png" format="PNG" align="center"
+                                scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
                You should now see a form allowing you to enter/modify the information about the Consumer.
@@ -426,17 +434,25 @@
                operations and enter the WSDL URL for the producer in the text field
                and press the "Refresh &amp; Save" button:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/config_wsdl.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_wsdl.png" format="PNG" align="center" valign="middle"
+                                scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
                This will retrieve the service description associated with the Producer which WSRP interface is described
                by the WSDL file found at the URL you just entered. In this case, querying the service description will
                allow us to learn that the Producer requires registration but did not request any registration property:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" valign="middle"
+                                />
+                  </imageobject>
+                   <imageobject role="html">
+                     <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" width="150mm"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -450,9 +466,13 @@
                registration property, &PRODUCT_NAME;'s WSRP consumer would have informed you that you were missing some
                information:
                <mediaobject>
-                  <imageobject>
-                     <imagedata fileref="images/WSRP/config_missing.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                  <imageobject role="html">
+                     <imagedata fileref="images/WSRP/config_missing.png" format="PNG" align="center"
+                                />
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_missing.png" format="PNG" align="center" scalefit="1" width="150mm"
+                                />
                   </imageobject>
                </mediaobject>
                <note>
@@ -468,9 +488,13 @@
                press "Save &amp;
                Refresh" once more, you would have seen something similar to:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/config_end.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_end.png" format="PNG" align="center" valign="middle"
+                                scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -526,9 +550,13 @@
                Portlet link, you will now be able to see the remote portlets after clicking the REMOTE tab in the left
                column:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/remote_portlets.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/remote_portlets.png" format="PNG" align="center" valign="middle"
+                                scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -545,10 +573,15 @@
                <emphasis>wsrp</emphasis>
                in the Application Type drop-down menu:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/remote_portlets_category.png" format="PNG" align="center"
                                 valign="middle"
-                                scalefit="1"/>
+                                scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="html">
+                     <imagedata fileref="images/WSRP/remote_portlets_category.png" format="PNG" align="center"
+                                valign="middle"
+                                scalefit="1" width="70mm"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -781,25 +814,37 @@
                <emphasis>foo@example.com</emphasis>
                instead of<emphasis>example@example.com</emphasis>:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
+                                scalefit="1" width="120mm"/>
                   </imageobject>
                </mediaobject>
                Now, click "Update properties" to save the change. A "Modify registration" button should now appear to
                let you send the new data to the remote producer:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/modify_reg_modify.png" format="PNG" align="center"
-                                valign="middle" scalefit="1"/>
+                                valign="middle"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/modify_reg_modify.png" format="PNG" align="center"
+                                valign="middle" width="150mm" scalefit="1"/>
                   </imageobject>
                </mediaobject>
                Click this new button and, if everything went well and your updated registration has been accepted by
                the remote producer, you should see something similar to:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/modify_reg_end.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                />
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/modify_reg_end.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"
+                                />
                   </imageobject>
                </mediaobject>
             </para>
@@ -821,9 +866,13 @@
                registration property (as we have seen so far). If you go to the configuration screen for this producer,
                you should see:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                />
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
+                           scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
 
@@ -836,9 +885,13 @@
                you should go to the configuration screen for this remote producer and refresh the information held by
                the consumer by pressing "Refresh &amp; Save":
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/modify_reg_self.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
+                                scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/modify_reg_self.png" format="PNG" align="center" valign="middle"
+                                scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
 
@@ -849,9 +902,13 @@
                and then click "Modify registration". If all went on well and the producer accepted your new registration
                data, you should see something similar to:
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/WSRP/modify_reg_self_end.png" format="PNG" align="center"
-                                valign="middle" scalefit="1"/>
+                                valign="middle" scalefit="0"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/WSRP/modify_reg_self_end.png" format="PNG" align="center"
+                                valign="middle" scalefit="1" width="150mm"/>
                   </imageobject>
                </mediaobject>
 
@@ -877,9 +934,13 @@
          <para>
             Several operations are available from the consumer list view of the WSRP configuration portlet:
             <mediaobject>
-               <imageobject>
+               <imageobject role="html">
                   <imagedata fileref="images/WSRP/consumer_operations.png" format="PNG" align="center" valign="middle"
-                             scalefit="1"/>
+                             scalefit="0"/>
+               </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/WSRP/consumer_operations.png" format="PNG" align="center" valign="middle"
+                             scalefit="1" width="150mm"/>
                </imageobject>
             </mediaobject>
          </para>
@@ -1051,8 +1112,11 @@
             information on the consumer configuration screen:
          </para>
          <mediaobject>
-            <imageobject>
+            <imageobject role="html">
                <imagedata fileref="images/WSRP/erase_registration.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+             <imageobject role="fo">
+               <imagedata fileref="images/WSRP/erase_registration.png" format="PNG" align="center" valign="middle" scalefit="1" width="70mm"/>
             </imageobject>
          </mediaobject>
          <para>
@@ -1061,9 +1125,13 @@
             when not required. A warning screen will be displayed to give you a chance to change your mind:
          </para>
          <mediaobject>
-            <imageobject>
+            <imageobject role="html">
                <imagedata fileref="images/WSRP/erase_registration_warning.png" format="PNG" align="center"
                           valign="middle"/>
+            </imageobject>
+             <imageobject role="fo">
+               <imagedata fileref="images/WSRP/erase_registration_warning.png" format="PNG" align="center"
+                          valign="middle" scalefit="1" width="80mm"/>
             </imageobject>
          </mediaobject>
       </sect2>
@@ -1103,9 +1171,13 @@
             by clicking the "Producer Configuration" tab of the "WSRP" page of the "admin" portal. Here's what you
             should see with the default configuration:
             <mediaobject>
-               <imageobject>
+               <imageobject role="html">
                   <imagedata fileref="images/WSRP/producer_default.png" format="PNG" align="center" valign="middle"
-                             scalefit="1"/>
+                             scalefit="0"/>
+               </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/WSRP/producer_default.png" format="PNG" align="center" valign="middle"
+                             scalefit="1" width="150mm"/>
                </imageobject>
             </mediaobject>
             As expected, you can specify whether or not the producer will send the full service description to
@@ -1128,9 +1200,13 @@
             properties in case of the default configuration. Let's configure our producer starting with a blank
             state:
             <mediaobject>
-               <imageobject>
+               <imageobject role="html">
                   <imagedata fileref="images/WSRP/producer_blank.png" format="PNG" align="center" valign="middle"
-                             scalefit="1"/>
+                             scalefit="0"/>
+               </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/WSRP/producer_blank.png" format="PNG" align="center" valign="middle"
+                             scalefit="1" width="150mm"/>
                </imageobject>
             </mediaobject>
             eXo Platform will allow unregistered consumers to see the list of offered portlets, so the first checkbox
@@ -1139,9 +1215,13 @@
             checkbox ("Requires registration. Modifying this information will trigger invalidation of consumer
             registrations."). The screen should now refresh and display:
             <mediaobject>
-               <imageobject>
+               <imageobject role="html">
                   <imagedata fileref="images/WSRP/producer_registration.png" format="PNG" align="center"
-                             valign="middle" scalefit="1"/>
+                             valign="middle" scalefit="0"/>
+               </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/WSRP/producer_registration.png" format="PNG" align="center"
+                             valign="middle" scalefit="1" width="150mm"/>
                </imageobject>
             </mediaobject>
             You can specify the fully-qualified name for your
@@ -1155,9 +1235,13 @@
             providing a description for the registration property that can be used by consumers to figure out its
             purpose:
             <mediaobject>
-               <imageobject>
+               <imageobject role="html">
                   <imagedata fileref="images/WSRP/producer_email.png" format="PNG" align="center" valign="middle"
-                             scalefit="1"/>
+                             scalefit="0"/>
+               </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/WSRP/producer_email.png" format="PNG" align="center" valign="middle"
+                             scalefit="1" width="150mm"/>
                </imageobject>
             </mediaobject>
             Press "Save" to record your modifications.

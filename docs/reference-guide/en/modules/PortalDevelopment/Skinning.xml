@@ -439,9 +439,13 @@ skin/Stylesheet.css</programlisting>
          </para>
 
          <mediaobject>
-		<imageobject>
+		<imageobject role="html">
 			<imagedata fileref="images/PortalDevelopment/Skinning/portal-change-skin.png"
-				format="PNG" width="444" />
+				format="PNG" width="444" align="center" />
+		</imageobject>
+             <imageobject role="fo">
+			<imagedata fileref="images/PortalDevelopment/Skinning/portal-change-skin.png"
+				format="PNG" width="150mm" scalefit="1" align="center" />
 		</imageobject>
 	</mediaobject>
 
@@ -485,9 +489,13 @@ skin/Stylesheet.css</programlisting>
     which style of decoration would go around the window if any.</para>
 
     <para><mediaobject>
-        <imageobject>
+        <imageobject role="html">
           <imagedata fileref="images/PortalDevelopment/Skinning/windowStyles.png" format="PNG"
-                     width="444" />
+                     width="444" align="center" />
+        </imageobject>
+        <imageobject role="fo">
+          <imagedata fileref="images/PortalDevelopment/Skinning/windowStyles.png" format="PNG"
+                     width="150mm" align="center" scalefit="1" />
         </imageobject>
       </mediaobject></para>
 
@@ -807,9 +815,13 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
         effects.</para>
  
         <mediaobject>
-          <imageobject>
+          <imageobject role="html">
             <imagedata fileref="images/PortalDevelopment/Skinning/decoratorPattern.png" format="PNG"
-                     width="418" />
+                     width="418" align="center" />
+          </imageobject>
+            <imageobject role="fo">
+            <imagedata fileref="images/PortalDevelopment/Skinning/decoratorPattern.png" format="PNG"
+                     width="70mm" scalefit="1" align="center" />
           </imageobject>
         </mediaobject>
 
@@ -844,9 +856,13 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
         block.</para>
 
         <mediaobject>
-          <imageobject>
+          <imageobject role="html">
             <imagedata fileref="images/PortalDevelopment/Skinning/leftMarginPattern.png" format="PNG"
-                     width="303" />
+                     width="303" align="center" />
+          </imageobject>
+            <imageobject role="fo">
+            <imagedata fileref="images/PortalDevelopment/Skinning/leftMarginPattern.png" format="PNG"
+                     width="70mm" scalefit="1" align="center" />
           </imageobject>
         </mediaobject>
 

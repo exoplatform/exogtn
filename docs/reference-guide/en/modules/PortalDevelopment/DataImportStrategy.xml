@@ -136,8 +136,11 @@
 </node-navigation>]]></programlisting>
       Navigation node tree hierarchy
       <mediaobject>
-         <imageobject>
+         <imageobject role="html">
             <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center"/>
+         </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
          </imageobject>
       </mediaobject>
       <programlisting role="XML"><![CDATA[<node-navigation>
@@ -154,8 +157,11 @@
 </node-navigation>]]></programlisting>
       Navigation node tree hierarchy
       <mediaobject>
-         <imageobject>
+         <imageobject role="html">
             <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center"/>
+         </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center" scalefit="1" width="100mm"/>
          </imageobject>
       </mediaobject>
       <para>
@@ -185,8 +191,11 @@
                   If a node does not exist, the importer will add new nodes to the navigation tree. You will see the following result:
                </para>
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/DataImportStrategy/navigation_insert.png" format="PNG" align="center"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/DataImportStrategy/navigation_insert.png" format="PNG" align="center" scalefit="1" width="100mm"/>
                   </imageobject>
                </mediaobject>
                <para>
@@ -203,8 +212,11 @@
                   updates the node data (such node label and node icon in the example) if it exists. 
                </para>
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/DataImportStrategy/navigation_merge.png" format="PNG" align="center"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/DataImportStrategy/navigation_merge.png" format="PNG" align="center" scalefit="1" width="100mm"/>
                   </imageobject>
                </mediaobject>
             </listitem>
@@ -216,8 +228,11 @@
                   Everything will be destroyed and replaced with new data if the <emphasis>OVERWRITE</emphasis> mode is used.
                </para>
                <mediaobject>
-                  <imageobject>
+                  <imageobject role="html">
                      <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center"/>
+                  </imageobject>
+                   <imageobject role="fo">
+                     <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center" scalefit="1" width="100mm"/>
                   </imageobject>
                </mediaobject>
             </listitem>

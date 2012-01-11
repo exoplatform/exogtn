@@ -186,8 +186,11 @@
 							Tomcat should start and be accessible at <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>. At this stage, the login will not be available.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" width="444" />
+							</imageobject>
+                            <imageobject role="fo">
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" scalefit="1" width="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -468,8 +471,11 @@ realmName=gatein-domain;
 							Tomcat should now start and allow access to <ulink type="http" url="http://localhost:8888/josso/signon/login.do">http://localhost:8888/josso/signon/login.do</ulink>; but at this stage, login will not be available.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" width="444" />
+							</imageobject>
+                            <imageobject role="fo">
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" scalefit="1" width="120mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -764,8 +770,11 @@ realmName=gatein-domain;
 							Tomcat should start and be able to access <ulink type="http" url="http://localhost:8888/opensso/UI/Login?realm=gatein">http://localhost:8888/opensso/UI/Login?realm=gatein</ulink>. Login will not be available at this point.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" />
+							</imageobject>
+                            <imageobject role="fo">
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" scalefit="1" width="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>

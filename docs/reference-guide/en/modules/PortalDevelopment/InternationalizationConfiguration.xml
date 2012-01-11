@@ -316,8 +316,12 @@ organization.management=Management
 	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">
         <title>Translate the language selection form</title>	
 	    <mediaobject>
-           <imageobject>
-              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" valign="middle"
+           <imageobject role="html">
+              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" width="444"
+                        />
+           </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" width="120mm"
                         scalefit="1"/>
            </imageobject>
         </mediaobject>

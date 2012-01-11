@@ -14,7 +14,7 @@
 			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scalefit="1" width="150mm" />
 		</imageobject>
 	</mediaobject>
 	<para>

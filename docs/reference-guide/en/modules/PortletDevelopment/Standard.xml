@@ -32,8 +32,11 @@
 			</para>
 			<para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scalefit="1" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scale="1" width="444" />
+					</imageobject>
+                    <imageobject role="fo">
+						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scalefit="1" width="150mm" align="center" />
 					</imageobject>
 				</mediaobject>
 			</para>
@@ -157,9 +160,13 @@
 							Create a new portal page and add the portlet to it.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<objectinfo id="obje-Reference_Guide-Compiling-SimplestHelloWorldPortlet_deployed_on_a_new_page"><title>SimplestHelloWorldPortlet deployed on a new page</title>
-								</objectinfo><imagedata fileref="images/PortletDevelopment/Standard/first_portlet/deployed.png" format="PNG" width="444" />
+								</objectinfo><imagedata fileref="images/PortletDevelopment/Standard/first_portlet/deployed.png" format="PNG" width="444" align="center" />
+							</imageobject>
+                            <imageobject role="fo">
+								<objectinfo id="obje-Reference_Guide-Compiling-SimplestHelloWorldPortlet_deployed_on_a_new_page"><title>SimplestHelloWorldPortlet deployed on a new page</title>
+								</objectinfo><imagedata fileref="images/PortletDevelopment/Standard/first_portlet/deployed.png" format="PNG" width="150mm" scalefit="1" align="center" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -415,8 +422,11 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 			</procedure>
 			
 			<mediaobject>
-				<imageobject>
+				<imageobject role="html">
 					<imagedata align="center" fileref="images/PortletDevelopment/Standard/jsp_portlet/output.png" format="PNG" scalefit="1" width="444" />
+				</imageobject>
+                <imageobject role="fo">
+					<imagedata align="center" fileref="images/PortletDevelopment/Standard/jsp_portlet/output.png" format="PNG" scalefit="1" width="150mm" />
 				</imageobject>
 			</mediaobject>
 			<note>

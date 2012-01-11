@@ -17,7 +17,7 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center"/>
+					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center" scalefit="1" width="120mm"/>
 				</imageobject>
 			</mediaobject>
 
