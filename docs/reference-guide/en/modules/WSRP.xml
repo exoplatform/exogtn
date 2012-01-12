@@ -426,7 +426,7 @@
                   </imageobject>
                     <imageobject role="fo">
                      <imagedata fileref="images/WSRP/config_create.png" format="PNG" align="center"
-                                scalefit="1" width="150mm"/>
+                                scalefit="1" width="80mm"/>
                   </imageobject>
                </mediaobject>
                You should now see a form allowing you to enter/modify the information about the Consumer.
@@ -451,7 +451,7 @@
                      <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" valign="middle"
                                 />
                   </imageobject>
-                   <imageobject role="html">
+                   <imageobject role="fo">
                      <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" width="150mm"
                                 scalefit="1"/>
                   </imageobject>
@@ -578,10 +578,10 @@
                                 valign="middle"
                                 scalefit="0"/>
                   </imageobject>
-                   <imageobject role="html">
+                   <imageobject role="fo">
                      <imagedata fileref="images/WSRP/remote_portlets_category.png" format="PNG" align="center"
                                 valign="middle"
-                                scalefit="1" width="70mm"/>
+                                scalefit="1" width="60mm"/>
                   </imageobject>
                </mediaobject>
             </para>
