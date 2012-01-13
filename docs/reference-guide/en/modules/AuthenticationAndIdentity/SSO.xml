@@ -187,10 +187,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" width="444" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" width="444" align="center" />
 							</imageobject>
                             <imageobject role="fo">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" scalefit="1" width="150mm" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" scalefit="1" width="150mm" align="center" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -472,10 +472,10 @@ realmName=gatein-domain;
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" width="444" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" width="444" align="center" />
 							</imageobject>
                             <imageobject role="fo">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" scalefit="1" width="120mm" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" scalefit="1" width="120mm" align="center" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -771,10 +771,10 @@ realmName=gatein-domain;
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" align="center" width="444" />
 							</imageobject>
                             <imageobject role="fo">
-								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" scalefit="1" width="150mm" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" scalefit="1" width="150mm" align="center"/>
 							</imageobject>
 						</mediaobject>
 					</step>

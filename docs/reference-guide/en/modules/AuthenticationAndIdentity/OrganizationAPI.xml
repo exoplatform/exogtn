@@ -22,7 +22,7 @@
 				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" format="PNG" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" scalefit="1" format="PNG" align="center"/>
+				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" scalefit="1" width="150mm" format="PNG" align="center"/>
 			</imageobject>
 		</mediaobject>
 	</para>

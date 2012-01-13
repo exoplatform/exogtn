@@ -33,7 +33,7 @@
 			<para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scale="1" width="444" />
+						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scale="1" width="300" align="center"/>
 					</imageobject>
                     <imageobject role="fo">
 						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scalefit="1" width="150mm" align="center" />
@@ -707,8 +707,11 @@ Please check the source code to see the difference with Method 1.
 				<para>
 					In the third method, the action phase is triggered first, then the render phase is triggered, which outputs some content back to the web browser based on the available render parameters. 
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/PortletDevelopment/Standard/jsp_portlet/process.png" format="PNG" scalefit="1" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/PortletDevelopment/Standard/jsp_portlet/process.png" format="PNG" scale="1" width="444" align="center" />
+						</imageobject>
+                        <imageobject role="fo">
+							<imagedata fileref="images/PortletDevelopment/Standard/jsp_portlet/process.png" format="PNG" scalefit="1" width="120mm" align="center" />
 						</imageobject>
 					</mediaobject>
 				</para>

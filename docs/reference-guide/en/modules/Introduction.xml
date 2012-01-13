@@ -11,7 +11,7 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="110" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="1" width="444" />
 		</imageobject>
 		<imageobject role="fo">
 			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scalefit="1" width="150mm" />
