@@ -33,12 +33,13 @@
               <para>Render a <emphasis >Map&lt;QualifiedName, String&gt; </emphasis> as an HTTP URL.</para>
             </listitem>
           </itemizedlist>
-          <para>The goal of the controller (mapping engine) is to <emphasis>decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contain data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
-          <para>The controller configuration is declarative in an .xml file, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
+          <para>The goal of the controller (mapping engine) is to <emphasis>decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contains data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
+          <para>The controller configuration is declarative in an .xml file named _controller.xml_, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
+          <para>The controller data cannot be modified by using the portlet interface, but can be still changed at runtime by modifying in the <emphasis>controller.xml</emphasis> file, then calling the <emphasis>WebAppController.reloadConfiguration()</emphasis> method. </para>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Building_controller">
           <title>Building controller</title>
-          <para>The controller configuration that contains the routing rules is loaded from the <emphasis>controller.xml</emphasis> file that is retrieved in the GateIn configuration directory. Its location is determined by the <emphasis >gatein.controller.config</emphasis> property.</para>
+          <para>The controller configuration that contains the routing rules is loaded from the <emphasis>controller.xml</emphasis> file retrieved in the GateIn configuration directory. Its location is determined by the <emphasis >gatein.controller.config</emphasis> property.</para>
           <para>WebAppController loads and initializes the mapping engine.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
@@ -98,7 +99,7 @@
             <title>
               <emphasis >Route parameters</emphasis>
             </title>
-            <para>Route parameters defines a fixed value associate with a qualified name.</para>
+            <para>Route parameters define a fixed value associate with a qualified name.</para>
             <itemizedlist>
               <listitem>
                 <para>Routing: route parameters allow the controller to distinguish branches easily and route the request accordingly.</para>
