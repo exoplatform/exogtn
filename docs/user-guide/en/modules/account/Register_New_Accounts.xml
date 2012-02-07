@@ -79,8 +79,21 @@
                 <emphasis role="bold">Username</emphasis>
               </entry>
               <entry>
-                The name used to log in. Only lowercase (a - z), digit (0 - 9), underscore (_), dash (-) and dot (.) characters are allowed with its length from 3 to 30 characters.
-                The first and last characters of the username must be lowercase or digit ones.
+                The name used to log in. The username must be:
+                  <itemizedlist>
+                      <listitem>
+                          <para>Lowercase (a - z), digit (0 - 9), underscore (_), and dot (.) characters, but consecutive underscore (_) and dot (.) are not allowed. </para>
+                      </listitem>
+                      <listitem>
+                          <para>From 3 to 30 characters in length.</para>
+                      </listitem>
+                      <listitem>
+                          <para>Lowercase for its first character.</para>
+                      </listitem>
+                      <listitem>
+                          <para>Lowercase or digit for its last character.</para>
+                      </listitem>
+                  </itemizedlist>
               </entry> 
             </row>
             <row>
