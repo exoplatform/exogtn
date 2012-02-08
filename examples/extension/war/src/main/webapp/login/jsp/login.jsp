@@ -72,7 +72,7 @@
                username = encoder.encode(username);
           %>
             <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
-          <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
+          <form name="loginForm" class="ClearFix" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
                 <% if (uri != null) { %>
                 <input type="hidden" name="initialURI" value="<%=uri%>"/>
                 <% } %>
@@ -103,7 +103,7 @@
 		              </div>
 		            </div>
 		          </div>
-		          <div class="ClearLeft"><span></span></div>
+		        
 		          <script type='text/javascript'>			            
               function login() {
                 document.loginForm.submit();                   

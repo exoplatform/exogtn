@@ -76,18 +76,8 @@ a {
 	width: 100%;
 }
 
-.LeftBlock {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-}
-
-.RightBlock {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-}
-
 .ClearFix:after {
-  content: ".";
+  content: "";
   display: block;
   height: 0;
   clear: both;
@@ -104,15 +94,6 @@ a {
 	overflow: hidden;
 }
 
-.InlineLeft {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-}
-
-.InlineRight {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-}
 
 .AjaxLoadingMask {
   background: #4c4c4c;
@@ -134,29 +115,16 @@ a {
   padding: 0px 6px;
 }
 
-.FloatLeft {
+.FL {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 }
 
-.FloatRight {
+.FR {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 }
 
-.ClearLeft {
-  clear: left; /* orientation=lt */
-  clear: right; /* orientation=rt */
-}
-
-.ClearRight {
-  clear: right; /* orientation=lt */
-  clear: left; /* orientation=rt */
-}
-
-.ClearBoth {
-  clear: both;
-}
 
 .UIVirtualList {
 	height: 300px;

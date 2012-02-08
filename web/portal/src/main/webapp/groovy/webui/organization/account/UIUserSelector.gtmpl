@@ -26,7 +26,7 @@
 						<div class="LeftBar">
 							<div class="RightBar">
 								<div class="MiddleBar">
-									<div class="UIAddressSearchForm">
+									<div class="UIAddressSearchForm ClearFix">
 										<% if(uicomponent.isShowSearchGroup()) { %>
 										<div class="AddressLabel">
 											<%=uiform.getLabel(uiform.FIELD_GROUP)%>
@@ -49,7 +49,7 @@
 										</div>	
 										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
 										<% } %>
-										<div class="ClearLeft"><span></span></div>
+									
 									</div>
 									
 								</div>
@@ -58,7 +58,6 @@
 					</div>
 				</div>				
 			</div>
-			<div class="ClearBoth"><span></span></div>
 			<%}%>
 			<div class="AddressContainer">
 				<div class="ListAddress">

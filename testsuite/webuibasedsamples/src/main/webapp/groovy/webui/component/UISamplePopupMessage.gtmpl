@@ -7,7 +7,7 @@
 			<div class="LeftToolbar">
 				<div class="RightToolbar">
 				  <div class="MiddleToolbar">				 
-					<div class="ManagementIconContainer">
+					<div class="ManagementIconContainer ClearFix">
 					 <%
 						 style = "SelectButtonLabel"; 
 					 %>
@@ -26,7 +26,6 @@
 							<div class="$style" style="text-align: center;">Error</div>
 							</a>
 							<div class="HorizontalSeparator"><span></span></div>
-							<div class="ClearBoth"><span></span></div>
 						</div>			 
 					</div>
 				</div>
