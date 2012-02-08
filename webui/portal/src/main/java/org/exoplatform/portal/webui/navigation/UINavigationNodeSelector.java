@@ -644,21 +644,19 @@ public class UINavigationNodeSelector extends UIContainer
          UserPortalConfigService service = uiPopupMenu.getApplicationComponent(UserPortalConfigService.class);
          if (targetNode == null)
          {
-            newNode.setUri(newNode.getName());
             targetNav.addNode(newNode);
-            if (selectedNode.isCloneNode())
-            {
-               clonePageFromNode(newNode, targetNav.getOwnerType(), targetNav.getOwnerId(), service);
-            }
-            return;
          }
+         else
+         {
+            targetNode.getChildren().add(newNode);
+            uiNodeSelector.selectPageNodeByUri(targetNode.getUri());
+         }
+         
          setNewUri(targetNode, newNode);
-         targetNode.getChildren().add(newNode);
          if (selectedNode.isCloneNode())
          {
             clonePageFromNode(newNode, targetNav.getOwnerType(), targetNav.getOwnerId(), service);
          }
-         uiNodeSelector.selectPageNodeByUri(targetNode.getUri());
       }
 
       private void clonePageFromNode(PageNode node, String ownerType, String ownerId, UserPortalConfigService service)
