@@ -30,12 +30,8 @@
 	left: -85px; /* orientation=lt */
 	right: -85px; /* orientation=rt */
 	border: 1px solid #787878;
-	box-shadow: 1px 1px 2px #787878; /* orientation=lt */
-	-moz-box-shadow: 1px 1px 2px #787878; /* orientation=lt */
-	-webkit-box-shadow: 1px 1px 2px #787878; /* orientation=lt */
-	box-shadow: -1px 1px 2px #787878; /* orientation=rt */
-	-moz-box-shadow: -1px 1px 2px #787878; /* orientation=rt */
-	-webkit-box-shadow: -1px 1px 2px #787878; /* orientation=rt */
+	box-shadow: 1px 1px 2px #787878; /* orientation=lt */	
+	box-shadow: -1px 1px 2px #787878; /* orientation=rt */	
 	margin-top: 8px;
 	background: #ffffff;
 }

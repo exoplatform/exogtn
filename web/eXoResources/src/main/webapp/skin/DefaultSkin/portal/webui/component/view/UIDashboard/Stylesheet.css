@@ -58,8 +58,6 @@
 }
 
 .UITabPaneDashboard .UITab {	
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	height: 19px;
 	line-height: 17px;
@@ -150,7 +148,6 @@
 
 .UIDashboardSelectContainer .DashboardItemContainer .InputContainer {
 	padding: 4px 0px 4px 10px;
-	_padding: 0px 10px;
 	background: #ececec;
 }
 
@@ -183,7 +180,7 @@
 
 .UIDashboardSelectContainer .DashboardItemContainer .DisableArrowIcon {
 	filter: alpha(opacity=30);
-	-moz-opacity: 0.3;
+	opacity: 0.3;
 }
 
 .UIDashboardSelectContainer .DashboardItemContainer .MiddleItemContainer {
@@ -281,7 +278,6 @@
 	overflow: auto;
 	height: 100%;
 	min-height: 400px;
-	_height: 400px;
 	padding: 8px;
 	text-align: right;/* orientation=lt */
 	text-align: left;/* orientation=rt */
@@ -431,6 +427,5 @@
 
 .Maximized iframe {
 	width: 100%;
-	_width: 98%;
 }
 

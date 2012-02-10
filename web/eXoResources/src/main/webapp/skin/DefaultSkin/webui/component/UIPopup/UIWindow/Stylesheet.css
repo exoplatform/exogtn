@@ -57,8 +57,6 @@
 	font-size: 12px;
 	margin: 30px auto;
     width: 500px;
-	-moz-border-radius: 4px 4px 4px 4px;
-  -webkit-border-radius: 4px 4px 4px 4px;
   border-radius: 4px 4px 4px 4px;
     background: none repeat scroll 0 0 white;
     border: 1px solid #d1d1d1;
@@ -80,8 +78,6 @@
 	line-height: 40px;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-	-moz-border-radius: 4px 4px 0px 0px;
-	-webkit-border-radius: 4px 4px 0px 0px;
 	border-radius: 4px 4px 0px 0px;
 	margin: 0px 0px 30px 0px;
 }

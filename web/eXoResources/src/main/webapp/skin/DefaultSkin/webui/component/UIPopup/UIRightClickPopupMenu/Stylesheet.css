@@ -22,12 +22,8 @@
 	position: absolute;
 	background: #ffffff;
 	border: 1px solid #c6c6c6;
-	-moz-box-shadow: 1px 3px 5px #BDBDCE;
-	-webkit-box-shadow: 1px 3px 5px #BDBDCE;
 	box-shadow: 1px 3px 5px #BDBDCE;
 	border-radius: 2px;
-	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px;
 }
 
 .UIRightClickPopupMenu .MenuItem {

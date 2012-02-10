@@ -19,13 +19,9 @@
 
 .UIMaskWorkspace {
 	border: none;
-	width: 650px;
-	-moz-box-shadow: 0px 0px 10px #CACACA;
-	-webkit-box-shadow: 0px 0px 10px #CACACA;
+	width: 650px;	
 	box-shadow: 0px 0px 10px #afafaf;
-	border: 1px solid #CACACA;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+	border: 1px solid #CACACA;	
 	border-radius: 5px;
 	background: #EBEBEB;
 }
@@ -56,8 +52,6 @@
 }
 
 .UIMaskWorkspace .MaskContainer {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
 
@@ -97,10 +91,6 @@
 
 .UIMaskWorkspace .UIForm .HorizontalLayout .SelectedIconInfo .UIFormInputSet {
 	margin: auto;
-}
-
-.UIMaskWorkspace .UIAccessGroup .PublicCheck .UIFormGrid td.FieldComponent {
-	_padding: 0px;
 }
 
 /*********************************** End UITabContent	************************************/

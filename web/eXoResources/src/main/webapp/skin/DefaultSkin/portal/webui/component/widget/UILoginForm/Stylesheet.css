@@ -23,8 +23,6 @@
 	padding: 30px 10px 30px 17px; /* orientation=rt */
 	background: #ebebeb;
 	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 
 /*##############################- LoginBox Style-################################*/
@@ -173,8 +171,6 @@
 }
 
 .UILoginForm .UIAction .SimpleStyle {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
 

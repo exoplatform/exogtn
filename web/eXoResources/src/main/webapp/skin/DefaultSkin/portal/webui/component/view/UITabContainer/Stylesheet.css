@@ -40,7 +40,6 @@
 .UITabContainer .EditIcon {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	_float: none;
 }
 
 .UITabContainer .UIHorizontalTabs .UITab {

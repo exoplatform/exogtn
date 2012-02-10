@@ -31,7 +31,6 @@
 	border: solid 1px gray;
 	width: 235px;
 	height: 18px;
-	*height: 18px;
 	line-height: 18px;
 }
 
@@ -39,7 +38,6 @@
 	display:block;
  	margin: 1px;
  	height: 15px;
-	*height: 15px;
 	line-height: 15px;
 	border: solid 1px #cccccc;
 }
@@ -52,7 +50,7 @@
 	color: white;
 }
 
-.UIFormColorPicker a:visit{
+.UIFormColorPicker a:visited{
 	color: black;
 }
 

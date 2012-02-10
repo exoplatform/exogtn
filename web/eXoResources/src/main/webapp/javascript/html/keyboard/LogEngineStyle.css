@@ -40,7 +40,7 @@
   z-index: 1000;
   border: solid 1px blue;
   background: #000000;
-  -moz-opacity: 0.7;
+  opacity: 0.7;
   filter: alpha(opaque=70) ;
   color: #ffffff;
 }

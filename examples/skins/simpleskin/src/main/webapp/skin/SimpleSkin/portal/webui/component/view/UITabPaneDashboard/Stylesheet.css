@@ -2,8 +2,6 @@
 .UITabPaneDashboard {
 	background-color: #F0F0F0;
 	border-bottom: 1px solid #e5e5e5;
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
 	border-radius:  0;
 	margin: 0 8px;
 }
@@ -13,8 +11,6 @@
 }
 
 .UITabPaneDashboard .UITab {	
-	-moz-border-radius: 0px;
-	-webkit-border-radius: 0px;
 	border-radius: 0px;
 	background-color:#E6E6E6;
 	border:1px solid #DADADA;

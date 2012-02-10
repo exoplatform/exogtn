@@ -42,9 +42,7 @@
 	cursor: move;
 	text-align: left;
 	font-size: 14px;
-	font-family: verdana;
-	-moz-border-radius: 2px 2px 0px 0px;
-	-webkit-border-radius: 2px 2px 0px 0px;
+	font-family: verdana,arial,tahoma;
 	border-radius: 2px 2px 0px 0px;
 }
 
@@ -67,7 +65,7 @@
 
 .UIGadget .GadgetControl .IconControl {
 	background-image: url('background/IconGadget.gif');
-	background-position: no-repeat;
+	background-repeat: no-repeat;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 	height: 14px;
@@ -100,8 +98,6 @@
 	border: 1px solid #c3c3c3;
 	border-top: none;
 	padding: 3px;
-	-moz-border-radius: 0px 0px 3px 3px;
-	-webkit-border-radius: 0px 0px 3px 3px;
 	border-radius: 0px 0px 3px 3px;
 	word-wrap: break-word;
 }

@@ -53,7 +53,10 @@ form {
 
 html {
 	margin: 0px; padding: 0px;
-	*overflow-x: hidden;
+}
+
+*+html {
+	overflow-x: hidden;
 }
 
 body {
@@ -92,10 +95,10 @@ a {
   visibility: hidden;
 }
 
-.ClearFix {
-	!display: inline-block;
-  !zoom: 1;
-  !display: block; 
+*+html .ClearFix {
+	display: inline-block;
+	zoom: 1;
+	display: block; 
 }
 
 .InlineContainer {
@@ -104,8 +107,6 @@ a {
 
 .AjaxLoadingMask {
   background: #4c4c4c;
-  -moz-border-radius: 0px 0px 7px 7px;
-  -webkit-border-radius: 0px 0px 7px 7px;
   border-radius: 0px 0px 7px 7px;
   padding: 10px 20px;
   opacity: 0.9;
@@ -131,4 +132,3 @@ a {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 }
-

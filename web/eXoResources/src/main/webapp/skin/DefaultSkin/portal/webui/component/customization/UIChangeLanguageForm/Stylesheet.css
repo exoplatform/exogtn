@@ -111,8 +111,6 @@
 .UIChangeLanguageForm .UITabPane .TabPaneContent .WorkingArea {
 	background: #ffffff;
 	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 
 .UIChangeLanguageForm .UITabPane .UITabContentContainer .UITabContent {

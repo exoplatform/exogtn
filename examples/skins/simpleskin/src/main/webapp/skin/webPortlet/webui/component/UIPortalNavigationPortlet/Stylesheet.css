@@ -39,10 +39,12 @@
 	padding: 0px 24px;
 	background: #f9f9f9;
 	float: none;
-	!position: relative;
 	height: 30px;
 }
 
+*+html .UINavigationPortlet .UINavigationBar {
+	position: relative;
+}
 .UINavigationPortlet .UINavigationBar  .UITab  {
 	font-weight:normal;
 }

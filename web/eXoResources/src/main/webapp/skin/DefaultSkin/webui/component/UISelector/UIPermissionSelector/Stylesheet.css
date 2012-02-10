@@ -95,7 +95,7 @@
 }
 
 .UIPermissionSelector .PermissionInfoContainer .FloatBlockHidden {
-	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
+	filter:alpha(opacity=30);opacity:.30;
 }
 
 .UIPermissionSelector .PermissionInfoContainer a.FloatBlockHidden {

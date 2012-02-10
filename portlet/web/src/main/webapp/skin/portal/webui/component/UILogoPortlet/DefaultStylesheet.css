@@ -31,10 +31,10 @@
   visibility: hidden;
 }
 
-.ClearFix {
-	!display: inline-block;
-  !zoom: 1;
-  !display: block; 
+*+html .ClearFix {
+	display: inline-block;
+	zoom: 1;
+	display: block; 
 }
 
 .UILogoPortlet .Img img {

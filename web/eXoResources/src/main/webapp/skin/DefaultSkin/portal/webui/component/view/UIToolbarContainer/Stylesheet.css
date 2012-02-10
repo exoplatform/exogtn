@@ -91,11 +91,12 @@
 	padding-left: 2px; /* orientation=rt */
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-	float: none; 
-	!float: left;/* orientation=rt */
-	_float: none;/* orientation=rt */
+	float: none; 	
 }
 
+*+html .UIToolbarContainer .UIHorizontalTabs .UITab {
+	float: left;/* orientation=rt */
+}
 .UserToolBarSitePortletTDContainer {
 	position: relative;
 }

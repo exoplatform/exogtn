@@ -28,7 +28,10 @@
 
 .UIPageBrowser .UIGrid {	
 	width: 99.7%;
-	!width: 98%;
+}
+
+*+html .UIPageBrowser .UIGrid { 
+	width: 98%;
 }
 
 .UIPageBrowser .UIGrid .Text {	

@@ -93,10 +93,10 @@
   visibility: hidden;
 }
 
-.SampleWebUI .ClearFix {
-	!display: inline-block;
-  !zoom: 1;
-  !display: block; 
+*+html .SampleWebUI .ClearFix {
+	display: inline-block;
+	zoom: 1;
+	display: block; 
 }
 
 .SampleWebUI a {

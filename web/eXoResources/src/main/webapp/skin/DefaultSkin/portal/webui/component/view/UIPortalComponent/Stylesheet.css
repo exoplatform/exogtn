@@ -20,10 +20,7 @@
 .UIPortal .LAYOUT-PORTAL {
 	background: white;
 	padding: 8px;
-	_padding: 8px 0px; /* orientation=rt */
 	margin: auto;
-	_margin: 0px; /* orientation=rt */
-	_width: 99%; /* orientation=rt */
 }
 
 .DragAndDropPreview {
@@ -152,19 +149,12 @@
 
 .EdittingContainer .LAYOUT-BLOCK .UIRowContainer {
 	min-height: 86px;
-	_height: 86px;
 }
 
 .EdittingContainer .VIEW-BLOCK .EmptyContainer {
 	height: 82px;
 }
 
-.EdittingContainer .LAYOUT-CONTAINER .UIContainer {
-	_height: 100%;
-	/*
-	 fix bug dragdrop in IE6
-	*/
-}
 
 /*##############################- PortletLayoutDecorator	-################################*/
 

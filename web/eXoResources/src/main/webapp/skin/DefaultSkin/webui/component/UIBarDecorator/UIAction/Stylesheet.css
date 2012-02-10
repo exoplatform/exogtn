@@ -54,8 +54,6 @@
 	background: url('background/LightBlueStyle.gif') repeat-x center;
 	white-space: nowrap;
 	padding: 0px 14px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	border: 1px solid #acacac;
 	color:#464646;
@@ -71,8 +69,6 @@
 	padding: 0px 12px;
 	white-space: nowrap;
 	border: 1px solid #c9c9c9;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
 
@@ -96,8 +92,6 @@
 	padding: 0px 10px;
 	border: 1px solid #e2e2e2;
 	border-bottom: 1px solid #d9d9d9;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
 
@@ -113,8 +107,6 @@
 	line-height: 22px;
 	padding: 0px 8px;
 	border: 1px solid #acacac;
-	-moz-border-radius: 12px;
-	-webkit-border-radius: 12px;
 	border-radius: 12px;
 }
 

@@ -53,10 +53,10 @@
   visibility: hidden;
 }
 
-.UISitemap .ClearFix {
-	!display: inline-block;
-  !zoom: 1;
-  !display: block; 
+*+html .UISitemap .ClearFix {
+	display: inline-block;
+	zoom: 1;
+	display: block; 
 }
 
 .UISitemap .CollapseAll {

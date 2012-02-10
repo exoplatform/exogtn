@@ -53,8 +53,6 @@
 .UIBarStyle .TitleBar {
 	background: url("background/TitleBar.png") repeat-x left top;
     border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
-	-webkit-border-radius: 5px 5px 0 0;
     height: 30px;
     padding-top: 5px;
 }

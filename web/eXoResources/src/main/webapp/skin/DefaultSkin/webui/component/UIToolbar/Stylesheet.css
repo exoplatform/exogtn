@@ -147,7 +147,7 @@
 
 .UIToolbar .BlueLargeToolbar .SelectItemButton .LablelIcon {
 	filter: alpha(opacity=100);
-	-moz-opacity: 1.0;
+	opacity: 1.0;
 }
 
 .UIToolbar .BlueLargeToolbar .SelectItemButton .ButtonLabel {

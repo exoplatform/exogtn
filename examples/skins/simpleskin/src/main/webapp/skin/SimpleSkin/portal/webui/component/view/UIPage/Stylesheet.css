@@ -35,8 +35,6 @@
 }
 
 .UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY {
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
 	border-radius:0;
 	background: #fff;
 	padding:0;

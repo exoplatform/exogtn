@@ -253,15 +253,9 @@
 	padding: 0px;
 }
 
-.UIVerticalSlideTabs .VTabStyle4 .UIVTabContent .OverflowContainer {
-	_width: 92%;
-	_padding: 7px 0px;
-}
-
 .UIVerticalSlideTabs .VTabStyle4 .VTabContentBG {
 	background: url(background/VTabContentBG.gif) repeat-x left top;
 	padding: 7px;
-	_padding: 0px 7px;
 }
 
 .UIVerticalSlideTabs .VTabStyle4 .VTabContentBG img {

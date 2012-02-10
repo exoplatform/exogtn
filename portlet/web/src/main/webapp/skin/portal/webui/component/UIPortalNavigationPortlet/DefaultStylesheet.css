@@ -17,8 +17,8 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIPortalNavigationPortlet {
-  !position: relative;
+*+html .UIPortalNavigationPortlet {
+  position: relative;
 }
 	
 .UIPortalNavigationPortlet .UINavigationBar {
@@ -31,7 +31,6 @@
 
 .UIPortalNavigationPortlet .UINavigationBar .UIHorizontalTabs .TabsContainer {
 	float: none;
-	_position: relative; /* orientation=rt */
 }
 
 .UIPortalNavigationPortlet .UINavigationBar .LeftNavigationBar {
@@ -40,7 +39,10 @@
 	padding-left: 3px; /* orientation=lt */
 	padding-right: 3px; /* orientation=rt */
 	border-top: 1px solid white;
-	!background-position: center 1px;
+}
+
+*+html .UIPortalNavigationPortlet .UINavigationBar .LeftNavigationBar { 
+	background: url('DefaultSkin/background/Navigation.gif') repeat-x center 1px;
 }
 
 .UIPortalNavigationPortlet .UITab a.TabLabel {

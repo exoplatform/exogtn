@@ -26,10 +26,10 @@ a {
 	visibility: hidden;
 }
 
-.ClearFix {
-	!display: inline-block;
-	!zoom: 1;
-	!display: block; 
+*+html .ClearFix {
+	display: inline-block;
+	zoom: 1;
+	display: block; 
 }
 
 .FL {
@@ -86,7 +86,7 @@ a {
 	border: 1px solid #cacaca;
 	color: #6086eb;
 	font-size: 13px;
-	-moz-border-radius: 2px;
+	border-radius: 2px;
 	width: 130px;
 }
 
@@ -168,7 +168,7 @@ a {
 .GadgetGrid .UIGrid .SkinID {
 	background: #efefef;
 	padding: 0px 5px;
-	-moz-border-radius: 2px 2px 2px 2px;
+	border-radius: 2px;
 }
 
 .GadgetGrid .UIGrid .SkinID input {

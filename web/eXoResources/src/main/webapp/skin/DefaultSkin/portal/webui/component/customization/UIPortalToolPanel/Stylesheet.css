@@ -25,14 +25,6 @@
  * version: $Id$
  */
  
-.UIPortalToolPanel {
-	_height: 100%; /* orientation=rt */
-}
-
-.UIPortalToolPanel .Body {
-	_height: 100%;
-}
-
 .UIEditInlineWS .UIPortalToolPanel .PageDecoratorContainer {
 }
  
