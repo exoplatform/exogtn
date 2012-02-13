@@ -7,7 +7,7 @@
     def rcontext = _ctx.getRequestContext();
     JavascriptManager jsmanager = rcontext.getJavascriptManager();
     def hostName = GadgetUtil.getGadgetServerUrl();
-    def url = null;
+    def url = uicomponent.getUrl();
     def metadata = "";
     def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
     def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
@@ -21,15 +21,14 @@
    
     def isLossData = uicomponent.isLossData();
     if(!isLossData) {
-      	url = uicomponent.getUrl();
       	metadata = uicomponent.getRpcMetadata();
       	userPref = uicomponent.getUserPref();
       	jsmanager.importJavascript("eXo.gadget.UIGadget");
-      	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
+      	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
       	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
       																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
     }
-                                                                                                               																													
+                                                                                                            																													
 	boolean isMini = Boolean.parseBoolean(uicomponent.getProperties().get("minimized"));
 	String miniTitle = _ctx.appRes("UIGadget.tooltip.Minimize");
 	String unminiTitle = _ctx.appRes("UIGadget.tooltip.Unminimize");
@@ -55,6 +54,9 @@
 		<span class="GadgetTitle" style="display: none;"><%= uicomponent.getApplicationName() %></span>
 	</div>
 	<div class="GadgetApplication" id="content-$id" style="display:<%= Boolean.parseBoolean(uicomponent.getProperties().get("minimized")) ? "none": "block"; %>">
+		<% if(isLossData) { %>
+			<span><%=_ctx.appRes("UIGadget.error.NotAvailable") + url%></span>
+		<% } %>
 	</div>
 	<div class="UIMask" style="display: none; border:solid 1px red"><span></span></div>
 </div>

@@ -103,7 +103,7 @@
 	-moz-border-radius: 0px 0px 3px 3px;
 	-webkit-border-radius: 0px 0px 3px 3px;
 	border-radius: 0px 0px 3px 3px;
-	
+	word-wrap: break-word;
 }
 
 .UIGadget iframe {
