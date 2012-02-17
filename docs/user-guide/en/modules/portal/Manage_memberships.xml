@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
+<section id="sect-User_Guide-User_Management-Manage_memberships">
+    <para>
+      The role of a user in a specific group is managed by using the
+      <emphasis role="bold">Membership Management</emphasis>
+      tab.
+    </para>
+    <para>
+      By default, eight membership types available in eXo Platform include <emphasis>Member, Author, Editor, Manager, Redactor,
+      Validator, Webdesigner,</emphasis> and <emphasis>Publisher.</emphasis> The "Manager" has the highest right in a group.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" width="444"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+      </imageobject>
+    </mediaobject>
+
+    <section id="sect-User_Guide-User_Management-Add_a_new_membership_type">
+      <title>Add a new membership type</title>
+      <procedure>
+        <step>
+          <para>
+            Enter values into the fields of the
+            <emphasis role="bold">Add/Edit Membership</emphasis>
+            form. The <emphasis role="bold">Membership Name</emphasis> field is required, and only letters, digits, dots, dashes and underscores are allowed without ANY SPACES.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept adding a new membership, or
+            <emphasis role="bold">Reset</emphasis>
+            to clear entered values.
+          </para>
+        </step>
+      </procedure>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Edit_a_membership_type">
+      <title>Edit a membership type</title>
+      <procedure>
+        <step>
+          <para>
+            Click
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
+              </imageobject>
+            </inlinemediaobject>
+            corresponding to the membership type you want to edit in the <emphasis role="bold">Action</emphasis> column. Information about the selected
+            membership type will be updated automatically in the
+            <emphasis role="bold">Add/Edit Membership</emphasis>
+            form.
+          </para>
+        </step>
+        <step>
+          <para>
+            Make your desired changes on the <emphasis role="bold">Description</emphasis> field. You cannot change the <emphasis role="bold">Membership Name.</emphasis>
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept your changes.
+          </para>
+        </step>
+      </procedure>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Delete_a_membership_type">
+      <title>Delete a membership type</title>
+      <procedure>
+        <step>
+          <para>
+            Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject>
+            in the <emphasis role="bold">Action</emphasis> column.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">OK</emphasis>
+            in the confirmation message to accept your deletion.
+          </para>
+        </step>
+      </procedure>
+    </section>
+  </section>

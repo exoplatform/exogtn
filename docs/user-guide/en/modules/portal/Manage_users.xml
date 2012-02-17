@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
+<section id="sect-User_Guide-User_Management-Manage_users">
+    <para>By clicking <emphasis role="bold">Groups And Roles,</emphasis> you will see the <emphasis role="bold">Organization</emphasis> form which allows
+      you to manage users, groups and memberships.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="0" width="100"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/Manage_groups_roles.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+      </imageobject>
+    </mediaobject>
+    <para>
+      As an administrator, you can easily find, edit information of users, and even remove them from the system via the
+      <emphasis role="bold">User Management</emphasis> tab. By default, all registered users will be shown in this tab.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" contentwidth="70"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/UserGroupManagement.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+      </imageobject>
+    </mediaobject>
+    <para>
+      Via the <emphasis role="bold">User Management</emphasis> tab, you also can define each user belonging to user groups and his
+      memberships (roles) in these groups. You cannot add users to a group but can remove them from the group.
+    </para>
+    <section id="sect-User_Guide-User_Management-Search_a_user">
+      <title>Search for users</title>
+      <para>
+        You can search for specific users by username, first name, last name or email address.
+      </para>
+      <procedure>
+        <step>
+          <para>
+            Type the search term related to the user you want to search. You do not need to enter an exact term.
+          </para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/SearchUser.png" format="PNG" align="center" scalefit="0" width="80mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Select the information type you want to search against.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click 
+ 			<inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3.5mm"/>
+            </imageobject>
+          </inlinemediaobject>, or hit the <emphasis role="bold">Enter</emphasis> key to perform your search.
+          </para>
+        </step>
+      </procedure>
+    </section>
+    <section id="sect-User_Guide-User_Management-Edit_a_user">
+      <title>Edit user information</title>
+      <procedure>
+        <step>
+          <para>
+            Locate the user you want to edit his information.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click 
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="3.5mm"/>
+              </imageobject>
+            </inlinemediaobject>
+            corresponding to the user with the information you want to edit.
+          </para>
+        </step>
+        <step>
+          <para>
+            Select the
+            <emphasis role="bold">Account Info</emphasis>
+            tab to edit main information of the user, including <emphasis role="bold">First Name, Last Name,</emphasis> or <emphasis role="bold">Email Address.</emphasis>
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444mm"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            </imageobject>
+          </mediaobject>
+          <variablelist>
+            <varlistentry>
+              <term>
+                <emphasis role="bold">Username</emphasis>
+              </term>
+              <listitem>
+                <para>
+                  The
+                  <emphasis role="bold">Username</emphasis>
+                  cannot be changed.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                <emphasis role="bold">Change Password</emphasis>
+              </term>
+              <listitem>
+                <para>
+                  The
+                  <emphasis role="bold">Change Password</emphasis>
+                  option allows an administrator to set a new password for the selected user. When the
+                  <emphasis role="bold">Change Password</emphasis>
+                  option is unchecked,
+                  <emphasis role="bold">New Password</emphasis>
+                  and
+                  <emphasis role="bold">Confirm Password</emphasis>
+                  are hidden. Passwords must contain at least 6 characters, including letters, numbers and
+                  punctuation marks.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+		  <para>For more details on these fields, see <link linkend="Create_New_Account_form_details">here.</link>
+		  </para>
+        </step>
+        <step>
+          <para>
+            Select the
+            <emphasis role="bold">User Profile</emphasis>
+            tab to edit the personal information of the selected user, including
+            <emphasis role="bold">Profile,</emphasis>
+            <emphasis role="bold">Home</emphasis>
+            and
+            <emphasis role="bold">Business.</emphasis>
+			You may also switch the default display language for that user by selecting
+            another language from the <emphasis role="bold">Language</emphasis> field where all available languages are displayed in the alphabetical order.
+          </para>
+        </step>
+        <step>
+          <para>
+            Select the
+            <emphasis role="bold">User Membership</emphasis>
+            tab to see the group membership information of the user.
+          </para>
+          <para>
+            The
+            <emphasis role="bold">User Membership</emphasis>
+            tab displays which groups the selected user belongs to.
+          </para>
+          <para>
+            To remove the user from a group, click 
+            <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject>.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click <emphasis role="bold">Save</emphasis> to accept your changes.
+          </para>
+        </step>
+      </procedure>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Delete_a_user">
+      <title>Delete a user</title>
+      <procedure>
+        <step>
+          <para>
+            Locate the user you wish to delete.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click 
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="3mm"/>
+            </imageobject>
+          </inlinemediaobject> corresponding to the user you want to delete in the main <emphasis role="bold">User Management</emphasis> form.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">OK</emphasis>
+            in the confirmation message
+            to accept your deletion.
+          </para>
+        </step>
+      </procedure>
+    </section>
+
+  </section>

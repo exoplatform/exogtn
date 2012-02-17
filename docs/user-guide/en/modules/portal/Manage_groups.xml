@@ -1,0 +1,347 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+        <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+        %BOOK_ENTITIES;
+        ]>
+<section id="sect-User_Guide-User_Management-Manage_groups">
+    <para>Select the
+      <emphasis role="bold">Group Management</emphasis>
+      tab in the <emphasis role="bold">Organization</emphasis> form. This tab is used to add, edit or delete a group.
+      You can also add or delete a user to a group and edit the user membership in the group.
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/GroupManage.png" format="PNG" align="center" width="444"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/GroupManage.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+      </imageobject>
+    </mediaobject>
+    <para>
+      By default, all existing groups will be displayed on the left pane.
+      The right pane shows information of the selected group and of its members with the <emphasis role="bold">Add Member</emphasis> form.
+    </para>
+
+
+    <section id="sect-User_Guide-User_Management-Add_a_new_group">
+      <title>Add a new group</title>
+      <procedure>
+        <step>
+          <para>
+            Select the path to create a new group by clicking the group from the left pane or by clicking
+            <inlinemediaobject>
+              <imageobject role="html">
+                <imagedata fileref="images/arrow-blue-arrow.png" format="PNG" scalefit="1" width="4mm"/>
+              </imageobject>
+            </inlinemediaobject>
+            if you want to create a group at a higher level. The selected path is displayed in the breadcrumb bar.
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/Admin1.png" format="PNG" align="center"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/Admin1.png" format="PNG" align="center" contentwidth="50mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Click
+            <inlinemediaobject>
+              <imageobject role="html">
+                <imagedata fileref="images/plus_icon.png" format="PNG" scalefit="1" width="4mm"/>
+              </imageobject>
+            </inlinemediaobject>
+            in the left pane.
+			</para>
+			<para>
+			The
+            <emphasis role="bold">Add Group</emphasis>
+            form will be displayed in the right pane.
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/AddGroup.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/AddGroup.png" format="PNG" align="center" contentwidth="110mm"/>
+            </imageobject>
+          </mediaobject>
+		  </para>
+		  <para><emphasis role="bold">Details:</emphasis></para>
+      <table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>
+                Field
+              </entry>
+              <entry>
+                Description
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+           <row>
+              <entry>
+                 <emphasis role="bold">Group Name</emphasis>
+              </entry>
+              <entry>
+                 Name of the group that is required and unique within the portal with its length from 3 to 30 characters. 
+                 Only letters, numbers and underscore characters are allowed for the <emphasis role="bold">Group Name</emphasis> field.
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <emphasis role="bold">Label</emphasis>
+              </entry>
+              <entry>
+                The display name of the group with any length from 3 to 50 characters.
+              </entry>
+            </row>
+             <row>
+              <entry>
+                <emphasis role="bold">Description</emphasis>
+              </entry>
+              <entry>
+                 A description of the group with any length from 0 to 255 characters.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+        </step>
+        <step>
+          <para>
+            Fill in the required fields. Once being saved, the <emphasis role="bold">Group Name</emphasis> cannot be edited.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept creating the new group.
+          </para>
+        </step>
+      </procedure>
+      <note>
+        <para>The creator will automatically become the manager of that group. The creator's username will be added to the created group with the "manager" membership.
+        </para>
+      </note>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Edit-a-group">
+      <title>Edit a group</title>
+      <procedure>
+        <step>
+          <para>
+            Click the group you want to edit in the left pane.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject> in the left pane to show the
+            <emphasis role="bold">Edit Current Group</emphasis>
+            form of the selected group.
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scale="110"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Make changes on the fields, except <emphasis role="bold">Group Name.</emphasis>
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept your changes.
+          </para>
+        </step>
+      </procedure>
+    </section>
+
+     <section id="sect-User_Guide-User_Management-Delete_a_group">
+      <title>Delete a group</title>
+      <procedure>
+        <step>
+          <para>
+            Click the group you want to delete in the left pane.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject> in the row of the membership type you want to delete.
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="110"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">OK</emphasis>
+            in the confirmation message to accept your deletion.
+          </para>
+        </step>
+      </procedure>
+      <note>
+        <para>After being deleted, all information related to that group, such as users and navigation, is also deleted.
+          You cannot delete the mandatory groups, including <emphasis>Platform, Platform/Administration, Platform/Guests, Platform/Visitors.</emphasis>
+        </para>
+      </note>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">
+      <title>Add a user to a group</title>
+      <procedure>
+        <step>
+          <para>
+            Select the group to which you want to add a new user in the left pane.
+          </para>
+        </step>
+        <step>
+          <para>Enter the exact Username of the user that you want to add to the selected group (you can add many usernames separated by commas);
+                <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444"/>
+            </imageobject>
+                    <imageobject role="fo">
+              <imagedata fileref="images/AddMember1.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+            </imageobject>
+          </mediaobject>
+          </para>
+          <para>Or, enter at least one character if you are not sure about the exact spelling and do the further followings:
+              <para><emphasis role="bold">i.</emphasis> Click 
+                <inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Search_icon.png" format="PNG" scalefit="1" width="4mm"/>
+                  </imageobject>
+                </inlinemediaobject>
+                to search by your entered characters.
+              </para>
+            <para>After you have clicked
+                <inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Search_icon.png" format="PNG" scalefit="1" width="4mm"/>
+                  </imageobject>
+                </inlinemediaobject>
+                , there will be a list of all existing users whose <emphasis role="bold">Usernames</emphasis> include the entered characters. For
+                example, if you enter 'o', you will get the following result.
+              </para>
+              <mediaobject>
+                <imageobject role="html">
+                  <imagedata fileref="images/Select_user_form.png" format="PNG" align="center" scale="110"/>
+                </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/Select_user_form.png" format="PNG" align="center" scalefit="1"
+                             width="100mm"/>
+                </imageobject>
+              </mediaobject>
+              <para>
+               <emphasis role="bold">ii.</emphasis> Select the checkboxes corresponding to users you want to add to the group.
+              </para>
+              <para>
+                After clicking <emphasis role="bold">Add,</emphasis> you will see the complete <emphasis role="bold">Usernames</emphasis> in the <emphasis role="bold">Add
+                Member</emphasis> form.
+              </para>
+              <mediaobject>
+                <imageobject role="html">
+                  <imagedata fileref="images/Added_member_form.png" format="PNG" align="center" scale="110"/>
+                </imageobject>
+                <imageobject role="fo">
+                  <imagedata fileref="images/Added_member_form.png" format="PNG" align="center" scalefit="1"
+                             width="100mm"/>
+                </imageobject>
+              </mediaobject>
+            </para>
+        </step>
+        <step>
+          <para>
+            Select the membership for the users from the <emphasis role="bold">Membership</emphasis> list. You can click
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/Refresh_button.png" format="PNG" scalefit="1" width="4mm"/>
+              </imageobject>
+            </inlinemediaobject>
+            to update the memberships list in case of any changes.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to accept adding the selected users to the specific group with the specified membership type.
+          </para>
+        </step>
+      </procedure>
+      <note>
+        <para>By default, the "manager" membership has the highest right in a group.
+          A user can have several membership types in a group. To do that, you have to use the
+          <emphasis role="bold">Add Member</emphasis>
+          form for each membership type. The user's membership information is hereafter updated. You can check it by opening the
+          <emphasis role="bold">User Management</emphasis>
+          form and editing the user you just added.
+        </para>
+      </note>
+    </section>
+
+    <section id="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group">
+      <title>Edit a user membership in a group</title>
+      <procedure>
+        <step>
+          <para>
+            Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject> corresponding to a specific user with a membership in the <emphasis role="bold">Action</emphasis> column in the right pane.
+          </para>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/EditMember1.png" format="PNG" align="center"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
+            </imageobject>
+          </mediaobject>
+        </step>
+        <step>
+          <para>
+            Change the membership of the selected user by selecting another value in the
+            <emphasis role="bold">Membership</emphasis>
+            list.
+          </para>
+        </step>
+        <step>
+          <para>
+            Click
+            <emphasis role="bold">Save</emphasis>
+            to complete your changes.
+          </para>
+        </step>
+      </procedure>
+    </section>
+  </section>
