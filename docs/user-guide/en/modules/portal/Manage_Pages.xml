@@ -32,7 +32,7 @@
         <step>
           <para>Hover your cursor over
             <emphasis role="bold">Edit</emphasis>
-            on the Administration bar.
+            on the <emphasis role="bold">Administration</emphasis> bar.
           </para>
         </step>
         <step>
@@ -431,8 +431,8 @@
                 If
                 <emphasis role="bold">Owner Type</emphasis>
                 is "<emphasis>portal</emphasis>", the page is created for a portal. Therefore, only users who have the
-                <emphasis>edit</emphasis>
-                permissions on the portal can create this page type.
+                <emphasis>Edit</emphasis>
+                permission on the portal can create this page type.
               </para>
 			  </listitem>
 			  <listitem>
@@ -464,7 +464,7 @@
 			 <listitem>
               <para>The name of the current portal is automatically selected for
                 <emphasis role="bold">Owner Id,</emphasis>
-                ensuring the edit permissions are assigned to users who can edit the current portal.
+                ensuring the <emphasis>Edit</emphasis> permission is assigned to users who can edit the current portal.
               </para>
             </listitem>
 			</itemizedlist>
@@ -516,18 +516,18 @@
           <itemizedlist>
               <listitem>
                   <para>If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Portal</emphasis>",
-                   the name of the current portal is automatically selected for the <emphasis role="bold">Owner Id</emphasis> field, so that the <emphasis>access</emphasis> permission is assigned to all users who can access the current portal.
+                   the name of the current portal is automatically selected for the <emphasis role="bold">Owner Id</emphasis> field, so that the <emphasis>Access</emphasis> permission is assigned to all users who can access the current portal.
                   </para>
               </listitem>
               <listitem>
                   <para>
                       If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Group</emphasis>",
-                      the <emphasis>access</emphasis> permission is assigned to all users who are the members of the group
+                      the <emphasis>Access</emphasis> permission is assigned to all users who are the members of the group
                       that is selected in the <emphasis role="bold">Owner Id</emphasis> field of the <emphasis role="bold">Page Settings</emphasis> tab.
                   </para>
               </listitem>
           </itemizedlist>
-              <para>To reassign the <emphasis>access</emphasis>
+              <para>To reassign the <emphasis>Access</emphasis>
               permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">Access permission</link> section.
               </para>
               </listitem>
@@ -538,19 +538,19 @@
               <itemizedlist>
               <listitem>
                   <para>If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Portal</emphasis>",
-                   the <emphasis>edit</emphasis> permission is assigned to users who can edit the current portal.
+                   the <emphasis>Edit</emphasis> permission is assigned to users who can edit the current portal.
                   </para>
               </listitem>
               <listitem>
                   <para>
                       If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Group</emphasis>",
-                      the <emphasis>edit</emphasis> permission is assigned to all users who are the members of the group
+                      the <emphasis>Edit</emphasis> permission is assigned to all users who are the members of the group
                       that is selected in the <emphasis role="bold">Owner Id</emphasis> field of the <emphasis role="bold">Page Settings</emphasis> tab.
                   </para>
               </listitem>
           </itemizedlist>
-                  <para>To reassign the <emphasis>edit</emphasis>
-              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">Edit permission</link> section.</para>
+                  <para>To reassign the <emphasis>Edit</emphasis>
+              permission for the page, see details in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">Edit Permission</link> section.</para>
               </listitem>
           </itemizedlist>
       </step>
@@ -632,7 +632,7 @@
 		<para><emphasis role="bold">i.</emphasis> In the <emphasis role="bold">Page Settings</emphasis> tab, you cannot change values in
                 <emphasis role="bold">Page Id, Owner Type, Owner Id,</emphasis> and <emphasis role="bold">Page Name.</emphasis>
               </para>
-        <para><emphasis role="bold">ii.</emphasis> In the <emphasis role="bold">Permission Settings</emphasis> tab, you can change or add more access and edit permissions.
+        <para><emphasis role="bold">ii.</emphasis> In the <emphasis role="bold">Permission Settings</emphasis> tab, you can change or add more <emphasis>Access</emphasis> and <emphasis>Edit</emphasis> permissions.
                 This form is only supported for pages of a <emphasis>group</emphasis> or a <emphasis>portal.</emphasis>
                 Because the user's page is private, noone can access or edit it, except the creator.
 				<note><para>For more details on how to assign permissions on a page, refer to the <link linkend="sect-User_Guide-Manage_Permission-Set_Page_Permission">Set permissions on a page</link> section.

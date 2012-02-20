@@ -5,8 +5,8 @@
         ]>
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
   <para>
-    If you are the portal administrator or the portal administrator has granted you the appropriate permission
-    privileges, you can execute some special actions related to portal nodes, including copying, editing, cutting, cloning, deleting, adding existing nodes.
+    If you are the portal administrator or granted the appropriate permission
+    privileges by the portal administrator, you can execute some special actions related to portal nodes, including copying, editing, cutting, cloning, deleting, adding existing nodes.
     To do so, you first need to go to the nodes list by following steps described in the <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Edit navigation</link> section, then right-clicking your desired node to open the drop-down menu.
   <mediaobject>
     <imageobject role="html">
@@ -33,7 +33,7 @@
             <imageobject>
               <imagedata fileref="images/Up_arrow.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
-          </inlinemediaobject>, then right-click the empty space and select <emphasis role="bold">Add New Node.</emphasis>
+          </inlinemediaobject>, then right-click the empty space and select <emphasis role="bold">Add New Node.</emphasis>;
 		  </para>
 		  </listitem>
 		  <listitem>
@@ -245,79 +245,94 @@
          </tbody>
         </tgroup>
       </table>
-        <para>
-          You do not need to enter values in these fields. They are automatically recorded after you have selected an
-          existing page by clicking
-          <emphasis role="bold">Search and Select Page.</emphasis>
-        </para>
-        <para>
-          The
-          <emphasis role="bold">Select Page</emphasis>
-          form appears.
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
-          </imageobject>
-        </mediaobject>
-		</para>
-        <para>
-          This window lists all existing pages of
-          <emphasis role="bold">Portal</emphasis>
-          or
-          <emphasis role="bold">Group</emphasis>
-          with basic information for each page.
-        </para>
-        <para xml:id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
-          You can select a page for creating a node by simply clicking 
-		  <inlinemediaobject>
-                <imageobject>
-                  <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
-                </imageobject>
-              </inlinemediaobject>, or search for a specific page as
-          follows:
-        </para>
-            <para><emphasis role="bold">i.</emphasis>
-              Enter your page title into the
-              <emphasis role="bold">Title</emphasis>
-              field to search by title;
-            </para>
-            <para> 
-              Or, enter the site name into the
-              <emphasis role="bold">Site Name</emphasis>
-              field to search by the page's site name;
-            </para>
-            <para>
-              Or, enter values into both fields to further limit your search results by both
-              <emphasis role="bold">Title</emphasis> and <emphasis role="bold">Site Name.</emphasis>
-            </para>
-          <para><emphasis role="bold">ii.</emphasis> Select the area in which you want to search into the
-              <emphasis role="bold">Type</emphasis>
-              field.
-            </para>
-            <para><emphasis role="bold">iii.</emphasis> Click 
-              <inlinemediaobject>
-                <imageobject>
-                  <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3mm"/>
-                </imageobject>
-              </inlinemediaobject>
-              to perform your search. All pages matching your search criteria will be listed.
-            </para>
-            <para><emphasis role="bold">iv.</emphasis> Click
-              <inlinemediaobject>
-                <imageobject>
-                  <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
-                </imageobject>
-              </inlinemediaobject>
-              on the row of the page to select.
-            </para>
-        <para>
-          After selecting a page, you will see the page details in the 
-          <emphasis role="bold">Page Selector</emphasis>
-          form.
-        </para>
+          <itemizedlist>
+              <listitem>
+                  <para>If you select <emphasis role="bold">Create Page</emphasis>, input the name and title for the page.</para>
+              </listitem>
+              <listitem>
+                  <para>If you select <emphasis role="bold">Search and Select Page</emphasis>, you do not need to enter
+                      values in these fields. They are automatically recorded after you have selected an
+                      existing page from the <emphasis role="bold">Select Page</emphasis>
+                      form .
+                  </para>
+                      <mediaobject>
+                          <imageobject role="html">
+                              <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110"/>
+                          </imageobject>
+                          <imageobject role="fo">
+                              <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scalefit="1"
+                                         width="100mm"/>
+                          </imageobject>
+                      </mediaobject>
+                  <para>
+                      This window lists all existing pages of
+                      <emphasis role="bold">Portal</emphasis>
+                      or
+                      <emphasis role="bold">Group</emphasis>
+                      with basic information for each page.
+                  </para>
+                  <para xml:id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
+                      You can select a page for creating a node by simply clicking
+                      <inlinemediaobject>
+                          <imageobject>
+                              <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
+                          </imageobject>
+                      </inlinemediaobject>
+                      , or search for a specific page as
+                      follows:
+                  </para>
+                  <para>
+                      <emphasis role="bold">i.</emphasis>
+                      Enter your page title into the
+                      <emphasis role="bold">Title</emphasis>
+                      field to search by title;
+                  </para>
+                  <para>
+                      Or, enter the site name into the
+                      <emphasis role="bold">Site Name</emphasis>
+                      field to search by the page's site name;
+                  </para>
+                  <para>
+                      Or, enter values into both fields to further limit your search results by both
+                      <emphasis role="bold">Title</emphasis>
+                      and
+                      <emphasis role="bold">Site Name.</emphasis>
+                  </para>
+                  <para>
+                      <emphasis role="bold">ii.</emphasis>
+                      Select the area in which you want to search into the
+                      <emphasis role="bold">Type</emphasis>
+                      field.
+                  </para>
+                  <para>
+                      <emphasis role="bold">iii.</emphasis>
+                      Click
+                      <inlinemediaobject>
+                          <imageobject>
+                              <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3mm"/>
+                          </imageobject>
+                      </inlinemediaobject>
+                      to perform your search. All pages matching your search criteria will be listed.
+                  </para>
+                  <para>
+                      <emphasis role="bold">iv.</emphasis>
+                      Click
+                      <inlinemediaobject>
+                          <imageobject>
+                              <imagedata fileref="images/Select_page_icon.png" format="PNG" scalefit="1" width="3mm"/>
+                          </imageobject>
+                      </inlinemediaobject>
+                      on the row of the page to select.
+                  </para>
+                  <para>
+                      After selecting a page, you will see the page details in the
+                      <emphasis role="bold">Page Selector</emphasis>
+                      form.
+                  </para>
+              </listitem>
+          </itemizedlist>
+
+
       </step>
       <step>
         <para>
@@ -341,7 +356,7 @@
       When the page type is 'User', you cannot select a page of another users.
 	</para>
 	<para>
-      If you do not have the access permission for any page in the list, please contact your administrator to get appropriate permissions.
+      If you do not have the <emphasis>Access</emphasis> permission for any page in the list, please contact your administrator to get appropriate permissions.
 	</para>
     </note>
   </section>

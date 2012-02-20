@@ -17,7 +17,7 @@
               <imagedata fileref="images/AddCategorybutton.png" format="PNG" contentwidth="6mm"/>"
             </imageobject>
           </inlinemediaobject>
-          on the action bar to open the form to add a new category.
+          on the <emphasis role="bold">Action</emphasis> bar to open the form to add a new category.
         </para>
         <para>Details:</para>
         <para>In the<emphasis role="bold">Category Setting</emphasis>tab:
@@ -54,7 +54,7 @@
         <para>Enter values in the Category Setting tab.</para>
       </step>
       <step>
-        <para>Set access permission for your category. Accordingly, another users can only view and use portlets in your
+        <para>Set the <emphasis>Access</emphasis> permission for your category. Accordingly, another users can only view and use portlets in your
           category to which they have access.
         </para>
         <mediaobject>
@@ -65,7 +65,7 @@
             <imagedata fileref="images/Permission2.png" format="PNG" align="center" scalefit="1" contentwidth="130mm"/>
           </imageobject>
         </mediaobject>
-        <para>For more details about how to set access permission, refer to<xref
+        <para>For more details about how to set the <emphasis>Access</emphasis> permission, refer to<xref
                 linkend="sect-User_Guide-Manage_Permissions"/>.
         </para>
       </step>

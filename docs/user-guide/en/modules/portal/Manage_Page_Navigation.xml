@@ -43,7 +43,7 @@
           <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
         </imageobject>
       </inlinemediaobject>
-      on the Administration bar, then select
+      on the <emphasis role="bold">Administration</emphasis> bar, then select
       <emphasis role="bold">Portal --> Group Sites</emphasis>
       from the drop-down menu.
     </para>

@@ -25,7 +25,7 @@
 			<term><emphasis role="bold">Edit</emphasis></term>
 			<listitem>
 				<para>
-					This permission type allows users to change portal content. This includes actions such as changing page information, deleting pages etc. The <emphasis>edit</emphasis> permission is set for only one group at a time.
+					This permission type allows users to change portal content. This includes actions such as changing page information, deleting pages etc. The <emphasis>Edit</emphasis> permission is set for only one group at a time.
 				</para>
 			</listitem>
 		</varlistentry>
@@ -56,7 +56,7 @@
 			<term><emphasis role="bold">Portlet</emphasis></term>
 			<listitem>
 				<para>
-					The portlet permission level allows users to create a page by dragging and dropping portlets into a page. Some portlets are only used for administrators while some are used for individuals thus administrators have to set the appropriate access permissions.
+					The portlet permission level allows users to create a page by dragging and dropping portlets into a page. Some portlets are only used for administrators while some are used for individuals thus administrators have to set the appropriate <emphasis>Access</emphasis> permission.
 				</para>
 			</listitem>
 		</varlistentry>

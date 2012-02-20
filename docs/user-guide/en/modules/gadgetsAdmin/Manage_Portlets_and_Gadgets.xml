@@ -11,7 +11,7 @@
         <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
       </imageobject>
     </inlinemediaobject>
-    on the Administration bar, and select <emphasis role="bold">Applications.</emphasis> The
+    on the <emphasis role="bold">Administration</emphasis> bar, and select <emphasis role="bold">Applications.</emphasis> The
     <emphasis role="bold">Manage Applications</emphasis> page will appear.
     	<mediaobject>
 					<imageobject role="html">
@@ -37,7 +37,7 @@
               <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="15mm"/>"
             </imageobject>
           </inlinemediaobject>
-          at the right corner on the action bar.
+          at the right corner on the <emphasis role="bold">Action</emphasis> bar.
         </para>
       </step>
       <step>
@@ -261,7 +261,7 @@
 	  The <emphasis role="bold">Access Permission</emphasis> tab allows you to set the access permission on the portlet. The portlet can be made public to everyone or restricted to specific groups.
 	  </para>
 	  <note>
-	  <para>See the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set access permission on a portlet</link> section for details on how to assign the access permission on a portlet.
+	  <para>See the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set Access permission on a portlet</link> section for details on how to assign the access permission on a portlet.
 	  </para>
 	  </note>
 	  </listitem>

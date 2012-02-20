@@ -19,7 +19,7 @@
               <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
-          on the Administration bar, then select <emphasis role="bold">Portal --> Sites</emphasis> from the drop-down menu.
+          on the <emphasis role="bold">Administration</emphasis> bar, then select <emphasis role="bold">Portal --> Sites</emphasis> from the drop-down menu.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -132,9 +132,9 @@
           tab to set permissions on the portal.
         </para>
         <para>
-          The list of access permissions for the portal is empty by default. You have to select at least one or tick the
+          The list of <emphasis>Access</emphasis> permissions for the portal is empty by default. You have to select at least one or tick the
           <emphasis role="bold">Make it public (everyone can access)</emphasis> 
-          checkbox to assign access permission to everyone.
+          checkbox to assign the <emphasis>Access</emphasis> permission to everyone.
         </para>
 		<note>
 		<para>
@@ -166,14 +166,14 @@
     <para>
       To switch between portals, hover your cursor over
       <emphasis role="bold">My Sites</emphasis>
-      on the Administration bar for a list of all portals in which you have at least access rights, then click the
+      on the <emphasis role="bold">Administration</emphasis> bar for a list of all portals in which you have at least access rights, then click the
       desired portal. You need to wait a few seconds to be switched to your selected portal.
     <mediaobject>
       <imageobject role="html">
         <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scale="110"/>
       </imageobject>
       <imageobject role="fo">
-        <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+        <imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scalefit="1" width="50mm"/>
       </imageobject>
     </mediaobject>
 	</para>
@@ -182,12 +182,12 @@
     <title>Edit a portal</title>
     <note>
 	<para>
-      The function allows you to edit layouts, navigations and properties of a portal. To do this, you must have the edit permission by contacting your administrator.
+      The function allows you to edit layouts, navigations and properties of a portal. To do this, you must have the <emphasis>Edit</emphasis> permission by contacting your administrator.
 	</para>
 	</note>
 	<para xml:id="sect-User_Guide-Manage_Portals-Edit_a_Portal-Ways_to_relevant_forms">
 	<emphasis role="bold">
-	  When you have the edit permission, follow either of two ways below to go to the relevant form that allows you to do actions related to editing a portal.
+	  When you have the <emphasis>Edit</emphasis> permission, follow either of two ways below to go to the relevant form that allows you to do actions related to editing a portal.
     </emphasis>
 	</para>
     <para xml:id="User_Guide-Manage_Portals-Edit_a_Portal-first_way">
@@ -197,13 +197,13 @@
           <para>
             Hover your cursor over
             <emphasis role="bold">My Sites</emphasis>
-            on the Administration bar and select the portal you want to edit from the drop-down menu.
+            on the <emphasis role="bold">Administration</emphasis> bar and select the portal you want to edit from the drop-down menu.
 		 </para>
 		 <para>You will be switched to your selected portal just after a few seconds.
           </para>
         </step>
         <step>
-          <para>Continue hovering your cursor over <emphasis role="bold">Edit</emphasis> on the Administration bar to open the drop-down menu.</para>
+          <para>Hover your cursor over <emphasis role="bold">Edit</emphasis> on the <emphasis role="bold">Administration</emphasis> bar to open the drop-down menu.</para>
 		  <para><emphasis role="bold">i.</emphasis> Select <emphasis role="bold">Site --> Layout.</emphasis>
           </para>
 		  <para>
