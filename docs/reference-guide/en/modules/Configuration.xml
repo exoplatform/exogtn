@@ -5,6 +5,17 @@
 ]>
 <chapter id="chap-Reference_Guide-Configuration">
    <title>Configuration</title>
+    <para>This chapter provides you the basic knowledge about configurations in &PRODUCT; via two main topics: </para>
+    <itemizedlist>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Database_Configuration">Database Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-EMail_Service_Configuration">Email Service Configuration</link></para>
+        </listitem>
+    </itemizedlist>
+    <para>With this knowledge, you can extend more functions for your product and customize them as you want.</para>
+
    <xi:include href="Configuration/DatabaseConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="Configuration/EMailServiceConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

@@ -5,6 +5,52 @@
 ]>
 <chapter id="chap-Reference_Guide-Development">
 	<title>Portal Development</title>
+    <para>This chapter provides you the basic knowledge about portal development via the following topics:</para>
+    <itemizedlist>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Upload_Component">Upload Component</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+        </listitem>
+    </itemizedlist>
+
 	<xi:include href="PortalDevelopment/Skinning.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/PortalLifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/DefaultPortalConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

@@ -5,6 +5,29 @@
 ]>
 <chapter id="chap-Reference_Guide-Authentication_And_Identity">
    <title>Authentication and Identity</title>
+
+    <para>This chapter provides you the basic knowledge about authentication and identity of portals, such as information related to accounts,
+        organization configuration, and more via the following topics:</para>
+    <itemizedlist>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Predefined_User_Configuration">Predefined User Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Authentication_Token_Configuration">Authentication Token Configuration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-PicketLink_IDM_integration">PicketLink IDM integration</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></para>
+        </listitem>
+    </itemizedlist>
    <xi:include href="AuthenticationAndIdentity/PredefinedUserConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/AuthenticationTokenConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/BackendConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

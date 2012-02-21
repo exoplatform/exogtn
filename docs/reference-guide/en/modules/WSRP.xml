@@ -6,9 +6,7 @@
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
 
-   <sect1 id="wsrp-Introduction">
-      <title>Introduction</title>
-      <para>The Web Services for Remote Portlets specification defines a web service interface for accessing and
+      <para xml:id="wsrp-Introduction">The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with presentation-oriented web services. It has been produced through the efforts of
          the Web Services for Remote Portlets (WSRP) OASIS Technical Committee. It is based on the requirements
          gathered and on the concrete proposals made to the committee.
@@ -35,7 +33,30 @@
          <ulink url="http://www.oasis-open.org/committees/download.php/10539/wsrp-primer-1.0.html">primer</ulink>
          for a good, and albeit technical overview of WSRP.
       </para>
-   </sect1>
+    <para>This chapter consists of the following main topics:</para>
+    <itemizedlist>
+        <listitem>
+            <para><link linkend="wsrp_support">Level of support in &PRODUCT;</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="wsrp-Deploy_GateIn_wsrp_services">Deploy &PRODUCT_NAME;'s WSRP services</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="wsrp-Make_portlet_remotable">Make a portlet remotable</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">Consume &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="wsrp-consumer_configuration">Consume remote WSRP portlets in &PRODUCT_NAME;</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="wsrp-Consumers_maintenance">Consumers maintenance</link></para>
+        </listitem>
+        <listitem>
+            <para><link linkend="producer_config">Configure &PRODUCT_NAME;'s WSRP Producer</link></para>
+        </listitem>
+    </itemizedlist>
 
    <sect1 id="wsrp_support">
       <title>Level of support in &PRODUCT;</title>
