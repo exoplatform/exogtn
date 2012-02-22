@@ -25,7 +25,7 @@
 			isSelected = true;
 		}
 		println """
-						<div class="UITab MessageTabDialog">
+						<div class="UITab MessageTabDialog NormalTabStyle">
 							<div class="$cssClass">
 								<div class="LeftTab">
 									<div class="RightTab">
