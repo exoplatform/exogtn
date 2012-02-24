@@ -10,10 +10,28 @@
       You can perform this action only when you are a member of the
       <emphasis>/platform/administrators</emphasis> group.
     </para>
+
     <procedure>
       <step>
+        <para>Open the
+          <emphasis role="bold">Create New Portal</emphasis>
+          window by following one of the two ways:
+        </para>
+        <para><emphasis role="bold">The first way</emphasis> </para>
         <para>
-          Hover your cursor over
+          Hover your cursor over <emphasis role="bold">Edit --> Site</emphasis> on the <emphasis role="bold">Administration</emphasis> bar, then select <emphasis role="bold">Add site</emphasis> from the drop-down menu.
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/Add_site1.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/Add_site1.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+          </imageobject>
+        </mediaobject>
+        <para><emphasis role="bold">The second way</emphasis> </para>
+        <para>
+          <emphasis role="bold">i.</emphasis> Hover your cursor over
           <inlinemediaobject>
             <imageobject>
               <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
@@ -29,9 +47,7 @@
             <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
-      </step>
-      <step>
-        <para>Click the <emphasis role="bold">Add New Portal</emphasis> button.
+        <para><emphasis role="bold">ii.</emphasis> Click the <emphasis role="bold">Add New Portal</emphasis> button.
         </para>
         <para>
           By default, the
