@@ -193,7 +193,7 @@
       </citetitle>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/PageWizard2.png" format="PNG" width="444"/>
+              <imagedata fileref="images/PageWizard2.png" format="PNG" width="444" align="center"/>
             </imageobject>
           </mediaobject>
       <procedure> 
