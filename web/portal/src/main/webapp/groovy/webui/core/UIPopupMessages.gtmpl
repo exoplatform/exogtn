@@ -22,13 +22,13 @@
 
 	boolean printTab(List messages, String title, boolean isSelected) {
 		String cssClass = "NormalTab";
-		if(messages.size() == 0) cssClass = "DisabledTab NormalTab";
+		if(messages.size() == 0) cssClass = "DisabledTab";
 		else if(!isSelected) {
 			cssClass = "SelectedTab";
 			isSelected = true;
 		}
 		println """
-						<div class="UITab MessageTabDialog NormalTabStyle">
+						<div class="UITab MessageTabDialog">
 							<div class="$cssClass">
 								<div class="LeftTab">
 									<div class="RightTab">

@@ -36,19 +36,23 @@
 
 /*###########################-- NormalTabStyle --############################*/
 
-.UIHorizontalTabs  .NormalTabStyle  {
+.UIHorizontalTabs  .NormalTabStyle  ,.UIHorizontalTabs  .GrayTabStyle,
+.UIHorizontalTabs .MessageTabDialog ,.UIAccountSettingForm .UITab {
 	line-height: 23px;
 	font-weight:normal;
 	white-space: nowrap; /* orientation=rt */
 	color:#363636;
 }
 
-.UIHorizontalTabs  .NormalTabStyle .NormalTab {
+.UIHorizontalTabs  .NormalTabStyle .NormalTab ,.UIHorizontalTabs  .GrayTabStyle .NormalTab  ,
+.UIHorizontalTabs .MessageTabDialog .DisabledTab,.UIHorizontalTabs .MessageTabDialog .NormalTab,
+.UIAccountSettingForm  .NormalTab {
 	padding: 0px 16px;	
 	border: 1px solid transparent;	
 }
 
-.UIHorizontalTabs  .NormalTabStyle .SelectedTab  {
+.UIHorizontalTabs  .NormalTabStyle .SelectedTab  ,.UIHorizontalTabs  .GrayTabStyle .SelectedTab,
+.UIHorizontalTabs .MessageTabDialog .SelectedTab,.UIAccountSettingForm  .SelectedTab  {
 	background: #fff;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
