@@ -225,6 +225,7 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
 
       Map<String, String> attributes = new HashMap<String, String>();
       attributes.put("type", "text");
+      attributes.put("name", name);
       attributes.put("value", value);
       if (isReadOnly())
          attributes.put("readonly", "readonly");
