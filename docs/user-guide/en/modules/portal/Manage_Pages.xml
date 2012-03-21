@@ -273,9 +273,18 @@
                       role="bold">Columns Layout,
               </emphasis>
               <emphasis role="bold">Autofit Columns Layout,</emphasis>
-              <emphasis role="bold">Tabbed Layout,</emphasis>
+              <emphasis role="bold">Tabs Layout,</emphasis>
               and
-              <emphasis role="bold">Mixed Layout.</emphasis>
+              <emphasis role="bold">Mixed Layout.</emphasis> </para>
+             <para>For <emphasis role="bold">Tabs Layout,</emphasis> you can add more tabs to the layout, and reorder the position of the tabs.
+              <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/tabs_layout.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+            <imageobject role="fo">
+            <imagedata fileref="images/tabs_layout.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+          </imageobject>
+        </mediaobject>
             </para>
 			</listitem>
 			<listitem>
