@@ -1346,4 +1346,71 @@
       </sect2>
 
    </sect1>
+  <sect1 id="wsrp.wsrp_interg_configuration">
+       <title>WSRP integration configuration</title>
+       <para>
+         WSRP is integrated into GateIn thanks to the <link linkend="sect-Reference_Guide-Foundations-Extension_mechanism">extension mechanism</link>.
+       </para>
+       <sect2>
+         <title>Extended Navigation</title>
+         <para>The extension artifact defines an extra navigational node, whose page contains the WSRP Admin portlet.</para>
+         <programlisting language="xml"><![CDATA[
+              <page-nodes>
+                 <node>
+                    <uri>wsrpConfiguration</uri>
+                    <name>wsrpConfiguration</name>
+                    <label>WSRP</label>
+                    <page-reference>group::/platform/administrators::wsrpConfiguration</page-reference>
+                 </node>
+              </page-nodes> ]]>
+         </programlisting>
+       </sect2>
+       <sect2 id="wsrp.wsrp_intergration">
+         <title>WSRP integration</title>
+         <para>As the extension package is deployed, the <emphasis>WSRPServiceIntegration</emphasis> service component is started and that triggers the injection
+         of the WSRP infrastructure (persistent data, web service endpoints, and more) into GateIn.</para>
+         <programlisting language="xml"><![CDATA[
+   <component>
+      <key>org.gatein.integration.wsrp.WSRPServiceIntegration</key>
+      <type>org.gatein.integration.wsrp.WSRPServiceIntegration</type>
+      <init-params>
+         <value-param>
+            <name>producerConfigLocation</name>
+            <description>Location of the default producer configuration file</description>
+            <value>${gatein.conf.dir:classpath:/conf}/wsrp-producer-config.xml</value>
+         </value-param>
+         <value-param>
+            <name>consumersConfigLocation</name>
+            <description>Location of the default consumers configuration file</description>
+            <value>${gatein.conf.dir:classpath:/conf}/wsrp-consumers-config.xml</value>
+         </value-param>
+         <value-param>
+            <name>consumersInitDelay</name>
+            <description>Time (in seconds) after the start of the WSRP extension, waited before the consumers are
+               started
+            </description>
+            <value>2</value>
+         </value-param>
+      </init-params>
+   </component>]]>
+         </programlisting>
+         <itemizedlist>
+           <listitem>
+             <para>
+                <emphasis>producerConfigLocation</emphasis>: The location of the default producer configuration file.
+             </para>
+           </listitem>
+           <listitem>
+             <para>
+                <emphasis>consumersConfigLocation</emphasis>: The location of the default consumers configuration file.
+             </para>
+           </listitem>
+           <listitem>
+             <para>
+               <emphasis>consumersInitDelay</emphasis>: The time period (in seconds) after the start of the WSRP extension, and the consumers must wait before starting. The param is used to ensure that JBoss WS has enough time to publish WSDL before the WSRP Consumer is started.
+             </para>
+           </listitem>
+         </itemizedlist>
+       </sect2>
+     </sect1>
 </chapter>
