@@ -298,6 +298,7 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+            </para>
 <programlisting>
 <![CDATA[
 <!--
@@ -306,11 +307,11 @@ realmName=gatein-domain;
 <a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
 ]]>
 </programlisting>
-						</para>
+
 					</listitem>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:
+							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -321,14 +322,13 @@ realmName=gatein-domain;
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-               </para>
             </listitem>
          </itemizedlist>
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:
-<programlisting><![CDATA[<filter>
+                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:</para>
+<programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
    <init-param>
@@ -383,7 +383,6 @@ realmName=gatein-domain;
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
 </filter-mapping>]]></programlisting>
-               </para>
             </listitem>
          </itemizedlist>
          <para>
@@ -590,7 +589,7 @@ realmName=gatein-domain;
         <itemizedlist>
           <listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:
+							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -601,7 +600,6 @@ realmName=gatein-domain;
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-						</para>
            </listitem> 
         </itemizedlist>           
         <itemizedlist>
@@ -928,7 +926,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:
+							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -939,7 +937,6 @@ realmName=gatein-domain;
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-						</para>
             </listitem>
          </itemizedlist>
          <itemizedlist>
@@ -1441,7 +1438,7 @@ network.negotiate-auth.using-native-gsslib = true
              valid Kerberos ticket or his browser doesn't support SPNEGO with our Kerberos server).
           </para>
           <para>
-             If you don't want fallback to FORM, you can disable form-login-config part and have only:
+             If you don't want fallback to FORM, you can disable form-login-config part and have only:</para>
                         <programlisting language="xml"><![CDATA[
     <login-config>
       <auth-method>SPNEGO</auth-method>
@@ -1454,8 +1451,8 @@ network.negotiate-auth.using-native-gsslib = true
     </login-config>
 ]]>
 </programlisting>
-          In this case user needs to authenticate through SPNEGO and if that fails, FORM is not shown but user has authentication error with HTTP code 401.
-          </para>
+        <para> In this case user needs to authenticate through SPNEGO and if that fails, FORM is not shown but user has authentication error with HTTP code 401.</para>
+
 				</step>
 				<step>
               <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the

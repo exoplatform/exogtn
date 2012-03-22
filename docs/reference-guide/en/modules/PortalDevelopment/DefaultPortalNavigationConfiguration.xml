@@ -164,7 +164,7 @@
 		 
 <para>
 Each portal, groups and users navigation is indicated by a configuration paragraph, for example:
-
+</para>
 <programlistingco>
 			<areaspec>
 			<area coords="5" id="area-Reference_Guide.Portalconf.predifinedOwner" />
@@ -193,7 +193,6 @@ Each portal, groups and users navigation is indicated by a configuration paragra
    </object>
 </object-param>]]>
 </programlisting>
-</programlistingco>
 
 <calloutlist>
 				<callout arearefs="area-Reference_Guide.Portalconf.predifinedOwner">
@@ -231,7 +230,8 @@ Each portal, groups and users navigation is indicated by a configuration paragra
 						</itemizedlist>
 				</callout>
 </calloutlist>
-		</para>
+ </programlistingco>
+
 	
 	<para>	
 Base on these parameters, portal will look for the configuration files and create a relevant portal navigation, pages and data import strategy. The portal configuration files will be stored in folders with path look like <emphasis>{templateLocation}/{ownerType}/{predefinedOwner}</emphasis>, all navigations are defined in the <emphasis>navigation.xml</emphasis> file, pages are defined in pages.xml and portal configuration is defined in <emphasis>{ownerType}.xml</emphasis>.
