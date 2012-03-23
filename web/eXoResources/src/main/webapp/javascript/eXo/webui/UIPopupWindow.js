@@ -44,9 +44,11 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	if(contentBlock && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
 		contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
 	}
-	var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span' ,'PopupTitle') ;
-
-	popupBar.onmousedown = this.initDND ;
+	
+	if (isShow) {
+	   var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span' ,'PopupTitle') ;
+	   popupBar.onmousedown = this.initDND ;
+	}
 	
 	if(isShow == false) {
 		this.superClass.hide(popup) ;

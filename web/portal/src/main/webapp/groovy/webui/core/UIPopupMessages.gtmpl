@@ -68,6 +68,10 @@
 
 %>
 <div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
+	<%
+	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false, null, null, $uicomponent.showMask);");
+	if (uicomponent.hasMessage()) {
+	%>
 	<div class="OverflowContainer ClearFix">
 		<a class="CloseButton" title="<%=_ctx.appRes("UIPopupMessages.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
 		<span class="PopupTitle"><%=_ctx.appRes("UIPopupMessages.title.exoMessages")%></span>
@@ -97,11 +101,9 @@
 			</div>
 		</div>						
 	</div>
-</div>
 	<%
-		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false, null, null, $uicomponent.showMask);");
-		if(uicomponent.hasMessage()){
-			rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
-			rcontext.getJavascriptManager().addJavascript("window.setTimeout(\"eXo.webui.UIPopupWindow.increasezIndex('$popupId')\", 100);");
-		}
+		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+		rcontext.getJavascriptManager().addJavascript("window.setTimeout(\"eXo.webui.UIPopupWindow.increasezIndex('$popupId')\", 100);");
+	}
 	%>
+</div>

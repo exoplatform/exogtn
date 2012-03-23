@@ -105,6 +105,21 @@
 		    }
 		 }		 
 		%>
+		<script type="text/javascript">
+			function initLoading(text) {
+			   	var ajaxLoading = document.getElementById("AjaxLoadingMask");
+				var loadingText = document.createElement("span");
+				loadingText.className = "LoadingText";
+				loadingText.innerHTML = text;
+				ajaxLoading.appendChild(loadingText);
+				
+				var closeIcon = document.createElement("a");
+				closeIcon.className = "CloseLoadIcon";
+				closeIcon.setAttribute("href", "javascript:ajaxAbort();");
+				closeIcon.innerHTML = "&nbsp;";
+				ajaxLoading.appendChild(closeIcon);
+			}
+		</script>
 	</head>
 
 	<body style="height: 100%;">
@@ -117,6 +132,7 @@
 	  <div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
 			
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
-			<span class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></span>
-			<a href="javascript:ajaxAbort();" class="CloseLoadIcon">&nbsp;</a>		
 		</div>
+		<script type="text/javascript">
+			initLoading('<%=_ctx.appRes("UIPortalApplication.label.Loading")%> ');
+		</script>
