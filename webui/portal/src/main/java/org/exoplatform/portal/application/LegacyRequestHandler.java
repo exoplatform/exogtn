@@ -131,4 +131,10 @@ public class LegacyRequestHandler extends WebRequestHandler
       resp.sendRedirect(resp.encodeRedirectURL(s));
       return true;
    }
+
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
+      return true;
+   }
 }

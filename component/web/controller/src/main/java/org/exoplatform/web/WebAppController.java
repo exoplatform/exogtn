@@ -331,12 +331,6 @@ public class WebAppController
          {
             while (matcher.hasNext() && !processed)
             {
-               if (!started)
-               {
-                  RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
-                  started = true;
-               }
-
                //
                Map<QualifiedName, String> parameters = matcher.next();
                String handlerKey = parameters.get(HANDLER_PARAM);
@@ -350,12 +344,25 @@ public class WebAppController
                         log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
                      }
 
+                     if (!started && handler.getRequiresLifeCycle())
+                     {
+                        if (debug)
+                        {
+                           log.debug("Starting RequestLifeCycle for handler " + handler);
+                        }
+                        RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
+                        started = true;
+                     }
+
                      //
                      processed = handler.execute(new ControllerContext(this, router, req, res, parameters));
                   }
                   else
                   {
-                     log.debug("No handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
+                     if (debug)
+                     {
+                       log.debug("No handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
+                     }
                   }
                }
             }
@@ -364,6 +371,10 @@ public class WebAppController
          {
             if (started)
             {
+               if (debug)
+               {
+                  log.debug("Finishing RequestLifeCycle for current request");
+               }
                RequestLifeCycle.end();
             }
          }
