@@ -5,7 +5,7 @@
 %BOOK_ENTITIES;
 ]>
 
-<book lang="en">
+<book lang="en" xml:id="GateInReferenceGuide">
 	<bookinfo>
 		<title>Reference Guide / GateIn</title>
 		<subtitle>
