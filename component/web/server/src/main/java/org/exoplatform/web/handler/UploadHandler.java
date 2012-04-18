@@ -63,6 +63,11 @@ public class UploadHandler extends WebRequestHandler
 
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
+      if (req.getRemoteUser() == null)
+      {
+         res.sendError(HttpServletResponse.SC_FORBIDDEN);
+         return;
+      }
       String action = req.getParameter("action");
       String[] uploadIds = req.getParameterValues("uploadId");
       
