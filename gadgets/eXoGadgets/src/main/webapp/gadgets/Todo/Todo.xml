@@ -40,6 +40,7 @@
 		<Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
 		<Locale lang="fr" messages="locale/fr_ALL.xml" />
 		<Locale lang="vi" messages="locale/vi_ALL.xml" />
+		<Locale lang="it" messages="locale/it_ALL.xml" />
 		<Require feature="setprefs"/>
 	</ModulePrefs>
 	<UserPref name="todoList" datatype="list"/>
