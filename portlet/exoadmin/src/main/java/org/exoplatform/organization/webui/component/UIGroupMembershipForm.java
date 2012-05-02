@@ -26,6 +26,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -47,6 +48,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -107,10 +109,11 @@ public class UIGroupMembershipForm extends UIForm
    {
       listOption.clear();
       OrganizationService service = getApplicationComponent(OrganizationService.class);
-      List<?> collection = (List<?>)service.getMembershipTypeHandler().findMembershipTypes();
-      for (Object ele : collection)
+      List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
+      Collections.sort(memberships, new Util.MembershipTypeComparator());
+      
+      for (MembershipType mt : memberships)
       {
-         MembershipType mt = (MembershipType)ele;
          listOption.add(new SelectItemOption<String>(mt.getName(), mt.getName(), mt.getDescription()));
       }
    }
