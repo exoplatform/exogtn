@@ -41,7 +41,4 @@
 		<path>/gadgets/rssAggregator/rssAggregator.xml</path>
 	</gadget>
 
-  <gadget name="Currency">
-    <url>http://www.donalobrien.net/apps/google/currency.xml</url>
-  </gadget>
 </gadgets>
