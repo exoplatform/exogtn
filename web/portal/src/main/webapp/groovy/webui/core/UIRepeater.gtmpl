@@ -4,6 +4,7 @@
   import org.exoplatform.webui.form.UIForm;
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
+  import org.gatein.common.text.EntityEncoder;
 
   String[] beanFields =  uicomponent.getBeanFields() ;  
   String[] beanActions =  uicomponent.getBeanActions() ;  
@@ -13,6 +14,7 @@
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class); 
   
   DateFormat dateFormat = null;
+  EntityEncoder entityEncoder = EntityEncoder.FULL;
 %>
 <div id="$uicomponent.id">
     <table class="UIGrid" cellspacing="0">
@@ -57,7 +59,10 @@
 		              cssClass = "Datetime" ;
 		              fieldValue = dateFormat.format(fieldValue);
 		            } 
-		            else cssClass = "Text" ;
+		            else { 
+		        	cssClass = "Text" ;
+		        	fieldValue = entityEncoder.encode(fieldValue.toString());
+		    	    }
 		          } else {
 		            fieldValue = "";
 		          }
