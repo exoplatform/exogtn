@@ -68,11 +68,11 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 	contextMenu.style.display = "none" ;
 	var href = elemt.getAttribute('href') ;
 	if(href.indexOf("javascript") == 0) {
-		eval(unescape(href).replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ; 
+		eval(unescape(href).replace('_objectid_', encodeURIComponent(contextMenu.objId.replace(/'/g, "\\'")))) ; 
 		eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
 		return false;
 	}
-	elemt.setAttribute('href', href.replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ;
+	elemt.setAttribute('href', href.replace('_objectid_', encodeURIComponent(contextMenu.objId.replace(/'/g, "\\'")))) ;
 	return true;
 }
 /**
