@@ -20,6 +20,8 @@
 package org.exoplatform.web.login;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -68,17 +70,27 @@ public class PortalLoginController extends AbstractHttpServlet
       req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
 
       // Obtain initial URI
-      String uri = req.getParameter("initialURI");
-
-      // otherwise compute one
-      if (uri == null || uri.length() == 0)
+      String initialURI = req.getParameter("initialURI");
+      log.debug("Performing the do login send redirect with initialURI=" + initialURI + " and remoteUser=" + req.getRemoteUser());
+      if (initialURI == null || initialURI.length() == 0)
       {
-         uri = req.getContextPath();
-         log.debug("No initial URI found, will use default " + uri + " instead ");
+         initialURI = req.getContextPath();
       }
-      else
+
+      try
       {
-         log.debug("Found initial URI " + uri);
+         URI uri = new URI(initialURI);
+
+         if (uri.isAbsolute() && !(uri.getHost().equals(req.getServerName())))
+         {
+            log.warn("Cannot redirect to a URI outside of the current host when using a login redirection. Redirecting to the portal context path instead.");
+            initialURI = req.getContextPath();
+         }
+      }
+      catch (URISyntaxException e)
+      {
+         log.warn("Initial URI in login link is malformed. Redirecting to the portal context path instead.");
+         initialURI = req.getContextPath();
       }
 
       // if we do have a remember me
@@ -102,7 +114,7 @@ public class PortalLoginController extends AbstractHttpServlet
       }
 
       //
-      resp.sendRedirect(uri);
+      resp.sendRedirect(resp.encodeRedirectURL(initialURI));
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
