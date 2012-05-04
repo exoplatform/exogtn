@@ -1,5 +1,6 @@
 <%	
 	import org.exoplatform.services.organization.User;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 		
 	def rcontext = _ctx.getRequestContext();
 	
@@ -7,8 +8,11 @@
 %>
 <div class="UIUserInfoPortlet" id="$uicomponent.id">
 	<div class="Name">
-	<% if(rcontext.getRemoteUser() != null) { %>
-		<a href="$accountSetting"><%=uicomponent.getUser().getFullName()%></a>
+	<% if(rcontext.getRemoteUser() != null) { 
+	   	def encoder = HTMLEntityEncoder.getInstance();
+		def fullName = encoder.encode(uicomponent.getUser().getFullName());
+	%>
+		<a href="$accountSetting"><%=fullName%></a>
 	<%} else {%>
 		<span></span>
 	<%}%>
