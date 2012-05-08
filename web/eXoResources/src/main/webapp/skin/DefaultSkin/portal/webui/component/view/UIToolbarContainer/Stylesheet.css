@@ -20,7 +20,7 @@
 .UIToolbarContainer {	
 	padding: 0px;
 	height: auto;
-	!position: relative;
+	!position: relative;/* orientation=lt */
 	!z-index: 1000;
 }
 
