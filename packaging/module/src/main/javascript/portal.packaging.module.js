@@ -70,7 +70,7 @@ function getModule(params)
       addDependency(new Project("org.gatein.pc", "pc-controller", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-federation", "jar", pcVersion)).
       addDependency(new Project("org.gatein.wci", "wci-wci", "jar", wciVersion)).
-      addDependency(new Project("org.gatein.wci", "wci-tomcat", "jar", wciVersion)).
+      addDependency(new Project("org.gatein.wci", "wci-tomcat6", "jar", wciVersion)).
       addDependency(new Project("org.gatein.wci", "wci-exo", "jar", wciVersion)).
       addDependency(new Project("org.gatein.common", "common-common", "jar", commonVersion)).
       addDependency(new Project("log4j", "log4j", "jar", "1.2.14")).
