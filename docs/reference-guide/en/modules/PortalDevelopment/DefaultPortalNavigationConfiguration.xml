@@ -599,58 +599,7 @@
 			Note that when you develop a portal, we advise you to use the XML instead of the User Interface as XML will allow you to provide a preconfigured package to your customer. But as each time you start the server the first time, the XML files are stored in the JCR, it will be necessary to remove the database (the jcr leverages a database). During the development phase using tomcat it simply means to delete the directory: exo-tomcat/temp
 		</para>  -->
 	</section>
-	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Tips">
-		<title>Tips</title>
-		<section id="sect-Reference_Guide-Tips-Direct_External_Links">
-			<title>Direct External Links</title>
-			<para>
-				If you wish to add a link to a URL outside the portal you first have to define a &#34;page&#34; that will only serve as a navigation placeholder for external redirect - it will not be used for any portlets.
-            Then add the URL to the navigation. (TODO: check for correctness)
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>pages.xml</term>
-					<listitem>
-						<para>
-							
-<programlisting>&#60;page&#62;
-  &#60;owner-type&#62;portal&#60;/owner-type&#62;
-  &#60;owner-id&#62;website&#60;/owner-id&#62;
-  &#60;name&#62;documentation&#60;/name&#62;
-  &#60;title&#62;Documentation&#60;/title&#62;
-  &#60;access-permissions&#62;Everyone&#60;/access-permissions&#62;
-  &#60;edit-permission&#62;*:/platform/administrators&#60;/edit-permission&#62;
-&#60;/page&#62;
-</programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>navigation.xml</term>
-					<listitem>
-						<para>
-							
-<programlisting>&#60;node&#62;
-  &#60;uri&#62;http://wiki.exoplatform.com/xwiki/bin/view/Main/WebHome&#60;/uri&#62;
-  &#60;name&#62;documentation&#60;/name&#62;
-  &#60;label&#62;#{portal.classic.documentation}&#60;/label&#62;
-  &#60;page-reference&#62;portal::website::documentation&#60;/page-reference&#62;
-&#60;/node&#62;
-</programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-			<warning>
-				<title>Direct external links were not a design goal</title>
-				<para>
-					Currently you cannot modify the URL using the portal interface, you must change it in the configuration files or modify the underlying database table.
-				</para>
-			</warning>
-		</section>
 
-	</section>
 
 </section>
 
