@@ -89,7 +89,7 @@
        
        <!-- Missing packaging dependencies -->
 <dependency><groupId>org.gatein.wci</groupId><artifactId>wci-exo</artifactId><version>${org.gatein.wci.version}</version></dependency>
-<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat6</artifactId><version>${org.gatein.wci.version}</version></dependency>
+<dependency><groupId>org.gatein.wci</groupId><artifactId>wci-tomcat</artifactId><version>${org.gatein.wci.version}</version></dependency>
 <dependency><groupId>commons-pool</groupId><artifactId>commons-pool</artifactId><version>${commons-pool.version}</version></dependency>
 <dependency><groupId>org.exoplatform.jcr</groupId><artifactId>exo.jcr.component.webdav</artifactId><version>${org.exoplatform.jcr.version}</version></dependency>
 <dependency><groupId>org.exoplatform.jcr</groupId><artifactId>exo.jcr.framework.web</artifactId> <version>${org.exoplatform.jcr.version}</version></dependency>
