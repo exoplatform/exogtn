@@ -4,6 +4,7 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-Manage_Pages">
+<title>Manage pages</title>
   <section id="sect-User_Guide-Page_Creation_Wizard">
     <title>Add a new page using Page Creation Wizard</title>
     <para>
@@ -774,4 +775,5 @@
       </step>
     </procedure>
   </section>
+<xi:include href="Manage_Page_Navigation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </section>

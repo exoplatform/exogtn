@@ -4,6 +4,7 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-User_Management-Manage_groups">
+<title>Manage groups</title>
     <para>Select the
       <emphasis role="bold">Group Management</emphasis>
       tab in the <emphasis role="bold">Organization</emphasis> form. This tab is used to add, edit or delete a group.
@@ -21,8 +22,6 @@
       By default, all existing groups will be displayed on the left pane.
       The right pane shows information of the selected group and of its members with the <emphasis role="bold">Add Member</emphasis> form.
     </para>
-
-
     <section id="sect-User_Guide-User_Management-Add_a_new_group">
       <title>Add a new group</title>
       <procedure>

@@ -4,6 +4,7 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-User_Management-Manage_memberships">
+<title>Manage memberships</title>
     <para>
       The role of a user in a specific group is managed by using the
       <emphasis role="bold">Membership Management</emphasis>

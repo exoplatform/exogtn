@@ -1,0 +1,34 @@
+<section xml:id="sect-User_Guide-Manage_Organization">
+<title>Manage Your Organization</title>
+ <para>This chapter covers the following topics: </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link>
+          </emphasis> </para>
+      </listitem>
+    </itemizedlist>
+<xi:include href="Add_user.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<xi:include href="Manage_users.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<xi:include href="Manage_groups.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<xi:include href="Manage_memberships.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</section>

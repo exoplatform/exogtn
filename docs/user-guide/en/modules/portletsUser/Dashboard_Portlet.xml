@@ -9,10 +9,29 @@
     This portlet is to host mini-applications known as gadgets. The dashboard uses a variety of
     graphical effects for displaying, opening and using gadgets.
   </para>
+  <para>In the Dashboard portlet, you can do some specific actions as follows:</para>
+  <itemizedlist>
+  <listitem>
   <para>
-    Gadgets within the Dashboard portlet may be moved or rearranged. Users can create new gadgets and delete unnecessary ones.
-    Also, users can open many gadgets with different settings at once.
+   <link linkend='sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace'>Use the Dashboard workspace</link>
   </para>
+  </listitem>
+  <listitem>
+  <para>
+   <link linkend='sect-User_Guide-Dashboard_Portlet-Change_gadget_preferences'>Change gadget preferences</link>
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+   <link linkend='sect-User_Guide-Dashboard_Portlet-Add_Gadgets'>Add more external gadgets from Dashboard</link>
+  </para>
+  </listitem>
+  </itemizedlist>
+  <note>
+  <para>
+    You can open many gadgets with different settings at once.
+  </para>
+  </note>
 
   <section id="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace">
     <title>Use the Dashboard workspace</title>

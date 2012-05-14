@@ -57,6 +57,26 @@
         <imagedata fileref="images/GroupPageNavigation.png" format="PNG" align="center" contentwidth="150mm"/>
       </imageobject>
     </mediaobject>
+    <para>Here, you can do many actions, including:</para>
+    <itemizedlist>
+	<listitem>
+	<para><link linkend='User_Guide-Manage_Page_Navigation-Group_Page_navigation-Edit'>Edit a group's page navigation</link>
+    </para>
+    </listitem>
+   <listitem>
+	<para><link linkend='User_Guide-Manage_Page_Navigation-Group_Page_navigation-Create_new_Navigation'>Create a new page navigation</link>
+    </para>
+    </listitem>
+   <listitem>
+	<para><link linkend='User_Guide-Manage_Page_Navigation-Group_Page_navigation-Change_Priority'>Change priority of page's navigation</link>
+    </para>
+    </listitem>
+	<listitem>
+	<para><link linkend='User_Guide-Manage_Page_Navigation-Delete_Group_Navigation'>Delete a group's navigation</link>
+    </para>
+    </listitem>
+    </itemizedlist>
+ 
     <section id="User_Guide-Manage_Page_Navigation-Group_Page_navigation-Edit">
       <title>Edit a group's page navigation</title>
       <para>Click

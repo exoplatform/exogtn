@@ -26,6 +26,39 @@
        Portlets and gadgets are organized into different categories. Each category contains one or several portlets or gadgets. You can also mix portlets and gadgets into one category. 
        By default, all gadgets are placed in the <emphasis>Gadgets</emphasis> category.
      </para>
+     <para>Here, you can manage portlets and gadgets through the following actions:</para>
+     <itemizedlist>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet'>Import portlets and gadgets</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Dashboard_Portlet-View_Information'>View/Edit detailed information of a portlet/gadget</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Dashboard_Portlet-Edit_Specific_Portlet'>Edit a specific portlet</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget'>Add a gadget</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Gadget_to_the_Dashboard_Portlet'>Add a new gadget from Dashboard</link>
+     </para>
+     </listitem>
+	 <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Gadgets-Edit_a_Gadget'>Edit a gadget</link>
+     </para>
+     </listitem>
+     </itemizedlist>
   <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet">
     <title>Import portlets and gadgets</title>
     <para>This feature enables you to import default portlets and gadgets into different categories as follows:</para>

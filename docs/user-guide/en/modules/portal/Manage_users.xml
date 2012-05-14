@@ -4,6 +4,7 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-User_Guide-User_Management-Manage_users">
+<title>Manage users</title>
     <para>By clicking <emphasis role="bold">Groups And Roles,</emphasis> you will see the <emphasis role="bold">Organization</emphasis> form which allows
       you to manage users, groups and memberships.
     </para>
