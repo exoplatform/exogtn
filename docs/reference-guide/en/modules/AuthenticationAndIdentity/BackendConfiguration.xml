@@ -29,8 +29,11 @@
 	<para>
 		Additionally, the GateIn <emphasis>membership</emphasis> concept needs to be translated into the IDM <emphasis>Role</emphasis> concept. Therefore, the <emphasis >PicketLink IDM</emphasis> model is used in a limited way. All these translations are applied by the integration layer.
 	</para>
-	<section id="sect-Reference_Guide-PicketLink_IDM_integration-Configuration_files">
-		<title>Configuration files</title>
+  <para xml:id="sect-Reference_Guide-PicketLink_IDM_integration-Configuration_files">
+    <citetitle>
+      <emphasis role="bold">Configuration files</emphasis>
+    </citetitle>
+  </para>
 		<para>
 			The main configuration file is <emphasis >idm-configuration.xml</emphasis>:
 		</para>
@@ -386,8 +389,6 @@
     &#60;/stores&#62;
 &#60;/jboss-identity&#62;
 </programlisting>
-	</section>
-
 </section>
 
 

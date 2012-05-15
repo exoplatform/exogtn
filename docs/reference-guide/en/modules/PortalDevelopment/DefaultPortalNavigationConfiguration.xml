@@ -13,17 +13,17 @@
 		<itemizedlist>
 			<listitem>
 				<para>
-					<xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" />
+					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					<xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation" />
+					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					<xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation" />
+					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link>
 				</para>
 			</listitem>
 		</itemizedlist>

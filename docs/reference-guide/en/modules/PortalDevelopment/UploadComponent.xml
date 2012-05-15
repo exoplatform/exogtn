@@ -5,12 +5,10 @@
 ]>
 <section id="sect-Reference_Guide-Upload_Component">
 	<title>Upload Component</title>
-	<!-- 	<section id="sect-Reference_Guide-Upload_Component-Overview">
-		<title>Overview</title>
-		<para>
-			In this article, you will learn how to:
+			<para>
+			In this section, you will learn how to configure the <emphasis role="bold"> Upload service </emphasis> that is defined by the <emphasis>org.exoplatform.upload.UploadService</emphasis> class.
 		</para>
-		<itemizedlist>
+	<!--	<itemizedlist>
 			<listitem>
 				<para>
 					configure the Upload service
@@ -32,13 +30,8 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section>  -->
 	<section id="sect-Reference_Guide-Upload_Component-Upload_Service">
-		<title>Upload Service</title>
-		<para>
-			The service is defined by the <emphasis>org.exoplatform.upload.UploadService</emphasis> class.
-
-		</para>
+		<title>Upload Service</title>    -->
 		<para>
 			This can be configured with the following XML code:
 		</para>
@@ -190,8 +183,6 @@
 				</note>
 			</step>
 		</procedure>
-
-	</section>
 
 </section>
 

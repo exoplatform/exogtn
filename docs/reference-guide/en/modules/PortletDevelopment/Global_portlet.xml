@@ -51,17 +51,14 @@
       <para>The global <emphasis >portlet.xml</emphasis> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
             Specification with some restrictions. In this file, the following elements are supported:
         </para>
-      <orderedlist>
+      <itemizedlist>
         <listitem>
-          <para>Portlet Filter</para>
+          <para><link linkend="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter">Portlet Filter</link></para>
         </listitem>
         <listitem>
-          <para>Portlet Mode</para>
+          <para><link linkend="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode">Portlet Mode and Window State</link></para>
         </listitem>
-        <listitem>
-          <para>Window State</para>
-        </listitem>
-      </orderedlist>
+      </itemizedlist>
       <section id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter">
         <title>Portlet filter</title>
         <para>Portlet filter mappings declared in the global<emphasis > portlet.xml</emphasis> file are applied across portlet applications. With

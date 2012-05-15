@@ -13,6 +13,7 @@
 		<para>
 			When logging into the portal, users gain access to many systems through portlets using a single identity. In many cases, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases, each SSO framework provides a unique way to plug into a Java EE application.
 		</para>
+    </section>
 		<section id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
 			<title>Prerequisites</title>
 			<para>
@@ -29,8 +30,6 @@
 			</para>
 		</section>
 
-	</section>
-	
 	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
 		<title>Central Authentication Service (CAS)</title>
 		<para>

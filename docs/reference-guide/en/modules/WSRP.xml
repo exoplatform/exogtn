@@ -1282,9 +1282,9 @@
 
             </note>
          </para>
-
-         <sect3 id="custom_registration">
-            <title>Customization of Registration handling behavior</title>
+         <para xml:id="custom_registration">
+           <emphasis role="bold">Customization of Registration handling behavior</emphasis>
+         </para>
             <para>
                Registration handling behavior can be customized by users to suit their Producer needs. This is
                accomplished by providing an implementation of the
@@ -1327,7 +1327,6 @@
                   </para>
                </note>
             </para>
-         </sect3>
       </sect2>
       <sect2 id="strict-mode">
          <title>WSRP validation mode</title>

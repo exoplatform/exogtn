@@ -109,7 +109,7 @@ common graphic resource reuse and ease of development
       <title>Skin Selection Through the User Interface</title>
       <para>
         There are a few means for you to select the display skin. The easiest way to change the skin is to select it through
-        the user interface. Admininistrators can change the default skin for the portal, and users logged in can select their desired display skins.
+        the user interface. Administrators can change the default skin for the portal, and users logged in can select their desired display skins.
 	</para>
       <para>
         Please see the User Guide for information on how to change the skin using the user

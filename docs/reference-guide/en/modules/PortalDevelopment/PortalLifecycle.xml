@@ -5,12 +5,10 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
 	<title>Portal Lifecycle</title>
-	<section id="sect-Reference_Guide-Portal_Lifecycle-Overview">
-		<title>Overview</title>
-		<para>
+	<para>
 			This chapter describes the portal lifecycle from the application server start to its stop and how requests are handled.
-		</para>
-	</section>
+  </para>
+
 	
 	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
 		<title>Application Server start and stop</title>

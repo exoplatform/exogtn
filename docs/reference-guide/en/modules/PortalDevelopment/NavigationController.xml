@@ -5,8 +5,6 @@
 ]>
 <section id="sect-Reference_Guide-Navigation_Controller">
       <title>Navigation Controller </title>
-      <section id="sect-Reference_Guide-Navigation_Controller-Description">
-        <title>Description</title>
         <para>The navigation controller is a major enhancement of GateIn that has several goals:</para>
         <itemizedlist>
           <listitem>
@@ -19,10 +17,9 @@
             <para>Provide a more friendly URL and let portal administrator configure how the HTTP request should look like.</para>
           </listitem>
         </itemizedlist>
-      </section>
       <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action">
         <title>Controller in Action</title>
-        <section>
+        <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action-Controller">
           <title>Controller</title>
           <para>The <code>WebAppController</code> is the component of GateIn that processes HTTP invocations and transforms them into a portal request. It has been improved with the addition of a request mapping engine (<emphasis >controller</emphasis>) whose role is to make the HTTP request decouple and create a portal request. The mapping engine makes two essential tasks:</para>
           <itemizedlist>
@@ -352,9 +349,36 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
         <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering">
           <title>Rendering</title>
           <para>The <emphasis >controller</emphasis> is designed to render a Map&lt;QualifiedName, String&gt; as an HTTP URL according to its routing table, but to integrate it for easy usage in WebUI Framework of GateIn, you need some more components:</para>
-          <section>
+			<itemizedlist>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering-PortalURL">PortalURL</link>
+				 </para>
+				</listitem>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-NodeURL">NodeURL</link>
+				 </para>
+				</listitem>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL">ComponentURL</link>
+				 </para>
+				</listitem>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL_PortletURLS">Portlet URLs</link>
+				 </para>
+				</listitem>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-URLBuilder">Webui URLBuilder</link>
+				 </para>
+				</listitem>
+				<listitem>
+				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Groovy_Templates">Groovy Templates</link>
+				 </para>
+				</listitem>
+			</itemizedlist>
+			
+          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering-PortalURL">
             <title>
-              <emphasis >PortalURL</emphasis>
+              <emphasis>PortalURL</emphasis>
             </title>
             <para>
               <code>PortalURL</code> plays a similar role at the portal level. Its main role is to abstract the creation of an URL for a resource managed by the portal.</para>
@@ -472,7 +496,7 @@ String s = url.toString();
             </programlistingco>
             <para>Normally, you should not have to deal with it as the WebUI framework has already an abstraction for managing URL known as <code>URLBuilder</code>. The <code>URLBuilder</code> implementation delegates URL creation to <code>ComponentURL</code> objects.</para>
           </section>
-          <section>
+          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL_PortletURLS">
             <title>Portlet URLs</title>
             <para>Portlet URLs API implementation delegates to the portal <code>ComponentURL</code> (via the portlet container SPI). It is possible to control the language in the URL from a <code>PortletURL</code> object by setting the <code>gtn:lang</code> property:</para>
             <itemizedlist>
@@ -541,7 +565,7 @@ put("nodeurl", new Closure(this)
       </section>
       <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration">
         <title>Changes and migration from GateIn 3.1.x</title>
-        <para>The navication controller implies a migration of the client code that is coupled to several internal APIs of GateIn. The major impact is related to anything dealing with URL:</para>
+        <para>The navigation controller implies a migration of the client code that is coupled to several internal APIs of GateIn. The major impact is related to anything dealing with URL:</para>
         <itemizedlist>
           <listitem>
             <para>Creation of an URL representing a resource managed by the portal: navigation node or UI component.</para>
@@ -672,7 +696,7 @@ String uri = nodeURL.setNode(node).toString();
 ]]></programlisting>
           </programlistingco>
         </section>
-        <section>
+        <section id="sect-Reference_Guide-Navigation_Controller-PortalWar_WebXMLChanges">
           <title>portal.war's web.xml changes</title>
           <para><emphasis >DoLoginServlet declaration</emphasis>:</para>
           <programlistingco>
