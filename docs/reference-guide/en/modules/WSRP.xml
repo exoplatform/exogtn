@@ -1023,7 +1023,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/export_portlet_list.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/export_portlet_list.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>Once portlets have been selected, they can be exported by clicking the "Export" button thus making
@@ -1031,7 +1031,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/export_done.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/export_done.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>You can re-import the portlets directly by pressing the "Use for import" button or, on the Consumers list
@@ -1040,7 +1040,7 @@
             action link, you should see a screen similar to the one below:</para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/export_list.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/export_list.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>As you can see this screen presents the list of available exports with available operations for each.
@@ -1059,7 +1059,7 @@
          <para>Once you have selected an export to import from, you will see a screen similar to the one below:</para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/import_start.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/import_start.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>The screen displays the list of available exported portlets for the previously selected export. You can
@@ -1074,7 +1074,7 @@
             as shown below:</para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/import_original_page.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/import_original_page.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>In this example, we want to replace the content of the
@@ -1090,7 +1090,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/import_selected_page.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/import_selected_page.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>Note that, at this point, we still need to select the window which content we want to replace before
@@ -1102,7 +1102,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/import_success.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/import_success.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
          <para>If you now take a look at the
@@ -1115,7 +1115,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/import_modified_page.png" format="PNG" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/import_modified_page.png" format="PNG" align="center" valign="middle" scalefit="1" width="150mm"/>
             </imageobject>
          </mediaobject>
       </sect2>
