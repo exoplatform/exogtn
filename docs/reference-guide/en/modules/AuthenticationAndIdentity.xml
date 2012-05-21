@@ -5,7 +5,7 @@
 ]>
 <chapter id="chap-Reference_Guide-Authentication_And_Identity">
    <title>Authentication and Identity</title>
-
+    <abstract>
     <para>This chapter provides you the basic knowledge about authentication and identity of portals, such as information related to accounts,
         organization configuration, and more via the following topics:</para>
     <itemizedlist>
@@ -28,6 +28,7 @@
             <para><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></para>
         </listitem>
     </itemizedlist>
+  </abstract>
    <xi:include href="AuthenticationAndIdentity/PredefinedUserConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/AuthenticationTokenConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/BackendConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

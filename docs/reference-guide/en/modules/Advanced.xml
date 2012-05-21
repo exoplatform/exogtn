@@ -5,13 +5,14 @@
 ]>
 <chapter id="chap-Reference_Guide-Advanced">
 	<title>Advanced Development</title>
+  <abstract>
    <para>This chapter helps you further understand about advanced portal system with Kernel service via the following topic:</para>
    <itemizedlist>
         <listitem>
             <para><link linkend="sect-Reference_Guide-Foundations">Foundations</link></para>
         </listitem>
     </itemizedlist>
-
+   </abstract>
 	<xi:include href="Advanced/Foundations.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
 

@@ -5,7 +5,7 @@
    ]>
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
-
+    <abstract>
       <para xml:id="wsrp-Introduction">The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with presentation-oriented web services. It has been produced through the efforts of
          the Web Services for Remote Portlets (WSRP) OASIS Technical Committee. It is based on the requirements
@@ -57,7 +57,7 @@
             <para><link linkend="producer_config">Configure &PRODUCT_NAME;'s WSRP Producer</link></para>
         </listitem>
     </itemizedlist>
-
+    </abstract>
    <sect1 id="wsrp_support">
       <title>Level of support in &PRODUCT;</title>
       <para>The WSRP Technical Committee defined
