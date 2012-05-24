@@ -18,9 +18,9 @@
  */
 
 package org.exoplatform.organization.webui.component;
-
+import java.util.Collections;
 import java.util.List;
-
+import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.StatelessPageList;
@@ -47,7 +47,7 @@ public class FindMembershipTypesPageList extends StatelessPageList<MembershipTyp
       ExoContainer container = PortalContainer.getInstance();
       OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
       List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
-      
+      Collections.sort(memberships, new Util.MembershipTypeComparator());
       return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
 
    }

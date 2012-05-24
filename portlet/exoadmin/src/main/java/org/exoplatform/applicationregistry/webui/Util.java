@@ -22,6 +22,7 @@ package org.exoplatform.applicationregistry.webui;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.services.organization.MembershipType;
 import org.gatein.common.i18n.LocalizedString;
 
 import java.util.Comparator;
@@ -88,6 +89,15 @@ public class Util
             secondTitle = "";
          }
          return firstTitle.compareToIgnoreCase(secondTitle);
+      }
+
+   }
+   static public class MembershipTypeComparator implements Comparator<MembershipType>
+   {
+
+      public int compare(MembershipType m1, MembershipType m2)
+      {
+         return m1.getName().compareTo(m2.getName());
       }
 
    }

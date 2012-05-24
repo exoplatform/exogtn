@@ -41,6 +41,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by The eXo Platform SARL
@@ -87,6 +89,13 @@ public class UIGroupEditMembershipForm extends UIForm
          if (mt.getName().equals(memberShip.getMembershipType()))
             option.setSelected(true);
          listOption.add(option);
+         Collections.sort(listOption, new Comparator<SelectItemOption<String>>()
+         {
+           public int compare(SelectItemOption<String> m1 , SelectItemOption<String> m2)
+           {
+             return m1.getValue().compareTo(m2.getValue());
+           }
+         });
       }
    }
 
