@@ -42,6 +42,8 @@ import org.exoplatform.webui.form.UIForm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /** Author : Nhu Dinh Thuan nhudinhthuan@exoplatform.com Jun 27, 2006 */
@@ -97,6 +99,13 @@ public class UIGroupMembershipSelector extends UIContainer
       {
          listMemberhip.add("*");
       }
+      Collections.sort(listMemberhip, new Comparator<String>()
+      {
+         public int compare(String m1, String m2)
+         {
+            return m1.compareTo(m2);
+         }
+      });
       
       super.processRender(context);
    }
