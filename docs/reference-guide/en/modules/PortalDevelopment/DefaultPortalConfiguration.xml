@@ -11,13 +11,11 @@
 			&PRODUCT; default home page URL is <literal>http://{hostname}:{port}/portal/</literal>.
          There may be multiple independent portals deployed in parallel at any given time, each of which has its root
          context (i.e.: <literal>http://{hostname}:{port}/sample-portal/</literal>).
-         Each portal is internally composed of one or more, what we again call 'portals'. There needs to be at least
-         one such portal - the default one is called 'classic'. When accessing &PRODUCT; default home page URL, you
-         are automatically redirected to 'classic' portal.
+         Each portal is internally composed of one or more 'portals'. It is required to have at least one such portal. The default one is called 'classic'.
 
-         The default portal performs another important task. When starting up &PRODUCT; for the first time, its
+         The default portal performs another important task. When starting up  for the first time, its
          JCR database will be empty (that's where portals keep their runtime-configurable settings).
-         It's the default portal that's used to detect this, and to trigger automatic data initialization.
+         It is the default portal used to detect this, and to trigger automatic data initialization.
 		</para>
 	</section>
 	
@@ -49,11 +47,11 @@
   &#60;/component&#62;
 </programlisting>
 		<para>
-			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default.
+			In this example, the <emphasis role="bold">classic</emphasis> portal has been set as the default.
 		</para>
       <note>
          <para>
-         Components, component-plugins, and init-params are explained in Foundations chapter. For now just note how
+         Components, component-plugins, and init-params are explained in the <link linkend="sect-Reference_Guide-Foundations">Foundations</link> section. For now, just note how
          <literal>NewPortalConfigListener</literal> component-plugin is used to add configuration to
          <literal>UserPortalConfigService</literal>, which is designed in this way to allow other components
          to add configuration to it.

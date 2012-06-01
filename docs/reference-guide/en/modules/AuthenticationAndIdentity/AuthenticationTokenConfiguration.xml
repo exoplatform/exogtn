@@ -11,7 +11,7 @@
 			<emphasis>Token Service</emphasis> is used in authentication.
 		</para>
 		<para>
-			The token system prevents user account information being sent in clear text mode within inbound requests. This increases authentication security.
+			The token system prevents user account information being sent in the clear text mode within inbound requests. This increases the authentication security.
 		</para>
 		<para>
 			Token service allows administrators to create, delete, retrieve and clean tokens as required.
@@ -20,7 +20,7 @@
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implementing the Token Service API</title>
+		<title>Implement the Token Service API</title>
 		<para>
 			All token services used in &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
          The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
@@ -39,7 +39,7 @@
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
-		<title>Configuring token services</title>
+		<title>Configure token services</title>
 		<para>
 			Token services configuration includes specifying the token validity period. The token service is configured as a portal component (in portal scope, as opposed to root scope - more about that in Foundations chapter).
 		</para>
@@ -74,17 +74,17 @@
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-name">
 					<para>
-						Service name
+						The service name
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time">
 					<para>
-						Amount of time
+						The amount of time
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit">
 					<para>
-						Unit of time
+						The unit of time
 					</para>
 				</callout>
 			</calloutlist>

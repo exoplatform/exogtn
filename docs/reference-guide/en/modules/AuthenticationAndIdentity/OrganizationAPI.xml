@@ -47,15 +47,14 @@
 		component connects a User, a Group and a Membership Type.
 	</para>
 	<para>
-		A user can have one or more memberships within a group, for example:
-		user A can have the 'member' and 'admin' memberships in group /user.
+		A user can have one or more memberships within a group. For example:
+		the user A can have the 'member' and 'admin' memberships in the /user group.
 		A user belongs to a group if he has at least one membership in that
 		group.
       </para>
 	<para>
-		Exposing the Organization API to developers the OrganizationService component
-		provides developers with access
-		to handler objects for managing each of the five components -
+		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component.
+    These handler objects are used to mana each of the five components, including
 		UserHandler, UserProfileHandler, GroupHandler, MembershipTypeHandler,
 		and MembershipHandler.
       </para>

@@ -36,10 +36,10 @@
 	<section id="sect-Reference_Guide-Upload_Component-Upload_Service">
 		<title>Upload Service</title>
 		<para>
-			The service is defined by the class: <literal>org.exoplatform.upload.UploadService</literal>;
+			The service is defined by the <literal>org.exoplatform.upload.UploadService</literal> class;
 		</para>
 		<para>
-			This can be configured with the following xml code:
+			This can be configured with the following XML code:
 		</para>
 		
 <programlisting role="XML">&#60;component&#62;
@@ -54,19 +54,19 @@
   &#60;/component&#62;
 </programlisting>
 		<para>
-			This code allows for a default upload size limit for the service to be configured. The value unit is in MegaBytes.
+			This code allows a default upload size limit for the service to be configured. The value unit is in MegaBytes.
 		</para>
 		<para>
 			This limit will be used by default by all applications if no application-specific limit is set. Setting a different limit for applications is discussed in a later section.
 		</para>
 		<para>
-			If the value is set at <parameter>0</parameter> the upload size is unlimited.
+			If the value is set to <parameter>0</parameter>, the upload size is unlimited.
 		</para>
 		<procedure id="proc-Reference_Guide-Upload_Service-How_to_use_the_upload_component">
 			<title>How to use the upload component</title>
 			<step>
 				<para>
-					Create an object type <literal>org.exoplatform.webui.form.UIFormUploadInput</literal>.
+					Create an <literal>org.exoplatform.webui.form.UIFormUploadInput</literal> object type.
 				</para>
 				<para>
 					Two constructors are available for this:
@@ -102,7 +102,7 @@ UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&
 &#60;/preference&#62;
 </programlisting>
 				<para>
-					Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
+					Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set to MegaBytes.
 				</para>
 			</step>
 			<step>
@@ -141,7 +141,7 @@ UIFormUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
 uploadService.removeUpload(uiChild.getUploadId()) ;
 </programlisting>
 				<note>
-					<title>Saving the uploaded file</title>
+					<title>Savethe uploaded file</title>
 					<para>
 						Ensure the file is saved <emphasis role="bold">before</emphasis> the service is cleaned.
 					</para>

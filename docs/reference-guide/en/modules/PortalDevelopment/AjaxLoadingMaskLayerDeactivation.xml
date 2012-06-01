@@ -31,7 +31,7 @@
 	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">
 		<title>Purpose</title>
 		<para>
-			The loading mask layer is deployed after an ajax-call. Its purpose is to block the GUI in order to prevent further user actions until the the ajax-request has been completed.
+			The loading mask layer is deployed after an ajax-call. Its purpose is to block the GUI to prevent further user actions until the the ajax-request has been completed.
 		</para>
 		<para>
 			However, the mask layer may need to be deactivated in instances where the portal requires user instructions before previous instructions have been carried out.
@@ -65,7 +65,7 @@
 		</procedure>
 		
 		<para>
-			The GUI will be blocked to ensure a user can only request one action at a time and while the request seems to be synchronous, all ajax requests are, in fact always asynchronous. For further information refer to <xref linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue" />.
+			The GUI will be blocked to ensure a user can only request one action at a time and while the request seems to be synchronous, all ajax requests are, in fact, always asynchronous. For further information, refer to <xref linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue" />.
 		</para>
 	</section>
 	
@@ -79,7 +79,7 @@
 request.open(instance.method, instance.url, bAsync);
 </programlisting>
 		<para>
-			However, in order to work with browsers that do not support <emphasis>Synchronous</emphasis> requests, <literal>bAsync</literal> is set to always be true (Ajax request will always be asynchronous).
+			However, to work with browsers that do not support <emphasis>Synchronous</emphasis> requests, <literal>bAsync</literal> is set to always be true (Ajax request will always be asynchronous).
 		</para>
 		<!-- 		
 <programlisting>var bAsync = false; // Synchronous

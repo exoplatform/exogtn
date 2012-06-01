@@ -21,8 +21,8 @@
 			The <emphasis role="bold">checkDatabaseAlgorithm</emphasis> initialization parameter determines how the database update is performed.
 		</para>
 		<para>
-			If its value is set to <emphasis role="bold">entry</emphasis> it means that each user, group and membership listed in the configuration is checked each time &PRODUCT; is started.
-         If the entry doesn&#39;t yet exist in the database, it is created. If <emphasis role="bold">checkDatabaseAlgorithm</emphasis> parameter value is set to <emphasis role="bold">empty</emphasis>,
+			If its value is set to <emphasis role="bold">entry</emphasis>, it means that each user, group and membership listed in the configuration is checked each time &PRODUCT; is started.
+         If the entry does not yet exist in the database, it is created. If <emphasis role="bold">checkDatabaseAlgorithm</emphasis> parameter value is set to <emphasis role="bold">empty</emphasis>,
          the configuration data will be updated to the database only if the database is empty.
 		</para>
 	</section>
@@ -164,7 +164,7 @@
          It also specifies a list of users that should not be processed (i.e. administrative users like 'root').
 		</para>
       <note>
-         <para>The terms 'membership' and 'membership type' refer to the same thing, and are used interchangeably.</para>
+         <para>The 'membership' and 'membership type' terms refer to the same thing, and are used interchangeably.</para>
       </note>
 		
 <programlisting role="XML">&#60;component-plugin&#62;

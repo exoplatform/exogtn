@@ -18,7 +18,7 @@
 			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
 		<para>
-			&PRODUCT; doesn&#39;t require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
+			&PRODUCT; does not require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
 		</para>
 		<para>
 			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
@@ -98,7 +98,7 @@
 		</para>
 		<note>
 			<para>
-				As the servlet is already configured this example is for information only.
+				As the servlet is already configured, this example only aims at providing information.
 			</para>
 		</note>
 		
@@ -157,7 +157,7 @@ public class MyFilter implements javax.servlet.Filter {
 }
 </programlisting>
 		<para>
-			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above nothing specific to &PRODUCT; needs to be included, only the URL pattern to set has to be known.
+			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which you want to know the time to serve a portlet request. As mentioned above, nothing specific to &PRODUCT; needs to be included, only the URL pattern to set has to be known.
 		</para>
 		
 <programlisting role="XML">
