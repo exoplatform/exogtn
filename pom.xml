@@ -88,6 +88,9 @@
      <pushChanges>false</pushChanges>
      <version.release.plugin>2.1</version.release.plugin>
 
+      <!-- buildnumber-maven-plugin -->
+      <version.buildnumber.plugin>1.1</version.buildnumber.plugin>
+
       <!-- ***************** -->
       <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
       <!-- ***************** -->
