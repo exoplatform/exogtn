@@ -95,6 +95,9 @@
      <pushChanges>false</pushChanges>
      <version.release.plugin>2.1</version.release.plugin>
 
+      <!-- buildnumber-maven-plugin : needs 1.0 for git -->
+      <version.buildnumber.plugin>1.1</version.buildnumber.plugin>
+
       <!-- ***************** -->
       <!-- Repository Deployment URLs for eXo (EXOGTN-12) -->
       <!-- webdav required to safely deploy large artifacts -->
