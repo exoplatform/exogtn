@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<section id="sect-Reference-Guide_Gadgets_Standard-WebApp">
+  <title>Standard WebApp for Gadget importer</title>
+  <para>In &PRODUCT;, you can create a WebApp folder to contain the configuration of the list of gadgets which are automatically added to the <emphasis role="bold">Application
+        Registry</emphasis>.</para>
+  <para>This section shows you how to create a WebApp which has a standard structure processed by the Gadget importer.</para>
+  <section id="sect-Reference-Guide_Gadgets_Standard-WebApp_Structure-WebApp">
+    <title>Structure of WebApp</title>
+    <para> A WebApp should be organized as the following structure:
+    </para>
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/GadgetDevelopment/GadgetStructure.png" format="PNG" align="center"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/GadgetDevelopment/GadgetStructure.png" format="PNG" align="center" scalefit="1"
+                   width="60mm"/>
+      </imageobject>
+    </mediaobject>
+  </section>
+  <section id="sect-Reference-Guide_Gadgets_Necessary-files">
+    <title>Necessary files</title>
+    <para>The WebApp structure consists of two necessary files, including <emphasis>web.xml</emphasis>, and <emphasis>gadget.xml</emphasis>.</para>
+    <para>In the
+      <emphasis>web.xml</emphasis>
+      file, there are 2 requirements: </para>
+    <itemizedlist>
+      <listitem>
+        <para>The
+      <emphasis>org.exoplatform.portal.application.ResourceRequestFilter</emphasis>
+      filter: handle requests to map into GateIn.</para>
+      </listitem>
+      <listitem>
+        <para>The
+      <emphasis>org.gatein.wci.api.GateInServlet</emphasis>
+      servlet: help to register this WebApp to GateIn.</para>
+      </listitem>
+    </itemizedlist>
+
+    <programlisting language="xml"><![CDATA[<web-app>
+  <display-name>eXoGadgets</display-name>
+  <filter>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>GateInServlet</servlet-name>
+    <servlet-class>org.gatein.wci.api.GateInServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GateInServlet</servlet-name>
+    <url-pattern>/gateinservlet</url-pattern>
+  </servlet-mapping>
+
+</web-app>]]>
+    </programlisting>
+    <para>The
+      <emphasis>gadget.xml</emphasis>
+      file is used to locate the configuration of gadgets that you want to add to the <emphasis role="bold">Application
+        Registry</emphasis>.
+    </para>
+    <programlisting language="xml"> <![CDATA[<gadgets
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gadgets_1_0"
+    xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
+
+	<gadget name="To-do">
+		<path>/gadgets/Todo/Todo.xml</path>
+	</gadget>
+
+	<gadget name="Calendar">
+		<path>/gadgets/Calendar/Calendar.xml</path>
+	</gadget>
+
+	<gadget name="Calculator">
+		<path>/gadgets/Calculator/Calculator.xml</path>
+	</gadget>
+
+	<gadget name="rssAggregator">
+		<path>/gadgets/rssAggregator/rssAggregator.xml</path>
+	</gadget>
+
+  <gadget name="Currency">
+    <url>http://www.donalobrien.net/apps/google/currency.xml</url>
+  </gadget>
+
+  <gadget name="ServicesManagement">
+    <path>/gadgets/ServicesManagement/ServicesManagement.xml</path>
+  </gadget>
+</gadgets>
+]]>
+    </programlisting>
+    <para>This file has 3 important tags:</para>
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role="bold">&lt;gadget&gt;</emphasis>: every gadget will be configured in the
+          <emphasis>&lt;gadget&gt;</emphasis>
+          tag which
+          has a "<emphasis>name</emphasis>" attribute to indicate the gadget name that <emphasis role="bold">Application Registry</emphasis> manages.
+          The <emphasis>&lt;gadget&gt;</emphasis>
+          tag
+          can contain a child tag, either <emphasis>&lt;path&gt;</emphasis>, or <emphasis>&lt;url&gt;</emphasis>.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis role="bold">&lt;path&gt;</emphasis>: this tag is the child of the
+          <emphasis>&lt;gadget&gt;</emphasis>
+          tag. It indicates the path to the gadget and helps the Gadget service find exactly where the gadget source and
+          resources are located. It is known as the local path of the server.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis role="bold">&lt;url&gt;</emphasis>: if the gadget source is located from the external server, the
+          <emphasis>&lt;url&gt;</emphasis>
+          tag should be configured to indicate the URL of the gadget.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section id="sect-Reference-Guide_Gadgets_Local-Gadget-Resource">
+    <title>Local gadget resources</title>
+    <para>
+        For local gadgets, their source and resources should be located in the same folder.
+        </para>
+        <para>See the example about the
+          <emphasis role="bold">To-do</emphasis>
+          gadget:
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/GadgetDevelopment/todoExample.png" format="PNG" align="center"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/GadgetDevelopment/todoExample.png" format="PNG" align="center" scalefit="1"
+                       width="50mm"/>
+          </imageobject>
+        </mediaobject>
+        <note>
+          <para>
+          The Gadget importer service will find a folder that contains the gadget source, then find all resources in the
+            folder and store them into JCR as the resources of the gadget. Therefore, putting the gadget resources in
+            the folder different from the gadget source can cause many unnecessary files to be stored as the
+            resource files of the gadget.
+          </para>
+        </note>
+  </section>
+</section>
