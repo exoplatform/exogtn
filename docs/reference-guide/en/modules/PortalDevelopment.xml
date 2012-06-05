@@ -5,6 +5,7 @@
 ]>
 <chapter id="chap-Reference_Guide-Development">
 	<title>Portal Development</title>
+  <abstract>
     <para>This chapter provides you the basic knowledge about portal development via the following topics:</para>
     <itemizedlist>
         <listitem>
@@ -50,7 +51,7 @@
             <para><link linkend="sect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
         </listitem>
     </itemizedlist>
-
+    </abstract>
 	<xi:include href="PortalDevelopment/Skinning.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/PortalLifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/DefaultPortalConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

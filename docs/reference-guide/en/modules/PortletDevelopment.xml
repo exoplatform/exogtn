@@ -5,6 +5,7 @@
 ]>
 <chapter id="chap-Reference_Guide-Portlet_development">
 	<title>Portlet development</title>
+  <abstract>
     <para>This chapter provides you the basic knowledge about portlets, and then you can know how to develop a portlet in a portal.</para>
     <para>This chapter consists of the following topics:</para>
     <itemizedlist>
@@ -15,6 +16,7 @@
             <para><link linkend="sect-Reference_Guide-Global_Portlet">Global porlet.xml file</link></para>
         </listitem>
     </itemizedlist>
+  </abstract>
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Standard.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Global_portlet.xml"/>
 

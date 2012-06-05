@@ -5,6 +5,7 @@
 ]>
 <chapter id="chap-Reference_Guide-Gadget_development">
 	<title>Gadget development</title>
+  <abstract>
     <para>This chapter provides you all the basic knowledge about gadget developments through two following topics:</para>
     <itemizedlist>
         <listitem>
@@ -14,7 +15,8 @@
             <para><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server">Set up a Gadget Server</link></para>
         </listitem>
     </itemizedlist>
-    With the knowledge you have gained, you will know how to deploy a gadget in &PRODUCT;.
+   <para>With the knowledge you have gained, you will know how to deploy a gadget in &PRODUCT;.</para>
+  </abstract>
 	<xi:include href="GadgetDevelopment/Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="GadgetDevelopment/SetupGadgetServer.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

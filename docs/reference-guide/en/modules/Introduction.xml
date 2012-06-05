@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-Reference_Guide-Introduction">
+<preface id="preface-Reference_Guide-Introduction">
 <title>Introduction</title>
 
 	<para>
@@ -20,8 +20,9 @@
 	<para>
 		This book provides thorough information about installation and configuration of the services provided by GateIn.
 	</para>
-	<section id="sect-Install_Guide-Introduction-Related_Links">
-		<title>Related Links</title>
+	<para id="sect-Install_Guide-Introduction-Related_Links">
+		<citetitle><emphasis role="bold">Related Links</emphasis></citetitle>
+    </para>
 		<itemizedlist>
 			<listitem>
 				<para>
@@ -48,7 +49,5 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section>
-
-</chapter>
+</preface>
 
