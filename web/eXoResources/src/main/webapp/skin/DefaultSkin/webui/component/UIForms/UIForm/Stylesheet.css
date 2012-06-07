@@ -21,6 +21,7 @@
 
 .UIFormGrid {
 	margin: auto;
+	width: auto;
 }
 
 .UIForm .UIFormGrid td.FieldLabel {
