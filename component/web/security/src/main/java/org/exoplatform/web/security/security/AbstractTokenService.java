@@ -220,6 +220,6 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
    protected String nextTokenId()
    {
-      return InitiateLoginServlet.COOKIE_NAME + random.nextInt();
+      return InitiateLoginServlet.COOKIE_NAME + System.currentTimeMillis() + random.nextInt();
    }
 }
