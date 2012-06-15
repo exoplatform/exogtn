@@ -50,7 +50,13 @@ UIVirtualList.prototype.init = function(componentId, hasNext, autoAdjustHeight) 
 
 UIVirtualList.prototype.loadIfNeeded = function(uiVirtualList)
 {
-  if (uiVirtualList.clientHeight == uiVirtualList.scrollHeight)
+  var children = eXo.core.DOMUtil.getChildrenByTagName(uiVirtualList, "div");  
+  var childrenHeight = 0;
+  for (var i=0; i<children.length;i++) {
+  	childrenHeight += children[i].offsetHeight;  	
+  }
+
+  if (childrenHeight <= uiVirtualList.offsetHeight)
   {
     if (uiVirtualList.isFinished)
     {

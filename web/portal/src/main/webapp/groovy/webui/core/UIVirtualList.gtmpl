@@ -18,7 +18,9 @@
 %>
 <div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css" 
   onscroll="eXo.webui.UIVirtualList.onScroll(this,'$url');">    
-  <% uicomponent.renderChildren();%>
+  <div style="width: 99%;" >
+    <% uicomponent.renderChildren();%>
+  </div>
   <% 
     rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight);");
   %>
