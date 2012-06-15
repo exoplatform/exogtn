@@ -295,20 +295,8 @@ function UIDashboard() {
 		var gadgetControls = DOMUtil.findDescendantsByClass(portletWindow, "div", "GadgetControl");
 		for(var j=0; j<gadgetControls.length; j++) {
 			var uiGadget = DOMUtil.findAncestorByClass(gadgetControls[j],"UIGadget");
-			var minimizeButton = DOMUtil.findFirstDescendantByClass(gadgetControls[j], "span", "MinimizeAction") ;
 			if(canEdit) {
 				eXo.webui.UIDashboard.init(gadgetControls[j], uiGadget);
-				
-				if(minimizeButton) minimizeButton.style.display = "block" ;
-			} else{
-				if(minimizeButton) {
-					minimizeButton.style.display = "none" ;
-					var controlBar = minimizeButton.parentNode ;
-					var closeButton = DOMUtil.findFirstChildByClass(controlBar, "div", "CloseGadget") ;
-					var editButton = DOMUtil.findFirstChildByClass(controlBar, "div", "EditGadget") ;
-					closeButton.style.display = "none" ;
-					editButton.style.display = "none" ;
-				}
 			}
 		}
 	};

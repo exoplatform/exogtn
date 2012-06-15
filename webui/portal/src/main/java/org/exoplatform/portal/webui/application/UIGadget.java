@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -107,6 +108,8 @@ public class UIGadget extends UIComponent
    public String view = HOME_VIEW;
    
    public static String SAVE_PREF_FAIL = "UIGadget.savePrefFail";
+   
+   public static String CAN_EDIT_DASHBOARD = UIGadget.class.getName() + "_canEditDashboard";
 
    /**
     * Initializes a newly created <code>UIGadget</code> object
@@ -144,6 +147,12 @@ public class UIGadget extends UIComponent
       return storageName;
    }
 
+   public boolean canEdit() 
+   {
+      RequestContext context = RequestContext.getCurrentInstance();
+      return Boolean.getBoolean((String)context.getAttribute(UIGadget.CAN_EDIT_DASHBOARD));
+   }
+   
    public String getStandaloneURL()
    {
       PortalRequestContext portalRC = Util.getPortalRequestContext();

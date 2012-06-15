@@ -75,6 +75,7 @@ public class UIDashboard extends UIContainer
          }         
       }
       
+      context.setAttribute(UIGadget.CAN_EDIT_DASHBOARD, canEdit());
       super.processRender(context);
    }
 

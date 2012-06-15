@@ -529,6 +529,8 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
          uiDashboardContainer.addUIGadget(uiGadget, col, row);
          uiDashboardContainer.save();
+         //We need this attribute when render Gadgets
+         context.setAttribute(UIGadget.CAN_EDIT_DASHBOARD, true);
          context.addUIComponentToUpdateByAjax(uiDashboardContainer);
       }
    }

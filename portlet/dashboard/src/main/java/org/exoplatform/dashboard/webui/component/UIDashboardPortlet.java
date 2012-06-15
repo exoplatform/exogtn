@@ -82,7 +82,7 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
             if (page != null)
             {
                UserACL userACL = portal.getApplicationComponent(UserACL.class);
-               return userACL.hasPermission(page);
+               return userACL.hasEditPermission(page);
             }
          }
       }
