@@ -8,7 +8,7 @@
   <para>
     To change your account information, hover your cursor over the account name at the top right corner of the site and
     click
-    <emphasis role="bold">My Account</emphasis>
+    <guilabel>My Account</guilabel>
     from the drop-down menu.
   </para>
   <mediaobject>
@@ -21,7 +21,7 @@
   </mediaobject>
   <para>
     The
-    <emphasis role="bold">Account Profiles</emphasis>
+    <guilabel>Account Profiles</guilabel>
     form appears.
   </para>
   <mediaobject>
@@ -41,19 +41,19 @@
     <step>
       <para>
         Select the
-        <emphasis role="bold">Account Profiles</emphasis>
+        <guilabel>Account Profiles</guilabel>
         tab.
       </para>
     </step>
     <step>
       <para>
-        Change your <emphasis role="bold">First Name, Last Name, Email.</emphasis> Your <emphasis role="bold">Username</emphasis> cannot be changed.
+        Change your <guilabel>First Name, Last Name, Email</guilabel>. Your <guilabel>Username</guilabel> cannot be changed.
       </para>
     </step>
     <step>
       <para>
         Click
-        <emphasis role="bold">Save</emphasis>
+        <guibutton>Save</guibutton>
         to submit your changes.
       </para>
     </step>
@@ -72,7 +72,7 @@
     <step>
       <para>
         Select the
-        <emphasis role="bold">Change Password</emphasis>
+        <guilabel>Change Password</guilabel>
         tab to go to the following form.
       </para>
       <mediaobject>
@@ -97,14 +97,14 @@
     <step>
       <para>
         Re-enter your password in the
-        <emphasis role="bold">Confirm New Password</emphasis>
+        <guilabel>Confirm New Password</guilabel>
         field.
       </para>
     </step>
     <step>
       <para>
         Click
-        <emphasis role="bold">Save</emphasis>
+        <guibutton>Save</guibutton>
         to accept your changes.
       </para>
     </step>

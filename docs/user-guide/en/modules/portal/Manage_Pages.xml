@@ -18,28 +18,30 @@
         <para xml:id="sect-User_Guide-Page_Creation_Wizard-Select_Navigation_Node_and_Create_Page">
       <emphasis role="bold">Select a navigation node and create the page</emphasis></para>
       </citetitle>
-      <para>In the first step, you have to set <emphasis role="bold">Node Name</emphasis> and <emphasis role="bold">Display Name</emphasis> of your page. You are also able to decide
+      <para>In the first step, you have to set <guilabel>Node Name</guilabel> and <guilabel>Display Name</guilabel> of your page. You are also able to decide
         the pages visibility and the publication period of the page.
       </para>
       <procedure>
         <step>
           <para>
             Hover your cursor over
-            <emphasis role="bold">My Sites</emphasis>
+            <guilabel>My Sites</guilabel>
             and click one portal/site to which you want to add a new page from the drop-down menu.
           </para>
           <para>You will be switched to your selected portal only after a few seconds.</para>
         </step>
         <step>
           <para>Hover your cursor over
-            <emphasis role="bold">Edit</emphasis>
-            on the <emphasis role="bold">Administration</emphasis> bar.
+            <guilabel>Edit</guilabel>
+            on the <guilabel>Administration</guilabel> bar.
           </para>
         </step>
         <step>
-          <para>Select
-            <emphasis role="bold">Page --> Add Page</emphasis>
-            from the drop-down menu to open the <emphasis role="bold">Page Creation Wizard</emphasis> form.
+          <para>Select <menuchoice>
+            <guimenu>Page</guimenu>
+            <guimenuitem>Add Page</guimenuitem>
+          </menuchoice>
+            from the drop-down menu to open the <guilabel>Page Creation Wizard</guilabel> form.
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/Wizard1.png" format="PNG" align="center" scale="110"/>
@@ -61,7 +63,7 @@
             <listitem>
               <para>
                 The right pane displays
-                <emphasis role="bold">Page Editor</emphasis>
+                <guilabel>Page Editor</guilabel>
                 where you can make changes on the selected navigation node.
                 You can input parameters for your new page in this pane.
               </para>
@@ -83,7 +85,7 @@
           <tbody>
            <row>
               <entry>
-                <emphasis role="bold">Selected Page Node</emphasis>
+                <guilabel>Selected Page Node</guilabel>
               </entry>
               <entry>
                 The path of the selected node to add a new sub-page.     
@@ -91,7 +93,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Node Name</emphasis>
+                <guilabel>Node Name</guilabel>
               </entry>
               <entry>
                The node name of the added page. This field is required with its length
@@ -100,28 +102,28 @@
             </row>
              <row>
               <entry>
-                <emphasis role="bold">Extended Label Mode</emphasis>
+                <guilabel>Extended Label Mode</guilabel>
               </entry>
               <entry>
                 Tick the checkbox to show the
-                  <emphasis role="bold">Language</emphasis>
+                  <guilabel>Language</guilabel>
                   field for you to select another
                   language for your created node's display name. It means that if this checkbox is deselected, the
-                  <emphasis role="bold">Language</emphasis>
+                  <guilabel>Language</guilabel>
                   field
                   will be deactivated.
               </entry>
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Language</emphasis>
+                <guilabel>Language</guilabel>
               </entry>
               <entry>
                 Select your desired language for the node's display name from the drop-down menu.
               </entry>
             </row>
             <row>
-            <entry><emphasis role="bold">Display Name</emphasis>
+            <entry><guilabel>Display Name</guilabel>
             </entry>
             <entry>
           The display name of the node which contains the added page and must have a length between 3 and 120 characters.
@@ -129,7 +131,7 @@
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Visible</emphasis>
+                <guilabel>Visible</guilabel>
               </entry>
               <entry>
                 <para>
@@ -138,7 +140,7 @@
                 <para>
                   If this option is checked, the page or the page node appears on the navigation bar, the page
                   navigation and the
-                  sitemap. If "Visible" is checked, the visibility also depends on the <emphasis role="bold">Publication Date &amp; Time</emphasis>
+                  sitemap. If "Visible" is checked, the visibility also depends on the <guilabel>Publication Date &amp; Time</guilabel>
                   option.
                 </para>
                 <para>
@@ -149,19 +151,19 @@
             </row>
                         <row>
               <entry>
-                <emphasis role="bold">Publication Date &amp; Time</emphasis>
+                <guilabel>Publication Date &amp; Time</guilabel>
               </entry>
               <entry>
                     This option allows the page to be published for a given period. If this option is checked,
-                  <emphasis role="bold">Start Publication Date</emphasis>
+                  <guilabel>Start Publication Date</guilabel>
                   and
-                  <emphasis role="bold">End Publication Date</emphasis>
+                  <guilabel>End Publication Date</guilabel>
                   will be shown.
               </entry>
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Start Publication Date</emphasis>
+                <guilabel>Start Publication Date</guilabel>
               </entry>
               <entry>
                 The start date and time to publish the page.
@@ -169,7 +171,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">End Publication Date</emphasis>
+                <guilabel>End Publication Date</guilabel>
               </entry>
               <entry>
                 The end date and time to publish the page.
@@ -182,7 +184,7 @@
         <step>
           <para>
             Click
-            <emphasis role="bold">Next</emphasis>
+            <guilabel>Next</guilabel>
             or number '2' of the wizard steps to go to <link linkend="sect-User_Guide-Page_Creation_Wizard-Select_Page_Layout_Template">Step 2.</link>
           </para>
         </step>
@@ -201,14 +203,14 @@
         <step>
           <para>
             Select
-            <emphasis role="bold">Empty Layout</emphasis>
+            <guilabel>Empty Layout</guilabel>
             or click the down-arrow icon in the right pane to see more templates.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Next</emphasis>
+            <guilabel>Next</guilabel>
             or number '3' of the wizard steps to go to the <link linkend="sect-User_Guide-Page_Creation_Wizard-Rearrange_Page_Layout_and_Portlets">last step.</link>
           </para>
         </step>
@@ -222,7 +224,7 @@
 	   </para>
 	   <itemizedlist>
 		<listitem>
-		<para>Add your desired applications, containers or gadgets by dragging and dropping them from <emphasis role="bold">Page Editor</emphasis> to the main page body.
+		<para>Add your desired applications, containers or gadgets by dragging and dropping them from <guilabel>Page Editor</guilabel> to the main page body.
 		</para>
       <mediaobject>
         <imageobject role="html">
@@ -248,7 +250,7 @@
           <tbody>
             <row>
               <entry>
-                <emphasis role="bold">Applications</emphasis>
+                <guilabel>Applications</guilabel>
               </entry>
               <entry>
                 This tab lists all existing categories and their portlets that you easily can drag and drop into the container.
@@ -256,28 +258,27 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Containers</emphasis>
+                <guilabel>Containers</guilabel>
               </entry>
               <entry>
                 <para>
               This tab contains all existing containers to build your page layout. You can add a container to your
               page area by dragging and dropping available containers from
-              <emphasis role="bold">Page Editor</emphasis>
+              <guilabel>Page Editor</guilabel>
               to the main page body.
             </para>
 			<itemizedlist>
 			<listitem>
             <para>
               There are various layouts available, including
-              <emphasis role="bold">Rows Layout,</emphasis>
-              <emphasis
-                      role="bold">Columns Layout,
-              </emphasis>
-              <emphasis role="bold">Autofit Columns Layout,</emphasis>
-              <emphasis role="bold">Tabs Layout,</emphasis>
+              <guilabel>Rows Layout,</guilabel>
+              <guilabel>Columns Layout,
+              </guilabel>
+              <guilabel>Autofit Columns Layout,</guilabel>
+              <guilabel>Tabs Layout,</guilabel>
               and
-              <emphasis role="bold">Mixed Layout.</emphasis> </para>
-             <para>For <emphasis role="bold">Tabs Layout,</emphasis> you can add more tabs to the layout, and reorder the position of the tabs.
+              <guilabel>Mixed Layout</guilabel>. </para>
+             <para>For <guilabel>Tabs Layout,</guilabel> you can add more tabs to the layout, and reorder the position of the tabs.
               <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/tabs_layout.png" format="PNG" align="center" scale="110"/>
@@ -335,11 +336,11 @@
           </inlinemediaobject> respectively.
 		</para>
 		</listitem>
-		<listitem><para> View page properties by clicking <emphasis role="bold">View Page Properties</emphasis> at the bottom of the <emphasis role="bold">Page Editor</emphasis> window.
+		<listitem><para> View page properties by clicking <guilabel>View Page Properties</guilabel> at the bottom of the <guilabel>Page Editor</guilabel> window.
 		</para>
 	  </listitem> 
 		<listitem>
-		<para>Preview your changes by clicking <emphasis role="bold">Switch View Mode.</emphasis>
+		<para>Preview your changes by clicking <guilabel>Switch View Mode.</guilabel>
          </para>
         </listitem>
 		</itemizedlist>
@@ -352,7 +353,7 @@
           </imageobject>
         </inlinemediaobject>
         in the
-        <emphasis role="bold">Page Editor</emphasis>
+        <guilabel>Page Editor</guilabel>
         window to save all changes, or
         <inlinemediaobject>
           <imageobject>
@@ -378,10 +379,12 @@
       </step>
       <step>
         <para>
-          Select
-          <emphasis role="bold">Portal --> Pages</emphasis>
-          to go to the 
-          <emphasis role="bold">Pages Management</emphasis> page.
+          Select <menuchoice>
+          <guimenu>Portal</guimenu>
+          <guimenuitem>Pages</guimenuitem>
+          </menuchoice>
+          to go to the
+          <guilabel>Pages Management</guilabel> page.
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/ManagePage.png" format="PNG" align="center" scale="110"/>
@@ -395,10 +398,10 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Add New Page</emphasis>
+          <guilabel>Add New Page</guilabel>
           to open the
-          <emphasis role="bold">Add New Page</emphasis>
-          form with the <emphasis role="bold">Page Settings</emphasis> tab.
+          <guilabel>Add New Page</guilabel>
+          form with the <guilabel>Page Settings</guilabel> tab.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -424,7 +427,7 @@
           <tbody>
             <row>
               <entry>
-                <emphasis role="bold">Page Id</emphasis>
+                <guilabel>Page Id</guilabel>
               </entry>
               <entry>
                 The page's identification string which will be automatically generated when the page is created.
@@ -432,14 +435,14 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Owner Type</emphasis>
+                <guilabel>Owner Type</guilabel>
               </entry>
               <entry>
 			<itemizedlist>
                <listitem>
               <para>
                 If
-                <emphasis role="bold">Owner Type</emphasis>
+                <guilabel>Owner Type</guilabel>
                 is "<emphasis>portal</emphasis>", the page is created for a portal. Therefore, only users who have the
                 <emphasis>Edit</emphasis>
                 permission on the portal can create this page type.
@@ -448,7 +451,7 @@
 			  <listitem>
               <para>
                 If
-                <emphasis role="bold">Owner Type</emphasis>
+                <guilabel>Owner Type</guilabel>
                 is "<emphasis>group</emphasis>", the page is created for a group. Therefore, only users who are the
                 <emphasis>manager</emphasis>
                 of that group can create this page type.
@@ -459,11 +462,11 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Owner Id</emphasis>
+                <guilabel>Owner Id</guilabel>
               </entry>
               <entry>
                 The identification name of the page's owner which will be automatically created after you have selected
-                <emphasis role="bold">Owner Type.</emphasis>
+                <guilabel>Owner Type</guilabel>.
 			 <itemizedlist>
 			 <listitem>
 			 <para>
@@ -473,7 +476,7 @@
 			 </listitem>
 			 <listitem>
               <para>The name of the current portal is automatically selected for
-                <emphasis role="bold">Owner Id,</emphasis>
+                <guilabel>Owner Id,</guilabel>
                 ensuring the <emphasis>Edit</emphasis> permission is assigned to users who can edit the current portal.
               </para>
             </listitem>
@@ -482,7 +485,7 @@
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Page Name</emphasis>
+                <guilabel>Page Name</guilabel>
               </entry>
               <entry> The page name which is required and must be unique. Only alphabetical, numerical and
                 underscore characters are allowed with its length from 3 to 30 characters.
@@ -490,14 +493,14 @@
             </row>
 			<row>
 			<entry>
-			<emphasis role="bold">Page Title</emphasis>
+			<guilabel>Page Title</guilabel>
 			</entry>
 			<entry>The page title which is optional with its length from 3 to 30 characters.
 			</entry>
 			</row>
 			<row>
 			<entry>
-			<emphasis role="bold">Show Max Window</emphasis>
+			<guilabel>Show Max Window</guilabel>
 			</entry>
 			<entry>The option enables the page to be shown at the maximum size or not.
 			</entry>
@@ -509,31 +512,31 @@
       <step>
         <para>
           Define the page layout in the
-          <emphasis role="bold">Page Layout</emphasis>
+          <guilabel>Page Layout</guilabel>
           template.
         </para>
       </step>
       <step>
         <para xml:id="Manage_Pages.Permission_Settings">
           Define permissions in the
-          <emphasis role="bold">Permission Settings</emphasis>
-          tab. This tab consists of two sub-tabs named <emphasis role="bold">Access Permission Settings</emphasis> and
-            <emphasis role="bold">Edit Permission Settings</emphasis>.
+          <guilabel>Permission Settings</guilabel>
+          tab. This tab consists of two sub-tabs named <guilabel>Access Permission Settings</guilabel> and
+            <guilabel>Edit Permission Settings</guilabel>.
         </para>
           <itemizedlist>
               <listitem>
-          <para>The <emphasis role="bold">Access Permission Settings</emphasis> tab shows all users who can access the page:</para>
+          <para>The <guilabel>Access Permission Settings</guilabel> tab shows all users who can access the page:</para>
           <itemizedlist>
               <listitem>
-                  <para>If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Portal</emphasis>",
-                   the name of the current portal is automatically selected for the <emphasis role="bold">Owner Id</emphasis> field, so that the <emphasis>Access</emphasis> permission is assigned to all users who can access the current portal.
+                  <para>If the value of the <guilabel>Owner Type</guilabel> field is "<emphasis>Portal</emphasis>",
+                   the name of the current portal is automatically selected for the <guilabel>Owner Id</guilabel> field, so that the <emphasis>Access</emphasis> permission is assigned to all users who can access the current portal.
                   </para>
               </listitem>
               <listitem>
                   <para>
-                      If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Group</emphasis>",
+                      If the value of the <guilabel>Owner Type</guilabel> field is "<emphasis>Group</emphasis>",
                       the <emphasis>Access</emphasis> permission is assigned to all users who are the members of the group
-                      that is selected in the <emphasis role="bold">Owner Id</emphasis> field of the <emphasis role="bold">Page Settings</emphasis> tab.
+                      that is selected in the <guilabel>Owner Id</guilabel> field of the <guilabel>Page Settings</guilabel> tab.
                   </para>
               </listitem>
           </itemizedlist>
@@ -542,20 +545,20 @@
               </para>
               </listitem>
               <listitem>
-                  <para>The <emphasis role="bold">Edit Permission Settings</emphasis> shows all users who have the <emphasis>edit</emphasis>
+                  <para>The <guilabel>Edit Permission Settings</guilabel> shows all users who have the <emphasis>edit</emphasis>
               permission on the page.
                   </para>
               <itemizedlist>
               <listitem>
-                  <para>If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Portal</emphasis>",
+                  <para>If the value of the <guilabel>Owner Type</guilabel> field is "<emphasis>Portal</emphasis>",
                    the <emphasis>Edit</emphasis> permission is assigned to users who can edit the current portal.
                   </para>
               </listitem>
               <listitem>
                   <para>
-                      If the value of the <emphasis role="bold">Owner Type</emphasis> field is "<emphasis>Group</emphasis>",
+                      If the value of the <guilabel>Owner Type</guilabel> field is "<emphasis>Group</emphasis>",
                       the <emphasis>Edit</emphasis> permission is assigned to all users who are the members of the group
-                      that is selected in the <emphasis role="bold">Owner Id</emphasis> field of the <emphasis role="bold">Page Settings</emphasis> tab.
+                      that is selected in the <guilabel>Owner Id</guilabel> field of the <guilabel>Page Settings</guilabel> tab.
                   </para>
               </listitem>
           </itemizedlist>
@@ -567,7 +570,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept creating a new page.
         </para>
       </step>
@@ -583,10 +586,10 @@
         </para>
           <para><emphasis role="bold">The first way</emphasis></para>
               <para><emphasis role="bold">i.</emphasis> Open the
-                <emphasis role="bold">Navigation Management</emphasis>
+                <guilabel>Navigation Management</guilabel>
                 form by doing the steps in the <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Edit navigation</link> section.
               </para>
-              <para><emphasis role="bold">ii.</emphasis> Right-click your desired node and select <emphasis role="bold">Edit Node's Page</emphasis> from the drop-down menu.
+              <para><emphasis role="bold">ii.</emphasis> Right-click your desired node and select <guilabel>Edit Node's Page</guilabel> from the drop-down menu.
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/EditNodePage.png" format="PNG" align="center" scale="110"/>
@@ -605,8 +608,10 @@
                     <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
                   </imageobject>
                 </inlinemediaobject>
-                and select
-                <emphasis role="bold">Portal --> Pages</emphasis>
+                and select <menuchoice>
+                  <guimenu>Portal</guimenu>
+                  <guimenuitem>Pages</guimenuitem>
+                </menuchoice>
                 to open the 
                 <emphasis role="bold">Pages Management</emphasis> page.
               </para>
@@ -619,8 +624,8 @@
           </inlinemediaobject> 
              corresponding to the page you want to edit.</para>
 			 
-        <para>The <emphasis role="bold">Edit Page</emphasis> form will be displayed in the
-          <emphasis role="bold">Page Properties</emphasis> window.
+        <para>The <guilabel>Edit Page</guilabel> form will be displayed in the
+          <guilabel>Page Properties</guilabel> window.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -634,17 +639,17 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">View Page Properties</emphasis>
+          <guilabel>View Page Properties</guilabel>
           in the
-          <emphasis role="bold">Page Editor</emphasis>
+          <guilabel>Page Editor</guilabel>
           window to edit page properties.
         </para>
-		<para><emphasis role="bold">i.</emphasis> In the <emphasis role="bold">Page Settings</emphasis> tab, you cannot change values in
-                <emphasis role="bold">Page Id, Owner Type, Owner Id,</emphasis> and <emphasis role="bold">Page Name.</emphasis>
+		<para><emphasis role="bold">i.</emphasis> In the <guilabel>Page Settings</guilabel> tab, you cannot change values in
+                <guilabel>Page Id, Owner Type, Owner Id,</guilabel> and <guilabel>Page Name</guilabel>.
               </para>
-        <para><emphasis role="bold">ii.</emphasis> In the <emphasis role="bold">Permission Settings</emphasis> tab, you can change or add more <emphasis>Access</emphasis> and <emphasis>Edit</emphasis> permissions.
+        <para><emphasis role="bold">ii.</emphasis> In the <guilabel>Permission Settings</guilabel> tab, you can change or add more <emphasis>Access</emphasis> and <emphasis>Edit</emphasis> permissions.
                 This form is only supported for pages of a <emphasis>group</emphasis> or a <emphasis>portal.</emphasis>
-                Because the user's page is private, noone can access or edit it, except the creator.
+                Because the user's page is private, no one can access or edit it, except the creator.
 				<note><para>For more details on how to assign permissions on a page, refer to the <link linkend="sect-User_Guide-Manage_Permission-Set_Page_Permission">Set permissions on a page</link> section.
 				</para></note>
               </para>
@@ -716,7 +721,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Save,</emphasis>
+          <guibutton>Save</guibutton>,
           then select
           <inlinemediaobject>
             <imageobject>
@@ -724,7 +729,7 @@
             </imageobject>
           </inlinemediaobject>
           in
-          <emphasis role="bold">Page Editor</emphasis>
+          <guilabel>Page Editor</guilabel>
           for all changes to take effect, or
           <inlinemediaobject>
             <imageobject>
@@ -748,8 +753,10 @@
               <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
-          and select
-          <emphasis role="bold">Portal --> Pages</emphasis>
+          and select <menuchoice>
+          <guimenu>Portal</guimenu>
+          <guimenuitem>Pages</guimenuitem>
+          </menuchoice>
           to open the
           <emphasis role="bold">Pages Management</emphasis> page.
           You will see a list of all existing pages.
@@ -769,7 +776,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">OK</emphasis>
+          <guibutton>OK</guibutton>
           in the confirmation message to accept your deletion.
         </para>
       </step>

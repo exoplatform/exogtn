@@ -5,7 +5,7 @@
         ]>
 <section id="sect-User_Guide-User_Management-Manage_users">
 <title>Manage users</title>
-    <para>By clicking <emphasis role="bold">Groups And Roles,</emphasis> you will see the <emphasis role="bold">Organization</emphasis> form which allows
+    <para>By clicking <guilabel>Groups And Roles,</guilabel> you will see the <guilabel>Organization</guilabel> form which allows
       you to manage users, groups and memberships.
     </para>
     <mediaobject>
@@ -18,7 +18,7 @@
     </mediaobject>
     <para>
       As an administrator, you can easily find, edit information of users, and even remove them from the system via the
-      <emphasis role="bold">User Management</emphasis> tab. By default, all registered users will be shown in this tab.
+      <guilabel>User Management</guilabel> tab. By default, all registered users will be shown in this tab.
     </para>
     <mediaobject>
       <imageobject role="html">
@@ -29,7 +29,7 @@
       </imageobject>
     </mediaobject>
     <para>
-      Via the <emphasis role="bold">User Management</emphasis> tab, you also can define each user belonging to user groups and his
+      Via the <guilabel>User Management</guilabel> tab, you also can define each user belonging to user groups and his
       memberships (roles) in these groups. You cannot add users to a group but can remove them from the group.
     </para>
     <section id="sect-User_Guide-User_Management-Search_a_user">
@@ -63,7 +63,7 @@
             <imageobject>
               <imagedata fileref="images/Search_button.png" format="PNG" scalefit="1" width="3.5mm"/>
             </imageobject>
-          </inlinemediaobject>, or hit the <emphasis role="bold">Enter</emphasis> key to perform your search.
+          </inlinemediaobject>, or hit the <guibutton>Enter</guibutton> key to perform your search.
           </para>
         </step>
       </procedure>
@@ -90,8 +90,8 @@
         <step>
           <para>
             Select the
-            <emphasis role="bold">Account Info</emphasis>
-            tab to edit main information of the user, including <emphasis role="bold">First Name, Last Name,</emphasis> or <emphasis role="bold">Email Address.</emphasis>
+            <guilabel>Account Info</guilabel>
+            tab to edit main information of the user, including <guilabel>First Name, Last Name</guilabel>, or <guilabel>Email Address</guilabel>.
           </para>
           <mediaobject>
             <imageobject role="html">
@@ -104,30 +104,30 @@
           <variablelist>
             <varlistentry>
               <term>
-                <emphasis role="bold">Username</emphasis>
+                <guilabel>Username</guilabel>
               </term>
               <listitem>
                 <para>
                   The
-                  <emphasis role="bold">Username</emphasis>
+                  <guilabel>Username</guilabel>
                   cannot be changed.
                 </para>
               </listitem>
             </varlistentry>
             <varlistentry>
               <term>
-                <emphasis role="bold">Change Password</emphasis>
+                <guilabel>Change Password</guilabel>
               </term>
               <listitem>
                 <para>
                   The
-                  <emphasis role="bold">Change Password</emphasis>
+                  <guilabel>Change Password</guilabel>
                   option allows an administrator to set a new password for the selected user. When the
-                  <emphasis role="bold">Change Password</emphasis>
+                  <guilabel>Change Password</guilabel>
                   option is unchecked,
-                  <emphasis role="bold">New Password</emphasis>
+                  <guilabel>New Password</guilabel>
                   and
-                  <emphasis role="bold">Confirm Password</emphasis>
+                  <guilabel>Confirm Password</guilabel>
                   are hidden. Passwords must contain at least 6 characters, including letters, numbers and
                   punctuation marks.
                 </para>
@@ -140,25 +140,25 @@
         <step>
           <para>
             Select the
-            <emphasis role="bold">User Profile</emphasis>
+            <guilabel>User Profile</guilabel>
             tab to edit the personal information of the selected user, including
-            <emphasis role="bold">Profile,</emphasis>
-            <emphasis role="bold">Home</emphasis>
+            <guilabel>Profile,</guilabel>
+            <guilabel>Home</guilabel>
             and
-            <emphasis role="bold">Business.</emphasis>
+            <guilabel>Business.</guilabel>
 			You may also switch the default display language for that user by selecting
-            another language from the <emphasis role="bold">Language</emphasis> field where all available languages are displayed in the alphabetical order.
+            another language from the <guilabel>Language</guilabel> field where all available languages are displayed in the alphabetical order.
           </para>
         </step>
         <step>
           <para>
             Select the
-            <emphasis role="bold">User Membership</emphasis>
+            <guilabel>User Membership</guilabel>
             tab to see the group membership information of the user.
           </para>
           <para>
             The
-            <emphasis role="bold">User Membership</emphasis>
+            <guilabel>User Membership</guilabel>
             tab displays which groups the selected user belongs to.
           </para>
           <para>
@@ -172,7 +172,7 @@
         </step>
         <step>
           <para>
-            Click <emphasis role="bold">Save</emphasis> to accept your changes.
+            Click <guibutton>Save</guibutton> to accept your changes.
           </para>
         </step>
       </procedure>
@@ -193,13 +193,13 @@
             <imageobject>
               <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="3mm"/>
             </imageobject>
-          </inlinemediaobject> corresponding to the user you want to delete in the main <emphasis role="bold">User Management</emphasis> form.
+          </inlinemediaobject> corresponding to the user you want to delete in the main <guilabel>User Management</guilabel> form.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">OK</emphasis>
+            <guibutton>OK</guibutton>
             in the confirmation message
             to accept your deletion.
           </para>
