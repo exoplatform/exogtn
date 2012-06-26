@@ -24,7 +24,7 @@
     <procedure>
       <step><para>
           Select
-          <emphasis role="bold">Add New Node</emphasis> to create a node as a sub-node of the selected node.
+          <guilabel>Add New Node</guilabel> to create a node as a sub-node of the selected node.
 		  </para>
 		  <itemizedlist>
 		  <listitem>
@@ -34,17 +34,17 @@
             <imageobject>
               <imagedata fileref="images/Up_arrow.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
-          </inlinemediaobject>, then right-click the empty space and select <emphasis role="bold">Add New Node</emphasis>;
+          </inlinemediaobject>, then right-click the empty space and select <guilabel>Add New Node</guilabel>;
 		  </para>
 		  </listitem>
 		  <listitem>
-		  <para>Or, simply click the <emphasis role="bold">Add Node</emphasis> button.</para>
+		  <para>Or, simply click the <guibutton>Add Node</guibutton> button.</para>
 		  </listitem>
 		  </itemizedlist>
-		<para>The <emphasis role="bold">Add/Edit Page Node</emphasis> form appears.</para>
+		<para>The <guilabel>Add/Edit Page Node</guilabel> form appears.</para>
 		</step>
 		<step>
-		<para>Enter values in the <emphasis role="bold">Page Node Settings</emphasis> tab.
+		<para>Enter values in the <guilabel>Page Node Settings</guilabel> tab.
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110"/>
@@ -70,7 +70,7 @@
           <tbody>
 		    <row>
               <entry>
-                <emphasis role="bold">Asterisk (*)</emphasis>
+                <guilabel>Asterisk (*)</guilabel>
               </entry>
               <entry>
                 This mark next to each field means that it is required to enter values in the field.
@@ -78,7 +78,7 @@
             </row>
            <row>
               <entry>
-                <emphasis role="bold">Uri</emphasis>
+                <guilabel>Uri</guilabel>
               </entry>
               <entry>
                 An identification of the node that is auto-created after the new node has been created.
@@ -86,7 +86,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Node Name</emphasis>
+                <guilabel>Node Name</guilabel>
               </entry>
               <entry>
                 The node name which must be unique. Only alphabetic, numeric and underscore characters are allowed with
@@ -95,16 +95,16 @@
             </row>
              <row>
               <entry>
-                <emphasis role="bold">Extended Label Mode</emphasis>
+                <guilabel>Extended Label Mode</guilabel>
               </entry>
               <entry>
                 Tick this checkbox to activate the extended label mode for your page node's label.
-                If this checkbox is deselected, the <emphasis role="bold">Language</emphasis> field will disappear.
+                If this checkbox is deselected, the <guilabel>Language</guilabel> field will disappear.
               </entry>
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Language</emphasis>
+                <guilabel>Language</guilabel>
               </entry>
               <entry>
                 Select your desired language for the node label from the drop-down menu.
@@ -112,19 +112,19 @@
             </row>
             <row>
             <entry>
-            <emphasis role="bold">Label</emphasis>
+            <guilabel>Label</guilabel>
             </entry>
             <entry>
             The display name of the node on the screen in the selected language.
                 This field is not required and may be changed.
                 Its length must be between 3 and 120 characters, including SPACES.
-                For example, if you want to create a French label for your node, first select the <emphasis role="bold">Extended Label Mode</emphasis> checkbox.
-                Next, from the <emphasis role="bold">Language</emphasis> drop-down list, select your desired language and enter your French label into the <emphasis role="bold">Label</emphasis> field.
+                For example, if you want to create a French label for your node, first select the <guilabel>Extended Label Mode</guilabel> checkbox.
+                Next, from the <guilabel>Language</guilabel> drop-down list, select your desired language and enter your French label into the <guilabel>Label</guilabel> field.
             </entry>
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Visible</emphasis>
+                <guilabel>Visible</guilabel>
               </entry>
               <entry>
                 This checkbox enables the page and its node to be shown or hidden at the navigation bar and sitemap.
@@ -132,19 +132,19 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Publication Date &amp; Time</emphasis>
+                <guilabel>Publication Date &amp; Time</guilabel>
               </entry>
               <entry>
                 This option enables this node to be published for a given period. Two fields, including
-                <emphasis role="bold">Start Publication Date</emphasis>
+                <guilabel>Start Publication Date</guilabel>
                 and
-                <emphasis role="bold">End Publication Date</emphasis>
+                <guilabel>End Publication Date</guilabel>
                 only display when this option is checked.
               </entry>
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Start Publication Date</emphasis>
+                <guilabel>Start Publication Date</guilabel>
               </entry>
               <entry>
                 The start date and time to publish the node.
@@ -152,7 +152,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">End Publication Date</emphasis>
+                <guilabel>End Publication Date</guilabel>
               </entry>
               <entry>
                 The end date and time to publish the node.
@@ -164,15 +164,15 @@
 	   <note>
             <para>
               You can set date and time by clicking
-              <emphasis role="bold">Start Publication Date</emphasis>
+              <guilabel>Start Publication Date</guilabel>
               and
-              <emphasis role="bold">End Publication Date</emphasis>
+              <guilabel>End Publication Date</guilabel>
               and selecting a date from the calendar pop-up.
             </para>
           </note>
 	  </step>
 	  <step>
-        <para>Select a page for this node in the <emphasis role="bold">Page Selector</emphasis> tab if you want.
+        <para>Select a page for this node in the <guilabel>Page Selector</guilabel> tab if you want.
 			<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center" scale="110"/>
@@ -198,7 +198,7 @@
           <tbody>
            <row>
               <entry>
-                <emphasis role="bold">Page Id</emphasis>
+                <guilabel>Page Id</guilabel>
               </entry>
               <entry>
                 The identification string of the page which is created automatically.              
@@ -206,7 +206,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Name</emphasis>
+                <guilabel>Name</guilabel>
               </entry>
               <entry>
                The selected page's name.
@@ -214,7 +214,7 @@
             </row>
              <row>
               <entry>
-                <emphasis role="bold">Title</emphasis>
+                <guilabel>Title</guilabel>
               </entry>
               <entry>
                 The selected page's title.
@@ -222,14 +222,14 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Clear Page</emphasis>
+                <guilabel>Clear Page</guilabel>
               </entry>
               <entry>
                 Remove the inputted page information from fields.
               </entry>
             </row>
             <row>
-            <entry><emphasis role="bold">Create Page</emphasis>
+            <entry><guilabel>Create Page</guilabel>
             </entry>
             <entry>
           Create a new page with the inputted name and the title.
@@ -237,7 +237,7 @@
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Search and Select Page</emphasis>
+                <guilabel>Search and Select Page</guilabel>
               </entry>
               <entry>
                 Search and select an existing page.
@@ -248,13 +248,13 @@
       </table>
           <itemizedlist>
               <listitem>
-                  <para>If you select <emphasis role="bold">Create Page</emphasis>, input the name and title for the page.</para>
+                  <para>If you select <guilabel>Create Page</guilabel>, input the name and title for the page.</para>
               </listitem>
               <listitem>
-                  <para>If you select <emphasis role="bold">Search and Select Page</emphasis>, you do not need to enter
+                  <para>If you select <guilabel>Search and Select Page</guilabel>, you do not need to enter
                       values in these fields. They are automatically recorded after you have selected an
-                      existing page from the <emphasis role="bold">Select Page</emphasis>
-                      form .
+                      existing page from the <guilabel>Select Page</guilabel>
+                      form.
                   </para>
                       <mediaobject>
                           <imageobject role="html">
@@ -285,24 +285,24 @@
                   <para>
                       <emphasis role="bold">i.</emphasis>
                       Enter your page title into the
-                      <emphasis role="bold">Title</emphasis>
+                      <guilabel>Title</guilabel>
                       field to search by title;
                   </para>
                   <para>
                       Or, enter the site name into the
-                      <emphasis role="bold">Site Name</emphasis>
+                      <guilabel>Site Name</guilabel>
                       field to search by the page's site name;
                   </para>
                   <para>
                       Or, enter values into both fields to further limit your search results by both
-                      <emphasis role="bold">Title</emphasis>
+                      <guilabel>Title</guilabel>
                       and
-                      <emphasis role="bold">Site Name.</emphasis>
+                      <guilabel>Site Name.</guilabel>
                   </para>
                   <para>
                       <emphasis role="bold">ii.</emphasis>
                       Select the area in which you want to search into the
-                      <emphasis role="bold">Type</emphasis>
+                      <guilabel>Type</guilabel>
                       field.
                   </para>
                   <para>
@@ -327,7 +327,7 @@
                   </para>
                   <para>
                       After selecting a page, you will see the page details in the
-                      <emphasis role="bold">Page Selector</emphasis>
+                      <guilabel>Page Selector</guilabel>
                       form.
                   </para>
               </listitem>
@@ -338,16 +338,16 @@
       <step>
         <para>
           Select one icon in the
-          <emphasis role="bold">Icon</emphasis>
+          <guilabel>Icon</guilabel>
           tab if you want.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept the new node page, or
-          <emphasis role="bold">X</emphasis>
+          <guilabel>X</guilabel>
           to close the form.
         </para>
       </step>
@@ -369,19 +369,19 @@
       <step>
         <para>
           Select 
-          <emphasis role="bold">Edit this Node</emphasis>
+          <guilabel>Edit this Node</guilabel>
           from the drop-down menu to open the form with all similar fields when you <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">add a new node.</link>
         </para>
       </step>
       <step>
         <para>
-          Change values in fields of the current node, except the <emphasis role="bold">Node Name.</emphasis>
+          Change values in fields of the current node, except the <guilabel>Node Name</guilabel>.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to complete your changes.
         </para>
       </step>
@@ -395,19 +395,19 @@
       <step>
         <para>
           Select
-          <emphasis role="bold">Copy Node</emphasis> from the drop-down menu.
+          <guilabel>Copy Node</guilabel> from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
           Right-click the position you want to paste this node and select
-          <emphasis role="bold">Paste Node.</emphasis>
+          <guilabel>Paste Node</guilabel>.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your changes.
         </para>
       </step>
@@ -432,14 +432,14 @@
       <step>
         <para>
           Select
-          <emphasis role="bold">Clone Node</emphasis>
+          <guilabel>Clone Node</guilabel>
           from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
           Right-click the position that you want to paste this node and select
-          <emphasis role="bold">Paste Node.</emphasis>
+          <guilabel>Paste Node.</guilabel>
         </para>
         <para>
           The cloned node will be reproduced in a new place.
@@ -448,7 +448,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your changes.
         </para>
       </step>
@@ -462,19 +462,19 @@
       <step>
         <para>
           Select
-          <emphasis role="bold">Cut Node</emphasis>
+          <guilabel>Cut Node</guilabel>
           from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
           Select the position that you want to paste this node, then click
-          <emphasis role="bold">Paste Node</emphasis>.
+          <guilabel>Paste Node</guilabel>.
         </para>
       </step>
       <step>
         <para>Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your change.
         </para>
         <para>The cut node will be moved to your newly selected place.</para>
@@ -493,20 +493,20 @@
       <step>
         <para>
           Select
-          <emphasis role="bold">Delete Node</emphasis>
+          <guilabel>Delete Node</guilabel>
           from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">OK</emphasis>
+          <guibutton>OK</guibutton>
           in the confirmation message to accept your deletion.
         </para>
       </step>
       <step>
         <para>Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your change.
         </para>
       </step>
@@ -522,16 +522,16 @@
       <step>
         <para>
           Select
-          <emphasis role="bold">Move Up</emphasis>
+          <guilabel>Move Up</guilabel>
           or
-          <emphasis role="bold">Move Down</emphasis>
+          <guilabel>Move Down</guilabel>
           from the drop-down menu.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your changes.
         </para>
       </step>

@@ -50,9 +50,9 @@
         <step>
           <para>
             Click the
-            <emphasis role="bold">Login</emphasis>
+            <guilabel>Login</guilabel>
             link to open the
-            <emphasis role="bold">Sign in</emphasis>
+            <guilabel>Sign in</guilabel>
             form.
             <mediaobject>
               <imageobject role="html">
@@ -67,18 +67,18 @@
         <step>
           <para>
             Input your registered
-            <emphasis role="bold">Username</emphasis>
+            <guilabel>Username</guilabel>
             and
-            <emphasis role="bold">Password</emphasis>
+            <guilabel>Password</guilabel>
             in the
-            <emphasis role="bold">Sign in</emphasis>
+            <guilabel>Sign in</guilabel>
             form.
           </para>
         </step>
         <step>
           <para>
             Select the
-            <emphasis role="bold">Remember My Login</emphasis>
+            <guilabel>Remember My Login</guilabel>
             checkbox for the first time if you want to automatically return to this portal without signing in again.
             This feature enables you to be automatically authenticated to avoid doing an explicit authentication when
             you access the portal.
@@ -87,16 +87,16 @@
         <step>
           <para>
             Click
-            <emphasis role="bold">Sign in</emphasis>
+            <guibutton>Sign in</guibutton>
             to submit the form, or
-            <emphasis role="bold">Discard</emphasis>
+            <guibutton>Discard</guibutton>
             to quit.
           </para>
         </step>
       </procedure>
   <note>
     <para>
-      After selecting <emphasis role="bold">Remember My Login,</emphasis> if you do not sign out when you leave the
+      After selecting <guilabel>Remember My Login</guilabel>, if you do not sign out when you leave the
       portal, you will be automatically authenticated for your next visit.
     </para>
   </note>
@@ -106,7 +106,7 @@
     </para>
       </citetitle>
     <para>
-      This feature ends your authenticated session and returns you to the anonymous portal. To sign out, simply hover your cursor over your display name at the top right corner of the site, then select <emphasis role="bold">Logout</emphasis> from the drop-down menu.
+      This feature ends your authenticated session and returns you to the anonymous portal. To sign out, simply hover your cursor over your display name at the top right corner of the site, then select <guilabel>Logout</guilabel> from the drop-down menu.
     <mediaobject>
       <imageobject role="html">
         <imagedata fileref="images/Sign_out1.png" format="PNG" align="center" scale="110"/>

@@ -7,7 +7,7 @@
 <title>Manage memberships</title>
     <para>
       The role of a user in a specific group is managed by using the
-      <emphasis role="bold">Membership Management</emphasis>
+      <guilabel>Membership Management</guilabel>
       tab.
     </para>
     <para>
@@ -29,16 +29,16 @@
         <step>
           <para>
             Enter values into the fields of the
-            <emphasis role="bold">Add/Edit Membership</emphasis>
-            form. The <emphasis role="bold">Membership Name</emphasis> field is required, and only letters, digits, dots, dashes and underscores are allowed without ANY SPACES.
+            <guilabel>Add/Edit Membership</guilabel>
+            form. The <guilabel>Membership Name</guilabel> field is required, and only letters, digits, dots, dashes and underscores are allowed without ANY SPACES.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept adding a new membership, or
-            <emphasis role="bold">Reset</emphasis>
+            <guibutton>Reset</guibutton>
             to clear entered values.
           </para>
         </step>
@@ -56,21 +56,21 @@
                 <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
               </imageobject>
             </inlinemediaobject>
-            corresponding to the membership type you want to edit in the <emphasis role="bold">Action</emphasis> column. Information about the selected
+            corresponding to the membership type you want to edit in the <guilabel>Action</guilabel> column. Information about the selected
             membership type will be updated automatically in the
-            <emphasis role="bold">Add/Edit Membership</emphasis>
+            <guilabel>Add/Edit Membership</guilabel>
             form.
           </para>
         </step>
         <step>
           <para>
-            Make your desired changes on the <emphasis role="bold">Description</emphasis> field. You cannot change the <emphasis role="bold">Membership Name.</emphasis>
+            Make your desired changes on the <guilabel>Description</guilabel> field. You cannot change the <guilabel>Membership Name</guilabel>.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept your changes.
           </para>
         </step>
@@ -87,13 +87,13 @@
               <imagedata fileref="images/Delete_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
-            in the <emphasis role="bold">Action</emphasis> column.
+            in the <guilabel>Action</guilabel> column.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">OK</emphasis>
+            <guibutton>OK</guibutton>
             in the confirmation message to accept your deletion.
           </para>
         </step>

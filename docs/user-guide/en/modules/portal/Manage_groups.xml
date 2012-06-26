@@ -6,8 +6,8 @@
 <section id="sect-User_Guide-User_Management-Manage_groups">
 <title>Manage groups</title>
     <para>Select the
-      <emphasis role="bold">Group Management</emphasis>
-      tab in the <emphasis role="bold">Organization</emphasis> form. This tab is used to add, edit or delete a group.
+      <guilabel>Group Management</guilabel>
+      tab in the <guilabel>Organization</guilabel> form. This tab is used to add, edit or delete a group.
       You can also add or delete a user to a group and edit the user membership in the group.
     </para>
     <mediaobject>
@@ -20,7 +20,7 @@
     </mediaobject>
     <para>
       By default, all existing groups will be displayed on the left pane.
-      The right pane shows information of the selected group and of its members with the <emphasis role="bold">Add Member</emphasis> form.
+      The right pane shows information of the selected group and of its members with the <guilabel>Add Member</guilabel> form.
     </para>
     <section id="sect-User_Guide-User_Management-Add_a_new_group">
       <title>Add a new group</title>
@@ -56,7 +56,7 @@
 			</para>
 			<para>
 			The
-            <emphasis role="bold">Add Group</emphasis>
+            <guilabel>Add Group</guilabel>
             form will be displayed in the right pane.
           <mediaobject>
             <imageobject role="html">
@@ -83,16 +83,16 @@
           <tbody>
            <row>
               <entry>
-                 <emphasis role="bold">Group Name</emphasis>
+                 <guilabel>Group Name</guilabel>
               </entry>
               <entry>
                  Name of the group that is required and unique within the portal with its length from 3 to 30 characters. 
-                 Only letters, numbers and underscore characters are allowed for the <emphasis role="bold">Group Name</emphasis> field.
+                 Only letters, numbers and underscore characters are allowed for the <guilabel>Group Name</guilabel> field.
               </entry>
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Label</emphasis>
+                <guilabel>Label</guilabel>
               </entry>
               <entry>
                 The display name of the group with any length from 3 to 50 characters.
@@ -100,7 +100,7 @@
             </row>
              <row>
               <entry>
-                <emphasis role="bold">Description</emphasis>
+                <guilabel>Description</guilabel>
               </entry>
               <entry>
                  A description of the group with any length from 0 to 255 characters.
@@ -112,13 +112,13 @@
         </step>
         <step>
           <para>
-            Fill in the required fields. Once being saved, the <emphasis role="bold">Group Name</emphasis> cannot be edited.
+            Fill in the required fields. Once being saved, the <guilabel>Group Name</guilabel> cannot be edited.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept creating the new group.
           </para>
         </step>
@@ -145,7 +145,7 @@
               <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject> in the left pane to show the
-            <emphasis role="bold">Edit Current Group</emphasis>
+            <guilabel>Edit Current Group</guilabel>
             form of the selected group.
           </para>
           <mediaobject>
@@ -159,13 +159,13 @@
         </step>
         <step>
           <para>
-            Make changes on the fields, except <emphasis role="bold">Group Name.</emphasis>
+            Make changes on the fields, except <guilabel>Group Name.</guilabel>
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept your changes.
           </para>
         </step>
@@ -201,7 +201,7 @@
         <step>
           <para>
             Click
-            <emphasis role="bold">OK</emphasis>
+            <guibutton>OK</guibutton>
             in the confirmation message to accept your deletion.
           </para>
         </step>
@@ -247,7 +247,7 @@
                     <imagedata fileref="images/Search_icon.png" format="PNG" scalefit="1" width="4mm"/>
                   </imageobject>
                 </inlinemediaobject>
-                , there will be a list of all existing users whose <emphasis role="bold">Usernames</emphasis> include the entered characters. For
+                , there will be a list of all existing users whose <guilabel>Usernames</guilabel> include the entered characters. For
                 example, if you enter 'o', you will get the following result.
               </para>
               <mediaobject>
@@ -263,8 +263,8 @@
                <emphasis role="bold">ii.</emphasis> Select the checkboxes corresponding to users you want to add to the group.
               </para>
               <para>
-                After clicking <emphasis role="bold">Add,</emphasis> you will see the complete <emphasis role="bold">Usernames</emphasis> in the <emphasis role="bold">Add
-                Member</emphasis> form.
+                After clicking <guilabel>Add,</guilabel> you will see the complete <guilabel>Usernames</guilabel> in the <guilabel>Add
+                Member</guilabel> form.
               </para>
               <mediaobject>
                 <imageobject role="html">
@@ -279,7 +279,7 @@
         </step>
         <step>
           <para>
-            Select the membership for the users from the <emphasis role="bold">Membership</emphasis> list. You can click
+            Select the membership for the users from the <guilabel>Membership</guilabel> list. You can click
             <inlinemediaobject>
               <imageobject>
                 <imagedata fileref="images/Refresh_button.png" format="PNG" scalefit="1" width="4mm"/>
@@ -291,7 +291,7 @@
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept adding the selected users to the specific group with the specified membership type.
           </para>
         </step>
@@ -299,9 +299,9 @@
       <note>
         <para>By default, the "manager" membership has the highest right in a group.
           A user can have several membership types in a group. To do that, you have to use the
-          <emphasis role="bold">Add Member</emphasis>
+          <guilabel>Add Member</guilabel>
           form for each membership type. The user's membership information is hereafter updated. You can check it by opening the
-          <emphasis role="bold">User Management</emphasis>
+          <guilabel>User Management</guilabel>
           form and editing the user you just added.
         </para>
       </note>
@@ -316,7 +316,7 @@
             <imageobject>
               <imagedata fileref="images/edit_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
-          </inlinemediaobject> corresponding to a specific user with a membership in the <emphasis role="bold">Action</emphasis> column in the right pane.
+          </inlinemediaobject> corresponding to a specific user with a membership in the <guilabel>Action</guilabel> column in the right pane.
           </para>
           <mediaobject>
             <imageobject role="html">
@@ -330,14 +330,14 @@
         <step>
           <para>
             Change the membership of the selected user by selecting another value in the
-            <emphasis role="bold">Membership</emphasis>
+            <guilabel>Membership</guilabel>
             list.
           </para>
         </step>
         <step>
           <para>
             Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to complete your changes.
           </para>
         </step>

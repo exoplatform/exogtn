@@ -24,12 +24,12 @@
 		</step>
 		<step>
 			<para>
-				Select the <emphasis role="bold">Remember My Login</emphasis> check box when logging in &PRODUCT; at the first time.
+				Select the <guilabel>Remember My Login</guilabel> check box when logging in &PRODUCT; at the first time.
 			</para>
 		</step>
 		<step>
 			<para>
-				Click the <emphasis role="bold">Sign in</emphasis> button to sign in the portal.
+				Click the <guilabel>Sign in</guilabel> button to sign in the portal.
 			</para>
 		</step>
 	</procedure>

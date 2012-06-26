@@ -39,16 +39,16 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Dashboard</emphasis>
-          on the <emphasis role="bold">Administration</emphasis> bar to access the <emphasis role="bold">Dashboard</emphasis> portlet.
+          <guilabel>Dashboard</guilabel>
+          on the <guilabel>Administration</guilabel> bar to access the <guilabel>Dashboard</guilabel> portlet.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Add Gadgets</emphasis>
+          <guilabel>Add Gadgets</guilabel>
           to open the
-          <emphasis role="bold">Dashboard Workspace</emphasis>
+          <guilabel>Dashboard Workspace</guilabel>
           window which lists all available gadgets.
         </para>
         <mediaobject>
@@ -64,7 +64,7 @@
       <step>
         <para>
           Select a gadget in the
-          <emphasis role="bold">Dashboard Workspace</emphasis>
+          <guilabel>Dashboard Workspace</guilabel>
           window.
         </para>
       </step>
@@ -106,7 +106,7 @@
 	<citetitle>
     <para><emphasis role="bold">Change preferences of a gadget</emphasis></para>
 	</citetitle>
-    <para>The following is an example of changing preferences of the <emphasis role="bold">RSS Reader</emphasis> gadget.</para>
+    <para>The following is an example of changing preferences of the <guilabel>RSS Reader</guilabel> gadget.</para>
     <procedure>
       <step>
         <para>Click <inlinemediaobject>
@@ -126,15 +126,15 @@
       </step>
       <step>
         <para>Enter your preferred RSS into the
-          <emphasis role="bold">FEED URL</emphasis>
+          <guilabel>FEED URL</guilabel>
           field and one numeric character (from 1 to 100) in the
-          <emphasis role="bold">Items</emphasis>
+          <guilabel>Items</guilabel>
           field. The numeric character you entered is the number of items displayed in the RSS gadget.
         </para>
       </step>
       <step>
         <para>Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept your changes.
         </para>
       </step>
@@ -162,16 +162,16 @@
       <step>
         <para>
           Return to your portal and click
-          <emphasis role="bold">Dashboard</emphasis>
-          in the <emphasis role="bold">Administration</emphasis> bar.
+          <guilabel>Dashboard</guilabel>
+          in the <guilabel>Administration</guilabel> bar.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Add Gadgets</emphasis>
+          <guilabel>Add Gadgets</guilabel>
           in the Dashboard to open the
-          <emphasis role="bold">Dashboard Workspace</emphasis>
+          <guilabel>Dashboard Workspace</guilabel>
           window.
         </para>
       </step>

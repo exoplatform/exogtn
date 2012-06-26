@@ -11,7 +11,7 @@
         <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
       </imageobject>
     </inlinemediaobject>
-    on the <emphasis role="bold">Administration</emphasis> bar, and select <emphasis role="bold">Applications.</emphasis> The
+    on the <guilabel>Administration</guilabel> bar, and select <guilabel>Applications</guilabel>. The
     <emphasis role="bold">Manage Applications</emphasis> page will appear.
     	<mediaobject>
 					<imageobject role="html">
@@ -70,12 +70,12 @@
               <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="15mm"/>"
             </imageobject>
           </inlinemediaobject>
-          at the right corner on the <emphasis role="bold">Action</emphasis> bar.
+          at the right corner on the <guilabel>Action</guilabel> bar.
         </para>
       </step>
       <step>
         <para>Click
-          <emphasis role="bold">OK</emphasis>
+          <guibutton>OK</guibutton>
           in the confirmation message to accept importing portlets and gadgets automatically.
         </para>
         <para>All portlets and gadgets of all categories will be imported and listed on the left pane.</para>
@@ -114,7 +114,7 @@
         </term>
         <listitem>
           <para>
-            Details of a portlet: Name, Display Name, Description.
+            Details of a portlet: <guilabel>Name, Display Name, Description</guilabel>.
           </para>
         </listitem>
       </varlistentry>
@@ -132,7 +132,7 @@
       </inlinemediaobject>
       on the top corner of right pane. 
       </para>
-      <para>The <emphasis role="bold">Edit Application Information</emphasis> form will appear.
+      <para>The <guilabel>Edit Application Information</guilabel> form will appear.
     <mediaobject>
       <imageobject role="html">
         <imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="110"/>
@@ -145,7 +145,7 @@
     </para>
     </step>
     <step>
-    <para>Make changes on these fields, except <emphasis role="bold">Application Name.</emphasis>
+    <para>Make changes on these fields, except <guilabel>Application Name</guilabel>.
     </para>
     </step>
     </procedure>
@@ -171,7 +171,7 @@
           at the upper left corner of that portlet.
         </para>
         <para>
-          The <emphasis role="bold">Edit</emphasis> form will be displayed.
+          The <guilabel>Edit</guilabel> form will be displayed.
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/Edit_portlet_form.png" format="PNG" align="center" scale="110"/>
@@ -184,10 +184,10 @@
 		</para>
 		  <para>
           Normally, a portlet has four tabs:
-          <emphasis role="bold">Window Settings, Select Icon, Decoration Themes</emphasis>
-          and <emphasis role="bold">Access Permission.</emphasis> However, some portlets may also have
-          <emphasis role="bold">Edit Mode</emphasis> and <emphasis role="bold">Preferences</emphasis> tabs.
-          For example, IFrame and Dashboard portlets have the <emphasis role="bold">Edit Mode</emphasis> tab where administrators can define the interface details.
+          <guilabel>Window Settings, Select Icon, Decoration Themes</guilabel>
+          and <guilabel>Access Permission.</guilabel> However, some portlets may also have
+          <guilabel>Edit Mode</guilabel> and <guilabel>Preferences</guilabel> tabs.
+          For example, IFrame and Dashboard portlets have the <guilabel>Edit Mode</guilabel> tab where administrators can define the interface details.
         </para>
 		</step>
 		<step>
@@ -196,7 +196,7 @@
 		<itemizedlist>
 		<listitem>
 		<para>
-        The <emphasis role="bold">Window Settings</emphasis> tab allows you to change values related to settings of your selected portlet.
+        The <guilabel>Window Settings</guilabel> tab allows you to change values related to settings of your selected portlet.
 		</para>
 		<para><emphasis role="bold">Details:</emphasis>
 		</para>
@@ -215,7 +215,7 @@
           <tbody>
            <row>
               <entry>
-                <emphasis role="bold">Display Name</emphasis>
+                <guilabel>Display Name</guilabel>
               </entry>
               <entry>
                 The display name of portlet which cannot be changed.
@@ -223,7 +223,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Window Title</emphasis>
+                <guilabel>Window Title</guilabel>
               </entry>
               <entry>
                The portlet title with the length between 3 and 60 characters.
@@ -231,7 +231,7 @@
             </row>
              <row>
               <entry>
-                <emphasis role="bold">Width</emphasis>
+                <guilabel>Width</guilabel>
               </entry>
               <entry>
               The portlet's vertical size. The value of this field must be in numeric format.
@@ -239,22 +239,22 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Height</emphasis>
+                <guilabel>Height</guilabel>
               </entry>
               <entry>
                 The portlet's horizontal size. The value of this field must be in numeric format.
               </entry>
             </row>
             <row>
-            <entry><emphasis role="bold">Show Info Bar</emphasis>
+            <entry><guilabel>Show Info Bar</guilabel>
             </entry>
             <entry>
-             The option enables the information bar to be shown or hidden. If the <emphasis role="bold">Show Info Bar</emphasis> checkbox is not selected, portlet mode and window state will not be displayed in that portlet.
+             The option enables the information bar to be shown or hidden. If the <guilabel>Show Info Bar</guilabel> checkbox is not selected, portlet mode and window state will not be displayed in that portlet.
             </entry>
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Show Portlet Mode</emphasis>
+                <guilabel>Show Portlet Mode</guilabel>
               </entry>
               <entry>
                   The option enables the portlet mode to be shown or hidden.
@@ -262,7 +262,7 @@
             </row>
 			<row>
               <entry>
-                <emphasis role="bold">Show Window State</emphasis>
+                <guilabel>Show Window State</guilabel>
               </entry>
               <entry>
                 The option enables the portlet's window state to be shown or not.
@@ -270,7 +270,7 @@
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Description</emphasis>
+                <guilabel>Description</guilabel>
               </entry>
               <entry>
                 The brief information of the portlet. The length must be between 0 and 255 characters.
@@ -281,17 +281,17 @@
       </table>
 	  </listitem>
 	  <listitem>
-	  <para>The <emphasis role="bold">Select Icon</emphasis> tab allows you to select an icon for the portlet. By clicking <emphasis role="bold">Get Default,</emphasis> you do not have to select any icon from the list, the suitable icon will be got automatically.
+	  <para>The <guilabel>Select Icon</guilabel> tab allows you to select an icon for the portlet. By clicking <guilabel>Get Default,</guilabel> you do not have to select any icon from the list, the suitable icon will be got automatically.
 	  </para>
 	  </listitem>
 	  <listitem>
 	  <para>
-	  The <emphasis role="bold">Decoration Themes</emphasis> tab allows you to select a theme for the portlet from the themes list. By clicking <emphasis role="bold">Get Default,</emphasis> you do not have to choose any theme, it will be automatically set.
+	  The <guilabel>Decoration Themes</guilabel> tab allows you to select a theme for the portlet from the themes list. By clicking <guilabel>Get Default,</guilabel> you do not have to choose any theme, it will be automatically set.
 	  </para>
 	  </listitem>
 	  <listitem>
 	  <para>
-	  The <emphasis role="bold">Access Permission</emphasis> tab allows you to set the access permission on the portlet. The portlet can be made public to everyone or restricted to specific groups.
+	  The <guilabel>Access Permission</guilabel> tab allows you to set the access permission on the portlet. The portlet can be made public to everyone or restricted to specific groups.
 	  </para>
 	  <note>
 	  <para>See the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set Access permission on a portlet</link> section for details on how to assign the access permission on a portlet.
@@ -303,7 +303,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Save And Close</emphasis> to accept your changes.
+          <guibutton>Save And Close</guibutton> to accept your changes.
         </para>      
       </step>
     </procedure>
@@ -314,7 +314,7 @@
       To add a gadget, you first need to turn into the
       <emphasis role="bold">Gadget</emphasis>
       page by selecting
-      <emphasis role="bold">Gadget</emphasis> on the tab bar of the <emphasis role="bold">Manage Applications</emphasis> page.
+      <guilabel>Gadget</guilabel> on the tab bar of the <emphasis role="bold">Manage Applications</emphasis> page.
     </para>
     <mediaobject>
       <imageobject role="html">
@@ -333,13 +333,13 @@
     <procedure>
       <step>
         <para>
-          Click the <emphasis role="bold">Add a Remote Gadget</emphasis> link.
+          Click the <guilabel>Add a Remote Gadget</guilabel> link.
         </para>
       </step>
       <step>
         <para>
           Enter the link of your desired gadget which is in the <emphasis>.xml</emphasis> format in the
-          <emphasis role="bold">Gadget URL</emphasis> field.
+          <guilabel>Gadget URL</guilabel> field.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -354,7 +354,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Add</emphasis>
+          <guilabel>Add</guilabel>
           to accept your inputted URL.
         </para>
         <para>
@@ -368,7 +368,7 @@
     <procedure>
       <step>
         <para>
-          Click the <emphasis role="bold">Create a New Gadget</emphasis> link.
+          Click the <guilabel>Create a New Gadget</guilabel> link.
         </para>
       </step>
       <step>
@@ -391,7 +391,7 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept creating your new gadget.
         </para>
       </step>

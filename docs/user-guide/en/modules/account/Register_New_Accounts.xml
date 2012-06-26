@@ -14,7 +14,7 @@
     <step>
       <para>
         Click
-        <emphasis role="bold">Register</emphasis>
+        <guilabel>Register</guilabel>
         on the top of the portal if you are in the ACME sample site.
 		</para>
       <mediaobject>
@@ -26,7 +26,7 @@
         </imageobject> 
       </mediaobject>
 	  <para>
-	  If you are in the ACME Social intranet, click <emphasis role="bold">Register</emphasis> at the bottom of the portal.
+	  If you are in the ACME Social intranet, click <guilabel>Register</guilabel> at the bottom of the portal.
 	  </para>
 	  <mediaobject>
         <imageobject role="html">
@@ -38,7 +38,7 @@
       </mediaobject>
       <para>
         The
-        <emphasis role="bold">Create a New Account</emphasis>
+        <guilabel>Create a New Account</guilabel>
         form appears as below:
       </para>
       <mediaobject>
@@ -68,7 +68,7 @@
           <tbody>
             <row>
               <entry>
-                <emphasis role="bold">Asterisk (*)</emphasis>
+                <guilabel>Asterisk (*)</guilabel>
               </entry>
               <entry>
                 This mark next to each field indicates that it is required to input values in this field.
@@ -76,7 +76,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Username</emphasis>
+                <guilabel>Username</guilabel>
               </entry>
               <entry>
                 The name used to log in. The username must be:
@@ -98,7 +98,7 @@
             </row>
             <row>
               <entry>
-                <emphasis role="bold">Password</emphasis>
+                <guilabel>Password</guilabel>
               </entry>
               <entry>
 			The authentication string which must be between 6 and 30 characters, including spaces.
@@ -106,32 +106,32 @@
             </row>
               <row>
               <entry>
-                <emphasis role="bold">Confirm Password</emphasis>
+                <guilabel>Confirm Password</guilabel>
               </entry>
               <entry> Retype the password above. Values in both
-              <emphasis role="bold">Password</emphasis>
+              <guilabel>Password</guilabel>
               and
-              <emphasis role="bold">Confirm Password</emphasis>
+              <guilabel>Confirm Password</guilabel>
               fields must be the same.
               </entry>
             </row>
 			<row>
 			<entry>
-			<emphasis role="bold">First Name</emphasis>
+			<guilabel>First Name</guilabel>
 			</entry>
 			<entry> The user's first name which must start with a character. Its length must be between 1 and 45 characters.
 			</entry>
 			</row>
 			<row>
 			<entry>
-			<emphasis role="bold">Last Name</emphasis>
+			<guilabel>Last Name</guilabel>
 			</entry>
 			<entry>The user's last name which must start with a character. Its length must be between 1 and 45 characters.
 			</entry>
 			</row>
 			<row>
 			<entry>
-			<emphasis role="bold">Email Address</emphasis>
+			<guilabel>Email Address</guilabel>
 			</entry>
 			<entry>
 			<para>The user's email address that must be in the correct form, such as <replaceable>username@abc.com.</replaceable> </para>
@@ -153,7 +153,7 @@
 			</row>
 			<row>
 			 <entry>
-			 <emphasis role="bold">Text Validation</emphasis>
+			 <guilabel>Text Validation</guilabel>
 			 </entry>
 			 <entry>
 			  The text to verify your registration.
@@ -171,9 +171,9 @@
     <step>
       <para>
         Click
-        <emphasis role="bold">Subscribe</emphasis>
+        <guibutton>Subscribe</guibutton>
         to accept your new account, or
-        <emphasis role="bold">Reset</emphasis>
+        <guibutton>Reset</guibutton>
         to clear all your entered values. If your registration is not successful, there will be warning messages which indicate invalid fields.
       </para>
     </step>

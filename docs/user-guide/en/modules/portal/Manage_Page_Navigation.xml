@@ -43,8 +43,10 @@
           <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
         </imageobject>
       </inlinemediaobject>
-      on the <emphasis role="bold">Administration</emphasis> bar, then select
-      <emphasis role="bold">Portal --> Group Sites</emphasis>
+      on the <guilabel>Administration</guilabel> bar, then select <menuchoice>
+        <guimenu>Portal</guimenu>
+        <guimenuitem>Group Sites</guimenuitem>
+      </menuchoice>
       from the drop-down menu.
     </para>
     <para>The <emphasis role="bold">Group Navigation Management</emphasis> page will appear.
@@ -80,9 +82,9 @@
     <section id="User_Guide-Manage_Page_Navigation-Group_Page_navigation-Edit">
       <title>Edit a group's page navigation</title>
       <para>Click
-        <emphasis role="bold">Edit Navigation</emphasis>
+        <guilabel>Edit Navigation</guilabel>
         corresponding to the group navigation you want to edit. The
-        <emphasis role="bold">Navigation Management</emphasis>
+        <guilabel>Navigation Management</guilabel>
         form will appear.
       </para>
       <mediaobject>
@@ -108,18 +110,18 @@
       <procedure>
         <step>
           <para>Select
-            <emphasis role="bold">Add Navigation</emphasis>
+            <guilabel>Add Navigation</guilabel>
             at the bottom of the
-            <emphasis role="bold">Group Navigation</emphasis>
+            <guilabel>Group Navigation</guilabel>
             form.
             The groups list will be displayed with the
-            <emphasis role="bold">Add Navigation</emphasis>
+            <guilabel>Add Navigation</guilabel>
             buttons.
           </para>
         </step>
         <step>
           <para>Click
-            <emphasis role="bold">Add Navigation</emphasis>
+            <guilabel>Add Navigation</guilabel>
             corresponding to the group you want to add the new page navigation.
           </para>
           <para>After being added, the new group navigation will be displayed in the <emphasis role="bold">Group Navigation</emphasis> page.</para>
@@ -135,11 +137,11 @@
       <procedure>
         <step>
           <para>Click
-            <emphasis role="bold">Edit Properties</emphasis>
+            <guilabel>Edit Properties</guilabel>
             corresponding to the navigation you want to edit.
 			</para>
 			<para>The
-            <emphasis role="bold">Page Navigation Form</emphasis> will appear.
+            <guilabel>Page Navigation Form</guilabel> will appear.
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/PageNavigationForm.png" format="PNG" align="center" scale="110"/>
@@ -155,7 +157,7 @@
         </step>
         <step>
           <para>Click
-            <emphasis role="bold">Save</emphasis>
+            <guibutton>Save</guibutton>
             to accept changes.
           </para>
         </step>
@@ -169,13 +171,13 @@
       <procedure>
         <step>
           <para>Click
-            <emphasis role="bold">Delete Navigation</emphasis>
+            <guilabel>Delete Navigation</guilabel>
             corresponding to the navigation you want to delete.
           </para>
         </step>
         <step>
           <para>Click
-            <emphasis role="bold">OK</emphasis>
+            <guibutton>OK</guibutton>
             in the confirmation message to accept your deletion.
           </para>
         </step>

@@ -15,12 +15,12 @@
     <procedure>
       <step>
         <para>Open the
-          <emphasis role="bold">Create New Portal</emphasis>
+          <guilabel>Create New Portal</guilabel>
           window by following one of the two ways:
         </para>
         <para><emphasis role="bold">The first way</emphasis> </para>
         <para>
-          Hover your cursor over <emphasis role="bold">Edit --> Site</emphasis> on the <emphasis role="bold">Administration</emphasis> bar, then select <emphasis role="bold">Add site</emphasis> from the drop-down menu.
+          Hover your cursor over <menuchoice><guimenu>Edit</guimenu><guimenuitem>Site</guimenuitem></menuchoice> on the <guilabel>Administration</guilabel> bar, then select <guilabel>Add site</guilabel> from the drop-down menu.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -38,7 +38,7 @@
               <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
           </inlinemediaobject>
-          on the <emphasis role="bold">Administration</emphasis> bar, then select <emphasis role="bold">Portal --> Sites</emphasis> from the drop-down menu.
+          on the <guilabel>Administration</guilabel> bar, then select <menuchoice><guimenu>Portal</guimenu><guimenuitem>Sites</guimenuitem></menuchoice> from the drop-down menu.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -48,13 +48,13 @@
             <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scalefit="1" width="150mm"/>
           </imageobject>
         </mediaobject>
-        <para><emphasis role="bold">ii.</emphasis> Click the <emphasis role="bold">Add New Portal</emphasis> button.
+        <para><emphasis role="bold">ii.</emphasis> Click the <guibutton>Add New Portal</guibutton> button.
         </para>
         <para>
           By default, the
-          <emphasis role="bold">Create New Portal</emphasis>
+          <guilabel>Create New Portal</guilabel>
           window, which contains the
-          <emphasis role="bold">Portal Settings</emphasis> tab,
+          <guilabel>Portal Settings</guilabel> tab,
           will open.
           <mediaobject>
             <imageobject role="html">
@@ -68,19 +68,19 @@
       </step>
       <step>
         <para>
-          Enter a string into the <emphasis role="bold">Portal Name</emphasis> field. This field is required and must be unique. Only alphabetical, numerical and underscore characters are
+          Enter a string into the <guilabel>Portal Name</guilabel> field. This field is required and must be unique. Only alphabetical, numerical and underscore characters are
           allowed for this field with the length from 3 to 30 characters.
         </para>
       </step>
       <step>
         <para>
-          Select the default display language for the portal from the <emphasis role="bold">Locale</emphasis> field.
+          Select the default display language for the portal from the <guilabel>Locale</guilabel> field.
         </para>
       </step>
       <step>
         <para>
           Click the
-          <emphasis role="bold">Properties</emphasis>
+          <guilabel>Properties</guilabel>
           tab to set the properties of a portal.
         </para>
         <mediaobject>
@@ -108,26 +108,26 @@
           <tbody>
            <row>
               <entry>
-                 <emphasis role="bold">Keep session alive</emphasis>
+                 <guilabel>Keep session alive</guilabel>
               </entry>
               <entry>
                  Keep the working session for a long time to avoid the time-out. There are 3 options:
                <para>
-              <emphasis role="bold">Never:</emphasis>
+              <guilabel>Never:</guilabel>
                The session will time out if the logged-in user does not do any action after a given period. In this case, there will be a message which asks the user to log in again.
               </para>
               <para>
-              <emphasis role="bold">On Demand:</emphasis>
+              <guilabel>On Demand:</guilabel>
               The session will time out to the application's requirement. If there is no request from the application, the session will time out after the given period that is similar to that of <emphasis role="bold">Never.</emphasis>
             </para>
             <para>
-              <emphasis role="bold">Always:</emphasis>
+              <guilabel>Always:</guilabel>
              The session will never time out even if the logged-in user does not do any action after a long time.
             </para>
               </entry>
             </row>
             <row>
-            <entry><emphasis role="bold">Show info bar by default</emphasis>
+            <entry><guilabel>Show info bar by default</guilabel>
             </entry>
             <entry> Tick the checkbox to show the info bar of the porlet by default when the portlet is used in a page of the portal.
                     <para>
@@ -145,12 +145,12 @@
       <step>
         <para>
           Click the
-          <emphasis role="bold">Permission Settings</emphasis>
+          <guilabel>Permission Settings</guilabel>
           tab to set permissions on the portal.
         </para>
         <para>
           The list of <emphasis>Access</emphasis> permissions for the portal is empty by default. You have to select at least one or tick the
-          <emphasis role="bold">Make it public (everyone can access)</emphasis> 
+          <guilabel>Make it public (everyone can access)</guilabel>
           checkbox to assign the <emphasis>Access</emphasis> permission to everyone.
         </para>
 		<note>
@@ -162,14 +162,14 @@
       <step>
         <para>
           Click the
-          <emphasis role="bold">Portal Templates</emphasis>
+          <guilabel>Portal Templates</guilabel>
           tab to select the template for your portal.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">Save</emphasis>
+          <guibutton>Save</guibutton>
           to accept creating your new portal.
         </para>
       </step>
@@ -182,8 +182,8 @@
     </para>
     <para>
       To switch between portals, hover your cursor over
-      <emphasis role="bold">My Sites</emphasis>
-      on the <emphasis role="bold">Administration</emphasis> bar for a list of all portals in which you have at least access rights, then click the
+      <guilabel>My Sites</guilabel>
+      on the <guilabel>Administration</guilabel> bar for a list of all portals in which you have at least access rights, then click the
       desired portal. You need to wait a few seconds to be switched to your selected portal.
     <mediaobject>
       <imageobject role="html">
@@ -213,20 +213,20 @@
         <step>
           <para>
             Hover your cursor over
-            <emphasis role="bold">My Sites</emphasis>
-            on the <emphasis role="bold">Administration</emphasis> bar and select the portal you want to edit from the drop-down menu.
+            <guilabel>My Sites</guilabel>
+            on the <guilabel>Administration</guilabel> bar and select the portal you want to edit from the drop-down menu.
 		 </para>
 		 <para>You will be switched to your selected portal just after a few seconds.
           </para>
         </step>
         <step>
-          <para>Hover your cursor over <emphasis role="bold">Edit</emphasis> on the <emphasis role="bold">Administration</emphasis> bar to open the drop-down menu.</para>
-		  <para><emphasis role="bold">i.</emphasis> Select <emphasis role="bold">Site --> Layout.</emphasis>
+          <para>Hover your cursor over <guilabel>Edit</guilabel> on the <guilabel>Administration</guilabel> bar to open the drop-down menu.</para>
+		  <para><emphasis role="bold">i.</emphasis> Select <menuchoice><guimenu>Site</guimenu><guimenuitem>Layout</guimenuitem></menuchoice>.
           </para>
 		  <para>
 		  You will be directed to the <emphasis role="bold">Edit Portal</emphasis> page. From here, you can make changes on the <link linkend="proc-User_Guide-Manage_Portals-Edit_Layout">layout of your selected portal,</link> or on <link linkend="proc-User_Guide-Manage_Portals-Edit_Properties">its configurations</link> by selecting <emphasis role="bold">Site's Config</emphasis> at the bottom of the <emphasis role="bold">Edit Inline Composer</emphasis> form.
 		  </para>
-		  <para><emphasis role="bold">ii.</emphasis> Select <emphasis role="bold">Site --> Navigation.</emphasis></para>
+		  <para><emphasis role="bold">ii.</emphasis> Select <menuchoice><guimenu>Site</guimenu><guimenuitem>Navigation</guimenuitem></menuchoice>.</para>
 		  <para>From here, you can <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">edit your selected portal's navigation.</link></para>
         </step>
       </procedure>
@@ -246,9 +246,8 @@
           </para>
         </step>
         <step>
-          <para>Select
-            <emphasis role="bold">Portal --> Sites</emphasis>
-            to show the list of active portals.
+          <para>Select <menuchoice><guimenu>Portal</guimenu><guimenuitem>Sites</guimenuitem></menuchoice>
+            to show the list of active portals.</para>
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/ActivePortals.png" format="PNG" align="center" scale="110"/>
@@ -257,7 +256,7 @@
               <imagedata fileref="images/ActivePortals.png" format="PNG" align="center" contentwidth="150mm"/>
             </imageobject>
           </mediaobject>
-		   </para>
+
         </step>
 		<step>
 			<para>Specify your desired portal, and do the following actions:
@@ -267,32 +266,32 @@
 	  <itemizedlist>
 		<listitem>
 			<para>
-			<link linkend="proc-User_Guide-Manage_Portals-Edit_Layout">Edit the portal's layout</link> by clicking <emphasis role="bold">Edit Layout.</emphasis>
+			<link linkend="proc-User_Guide-Manage_Portals-Edit_Layout">Edit the portal's layout</link> by clicking <guilabel>Edit Layout.</guilabel>
 			</para>
 		</listitem>
 		<listitem>
 		<para>
-		<link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Change the portal's navigation</link> by clicking <emphasis role="bold">Edit Navigation.</emphasis>
+		<link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Change the portal's navigation</link> by clicking <guilabel>Edit Navigation</guilabel>.
 		</para>
 		</listitem>
 		<listitem>
 		<para>
-		<link linkend="proc-User_Guide-Manage_Portals-Edit_Properties">Edit the portal's configurations</link> by clicking <emphasis role="bold">Edit Portal's Config.</emphasis>
+		<link linkend="proc-User_Guide-Manage_Portals-Edit_Properties">Edit the portal's configurations</link> by clicking <guilabel>Edit Portal's Config</guilabel>.
 		</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete the portal</link> by clicking <emphasis role="bold">Delete.</emphasis>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete the portal</link> by clicking <guilabel>Delete</guilabel>.
 			</para>
 		</listitem>
 		</itemizedlist>
     <section id="proc-User_Guide-Manage_Portals-Edit_Layout">
       <title>Edit layout</title>
       <para>
-        To edit your selected portal's layout, your first need to follow <link linkend="sect-User_Guide-Manage_Portals-Edit_a_Portal-Ways_to_relevant_forms">one of ways above</link> to open the <emphasis role="bold">Edit Layout</emphasis> form.
+        To edit your selected portal's layout, your first need to follow <link linkend="sect-User_Guide-Manage_Portals-Edit_a_Portal-Ways_to_relevant_forms">one of ways above</link> to open the <guilabel>Edit Layout</guilabel> form.
       </para>
       <para>
         New applications, containers or gadgets can be dragged and dropped from the 
-        <emphasis role="bold">Edit Inline Composer</emphasis>
+        <guilabel>Edit Inline Composer</guilabel>
         window to the main portal body.
       </para>
       <para>
@@ -336,7 +335,7 @@
 		  </para>
           <para xml:id="Navigation_Management_window">
             The
-            <emphasis role="bold">Navigation Management</emphasis> form appears.
+            <guilabel>Navigation Management</guilabel> form appears.
           <mediaobject>
             <imageobject role="html">
               <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="100"/>
@@ -366,7 +365,7 @@
       </mediaobject>
 	  </para>
       <para>
-        In this window, you can make changes on fields in the various tabs, except the <emphasis role="bold">Portal Name</emphasis> in the <emphasis role="bold">Portal Settings</emphasis> tab.
+        In this window, you can make changes on fields in the various tabs, except the <guilabel>Portal Name</guilabel> in the <guilabel>Portal Settings</guilabel> tab.
       </para>
 	<note>
 	<para>For more details on these fields, refer to the <link linkend="sect-User_Guide-Create_a_New_Portal">Create a new portal</link> section.
@@ -391,14 +390,14 @@
       <step>
         <para>
           Click
-          <emphasis role="bold">Delete</emphasis>
+          <guilabel>Delete</guilabel>
           corresponding to the portal you want to delete.
         </para>
       </step>
       <step>
         <para>
           Click
-          <emphasis role="bold">OK</emphasis>
+          <guibutton>OK</guibutton>
           in the confirmation message to accept your deletion.
         </para>
       </step>
