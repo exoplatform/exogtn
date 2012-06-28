@@ -1,5 +1,8 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
+  <!-- Configure the TransactionManager -->
+  <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup" />
+
   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-idm-api-cluster">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
     <jgroupsConfig multiplexerStack="jcr.stack" />
