@@ -20,7 +20,7 @@
 				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
 			<para>
-				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-GA/sso-packaging-1.1.0-GA.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
+				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.1-GA/sso-packaging-1.1.1-GA.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
 			</para>
 			<para>
 				It is recommended that you should not run any portal extensions that could override the data when manipulating the <emphasis>gatein.ear</emphasis> file directly.
@@ -38,6 +38,11 @@
 		<para>
 			The integration consists of two steps: installing/configuring a CAS server and setting up the portal to use the CAS server.
 		</para>
+        <para>
+            For the SSO integration with Tomcat bundle, you need to add the following configuration into <emphasis>PLF_HOME/conf/Catalina/localhost/portal.xml</emphasis>:
+        </para>
+        <programlisting>&lt;Valve className="org.gatein.sso.agent.tomcat.ServletAccessValve"/&gt;
+        </programlisting>
 		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
 			<title>CAS server</title>
 			<para>
@@ -216,7 +221,7 @@
 			<procedure>
 				<step>
 					<para>
-						Copy all libraries from <emphasis>GATEIN_SSO_HOME/cas/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or in Tomcat, into $<emphasis>GATEIN_HOME/lib</emphasis>)
+						Copy all libraries from <emphasis>GATEIN_SSO_HOME/cas/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or in Tomcat, into $<emphasis>PLF_HOME/lib</emphasis>)
 					</para>
 				</step>
 				<step>
@@ -243,7 +248,7 @@
 						</listitem>
 						<listitem>
 							<para>
-							In Tomcat, edit <emphasis>GATEIN_HOME/conf/jaas.conf</emphasis>, uncomment on this section and comment other parts:
+							In Tomcat, edit <emphasis>PLF_HOME/conf/jaas.conf</emphasis>, uncomment on this section and comment other parts:
 							</para>			
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -283,7 +288,7 @@ realmName=gatein-domain;
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file, modify the 'Sign In' link as follows:
+						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file (in JBoss) or <emphasis>webapps\web\groovy\groovy\webui\component\UIBannerPortlet.gtmpl</emphasis> file (in Tomcat), modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -296,7 +301,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file (in JBoss) or <emphasis>webapps\web\groovy\portal\webui\component\UILogoPortlet.gtmpl</emphasis> file (in Tomcat), modify the 'Sign In' link as follows:
             </para>
 <programlisting>
 <![CDATA[
@@ -310,7 +315,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> file (in JBoss) or <emphasis>webapps\portal\login\jsp\login.jsp</emphasis> file (in Tomcat) with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -326,7 +331,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:</para>
+                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> file (in JBoss) or <emphasis>webapps\portal\WEB-INF\web.xml</emphasis> file (in Tomcat) with:</para>
 <programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -487,12 +492,12 @@ realmName=gatein-domain;
 			<procedure>
 				<step>
 					<para>
-						Copy the library files from <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/lib</emphasis> into <emphasis>gatein.ear/lib</emphasis> (or into <emphasis>GATEIN_HOME/lib</emphasis> if &PRODUCT; is  running in Tomcat)
+						Copy the library files from <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/lib</emphasis> into <emphasis>gatein.ear/lib</emphasis> (or into <emphasis>PLF_HOME/lib</emphasis> if &PRODUCT; is  running in Tomcat)
 					</para>
 				</step>
             <step>
                <para>
-                  Copy the file <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/02portal.war/WEB-INF/classes</emphasis> (or into <emphasis>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>GATEIN_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat)
+                  Copy the file <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/02portal.war/WEB-INF/classes</emphasis> (or into <emphasis>PLF_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>PLF_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat)
                </para>
             </step>
 				<step>
@@ -518,7 +523,7 @@ realmName=gatein-domain;
 						</listitem>
 						<listitem>
 							<para>
-								In Tomcat, edit <emphasis>GATEIN_HOME/conf/jaas.conf</emphasis>, uncomment on this section and comment other parts:
+								In Tomcat, edit <emphasis>PLF_HOME/conf/jaas.conf</emphasis>, uncomment on this section and comment other parts:
 							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule requiredtm	
@@ -829,7 +834,7 @@ realmName=gatein-domain;
 			<procedure>
 				<step>
 					<para>
-						Copy all libraries from <emphasis>GATEIN_SSO_HOME/opensso/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or, in Tomcat, into <emphasis>GATEIN_HOME/lib</emphasis>)
+						Copy all libraries from <emphasis>GATEIN_SSO_HOME/opensso/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or, in Tomcat, into <emphasis>PLF_HOME/lib</emphasis>)
 					</para>
 				</step>
 				<step>
@@ -856,7 +861,7 @@ realmName=gatein-domain;
 						</listitem>
 						<listitem>
 							<para>
-								If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
+								If you are running &PRODUCT; in Tomcat, edit $PLF_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
 							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -896,7 +901,7 @@ realmName=gatein-domain;
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file, modify the 'Sign In' link as follows:
+						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file (in JBoss)or <emphasis>webapps\web\groovy\groovy\webui\component\UIBannerPortlet.gtmpl</emphasis> file (in Tomcat),  modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -909,7 +914,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file (in JBoss) or <emphasis>webapps\web\groovy\portal\webui\component\UILogoPortlet.gtmpl</emphasis> file (in Tomcat) and  modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -925,7 +930,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> file (in JBoss) or <emphasis>webapps\portal\login\jsp\login.jsp</emphasis> file (in Tomcat) with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -941,7 +946,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:
+                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> file (in JBoss) or <emphasis>webapps\portal\WEB-INF\web.xml</emphasis> file (in Tomcat):
 <programlisting><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
