@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,26 +16,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.web.security.security;
+package org.exoplatform.web.security.codec;
+
+import java.util.Map;
 
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Nov 19, 2010
+ * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
+ * @date 6/15/12
  */
-
-public class ToThrowAwayCodec extends AbstractCodec
+public abstract class AbstractCodecBuilder
 {
-
-   @Override
-   public String decode(String encodedInput)
-   {
-      return encodedInput;
-   }
-
-   @Override
-   public String encode(String plainInput)
-   {
-      return plainInput;
-   }
-
+   public abstract AbstractCodec build(Map<String, String> config);
 }
