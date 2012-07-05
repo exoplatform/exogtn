@@ -16,27 +16,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.web.security.security;
+package org.exoplatform.web.security.codec;
 
-import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.web.security.codec.AbstractCodec;
 
 /**
- * Abstract codec used to encode/decode password stored/loaded on/from token entry
- * 
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * Nov 19, 2010
  */
 
-public abstract class AbstractCodec extends BaseComponentPlugin
+public class ToThrowAwayCodec extends AbstractCodec
 {
 
-   public String getName()
+   @Override
+   public String decode(String encodedInput)
    {
-      return this.getClass().toString();
+      return encodedInput;
    }
-   
-   public abstract String encode(String plainInput);
-   
-   public abstract String decode(String encodedInput);
-   
+
+   @Override
+   public String encode(String plainInput)
+   {
+      return plainInput;
+   }
+
 }

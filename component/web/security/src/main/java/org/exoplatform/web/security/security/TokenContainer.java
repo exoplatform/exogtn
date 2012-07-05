@@ -22,6 +22,7 @@ import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.codec.AbstractCodec;
 import org.gatein.wci.security.Credentials;
 
 import java.util.Collection;

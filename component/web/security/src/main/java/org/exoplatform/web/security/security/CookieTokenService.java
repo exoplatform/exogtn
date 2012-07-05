@@ -24,13 +24,30 @@ import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.codec.AbstractCodec;
+import org.exoplatform.web.security.codec.AbstractCodecBuilder;
+import org.exoplatform.web.security.codec.ToThrowAwayCodec;
+import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.KeyStore;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
@@ -38,6 +55,8 @@ import java.util.Date;
  */
 public class CookieTokenService extends AbstractTokenService<GateInToken, String>
 {
+
+   private static final Logger LOG = LoggerFactory.getLogger(CookieTokenService.class);
 
    /** . */
    public static final String LIFECYCLE_NAME="lifecycle-name";
@@ -48,7 +67,6 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
    /** . */
    private String lifecycleName="autologin";
 
-   //TODO: Introduce the concept of priority and store the plugins in a map structure
    private AbstractCodec codec;
 
    public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
@@ -61,15 +79,89 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
       }
       this.chromatticLifeCycle = chromatticManager.getLifeCycle(lifecycleName);
 
-      //Set the default codec
-      this.codec = new ToThrowAwayCodec();
+      initCodec();
    }
 
-   public final void setupCodec(ComponentPlugin codecPlugin)
+   private void initCodec()
    {
-      if(codecPlugin instanceof AbstractCodec)
+      String builderType = PropertyManager.getProperty("gatein.codec.builderclass");
+      Map<String, String> config = new HashMap<String, String>();
+
+      if (builderType != null)
       {
-         this.codec = (AbstractCodec)codecPlugin;
+         //If there is config for codec in configuration.properties, we read the config parameters from config file referenced in configuration.properties
+         String configFile = PropertyManager.getProperty("gatein.codec.config");
+         InputStream in = null;
+         try
+         {
+            File f = new File(configFile);
+            in = new FileInputStream(f);
+            Properties properties = new Properties();
+            properties.load(in);
+            for (Map.Entry entry : properties.entrySet())
+            {
+               config.put(entry.getKey().toString(), entry.getValue().toString());
+            }
+            config.put("gatein.codec.config.basedir", f.getParentFile().getAbsolutePath());
+         }
+         catch (IOException ioEx)
+         {
+            LOG.warn("Failed to read the config parameters from " + configFile, ioEx);
+         }
+         finally
+         {
+            IOTools.safeClose(in);
+         }
+      }
+      else
+      {
+         //If there is no config for codec in configuration.properties, we generate key if it does not exist and setup the default config
+         builderType = "org.exoplatform.web.security.codec.JCASymmetricCodecBuilder";
+         String gtnConfDir = PropertyManager.getProperty("gatein.conf.dir");
+         File f = new File(gtnConfDir + "/codec/codeckey.txt");
+         if (!f.exists())
+         {
+            new File(gtnConfDir + "/codec").mkdir();
+            OutputStream out = null;
+            try
+            {
+               KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+               keyGen.init(128);
+               SecretKey key = keyGen.generateKey();
+               KeyStore store = KeyStore.getInstance("JCEKS");
+               store.load(null, "gtnStorePass".toCharArray());
+               store.setEntry("gtnKey", new KeyStore.SecretKeyEntry(key), new KeyStore.PasswordProtection("gtnKeyPass".toCharArray()));
+               f.createNewFile();
+               out = new FileOutputStream(f);
+               store.store(out, "gtnStorePass".toCharArray());
+            }
+            catch (Exception ex)
+            {
+               ex.printStackTrace();
+            }
+            finally
+            {
+               IOTools.safeClose(out);
+            }
+         }
+         config.put("gatein.codec.jca.symmetric.keyalg", "AES");
+         config.put("gatein.codec.jca.symmetric.keystore", "codeckey.txt");
+         config.put("gatein.codec.jca.symmetric.storetype", "JCEKS");
+         config.put("gatein.codec.jca.symmetric.alias", "gtnKey");
+         config.put("gatein.codec.jca.symmetric.keypass", "gtnKeyPass");
+         config.put("gatein.codec.jca.symmetric.storepass", "gtnStorePass");
+         config.put("gatein.codec.config.basedir", f.getParentFile().getAbsolutePath());
+      }
+
+      try
+      {
+         this.codec = Class.forName(builderType).asSubclass(AbstractCodecBuilder.class).newInstance().build(config);
+         LOG.info("Initialize successfully the codec with builder " + builderType);
+      }
+      catch (Exception ex)
+      {
+         LOG.warn("Failed to initialize the codec with builder " + builderType + " , use ToThrowAwayCodec", ex);
+         this.codec = new ToThrowAwayCodec();
       }
    }
 
