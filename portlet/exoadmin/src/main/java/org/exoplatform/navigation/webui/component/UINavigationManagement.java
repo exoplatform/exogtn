@@ -25,6 +25,10 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -123,6 +127,20 @@ public class UINavigationManagement extends UIContainer
          }         
 
          uiNodeSelector.save();
+         
+         //check current node existed
+         UIPortal uiPortal = Util.getUIPortal();
+         UserPortal userPortal = userPortalConfig.getUserPortal();
+         UserNode targetNode = userPortal.resolvePath(navigation, null, uiPortal.getSelectedUserNode().getURI());
+         if(targetNode == null) 
+         {
+            targetNode = userPortal.getDefaultPath(UserNodeFilterConfig.builder().build());
+            if(targetNode != null) 
+            {
+               uiPortal.setNavPath(targetNode);
+               uiPortal.refreshUIPage();
+            }
+         }
       }
    }
 
