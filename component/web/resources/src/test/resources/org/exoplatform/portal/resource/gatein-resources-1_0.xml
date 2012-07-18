@@ -174,16 +174,8 @@
 			<js-path>/javascript/eXo/core/DragDrop2.js</js-path>
 		</param>
 		<param>
-			<js-module>eXo.core.Topic</js-module>
-			<js-path>/javascript/eXo/core/Topic.js</js-path>
-		</param>
-		<param>
 			<js-module>eXo.core.JSON</js-module>
 			<js-path>/javascript/eXo/core/JSON.js</js-path>
-		</param>
-		<param>
-			<js-module>eXo.core.Cometd</js-module>
-			<js-path>/javascript/eXo/core/Cometd.js</js-path>
 		</param>
 		<param>
 			<js-module>eXo.core.Spliter</js-module>
