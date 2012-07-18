@@ -7,7 +7,9 @@
 	 * version: $Id$
 	 */  
 %>
-<%	
+<%
+   import org.exoplatform.commons.utils.HTMLEntityEncoder;
+
 	String popupId = uicomponent.getId();
 	
 	def rcontext = _ctx.getRequestContext();
@@ -55,7 +57,7 @@
 			if(mess.messageKey == null) continue;
 			println "						<div class=\"MessageContainer\">";
 			println "							<div class=\"PopupIcon ${messType}Icon\"><span></span></div>";
-			println "							<div class=\"PopupMessage\">";			
+			println "							<div class=\"PopupMessage\">";
 			String msgValue = _ctx.appRes(mess.messageKey);
 			Object[] msgArguments = mess.getMessageAruments();
 			if(msgArguments != null && msgArguments.length > 0) {
@@ -69,6 +71,8 @@
 					}
 			    }
 			}
+			def encoder = HTMLEntityEncoder.getInstance();
+			msgValue = encoder.encode(msgValue);
 			println msgValue;
 			println "						 </div>";
 			println "						 <div style=\"clear:left\"><span></span></div>";

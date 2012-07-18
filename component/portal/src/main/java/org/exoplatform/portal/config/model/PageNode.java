@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
 import org.gatein.common.text.EntityEncoder;
@@ -154,10 +155,9 @@ public class PageNode extends PageNodeContainer
    
    public String getEncodedResolvedLabel()
    {
-	   EntityEncoder encoder = EntityEncoder.FULL;
 	   if (encodedResolvedLabel == null)
 	   {
-		   encodedResolvedLabel = encoder.encode(resolvedLabel);
+		   encodedResolvedLabel = HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
 	   }
 	   return encodedResolvedLabel;
    }

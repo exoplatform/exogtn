@@ -4,6 +4,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.webui.organization.OrganizationUtils;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -57,6 +58,8 @@
 		String title = "";
 		if(toolong) title = "title='$node.resolvedLabel'";
 		else title = "";
+		def entityEncoder = HTMLEntityEncoder.getInstance();
+		label = entityEncoder.encode(label);
 		print """
 			<div class="MenuItem $tabStyleNavigation">
 				<div class="$clazz">
