@@ -19,11 +19,11 @@
 package org.exoplatform.web.security.security;
 
 import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
-
+import org.exoplatform.web.security.codec.AbstractCodec;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -83,6 +83,38 @@ public abstract class TokenContainer
       }
       entry.setExpirationTime(expirationTime);
       return entry.getToken();
+   }
+
+   public GateInToken encodeAndSaveToken(String tokenId, Credentials credentials, Date expirationTime, AbstractCodec codec)
+   {
+      Map<String, TokenEntry> tokens = getTokens();
+      TokenEntry entry = tokens.get(tokenId);
+      if (entry == null)
+      {
+         entry = createToken();
+         tokens.put(tokenId, entry);
+         entry.setUserName(credentials.getUsername());
+         entry.setPassword(codec.encode(credentials.getPassword()));
+      }
+      entry.setExpirationTime(expirationTime);
+      return entry.getToken();
+   }
+
+   public GateInToken getTokenAndDecode(String tokenId, AbstractCodec codec)
+   {
+      Map<String, TokenEntry> tokens = getTokens();
+      TokenEntry entry = tokens.get(tokenId);
+      if(entry != null)
+      {
+         GateInToken gateInToken = entry.getToken();
+         Credentials payload = gateInToken.getPayload();
+
+         //Return a cloned GateInToken
+         return new GateInToken(gateInToken.getExpirationTimeMillis(), new Credentials(payload.getUsername(), codec
+               .decode(payload.getPassword())));
+
+      }
+      return null;
    }
 
 }
