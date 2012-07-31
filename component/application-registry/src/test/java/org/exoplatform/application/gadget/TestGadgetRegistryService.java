@@ -19,6 +19,7 @@
 
 package org.exoplatform.application.gadget;
 
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.AbstractApplicationRegistryTest;
@@ -71,8 +72,24 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
       String gadgetName = "local_test";
       TestGadgetImporter importer = new TestGadgetImporter(configurationManager, gadgetName, "org/exoplatform/application/gadgets/weather.xml", true);
       importer.doImport();
+
+      GadgetDefinition def = service_.getRegistry().getGadget(gadgetName);
+      assertNotNull(def);
+      //No metadata is persisted in JCR
+      assertNull(def.getDescription());
+      assertNull(def.getTitle());
+      assertNull(def.getThumbnail());
+      assertNull(def.getReferenceURL());
+
       assertEquals(1, service_.getAllGadgets().size());
-      assertEquals(gadgetName, service_.getGadget(gadgetName).getName());
+      Gadget gadget = service_.getGadget(gadgetName);
+      assertNotNull(gadget);
+      assertEquals(gadgetName, gadget.getName());
+      assertEquals("__MSG_description__", gadget.getDescription());
+      assertEquals("__MSG_gTitle__", gadget.getTitle());
+      assertEquals("http://www.labpixies.com/campaigns/weather/images/thumbnail.jpg", gadget.getThumbnail());
+      assertEquals("http://www.labpixies.com", gadget.getReferenceUrl());
+
       service_.removeGadget(gadgetName);
       assertNull(service_.getGadget(gadgetName));
    }
@@ -156,10 +173,11 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
             if (content != null)
             {
                LocalGadgetData data = (LocalGadgetData) def.getData();
-               data.setFileName(gadgetURI);
+               String fileName = getName(gadgetURI);
+               data.setFileName(fileName);
                NTFolder folder = data.getResources();
                String encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
-               folder.createFile(getName(gadgetURI), new Resource(LocalGadgetData.GADGET_MIME_TYPE, encoding, content));
+               folder.createFile(fileName, new Resource(LocalGadgetData.GADGET_MIME_TYPE, encoding, content));
             }
          }
          else
@@ -167,6 +185,38 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
             RemoteGadgetData data = (RemoteGadgetData) def.getData();
             data.setURL(gadgetURI);
          }
+      }
+
+      @Override
+      protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
+      {
+         if (!def.isLocal())
+         {
+            String gadgetName = def.getName();
+            String description = prefs.getDescription();
+            String thumbnail = prefs.getThumbnail().toString();
+            String title = getGadgetTitle(prefs, gadgetName);
+            String referenceURL = prefs.getTitleUrl().toString();
+
+            def.setDescription(description);
+            def.setThumbnail(thumbnail);
+            def.setTitle(title);
+            def.setReferenceURL(referenceURL);
+         }
+      }
+
+      private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
+      {
+         String title = prefs.getDirectoryTitle();
+         if (title == null || title.trim().length() < 1)
+         {
+            title = prefs.getTitle();
+         }
+         if (title == null || title.trim().length() < 1)
+         {
+            return defaultValue;
+         }
+         return title;
       }
 
       private String getName(String resourcePath) throws IOException

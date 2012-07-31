@@ -18,18 +18,20 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.apache.shindig.common.uri.Uri;
-import org.apache.shindig.gadgets.spec.GadgetSpec;
-import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.api.annotations.*;
+import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.ManyToOne;
+import org.chromattic.api.annotations.MappedBy;
+import org.chromattic.api.annotations.NamingPrefix;
+import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.Owner;
+import org.chromattic.api.annotations.Path;
 import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.chromattic.ext.ntdef.NTFile;
-import org.chromattic.ext.ntdef.Resource;
 import org.chromattic.ext.ntdef.NTFolder;
+import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.EncodingDetector;
-
-
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 
@@ -77,16 +79,8 @@ public abstract class LocalGadgetData extends GadgetData
       GadgetDefinition def = getDefinition();
 
       // Get the related content
-      GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
-      ModulePrefs prefs = spec.getModulePrefs();
       byte[] bytes = gadgetXML.getBytes();
       String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
-
-      // Update def
-      def.setDescription(prefs.getDescription());
-      def.setThumbnail(prefs.getThumbnail().toString()); // Do something better than that
-      def.setTitle(prefs.getTitle());
-      def.setReferenceURL(prefs.getTitleUrl().toString());
 
       // Update content
       NTFile content = getGadgetContent();
