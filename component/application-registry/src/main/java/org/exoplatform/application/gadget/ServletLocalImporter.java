@@ -18,6 +18,7 @@
  */
 package org.exoplatform.application.gadget;
 
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
@@ -73,6 +74,12 @@ public class ServletLocalImporter extends GadgetImporter
    protected String getGadgetURL() throws Exception
    {
       return gadgetService.getGadgetURL(getGadgetName());
+   }
+
+   @Override
+   protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
+   {
+      //We store no metadata for local gadget
    }
 
    @Override
