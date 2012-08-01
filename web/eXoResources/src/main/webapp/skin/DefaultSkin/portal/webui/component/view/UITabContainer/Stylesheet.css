@@ -55,11 +55,7 @@
    cursor: pointer;
 }
 
-.ApplicationMode .UITabContainer .AddTab {
-	display: none;
-}
-
-.ApplicationMode .UITabContainer .EditIcon {
+.ApplicationMode .UITabContainer .AddTab ,.ApplicationMode .UITabContainer  .UITab  .EditIcon {
 	display: none;
 }
 
