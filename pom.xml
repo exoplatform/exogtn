@@ -118,9 +118,9 @@
    </distributionManagement>
 
    <scm>
-      <connection>scm:git:git://github.com/exoportal/exogtn.git</connection>
-      <developerConnection>scm:git:ssh://git@github.com/exoportal/exogtn.git</developerConnection>
-      <url>https://github.com/exoportal/exogtn</url>
+      <connection>scm:git:git://github.com/exoplatform/exogtn.git</connection>
+      <developerConnection>scm:git:git@github.com:exoplatform/exogtn.git</developerConnection>
+      <url>https://fisheye.exoplatform.org/browse/exogtn</url>
    </scm>
 
    <modules>
