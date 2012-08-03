@@ -1,0 +1,31 @@
+<abstract>
+    <para>
+    The intended readers of this guide are developers who want to learn about GateIn developments and configurations.
+</para>
+<para>
+    This guide consists of the following main content:
+</para>
+<itemizedlist>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Configuration">Configuration</link></emphasis>: Provides you the knowledge about configurations of GateIn database and email service. This will help you customize and extend more functions for your product.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Development">Portal development</link></emphasis>: Provides the knowledge about Portal skinning, some Portal's important configurations (Portal default configuration, Portal permission configuration, Portal navigation configuration, Internationalization configuration, etc), Data Import Strategy, Navigation Controller and other knowledge for developing Portal.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Portlet_development">Portlet development</link></emphasis>: Provides you the basic knowledge about portlet development so you can develop your portlet in a Portal.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Gadget_development">Gadget reference</link></emphasis>: Provides you the basic knowledge about gadget developments so you can deploy your gadget in a Portal.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Advanced">Advanced development</link></emphasis>: Helps you further understand about the foundations of a portal system.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Authentication_And_Identity">Authentication and Identity</link></emphasis>: Provides you the basic knowledge about authentication and identity of portals, such as information related to passwords, accounts, organization configuration.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="wsrp">Web Services for Remote Portlets (WSRP)</link></emphasis>: Provides you the knowledge to deploy, configure and consume Web Services for Remote Portlets in GateIn.</para>
+</listitem>
+</itemizedlist>
+</abstract>
