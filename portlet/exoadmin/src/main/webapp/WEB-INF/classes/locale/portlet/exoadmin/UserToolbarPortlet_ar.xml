@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIUserToolBarSitePortlet>
+    <header>
+      <site>الموقع</site>
+    </header>
+  </UIUserToolBarSitePortlet>
+  <UIUserToolBarGroupPortlet>
+     <header>
+      <group>المجموعة</group>
+    </header>
+   </UIUserToolBarGroupPortlet>
+   <UIUserToolBarDashboardPortlet>
+     <header>
+      <dashboard>لوحة التحكـّم</dashboard>
+    </header> 
+   </UIUserToolBarDashboardPortlet>
+</bundle>
