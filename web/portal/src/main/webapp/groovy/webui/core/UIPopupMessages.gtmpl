@@ -8,7 +8,8 @@
 	 */  
 %>
 <%
-    import org.gatein.common.text.EntityEncoder;
+   import org.exoplatform.commons.utils.HTMLEntityEncoder;
+
 	String popupId = uicomponent.getId();
 	
 	def rcontext = _ctx.getRequestContext();
@@ -70,7 +71,7 @@
 					}
 			    }
 			}
-			EntityEncoder encoder = EntityEncoder.FULL;
+			def encoder = HTMLEntityEncoder.getInstance();
 			msgValue = encoder.encode(msgValue);
 			println msgValue;
 			println "						 </div>";
