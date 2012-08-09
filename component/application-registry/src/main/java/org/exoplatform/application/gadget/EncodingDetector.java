@@ -36,11 +36,20 @@ import java.io.InputStream;
 public class EncodingDetector extends DefaultHandler
 {
 
-   public static String detect(InputStream in) throws IOException, ParserConfigurationException, SAXException
+   public static String detect(InputStream in) throws ParserConfigurationException, SAXException
    {
       EncodingDetector detector = new EncodingDetector();
-      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-      parser.parse(in, detector);
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      //Set below feature to avoid loading external DTD - a buggy and slow action.
+      factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      SAXParser parser = factory.newSAXParser();
+      try
+      {
+         parser.parse(in, detector);
+      }
+      catch (Exception ex)
+      {
+      }
       return detector.encoding;
    }
 
