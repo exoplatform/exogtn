@@ -245,7 +245,9 @@ PortalDragDrop.prototype.init = function(e) {
 	        }
 	      }
 	  	}
-
+	  	
+	  	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
+	  	
 	    if(dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27) {
 	    	eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
 	    } else {
@@ -277,9 +279,7 @@ PortalDragDrop.prototype.init = function(e) {
 	    eXo.portal.isInDragging = false;
 	    if (hasChanged) {
 	    	eXo.portal.UIPortal.changeComposerSaveButton();
-	    }
-
-	    this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
+	    }	    
   };
   
   var clickObject = this;
