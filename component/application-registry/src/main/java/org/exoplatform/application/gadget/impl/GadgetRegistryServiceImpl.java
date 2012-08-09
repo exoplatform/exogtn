@@ -356,6 +356,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
          }
          catch (Exception e)
          {
+            log.warn("Exception while importing " + importer.getGadgetName() + " gadget", e);
             done = false;
          }
          finally
