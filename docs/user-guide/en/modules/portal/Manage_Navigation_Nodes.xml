@@ -359,12 +359,22 @@
       </step>
     </procedure>
     <note>
-	<para>To select a page, you must be a member in the <emphasis role="bold">Access Permission</emphasis> or <emphasis role="bold">Edit Permission</emphasis> list of the selected pages.
+     <itemizedlist>
+    <listitem>
+    <para>
+      When editing a navigation in Group Sites and adding or editing a node of a group navigation, if your selected page belongs to <emphasis role="bold">Setup menu</emphasis> pages, your page will not be displayed under the <guilabel>My Groups</guilabel> menu in the <emphasis role="bold">Administration Bar</emphasis>. These pages are: New Staff, Organization Management, Registry, Site Explorer, WCM Administration, Page Management, Service Management, Portal Navigation, Group Navigation, Monitoring and IDE.
+    </para>
+    </listitem>
+	<listitem><para>To select a page, you must be a member in the <emphasis role="bold">Access Permission</emphasis> or <emphasis role="bold">Edit Permission</emphasis> list of the selected pages.
       When the page type is 'User', you cannot select a page of another users.
 	</para>
+     </listitem>
+     <listitem>
 	<para>
-      If you do not have the <emphasis>Access</emphasis> permission for any page in the list, please contact your administrator to get appropriate permissions.
+      If you do not have the <emphasis role="bold">Access Permission</emphasis> for any page in the list, please contact your administrator to get appropriate permissions.
 	</para>
+     </listitem>
+      </itemizedlist>
     </note>
 
   <citetitle>
