@@ -55,6 +55,7 @@ public class UIStandaloneGadget extends UIGadget
          try
          {
             uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
+            event.getRequestContext().setResponseComplete(true);
          }
          catch(Exception e)
          {

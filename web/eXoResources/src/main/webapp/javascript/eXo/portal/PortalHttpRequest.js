@@ -469,8 +469,7 @@ function HttpResponseHandler(){
 			}
 		}
 		
-		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
-		var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");           
+		var portletFragsInWS = DOMUtil.findDescendantsByClass(document.body, "div", "PORTLET-FRAGMENT");           
 		var exHeads = DOMUtil.getElementsBy(function(elem) {
 			return elem.tagName != "TITLE" && elem.className.indexOf("ExHead-") == 0;
 		}, "*", head);
