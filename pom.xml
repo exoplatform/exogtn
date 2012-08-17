@@ -112,7 +112,7 @@
    <scm>
       <connection>scm:git:git://github.com/exoplatform/exogtn.git</connection>
       <developerConnection>scm:git:git@github.com:exoplatform/exogtn.git</developerConnection>
-      <url>https://github.com/exoplatform/exogtn</url>
+      <url>https://fisheye.exoplatform.org/browse/exogtn</url>
    </scm>
 
    <modules>
