@@ -19,7 +19,6 @@
 
 .UIGrid {
 	margin: auto;	
-	table-layout:fixed;
 }
 
 .UIGrid .center {
