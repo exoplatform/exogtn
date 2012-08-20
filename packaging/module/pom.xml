@@ -23,7 +23,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging</artifactId>
-      <version>3.1.14-PLF</version>
+      <version>3.1.15-PLF-SNAPSHOT</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
