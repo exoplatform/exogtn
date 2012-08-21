@@ -5,6 +5,32 @@
         ]>
 <section id="sect-User_Guide-Manage_Permissions">
 <title>Manage permissions</title>
+  <highlights>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="sect-User_Guide-Manage_Permission-Set_Portal_Permission">Set permissions on a portal</link>
+          : Learn to set the Access permission and Edit permission on a portal for groups and memberships.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-Manage_Permission-Set_Page_Permission">Set permissions on a page</link>:
+          Learn to set the Access permission and Edit permission on a page for groups and memberships.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category">Set Access
+          permission on a category</link>: Learn to set the Access permission and Edit permission on a category for
+          groups and memberships.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set Access
+          permission on a portlet</link>: Learn to set the Access permission and Edit permission on a portlet for groups
+          and memberships.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </highlights>
   <para>
     Permissions play an important role in accessing and performing actions in eXo Platform. Depending on these permissions assigned by an administrator, users can gain access to various components and another actions, such as editing portals, pages, or
     portlets.
@@ -13,7 +39,40 @@
     Details about permission types and levels can also be found in the
     <link linkend="Platform_User_Guide.eXo_Platform.Get_started.Glossary.Permission">Permission</link> section.
   </para>
-  <section id="sect-User_Guide-Manage_Permission-Set_Portal_Permission">
+   <para>
+     <prompt>
+       <emphasis role="bold">See also</emphasis>
+     </prompt>
+   </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage sites</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites.SampleAccessibleWeb">Manage a sample accessible website</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage navigation nodes</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Pages">Manage pages</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications">Manage applications</link>
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <section id="sect-User_Guide-Manage_Permission-Set_Portal_Permission" role="NotInToc">
     <title>Set permissions on a portal</title>
       <para>You can set the portal permissions (<emphasis role="bold">Access permission</emphasis> and <emphasis role="bold">Edit permission</emphasis>) for a specific user via the <guilabel>Permission Settings</guilabel> tab.</para>
       <para xml:id="sect-User_Guide-Manage_Permission-Set_Portal_Permission-Open_Permission Settings_tab">The <guilabel>Permission Settings</guilabel> tab can be opened in some various ways, depending on the following approaches.</para>
@@ -106,7 +165,7 @@
               </para>
             </step>
             </procedure>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">
+    <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal" role="NotInToc">
       <title>Access permission</title>
       <note>
 	  <para>To access a portal, you must belong to one of the groups that have the <emphasis>Access</emphasis> permission to that portal.
@@ -173,7 +232,7 @@
 		</listitem>
 		 </itemizedlist>
     </section>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">
+    <section id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal" role="NotInToc">
       <title>Edit permission</title>
       <note>
 	  <para>
@@ -203,7 +262,7 @@
     </section>
   </section>
   <!-- Set_Page_Permission -->
-  <section id="sect-User_Guide-Manage_Permission-Set_Page_Permission">
+  <section id="sect-User_Guide-Manage_Permission-Set_Page_Permission" role="NotInToc">
     <title>Set permissions on a page</title>
 <!--	<para>Before setting permissions on a page, you need to pay attention to the following cases:
 	</para>
@@ -398,7 +457,7 @@
     </section>
   </section>
 
-  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category">
+  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category" role="NotInToc">
     <title>Set Access permission on a category</title>
     <para>
       Setting the <emphasis>Access</emphasis> permission on categories allows these categories to be listed when a page is edited to
@@ -450,7 +509,7 @@
     </procedure>
   </section>
 
-  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">
+  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet" role="NotInToc" >
     <title>Set Access permission on a portlet</title>
     <procedure>
       <step>

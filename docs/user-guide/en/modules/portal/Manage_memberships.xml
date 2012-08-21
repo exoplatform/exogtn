@@ -23,8 +23,12 @@
       </imageobject>
     </mediaobject>
 
-    <section id="sect-User_Guide-User_Management-Add_a_new_membership_type">
-      <title>Add a new membership type</title>
+    <para>
+		In the following sections you will you learn to <link linkend="sect-User_Guide-User_Management-Add_a_new_membership_type">Add a new membership type</link>, <link linkend="sect-User_Guide-User_Management-Edit_a_membership_type">Edit a membership type</link> and <link linkend="sect-User_Guide-User_Management-Delete_a_membership_type">Delete a membership type</link>.
+	  </para>
+	  <para xml:id="sect-User_Guide-User_Management-Add_a_new_membership_type">
+		<citetitle><emphasis role="bold">Add a new membership type</emphasis></citetitle>
+	  </para>
       <procedure>
         <step>
           <para>
@@ -43,10 +47,10 @@
           </para>
         </step>
       </procedure>
-    </section>
 
-    <section id="sect-User_Guide-User_Management-Edit_a_membership_type">
-      <title>Edit a membership type</title>
+    <para xml:id="sect-User_Guide-User_Management-Edit_a_membership_type">
+	  <citetitle><emphasis role="bold">Edit a membership type</emphasis></citetitle>
+	  </para>
       <procedure>
         <step>
           <para>
@@ -75,10 +79,10 @@
           </para>
         </step>
       </procedure>
-    </section>
 
-    <section id="sect-User_Guide-User_Management-Delete_a_membership_type">
-      <title>Delete a membership type</title>
+    <para xml:id="sect-User_Guide-User_Management-Delete_a_membership_type">
+		<citetitle><emphasis role="bold">Delete a membership type</emphasis></citetitle>
+  	</para>
       <procedure>
         <step>
           <para>
@@ -98,5 +102,26 @@
           </para>
         </step>
       </procedure>
+    <para>
+  <prompt>
+	 <emphasis role="bold">See also</emphasis>
+  </prompt>
+  </para>
+<itemizedlist>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link>
+		</para>
+	</listitem>
+</itemizedlist>
     </section>
-  </section>
