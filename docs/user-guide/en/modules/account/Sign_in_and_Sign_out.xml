@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Sign_In_and_Sign_Out">
+<section id="sect-User_Guide-Sign_In_and_Sign_Out" role="NotInToc">
   <title>Sign in &amp; Sign out</title>
   <citetitle>
   <para xml:id="sect-User_Guide-Sign_in"><emphasis role="bold">Sign in a portal</emphasis></para>

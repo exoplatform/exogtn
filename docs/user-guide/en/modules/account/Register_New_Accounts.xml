@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Register_New_Accounts">
+<section id="sect-User_Guide-Register_New_Accounts" role="NotInToc">
   <title>Register new account</title>
   <para>
     As a guest user, you can visit eXo Platform but are limited to a lot of content and applications.
