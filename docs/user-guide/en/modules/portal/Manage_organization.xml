@@ -5,25 +5,25 @@
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link>
+            <link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link> shows you how to add a new user to your organization.
           </emphasis> </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link>
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link> shows you how to manage user, groups and memberships.
           </emphasis> </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link>
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link> shows you how to add, edit, delete groups and members in groups.
           </emphasis> </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link>
+            <link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link> shows you how to add, edit and delete membership types.
           </emphasis> </para>
       </listitem>
     </itemizedlist>
