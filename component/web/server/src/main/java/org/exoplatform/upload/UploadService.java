@@ -19,6 +19,17 @@
 
 package org.exoplatform.upload;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.ProgressListener;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.PortalContainerInfo;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,21 +40,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.PortalContainerInfo;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-import org.gatein.common.text.EntityEncoder;
 
 public class UploadService
 {
@@ -116,7 +114,23 @@ public class UploadService
 
       ServletFileUpload servletFileUpload = makeServletFileUpload(upResource);
       // parse request
-      List<FileItem> itemList = servletFileUpload.parseRequest(request);
+      List<FileItem> itemList = null;
+      try
+      {
+         itemList = servletFileUpload.parseRequest(request);
+      }
+      catch (FileUploadException uploadEx)
+      {
+         if(uploadEx instanceof FileUploadBase.IOFileUploadException)
+         {
+            log.debug("IOException while upload resource", uploadEx);
+         }
+         else
+         {
+            throw uploadEx;
+         }
+      }
+
       if (itemList == null || itemList.size() != 1 || itemList.get(0).isFormField())
       {
          log.debug("Please upload 1 file per request");
