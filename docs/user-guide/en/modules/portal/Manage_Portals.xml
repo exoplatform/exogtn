@@ -5,7 +5,56 @@
         ]>
 <section id="sect-User_Guide-Manage_Portals">
 <title>Manage sites</title>
-  <section id="sect-User_Guide-Create_a_New_Portal">
+    	<highlights>
+	<itemizedlist>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Create_a_New_Portal">Create a new site</link>: Learn to create a new site and configure site settings.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Switching_between_Portals">Switch between sites</link>: Learn to navigate between sites.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Edit_a_Portal">Edit a site</link>: Learn to edit a site's layout, navigation and configuration.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete a portal</link>: Learn to remove a sites.</para>
+		</listitem>
+	</itemizedlist>
+	</highlights>
+<para>
+  <prompt>
+		<emphasis role="bold">See also</emphasis>
+  </prompt>
+</para>
+<itemizedlist>
+    <listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Permission">Manage permissions</link>
+		</para>
+	</listitem>
+     <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites.SampleAccessibleWeb">Manage a sample accessible website</link>
+      </para>
+    </listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage navigation nodes</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Pages">Manage pages</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications">Manage applications</link>
+		</para>
+	</listitem>
+</itemizedlist>
+
+  <section id="sect-User_Guide-Create_a_New_Portal" role="NotInToc">
     <title>Create a new portal</title>
     <para>
       You can perform this action only when you are a member of the
@@ -175,7 +224,7 @@
       </step>
     </procedure>
   </section>
-   <section id="sect-User_Guide-Switching_between_Portals">
+   <section id="sect-User_Guide-Switching_between_Portals" role="NotInToc">
     <title>Switch between portals</title>
     <para>This function enables you to select and use another portals (gateway, starting site). You can perform this
       action only when you are assigned the appropriate permission by the administrators.
@@ -195,7 +244,7 @@
     </mediaobject>
 	</para>
   </section>
-  <section id="sect-User_Guide-Manage_Portals-Edit_a_Portal">
+  <section id="sect-User_Guide-Manage_Portals-Edit_a_Portal" role="NotInToc">
     <title>Edit a portal</title>
     <note>
 	<para>
@@ -373,7 +422,7 @@
 	</note>
     </section>
   </section>
-  <section id="sect-User_Guide-Manage_Portals-Delete_a_Portal">
+  <section id="sect-User_Guide-Manage_Portals-Delete_a_Portal" role="NotInToc">
     <title>Delete a portal</title>
     <note>
 	<para>

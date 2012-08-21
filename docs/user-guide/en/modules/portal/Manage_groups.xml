@@ -5,6 +5,35 @@
         ]>
 <section id="sect-User_Guide-User_Management-Manage_groups">
 <title>Manage groups</title>
+  <highlights>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="sect-User_Guide-User_Management-Add_a_new_group">Add a new group</link>: Learn to add a new
+          group to your organization.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-User_Management-Edit-a-group">Edit a group</link>: Learn to edit the
+          information of current groups.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-User_Management-Delete_a_group">Delete a group</link>: Learn to remove a
+          group from your organization.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">Add a user to a group</link>:
+          Learn to add members to a group.
+        </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group">Edit a user membership
+          in a group</link>: Learn to change the user's membership type in a group.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </highlights>
     <para>Select the
       <guilabel>Group Management</guilabel>
       tab in the <guilabel>Organization</guilabel> form. This tab is used to add, edit or delete a group.
@@ -22,7 +51,29 @@
       By default, all existing groups will be displayed on the left pane.
       The right pane shows information of the selected group and of its members with the <guilabel>Add Member</guilabel> form.
     </para>
-    <section id="sect-User_Guide-User_Management-Add_a_new_group">
+    <para>
+  <prompt>
+	 <emphasis role="bold">See also</emphasis>
+  </prompt>
+  </para>
+<itemizedlist>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link>
+		</para>
+	</listitem>
+</itemizedlist>
+    <section id="sect-User_Guide-User_Management-Add_a_new_group" role="NotInToc">
       <title>Add a new group</title>
       <procedure>
         <step>
@@ -129,7 +180,7 @@
       </note>
     </section>
 
-    <section id="sect-User_Guide-User_Management-Edit-a-group">
+    <section id="sect-User_Guide-User_Management-Edit-a-group" role="NotInToc">
       <title>Edit a group</title>
       <procedure>
         <step>
@@ -172,7 +223,7 @@
       </procedure>
     </section>
 
-     <section id="sect-User_Guide-User_Management-Delete_a_group">
+     <section id="sect-User_Guide-User_Management-Delete_a_group" role="NotInToc">
       <title>Delete a group</title>
       <procedure>
         <step>
@@ -213,7 +264,7 @@
       </note>
     </section>
 
-    <section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">
+    <section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group" role="NotInToc">
       <title>Add a user to a group</title>
       <procedure>
         <step>
@@ -307,7 +358,7 @@
       </note>
     </section>
 
-    <section id="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group">
+    <section id="sect-User_Guide-User_Management-Edit_the_user_membership_in_a_group" role="NotInToc">
       <title>Edit a user membership in a group</title>
       <procedure>
         <step>

@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Change_Account_Settings">
+<section id="sect-User_Guide-Change_Account_Settings" role="NotInToc">
   <title>Change account settings</title>
   <para>
     To change your account information, hover your cursor over the account name at the top right corner of the site and
