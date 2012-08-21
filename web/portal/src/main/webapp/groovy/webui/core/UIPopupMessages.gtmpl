@@ -69,8 +69,9 @@
 %>
 <div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
 	<%
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false, null, null, $uicomponent.showMask);");
-	if (uicomponent.hasMessage()) {
+	def isShown = uicomponent.hasMessage();
+	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', $isShown, null, null, $uicomponent.showMask);");
+	if (isShown) {
 	%>
 	<div class="OverflowContainer ClearFix">
 		<a class="CloseButton" title="<%=_ctx.appRes("UIPopupMessages.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
@@ -102,7 +103,6 @@
 		</div>						
 	</div>
 	<%
-		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 		rcontext.getJavascriptManager().addJavascript("window.setTimeout(\"eXo.webui.UIPopupWindow.increasezIndex('$popupId')\", 100);");
 	}
 	%>
