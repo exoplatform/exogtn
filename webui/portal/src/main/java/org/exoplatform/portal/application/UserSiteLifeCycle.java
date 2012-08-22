@@ -97,7 +97,7 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
          }
          catch (Exception ex)
          {
-            log.warn("Navigation " + nav.getKey().getName() + " does not exist!", ex);
+            log.warn("Navigation " + siteKey.getName() + " does not exist!", ex);
          }
 
       }
