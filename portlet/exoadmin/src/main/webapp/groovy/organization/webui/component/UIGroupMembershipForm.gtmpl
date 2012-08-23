@@ -3,6 +3,7 @@
 	import org.exoplatform.webui.form.UIFormStringInput;
 	import org.exoplatform.webui.core.UIPopupWindow;
 	uicomponent.renderChild(UIPopupWindow.class);
+        uicomponent.loadData();
 %>
 <div class="UIFormWithTitle $uicomponent.id">
 	<div class="TitleBar"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
