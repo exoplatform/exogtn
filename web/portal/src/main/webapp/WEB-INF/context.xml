@@ -20,7 +20,8 @@
 -->
 
 <Context path='/portal' docBase='portal' debug='0' reloadable='true' crossContext='true' privileged='true'>
-  <Realm className='org.apache.catalina.realm.JAASRealm'
+  <Realm className="org.jboss.web.tomcat.security.JBossWebRealm"
+         certificatePrincipal="org.jboss.security.auth.certs.SubjectDNMapping"
          appName='gatein-domain'
          userClassNames='org.exoplatform.services.security.jaas.UserPrincipal'
          roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal'
