@@ -1,16 +1,20 @@
 <para><highlights>
 	<itemizedlist>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Register_New_Accounts">Register new account</link>: Learn to create a new account to start working on eXo Platform.</para>
+			<para><link linkend="sect-User_Guide-Register_New_Accounts">Register new account</link></para>
+			<para>Steps to create a new account before working on eXo Palatform.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Sign_In_and_Sign_Out">Sign in and Sign out</link>: Learn to sign in and sign out with your registered account.</para>
+			<para><link linkend="sect-User_Guide-Sign_In_and_Sign_Out">Sign in and Sign out</link></para>
+			<para>Ways to sign in and sign out with your registered account.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Change_Account_Settings">Change account settings</link>: Learn to change your account profiles and password.</para>
+			<para><link linkend="sect-User_Guide-Change_Account_Settings">Change account settings</link></para>
+			<para>Instructions on how to change your account settings, including account profiles and password.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Account_and_Password_Retrieval">Retrieve account and password</link>: Learn to recover you username and password when you forget.</para>
+			<para><link linkend="sect-User_Guide-Account_and_Password_Retrieval">Retrieve account and password</link></para>
+			<para>Steps to recover you username and password when you forget.</para>
 		</listitem>
 	</itemizedlist>
 </highlights>
