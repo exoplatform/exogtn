@@ -2,13 +2,16 @@
 <highlights>
 	<itemizedlist>
 		<listitem>
-			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Inside_Portal">Inside a portal</link>: Learn to manage portlets, gadgets and use the <emphasis role="bold">Dashboard portlet</emphasis>.</para>
+			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Inside_Portal">Inside a portal</link></para>
+			<para>Information related to managing gadgets and portlet. Also, this section introduces you to the <emphasis role="bold">Dashboard</emphasis> portlet which hosts many mini-applications known as gadgets.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Gadgets">Use Gadgets in your dashboards</link>: Learn to use Engagement gadgets, Management and Monitoring Gadgets, Audit and Collab gadgets.</para>
+			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Gadgets">Use Gadgets in your dashboards</link></para>
+			<para>Introduction to various types of gadgets, including Engagement, Management and Monitoring, Audit and Collab, and the way to use them.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Inside_Desktop">Inside Desktop</link>: Learn to use the WebOS Desktop.</para>
+			<para><link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications.Inside_Desktop">Inside Desktop</link></para>
+			<para>Introduction to the <emphasis role="bold">Desktop</emphasis> application, and actions you can do in this application.</para>
 		</listitem>		
 	</itemizedlist>
 	<para>
