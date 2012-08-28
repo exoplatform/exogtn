@@ -9,19 +9,24 @@
     <highlights>
 	<itemizedlist>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Page_Creation_Wizard">Add a new page using Page Creation Wizard</link>: Learn to use the <emphasis role="bold">Page Creation Wizard</emphasis> to create a new page.</para>
+			<para><link linkend="sect-User_Guide-Page_Creation_Wizard">Add a new page using Page Creation Wizard</link></para>
+			<para>The whole process to create a new page using <emphasis role="bold">Page Creation Wizard</emphasis>, including: selecting a navigation node and creating the page, selecting a page layout template, and finally arranging the page layout.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">Add a new page using Page Management</link>: Learn to use the <emphasis role="bold">Page Management</emphasis> to create a new page.</para>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">Add a new page using Page Management</link></para>
+			<para>Step-by-step instructions on how to add a new page using <emphasis role="bold">Page Management</emphasis>.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Pages-Edit_a_Page">Edit a page</link>: Learn to edit the page properties and layout.</para>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Edit_a_Page">Edit a page</link></para>
+			<para>Steps and ways to edit the page properties and layout.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Pages-Delete_a_Page">Delete a page</link>: Learn to remove a page.</para>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Delete_a_Page">Delete a page</link></para>
+			<para>Steps to remove a page.</para>
 		</listitem>
         <listitem>
-			<para><link linkend="sect-User_Guide-Manage_Page_Navigation">Manage page navigation</link>: Learn to add, edit, delete the navigation of pages.</para>
+			<para><link linkend="sect-User_Guide-Manage_Page_Navigation">Manage page navigation</link></para>
+			<para>Information and actions related to the page navigation of portal/user/group.</para>
 		</listitem>
 	</itemizedlist>
 </highlights>

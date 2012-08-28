@@ -5,19 +5,23 @@
         ]>
 <section id="sect-User_Guide-Manage_Portals">
 <title>Manage sites</title>
-    	<highlights>
+    <highlights>
 	<itemizedlist>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Create_a_New_Portal">Create a new site</link>: Learn to create a new site and configure site settings.</para>
+			<para><link linkend="sect-User_Guide-Create_a_New_Portal">Create a new portal</link></para>
+			<para>Steps to create a new portal and configure its settings.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Switching_between_Portals">Switch between sites</link>: Learn to navigate between sites.</para>
+			<para><link linkend="sect-User_Guide-Switching_between_Portals">Switch between portals</link></para>
+			<para>Steps to navigate between portals.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Portals-Edit_a_Portal">Edit a site</link>: Learn to edit a site's layout, navigation and configuration.</para>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Edit_a_Portal">Edit a portal</link></para>
+			<para>Ways and steps to edit the layout, navigation and configuration of a portal.</para>
 		</listitem>
 		<listitem>
-			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete a portal</link>: Learn to remove a sites.</para>
+			<para><link linkend="sect-User_Guide-Manage_Portals-Delete_a_Portal">Delete a portal</link></para>
+			<para>Steps to remove a portal.</para>
 		</listitem>
 	</itemizedlist>
 	</highlights>
