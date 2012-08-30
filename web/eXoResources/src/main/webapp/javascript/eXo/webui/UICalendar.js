@@ -201,11 +201,11 @@ UICalendar.prototype.renderCalendar = function() {
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
-	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.webui.UICalendar.changeMonth(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousMonth") + '"></a></td>' ;
-	table += 		'			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.webui.UICalendar.changeYear(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousYear") + '"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="#PreviousMonth" onclick="eXo.webui.UICalendar.changeMonth(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousMonth") + '"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="PreviousYear" href="#PreviousYear" onclick="eXo.webui.UICalendar.changeYear(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousYear") + '"></a></td>' ;
 	table += 		'			<td><font color="#f89302">' + this.months[this.currentDate.getMonth()] + '</font> - ' + this.currentDate.getFullYear() + '</td>' ;
-	table += 		'			<td class="YearButton"><a class="NextYear" href="javascript:eXo.webui.UICalendar.changeYear(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextYear") + '"></a></td>' ;
-	table += 		'			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.webui.UICalendar.changeMonth(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextMonth") + '"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="NextYear" href="#NextYear" onclick="eXo.webui.UICalendar.changeYear(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextYear") + '"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="NextMonth" href="#NextMonth" onclick="eXo.webui.UICalendar.changeMonth(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextMonth") + '"></a></td>' ;
 	table += 		'		</tr>' ;
 	table += 		'	</table>' ;
 	table += 		'	<div style="margin-top: 6px;padding: 0px 5px;">' ;
@@ -244,7 +244,7 @@ UICalendar.prototype.renderCalendar = function() {
           clazz = 'Weekday';
         }
 
-        table = table + "<td><a class='"+clazz+"' href=\"javascript:eXo.webui.UICalendar.setDate("+this.currentDate.getFullYear()+","+(this.currentDate.getMonth() + 1)+","+dayOfMonth+")\">"+dayOfMonth+"</a></td>" ;
+        table = table + '<td><a class="'+clazz+'" href="#SelectDate" onclick="eXo.webui.UICalendar.setDate('+this.currentDate.getFullYear()+','+(this.currentDate.getMonth() + 1)+','+dayOfMonth+')">'+dayOfMonth+'</a></td>' ;
         dayOfMonth++ ;
       } else {
         table = table + "<td class='empty'><div>&nbsp;</div></td>" ;
