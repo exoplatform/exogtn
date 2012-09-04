@@ -389,6 +389,32 @@
     &#60;/stores&#62;
 &#60;/jboss-identity&#62;
 </programlisting>
+    <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
+
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Password-encryption">Password Encryption</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Predefined_User_Configuration">Predefined User Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Authentication_Token_Configuration">Authentication Token Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

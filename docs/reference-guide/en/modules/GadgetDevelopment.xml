@@ -9,10 +9,12 @@
     <para>This chapter provides you all the basic knowledge about gadget developments through two following topics:</para>
     <itemizedlist>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Gadgets">Gadgets</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Gadgets">Gadgets</link></emphasis></para>
+          <para>Knowledge on default gadgets on the system or remote ones and how to create new ones, edit/delete/import them or view them on the dashboard, and more.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server">Set up a Gadget Server</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server">Set up a Gadget Server</link></emphasis></para>
+           <para>Instruction on how to configure the gadget host and knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
         </listitem>
     </itemizedlist>
    <para>With the knowledge you have gained, you will know how to deploy a gadget in &PRODUCT;.</para>

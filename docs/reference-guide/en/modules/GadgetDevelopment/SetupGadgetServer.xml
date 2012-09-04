@@ -5,7 +5,18 @@
 ]>
 <section id="sect-Reference_Guide-Setup_a_Gadget_Server">
 	<title>Set up a Gadget Server</title>
-	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">Virtual servers for gadget rendering</link></emphasis></para><para>Instruction on how to configure the gadget host.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration">Configuration</link></emphasis></para><para>
+               Knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
+	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering" role="NotInToc">
 		<title>Virtual servers for gadget rendering</title>
 		<para>
 			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain other than the container (the website that &#39;contains&#39; the app), it is unable to interfere with the portal by modifying the code or cookies.
@@ -37,7 +48,7 @@
 		</para>
 	</section>
 	
-	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration">
+	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration" role="NotInToc">
 		<title>Configuration</title>
 		<section id="sect-Reference_Guide-Configuration-Security_key">
       <title>Security key</title>
@@ -124,7 +135,17 @@
 		</section>
 
 	</section>
+        <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Gadgets">Gadgets</link></para>
+           </listitem>
+         </itemizedlist>
 </section>
 
 

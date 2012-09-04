@@ -5,6 +5,19 @@
 ]>
 <section id="sect-Reference_Guide-Navigation_Controller">
       <title>Navigation Controller </title>
+        <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Controller_Action">Controller in Action</link></emphasis></para><para>Introduction on the goal, the configuration declaration of the controller and the description of parameters for configuring the controller.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework">Integrate to GateIn WebUI framework</link></emphasis></para><para>Introduction on a set of parameters in Gatein's routing table and some components needed for rendering defined parameters.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Changes_Migration">Changes and migration from GateIn 3.1.x</link></emphasis></para><para>Provision of changes in securities, dashboard, <filename>portal.war</filename> and <filename>web.xml</filename> and migration knowledge from Gatein 3.1.x.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
         <para>The navigation controller is a major enhancement of GateIn that has several goals:</para>
         <itemizedlist>
           <listitem>
@@ -17,7 +30,7 @@
             <para>Provide a more friendly URL and let portal administrator configure how the HTTP request should look like.</para>
           </listitem>
         </itemizedlist>
-      <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action">
+      <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action" role="NotInToc">
         <title>Controller in Action</title>
         <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action-Controller">
           <title>Controller</title>
@@ -304,7 +317,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
           </section>
         </section>
       </section>
-      <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework">
+      <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework" role="NotInToc">
         <title>Integrate to GateIn WebUI framework</title>
         <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Routing">
           <title>Routing</title>
@@ -563,7 +576,7 @@ put("nodeurl", new Closure(this)
           </section>
         </section>
       </section>
-      <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration">
+      <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration" role="NotInToc">
         <title>Changes and migration from GateIn 3.1.x</title>
         <para>The navigation controller implies a migration of the client code that is coupled to several internal APIs of GateIn. The major impact is related to anything dealing with URL:</para>
         <itemizedlist>

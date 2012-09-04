@@ -9,10 +9,12 @@
     <para>This chapter provides you the basic knowledge about configurations in &PRODUCT; via two main topics: </para>
     <itemizedlist>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Database_Configuration">Database Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Database_Configuration">Database Configuration</link></emphasis>:</para>
+          <para>Instruction on how to configure the database for the JCR and the default identity store.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-EMail_Service_Configuration">Email Service Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-EMail_Service_Configuration">Email Service Configuration</link></emphasis>:</para>
+          <para> Instruction on how to configure the e-mail sending services.</para>
         </listitem>
     </itemizedlist>
     <para>With this knowledge, you can extend more functions for your product and customize to your desires.</para>

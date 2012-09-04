@@ -5,6 +5,17 @@
 ]>
 <section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">
 	<title>Deactivation of the Ajax Loading Mask Layer</title>
+    <para>
+        <emphasis role="bold">The followings topics are covered:</emphasis>
+    </para>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">Purpose</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">Synchronous issue</link></para>
+           </listitem>
+       </itemizedlist>
 	<!-- 	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Overview">
 		<title>Overview</title>
 		<para>
@@ -28,8 +39,11 @@
 			</listitem>
 		</itemizedlist>
 	</section>  -->
-	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">
-		<title>Purpose</title>
+    <para xml:id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">
+	<citetitle>
+		<emphasis role="bold">Purpose</emphasis>
+	</citetitle>
+    </para>
 		<para>
 			The loading mask layer is deployed after an ajax-call. It aims at blocking the GUI to prevent further user actions until the the ajax-request has been completed.
 		</para>
@@ -67,10 +81,11 @@
 		<para>
 			The GUI will be blocked to ensure that the user can only request one action at one time and while the request seems to be synchronous, all ajax requests are always asynchronous. For further information, refer to <xref linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue" />.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">
-		<title>Synchronous issue</title>
+    <para xml:id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">
+	    <citetitle>
+		    <emphasis role="bold">Synchronous issue</emphasis>
+	    </citetitle>
+    </para>
 		<para>
 			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <emphasis>bAsync</emphasis> parameter.
 		</para>
@@ -91,8 +106,6 @@ request.open(instance.method, instance.url, bAsync); // Firefox will not execute
 <programlisting language="javascript">// Asynchronous request
 request.open(instance.method, instance.url, true);
 </programlisting>
-	</section>
-
 </section>
 
 

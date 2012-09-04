@@ -5,13 +5,30 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
 	<title>Portal Lifecycle</title>
+    <para>
+        <emphasis role="bold">
+            The following topics are covered:
+        </emphasis>
+    </para>
+      <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">Application Server start and stop</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">The Command Servlet</link></para>
+           </listitem>
+       </itemizedlist>
+</highlights>
 	<para>
 			This chapter describes the portal lifecycle from the application server start to its stop and how requests are handled.
-  </para>
+    </para>
 
-	
-	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
-		<title>Application Server start and stop</title>
+	 <para xml:id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
+         <citetitle>
+             <emphasis role="bold">Application Server start and stop</emphasis>
+         </citetitle>
+	 </para>
 		<para>
 			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
@@ -21,7 +38,6 @@
 		<para>
 			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
 		</para>
-	</section>
 	
 	<!--   
 	   TODO: Define the added listener
@@ -86,8 +102,13 @@
   }
 </programlisting>
    -->
-	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
-		<title>The Command Servlet</title>
+    <para xml:id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
+        <citetitle>
+            <emphasis role="bold">
+                  The Command Servlet
+            </emphasis>
+        </citetitle>
+    </para>
 		<para>
 			The servlet is the main entry point for incoming requests, it also includes some init codes when the portal is launched. This servlet (<emphasis>org.gatein.wci.command.CommandServlet</emphasis>) is automatically added during deployment and mapped to <emphasis>/tomcatgateinservlet</emphasis>.
 		</para>
@@ -185,7 +206,6 @@ public class MyFilter implements javax.servlet.Filter {
 				</para>
 			</note>
 		</para>
-	</section>
 	
 	<!--   
 		<para>
@@ -1033,6 +1053,53 @@ abstract public class WebuiRequestContext extends RequestContext {
 </programlisting>
 	</section>
   -->
+
+<para>
+    <prompt>
+        <emphasis role="bold">See also</emphasis>
+    </prompt>
+</para>
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

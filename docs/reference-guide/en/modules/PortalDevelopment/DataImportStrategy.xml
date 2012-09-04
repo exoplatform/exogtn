@@ -5,10 +5,19 @@
 ]>
 <section id="sect-Reference_Guide-Data_Import_Strategy">
    <title>Data Import Strategy</title>
-   <section id="sect-Reference_Guide-Introduction">
-      <title>Introduction</title>
-      <para>
-        In the Portal extension mechanism, developers can define an extension
+    <highlights>
+       <itemizedlist>
+              <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Mode">Import Mode</link></emphasis></para>
+             <para>Information on modes for the import strategy.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Strategy">Data Import Strategy</link></emphasis></para>
+             <para>Information on three types of object data: <emphasis>Portal Config</emphasis>, <emphasis> Page Data</emphasis> and <emphasis>Navigation Data</emphasis>.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
+       <para>In the Portal extension mechanism, developers can define an extension
         that Portal data can be customized by configurations in the extension. There
         are several cases which an extension developer wants to define how to customize the Portal data, 
         for example modifying, overwriting or just inserting a bit into the data defined by the portal. 
@@ -18,9 +27,8 @@
       <para>
         This section shows you how data are changes in each mode.
       </para>
-   </section>
-   
-   <section id="sect-Reference_Guide-Import_Mode">
+
+   <section id="sect-Reference_Guide-Import_Mode" role="NotInToc">
       <title>Import Mode</title>
       In this section, the following modes for the import strategy are introduced:
       <itemizedlist>
@@ -72,14 +80,18 @@
       The way that the import strategy works with the import mode will be clearly demonstrated in next sections for each type of data.
       </para>
    </section>
-   <section id="sect-Reference_Guide-Import_Strategy">
+   <section id="sect-Reference_Guide-Import_Strategy" role="NotInToc">
       <title>Data Import Strategy</title>
       The 'Portal Data' term which has been referred in the previous sections can be
       classified into three types of object data: Portal Config, Page Data and
       Navigation Data; each of which has some differences in the import strategy.
-      <section id="sect-Reference_Guide-Navigation_Data">
-         <title>Navigation Data</title>
-         The navigation data import strategy will be processed to the import mode level as the followings:
+
+     <para id="sect-Reference_Guide-Navigation_Data">
+          <citetitle>
+            <emphasis role="bold">Navigation Data</emphasis>
+          </citetitle>
+        </para>
+              The navigation data import strategy will be processed to the import mode level as the followings:
          <itemizedlist>
             <listitem>
                <emphasis>CONSERVE</emphasis>: If the navigation exists, leave it untouched. Otherwise, import data.
@@ -238,9 +250,12 @@
             </listitem>
          </itemizedlist>
       </para>
-      </section>
-      <section id="sect-Reference_Guide-Portal_Config">
-         <title>Portal Config</title>
+
+
+     <para id="sect-Reference_Guide-Portal_Config">
+      <citetitle><emphasis role="bold">Portal Config</emphasis></citetitle>
+    </para>
+
          <para>
             PortalConfig defines the portal name, permission, layout and some properties
             of a site. These information are configured in the <emphasis>portal.xml</emphasis>, <emphasis>group.xml</emphasis> or
@@ -260,13 +275,17 @@
                <emphasis>MERGE</emphasis> and <emphasis>OVERWRITE</emphasis> have the same behavior. The new portal config will be created if it does not exist or update portal properties defined by the portal config definition.
             </listitem>
          </itemizedlist>
-      </section>
-      <section id="sect-Reference_Guide-Page_Data">
-         <title>Page Data</title>
-         <para>
+
+        <para id="sect-Reference_Guide-Page_Data">
+          <citetitle>
+            <emphasis role="bold">Page Data</emphasis>
+          </citetitle>
+        </para>
+
+        <para>
             The import mode affects the page data import as the same as Portal Config.
          </para>
-      </section>
+
       <note>
          <para>
             If the Import mode is <emphasis>CONSERVE</emphasis> or <emphasis>INSERT</emphasis>, the data import strategy always performs
@@ -274,4 +293,51 @@
          </para>
       </note>
    </section>
+<para>
+<prompt>
+  <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
