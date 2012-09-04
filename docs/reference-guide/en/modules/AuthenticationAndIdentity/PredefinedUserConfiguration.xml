@@ -5,15 +5,41 @@
 ]>
 <section id="sect-Reference_Guide-Predefined_User_Configuration">
 	<title>Predefined User Configuration</title>
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			To specify the initial Organization configuration, the content of <emphasis>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </emphasis> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
-		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
-		<title>Plugin for adding users, groups and membership types</title>
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">Plugin for adding users, groups and membership types</link></emphasis></para>
+               <para>Introduction on the plugin of type <emphasis>org.exoplatform.services.organization.OrganizationDatabaseInitializer</emphasis> that is used
+               to specify the list of membership types/groups/users to be created. </para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">Membership types</link></emphasis></para>
+             <para>Instruction on how to specify the predefined membership types via the <emphasis >OrganizationConfig</emphasis> plugin parameter.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Groups">Groups</link></emphasis></para>
+             <para>Instruction on how to specify the predefined groups via the <emphasis>OrganizationConfig</emphasis> plugin parameter.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Users">Users</link></emphasis></para>
+             <para>Instruction on how to specify the predefined users via the <emphasis>OrganizationConfig</emphasis> plugin parameter.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">Plugin for monitoring user creation</link></emphasis></para>
+           <para>Introduction on the plugin of type <emphasis>org.exoplatform.services.organization.impl.NewUserEventListener</emphasis> that is used to monitor user creation.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
+    <para>
+		To specify the initial Organization configuration, the content of <emphasis>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </emphasis> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
+	</para>
+
+  <para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
+    <citetitle>
+      <emphasis role="bold">Plugin for adding users, groups and membership types</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			The plugin of type <emphasis>org.exoplatform.services.organization.OrganizationDatabaseInitializer</emphasis> is used to specify the list of membership types/groups/users to be created.
 		</para>
@@ -25,10 +51,13 @@
          If the entry does not exist in the database yet, it is created. If the <emphasis >checkDatabaseAlgorithm</emphasis> parameter value is set to <emphasis >empty</emphasis>,
          the configuration data will be updated to the database only if the database is empty.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
-		<title>Membership types</title>
+
+  <para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
+    <citetitle>
+      <emphasis role="bold">Membership types</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			The predefined membership types are specified in the <emphasis >membershipType</emphasis> field of the <emphasis >OrganizationConfig</emphasis> plugin parameter.
 		</para>
@@ -73,10 +102,12 @@
    &#60;/collection&#62;
 &#60;/field&#62;
 </programlisting>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
-		<title>Groups</title>
+
+	 <para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
+    <citetitle>
+      <emphasis role="bold">Groups</emphasis>
+    </citetitle>
+   </para>
 		<para>
 			The predefined groups are specified in the <emphasis >group</emphasis> field of the <emphasis >OrganizationConfig</emphasis> plugin parameter.
 		</para>
@@ -119,10 +150,14 @@
   &#60;/collection&#62;
 &#60;/field&#62;
 </programlisting>
-	</section>
+
 	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Users">
-		<title>Users</title>
+    <para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Users">
+    <citetitle>
+      <emphasis role="bold">Users</emphasis>
+    </citetitle>
+   </para>
+
 		<para>
 			The predefined users are specified in the <emphasis >membershipType</emphasis> field of the <emphasis >OrganizationConfig</emphasis> plugin parameter.
 		</para>
@@ -153,10 +188,14 @@
   &#60;/collection&#62;
 &#60;/field&#62;
 </programlisting>
-	</section>
+
 	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">
-		<title>Plugin for monitoring user creation</title>
+	<para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">
+    <citetitle>
+      <emphasis role="bold">Plugin for monitoring user creation</emphasis>
+    </citetitle>
+   </para>
+
 		<para>
 			The plugin of type <emphasis>org.exoplatform.services.organization.impl.NewUserEventListener </emphasis> specifies
          which groups all the newly created users should become members of. It specifies the groups and the memberships to use
@@ -200,8 +239,32 @@
   &#60;/init-params&#62;
 &#60;/component-plugin&#62;
 </programlisting>
-	</section>
+        <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Password-encryption">Password Encryption</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Authentication_Token_Configuration">Authentication Token Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-PicketLink_IDM_integration">PicketLink IDM integration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

@@ -9,46 +9,60 @@
     <para>This chapter provides you the basic knowledge about portal development via the following topics:</para>
     <itemizedlist>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skinning_Portal">Skin the portal</link></emphasis></para>
+          <para>Provision of all topics helping you to skin a portal.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></emphasis></para>
+          <para> Introduction on the portal lifecycle from the application server start to its stop and how requests are handled.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></emphasis></para>
+          <para> Knowledge about the default configuration file of the portal.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></emphasis></para>
+          <para> Knowledge about the default permission configuration of the portal.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></emphasis></para>
+          <para> Knowledge about 3 portal navigation types, which are Portal Navigation, Group Navigation and User Navigation.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></emphasis></para>
+          <para>Knowledge about how the portal data are imported and the data import strategy in each import mode.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></emphasis></para>
+          <para> Instruction on how to configure <emphasis role="bold">Gatein</emphasis> for internationalization.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></emphasis></para>
+          <para> Instruction on the Right To Left Framework for controlling the text orientation.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></emphasis></para>
+          <para> Knowledge about the XML resource bundles, which are developed as an alternative to property files.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></emphasis></para>
+          <para> Knowledge about the library which is designed to allow applications within a page to exchange data.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Upload_Component">Upload Component</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Upload_Component">Upload Component</link></emphasis></para>
+         <para>Instruction on configuring the <emphasis role="bold">Upload Service</emphasis>.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></emphasis></para>
+          <para>Instruction on how to deactivate the ajax-loading mask.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></emphasis></para>
+          <para>Instruction on how to manage JavaScript via the <filename>gatein-resources.xml</filename> configuration file.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller">Navigation Controller</link></emphasis></para>
+          <para> Knowledge about the <emphasis role="bold">Navigation Controller</emphasis>, which is designed to provide a more friendly URL and let portal administrator configure the HTTP request.</para>
         </listitem>
     </itemizedlist>
     </abstract>

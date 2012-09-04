@@ -4,9 +4,33 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Foundations">
-
    <title>Foundations</title>
-   <section id="sect-Reference_Guide-Foundations-Kernel">
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Kernel.html">GateIn Kernel</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Configuring_services">Configure services</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Configuration_syntax">Configuration syntax</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Init_params">InitParams configuration object</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Configuring_portal">Configure a portal container</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Extension_mechanism">GateIn Extension Mechanism and Portal Extensions</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Foundations-Multiple_portals">Run Multiple Portals</link></para>
+           </listitem>
+       </itemizedlist>
+    </highlights>
+   <section id="sect-Reference_Guide-Foundations-Kernel" role="NotInToc">
       <title>GateIn Kernel</title>
       <para>
          &PRODUCT; is built as a set of services on top of the dependency injection kernel. The kernel provides configuration, lifecycle handling, component scopes, and some core services.
@@ -43,7 +67,7 @@
       </para>
    </section>
 
-   <section id="sect-Reference_Guide-Foundations-Configuring_services">
+   <section id="sect-Reference_Guide-Foundations-Configuring_services" role="NotInToc">
       <title>Configure services</title>
 
       <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis>configuration.xml</emphasis> configuration files.
@@ -59,7 +83,7 @@
 
    </section>
 
-   <section id="sect-Reference_Guide-Foundations-Configuration_syntax">
+   <section id="sect-Reference_Guide-Foundations-Configuration_syntax" role="NotInToc">
       <title>Configuration syntax</title>
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
@@ -206,8 +230,7 @@
       </section>
    </section>
 
-
-   <section id="sect-Reference_Guide-Foundations-Init_params">
+   <section id="sect-Reference_Guide-Foundations-Init_params" role="NotInToc">
       <title>InitParams configuration object</title>
 
       <para>
@@ -368,8 +391,7 @@
       </para>
    </section>
 
-
-   <section id="sect-Reference_Guide-Foundations-Configuring_portal">
+   <section id="sect-Reference_Guide-Foundations-Configuring_portal" role="NotInToc">
       <title>Configure a portal container</title>
 
       <para>
@@ -510,7 +532,7 @@
       </para>
    </section>
 
-   <section id="sect-Reference_Guide-Foundations-Extension_mechanism">
+   <section id="sect-Reference_Guide-Foundations-Extension_mechanism" role="NotInToc">
       <title>GateIn Extension Mechanism and Portal Extensions</title>
 
       <para>
@@ -565,8 +587,7 @@
 
    </section>
 
-
-   <section id="sect-Reference_Guide-Foundations-Multiple_portals">
+   <section id="sect-Reference_Guide-Foundations-Multiple_portals" role="NotInToc">
       <title>Run Multiple Portals</title>
 
       <para>

@@ -5,8 +5,38 @@
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
 	<title>Authentication Token Configuration</title>
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
-		<title>What is Token Service?</title>
+    <highlights>
+      <para>The following topics are covered:</para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">What is Token Service?</link>
+          </emphasis>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">Implement the Token Service API</link>
+          </emphasis>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">Configure token services</link>
+          </emphasis>
+        </para>
+      </listitem>
+      </itemizedlist>
+  </highlights>
+
+  <para xml:id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
+    <citetitle>
+      <emphasis role="bold">What is Token Service?</emphasis>
+    </citetitle>
+  </para>
 		<para>
 			<emphasis>Token Service</emphasis> is used in authentication.
 		</para>
@@ -17,10 +47,14 @@
 			The token service allows administrators to create, delete, retrieve and clean tokens as required.
          The service also defines a validity period of any given token. The token becomes invalid once this period expires.
 		</para>
-	</section>
+
 	
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implement the Token Service API</title>
+   <para xml:id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
+    <citetitle>
+      <emphasis role="bold">Implement the Token Service API</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			All token services used in the &PRODUCT; authentication must be implemented by subclassing an <emphasis >AbstractTokenService</emphasis> abstract class.
          The following <emphasis >AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
@@ -36,10 +70,13 @@
 </programlisting>
 		<para>
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
-		<title>Configure token services</title>
+
+	<para xml:id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
+    <citetitle>
+      <emphasis role="bold">Configure token services</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			The token services configuration includes specifying the token validity period. The token service is configured as a portal component (in the portal scope, as opposed to the root scope - more about that in Foundations chapter).
 		</para>
@@ -118,8 +155,32 @@
 				</para>
 			</listitem>
 		</orderedlist>
-	</section>
+     <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Password-encryption">Password Encryption</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Predefined_User_Configuration">Predefined User Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-PicketLink_IDM_integration">PicketLink IDM integration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

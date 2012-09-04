@@ -5,8 +5,17 @@
 ]>
 <section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication">
 	<title>JavaScript Inter Application Communication</title>
-	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Overview">
-		<title>Overview</title>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Library">Library</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Syntax">Syntax</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Example_of_what">Example of Javascript events usage</link></para>
+           </listitem>                     
+       </itemizedlist>
 		<para>
 			JavaScript Inter Application Communication is designed to allow applications within a page to exchange data. This library is made for broadcasting messages on topic.
 		</para>
@@ -52,7 +61,6 @@
 				</listitem>
 			</varlistentry>
 		</variablelist>
-	</section>
 	
 	<!--   
    <section
@@ -101,8 +109,9 @@
 		</para>
    </section>
    -->
-	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Library">
-		<title>Library</title>
+	<para xml:id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Library">
+		<citetitle><emphasis role="bold">Library</emphasis></citetitle>
+    </para>
 		<para>
 			The Inter Application Communication library is found in <emphasis>01eXoResources.war:/javascript/eXo/core/Topic.js</emphasis>
 		</para>
@@ -142,10 +151,10 @@ Topic.prototype.unsubscribe = function(/*String*/ topic, /*Object*/ id) { ... }
 
 Topic.prototype.initCometdBridge = function() { ... }
 </programlisting>
-	</section>
 	
-	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Syntax">
-		<title>Syntax</title>
+	<para xml:id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Syntax">
+		<citetitle><emphasis role="bold">Syntax</emphasis></citetitle>
+    </para>
 		<para>
 			The three messaging functions require particular objects and definitions in their syntax:
 		</para>
@@ -243,10 +252,10 @@ Topic.prototype.initCometdBridge = function() { ... }
 				</listitem>
 			</varlistentry>
 		</variablelist>
-	</section>
 	
-	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Example_of_what">
-		<title>Example of Javascript events usage</title>
+	<para xml:id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Example_of_what">
+		<citetitle>Example of Javascript events usage</citetitle>
+    </para>
 		
 <programlisting language="html">&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
 &#60;portlet:defineObjects/&#62;
@@ -296,8 +305,52 @@ Topic.prototype.initCometdBridge = function() { ... }
   init_&#60;portlet:namespace/&#62;();
 &#60;/script&#62;
 </programlisting>
-	</section>
-
+<para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

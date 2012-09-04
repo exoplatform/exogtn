@@ -5,8 +5,11 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Default_Permission_Configuration">
 	<title>Portal Default Permission Configuration</title>
-	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
-		<title>Overview</title>
+    <para xml:id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
+	<citetitle>
+		<emphasis role="bold">Overview</emphasis>
+	</citetitle>
+    </para>
 		<para>
 			The default permission configuration for the portal is defined through <emphasis>org.exoplatform.portal.config.UserACL</emphasis>
          component configuration in the file <emphasis>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</emphasis>.
@@ -116,11 +119,11 @@
   &#60;/init-params&#62;   
 &#60;/component&#62;
 </programlisting>
-	</section>
-	
-	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
-		<title>Overwrite Portal Default Permissions</title>
-
+	  <para xml:id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
+	<citetitle>
+		<emphasis role="bold">Overwrite Portal Default Permissions</emphasis>
+	</citetitle>
+    </para>
       <para>When creating the custom portals and portal extensions, it is possible to override the default configuration by
       using <emphasis>org.exoplatform.portal.config.PortalACLPlugin</emphasis>, configuring it as an external-plugin of
       <emphasis>org.exoplatform.portal.config.UserACL</emphasis> service:</para>
@@ -147,8 +150,6 @@
     &#60;/component-plugin&#62;
   &#60;/external-component-plugins&#62;
 </programlisting>
-	</section>
-
 </section>
 
 

@@ -5,6 +5,25 @@
 ]>
 <section id="sect-Reference_Guide-RTL_Right_To_Left_Framework">
 	<title>RTL (Right To Left) Framework</title>
+    <para>
+        <emphasis role="bold">The following topics are covered:</emphasis>
+    </para>
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">Groovy templates</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework-Stylesheet">Stylesheet</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">Images</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">Client side Javascript</link></para>
+           </listitem>
+       </itemizedlist>
+    </highlights>
 	<para>
 		The text orientation depends on the current locale setting. The orientation is a Java 5 enum that provides a set of functionalities:
 	</para>
@@ -28,8 +47,9 @@
 	<para>
 		In case of a different context, such as the <emphasis>PortletRequestContext</emphasis>, it delegates to the parent context given the fact that the root <emphasis>RequestContext</emphasis> is always a <emphasis>PortalRequestContext</emphasis>.
 	</para>
-	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
-		<title>Groovy templates</title>
+	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
+		<citetitle><emphasis role="bold">Groovy templates</emphasis></citetitle>
+    </para>
 		<para>
 			Orientation is defined by implicit variables in the Groovy binding context:
 		</para>
@@ -67,10 +87,10 @@
 				</listitem>
 			</varlistentry>
 		</variablelist>
-	</section>
 	
-	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Stylesheet">
-		<title>Stylesheet</title>
+	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Stylesheet">
+		<citetitle><emphasis role="bold">Stylesheet</emphasis></citetitle>
+    </para>
 		<para>
 			The skin service handles stylesheet rewriting to accommodate the orientation. It works by appending -lt or -rt to the stylesheet name.
 		</para>
@@ -140,10 +160,10 @@ padding: 0px 0px 0px 5px; /* orientation=rt */
 </programlisting>
 			
 		</example>
-	</section>
 	
-	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">
-		<title>Images</title>
+	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images" role="NotInToc">
+		<citetitle><emphasis role="bold">Images</emphasis></citetitle>
+    </para>
 		<para>
 			Sometimes, it is necessary to create the RT version of an image that will be used from a template or from a stylesheet. However, symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
 		</para>
@@ -170,10 +190,9 @@ padding-right: 2px; /* orientation=lt */
 padding-left: 2px; /* orientation=rt */
 </programlisting>
 	
-  </section>
-	
-	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
-		<title>Client side JavaScript</title>
+	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
+		<citetitle><emphasis role="bold">Client side JavaScript</emphasis></citetitle>
+    </para>
 		<para>
 			The <emphasis>eXo.core.I18n</emphasis> object provides the following parameters for orientation:
 		</para>
@@ -211,8 +230,53 @@ padding-left: 2px; /* orientation=rt */
 				</listitem>
 			</varlistentry>
 		</variablelist>
-	</section>
+<para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

@@ -5,8 +5,30 @@
 ]>
 <section id="sect-Reference_Guide-Internationalization_Configuration">
 	<title>Internationalization Configuration</title>
-	<section id="sect-Reference_Guide-Internationalization_Configuration-Overview">
-		<title>Overview</title>
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Internationalization_Configuration-Locales_configuration">Locales configuration:</link></emphasis></para>
+               <para>Provision of the configuration for defining which languages are available to users in the "Change Language" section.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Internationalization_Configuration-ResourceBundleService">ResourceBundleService:</link></emphasis></para>
+               <para>Description for the ResourceBundleService configuration.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Internationalization_Configuration-Navigation_Resource_Bundles">Navigation Resource Bundles:</link></emphasis></para>
+               <para>Description for the language configuration for navigation.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Internationalization_Configuration-_Portlets_">Portlets:</link></emphasis></para>
+               <para>Description for the language configuration for portlets.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">Translate the language selection form:</link></emphasis></para>
+               <para>Instruction on how to translate a language in the Interface Language Setting.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
 		<note>
 			<title>Assumed Knowledge</title>
 			<para>
@@ -59,9 +81,7 @@ NavigationPortlet_ar.xml
 				For more information, refer to <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />.
 			</para>
 		</note>
-	</section>
-	
-	<section id="sect-Reference_Guide-Internationalization_Configuration-Locales_configuration">
+	<section id="sect-Reference_Guide-Internationalization_Configuration-Locales_configuration" role="NotInToc">
 		<title>Locales configuration</title>
 		<para>
 			Various languages are available in the portal package. The configuration below will define which languages shown in the &#34;Change Language&#34; section and made available to users.
@@ -151,7 +171,7 @@ NavigationPortlet_ar.xml
 
 	</section>
 	
-	<section id="sect-Reference_Guide-Internationalization_Configuration-ResourceBundleService">
+	<section id="sect-Reference_Guide-Internationalization_Configuration-ResourceBundleService" role="NotInToc">
 		<title>ResourceBundleService</title>
 		<para>
 			The resource bundle service is configured in: <emphasis>02portal.war:/WEB-INF/conf/common/common-configuration.xml</emphasis>:
@@ -220,7 +240,7 @@ NavigationPortlet_ar.xml
 
 	</section>
 	
-	<section id="sect-Reference_Guide-Internationalization_Configuration-Navigation_Resource_Bundles">
+	<section id="sect-Reference_Guide-Internationalization_Configuration-Navigation_Resource_Bundles" role="NotInToc">
 		<title>Navigation Resource Bundles</title>
 		<para>
 			There is a resource bundle for each navigation. A navigation can exist for user, groups, and portal.
@@ -249,8 +269,19 @@ organization.management=Management
 		</para>
 	</section>
 	
-	<section id="sect-Reference_Guide-Internationalization_Configuration-_Portlets_">
+	<section id="sect-Reference_Guide-Internationalization_Configuration-_Portlets_" role="NotInToc">
 		<title> Portlets </title>
+        <para>
+            <emphasis role="bold">The following topics are covered:</emphasis>
+        </para>
+        <itemizedlist>
+            <listitem>
+                <link linkend="sect-Reference_Guide-_Portlets_-Standard_portlet_resource_keys">Standard portlet resource keys</link>
+            </listitem>
+            <listitem>
+                <link linkend="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage">Debugging resource bundle usage</link>
+            </listitem>
+        </itemizedlist>
 		<para>
 			Portlets are independent applications and deliver their own resource files.
 		</para>
@@ -284,8 +315,9 @@ organization.management=Management
 		<para>
 			See the portlet specification for more details about the portlet internationalization.
 		</para>
-		<section id="sect-Reference_Guide-_Portlets_-Standard_portlet_resource_keys">
-			<title>Standard portlet resource keys</title>
+		<para xml:id="sect-Reference_Guide-_Portlets_-Standard_portlet_resource_keys">
+			<citetitle><emphasis role="bold">Standard portlet resource keys</emphasis></citetitle>
+        </para>
 			<para>
 				The portlet specifications define three standard keys: Title, Short Title and Keywords. Keywords are formatted as a comma-separated list of tags.
 			</para>
@@ -294,10 +326,10 @@ organization.management=Management
  javax.portlet.short-title=Breadcrumbs
  javax.portlet.keywords=Breadcrumbs, Breadcrumb
 </programlisting>
-		</section>
 				
-		<section id="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage">
-			<title>Debugging resource bundle usage</title>
+		<para xml:id="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage" role="NotInToc">
+			<citetitle><emphasis role="bold">Debugging resource bundle usage</emphasis></citetitle>
+        </para>
 			<para>
 				When translating an application, it can sometimes be difficult to find the right key for a given property.
 			</para>
@@ -310,10 +342,8 @@ organization.management=Management
 			<para>
 				For example, the translated value for the key &#34;<parameter>organization.title</parameter>&#34; is simply the value &#34;<parameter>organization.title</parameter>&#34;. Selecting that language allows use of the portal and its applications with all the keys visible. This makes it easier to find out the correct key for a given label in the portal page.
 			</para>
-		</section>
-
 	</section>
-	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">
+	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form" role="NotInToc">
         <title>Translate the language selection form</title>	
 	    <mediaobject>
            <imageobject role="html">
@@ -343,7 +373,53 @@ organization.management=Management
            </para>
         </example>
 	</section>
+      <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

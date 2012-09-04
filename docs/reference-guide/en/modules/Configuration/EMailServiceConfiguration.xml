@@ -6,25 +6,20 @@
 ]>
 <section id="sect-Reference_Guide-EMail_Service_Configuration">
   <title>Email Service Configuration</title>
-
-  <section id="sect-Reference_Guide-EMail_Service_Configuration-Overview">
-    <title>Overview</title>
-
     <para>&PRODUCT; includes an e-mail sending service that needs to be configured
     before it can function properly. This service, for instance, is used to send emails to users who forgot
     their password or username.</para>
-
-  </section>
-
-  <section id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
-    <title>Configure the outgoing e-mail account</title>
-
+   <para xml:id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
+       <citetitle>
+           <emphasis role="bold">Configure the outgoing e-mail account</emphasis>
+       </citetitle>
+   </para>
     <para>The e-mail service can use any SMTP account configured in
     <emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>
     (or <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis> if you are using Tomcat).</para>
 
     <para>The relevant section looks like:</para>
-    
+
     <programlisting># EMail
 gatein.email.smtp.username=
 gatein.email.smtp.password=
@@ -40,7 +35,18 @@ gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory</programlis
 
     <para>In corporate environments, if you want to use your corporate SMTP gateway over SSL,
        like in the default configuration, configure a certificate truststore containing your SMTP server's
-       public certificate. Depending on the key sizes, you may then also need to install Java Cryptography Extension (JCE) 
+       public certificate. Depending on the key sizes, you may then also need to install Java Cryptography Extension (JCE)
        Unlimited Strength Jurisdiction Policy Files for your Java Runtime Environment.</para>
-  </section>
+  <para>
+  <citetitle>
+            <emphasis role="bold">See also</emphasis>
+        </citetitle>
+    </para>
+    <itemizedlist>
+        <listitem>
+            <para>
+                <link linkend="sect-Reference_Guide-Database_Configuration">Database Configuration</link>
+            </para>
+        </listitem>
+    </itemizedlist>
 </section>

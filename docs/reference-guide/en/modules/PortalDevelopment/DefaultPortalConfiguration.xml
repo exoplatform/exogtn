@@ -5,8 +5,22 @@
 ]>
 <section id="sect-Reference_Guide-Default_Portal_Configuration">
 	<title>Default Portal Configuration</title>
-	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
-		<title>Overview</title>
+    <para>
+        <emphasis role="bold">The following topics are covered:</emphasis>
+    </para>
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Configuration">Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">Delete Portals Definition by Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">Set the info bar shown by default for portlet</link></para>
+           </listitem>
+       </itemizedlist>
+</highlights>
 		<para>
 			&PRODUCT; default homepage URL is <emphasis>http://{hostname}:{port}/portal/</emphasis>.
          There may be multiple independent portals deployed in parallel at any given time, each of which has its root
@@ -19,10 +33,9 @@
          JCR database will be empty (that's where portals keep their runtime-configurable settings).
          It is the default portal used to detect this, and to trigger automatic data initialization.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
-		<title>Configuration</title>
+	<para xml:id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
+      <citetitle><emphasis role="bold">Configuration</emphasis></citetitle>
+    </para>
 		<para>
 			The following example configuration can be found at: &#34;<emphasis>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</emphasis>&#34;.
 		</para>
@@ -59,11 +72,9 @@
          to add configuration to it.
          </para>
       </note>
-	</section>
-    <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips">
-    <title>Tips</title>
-    <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">
-      <title>Delete Portals Definition by Configuration</title>
+    <para xml:id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">
+      <citetitle><emphasis role="bold">Delete Portals Definition by Configuration</emphasis></citetitle>
+    </para>
         <para>
             In some cases, some portal definitions are defined but not used any more. If you want to delete them, you can add some configurations to
             <emphasis>portal.war/WEB-INF/conf/portal/portal-configuration.xml</emphasis>.
@@ -112,9 +123,9 @@
 	</component-plugin>
 </external-component-plugins>
          ]]></programlisting>
-        </section>
-        <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">
-            <title>Set the info bar shown by default for portlet</title>
+        <para xml:id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">
+      <citetitle><emphasis role="bold">Set the info bar shown by default for portlet</emphasis></citetitle>
+        </para>
             <para>You can set the info bar shown by default for portlets of a portal by adding a property for the <emphasis>portal-config</emphasis> configuration in the <emphasis>portal.xml</emphasis> file.</para>
             <programlisting><![CDATA[
                     <properties>
@@ -122,8 +133,52 @@
                     </properties>
             ]]></programlisting>
             <para>There are two values for "showPortletInfo": 0 and 1. If the value is 1, the info bar of portlets is shown by default. If the value is 0, it is not.</para>
-        </section>
-    </section>
+    <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+    </para>
+    <itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

@@ -5,8 +5,21 @@
 ]>
 <section id="sect-Reference_Guide-XML_Resources_Bundles">
 	<title>XML Resources Bundles</title>
-	<section id="sect-Reference_Guide-XML_Resources_Bundles-Motivation">
-		<title>Motivation</title>
+    <para><emphasis role="bold">The following topics are covered:</emphasis></para>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles-Motivation">Motivation</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles-XML_format">XML format</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles-Portal_support">Portal support</link></para>
+           </listitem>
+       </itemizedlist>
+	<para id="sect-Reference_Guide-XML_Resources_Bundles-Motivation">
+		<citetitle><emphasis role="bold">Motivation</emphasis></citetitle>
+    </para>
 		<para>
 			Resource bundles are usually stored in property files. However, as property files are plain files, issues with the encoding of the file may arise. The XML resource bundle format has been developed to provide an alternative to property files.
 		</para>
@@ -27,10 +40,10 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section>
-	
-	<section id="sect-Reference_Guide-XML_Resources_Bundles-XML_format">
-		<title>XML format</title>
+
+	<para id="sect-Reference_Guide-XML_Resources_Bundles-XML_format">
+		<citetitle><emphasis role="bold">XML format</emphasis></citetitle>
+    </para>
 		<para>
 			The XML format is very simple and has been developed based on the <emphasis>DRY</emphasis> (Don&#39;t Repeat Yourself) principle. The resource bundle keys are hierarchically defined and we can leverage the hierarchic nature of the XML for that purpose. Here is an example of turning a property file into an XML resource bundle file:
 		</para>
@@ -69,18 +82,63 @@ UIAccountForm.action.Reset= ...
   &#60;/UIAccountForm&#62;
 &#60;/bundle&#62;
 </programlisting>
-	</section>
 	
-	<section id="sect-Reference_Guide-XML_Resources_Bundles-Portal_support">
-		<title>Portal support</title>
+	<para id="sect-Reference_Guide-XML_Resources_Bundles-Portal_support">
+		<citetitle><emphasis role="bold">Portal support</emphasis></citetitle>
+    </para>
 		<para>
 			To be loaded by the portal at runtime (actually the resource bundle service), the name of the file must be the same as a property file and it must use the <emphasis role="bold">.xml</emphasis> suffix.
 		</para>
 		<para>
 			For example, for the Account Portlet to be displayed in Arabic, the resource bundle would be <emphasis role="bold"> AccountPortlet_ar.xml</emphasis> rather than <emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
 		</para>
-	</section>
+<para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

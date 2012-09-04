@@ -3,13 +3,28 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-Reference-Guide_Gadgets_Standard-WebApp">
+<section id="sect-Reference-Guide_Gadgets_Standard-WebApp" role="NotInToc">
   <title>Standard WebApp for Gadget importer</title>
   <para>In &PRODUCT;, you can create a WebApp folder to contain the configuration of the list of gadgets which are automatically added to the <emphasis role="bold">Application
         Registry</emphasis>.</para>
-  <para>This section shows you how to create a WebApp which has a standard structure processed by the Gadget importer.</para>
-  <section id="sect-Reference-Guide_Gadgets_Standard-WebApp_Structure-WebApp">
-    <title>Structure of WebApp</title>
+  <para>This section shows you how to create a WebApp which has a standard structure processed by the Gadget importer. It covers the following topics:</para>
+  <itemizedlist>
+    <listitem>
+      <para><link linkend="sect-Reference-Guide_Gadgets_Standard-WebApp_Structure-WebApp">Structure of WebApp</link></para>
+    </listitem>
+    <listitem>
+      <para><link linkend="sect-Reference-Guide_Gadgets_Necessary-files">Necessary files</link></para>
+    </listitem>
+    <listitem>
+      <para><link linkend="sect-Reference-Guide_Gadgets_Local-Gadget-Resource">Local gadget resources</link></para>
+    </listitem>
+  </itemizedlist>
+
+  <para xml:id="sect-Reference-Guide_Gadgets_Standard-WebApp_Structure-WebApp">
+    <citetitle>
+      <emphasis role="bold">Structure of WebApp</emphasis>
+    </citetitle>
+  </para>
     <para> A WebApp should be organized as the following structure:
     </para>
     <mediaobject>
@@ -21,9 +36,13 @@
                    width="60mm"/>
       </imageobject>
     </mediaobject>
-  </section>
-  <section id="sect-Reference-Guide_Gadgets_Necessary-files">
-    <title>Necessary files</title>
+
+  <para xml:id="sect-Reference-Guide_Gadgets_Necessary-files">
+    <citetitle>
+      <emphasis role="bold">Necessary files</emphasis>
+    </citetitle>
+  </para>
+
     <para>The WebApp structure consists of two necessary files, including <emphasis>web.xml</emphasis>, and <emphasis>gadget.xml</emphasis>.</para>
     <para>In the
       <emphasis>web.xml</emphasis>
@@ -128,9 +147,12 @@
         </para>
       </listitem>
     </itemizedlist>
-  </section>
-  <section id="sect-Reference-Guide_Gadgets_Local-Gadget-Resource">
-    <title>Local gadget resources</title>
+
+    <para xml:id="sect-Reference-Guide_Gadgets_Local-Gadget-Resource">
+    <citetitle>
+      <emphasis role="bold">Local gadget resources</emphasis>
+    </citetitle>
+  </para>
     <para>
         For local gadgets, their source and resources should be located in the same folder.
         </para>
@@ -155,5 +177,4 @@
             resource files of the gadget.
           </para>
         </note>
-  </section>
 </section>

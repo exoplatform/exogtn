@@ -5,7 +5,18 @@
 ]>
 <section id="sect-Reference_Guide-Portlet_Primer">
 	<title>Portlet Primer</title>
-	<section id="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview">
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview">JSR-168 and JSR-286 overview</link></emphasis></para><para>Provision of overview on portal pages, rendering modes and window states of the JSR-168 and JSR-286 portlet specifications.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer-Tutorials">Tutorials</link></emphasis></para><para>Instruction on deploying your first portlet and example of the JavaServer Pages portlet.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
+
+	<section id="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview" role="NotInToc">
 		<title>JSR-168 and JSR-286 overview</title>
 		<para>
 			The Java Community Process (<emphasis>JCP</emphasis>) uses Java Specification Requests (<emphasis>JSR</emphasis>s) to define proposed specifications and technologies designed for the Java platform.
@@ -110,7 +121,7 @@
 
 	</section>
 	
-	<section id="sect-Reference_Guide-Portlet_Primer-Tutorials">
+	<section id="sect-Reference_Guide-Portlet_Primer-Tutorials" role="NotInToc">
 		<title>Tutorials</title>
 		<para>
 			The tutorials contained in this chapter are targeted towards portlet developers. It is also recommended that developers read and understand the <ulink url="http://www.jcp.org/en/jsr/detail?id=286"> JSR-286 Portlet Specification </ulink> .

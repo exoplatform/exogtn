@@ -88,7 +88,7 @@
 			The following sections require more textual information.
 		</para>
 	</important>
-	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
+	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets" role="NotInToc">
 		<title>Existing Gadgets</title>
 		<mediaobject>
 			<imageobject role="html">
@@ -100,7 +100,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
+	<section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget" role="NotInToc">
 		<title>Create a new Gadget</title>
 		<mediaobject>
 			<imageobject role="html">
@@ -112,7 +112,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Remote_Gadget">
+	<section id="sect-Reference_Guide-Gadgets-Remote_Gadget" role="NotInToc">
 		<title>Remote Gadget</title>
 		<para>
 			This is the reference to a remote gadget (stock one).
@@ -127,7 +127,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
+	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing" role="NotInToc">
 		<title>Gadget Importing</title>
 		<para>
 			After referencing the gadget successfully, import it into the local repository.
@@ -142,7 +142,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
+	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing" role="NotInToc">
 		<title>Gadget Web Editing</title>
 		<para>
 			Modify it from the Web where the Gadget was imported:
@@ -157,7 +157,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing">
+	<section id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing" role="NotInToc">
 		<title>Gadget IDE Editing</title>
 		<para>
 			Edit it from your IDE thanks to the WebDAV protocol:
@@ -172,7 +172,7 @@
 		</mediaobject>
 	</section>
 	
-	<section id="sect-Reference_Guide-Gadgets-Dashboard_Viewing">
+	<section id="sect-Reference_Guide-Gadgets-Dashboard_Viewing" role="NotInToc">
 		<title>Dashboard Viewing</title>
 		<para>
 			View it from the Dashboard when you drag and drop the Gadget from listing to the dashboard.

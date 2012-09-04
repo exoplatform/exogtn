@@ -10,10 +10,12 @@
     <para>This chapter consists of the following topics:</para>
     <itemizedlist>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Portlet_Primer">Portlet Primer</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer">Portlet Primer</link></emphasis></para>
+          <para>Provision of JCP and JSRs specification and tutorials on deploying portlets.</para>
         </listitem>
         <listitem>
-            <para><link linkend="sect-Reference_Guide-Global_Portlet">Global porlet.xml file</link></para>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Global_Portlet">Global porlet.xml file</link></emphasis></para>
+          <para>Provision of the global <filename>porlet.xml</filename> use case.</para>
         </listitem>
     </itemizedlist>
   </abstract>

@@ -5,7 +5,27 @@
         ]>
 <section id="sect-Reference_Guide-Global_Portlet">
   <title>Global porlet.xml file</title>
-  <section id="sect-Reference_Guide-Global_Portlet-Global_usecase">
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Global_Portlet-Global_usecase">Global portlet.xml usecase</link></emphasis></para><para>Introduction on the global portlet purpose.</para>
+           </listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Global_Portlet-Global_metadata">Global metadata</link></emphasis></para><para>Knowledge about the location and the global metadata elements.</para>
+           </listitem>
+       </itemizedlist>
+</highlights>
+    <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portlet_Primer">Portlet Primer</link></para>
+           </listitem>
+        </itemizedlist>
+  <section id="sect-Reference_Guide-Global_Portlet-Global_usecase" role="NotInToc">
       <title>Global portlet.xml usecase</title>
       <para>The Portlet Specification introduces PortletFilter as a standard approach to extend the behaviors of portlet
           objects. For example, a filter can transform the content of portlet requests and portlet responses.
@@ -28,8 +48,21 @@
           The global portlet feature is designed to compensate such limitation.
       </para>
   </section>
-  <section id="sect-Reference_Guide-Global_Portlet-Global_metadata">
+  <section id="sect-Reference_Guide-Global_Portlet-Global_metadata" role="NotInToc">
     <title>Global metadata</title>
+    <highlights>
+      <para>
+      <emphasis role="bold">The following topics are covered:</emphasis>
+        </para>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="sect-Reference_Guide-Global_Portlet-Location">Location</link> </para>
+      </listitem>
+      <listitem>
+        <para><link linkend="sect-Reference_Guide-Global_Portlet-Global_metadata_elements">Global metadata elements</link> </para>
+      </listitem>
+    </itemizedlist>
+    </highlights>
     <para>The Global metadata is declared in the
             <emphasis>portlet.xml</emphasis> file conforming with Portlet 2.0 &apos;s XSD.
         </para>
@@ -38,16 +71,23 @@
              xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;&gt;
 
 &lt;/portlet-app&gt;</programlisting>
-    <section id="sect-Reference_Guide-Global_Portlet-Location">
-      <title>Location</title>
+    <para xml:id="sect-Reference_Guide-Global_Portlet-Location">
+      <citetitle>
+      <emphasis role="bold">Location</emphasis>
+      </citetitle>
+      </para>
       <para>The path to the global <emphasis>portlet.xml</emphasis> is value of <emphasis >gatein.portlet.config</emphasis> in the <emphasis >configuration.properties</emphasis> file and varied by hosting
             application servers.
         </para>
       <para><emphasis role="bold">For Tomcat</emphasis>: <emphasis>TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
       <para><emphasis role="bold">For JBoss</emphasis>: <emphasis>JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
-    </section>
-    <section id="sect-Reference_Guide-Global_Portlet-Global_metadata_elements">
-      <title>Global metadata elements</title>
+
+    <para xml:id="sect-Reference_Guide-Global_Portlet-Global_metadata_elements">
+      <citetitle>
+      <emphasis role="bold">Global metadata elements</emphasis>
+      </citetitle>
+      </para>
+
       <para>The global <emphasis >portlet.xml</emphasis> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
             Specification with some restrictions. In this file, the following elements are supported:
         </para>
@@ -59,8 +99,9 @@
           <para><link linkend="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode">Portlet Mode and Window State</link></para>
         </listitem>
       </itemizedlist>
-      <section id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter">
-        <title>Portlet filter</title>
+      <para xml:id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter">
+        <emphasis role="bold">Portlet filter</emphasis>
+      </para>
         <para>Portlet filter mappings declared in the global<emphasis > portlet.xml</emphasis> file are applied across portlet applications. With
                 the XML configuration below, the filter ApplicationMonitoringFilter involves in request handling on any
                 deployed portlet.
@@ -81,12 +122,11 @@
               records statistic information on deployed portlets.
               The filter alternates actual monitoring mechanism in WebUI Framework.
           </para>
-      </section>
-      <section id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode">
-        <title>Portlet Mode and Window State</title>
+
+      <para id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode">
+        <emphasis role="bold">Portlet Mode and Window State</emphasis>
+      </para>
         <para>The global <emphasis>portlet.xml</emphasis> file is considered as an alternative place to declare custom Portlet Modes and Window States.
             </para>
-      </section>
-    </section>
   </section>
 </section>

@@ -5,29 +5,22 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Navigation_Configuration">
 	<title>Portal Navigation Configuration</title>
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Overview">
-		<title>Overview</title>
+    <highlights>
+       <itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link></para>
+           </listitem>
+       </itemizedlist>
+</highlights>
 		<para>
-			There are three navigation types available to portal users:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link>
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
+			There are three navigation types available to portal users, including <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link>,
+      <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link>, and <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link>.
 			These navigations are configured using the standard XML syntax in the file; &#34;<emphasis>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</emphasis>&#34;.
 		</para>
 		
@@ -237,9 +230,9 @@ Each portal, groups and users navigation is indicated by a configuration paragra
 Base on these parameters, portal will look for the configuration files and create a relevant portal navigation, pages and data import strategy. The portal configuration files will be stored in folders with path look like <emphasis>{templateLocation}/{ownerType}/{predefinedOwner}</emphasis>, all navigations are defined in the <emphasis>navigation.xml</emphasis> file, pages are defined in pages.xml and portal configuration is defined in <emphasis>{ownerType}.xml</emphasis>.
 For example, with the above configuration, prtal will look for all configuration files from <emphasis>war:/conf/portal/portal/classic path.</emphasis>
 	</para>
-	</section>
+
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" role="NotInToc">
 		<title>Portal Navigation</title>
 		<para>
 		The portal navigation incorporates the pages that can be accessed even when the user is not logged in assuming the applicable permissions allow the public access). For example, several portal navigations are used when a company owns multiple trademarks, and sets up a website for each of them.
@@ -445,7 +438,7 @@ For example, with the above configuration, prtal will look for all configuration
 		</variablelist>
 	</section>
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation" role="NotInToc">
 		<title>Group Navigation</title>
 		<para>
 			Group navigations are dynamically added to the user navigation at login. This allows users to see the menu of all pages assigned to any groups they belong to.
@@ -458,7 +451,7 @@ For example, with the above configuration, prtal will look for all configuration
 		</para>
 	</section>
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation" role="NotInToc">
 		<title>User Navigation</title>
 		<para>
 			User navigation is the set of nodes and pages that are owned by the user. They are part of the user's dashboard.
@@ -467,6 +460,55 @@ For example, with the above configuration, prtal will look for all configuration
 			Three files configure the user navigation (<emphasis>navigation.xml</emphasis>, <emphasis>pages.xml</emphasis> and <emphasis>portlet-preferences.xml</emphasis>). They are located in the <emphasis>{templateLocation}/{ownerType}/{predefinedOwner}</emphasis> directory with <emphasis>ownerType</emphasis> is <emphasis>user</emphasis> and <emphasis>predefinedOwner</emphasis> is username that want to create the navigation. For example, if administrator want to create navigation for user <emphasis>root</emphasis>, he has to locate the configuration files in <emphasis>portal.war/WEB-INF/conf/portal/user/root </emphasis>
 		</para>
 	</section>
+    <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+           </listitem>
+		    <listitem>
+               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
+           </listitem>
+		   <listitem>
+               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+           </listitem>
+       </itemizedlist>
 </section>
 
 

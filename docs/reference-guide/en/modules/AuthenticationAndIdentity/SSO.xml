@@ -5,17 +5,60 @@
 ]>
 <section id="chap-Reference_Guide-SSO_Single_Sign_On">
 	<title>Single-Sign-On (SSO)</title>
-	<section id="sect-Reference_Guide-Single_Sign_On-Overview">
-		<title>Overview</title>
-		<para>
-			&PRODUCT; provides some forms of Single-Sign-On (<emphasis>SSO</emphasis>) as an integration and aggregation platform.
+    <highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">Central Authentication Service (CAS)
+            </link></emphasis> </para>
+            <para>Instruction on how to integrate between GateIn and the CAS Single-Sign-On Framework via two steps:
+              installing/configuring a CAS server and setting up the portal to use the CAS server.</para>
+
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Single_Sign_On-JOSSO">JOSSO</link>
+          </emphasis>
+        </para>
+         <para>Instruction on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via two steps:
+              installing/configuringg a JOSSO server, and setting up the portal to use the JOSSO server.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">OpenSSO - The Open Web SSO project</link>
+          </emphasis>
+        </para>
+         <para>Instruction on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via two steps:
+              installing/configuringg a JOSSO server, and setting up the portal to use the JOSSO server.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="Single_Sign_On-SPNEGO">SPNEGO</link>
+          </emphasis>
+        </para>
+         <para>Knowledge about SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) which is used to authenticate transparently
+           through the web browser after a user has been authenticated when logging-in his session, and instruction on how to configure
+         the SPNEGO Server on Linux and integrate SPNEGO with GateIn .</para>
+      </listitem>
+    </itemizedlist>
+  </highlights>
+	<para id="sect-Reference_Guide-Single_Sign_On-Overview">
+				&PRODUCT; provides some forms of Single-Sign-On (<emphasis>SSO</emphasis>) as an integration and aggregation platform.
 		</para>
 		<para>
 			When logging into the portal, users gain access to many systems through portlets using a single identity. In many cases, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases, each SSO framework provides a unique way to plug into a Java EE application.
 		</para>
-    </section>
-		<section id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
-			<title>Prerequisites</title>
+
+  <para xml:id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
+    <citetitle>
+      <emphasis role="bold">Prerequisites</emphasis>
+    </citetitle>
+  </para>
+
 			<para>
 				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
@@ -28,9 +71,34 @@
 			<para>
 				Remove <emphasis>$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</emphasis> and <emphasis>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</emphasis> which are packaged with &PRODUCT; by default.
 			</para>
-		</section>
+     <para>
+	<prompt>
+		<emphasis role="bold">See also</emphasis>
+	</prompt>
+</para>
 
-	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
+		<itemizedlist>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Password-encryption">Password Encryption</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Predefined_User_Configuration">Predefined User Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Authentication_Token_Configuration">Authentication Token Configuration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-PicketLink_IDM_integration">PicketLink IDM integration</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></para>
+           </listitem>
+           <listitem>
+               <para><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></para>
+           </listitem>
+       </itemizedlist>
+
+	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service" role="NotInToc">
 		<title>Central Authentication Service (CAS)</title>
 		<para>
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the CAS Single-Sign-On Framework. Details about CAS can be found <ulink url="http://www.jasig.org/cas">here</ulink>.
@@ -390,7 +458,7 @@ realmName=gatein-domain;
 		</section>
 	</section>
 
-	<section id="sect-Reference_Guide-Single_Sign_On-JOSSO">
+	<section id="sect-Reference_Guide-Single_Sign_On-JOSSO" role="NotInToc">
 		<title>JOSSO</title>
 		<para>
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the JOSSO Single-Sign-On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
@@ -659,7 +727,7 @@ realmName=gatein-domain;
 
 	</section>
 	
-	<section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">
+	<section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project" role="NotInToc">
 		<title>OpenSSO - The Open Web SSO project</title>
 		<para>
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the OpenSSO Single Sign On Framework. Details about OpenSSO can be found <ulink url="https://opensso.dev.java.net/">here</ulink>.
@@ -1001,7 +1069,7 @@ realmName=gatein-domain;
 
 	</section>
 
-	<section id="Single_Sign_On-SPNEGO">
+	<section id="Single_Sign_On-SPNEGO" role="NotInToc">
 		<title>SPNEGO</title>
 		<para>SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) is
 			used to authenticate transparently through the web browser after the
@@ -1090,7 +1158,7 @@ permitted_enctypes = des3-hmac-sha1
 # correct and overriding these specifications only serves to disable new
 # encryption types as they are added, creating interoperability problems.
 #
-# Thie only time when you might need to uncomment these lines and change
+# The only time when you might need to uncomment these lines and change
 # the enctypes is if you have local software that will break on ticket
 # caches containing ticket encryption types it doesn't know about (such as
 # old versions of Sun Java).
