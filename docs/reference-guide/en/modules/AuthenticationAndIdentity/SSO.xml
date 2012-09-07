@@ -283,7 +283,7 @@ realmName=gatein-domain;
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -296,7 +296,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
             </para>
 <programlisting>
 <![CDATA[
@@ -310,7 +310,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire contents of <filename>login.jsp</filename> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -326,7 +326,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:</para>
+                  Add the following filters at the top of the filter chain in <filename>web.xml</filename>:</para>
 <programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -386,10 +386,45 @@ realmName=gatein-domain;
          </itemizedlist>
          <para>
 				Once these changes have been made, all links to the user authentication pages will redirect to the CAS centralized authentication form.
-			</para>
+		 </para>
+         <para>
+             <emphasis role="bold">Files location</emphasis>
+         </para>
+       <table frame='all'>
+        <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+            <thead>
+                <row>
+                    <entry>File</entry>
+                    <entry>Tomcat</entry>
+                    <entry>JBoss</entry>
+                </row>
+                    </thead>
+                    <tbody>
+                <row>
+                     <entry><emphasis role="bold"><filename>UIBannerPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>webapps/web/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>UILogoPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                     <entry><filename>webapps/web/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>login.jsp</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename></entry>
+                     <entry><filename>webapps/portal/login/jsp/login.jsp</filename></entry>
+                </row>
+                     <row>
+                     <entry><emphasis role="bold"><filename>web.xml</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename></entry>
+                     <entry><filename>webapps/portal/WEB-INF/web.xml</filename></entry>
+                 </row>
+            </tbody>
+        </tgroup>
+        </table>
 		</section>
 	</section>
-
 	<section id="sect-Reference_Guide-Single_Sign_On-JOSSO">
 		<title>JOSSO</title>
 		<para>
@@ -560,7 +595,7 @@ realmName=gatein-domain;
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -573,7 +608,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -588,7 +623,7 @@ realmName=gatein-domain;
         <itemizedlist>
           <listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire contents of <filename>login.jsp</filename> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -604,7 +639,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:							
+							Add the following filters at the top of the filter chain in <filename>web.xml</filename>:
 <programlisting><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -655,6 +690,42 @@ realmName=gatein-domain;
 			<para>
 				From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
 			</para>
+            <para>
+                <emphasis role="bold">Files location</emphasis>
+            </para>
+        <table frame='all'>
+        <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+            <thead>
+                <row>
+                    <entry>File</entry>
+                    <entry>Tomcat</entry>
+                    <entry>JBoss</entry>
+                </row>
+                    </thead>
+                    <tbody>
+                <row>
+                     <entry><emphasis role="bold"><filename>UIBannerPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>webapps/web/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>UILogoPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                     <entry><filename>webapps/web/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>login.jsp</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename></entry>
+                     <entry><filename>webapps/portal/login/jsp/login.jsp</filename></entry>
+                </row>
+                     <row>
+                     <entry><emphasis role="bold"><filename>web.xml</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename></entry>
+                     <entry><filename>webapps/portal/WEB-INF/web.xml</filename></entry>
+                 </row>
+            </tbody>
+        </tgroup>
+        </table>
 		</section>
 
 	</section>
@@ -896,7 +967,7 @@ realmName=gatein-domain;
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -909,7 +980,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-						In the <emphasis>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</emphasis> file, modify the 'Sign In' link as follows:
+						In the <filename>UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -925,7 +996,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire contents of <filename>login.jsp</filename> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -941,7 +1012,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:
+                  Add the following filters at the top of the filter chain in <filename>web.xml</filename>:
 <programlisting><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -993,14 +1064,47 @@ realmName=gatein-domain;
                </para>
             </listitem>
          </itemizedlist>
-        
 			<para>
 				From now on, all links redirecting to the user authentication pages will redirect to the OpenSSO centralized authentication form.
 			</para>
+            <para>
+                <emphasis role="bold">Files location</emphasis>
+            </para>
+            <table frame='all'>
+        <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+            <thead>
+                <row>
+                    <entry>File</entry>
+                    <entry>Tomcat</entry>
+                    <entry>JBoss</entry>
+                </row>
+                    </thead>
+                    <tbody>
+                <row>
+                     <entry><emphasis role="bold"><filename>UIBannerPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>webapps/web/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>UILogoPortlet.gtmpl</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                     <entry><filename>webapps/web/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename></entry>
+                </row>
+                <row>
+                    <entry><emphasis role="bold"><filename>login.jsp</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename></entry>
+                     <entry><filename>webapps/portal/login/jsp/login.jsp</filename></entry>
+                </row>
+                     <row>
+                     <entry><emphasis role="bold"><filename>web.xml</filename></emphasis></entry>
+                     <entry><filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename></entry>
+                     <entry><filename>webapps/portal/WEB-INF/web.xml</filename></entry>
+                 </row>
+            </tbody>
+        </tgroup>
+        </table>
 		</section>
-
 	</section>
-
 	<section id="Single_Sign_On-SPNEGO">
 		<title>SPNEGO</title>
 		<para>SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) is

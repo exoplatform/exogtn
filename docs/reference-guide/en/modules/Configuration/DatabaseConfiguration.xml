@@ -27,9 +27,7 @@
     <title>Configure the database for JCR</title>
 
     <para>To configure the database used by JCR, edit the
-    file:<emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>.</para>
-
-    <para> For Tomcat, the file is located at <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis>.</para>
+    <filename>configuration.properties</filename> file.</para>
 
     <para>Next, edit the values of driver, url, username and password with the
     values for your JDBC connection. To learn more, refer to your database JDBC driver
@@ -74,17 +72,13 @@ gatein.jcr.datasource.username=gateinuser
 gatein.jcr.datasource.password=gateinpassword
 </programlisting></para>
   </section>
-
   <section id="sect-Reference_Guide-Database_Configuration-Database_for_default_identity_store">
     <title>Configure the database for the default identity store</title>
 
-    <para>By default, users are stored in a database. To change the database where users are stored, you need to edit the file:</para>
-
-    <para><emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>For
-    Tomcat, the file is located at <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis></para>
-
+    <para>By default, users are stored in a database. To change the database where users are stored, you need to edit the <filename>configuration.properties</filename> file.</para>
     <para>You will find the same type of configuration as in
-    <emphasis>jcr-configuration.xml</emphasis>:<programlisting>gatein.idm.datasource.driver=org.hsqldb.jdbcDriver
+    <filename>jcr-configuration.xml</filename>:
+        <programlisting>gatein.idm.datasource.driver=org.hsqldb.jdbcDriver
 gatein.idm.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm_${name}
 gatein.idm.datasource.username=sa
 gatein.idm.datasource.password</programlisting></para>

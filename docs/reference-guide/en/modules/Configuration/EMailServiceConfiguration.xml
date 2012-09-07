@@ -20,11 +20,9 @@
     <title>Configure the outgoing e-mail account</title>
 
     <para>The e-mail service can use any SMTP account configured in
-    <emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>
-    (or <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis> if you are using Tomcat).</para>
-
+    <filename>configuration.properties</filename> name.
+    </para>
     <para>The relevant section looks like:</para>
-    
     <programlisting># EMail
 gatein.email.smtp.username=
 gatein.email.smtp.password=

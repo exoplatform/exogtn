@@ -16,6 +16,23 @@
         </listitem>
     </itemizedlist>
     <para>With this knowledge, you can extend more functions for your product and customize to your desires.</para>
+    <para>All the configuration discussed in this chapter will be done by editing the main system configuration file <filename>configuration.properties</filename>. This file is located at:</para>
+     <table frame='all'>
+        <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+            <thead>
+                <row>
+                    <entry>Tomcat</entry>
+                    <entry>JBoss</entry>
+                </row>
+                    </thead>
+                    <tbody>
+                <row>
+                     <entry><filename>$TOMCAT_HOME/gatein/conf/configuration.properties</filename></entry>
+                     <entry><filename>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</filename></entry>
+                </row>
+            </tbody>
+        </tgroup>
+        </table>
     </abstract>
    <xi:include href="Configuration/DatabaseConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="Configuration/EMailServiceConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
