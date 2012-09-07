@@ -13,11 +13,11 @@
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.webui.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
 %>
 <div id="<%=uicomponent.getId()%>">
-<input type="hidden" id="RemoveInputLabel" value="<%= _ctx.appRes("UIFormUploadInput.label.RemoveInput"); %>"/>
+<input type="hidden" id="RemoveInputLabel" name="RemoveInputLabel" value="<%= _ctx.appRes("UIFormUploadInput.label.RemoveInput"); %>"/>
 <%for(int i = 0; i < uploadId.length; i++) {%>
 <div class="UIUploadInput" id="UploadInputContainer<%=uploadId[i];%>">
 	<div class="LimitMessage" style="display: none;"><%= _ctx.appRes("UIFormUploadInput.msg.limit"); %></div>
-	<input type="hidden" id="RemoveInputUrl<%=uploadId[i];%>" value="<%=uicomponent.event('RemoveUploadId', uploadId[i]);%>"/>
+	<input type="hidden" id="RemoveInputUrl<%=uploadId[i];%>" name="RemoveInputUrl<%=uploadId[i];%>" value="<%=uicomponent.event('RemoveUploadId', uploadId[i]);%>"/>
 	<div id="UploadInput<%=uploadId[i];%>" class="UploadInput">
 	</div>
 	<div id="ProgressIframe<%=uploadId[i];%>" class="ProgressIframe" style="display: none;"></div>			
