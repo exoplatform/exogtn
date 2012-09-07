@@ -627,6 +627,26 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
 
+   public void testDefaultNodeResolution()
+   {
+      new UnitTest()
+      {
+         public void doExecute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("classic"));
+
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+            builder.withReadCheck();
+            UserNodeFilterConfig filterConfig = builder.build();
+            
+            UserNode defaultNode = userPortal.getDefaultPath(navigation, filterConfig);
+            assertEquals("home", defaultNode.getName());
+         }
+      }.execute("root");
+   }
+
    public void testLabel()
    {
       new UnitTest()
