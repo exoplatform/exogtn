@@ -205,7 +205,7 @@
               <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+              <imagedata fileref="images/Edit_group.png" format="PNG" align="center" scalefit="1" width="130mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -246,7 +246,7 @@
               <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="110"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+              <imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scalefit="1" width="60mm"/>
             </imageobject>
           </mediaobject>
         </step>
@@ -375,7 +375,7 @@
               <imagedata fileref="images/EditMember1.png" format="PNG" align="center"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
+              <imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="80mm"/>
             </imageobject>
           </mediaobject>
         </step>

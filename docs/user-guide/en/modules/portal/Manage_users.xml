@@ -104,7 +104,7 @@
               <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444mm"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="120mm"/>
             </imageobject>
           </mediaobject>
           <variablelist>

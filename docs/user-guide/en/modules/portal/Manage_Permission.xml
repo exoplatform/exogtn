@@ -105,7 +105,7 @@
               </imageobject>
               <imageobject role="fo">
                 <imagedata fileref="images/Permission_new_portals.png" format="PNG" align="center" scalefit="1"
-                           width="70mm"/>
+                           width="60mm"/>
               </imageobject>
             </mediaobject>
           </para>
@@ -190,7 +190,7 @@
           <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="0" width="150mm"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="1" width="110mm"/>
         </imageobject>
       </mediaobject>
 	  </para>

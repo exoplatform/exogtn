@@ -93,7 +93,7 @@
         </imageobject>
         <imageobject role="fo">
           <imagedata fileref="images/GroupPageNavigationManagement.png" format="PNG" align="center" scalefit="1"
-                     width="100mm"/>
+                     width="80mm"/>
         </imageobject>
       </mediaobject>
       <para>In this form, you can edit the group's page navigation through doing many actions, such as adding a new node

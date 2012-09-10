@@ -465,7 +465,7 @@
             <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="0" width="100mm"/>
           </imageobject>
             <imageobject role="fo">
-            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
 		<para><emphasis role="bold">Details:</emphasis></para>
