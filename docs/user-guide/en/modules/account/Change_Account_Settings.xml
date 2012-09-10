@@ -16,7 +16,7 @@
       <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" width="70mm" scalefit="1"/>
+      <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" width="90mm" scalefit="1"/>
     </imageobject>
   </mediaobject>
   <para>
@@ -29,7 +29,7 @@
       <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" width="70mm" scalefit="1"/>
+      <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" width="90mm" scalefit="1"/>
     </imageobject>
   </mediaobject>
   <citetitle>

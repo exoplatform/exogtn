@@ -67,7 +67,7 @@
         <para>Click
           <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="15mm"/>"
+              <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="17mm"/>"
             </imageobject>
           </inlinemediaobject>
           at the right corner on the <guilabel>Action</guilabel> bar.
@@ -139,7 +139,7 @@
       </imageobject>
       <imageobject role="fo">
         <imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scalefit="1"
-                   width="110mm"/>
+                   width="100mm"/>
       </imageobject>
     </mediaobject>
     </para>
@@ -347,7 +347,7 @@
           </imageobject>
           <imageobject role="fo">
             <imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scalefit="1"
-                       width="100mm"/>
+                       width="80mm"/>
           </imageobject>
         </mediaobject>
       </step>

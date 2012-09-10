@@ -83,7 +83,7 @@
 		</imageobject>
 		<imageobject role="fo">
 		  <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scalefit="1"
-					 width="100mm"/>
+					 width="120mm"/>
 		</imageobject>
 	</mediaobject>
   </section>
@@ -181,7 +181,7 @@
             <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" width="60mm"/>
           </imageobject>
         </mediaobject>
       </step>
