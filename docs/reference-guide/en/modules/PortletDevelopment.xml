@@ -3,24 +3,35 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-Reference_Guide-Portlet_development">
+<section id="chap-Reference_Guide-Portlet_development">
 	<title>Portlet development</title>
-  <abstract>
-    <para>This chapter provides you the basic knowledge about portlets, and then you can know how to develop a portlet in a portal.</para>
-    <para>This chapter consists of the following topics:</para>
+  <highlights>
     <itemizedlist>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer">Portlet Primer</link></emphasis></para>
-          <para>Provision of JCP and JSRs specification and tutorials on deploying portlets.</para>
+          <para>Overall information about JSR-168 and JSR-286, and tutorials on deploying portlets and examples of JavaServer Pages Portlet.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Global_Portlet">Global porlet.xml file</link></emphasis></para>
-          <para>Provision of the global <filename>porlet.xml</filename> use case.</para>
+          <para>Introduction to the global portlet purpose and knowledge of global metadata.</para>
         </listitem>
     </itemizedlist>
-  </abstract>
+	<para>After reading this section, you will gain certain knowledge of portlets you need to know before developing a portlet in a portal.</para>
+	</highlights>
+	<para>
+	<prompt>
+        <emphasis role="bold">See also</emphasis>
+    </prompt>
+   </para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				<link linkend="chap-Reference_Guide-Gadget_development">Gadget development</link>
+			</para>
+		</listitem>
+	</itemizedlist>
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Standard.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Global_portlet.xml"/>
 
-</chapter>
+</section>
 

@@ -6,15 +6,15 @@
 ]>
 <section id="sect-Reference_Guide-EMail_Service_Configuration">
   <title>Email Service Configuration</title>
-    <para>&PRODUCT; includes an e-mail sending service that needs to be configured
+    <para>&PRODUCT; includes an email sending service that needs to be configured
     before it can function properly. This service, for instance, is used to send emails to users who forgot
     their password or username.</para>
    <para xml:id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
        <citetitle>
-           <emphasis role="bold">Configure the outgoing e-mail account</emphasis>
+           <emphasis role="bold">Configure the outgoing email account</emphasis>
        </citetitle>
    </para>
-    <para>The e-mail service can use any SMTP account configured in
+    <para>The email service can use any SMTP account configured in
     <emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>
     (or <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis> if you are using Tomcat).</para>
 
@@ -38,9 +38,9 @@ gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory</programlis
        public certificate. Depending on the key sizes, you may then also need to install Java Cryptography Extension (JCE)
        Unlimited Strength Jurisdiction Policy Files for your Java Runtime Environment.</para>
   <para>
-  <citetitle>
+  <prompt>
             <emphasis role="bold">See also</emphasis>
-        </citetitle>
+        </prompt>
     </para>
     <itemizedlist>
         <listitem>

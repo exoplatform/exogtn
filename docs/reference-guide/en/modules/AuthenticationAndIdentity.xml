@@ -6,40 +6,40 @@
 <chapter id="chap-Reference_Guide-Authentication_And_Identity">
    <title>Authentication and Identity</title>
     <abstract>
-    <para>This chapter provides you the basic knowledge about authentication and identity of portals, such as information related to passwords, accounts,
+    <para>This chapter provides you with knowledge of authentication and identity of portals, such as information related to passwords, accounts,
         organization configuration, and more via the following topics:</para>
     <itemizedlist>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Password-encryption">Password Encryption</link></emphasis></para>
-      <para>Instruction on how to customize password encryption by setting several security parameters to match your own security policy.</para>
+      <para>Instructions on how to customize password encryption by setting several security parameters to match your own security policy.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration">Predefined User Configuration</link></emphasis> </para>
-          <para>Introduction on plugins used to specify the initial Organization configuration for predefined users, memberships and groups.
+          <para>Introduction to plugins used to specify the initial Organization configuration for predefined users, memberships and groups.
           </para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Authentication_Token_Configuration">Authentication Token Configuration</link></emphasis></para>
-          <para>Knowledge on implementing and configuring the Token Service API.</para>
+          <para>Knowledge of implementing and configuring the Token Service API.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-PicketLink_IDM_integration">PicketLink IDM integration</link></emphasis></para>
-          <para> Introduction on the PicketLink IDM configuration files.</para>
+          <para>Introduction to the PicketLink IDM configuration files.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-APIs-Organization_API">Organization API</link></emphasis></para>
-          <para>Introduction on the <emphasis>OrganizationService</emphasis> component that serves as an entry point into Organization API,
-            and provides the handling functionality for five main components including <emphasis>UserHandler</emphasis>, <emphasis>UserProfileHandler</emphasis>,
+          <para>Introduction to the <emphasis>OrganizationService</emphasis> component that serves as an entry point into Organization API,
+            and provides the handling functionality for 5 main components, including <emphasis>UserHandler</emphasis>, <emphasis>UserProfileHandler</emphasis>,
             <emphasis>GroupHandler</emphasis>, <emphasis>MembershipTypeHandler</emphasis>, and <emphasis>MembershipHandler</emphasis>.
           </para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Accessing_User_Profile">Access User Profile</link></emphasis> </para>
-            <para>Introduction on the configuration of retrieving the details for a logged-in user and the Organization Service.</para>
+            <para>Introduction to the configuration of retrieving the details for a logged-in user and the Organization Service.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="chap-Reference_Guide-SSO_Single_Sign_On">Single-Sign-On (SSO)</link></emphasis></para>
-          <para>Introduction on forms of Single-Sign-On (SSO) as an integration and aggregation platform between GateIn and Central Authentication Service (CAS),
+          <para>Introduction to forms of Single-Sign-On (SSO) as an integration and aggregation platform between GateIn and Central Authentication Service (CAS),
             JOSSO or SPNEGO. </para>
         </listitem>
     </itemizedlist>

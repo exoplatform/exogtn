@@ -3,21 +3,14 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-Reference_Guide-Portlet_Primer">
+<section id="sect-Reference_Guide-Portlet_Primer" role="NotInToc">
 	<title>Portlet Primer</title>
-    <highlights>
-       <itemizedlist>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview">JSR-168 and JSR-286 overview</link></emphasis></para><para>Provision of overview on portal pages, rendering modes and window states of the JSR-168 and JSR-286 portlet specifications.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portlet_Primer-Tutorials">Tutorials</link></emphasis></para><para>Instruction on deploying your first portlet and example of the JavaServer Pages portlet.</para>
-           </listitem>
-       </itemizedlist>
-</highlights>
 
-	<section id="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview" role="NotInToc">
-		<title>JSR-168 and JSR-286 overview</title>
+	<para xml:id="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview">
+		<citetitle>
+			<emphasis role="bold">JSR-168 and JSR-286 overview</emphasis>
+		</citetitle>
+	</para>
 		<para>
 			The Java Community Process (<emphasis>JCP</emphasis>) uses Java Specification Requests (<emphasis>JSR</emphasis>s) to define proposed specifications and technologies designed for the Java platform.
 		</para>
@@ -33,15 +26,14 @@
 		<para>
 			&PRODUCT; is fully JSR-286 compliant. Any JSR-168 or JSR-286 portlet operates as it is mandated by the respective specifications inside the portal.
 		</para>
-		<section id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Portal_Pages">
-			<title>Portal Pages</title>
-			<para>
-				A portal can be considered as a series of web pages with different <emphasis>areas</emphasis> within them. Those areas contain different <emphasis>windows</emphasis> and each <emphasis>window</emphasis> contains portlet:
-			</para>
-			<para>
-				The diagram below visually represents this nesting:
-			</para>
-			<para>
+		<itemizedlist>
+			<listitem>
+				<para xml:id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Portal_Pages">
+					<emphasis role="bold">Portal Pages</emphasis>
+				</para>
+				<para>
+					A portal can be considered as a series of web pages with different <emphasis>areas</emphasis> within them. Those areas contain different <emphasis>windows</emphasis> and each <emphasis>window</emphasis> contains portlet. The diagram below visually represents this nesting:
+				</para>
 				<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scale="1" width="300" align="center"/>
@@ -50,47 +42,48 @@
 						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scalefit="1" width="150mm" align="center" />
 					</imageobject>
 				</mediaobject>
-			</para>
-		</section>
-		
-		<section id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Rendering_Modes">
-			<title>Rendering Modes</title>
-			<para>
-				A portlet can have different view modes. Three modes are defined by the JSR-286 specification:
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>View</term>
-					<listitem>
-						<para>
-							Generate the markup reflecting the current state of the portlet.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Edit</term>
-					<listitem>
-						<para>
-							Allow you to customize the behavior of the portlet.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Help</term>
-					<listitem>
-						<para>
-							Provide information to the user as to how to use the portlet.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</section>
-		
-		<section id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Window_States">
-			<title>Window States</title>
-			<para>
-				Window states are an indicator of how much page space a portlet consumes on any given page. The three states defined by the JSR-168 specification are:
-			</para>
+			</listitem>
+			<listitem>
+				<para xml:id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Rendering_Modes">
+					<emphasis role="bold">Rendering Modes</emphasis>
+				</para>
+				<para>
+					A portlet can have different view modes. Three modes are defined by the JSR-286 specification:
+				</para>
+				<variablelist>
+					<varlistentry>
+						<term>View</term>
+						<listitem>
+							<para>
+								Generate the markup reflecting the current state of the portlet.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Edit</term>
+						<listitem>
+							<para>
+								Allow you to customize the behavior of the portlet.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Help</term>
+						<listitem>
+							<para>
+								Provide information to the user as to how to use the portlet.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</listitem>
+			<listitem>
+				<para xml:id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Window_States">
+					<emphasis role="bold">Window States</emphasis>
+				</para>
+				<para>
+					Window states are an indicator of how much page space a portlet consumes on any given page. The three states defined by the JSR-168 specification are:
+				</para>
 			<variablelist>
 				<varlistentry>
 					<term>Normal</term>
@@ -117,23 +110,26 @@
 					</listitem>
 				</varlistentry>
 			</variablelist>
-		</section>
+			</listitem>
+		</itemizedlist>
 
-	</section>
-	
-	<section id="sect-Reference_Guide-Portlet_Primer-Tutorials" role="NotInToc">
-		<title>Tutorials</title>
-		<para>
-			The tutorials contained in this chapter are targeted towards portlet developers. It is also recommended that developers read and understand the <ulink url="http://www.jcp.org/en/jsr/detail?id=286"> JSR-286 Portlet Specification </ulink> .
-		</para>
+		<section id="sect-Reference_Guide-Tutorials-Deploying_your_first_Portlet">
+			<title>Deploying your first Portlet</title>
+			
 		<note>
-			<title>Maven</title>
+			<itemizedlist>
+			<listitem>
+			<para>
+			The tutorials contained in this chapter are targeted towards portlet developers. It is also recommended that developers read and understand the <ulink url="http://www.jcp.org/en/jsr/detail?id=286"> JSR-286 Portlet Specification </ulink> .
+			</para>
+			</listitem>
+			<listitem>
 			<para>
 				This example is using Maven to compile and build the web archive. Maven versions can be downloaded from <ulink url="http://maven.apache.org/download.html">maven.apache.org</ulink>
 			</para>
+			</listitem>
+			</itemizedlist>
 		</note>
-		<section id="sect-Reference_Guide-Tutorials-Deploying_your_first_Portlet">
-			<title>Deploying your first Portlet</title>
 			<para>
 				This section describes how to deploy a portlet in &PRODUCT;. A sample portlet called <emphasis>SimplestHelloWorld</emphasis> is located in the <emphasis>examples</emphasis> directory at the root of your &PRODUCT; binary package. This sample is used in the following examples.
 			</para>
@@ -409,12 +405,12 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 					</para>
 				</listitem>
 			</orderedlist>
-			<procedure>
-				<step>
+				<note>
 					<para>
 						The example used in this section can be found in the <emphasis>JSPHelloUser</emphasis> directory.
 					</para>
-				</step>
+				</note>
+			<procedure>
 				<step>
 					<para>
 						Execute <command>mvn package</command> in this directory.
@@ -826,8 +822,6 @@ Please check the source code to see the difference with Method 1.
 			</section>
 
 		</section>
-
-	</section>
 
 </section>
 

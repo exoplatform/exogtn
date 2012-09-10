@@ -3,29 +3,32 @@
     The intended readers of this guide are developers who want to learn about GateIn developments and configurations.
 </para>
 <para>
-    This guide consists of the following main content:
+    This guide provides thorough information about services and applications provided by GateIn via the following chapters:
 </para>
 <itemizedlist>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Configuration">Configuration</link></emphasis>: Provides you the knowledge about configurations of GateIn database and email service. This will help you customize and extend more functions for your product.</para>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Configuration">Configuration</link></emphasis></para>
+<para>Knowledge of configurations of GateIn database and email service that helps you customize and extend more functions for your product.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Development">Portal development</link></emphasis>: Provides the knowledge about Portal skinning, some Portal's important configurations (Portal default configuration, Portal permission configuration, Portal navigation configuration, Internationalization configuration, etc), Data Import Strategy, Navigation Controller and other knowledge for developing Portal.</para>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Development">Portal development</link></emphasis></para>
+<para>Knowledge of portal skinning, portal lifecycle, and some important configurations (Portal default, Portal permission, Portal navigation, Internationalization), data import strategy, navigation controller and others that allows you to develop your portal.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Portlet_development">Portlet development</link></emphasis>: Provides you the basic knowledge about portlet development so you can develop your portlet in a Portal.</para>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Application_Development">Applications development</link></emphasis></para>
+<para>Comprehensive knowledge of 2 main applications of GateIn (portlets and gadgets) that allows you to develop them in a portal.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Gadget_development">Gadget reference</link></emphasis>: Provides you the basic knowledge about gadget developments so you can deploy your gadget in a Portal.</para>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Authentication_And_Identity">Authentication and Identity</link></emphasis></para>
+<para>Basic knowledge of authentication and identity of portals, including Password Encryption, Predefined User Configuration, Authentication Token Configuration, PicketLink IDM integration, Organization API, User Profile, and Single-Sign-On.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Advanced">Advanced development</link></emphasis>: Helps you further understand about the foundations of a portal system.</para>
+<para><emphasis role="bold"><link linkend="wsrp">Web Services for Remote Portlets (WSRP)</link></emphasis></para>
+<para>Information about support levels and instructions on how to deploy, configure and consume Web Services for Remote Portlets in GateIn.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Authentication_And_Identity">Authentication and Identity</link></emphasis>: Provides you the basic knowledge about authentication and identity of portals, such as information related to passwords, accounts, organization configuration.</para>
-</listitem>
-<listitem>
-<para><emphasis role="bold"><link linkend="wsrp">Web Services for Remote Portlets (WSRP)</link></emphasis>: Provides you the knowledge to deploy, configure and consume Web Services for Remote Portlets in GateIn.</para>
+<para><emphasis role="bold"><link linkend="chap-Reference_Guide-Advanced">Advanced Development - Foundation</link></emphasis></para>
+<para>Further knowledge of foundations (including GateIn Kernel, configuration syntax, InitParams configuration object, GateIn Extension Mechanism and Portal Extensions) of a portal system, as well detailed instructions for you to configure services/portal container or to run multiple portals.</para>
 </listitem>
 </itemizedlist>
 </abstract>

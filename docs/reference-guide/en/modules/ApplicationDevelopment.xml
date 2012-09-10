@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-Reference_Guide-Application_Development">
+	<title>Applications Development</title>
+  <abstract>
+    <para>This chapter provides you with significant knowledge of 2 main applications in &PRODUCT; that allows you to develop them efficiently:</para>
+    <itemizedlist>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="chap-Reference_Guide-Portlet_development">Portlet development</link></emphasis></para>
+          <para>Details of Portlet Primer and global porlet.xml file.</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="chap-Reference_Guide-Gadget_development">Gadget development</link></emphasis></para>
+          <para>Information about a list of gadgets, and how to set up a Gadget Server.</para>
+        </listitem>
+    </itemizedlist>
+    </abstract>
+	<xi:include href="PortletDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="GadgetDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</chapter>

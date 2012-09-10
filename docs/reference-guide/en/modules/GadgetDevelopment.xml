@@ -3,22 +3,34 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-Reference_Guide-Gadget_development">
+<section id="chap-Reference_Guide-Gadget_development">
 	<title>Gadget development</title>
-  <abstract>
-    <para>This chapter provides you all the basic knowledge about gadget developments through two following topics:</para>
+  <highlights>
     <itemizedlist>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Gadgets">Gadgets</link></emphasis></para>
-          <para>Knowledge on default gadgets on the system or remote ones and how to create new ones, edit/delete/import them or view them on the dashboard, and more.</para>
+          <para>Knowledge of default gadgets on the system or remote ones and how to create new ones, edit/delete/import them or view them on the dashboard, and more.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server">Set up a Gadget Server</link></emphasis></para>
-           <para>Instruction on how to configure the gadget host and knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
+           <para>Instructions on how to configure the gadget host and knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
         </listitem>
     </itemizedlist>
-   <para>With the knowledge you have gained, you will know how to deploy a gadget in &PRODUCT;.</para>
-  </abstract>
+   <para>With the knowledge you have gained in this section, you will know how to deploy a gadget in &PRODUCT;.</para>
+  </highlights>
+  <para>
+	<prompt>
+        <emphasis role="bold">See also</emphasis>
+    </prompt>
+   </para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				<link linkend="chap-Reference_Guide-Portlet_development">Portlet development</link>
+			</para>
+		</listitem>
+	</itemizedlist>
+
 	<xi:include href="GadgetDevelopment/Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="GadgetDevelopment/SetupGadgetServer.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-</chapter>
+</section>

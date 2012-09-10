@@ -9,11 +9,11 @@
        <itemizedlist>
               <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Mode">Import Mode</link></emphasis></para>
-             <para>Information on modes for the import strategy.</para>
+             <para>Information about modes for the import strategy.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Strategy">Data Import Strategy</link></emphasis></para>
-             <para>Information on three types of object data: <emphasis>Portal Config</emphasis>, <emphasis> Page Data</emphasis> and <emphasis>Navigation Data</emphasis>.</para>
+             <para>Information about 3 types of object data: <emphasis>Portal Config</emphasis>, <emphasis> Page Data</emphasis> and <emphasis>Navigation Data</emphasis>.</para>
            </listitem>
        </itemizedlist>
 </highlights>
@@ -119,13 +119,19 @@
             a descriptor:
             <procedure id="proc-Reference_Guide-Merge_Strategy">
                <step>
+				<para>
                   Start with the root nodes (which is the effective root node or another node if the parent URI is specified).
+				</para>
                </step>
                <step>
+				<para>
                   Compare the set of child nodes and insert the missing nodes in the persistent nodes.
+				</para>
                </step>
                <step>
+				<para>
                   Proceed recursively for each child having the same name.
+				</para>
                </step>
             </procedure>
          </para>
@@ -298,46 +304,24 @@
   <emphasis role="bold">See also</emphasis>
 </prompt>
 </para>
-
 		<itemizedlist>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
            </listitem>
 		    <listitem>
-               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+               <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+               <para><link linkend="sect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
            </listitem>
 		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
-           </listitem>
-		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+               <para><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
            </listitem>
        </itemizedlist>
 </section>
