@@ -56,7 +56,7 @@
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -184,7 +184,7 @@
 						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" width="100mm"/>
+						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" width="120mm"/>
 					</imageobject>
 				</mediaobject>
         </para>
@@ -268,7 +268,7 @@
                           </imageobject>
                           <imageobject role="fo">
                               <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scalefit="1"
-                                         width="100mm"/>
+                                         width="150mm"/>
                           </imageobject>
                       </mediaobject>
                   <para>

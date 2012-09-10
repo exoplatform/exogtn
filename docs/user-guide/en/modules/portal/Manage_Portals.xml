@@ -80,7 +80,7 @@
             <imagedata fileref="images/Add_site1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Add_site1.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+            <imagedata fileref="images/Add_site1.png" format="PNG" align="center" scalefit="1" width="60mm"/>
           </imageobject>
         </mediaobject>
         <para><emphasis role="bold">The second way</emphasis> </para>
@@ -98,7 +98,7 @@
             <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+            <imagedata fileref="images/AddPortal.png" format="PNG" align="center" scalefit="1" width="60mm"/>
           </imageobject>
         </mediaobject>
         <para><emphasis role="bold">ii.</emphasis> Click the <guibutton>Add New Portal</guibutton> button.
@@ -114,7 +114,7 @@
               <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scale="100"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+              <imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scalefit="1" width="120mm"/>
             </imageobject>
           </mediaobject>
         </para>
@@ -141,7 +141,7 @@
             <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scale="100"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scalefit="1" width="150mm"/>
+            <imagedata fileref="images/show-info-bar.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
  <para><emphasis role="bold">Details:</emphasis></para>
@@ -394,7 +394,7 @@
               <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="100"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+              <imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scalefit="1" width="80mm"/>
             </imageobject>
           </mediaobject>
 		  </para>
@@ -413,7 +413,7 @@
           <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scale="110"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+          <imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scalefit="1" width="120mm"/>
         </imageobject>
       </mediaobject>
 	  </para>
