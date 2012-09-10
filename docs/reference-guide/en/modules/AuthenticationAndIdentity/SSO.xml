@@ -12,7 +12,7 @@
           <emphasis role="bold">
             <link linkend="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">Central Authentication Service (CAS)
             </link></emphasis> </para>
-            <para>Instruction on how to integrate between GateIn and the CAS Single-Sign-On Framework via two steps:
+            <para>Instructions on how to integrate between GateIn and the CAS Single-Sign-On Framework via 2 steps:
               installing/configuring a CAS server and setting up the portal to use the CAS server.</para>
 
       </listitem>
@@ -22,8 +22,8 @@
             <link linkend="sect-Reference_Guide-Single_Sign_On-JOSSO">JOSSO</link>
           </emphasis>
         </para>
-         <para>Instruction on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via two steps:
-              installing/configuringg a JOSSO server, and setting up the portal to use the JOSSO server.</para>
+         <para>Instructions on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via 2 steps:
+              installing/configuringg a JOSSO server and setting up the portal to use the JOSSO server.</para>
       </listitem>
       <listitem>
         <para>
@@ -31,8 +31,8 @@
             <link linkend="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">OpenSSO - The Open Web SSO project</link>
           </emphasis>
         </para>
-         <para>Instruction on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via two steps:
-              installing/configuringg a JOSSO server, and setting up the portal to use the JOSSO server.</para>
+         <para>Instructions on how to integrate between GateIn and the JOSSO Single-Sign-On Framework via 2 steps:
+              installing/configuringg a JOSSO server and setting up the portal to use the JOSSO server.</para>
       </listitem>
       <listitem>
         <para>
@@ -40,8 +40,8 @@
             <link linkend="Single_Sign_On-SPNEGO">SPNEGO</link>
           </emphasis>
         </para>
-         <para>Knowledge about SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) which is used to authenticate transparently
-           through the web browser after a user has been authenticated when logging-in his session, and instruction on how to configure
+         <para>Knowledge of SPNEGO (Simple and Protected GSSAPI Negotiation Mechanism) which is used to authenticate transparently
+           throughout the web browser, and instructions on how to configure
          the SPNEGO Server on Linux and integrate SPNEGO with GateIn .</para>
       </listitem>
     </itemizedlist>
@@ -50,7 +50,7 @@
 				&PRODUCT; provides some forms of Single-Sign-On (<emphasis>SSO</emphasis>) as an integration and aggregation platform.
 		</para>
 		<para>
-			When logging into the portal, users gain access to many systems through portlets using a single identity. In many cases, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases, each SSO framework provides a unique way to plug into a Java EE application.
+			When logging into the portal, users gain access to many systems throughout portlets using a single identity. In many cases, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases, each SSO framework provides a unique way to plug into a Java EE application.
 		</para>
 
   <para xml:id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
@@ -104,26 +104,49 @@
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the CAS Single-Sign-On Framework. Details about CAS can be found <ulink url="http://www.jasig.org/cas">here</ulink>.
 		</para>
 		<para>
-			The integration consists of two steps: installing/configuring a CAS server and setting up the portal to use the CAS server.
+			The integration consists of 3 steps:
 		</para>
-		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
-			<title>CAS server</title>
-			<para>
-				First, set up the server to authenticate against the portal login module. In this example, the CAS server is installed on Tomcat.
-			</para>
-			<section id="sect-Reference_Guide-CAS_server-Obtaining_CAS">
-				<title>Obtaining CAS</title>
+		<procedure>
+			<step>
 				<para>
-					CAS can be downloaded from <ulink type="http" url="http://www.jasig.org/cas/download">http://www.jasig.org/cas/download</ulink>.
-               Tested version, which should work with these instructions is <emphasis role="bold">CAS 3.3.5</emphasis>, however other versions can also work without problems.
+					Configure a CAS server to authenticate against the portal login module. In this example, the CAS server is installed on Tomcat.
 				</para>
+			</step>
+			<step>
+				<para>
+					Set up the CAS client.
+				</para>
+			</step>
+			<step>
+				<para>
+				Redirect to CAS.
+				</para>
+			</step>
+		</procedure>
+		<para xml:id="sect-Reference_Guide-CAS_server-Obtaining_CAS">
+			Before doing the integration, you need to obtain CAS first:
+		</para>
+		<procedure>
+			<step>
+				<para>
+				Download CAS from <ulink type="http" url="http://www.jasig.org/cas/download">http://www.jasig.org/cas/download</ulink>.
+				</para>
+			</step>
+			<step>
 				<para>
 					Extract the downloaded file into a suitable location. This location will be referred to as <emphasis>$CAS_HOME</emphasis> in the following instructions.
 				</para>
-			</section>
+			</step>
+		</procedure>
+		<note>
+			<para>
+				The tested version, which should work with these instructions, is <emphasis role="bold">CAS 3.3.5</emphasis>; however, other versions can also work without problems.
+			</para>
+		</note>
 			
-			<section id="sect-Reference_Guide-CAS_server-Modifying_CAS_server">
-				<title>Modifying the CAS server</title>
+			
+			<section id="sect-Reference_Guide-CAS_server-Configuring_CAS_server">
+				<title>Configure the CAS server</title>
 				<para>
 					To configure the web archive as desired, the simplest way is to make the necessary changes directly in the CAS codebase.
 				</para>
@@ -262,8 +285,7 @@
 						</mediaobject>
 					</step>
 				</procedure>
-			</section>
-            <note>
+			<note>
                 <para>
                   By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the 
                                   <emphasis>cas.war/WEB-INF/cas-servlet.xml</emphasis> to include the follow line :
@@ -277,7 +299,7 @@
                 <emphasis >p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
                 </programlisting>
             </note>
-		</section>
+			</section>
 		
 		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Setup_the_CAS_client">
 			<title>Set up the CAS client</title>
@@ -464,31 +486,45 @@ realmName=gatein-domain;
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the JOSSO Single-Sign-On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
 		</para>
 		<para>
-			Setting up this integration consists of two steps: installing/configuring a JOSSO server, and setting up the portal to use the JOSSO server.
+			Setting up this integration consists of 3 steps:
 		</para>
-		<section id="sect-Reference_Guide-JOSSO-JOSSO_server">
-			<title>JOSSO server</title>
-			<para>
-				This section describes how to set up the JOSSO server to authenticate against the &PRODUCT; login module.
-			</para>
-			<para>
-				In this example, the JOSSO server will be installed on Tomcat.
-			</para>
-			<section id="sect-Reference_Guide-JOSSO_server-Obtaining_JOSSO">
-				<title>Obtaining JOSSO</title>
+		<procedure>
+			<step>
 				<para>
-					JOSSO can be downloaded from <ulink type="http" url="http://sourceforge.net/projects/josso/files/">http://sourceforge.net/projects/josso/files/</ulink>. Use the package that embeds Apache Tomcat.
+				Configure a JOSSO server to authenticate against the &PRODUCT; login module. In this section, the JOSSO server will be installed on Tomcat.
 				</para>
+			</step>
+			<step>
 				<para>
-					Once downloaded, extract the package into what will be called <emphasis>JOSSO_HOME</emphasis> in this example.
+				Set up the JOSSO client.
 				</para>
+			</step>
+			<step>
+				<para>
+				Set up the portal to redirect to JOSSO
+				</para>
+			</step>
+		</procedure>
+		<para xml:id="sect-Reference_Guide-JOSSO_server-Obtaining_JOSSO">To do this integration, you need to obtain JOSSO first:</para>
+			<procedure>
+				<step>
+					<para>
+					Download JOSSO from <ulink type="http" url="http://sourceforge.net/projects/josso/files/">http://sourceforge.net/projects/josso/files/</ulink>. Use the package that embeds Apache Tomcat.
+				</para>
+				</step>
+				<step>
+					<para>
+					Extract the package into what will be called <emphasis>JOSSO_HOME</emphasis> in this example.
+				</para>
+				</step>
+			</procedure>
         <warning>
           <para>The steps described later are only correct in case of JOSSO v.1.8.1.</para>
         </warning>
-			</section>
 			
-			<section id="sect-Reference_Guide-JOSSO_server-Modifying_JOSSO_server">
-				<title>Modifying the JOSSO server</title>
+			
+			<section id="sect-Reference_Guide-JOSSO_server-Configuring_JOSSO_server">
+				<title>Configure a JOSSO server</title>
 				<procedure>
 					<step>
 						<para>
@@ -547,8 +583,6 @@ realmName=gatein-domain;
 					</step>
 				</procedure>
 			</section>
-
-		</section>
 		
 		<section id="sect-Reference_Guide-JOSSO-Setup_the_JOSSO_client">
 			<title>Set up the JOSSO client</title>
@@ -724,7 +758,6 @@ realmName=gatein-domain;
 				From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
 			</para>
 		</section>
-
 	</section>
 	
 	<section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project" role="NotInToc">
@@ -733,34 +766,48 @@ realmName=gatein-domain;
 			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the OpenSSO Single Sign On Framework. Details about OpenSSO can be found <ulink url="https://opensso.dev.java.net/">here</ulink>.
 		</para>
 		<para>
-			Setting up this integration consists of two steps: installing/configuring an OpenSSO server, and setting up the portal to use the OpenSSO server.
+			Setting up this integration consists of 3 steps:
 		</para>
-		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-OpenSSO_server">
-			<title>OpenSSO server</title>
-			<para>
-				 This section details the setup of OpenSSO server to authenticate against the &PRODUCT; login module.
-			</para>
-			<para>
-				In this example, the OpenSSO server will be installed on Tomcat.
-			</para>
-			<section id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">
-				<title>Obtaining OpenSSO</title>
+		<procedure>
+			<step>
 				<para>
-					OpenSSO can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip</ulink>.
+				Configure an OpenSSO server to authenticate against the &PRODUCT; login module. In this section, the OpenSSO server will be installed on Tomcat.
 				</para>
+			</step>
+			<step>
 				<para>
-					Once downloaded, extract the package into a suitable location. This location will be referred to as <emphasis>OPENSSO_HOME</emphasis> in this example.
+				Set up the OpenSSO client.
 				</para>
+			</step>
+			<step>
+				<para>
+				Set up the portal to redirect to OpenSSO
+				</para>
+			</step>
+		</procedure>
+		<para xml:id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">To do this integration, you need to obtain OpenSSO first:</para>
+		<procedure>
+			<step>
+				<para>
+					Download OpenSSO from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip</ulink>.
+				</para>
+			</step>
+			<step>
+				<para>
+				   Extract the package into a suitable location. This location will be referred to as <emphasis>OPENSSO_HOME</emphasis> in this example.
+				</para>
+			</step>
+		</procedure>
             <note>
                <para>
                   There is also possibility to use OpenAM instead of OpenSSO server. OpenAM is free and integration steps with &PRODUCT; and OpenAM are very similar as with OpenSSO. More info is
                   <ulink type="http" url="http://community.jboss.org/wiki/GateInAndOpenAMIntegration">here</ulink> .
                </para>
             </note>
-			</section>
 			
-			<section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
-				<title>Modifying the OpenSSO server</title>
+			
+			<section id="sect-Reference_Guide-OpenSSO_server-Configuring_OpenSSO_server">
+				<title>Configure the OpenSSO server</title>
 				<para>
 					 To configure the web server as desired, it is simpler to directly modify the sources. 
 				</para>
@@ -890,10 +937,10 @@ realmName=gatein-domain;
                </step>
             </procedure>
          </section>
-		</section>
+		
 		
 		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_the_OpenSSO_client">
-			<title>Set up the OpenSSO client.</title>
+			<title>Set up the OpenSSO client</title>
 			<procedure>
 				<step>
 					<para>

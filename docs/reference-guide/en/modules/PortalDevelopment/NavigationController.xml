@@ -8,13 +8,16 @@
         <highlights>
        <itemizedlist>
            <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Controller_Action">Controller in Action</link></emphasis></para><para>Introduction on the goal, the configuration declaration of the controller and the description of parameters for configuring the controller.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Controller_Action">Controller in Action</link></emphasis></para>
+				<para>Introduction to the goal, the configuration declaration of the controller and the description of parameters for configuring the controller.</para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework">Integrate to GateIn WebUI framework</link></emphasis></para><para>Introduction on a set of parameters in Gatein's routing table and some components needed for rendering defined parameters.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework">Integrate to GateIn WebUI framework</link></emphasis></para>
+				<para>Introduction to a set of parameters in GateIn's routing table and some components needed for rendering defined parameters.</para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Changes_Migration">Changes and migration from GateIn 3.1.x</link></emphasis></para><para>Provision of changes in securities, dashboard, <filename>portal.war</filename> and <filename>web.xml</filename> and migration knowledge from Gatein 3.1.x.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Navigation_Controller-Changes_Migration">Changes and migration from GateIn 3.1.x</link></emphasis></para>
+				<para>Provision of changes in securities, dashboard, <filename>portal.war</filename> and <filename>web.xml</filename> and migration knowledge from GateIn 3.1.x.</para>
            </listitem>
        </itemizedlist>
 </highlights>
@@ -32,8 +35,7 @@
         </itemizedlist>
       <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action" role="NotInToc">
         <title>Controller in Action</title>
-        <section id="sect-Reference_Guide-Navigation_Controller-Controller_Action-Controller">
-          <title>Controller</title>
+        
           <para>The <code>WebAppController</code> is the component of GateIn that processes HTTP invocations and transforms them into a portal request. It has been improved with the addition of a request mapping engine (<emphasis >controller</emphasis>) whose role is to make the HTTP request decouple and create a portal request. The mapping engine makes two essential tasks:</para>
           <itemizedlist>
             <listitem>
@@ -46,7 +48,7 @@
           <para>The goal of the controller (mapping engine) is to <emphasis>decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contains data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
           <para>The controller configuration is declarative in an .xml file named _controller.xml_, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
           <para>The controller data cannot be modified by using the portlet interface, but can be still changed at runtime by modifying in the <emphasis>controller.xml</emphasis> file, then calling the <emphasis>WebAppController.reloadConfiguration()</emphasis> method. </para>
-        </section>
+       
         <section id="sect-Reference_Guide-Navigation_Controller-Building_controller">
           <title>Building controller</title>
           <para>The controller configuration that contains the routing rules is loaded from the <emphasis>controller.xml</emphasis> file retrieved in the GateIn configuration directory. Its location is determined by the <emphasis >gatein.controller.config</emphasis> property.</para>

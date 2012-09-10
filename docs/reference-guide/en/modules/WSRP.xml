@@ -6,6 +6,41 @@
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
     <abstract>
+	<para>This chapter consists of the following main topics:</para>
+    <itemizedlist>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp_support">Level of support in &PRODUCT;</link></emphasis></para>
+			<para>Necessary information about support levels in &PRODUCT;</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp-Deploy_GateIn_wsrp_services">Deploy &PRODUCT_NAME;'s WSRP services</link></emphasis></para>
+			<para>Information about the WSRP support in &PRODUCT_NAME;, WSRP use when running GateIn on a non-default port or hostname, and Considerations to use WSRP with SSL.</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp-Make_portlet_remotable">Make a portlet remotable</link></emphasis></para>
+			<para>Knowledge and examples of how to make a portlet remotable.</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">Consume &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</link></emphasis></para>
+			<para>Introduction to WSRP Consumers.</para>
+		</listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration">Consume remote WSRP portlets in &PRODUCT_NAME;</link></emphasis></para>
+			<para>Instructions on how to configure a remote producer walk-through, to configure access to remote producers via XML, and examples.</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance">Consumers maintenance</link></emphasis></para>
+			<para>Instructions on how to modify a currently held registration, to import and export portlets, to erase local registration data, and introduction to available operations from the consumer list view of the WSRP configuration portlet.</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold"><link linkend="producer_config">Configure &PRODUCT_NAME;'s WSRP Producer</link></emphasis></para>
+			<para>Knowledge of default and registration configurations, and WSRP validation mode.</para>
+        </listitem>
+		<listitem>
+            <para><emphasis role="bold"><link linkend="wsrp.wsrp_interg_configuration">WSRP integration configuration</link></emphasis></para>
+			<para>Introduction to Extended Navigation and details of WSRP integration.</para>
+        </listitem>
+    </itemizedlist>
       <para xml:id="wsrp-Introduction">The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with presentation-oriented web services. It has been produced through the efforts of
          the Web Services for Remote Portlets (WSRP) OASIS Technical Committee. It is based on the requirements
@@ -27,36 +62,13 @@
          </itemizedlist>
       </para>
 
-      <para>More information on WSRP can be found on the
+      <para>More information about WSRP can be found on the
          <ulink url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsrp">official website for WSRP</ulink>.
          It is suggested that you read the
          <ulink url="http://www.oasis-open.org/committees/download.php/10539/wsrp-primer-1.0.html">primer</ulink>
-         for a good, and albeit technical overview of WSRP.
+         for a good and technical overview of WSRP.
       </para>
-    <para>This chapter consists of the following main topics:</para>
-    <itemizedlist>
-        <listitem>
-            <para><link linkend="wsrp_support">Level of support in &PRODUCT;</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="wsrp-Deploy_GateIn_wsrp_services">Deploy &PRODUCT_NAME;'s WSRP services</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="wsrp-Make_portlet_remotable">Make a portlet remotable</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">Consume &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="wsrp-consumer_configuration">Consume remote WSRP portlets in &PRODUCT_NAME;</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="wsrp-Consumers_maintenance">Consumers maintenance</link></para>
-        </listitem>
-        <listitem>
-            <para><link linkend="producer_config">Configure &PRODUCT_NAME;'s WSRP Producer</link></para>
-        </listitem>
-    </itemizedlist>
+    
     </abstract>
    <section id="wsrp_support">
       <title>Level of support in &PRODUCT;</title>
@@ -468,12 +480,12 @@
        <itemizedlist>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration-Configure_remote_producer_walkthrough">Configure a remote producer walk-through</link></emphasis></para>
-             <para>Instruction on how to define access to a remote producer so that its portlets can be consumed within GateIn by using the configuration portlet
+             <para>Instructions on how to define access to a remote producer so that its portlets can be consumed within GateIn by using the configuration portlet
                or using the <emphasis>portlet.xml</emphasis> file.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML">Configure access to remote producers via XML</link></emphasis></para>
-               <para>Instruction on how to configure consumers by editing the <emphasis>wsrp-consumers-config.xml</emphasis> file with the required and optional configuration information.
+               <para>Instructions on how to configure consumers by editing the <emphasis>wsrp-consumers-config.xml</emphasis> file with the required and optional configuration information.
                 </para>
            </listitem>
            <listitem>
@@ -820,8 +832,11 @@
             </note>
          </para>
 
-         <section id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Required_configuration_information">
-            <title>Required configuration information</title>
+         <para xml:id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Required_configuration_information">
+            <citetitle>
+				<emphasis role="bold">Required configuration information</emphasis>
+			</citetitle>
+		 </para>
 
             <para>Now, look at which information needs to be provided to configure access to a remote producer.
             </para>
@@ -847,10 +862,12 @@
                <emphasis>&lt;endpoint-wsdl-url&gt;</emphasis>
                elements are required for a functional remote producer configuration.
             </para>
-         </section>
-
-         <section id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Optional_configuration">
-            <title>Optional configuration</title>
+         
+		<para xml:id="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML-Optional_configuration">
+            <citetitle>
+				<emphasis role="bold">Optional configuration</emphasis>
+			</citetitle>
+		</para>
             <para>It is also possible to provide addtional configuration. In some cases, the additional configuration might be important to
                establish a proper connection to the remote producer.
             </para>
@@ -905,7 +922,6 @@
                element. If you select to provide a consumer name, please remember that this should uniquely identify
                your consumer.
             </para>
-         </section>
       </section>
 
       <section id="wsrp-consumer_configuration-Example" role="NotInToc">
@@ -977,7 +993,7 @@
        <itemizedlist>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance-Modify_currently_held_registration">Modify a currently held registration</link></emphasis></para>
-             <para>Instruction on how to register modification for service upgrade and producer error.</para>
+             <para>Instructions on how to register modification for service upgrade and producer error.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance-Consumer_operations">Consumer operations</link></emphasis></para>
@@ -985,11 +1001,11 @@
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance-Import_export_portlets">Import and export portlets</link></emphasis></para>
-             <para>Instruction on how to import and export portlets.</para>
+             <para>Instructions on how to import and export portlets.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance-Erase_local_registration_data">Erase local registration data</link></emphasis></para>
-             <para> Instruction on how to erase local registration data without deregistering first.</para>
+             <para>Instructions on how to erase local registration data without deregistering first.</para>
            </listitem>
        </itemizedlist>
 </highlights>
@@ -1392,15 +1408,15 @@
        <itemizedlist>
            <listitem>
                <para><emphasis role="bold"><link linkend="producer_config-Default_configuration">Default configuration</link></emphasis></para>
-             <para>Introduction on the default producer configuration that requires consumers to register with it before providing access to its services.</para>
+             <para>Introduction to the default producer configuration that requires consumers to register with it before providing access to its services.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="registration-configuration">Registration configuration</link></emphasis></para>
-             <para>Introduction on the configuration of the Portal's behavior with respect to registration and on the customization of the registration handling behavior.</para>
+             <para>Introduction to the configuration of the Portal's behavior with respect to registration and on the customization of the registration handling behavior.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="strict-mode">WSRP validation mode</link></emphasis></para>
-             <para>Introduction on the WSRP validation mode.</para>
+             <para>Introduction to the WSRP validation mode.</para>
            </listitem>
        </itemizedlist>
 </highlights>
@@ -1619,17 +1635,6 @@
    </section>
   <section id="wsrp.wsrp_interg_configuration">
        <title>WSRP integration configuration</title>
-      <highlights>
-        <para><emphasis role="bold"> The following topics are covered:</emphasis></para>
-       <itemizedlist>
-           <listitem>
-               <para><link linkend="wsrp.wsrp_ExtendedNvigation">Extended Navigation</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="wsrp.wsrp_intergration">WSRP integration</link></para>
-           </listitem>
-       </itemizedlist>
-</highlights>
        <para>
          WSRP is integrated into GateIn thanks to the <link linkend="sect-Reference_Guide-Foundations-Extension_mechanism">extension mechanism</link>.
        </para>
@@ -1710,25 +1715,25 @@
 
 		<itemizedlist>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp_support">Level of support in GateIn 3.2</link></emphasis> </para>
+               <para><link linkend="wsrp_support">Level of support in GateIn 3.2</link></para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp-Deploy_GateIn_wsrp_services">Deploy GateIn's WSRP services</link></emphasis> </para>
+               <para><link linkend="wsrp-Deploy_GateIn_wsrp_services">Deploy GateIn's WSRP services</link></para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp-Make_portlet_remotable">Make a portlet remotable</link></emphasis> </para>
+               <para><link linkend="wsrp-Make_portlet_remotable">Make a portlet remotable</link></para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">Consume GateIn's WSRP portlets from a remote Consumer</link></emphasis> </para>
+               <para><link linkend="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">Consume GateIn's WSRP portlets from a remote Consumer</link></para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration">Consume remote WSRP portlets in GateIn</link></emphasis> </para>
+               <para><link linkend="wsrp-consumer_configuration">Consume remote WSRP portlets in GateIn</link></para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="wsrp-Consumers_maintenance">Consumers maintenance</link></emphasis> </para>
+               <para><link linkend="wsrp-Consumers_maintenance">Consumers maintenance</link></para>
            </listitem>
 		    <listitem>
-               <para><emphasis role="bold"><link linkend="producer_config">Configure GateIn's WSRP Producer</link></emphasis> </para>
+               <para><link linkend="producer_config">Configure GateIn's WSRP Producer</link></para>
            </listitem>
        </itemizedlist>
      </section>

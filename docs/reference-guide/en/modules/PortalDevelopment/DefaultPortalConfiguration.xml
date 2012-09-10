@@ -5,22 +5,7 @@
 ]>
 <section id="sect-Reference_Guide-Default_Portal_Configuration">
 	<title>Default Portal Configuration</title>
-    <para>
-        <emphasis role="bold">The following topics are covered:</emphasis>
-    </para>
-    <highlights>
-       <itemizedlist>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Configuration">Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">Delete Portals Definition by Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">Set the info bar shown by default for portlet</link></para>
-           </listitem>
-       </itemizedlist>
-</highlights>
+
 		<para>
 			&PRODUCT; default homepage URL is <emphasis>http://{hostname}:{port}/portal/</emphasis>.
          There may be multiple independent portals deployed in parallel at any given time, each of which has its root
@@ -140,45 +125,16 @@
     </para>
     <itemizedlist>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
            </listitem>
 		    <listitem>
-               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+               <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
            </listitem>
 		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
-           </listitem>
-		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+               <para><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
            </listitem>
        </itemizedlist>
 </section>
-
-

@@ -7,7 +7,7 @@
 <title>About GateIn</title>
 
 	<para>
-		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single portal framework. GateIn aims at providing an intuitive user-friendly portal, and a framework to address the needs of Web 2.0 applications today.
+		&PRODUCT; is the merge of two mature Java projects: JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single portal framework. GateIn aims at providing an intuitive user-friendly portal, and a framework to address the needs of Web 2.0 applications today.
 	</para>
 	<mediaobject>
 		<imageobject role="html">

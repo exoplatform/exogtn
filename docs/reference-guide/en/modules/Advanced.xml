@@ -10,32 +10,32 @@
    <itemizedlist>
         <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Kernel">GateIn Kernel</link></emphasis></para>
-            <para>Introduction on GateIn Kernel that provides configuration, lifecycle handling, component scopes, and some core services.</para>
+            <para>Introduction to GateIn Kernel that provides configuration, lifecycle handling, component scopes, and some core services.</para>
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuring_services">Configure services</link></emphasis></para>
-            <para>Introduction on the <emphasis>configuration.xml</emphasis> configuration files for creating services.</para>
+            <para>Introduction to the <emphasis>configuration.xml</emphasis> configuration files for creating services.</para>
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuration_syntax">Configuration syntax</link></emphasis></para>
-            <para>Information on the configuration syntax of services, including <emphasis>components</emphasis>, <emphasis>external plugins</emphasis>,
+            <para>Information about the configuration syntax of services, including <emphasis>components</emphasis>, <emphasis>external plugins</emphasis>,
             <emphasis>Includes </emphasis>, <emphasis>special URLs</emphasis> and <emphasis>Special variables</emphasis>.</para>
     </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Init_params">InitParams configuration object</link></emphasis></para>
-            <para>Introduction on the <emphasis>InitParams</emphasis> configuration object that is essentially a map of key-value pairs.</para>
+            <para>Introduction to the <emphasis>InitParams</emphasis> configuration object that is essentially a map of key-value pairs.</para>
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuring_portal">Configure a portal container</link></emphasis></para>
-            <para>Information on the configuration attributes of a portal container. </para>
+            <para>Information about the configuration attributes of a portal container. </para>
     </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Extension_mechanism">GateIn Extension Mechanism and Portal Extensions</link></emphasis></para>
-            <para>Introduction on GateIn extension mechanism and how to create a portal extension.</para>
+            <para>Introduction to the GateIn extension mechanism and how to create a portal extension.</para>
     </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Multiple_portals">Run Multiple Portals</link></emphasis></para>
-            <para>Knowledge on how to make a portal application correctly function when deployed in multiple portals.</para>
+            <para>Knowledge of how to make a portal application correctly function when deployed in multiple portals.</para>
     </listitem>
     </itemizedlist>
    </abstract>
@@ -165,9 +165,7 @@
          </listitem>
          <listitem>
            <para>
-             <emphasis role="bold">
                <link linkend="sect-Reference_Guide-Foundations-Multiple_portals">Run Multiple Portals</link>
-             </emphasis>
            </para>
          </listitem>
        </itemizedlist>

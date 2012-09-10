@@ -5,21 +5,8 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Navigation_Configuration">
 	<title>Portal Navigation Configuration</title>
-    <highlights>
-       <itemizedlist>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link></para>
-           </listitem>
-       </itemizedlist>
-</highlights>
 		<para>
-			There are three navigation types available to portal users, including <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link>,
+			There are 3 navigation types available to portal users, including <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">Portal Navigation</link>,
       <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">Group Navigation</link>, and <link linkend="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">User Navigation</link>.
 			These navigations are configured using the standard XML syntax in the file; &#34;<emphasis>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</emphasis>&#34;.
 		</para>
@@ -232,7 +219,7 @@ For example, with the above configuration, prtal will look for all configuration
 	</para>
 
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" role="NotInToc">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">
 		<title>Portal Navigation</title>
 		<para>
 		The portal navigation incorporates the pages that can be accessed even when the user is not logged in assuming the applicable permissions allow the public access). For example, several portal navigations are used when a company owns multiple trademarks, and sets up a website for each of them.
@@ -438,7 +425,7 @@ For example, with the above configuration, prtal will look for all configuration
 		</variablelist>
 	</section>
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation" role="NotInToc">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
 		<title>Group Navigation</title>
 		<para>
 			Group navigations are dynamically added to the user navigation at login. This allows users to see the menu of all pages assigned to any groups they belong to.
@@ -451,7 +438,7 @@ For example, with the above configuration, prtal will look for all configuration
 		</para>
 	</section>
 	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation" role="NotInToc">
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
 		<title>User Navigation</title>
 		<para>
 			User navigation is the set of nodes and pages that are owned by the user. They are part of the user's dashboard.
@@ -467,46 +454,16 @@ For example, with the above configuration, prtal will look for all configuration
 </para>
 		<itemizedlist>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Skinning_Portal">Skin the portal</link></para>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Lifecycle">Portal Lifecycle</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Data_Import_Strategy">Data Import Strategy</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Default_Permission_Configuration">Portal Default Permission Configuration</link></para>
            </listitem>
 		    <listitem>
-               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-XML_Resources_Bundles">XML Resources Bundles</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Upload_Component">Upload Component</link></para>
-           </listitem>
-           <listitem>
-               <para><link linkend="hsect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">Deactivation of the Ajax Loading Mask Layer</link></para>
+               <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
            </listitem>
 		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
-           </listitem>
-		   <listitem>
-               <para><link linkend="hsect-Reference_Guide-Navigation_Controller">Navigation Controller</link></para>
+               <para><link linkend="sect-Reference_Guide-Javascript_Configuration">JavaScript Configuration</link></para>
            </listitem>
        </itemizedlist>
 </section>

@@ -5,31 +5,6 @@
 ]>
 <section id="sect-Reference_Guide-Predefined_User_Configuration">
 	<title>Predefined User Configuration</title>
-    <highlights>
-       <itemizedlist>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">Plugin for adding users, groups and membership types</link></emphasis></para>
-               <para>Introduction on the plugin of type <emphasis>org.exoplatform.services.organization.OrganizationDatabaseInitializer</emphasis> that is used
-               to specify the list of membership types/groups/users to be created. </para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">Membership types</link></emphasis></para>
-             <para>Instruction on how to specify the predefined membership types via the <emphasis >OrganizationConfig</emphasis> plugin parameter.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Groups">Groups</link></emphasis></para>
-             <para>Instruction on how to specify the predefined groups via the <emphasis>OrganizationConfig</emphasis> plugin parameter.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Users">Users</link></emphasis></para>
-             <para>Instruction on how to specify the predefined users via the <emphasis>OrganizationConfig</emphasis> plugin parameter.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">Plugin for monitoring user creation</link></emphasis></para>
-           <para>Introduction on the plugin of type <emphasis>org.exoplatform.services.organization.impl.NewUserEventListener</emphasis> that is used to monitor user creation.</para>
-           </listitem>
-       </itemizedlist>
-</highlights>
     <para>
 		To specify the initial Organization configuration, the content of <emphasis>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </emphasis> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
 	</para>

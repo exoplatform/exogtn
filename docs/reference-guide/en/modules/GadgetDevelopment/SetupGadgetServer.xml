@@ -3,21 +3,13 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-Reference_Guide-Setup_a_Gadget_Server">
+<section id="sect-Reference_Guide-Setup_a_Gadget_Server" role="NotInToc">
 	<title>Set up a Gadget Server</title>
-    <highlights>
-       <itemizedlist>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">Virtual servers for gadget rendering</link></emphasis></para><para>Instruction on how to configure the gadget host.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration">Configuration</link></emphasis></para><para>
-               Knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
-           </listitem>
-       </itemizedlist>
-</highlights>
-	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering" role="NotInToc">
-		<title>Virtual servers for gadget rendering</title>
+	<para xml:id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">
+		<citetitle>
+			<emphasis role="bold">Virtual servers for gadget rendering</emphasis>
+		</citetitle>
+	</para>
 		<para>
 			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain other than the container (the website that &#39;contains&#39; the app), it is unable to interfere with the portal by modifying the code or cookies.
 		</para>
@@ -46,12 +38,9 @@
 		<para>
 			When deploying on the same server, ensure the gadget initiates before anything that calls it (for example; the webapp <literal>GateInGadgets</literal> which uses <literal>org.exoplatform.application.gadget.GadgetRegister</literal>).
 		</para>
-	</section>
 	
-	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration" role="NotInToc">
-		<title>Configuration</title>
 		<section id="sect-Reference_Guide-Configuration-Security_key">
-      <title>Security key</title>
+      <title>Configure Security key</title>
       <para>In GateIn, the gadget container is using three security files for authentication and authorization
         gadgets:
       </para>
@@ -108,7 +97,7 @@
 		</section>
 		
 		<section id="sect-Reference_Guide-Configuration-Gadget_proxy_and_concat_configuration">
-			<title>Gadget proxy and concat configuration</title>
+			<title>Configure Gadget proxy and Concat</title>
 			<para>
 				These servers have to be on the same domain as the gadget server. You can configure the container in <emphasis>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</emphasis>.
 			</para>
@@ -122,10 +111,12 @@
   &#34;concat-url&#34;: &#34;http://localhost:8080/eXoGadgetServer/gadgets/concat?&#34;
 },
 </programlisting>
-		</section>
-		
-		<section id="sect-Reference_Guide-Configuration-Proxy">
-			<title>Proxy</title>
+
+		<para xml:id="sect-Reference_Guide-Configuration-Proxy">
+			<citetitle>
+				<emphasis role="bold">Configure Proxy</emphasis>
+			</citetitle>
+		</para>
 			<para>
 				To allow external gadgets when the server is behind a proxy, add the following code to the beginning of the JVM:
 			</para>
@@ -133,19 +124,4 @@
 <programlisting>-Dhttp.proxyHost=proxyhostURL -Dhttp.proxyPort=proxyPortNumber -Dhttp.proxyUser=someUserName -Dhttp.proxyPassword=somePassword
 </programlisting>
 		</section>
-
-	</section>
-        <para>
-	<prompt>
-		<emphasis role="bold">See also</emphasis>
-	</prompt>
-</para>
-
-		<itemizedlist>
-           <listitem>
-               <para><link linkend="sect-Reference_Guide-Gadgets">Gadgets</link></para>
-           </listitem>
-         </itemizedlist>
 </section>
-
-

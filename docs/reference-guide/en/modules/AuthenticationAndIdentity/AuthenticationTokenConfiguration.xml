@@ -5,33 +5,6 @@
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
 	<title>Authentication Token Configuration</title>
-    <highlights>
-      <para>The following topics are covered:</para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <emphasis role="bold">
-            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">What is Token Service?</link>
-          </emphasis>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <emphasis role="bold">
-            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">Implement the Token Service API</link>
-          </emphasis>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <emphasis role="bold">
-            <link linkend="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">Configure token services</link>
-          </emphasis>
-        </para>
-      </listitem>
-      </itemizedlist>
-  </highlights>
-
   <para xml:id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
     <citetitle>
       <emphasis role="bold">What is Token Service?</emphasis>

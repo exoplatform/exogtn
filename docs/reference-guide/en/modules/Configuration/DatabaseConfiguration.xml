@@ -6,19 +6,7 @@
 ]>
 <section id="sect-Reference_Guide-Database_Configuration" role="NotInToc">
   <title>Database Configuration</title>
-  <highlights>
-  <para>
-      <emphasis role="bold">The following topics are covered:</emphasis>
-  </para>
-  <itemizedlist>
-       <listitem>
-          <para><link linkend="sect-Reference_Guide-Database_Configuration-JCR_database_configuration">Configure the database for JCR</link></para>
-      </listitem>
-       <listitem>
-          <para><link linkend="sect-Reference_Guide-Database_Configuration-Database_for_default_identity_store">Configure the database for the default identity store</link></para>
-      </listitem>
-  </itemizedlist>
-  </highlights>
+
     <para>&PRODUCT; has two different database dependencies. One is the
     identity service configuration, which depends on Hibernate. The other is the Java content repository (JCR) service, which
     depends on JDBC API and can integrate with any existing datasource implementation.</para>
@@ -30,6 +18,17 @@
     <para>&PRODUCT; assumes the default encoding for your database is
     <emphasis>latin1</emphasis>. You may need to change this parameter for
     your database so that &PRODUCT; works properly.</para>
+	<para>
+		The database configuration in GateIn can be divided into 2 main topics:
+	</para>
+	<itemizedlist>
+       <listitem>
+          <para><link linkend="sect-Reference_Guide-Database_Configuration-JCR_database_configuration">Configure the database for JCR</link></para>
+      </listitem>
+       <listitem>
+          <para><link linkend="sect-Reference_Guide-Database_Configuration-Database_for_default_identity_store">Configure the database for the default identity store</link></para>
+      </listitem>
+  </itemizedlist>
 
   <para xml:id="sect-Reference_Guide-Database_Configuration-JCR_database_configuration">
     <citetitle>
@@ -99,9 +98,9 @@ gatein.idm.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm_${
 gatein.idm.datasource.username=sa
 gatein.idm.datasource.password</programlisting></para>
     <para>
-        <citetitle>
+        <prompt>
             <emphasis role="bold">See also</emphasis>
-        </citetitle>
+        </prompt>
     </para>
     <itemizedlist>
         <listitem>

@@ -10,25 +10,31 @@
        <itemizedlist>
            <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Types_of_Styles">Skin components</link></emphasis></para>
-             <para>Learn about three main components of a complete skin, including <emphasis>Portal Skin</emphasis>, <emphasis>Window Styles</emphasis> and <emphasis>Portlet Skins</emphasis> .</para>
+             <para>Overall information about 3 main components of a complete skin, including <emphasis>Portal Skin</emphasis>, <emphasis>Window Styles</emphasis> and <emphasis>Portlet Skins</emphasis>.</para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Skin_Switching">Skin selection</link></emphasis></para><para>Learn to select skins via the User Interface and set the Default skin within the Configuration file.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Skin_Switching">Skin selection</link></emphasis></para>
+			<para>Ways to select a skin via the User Interface and set the default skin within the configuration file.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Skins_in_Page_Markups">Skins in page markups</link></emphasis></para>
+			   <para>Introduction to the skins in page markups with 2 main types of CSS links.</para>
+			</listitem>
+           <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guid-Skin_Configuration-Skin_Service">Skin Service</link></emphasis></para>
+				<para>Knowledge of <emphasis>Skin Service</emphasis>, including skin configuration and resource request filter.</para>
            </listitem>
            <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guid-Skin_Configuration-Skin_Service">The Skin Service</link></emphasis></para><para>Learn about the <emphasis>Skin Service</emphasis>, which is responsible for discovering and deploying skins into portal.</para>
-           </listitem>
-           <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Default_Skinhtml">The default Skin</link></emphasis></para><para>Learn about main files associated with the default skin.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Default_Skin">Default Skin</link></emphasis></para>
+			   <para>Details of main files associated with the default skin, including <emphasis>gatein-resources.xml</emphasis>, <emphasis>web.xml</emphasis>, and <emphasis>Stylesheet.css</emphasis>.</para>
            </listitem>
             <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skinhtml">Create new skins</link></emphasis></para><para>Learn to create a new portal skins, windows styles, portlet skins and new portlet specification CSS classes.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin">Create new skins</link></emphasis></para>
+				<para>Instructions on how to create a new portal skin, windows style, portlet skin and portlet specification CSS class.</para>
            </listitem>
             <listitem>
-               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Tips_and_Tricks">Tips and tricks</link></emphasis></para><para>Learn about CSS techniques and tips for easier CSS debugging.</para>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Skin_Configuration-Tips_and_Tricks">Tips and tricks</link></emphasis></para>
+			   <para>Knowledge of CSS techniques and tips for easier CSS debugging.</para>
            </listitem>
        </itemizedlist>
    </highlights>
@@ -46,16 +52,16 @@
    </para>
 		<itemizedlist>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
+               <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
+               <para><link linkend="sect-Reference_Guide-Portal_Navigation_Configuration">Portal Navigation Configuration</link></para>
            </listitem>
 		    <listitem>
-               <para><link linkend="hsect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
+               <para><link linkend="sect-Reference_Guide-Internationalization_Configuration">Internationalization Configuration</link></para>
            </listitem>
            <listitem>
-               <para><link linkend="hsect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
+               <para><link linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework">RTL (Right To Left) Framework</link></para>
            </listitem>
        </itemizedlist>
   <section id="sect-Reference_Guide-Skin_Configuration-Types_of_Styles" role="NotInToc">
@@ -145,7 +151,7 @@
     <title>Skin Selection</title>
 
     <para id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-UI">
-      <citetitle><emphasis role="bold">Skin Selection Through the User Interface</emphasis></citetitle>
+      <citetitle><emphasis role="bold">Select a skin throughout User Interface</emphasis></citetitle>
     </para>
       <para>
         There are a few means for you to select the display skin. The easiest way to change the skin is to select it through
@@ -158,7 +164,7 @@
 
     <para id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-config">
       <citetitle>
-        <emphasis role="bold">Setting the Default Skin within the Configuration Files</emphasis>
+        <emphasis role="bold">Set the Default Skin within the configuration files</emphasis>
       </citetitle>
     </para>
 
@@ -256,7 +262,7 @@
   </section>
 
   <section id="sect-Reference_Guid-Skin_Configuration-Skin_Service" role="NotInToc">
-    <title>The Skin Service</title>
+    <title>Skin Service</title>
     <para>
     The skin service of &PRODUCT; manages various types of
     skins. This service is responsible for discovering and deploying the skins into the
@@ -342,7 +348,7 @@
    </section>
 
   <section id="sect-Reference_Guide-Skin_Configuration-Default_Skin" role="NotInToc">
-    <title>The Default Skin</title>
+    <title>Default Skin</title>
     <para>
     The default skin for &PRODUCT; is located as part of the <emphasis>01eXoResource.war</emphasis>.
     The main files associated with the skin are shown below:
@@ -406,7 +412,7 @@ skin/Stylesheet.css</programlisting>
         <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes" />
         <area coords="4" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet" />
       </areaspec>
-    <programlisting language="css">@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
+    <programlisting>@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
 @import url(DefaultSkin/webui/component/Stylesheet.css);
 @import url(PortletThemes/Stylesheet.css);
 @import url(Portlet/Stylesheet.css);</programlisting>
@@ -447,7 +453,7 @@ skin/Stylesheet.css</programlisting>
     <title>Create New Skins</title>
 
     <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_new_portal_skin">
-      <title>Creating a New Portal Skin</title>
+      <title>Create a new portal skin</title>
       
       <para>
         A new portal needs to be added to the portal through the skin service. The web application
@@ -534,7 +540,7 @@ skin/Stylesheet.css</programlisting>
     </section>
 
   <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_new_themes">
-    <title>Creating a New Window Style</title>
+    <title>Create a new window style</title>
 
     <para>Window styles are the CSS applied to the window decoration. When the
     administrator selects a new application to add to a page, he can decide
@@ -728,7 +734,7 @@ skin/Stylesheet.css</programlisting>
 </programlisting>
 </section>
 <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Set_default_window_style">
-<title>How to Set the Default Window Style</title>
+<title>Set Default Window Style</title>
 To set the default window style to be used for a portal, you need to specify the CSS classes
 for a theme called <emphasis>DefaultTheme</emphasis>.
 <note><para>You do not need to specify the DefaultTheme in <emphasis>gatein-resources.xml</emphasis>.</para></note>
@@ -736,7 +742,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
   </section>
   
     <section id="sect-Reference_Guide-Skin_Configuration-Portlet_Styles">
-    <title>How to Create New Portlet skins</title>
+    <title>Create a new portlet skin</title>
 
     <para>Portlets often require additional styles that may not be defined by
     the portal skin. &PRODUCT; allows you to define additional
@@ -803,7 +809,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
     </section>
   </section>
       <section id="sect-Reference_Guide-Skin_Configuration-Portlet_Specification_CSS_Classes">
-    <title>How to create a new Portlet Specification CSS Classes</title>
+    <title>Create a new portlet specification CSS class</title>
     <para>The portlet specification defines a set of default CSS classes that should be available for portlets.
     These classes are included as part of the portal skin. Please see the portlet specification for a list of the 
     default classes that should be available.</para>
@@ -817,8 +823,11 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
     <title>Tips and Tricks</title>
 
 
-    <section id="sect-Reference_Guide-Tips_and_Tricks-Easier_css_debuggin">
-      <title>Easier CSS debugging</title>
+    <para xml:id="sect-Reference_Guide-Tips_and_Tricks-Easier_css_debugging">
+      <citetitle>
+		<emphasis role="bold">Easier CSS debugging</emphasis>
+	  </citetitle>
+	</para>
 
       <para>By default, CSS files are cached and their imports are merged into
       a single CSS file at the server side. This reduces the number of HTTP
@@ -840,15 +849,17 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
       <emphasis>-D</emphasis> option when running GateIn.</para>
       <programlisting>sh $JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting>
 
-      <orderedlist numeration="arabic">
-        <listitem>
-          <para>Warning: This option may cause display bugs with certain
-          browsers, such as Internet Explorer.</para>
-        </listitem>
-      </orderedlist>
-    </section>
-      <section id="sect-Reference_Guide-Tips_and_Tricks-Some_CSS_techniques">
-      <title>Some CSS techniques</title>
+      <warning>
+          <para>This option may cause display bugs with certain
+          browsers, such as Internet Explorer.
+		  </para>
+      </warning>
+	   
+	  <para xml:id="sect-Reference_Guide-Tips_and_Tricks-Some_CSS_techniques">
+		  <citetitle>
+			<emphasis role="bold">Some CSS techniques</emphasis>
+		  </citetitle>
+	  </para>
 
       <para>It is recommended that you have some experiences with CSS before
       studying &PRODUCT; CSS.</para>
@@ -857,10 +868,10 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
       for the UI. Some common techniques for customizing &PRODUCT; CSS are
       explained below.</para>
 
-      <section id="sect-Reference_Guide-Some_CSS_techniques-Decorator_pattern">
-        <title>Decorator pattern</title>
-
-        <para>The decorator is a pattern to create a contour or a curve around
+	  <itemizedlist>
+		<listitem>
+			<para xml:id="sect-Reference_Guide-Some_CSS_techniques-Decorator_pattern"><emphasis role="bold">Decorator pattern</emphasis></para>
+			<para>The decorator is a pattern to create a contour or a curve around
         an area. To achieve this effect, you need to create 9 cells.
         The BODY is the central area for you to decorate. The other 8
         cells are distributed around the BODY cell. You can use the width,
@@ -877,7 +888,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
                      width="70mm" scalefit="1" align="center" />
           </imageobject>
         </mediaobject>
-
+		<para> </para>
         <programlisting language="html">
 &lt;div class="Parent"&gt;
   &lt;div class="TopLeft"&gt;
@@ -897,11 +908,9 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
   &lt;div&gt;
 &lt;/div&gt;
 </programlisting>
-      </section>
-
-      <section id="sect-Reference_Guide-Some_CSS_techniques-Left_margin_left_pattern">
-        <title>Left margin left pattern</title>
-
+    </listitem>
+	  <listitem>
+		<para xml:id="sect-Reference_Guide-Some_CSS_techniques-Left_margin_left_pattern"><emphasis role="bold">Left margin left pattern</emphasis></para>
         <para>Left margin left pattern is a technique to create 2 blocks side
         by side. The left block has a fixed size and the right block
         will take the rest of the available space. When the user resizes the
@@ -918,7 +927,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
                      width="70mm" scalefit="1" align="center" />
           </imageobject>
         </mediaobject>
-
+		<para></para>
         <programlisting language="html">
 &lt;div class="Parent"&gt;
   &lt;div style="float: left; width: 100px"&gt;
@@ -928,7 +937,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
   &lt;div style="clear: left"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;
 </programlisting>
-      </section>
-    </section>
+      </listitem>
+	</itemizedlist>
   </section>
 </section>

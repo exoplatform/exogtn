@@ -672,7 +672,7 @@ protected boolean requirePortalEnvironment();
          application separation rules are used for resource loading (effectively turning off the
          extension mechanism). This method exists on <emphasis>AbstractHttpServlet</emphasis> and <emphasis>AbstractFilter</emphasis> as well, where there is a
          default implementation that automatically returns true, when it detects there is a current PortalContainer
-         present. Otherwises, it returns false.
+         present. Otherwise, it returns false.
 
       </para>
 
