@@ -29,9 +29,12 @@
 .UIGrid th {
 	line-height: 20px;
 	background: #e1e1e1 url('background/ThGridRepeatBg1x28.png') repeat-x;
-	padding: 5px 10px;
+	padding: 8px 10px;
 	text-align:left;/* orientation=lt */
 	text-align:right;/* orientation=rt */	
+    line-height: 13px;
+    text-transform: capitalize;
+	
 }
 
 .UIGrid th  + th {
