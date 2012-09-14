@@ -120,6 +120,7 @@ public class UITabContainer extends UIContainer
       @Override
       public void execute(Event<UITabContainer> event) throws Exception
       {
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UITabContainer container = event.getSource();
          String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
          if (container == null || objectId == null)
@@ -127,7 +128,8 @@ public class UITabContainer extends UIContainer
             return;
          }
          container.moveTab(container, objectId, true);
-         event.getRequestContext().addUIComponentToUpdateByAjax(container);
+         pcontext.addUIComponentToUpdateByAjax(container);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       }
    }
    
@@ -136,6 +138,7 @@ public class UITabContainer extends UIContainer
       @Override
       public void execute(Event<UITabContainer> event) throws Exception
       {
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UITabContainer container = event.getSource();
          String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
          if (container == null || objectId == null)
@@ -143,7 +146,8 @@ public class UITabContainer extends UIContainer
             return;
          }
          container.moveTab(container, objectId, false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(container);
+         pcontext.addUIComponentToUpdateByAjax(container);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       }
 
    }
@@ -170,6 +174,7 @@ public class UITabContainer extends UIContainer
                newTabContainer.setRendered(true);
                newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
                pcontext.addUIComponentToUpdateByAjax(container);
+               pcontext.ignoreAJAXUpdateOnPortlets(true);
                return;
             }
          }
