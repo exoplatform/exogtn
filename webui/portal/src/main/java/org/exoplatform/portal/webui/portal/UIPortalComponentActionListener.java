@@ -189,6 +189,7 @@ public class UIPortalComponentActionListener
       JavascriptManager jsManager = pcontext.getJavascriptManager();
       if(isUpdate) {
          pcontext.addUIComponentToUpdateByAjax(uiParent);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       } else {
          StringBuffer buffer = new StringBuffer();
          buffer.append("eXo.portal.UIPortal.removeComponent('");
@@ -378,6 +379,7 @@ public class UIPortalComponentActionListener
             {
                uiParent.getChildren().remove(uiSource);
                pcontext.addUIComponentToUpdateByAjax(uiParent);
+               pcontext.ignoreAJAXUpdateOnPortlets(true);
             }
          }
          else if (org.exoplatform.portal.webui.container.UIContainer.TABLE_COLUMN_CONTAINER.equals(uiParent
