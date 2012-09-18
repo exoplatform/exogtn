@@ -208,7 +208,7 @@
       </procedure>
       <note>
         <para>After being deleted, all information related to that group, such as users and navigation, is also deleted.
-          You cannot delete the mandatory groups, including <emphasis>Platform, Platform/Administration, Platform/Guests, Platform/Visitors.</emphasis>
+          You cannot delete the mandatory groups, including <emphasis>Platform, Platform/Administration, Platform/Guests, Platform/Users.</emphasis>
         </para>
       </note>
     </section>
