@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.account;
 
-import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
@@ -28,6 +27,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -39,10 +39,8 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
-import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
-import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UsernameValidator;
 
@@ -57,8 +55,7 @@ import org.exoplatform.webui.form.validator.UsernameValidator;
 events = {@EventConfig(listeners = UIAccountProfiles.SaveActionListener.class),
    @EventConfig(listeners = UIAccountProfiles.ResetActionListener.class, phase = Phase.DECODE)})
 public class UIAccountProfiles extends UIForm
-{
-
+{  
    public UIAccountProfiles() throws Exception
    {
       super();
@@ -104,36 +101,46 @@ public class UIAccountProfiles extends UIForm
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
          UIApplication uiApp = context.getUIApplication();
 
-         String userName = uiForm.getUIStringInput("userName").getValue();
-         User user = service.getUserHandler().findUserByName(userName);
-         String oldEmail = user.getEmail();
-         String newEmail = uiForm.getUIStringInput("email").getValue();
-
-         // Check if mail address is already used
-         Query query = new Query();
-         query.setEmail(newEmail);
-         if (service.getUserHandler().findUsers(query).getAll().size() > 0 && !oldEmail.equals(newEmail))
-         {
-            //Be sure it keep old value
-            user.setEmail(oldEmail);
-            Object[] args = {userName};
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
-            return;
-         }
-         user.setFirstName(uiForm.getUIStringInput("firstName").getValue());
-         user.setLastName(uiForm.getUIStringInput("lastName").getValue());
-         user.setEmail(newEmail);
-         uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
-         service.getUserHandler().saveUser(user, true);
-
-         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
          ConversationState state = ConversationState.getCurrent();
-         if (userName.equals(((User)state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName()))
+         String userName = ((User)state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName();                  
+         User user = service.getUserHandler().findUserByName(userName);
+         if (user != null)
          {
+            String oldEmail = user.getEmail();
+            String newEmail = uiForm.getUIStringInput("email").getValue();
+            
+            // Check if mail address is already used
+            Query query = new Query();
+            query.setEmail(newEmail);
+            if (service.getUserHandler().findUsers(query).getAll().size() > 0 && !oldEmail.equals(newEmail))
+            {
+               //Be sure it keep old value
+               user.setEmail(oldEmail);
+               Object[] args = {userName};
+               uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+               return;
+            }
+            user.setFirstName(uiForm.getUIStringInput("firstName").getValue());
+            user.setLastName(uiForm.getUIStringInput("lastName").getValue());
+            user.setEmail(newEmail);
+            uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
+            service.getUserHandler().saveUser(user, true);
+            
             state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
+            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
             uiWorkingWS.updatePortletsByName("UserInfoPortlet");
+            uiWorkingWS.updatePortletsByName("OrganizationPortlet");            
          }
-         uiWorkingWS.updatePortletsByName("OrganizationPortlet");
+         else
+         {        
+            JavascriptManager jsManager = context.getJavascriptManager();
+            jsManager.importJavascript("eXo");
+            
+            StringBuilder js = new StringBuilder("if(confirm('");
+            js.append(context.getApplicationResourceBundle().getString("UIAccountProfiles.msg.NotExistingAccount"));
+            js.append("')) {eXo.portal.logout();}");
+            jsManager.addJavascript(js.toString());            
+         }
       }
    }
 }
