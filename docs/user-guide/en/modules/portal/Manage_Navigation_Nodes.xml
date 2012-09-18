@@ -6,6 +6,9 @@
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
 <title>Manage navigation nodes</title>
   <para>
+      In the following sections, you will learn to <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">Add a new node</link>, <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">Edit a node</link>, <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Copy_a_node">Copy/Paste a node</link>, <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Clone_nodes">Clone a node</link>, <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Cut_a_node">Cut a node</link>, <link linkend="sect-User_Guide-Manage_Navigation_Nodes-Delete_a_node">Delete a node</link>, <link linkend="sect-User_Guide-Change_Node_Order">Change nodes order</link>.
+  </para>
+  <para>
     If you are the portal administrator or granted the appropriate permission
     privileges by the portal administrator, you can execute some special actions related to portal nodes, including copying, editing, cutting, cloning, deleting, adding existing nodes.
     To do so, you first need to go to the nodes list by following steps described in the <link linkend="proc-User_Guide-Manage_Portals-Edit_Navigation">Edit navigation</link> section, then right-clicking your desired node to open the drop-down menu.
@@ -19,8 +22,11 @@
     </imageobject>
   </mediaobject>
   </para>
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
-    <title>Add a new node</title>
+  <citetitle>
+  <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
+      <emphasis role="bold">Add a new node</emphasis>
+  </para>
+</citetitle>
     <procedure>
       <step><para>
           Select
@@ -50,7 +56,7 @@
             <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/AddNode4.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
 		</para>
@@ -178,7 +184,7 @@
 						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" width="100mm"/>
+						<imagedata fileref="images/Page_selector_form.png" format="PNG" align="center"  scalefit="1" width="120mm"/>
 					</imageobject>
 				</mediaobject>
         </para>
@@ -262,7 +268,7 @@
                           </imageobject>
                           <imageobject role="fo">
                               <imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scalefit="1"
-                                         width="100mm"/>
+                                         width="150mm"/>
                           </imageobject>
                       </mediaobject>
                   <para>
@@ -360,10 +366,12 @@
       If you do not have the <emphasis>Access</emphasis> permission for any page in the list, please contact your administrator to get appropriate permissions.
 	</para>
     </note>
-  </section>
 
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">
-    <title>Edit a node</title>
+  <citetitle>
+  <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">
+      <emphasis role="bold">Edit a node</emphasis>
+  </para>
+  </citetitle>
     <para>This function is used to edit the node settings and reselect a page for a node.</para>
     <procedure>
       <step>
@@ -386,10 +394,13 @@
         </para>
       </step>
     </procedure>
-  </section>
 
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Copy_a_node">
-    <title>Copy/Paste a node</title>
+
+  <citetitle>
+  <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Copy_a_node">
+      <emphasis role="bold">Copy/Paste a node</emphasis>
+  </para>
+  </citetitle>
     <para>These functions are used to reproduce a node in another place.</para>
     <procedure>
       <step>
@@ -416,10 +427,13 @@
 	<para>Two same node names in the same place are NOT allowed.
 	</para>
 	</note>
-  </section>
 
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Clone_nodes">
-    <title>Clone a node</title>
+
+  <citetitle>
+   <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Clone_nodes">
+      <emphasis role="bold">Clone a node</emphasis>
+   </para>
+  </citetitle>
     <para>
       The
       <emphasis role="bold">Clone Node</emphasis>
@@ -453,10 +467,12 @@
         </para>
       </step>
     </procedure>
-  </section>
 
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Cut_a_node">
-    <title>Cut a node</title>
+  <citetitle>
+  <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Cut_a_node">
+      <emphasis role="bold">Cut a node</emphasis>
+  </para>
+  </citetitle>
     <para>This function enables you to change the position of a specific node, such as changing the page path.</para>
     <procedure>
       <step>
@@ -484,10 +500,13 @@
 	<para>Two same node names in the same place are not allowed.
 	</para>
 	</note>
-  </section>
 
-  <section id="sect-User_Guide-Manage_Navigation_Nodes-Delete_a_node">
-    <title>Delete a node</title>
+
+    <citetitle>
+  <para xml:id="sect-User_Guide-Manage_Navigation_Nodes-Delete_a_node">
+      <emphasis role="bold">Delete a node</emphasis>
+  </para>
+</citetitle>
     <para>This function is used to remove a node linking to a page. After the node has been removed, the page has been still existing.</para>
     <procedure>
       <step>
@@ -511,10 +530,12 @@
         </para>
       </step>
     </procedure>
-  </section>
 
-  <section id="sect-User_Guide-Change_Node_Order">
-    <title>Change nodes order</title>
+  <citetitle>
+  <para xml:id="sect-User_Guide-Change_Node_Order">
+      <emphasis role="bold">Change nodes order</emphasis>
+  </para>
+  </citetitle>
     <para>
       You can easily move the position of nodes up or down in the navigation bar following these steps:
     </para>
@@ -536,7 +557,38 @@
         </para>
       </step>
     </procedure>
-  </section>
+    <para>
+     <prompt>
+       <emphasis role="bold">See also</emphasis>
+     </prompt>
+   </para>
+  <itemizedlist>
+      <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Permission">Manage permissions</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage sites</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites.SampleAccessibleWeb">Manage a sample accessible website</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Pages">Manage pages</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications">Manage applications</link>
+      </para>
+    </listitem>
+  </itemizedlist>
 </section>
 
 

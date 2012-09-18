@@ -17,7 +17,7 @@
             <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="0" width="100mm"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+            <imagedata fileref="images/Add_user_button.png" format="PNG" align="center" scalefit="1" width="60mm"/>
           </imageobject>
         </mediaobject>
         <para>The
@@ -29,7 +29,7 @@
             <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/NewStaff.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
       </step>
@@ -54,4 +54,26 @@
         </para>
       </step>
     </procedure>
+    <para>
+  <prompt>
+	 <emphasis role="bold">See also</emphasis>
+  </prompt>
+  </para>
+<itemizedlist>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_users">Manage users</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link>
+		</para>
+	</listitem>
+</itemizedlist>
   </section>

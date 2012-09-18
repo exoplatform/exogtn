@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Change_Account_Settings">
+<section id="sect-User_Guide-Change_Account_Settings" role="NotInToc">
   <title>Change account settings</title>
   <para>
     To change your account information, hover your cursor over the account name at the top right corner of the site and
@@ -16,7 +16,7 @@
       <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" width="70mm" scalefit="1"/>
+      <imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" width="90mm" scalefit="1"/>
     </imageobject>
   </mediaobject>
   <para>
@@ -29,7 +29,7 @@
       <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" scale="110"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" width="70mm" scalefit="1"/>
+      <imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" width="90mm" scalefit="1"/>
     </imageobject>
   </mediaobject>
   <citetitle>

@@ -5,6 +5,43 @@
         ]>
 <section id="sect-User_Guide-Manage_Permissions">
 <title>Manage permissions</title>
+  <highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+			<link linkend="sect-User_Guide-Manage_Permission-Set_Portal_Permission">Set permissions on a portal</link>
+        </para>
+		<para>
+			Instructions on how to set the Access and Edit permissions on a portal for groups and memberships.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+			<link linkend="sect-User_Guide-Manage_Permission-Set_Page_Permission">Set permissions on a page</link>
+		</para>
+		<para>
+          Steps to set the Access and Edit permissions on a page for groups and memberships.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+			<link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category">Set Access
+          permission on a category</link>
+		</para>
+		<para>
+		  Steps to set the Access permission on a category.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+			<link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">Set Access permission on a portlet</link>
+		</para>
+		<para>
+			Steps to set the Access permission on a portlet.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </highlights>
   <para>
     Permissions play an important role in accessing and performing actions in eXo Platform. Depending on these permissions assigned by an administrator, users can gain access to various components and another actions, such as editing portals, pages, or
     portlets.
@@ -13,7 +50,40 @@
     Details about permission types and levels can also be found in the
     <link linkend="Platform_User_Guide.eXo_Platform.Get_started.Glossary.Permission">Permission</link> section.
   </para>
-  <section id="sect-User_Guide-Manage_Permission-Set_Portal_Permission">
+   <para>
+     <prompt>
+       <emphasis role="bold">See also</emphasis>
+     </prompt>
+   </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage sites</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites.SampleAccessibleWeb">Manage a sample accessible website</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage navigation nodes</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Pages">Manage pages</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications">Manage applications</link>
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <section id="sect-User_Guide-Manage_Permission-Set_Portal_Permission" role="NotInToc">
     <title>Set permissions on a portal</title>
       <para>You can set the portal permissions (<emphasis role="bold">Access permission</emphasis> and <emphasis role="bold">Edit permission</emphasis>) for a specific user via the <guilabel>Permission Settings</guilabel> tab.</para>
       <para xml:id="sect-User_Guide-Manage_Permission-Set_Portal_Permission-Open_Permission Settings_tab">The <guilabel>Permission Settings</guilabel> tab can be opened in some various ways, depending on the following approaches.</para>
@@ -35,7 +105,7 @@
               </imageobject>
               <imageobject role="fo">
                 <imagedata fileref="images/Permission_new_portals.png" format="PNG" align="center" scalefit="1"
-                           width="70mm"/>
+                           width="60mm"/>
               </imageobject>
             </mediaobject>
           </para>
@@ -91,8 +161,7 @@
               </para>
             </step>
             <step>
-              <para>Select <menuchoice><guimenu>Edit</guimenu><guisubmenu>Site</guisubmenu> <guimenuitem>Layout</guimenuitem></menuchoice>
-                              on the <guilabel>Administration</guilabel> bar.
+              <para>Select <menuchoice><guimenu>Edit</guimenu><guisubmenu>Site</guisubmenu> <guimenuitem>Layout</guimenuitem></menuchoice> on the <guilabel>Administration</guilabel> bar.
               </para>
             </step>
             <step>
@@ -106,8 +175,11 @@
               </para>
             </step>
             </procedure>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">
-      <title>Access permission</title>
+	<para xml:id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">
+		<citetitle>
+			<emphasis role="bold">Access permission</emphasis>
+		</citetitle>
+	</para>
       <note>
 	  <para>To access a portal, you must belong to one of the groups that have the <emphasis>Access</emphasis> permission to that portal.
 	  </para>
@@ -118,10 +190,10 @@
           <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="0" width="150mm"/>
         </imageobject>
         <imageobject role="fo">
-          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+          <imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scalefit="1" width="110mm"/>
         </imageobject>
       </mediaobject>
-	</para>
+	  </para>
       <itemizedlist>
         <listitem>
         <para>
@@ -172,9 +244,11 @@
             <guilabel>Add Permission</guilabel> button and select again.
 		</listitem>
 		 </itemizedlist>
-    </section>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">
-      <title>Edit permission</title>
+    <para xml:id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">
+		<citetitle>
+			<emphasis role="bold">Edit permission</emphasis>
+		</citetitle>
+	</para>
       <note>
 	  <para>
         Only members under the <guilabel>Editor</guilabel> group can edit that portal. Access rights can be given to several groups but
@@ -200,10 +274,9 @@
           </para>
         </step>
       </procedure>
-    </section>
   </section>
   <!-- Set_Page_Permission -->
-  <section id="sect-User_Guide-Manage_Permission-Set_Page_Permission">
+  <section id="sect-User_Guide-Manage_Permission-Set_Page_Permission" role="NotInToc">
     <title>Set permissions on a page</title>
 <!--	<para>Before setting permissions on a page, you need to pay attention to the following cases:
 	</para>
@@ -316,8 +389,11 @@
           </para>
         </step>
       </procedure>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Page">
-      <title>Access permission</title>
+	<para xml:id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Page">
+		<citetitle>
+			<emphasis role="bold">Access permission</emphasis>
+		</citetitle>
+	</para>
 		<note>
 		<para>
         To be able to access a page, you have to be in one of the groups that have the <emphasis>Access</emphasis> permission to that page.
@@ -325,40 +401,12 @@
         </note>
 	 <para>To assign the <emphasis>Access</emphasis> permission on a page, simply follow steps as stated in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">Access permission</link> section.
 	 </para>
-	<!--para>
-	  After entering into the <link linkend="sect-User_Guide-Manage_Permission-Set_Page_Permission-ways_Permissions_tab">Permission Settings</link> tab, you first need to select the <emphasis role="bold">Access Permission Settings</emphasis> sub-tab to assign the access permission on a page. A list of permissions for that page will be
-        shown (provided the 
-        <emphasis role="bold">Make it public (everyone can access)</emphasis>
-        checkbox is deselected).
-      </para-->
-      <!--procedure>
-        <step>
-          <para>
-            Click the 
-            <emphasis role="bold">Add Permission</emphasis> button.
-          </para>
-        </step>
-        <step>
-          <para>
-            Select one group in the left pane, and one membership type in the right pane.
-          </para>
-          <para>
-            After selecting a membership type, you will see your selected permission in the access right list.
-            Note that you may associate group and membership at only one time. To add more access permissions, click
-            the
-            <emphasis role="bold">Add Permission</emphasis>
-            button and apply the same process again.
-          </para>
-        </step>
-      </procedure-->
-      <!--para>
-        If you want to allow any visitors to access the page, tick the
-        <emphasis role="bold">Make it public</emphasis>
-        checkbox. Any permission set for that page will be relaxed and the permissions list will disappear.
-      </para-->
-    </section>
-    <section id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Page">
-      <title>Edit permission</title>
+	
+	<para xml:id="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Page">
+		<citetitle>
+			<emphasis role="bold">Edit permission</emphasis>
+		</citetitle>
+	</para>
       <note>
 	  <para>
         Only users under the page's editors group can edit it. The Access permission can be set for several groups but
@@ -368,37 +416,8 @@
 	  <para>To give users the <emphasis>Edit</emphasis> permission, you must add them to the editors group
         of that page via <emphasis role="bold">Permission Settings</emphasis> and follow steps as stated in the <link linkend="sect-User_Guide-Manage_Permission-Set_the_Edit_Permission_on_a_Portal">Edit permission</link> section.
       </para>
-      <!--para>
-        You will see the
-        <emphasis role="bold">Current Permission.</emphasis>
-      </para-->
-      <!--procedure>
-        <step>
-          <para>
-            Click the
-            <emphasis role="bold">Select Permission</emphasis>
-            button to set new or change another group.
-          </para>
-        </step>
-        <step>
-          <para>
-            Select a group with a membership type (* indicates all membership types in a selected group).
-          </para>
-          <para>
-            After you have selected a specific membership from the right, the selected information is displayed.
-          </para>
-        </step>
-        <step>
-          <para>
-            Click
-            <emphasis role="bold">Save.</emphasis>
-          </para>
-        </step>
-      </procedure-->
-    </section>
   </section>
-
-  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category">
+  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Category" role="NotInToc">
     <title>Set Access permission on a category</title>
     <para>
       Setting the <emphasis>Access</emphasis> permission on categories allows these categories to be listed when a page is edited to
@@ -450,7 +469,7 @@
     </procedure>
   </section>
 
-  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet">
+  <section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portlet" role="NotInToc" >
     <title>Set Access permission on a portlet</title>
     <procedure>
       <step>

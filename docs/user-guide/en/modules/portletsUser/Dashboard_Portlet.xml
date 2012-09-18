@@ -73,20 +73,19 @@
           Drag and drop the selected gadget into the workspace.
         </para>
       </step>
-      <para>
-        In addition, eXo Platform is compatible with most gadgets which can be found
-        <ulink type="http" url="http://www.google.com/ig/directory?synd=open">here.</ulink>
-      </para>
-      <mediaobject>
-        <imageobject role="html">
-          <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scale="110"/>
-        </imageobject>
-        <imageobject role="fo">
-          <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scalefit="1"
-                     width="100mm"/>
-        </imageobject>
-      </mediaobject>
-    </procedure>
+	</procedure>
+	<para>
+	In addition, eXo Platform is compatible with most gadgets which can be found <ulink type="http" url="http://www.google.com/ig/directory?synd=open">here.</ulink>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+		  <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scale="110"/>
+		</imageobject>
+		<imageobject role="fo">
+		  <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scalefit="1"
+					 width="120mm"/>
+		</imageobject>
+	</mediaobject>
   </section>
 
   <section id="sect-User_Guide-Dashboard_Portlet-Change_gadget_preferences">
@@ -182,7 +181,7 @@
             <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" width="70mm"/>
+            <imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1" width="60mm"/>
           </imageobject>
         </mediaobject>
       </step>

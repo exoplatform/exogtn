@@ -3,9 +3,66 @@
         <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
         %BOOK_ENTITIES;
         ]>
+
 <section id="sect-User_Guide-Manage_Pages">
 <title>Manage pages</title>
-  <section id="sect-User_Guide-Page_Creation_Wizard">
+    <highlights>
+	<itemizedlist>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Page_Creation_Wizard">Add a new page using Page Creation Wizard</link></para>
+			<para>The whole process to create a new page using <emphasis role="bold">Page Creation Wizard</emphasis>, including: selecting a navigation node and creating the page, selecting a page layout template, and finally arranging the page layout.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">Add a new page using Page Management</link></para>
+			<para>Step-by-step instructions on how to add a new page using <emphasis role="bold">Page Management</emphasis>.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Edit_a_Page">Edit a page</link></para>
+			<para>Steps and ways to edit the page properties and layout.</para>
+		</listitem>
+		<listitem>
+			<para><link linkend="sect-User_Guide-Manage_Pages-Delete_a_Page">Delete a page</link></para>
+			<para>Steps to remove a page.</para>
+		</listitem>
+        <listitem>
+			<para><link linkend="sect-User_Guide-Manage_Page_Navigation">Manage page navigation</link></para>
+			<para>Information and actions related to the page navigation of portal/user/group.</para>
+		</listitem>
+	</itemizedlist>
+</highlights>
+<para>
+  <prompt>
+		<emphasis role="bold">See also</emphasis>
+  </prompt>
+</para>
+<itemizedlist>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Permission">Manage permissions</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage sites</link>
+		</para>
+	</listitem>
+    <listitem>
+      <para>
+        <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites.SampleAccessibleWeb">Manage a sample accessible website</link>
+      </para>
+    </listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_sites">Manage navigation nodes</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Applications">Manage applications</link>
+		</para>
+	</listitem>
+</itemizedlist>
+  <section id="sect-User_Guide-Page_Creation_Wizard" role="NotInToc">
     <title>Add a new page using Page Creation Wizard</title>
     <para>
       The <emphasis role="bold">Page Creation Wizard</emphasis> is available to the portal's administrators and facilitates them to create and publish
@@ -363,7 +420,7 @@
         to close without saving your changes.</para>
       </note>
   </section>
-  <section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
+  <section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List" role="NotInToc">
     <title>Add a new page using Page Management</title>
     <procedure>
       <step>
@@ -408,7 +465,7 @@
             <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="0" width="100mm"/>
           </imageobject>
             <imageobject role="fo">
-            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+            <imagedata fileref="images/PageSetting.png" format="PNG" align="center" scalefit="1" width="120mm"/>
           </imageobject>
         </mediaobject>
 		<para><emphasis role="bold">Details:</emphasis></para>
@@ -576,7 +633,7 @@
       </step>
     </procedure>
   </section>
-  <section id="sect-User_Guide-Manage_Pages-Edit_a_Page">
+  <section id="sect-User_Guide-Manage_Pages-Edit_a_Page" role="NotInToc">
     <title>Edit a page</title>
     <procedure>
       <step>
@@ -742,7 +799,7 @@
     </procedure>
   </section>
 
-  <section id="sect-User_Guide-Manage_Pages-Delete_a_Page">
+  <section id="sect-User_Guide-Manage_Pages-Delete_a_Page" role="NotInToc">
     <title>Delete a page</title>
     <procedure>
       <step>

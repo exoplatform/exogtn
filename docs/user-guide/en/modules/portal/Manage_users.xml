@@ -32,8 +32,12 @@
       Via the <guilabel>User Management</guilabel> tab, you also can define each user belonging to user groups and his
       memberships (roles) in these groups. You cannot add users to a group but can remove them from the group.
     </para>
-    <section id="sect-User_Guide-User_Management-Search_a_user">
-      <title>Search for users</title>
+    <para>
+	   In the following sections, you will learn to <link linkend="sect-User_Guide-User_Management-Search_a_user">Search for users</link>, <link linkend="sect-User_Guide-User_Management-Edit_a_user">Edit user information</link> and <link linkend="sect-User_Guide-User_Management-Delete_a_user">Delete a user</link>.
+	</para>
+	<para xml:id="sect-User_Guide-User_Management-Search_a_user">
+		<citetitle><emphasis role="bold">Search for users</emphasis></citetitle>
+	</para>
       <para>
         You can search for specific users by username, first name, last name or email address.
       </para>
@@ -67,9 +71,11 @@
           </para>
         </step>
       </procedure>
-    </section>
-    <section id="sect-User_Guide-User_Management-Edit_a_user">
-      <title>Edit user information</title>
+
+    <para xml:id="sect-User_Guide-User_Management-Edit_a_user">
+		<citetitle><emphasis role="bold">Edit user information</emphasis></citetitle>
+	  </para>
+
       <procedure>
         <step>
           <para>
@@ -98,7 +104,7 @@
               <imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444mm"/>
             </imageobject>
             <imageobject role="fo">
-              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
+              <imagedata fileref="images/Demo1.png" format="PNG" align="center" scalefit="1" width="120mm"/>
             </imageobject>
           </mediaobject>
           <variablelist>
@@ -176,10 +182,10 @@
           </para>
         </step>
       </procedure>
-    </section>
 
-    <section id="sect-User_Guide-User_Management-Delete_a_user">
-      <title>Delete a user</title>
+      <para xml:id="sect-User_Guide-User_Management-Delete_a_user">
+		  <citetitle><emphasis role="bold">Delete a user</emphasis></citetitle>
+	    </para>
       <procedure>
         <step>
           <para>
@@ -205,6 +211,27 @@
           </para>
         </step>
       </procedure>
+    <para>
+  <prompt>
+	 <emphasis role="bold">See also</emphasis>
+  </prompt>
+  </para>
+<itemizedlist>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Add_user">Add a user</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_groups">Manage groups</link>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<link linkend="Platform_User_Guide.Manage_Organization.Manage_memberships">Manage memberships</link>
+		</para>
+	</listitem>
+</itemizedlist>
     </section>
 
-  </section>

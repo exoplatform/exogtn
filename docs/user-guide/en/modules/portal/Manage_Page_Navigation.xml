@@ -3,7 +3,7 @@
         <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
         %BOOK_ENTITIES;
         ]>
-<section id="sect-User_Guide-Manage_Page_Navigation">
+<section id="sect-User_Guide-Manage_Page_Navigation" role="NotInToc">
   <title>Manage page navigation</title>
   <para>
     Navigation types in eXo Platform are outlined in the <link linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Navigation_Nodes">Manage navigation nodes.</link>
@@ -93,7 +93,7 @@
         </imageobject>
         <imageobject role="fo">
           <imagedata fileref="images/GroupPageNavigationManagement.png" format="PNG" align="center" scalefit="1"
-                     width="100mm"/>
+                     width="80mm"/>
         </imageobject>
       </mediaobject>
       <para>In this form, you can edit the group's page navigation through doing many actions, such as adding a new node
