@@ -4,41 +4,40 @@
         %BOOK_ENTITIES;
         ]>
 <chapter id="chap-User_Guide-Gadgets_Administration">
-  <title>Category, Portlets and Gadgets Administration</title>
-  <para>To administrate category, portlet and gadget, you first need to go to
-    <guilabel>Application Registry</guilabel>
-    by selecting<guilabel>Group</guilabel>, then<guilabel>Administration</guilabel>, and
-    <guilabel>Application Registry</guilabel>
-    on the Toolbar.
-    The form to organize portlets/gadgets into different categories will be displayed as below
-  </para>
-  <mediaobject>
+  <title>Categories, Portlets and Gadgets Administration</title>
+  <para>To manage categories, portlets and gadgets in a portal, you first need to hover your cursor over
+    <inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
+      </imageobject>
+    </inlinemediaobject>
+    on the <guilabel>Administration</guilabel> bar, and select <guilabel>Applications</guilabel>. The
+    <emphasis role="bold">Manage Applications</emphasis> page will appear.
+    	<mediaobject>
     <imageobject role="html">
       <imagedata fileref="images/Categories.png" format="PNG" align="center" scale="1" contentwidth="70"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="images/Categories.png" format="PNG" align="center" contentwidth="100mm"/>
+      <imagedata fileref="images/Categories.png" format="PNG" align="center" contentwidth="150mm"/>
     </imageobject>
   </mediaobject>
   <para>Details:</para>
   <itemizedlist>
     <listitem>
-      <para>
-        <inlinemediaobject>
+      <para> <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/No1.png" format="PNG" contentwidth="6mm"/>"
+            <imagedata fileref="images/No1.png" format="PNG" scalefit="1" width="3mm"/>
           </imageobject>
         </inlinemediaobject>
         <emphasis role="bold">Tab bar</emphasis>
-        consists of three items, including Categories
-        , Portlet, Gadget.
+        consists of three items, including Categories,
+        Portlet, Gadget.
       </para>
     </listitem>
     <listitem>
-      <para>
-        <inlinemediaobject>
+      <para> <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/No2.png" format="PNG" contentwidth="6mm"/>"
+            <imagedata fileref="images/No2.png" format="PNG" scalefit="1" width="3mm"/>
           </imageobject>
         </inlinemediaobject>
         <emphasis role="bold">Action bar</emphasis>
@@ -46,10 +45,9 @@
       </para>
     </listitem>
     <listitem>
-      <para>
-        <inlinemediaobject>
+      <para> <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/No3.png" format="PNG" contentwidth="6mm"/>"
+            <imagedata fileref="images/No3.png" format="PNG" scalefit="1" width="3mm"/>
           </imageobject>
         </inlinemediaobject>
         <emphasis role="bold">Left pane</emphasis>
@@ -57,10 +55,9 @@
       </para>
     </listitem>
     <listitem>
-      <para>
-        <inlinemediaobject>
+      <para> <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/No4.png" format="PNG" contentwidth="6mm"/>"
+            <imagedata fileref="images/No4.png" format="PNG" scalefit="1" width="3mm"/>
           </imageobject>
         </inlinemediaobject>
         <emphasis role="bold">Breadcrumb bar</emphasis>
@@ -68,18 +65,68 @@
       </para>
     </listitem>
     <listitem>
-      <para>
-        <inlinemediaobject>
+      <para> <inlinemediaobject>
           <imageobject>
-            <imagedata fileref="images/No5.png" format="PNG" contentwidth="6mm"/>"
+            <imagedata fileref="images/No5.png"  format="PNG" scalefit="1" width="3mm"/>
           </imageobject>
         </inlinemediaobject>
-
         <emphasis role="bold">Right pane</emphasis>
         provides detailed information of a specific portlet.
       </para>
     </listitem>
   </itemizedlist>
+
+  </para>
+     <para>
+       Portlets and gadgets are organized into different categories. Each category contains one or several portlets or gadgets. You can also mix portlets and gadgets into one category.
+       By default, all gadgets are placed in the <emphasis>Gadgets</emphasis> category.
+     </para>
+     <para>Here, you can do the following actions:</para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <link linkend="sect-UserGuide-Manage_Categories">Manage categories</link>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="sect-User_Guide-Manage_Portlets_and_Gadgets">Manage portlets and gadgets</link>
+      </para>
+     <itemizedlist>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet'>Import portlets and gadgets</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Dashboard_Portlet-View_Information'>View/Edit detailed information of a portlet/gadget</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Dashboard_Portlet-Edit_Specific_Portlet'>Edit a specific portlet</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget'>Add a gadget</link>
+     </para>
+     </listitem>
+     <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Gadget_to_the_Dashboard_Portlet'>Add a new gadget from Dashboard</link>
+     </para>
+     </listitem>
+	 <listitem>
+     <para>
+     <link linkend='sect-User_Guide-Manage_Gadgets-Edit_a_Gadget'>Edit a gadget</link>
+     </para>
+     </listitem>
+     </itemizedlist>
+     </listitem>
+  </itemizedlist>
+
   <!--
    <xi:include href="gadgetsAdmin/Manage_Gadgets_in_User_Workspace.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
     -->
