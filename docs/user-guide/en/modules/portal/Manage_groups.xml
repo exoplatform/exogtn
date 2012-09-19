@@ -38,7 +38,7 @@
     <para>Select the
       <guilabel>Group Management</guilabel>
       tab in the <guilabel>Organization</guilabel> form. This tab is used to add, edit or delete a group.
-      You can also add or delete a user to a group and edit the user membership in the group.
+      You can also add or delete a user to/from a group and edit the user membership in the group.
     </para>
     <mediaobject>
       <imageobject role="html">
