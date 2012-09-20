@@ -1,16 +1,13 @@
 <assembly>
+<id>sources</id>
   <formats>
     <format>zip</format>
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
    <fileSet>
-    <directory>target/docbook/publish/en-US/html</directory>
-    <outputDirectory>html</outputDirectory>
-   </fileSet>
-   <fileSet>
-    <directory>target/docbook/publish/en-US/html_single</directory>
-    <outputDirectory>html_single</outputDirectory>
+    <directory>target/docbook-src/</directory>
+    <outputDirectory>org.gatein.doc</outputDirectory>
    </fileSet>
   </fileSets>
 </assembly>
