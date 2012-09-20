@@ -34,13 +34,15 @@
     <name>GateIn User Guide en</name>
 
    <build>
+	  <!--
+			Assemble and attach the final artifacts (HTML, Docbook, PDF)
+	  -->
       <plugins>
-         <!-- Attach the doc to the pom in maven repo -->
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
                <execution>
-                  <id>doc-zip-packaging</id>
+                  <id>g-assemble-archives</id>
                   <phase>package</phase>
                   <goals>
                      <goal>single</goal>
@@ -53,43 +55,28 @@
                </execution>
             </executions>
          </plugin>
-         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>add-source</id>
-                  <phase>generate-sources</phase>
-                  <goals>
-                     <goal>add-source</goal>
-                  </goals>
-                  <configuration>
-                     <sources>
-                        <source>en</source>
-                     </sources>
-                  </configuration>
-               </execution>
-               <execution>
-                  <id>attach-artifacts</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>attach-artifact</goal>
-                  </goals>
-                  <configuration>
-                     <artifacts>
-                        <artifact>
-                           <file>target/docbook/publish/en-US/pdf/${project.name}.pdf</file>
-                           <type>pdf</type>
-                        </artifact>
-                        <artifact>
-                           <file>target/${project.artifactId}-${project.version}.zip</file>
-                           <type>zip</type>
-                        </artifact>
-                     </artifacts>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-      </plugins>
-   </build>
+		 <plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>build-helper-maven-plugin</artifactId>
+			<version>1.7</version>
+			<executions>
+				<execution>
+					<id>h-attach-pdf</id>
+					<phase>package</phase>
+					<goals>
+					  <goal>attach-artifact</goal>
+					</goals>
+					<configuration>
+						<artifacts>
+							<artifact>
+							  <file>${project.build.directory}/docbook/publish/en-US/pdf/${project.artifactId}-${project.version}.pdf</file>
+							  <type>pdf</type>
+							</artifact>
+						</artifacts>
+					</configuration>
+				</execution>
+			</executions>
+        </plugin>
+	</plugins>
+</build>
 </project>

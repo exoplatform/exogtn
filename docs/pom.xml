@@ -33,97 +33,175 @@
    <packaging>pom</packaging>
    <name>GateIn - Portal (docs-aggregator)</name>
 
-   <modules>
-     <!--
-        This is not the default modules declaration, instead we use the "normal" profile that is activated when
-        the development property is not set (to any value). This declaration does not build anything in development mode.
-       -->
-   </modules>
+<profiles>
+<profile>
+	<id>distrib</id>
+	<modules>
+		<module>user-guide</module>
+		<module>reference-guide</module>
+	</modules>
+     
+	<properties>
+		<docbook.source>${project.build.directory}/docbook-src</docbook.source>
+		<translation>en-US</translation>
+	</properties>
 
-   <profiles>
-     <profile>
-       <id>doc</id>
-       <activation>
-         <property>
-           <name>!gatein.dev</name>
-         </property>
-       </activation>
-       <modules>
-         <module>user-guide</module>
-         <module>reference-guide</module>
-       </modules>
-     </profile>
-   </profiles>
+	<dependencies>
+		<dependency>
+			<groupId>org.exoplatform.doc</groupId>
+			<artifactId>doc-style</artifactId>
+			<version>1.0.8-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+	</dependencies>
 
    <build>
         <plugins>
             <plugin>
-                <groupId>org.jboss.maven.plugins</groupId>
-                <artifactId>maven-jdocbook-plugin</artifactId>
-                <version>2.1.1</version>
-                <extensions>true</extensions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.gatein.doc</groupId>
-                        <artifactId>gatein-docbook-xslt</artifactId>
-                        <version>1.0.0-CR2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.gatein.doc</groupId>
-                        <artifactId>gatein-jdocbook-style</artifactId>
-                        <version>1.0.0-CR2</version>
-                        <type>jdocbook-style</type>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <sourceDocumentName>master.xml</sourceDocumentName>
-                    <sourceDirectory>${pom.basedir}/en</sourceDirectory>
-                    <imageResource>
-                        <directory>${pom.basedir}/en</directory>
-                        <includes>
-                          <include>images/**/*</include>
-                        </includes>
-                    </imageResource>
-                    <!--<cssResource>
-                        <directory>src/main/css</directory>
-                    </cssResource>-->
-                    <formats>
-                      <format>
-                          <formatName>pdf</formatName>
-                          <stylesheetResource>classpath://xslt/org/gatein/pdf.xsl</stylesheetResource>
-                          <finalName>${pom.name}.pdf</finalName>
-                      </format>
-                      <format>
-                          <formatName>html</formatName>
-                          <stylesheetResource>classpath:/xslt/org/gatein/xhtml.xsl</stylesheetResource>
-                          <finalName>index.html</finalName>
-                      </format>
-                      <format>
-                          <formatName>html_single</formatName>
-                          <stylesheetResource>classpath:/xslt/org/gatein/xhtml-single.xsl</stylesheetResource>
-                          <finalName>index.html</finalName>
-                      </format>
-                      <format>
-                          <formatName>eclipse</formatName>
-                          <stylesheetResource>classpath:/xslt/org/gatein/eclipse.xsl</stylesheetResource>
-                          <finalName>index.html</finalName>
-                      </format>
-                    </formats>
-                  
-                    <options>
-                        <xincludeSupported>true</xincludeSupported>
-                        <xmlTransformerType>saxon</xmlTransformerType>
-                        <!-- needed for uri-resolvers; can be ommitted if using 'current' uri scheme -->
-                        <!--     could also locate the docbook dependency and inspect its version... -->
-                        <docbookVersion>1.74.0</docbookVersion>
-                    </options>
-                </configuration>
-            </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+				<executions>
+				  <!--
+					 1a) Copy the images to the Docbook sources directory
+				  -->
+				  <execution>
+					<id>c-copy-images</id>
+					<phase>generate-sources</phase>
+					<goals>
+					  <goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					  <outputDirectory>${docbook.source}</outputDirectory>
+					  <resources>
+						<resource>
+						  <directory>en/images</directory>
+						  <excludes>
+						   <exclude>modules/**</exclude>
+						  </excludes>
+						</resource>
+					  </resources>
+					</configuration>
+				  </execution>
+				  <!--
+					 1b) Copy content to the Docbook sources directory
+		          -->
+				  <execution>
+					<id>d-copy-docbksource</id>
+					<phase>generate-sources</phase>
+					<goals>
+					  <goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					  <outputDirectory>${docbook.source}</outputDirectory>
+					  <resources>
+						<resource>
+						  <directory>en</directory>
+						</resource>
+					  </resources>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+
+			<!-- 
+				2) Unpack the Common style resources 
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+				  <execution>
+					<id>a-unpack</id>
+					<phase>generate-sources</phase>
+					<goals>
+					   <goal>unpack</goal>
+					</goals>
+					<configuration>
+						<artifactItems>
+							<artifactItem>
+							  <groupId>org.exoplatform.doc</groupId>
+							  <artifactId>doc-style</artifactId>
+							  <version>${doc-style.version}</version>
+							  <outputDirectory>${docbook.source}</outputDirectory>
+							  <includes>**</includes>
+							  <excludes>META-INF/**</excludes>
+							</artifactItem>
+						</artifactItems>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+
+			<!--
+				3) Process all the XML files to generate HTML and PDF formats
+			-->
+			<plugin>
+				<groupId>org.jboss.maven.plugins</groupId>
+				<artifactId>maven-jdocbook-plugin</artifactId>
+				<version>2.1.1</version>
+				<extensions>true</extensions>
+				<dependencies>
+					<dependency>
+						<groupId>org.exoplatform.doc</groupId>
+						<artifactId>exo-docbook-xslt</artifactId>
+						<version>1</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>e-jdocbook-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>f-generate-docs</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${docbook.source}</sourceDirectory>
+					<sourceDocumentName>master.xml</sourceDocumentName>
+					<imageResource>
+					  <directory>${docbook.source}</directory>
+					  <includes>
+						 <include>images/**</include>
+						 <include>background/**</include>
+					  </includes>
+					</imageResource>
+					<cssResource>
+					  <directory>${docbook.source}</directory>
+					  <includes>
+						 <include>css/**</include>
+					  </includes>
+					</cssResource>
+					<formats>
+					  <format>
+						<formatName>html</formatName>
+						<stylesheetResource>file:${docbook.source}/xsl/xhtml.xsl</stylesheetResource>
+						<finalName>index.html</finalName>
+					  </format>
+					  <format>
+						<formatName>pdf</formatName>
+						<stylesheetResource>file:${docbook.source}/xsl/pdf.xsl</stylesheetResource>
+						<finalName>${project.artifactId}-${project.version}.pdf</finalName>
+					  </format>
+					</formats>
+					<options>
+					  <xincludeSupported>true</xincludeSupported>
+					  <xmlTransformerType>saxon</xmlTransformerType>
+					  <docbookVersion>1.76.1</docbookVersion>
+					</options>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
-
-    <properties>
-        <translation>en-US</translation>
-    </properties>
-
+</profile>
+</profiles>
 </project>
