@@ -18,12 +18,12 @@
           </inlinemediaobject>
           on the <emphasis role="bold">Action</emphasis> bar to open the form to add a new category.
         </para>
-        <para>Details:</para>
-        <para>In the <emphasis role="bold">Category Setting</emphasis>tab:
+        <para><emphasis role="bold">Details:</emphasis></para>
+        <para>In the <guilabel>Category Setting</guilabel> tab:
         </para>
         <variablelist>
           <varlistentry>
-            <term>Category name</term>
+            <term><guilabel>Category name</guilabel></term>
             <listitem>
               <para>
                 The category's name that you want to add. This field is required and its length must be between 3 and 30
@@ -32,7 +32,7 @@
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Display name</term>
+            <term><guilabel>Display name</guilabel></term>
             <listitem>
               <para>
                 The display name of the category and its length must be between 3 and 30 characters.
@@ -40,7 +40,7 @@
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Description</term>
+            <term><guilabel>Description</guilabel></term>
             <listitem>
               <para>
                 A brief description of the category. Any length from 0 to 255 characters is allowed.
@@ -50,7 +50,7 @@
         </variablelist>
       </step>
       <step>
-        <para>Enter values in the Category Setting tab.</para>
+        <para>Enter values in the <guilabel>Category Setting</guilabel> tab.</para>
       </step>
       <step>
         <para>Set the <emphasis>Access</emphasis> permission for your category. Accordingly, another users can only view and use portlets in your
@@ -131,11 +131,11 @@
     <procedure>
       <step>
         <para>
-          Click the <inlinemediaobject>
+          Click <inlinemediaobject>
             <imageobject>
               <imagedata fileref="images/plus-icon1.png"  format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
-          </inlinemediaobject> icon located next to the category name to which you want to add portlets/gadgets.
+          </inlinemediaobject> located next to the category name to which you want to add portlets/gadgets.
         </para>
         <mediaobject>
           <imageobject role="html">
@@ -147,7 +147,7 @@
         </mediaobject>
         <variablelist>
           <varlistentry>
-            <term>Display name</term>
+            <term><guilabel>Display name</guilabel></term>
             <listitem>
               <para>
                 The display name of a portlet/gadget.
@@ -155,7 +155,7 @@
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Application Type</term>
+            <term><guilabel>Application Type</guilabel></term>
             <listitem>
               <para>
                 Either Portlet or Gadget.
@@ -176,14 +176,10 @@
       </step>
       <step>
         <para>
-          Click the
-          <emphasis role="bold">Save</emphasis>
-          button to add the selected portlet/gadget to the category.
+          Click <guibutton>Save</guibutton> to add the selected portlet/gadget to the category.
         </para>
       </step>
     </procedure>
     <para>The selected portlet/gadget will be added to the category in the left pane.</para>
   </section>
 </section>
-
-
