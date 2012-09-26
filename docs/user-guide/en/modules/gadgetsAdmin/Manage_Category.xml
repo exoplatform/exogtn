@@ -3,24 +3,23 @@
         <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
         %BOOK_ENTITIES;
         ]>
-<section id="sect-User_Guide-Manage_Categories">
-  <title>Manage Categories</title>
+<section id="sect-UserGuide-Manage_Categories">
+  <title>Manage categories</title>
 
-  <section id="sect-User_Guide-Manage_Categories-Add_New_Category">
+  <section id="sect-UserGuide-Manage_Categories-Add_New_Category">
     <title>Add a new category</title>
     <procedure>
       <step>
         <para>
-          Click
-          <inlinemediaobject>
+          Click <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/AddCategorybutton.png" format="PNG" contentwidth="6mm"/>"
+              <imagedata fileref="images/AddCategorybutton.png" format="PNG" scalefit="1" width="15mm"/>
             </imageobject>
           </inlinemediaobject>
           on the <emphasis role="bold">Action</emphasis> bar to open the form to add a new category.
         </para>
         <para>Details:</para>
-        <para>In the<emphasis role="bold">Category Setting</emphasis>tab:
+        <para>In the <emphasis role="bold">Category Setting</emphasis>tab:
         </para>
         <variablelist>
           <varlistentry>
@@ -65,8 +64,8 @@
             <imagedata fileref="images/Permission2.png" format="PNG" align="center" scalefit="1" contentwidth="130mm"/>
           </imageobject>
         </mediaobject>
-        <para>For more details about how to set the <emphasis>Access</emphasis> permission, refer to<xref
-                linkend="sect-User_Guide-Manage_Permissions"/>.
+        <para>For more details about how to set the <emphasis>Access</emphasis> permission, refer to <xref
+                linkend="Platform_User_Guide.Manage_Your_Portals.Manage_Permission"/>.
         </para>
       </step>
       <step>
@@ -78,12 +77,17 @@
       </step>
     </procedure>
   </section>
-  <section id="sect-User_Guide-Manage_Categories-Edit_Category">
+  <section id="sect-UserGuide-Manage_Categories-Edit_Category">
     <title>Edit a Category</title>
     <procedure>
       <step>
         <para>
-          Click the Edit icon located next to the title bar.
+          Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/edit-icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject>
+          located next to the title bar.
         </para>
       </step>
       <step>
@@ -100,12 +104,16 @@
       </step>
     </procedure>
   </section>
-  <section id="sect-User_Guide-Manage_Categories-Delete_a_Category">
+  <section id="sect-UserGuide-Manage_Categories-Delete_a_Category">
     <title>Delete a Category</title>
     <procedure>
       <step>
         <para>
-          Click the Trash can icon located next to the title bar.
+          Click <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Trash_icon1.png"  format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject> located next to the title bar.
         </para>
       </step>
       <step>
@@ -123,20 +131,18 @@
     <procedure>
       <step>
         <para>
-          Click the
-          <inlinemediaobject>
+          Click the <inlinemediaobject>
             <imageobject>
-              <imagedata fileref="images/plus-icon1.png" format="PNG" contentwidth="6mm"/>"
+              <imagedata fileref="images/plus-icon1.png"  format="PNG" scalefit="1" width="4mm"/>
             </imageobject>
-          </inlinemediaobject>
-          icon located next to the category name to which you want to add portlets/gadgets.
+          </inlinemediaobject> icon located next to the category name to which you want to add portlets/gadgets.
         </para>
         <mediaobject>
           <imageobject role="html">
             <imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="110"/>
           </imageobject>
           <imageobject role="fo">
-            <imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scalefit="1" contentwidth="160mm"/>
+            <imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
           </imageobject>
         </mediaobject>
         <variablelist>
