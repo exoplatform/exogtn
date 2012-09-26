@@ -18,8 +18,8 @@
  */
 
 .UIGrid {
-	margin: auto;	
-	table-layout:fixed;
+	margin: auto;		
+	border: 1px solid #fff;
 }
 
 .UIGrid .center {
@@ -29,20 +29,25 @@
 .UIGrid th {
 	line-height: 20px;
 	background: #e1e1e1 url('background/ThGridRepeatBg1x28.png') repeat-x;
-	padding: 5px 10px;
+	padding: 8px 10px;
 	text-align:left;/* orientation=lt */
-	text-align:right;/* orientation=rt */
-	border-left: 1px solid #fff;/* orientation=lt */
-	border-right: 1px solid #fff;/* orientation=rt */
+	text-align:right;/* orientation=rt */	
+    line-height: 13px;
+    text-transform: capitalize;
+	
 }
 
+.UIGrid th  + th {
+	border-left: 1px solid #fff;
+}
 
 .UIGrid td {
 	padding: 5px 10px;
-	border: 1px solid #fff;
-	border-right: 0; /* orientation=lt */
-	border-left: 0; /* orientation=rt */	
+	border-top:1px solid #fff;
 	vertical-align: middle;
+}
+.UIGrid td  + td {
+	border-left: 1px solid #fff;
 }
 
 .UIGrid .OddRow {
@@ -51,11 +56,6 @@
 
 .UIGrid .EvenRow {
 	background-color:#f4f4f4;
-}
-
-.UIGrid .OddRow td {
-	border-bottom:0;
-	border-top:0;
 }
 
 .UIGrid .ActionContainer {
