@@ -69,7 +69,7 @@
 				It is recommended that you should not run any portal extensions that could override the data when manipulating the <emphasis>gatein.ear</emphasis> file directly.
 			</para>
 			<para>
-				Remove <emphasis>$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</emphasis> and <emphasis>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</emphasis> which are packaged with &PRODUCT; by default.
+				Remove <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</emphasis> and <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</emphasis> which are packaged with &PRODUCT; by default.
 			</para>
      <para>
 	<prompt>
@@ -203,7 +203,7 @@
 </programlisting>
 						
 						<para>
-							With the following (Make sure to set the host, port and context with the values corresponding to your portal). Also available in <emphasis>GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</emphasis>.
+							With the following (Make sure to set the host, port and context with the values corresponding to your portal). Also available in <emphasis>$GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</emphasis>.
 						</para>
             
 <programlisting language="xml">&#60;!--
@@ -244,15 +244,15 @@
 					</step>
 					<step>
 						<para>
-							Copy <emphasis>GATEIN_SSO_HOME/cas/plugin/WEB-INF/lib/sso-cas-plugin-&#60;VERSION&#62;.jar</emphasis> and <emphasis>GATEIN_SSO_HOME/cas/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar</emphasis> into the <emphasis>CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/lib</emphasis> created directory.
+							Copy <emphasis>$GATEIN_SSO_HOME/cas/plugin/WEB-INF/lib/sso-cas-plugin-&#60;VERSION&#62;.jar</emphasis> and <emphasis>$GATEIN_SSO_HOME/cas/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar</emphasis> into the <emphasis>CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/lib</emphasis> created directory.
 						</para>
 					</step>
 					<step>
 						<para>
-							Get an installation of Tomcat and extract it into a suitable location (which will be called <emphasis>TOMCAT_HOME</emphasis> for these instructions). 
+							Get an installation of Tomcat and extract it into a suitable location (which will be called <emphasis>$PLATFORM_TOMCAT_HOME</emphasis> for these instructions).
 						</para>
 						<para>
-							Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <emphasis>TOMCAT_HOME/conf/server.xml</emphasis> and replace the 8080 port with 8888.
+							Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <emphasis>$PLATFORM_TOMCAT_HOME/conf/server.xml</emphasis> and replace the 8080 port with 8888.
 							<note>
 								<para>
 									If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
@@ -270,7 +270,7 @@
 					</step>
 					<step>
 						<para>
-							Copy <emphasis>CAS_HOME/cas-server-webapp/target/cas.war</emphasis> into <emphasis>TOMCAT_HOME/webapps</emphasis>.
+							Copy <emphasis>CAS_HOME/cas-server-webapp/target/cas.war</emphasis> into <emphasis>$PLATFORM_TOMCAT_HOME/webapps</emphasis>.
 						</para>
 						<para>
 							Tomcat should start and be accessible at <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>. At this stage, the login will not be available.
@@ -306,7 +306,7 @@
 			<procedure>
 				<step>
 					<para>
-						Copy all libraries from <emphasis>GATEIN_SSO_HOME/cas/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or in Tomcat, into $<emphasis>GATEIN_HOME/lib</emphasis>)
+						Copy all libraries from <emphasis>$GATEIN_SSO_HOME/cas/gatein.ear/lib</emphasis> into <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or in Tomcat, into $<emphasis>GATEIN_HOME/lib</emphasis>)
 					</para>
 				</step>
 				<step>
@@ -528,15 +528,15 @@ realmName=gatein-domain;
 				<procedure>
 					<step>
 						<para>
-							Copy the files from <emphasis>GATEIN_SSO_HOME/josso/plugin</emphasis> into the Tomcat directory (<emphasis>JOSSO_HOME</emphasis>).
+							Copy the files from <emphasis>$GATEIN_SSO_HOME/josso/plugin</emphasis> into the Tomcat directory (<emphasis>$JOSSO_HOME</emphasis>).
 						</para>
 						<para>
-							This action should replace or add the following files to the <emphasis>JOSSO_HOME/webapps/josso/WEB-INF/lib</emphasis> directory:
+							This action should replace or add the following files to the <emphasis>$JOSSO_HOME/webapps/josso/WEB-INF/lib</emphasis> directory:
 						</para>
 						<itemizedlist>
 							<listitem>
 								<para>
-									<emphasis>JOSSO_HOME/lib/josso-gateway-config.xml</emphasis>
+									<emphasis>$JOSSO_HOME/lib/josso-gateway-config.xml</emphasis>
 								</para>
 							</listitem>
 							<listitem>
@@ -558,7 +558,7 @@ realmName=gatein-domain;
 					</step>
 					<step>
 						<para>
-							Edit <emphasis>TOMCAT_HOME/conf/server.xml</emphasis> and replace the 8080 port with 8888 to change the default Tomcat port and avoid a conflict with the default &PRODUCT; port (for testing purposes).
+							Edit <emphasis>$PLATFORM_TOMCAT_HOME/conf/server.xml</emphasis> and replace the 8080 port with 8888 to change the default Tomcat port and avoid a conflict with the default &PRODUCT; port (for testing purposes).
 							<note>
 								<title>Port Conflicts</title>
 								<para>
@@ -589,12 +589,12 @@ realmName=gatein-domain;
 			<procedure>
 				<step>
 					<para>
-						Copy the library files from <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/lib</emphasis> into <emphasis>gatein.ear/lib</emphasis> (or into <emphasis>GATEIN_HOME/lib</emphasis> if &PRODUCT; is  running in Tomcat)
+						Copy the library files from <emphasis>$GATEIN_SSO_HOME/josso/gatein.ear/lib</emphasis> into <emphasis>gatein.ear/lib</emphasis> (or into <emphasis>$GATEIN_HOME/lib</emphasis> if &PRODUCT; is  running in Tomcat)
 					</para>
 				</step>
             <step>
                <para>
-                  Copy the file <emphasis>GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/02portal.war/WEB-INF/classes</emphasis> (or into <emphasis>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>GATEIN_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat)
+                  Copy the file <emphasis>$GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/02portal.war/WEB-INF/classes</emphasis> (or into <emphasis>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>GATEIN_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat)
                </para>
             </step>
 				<step>
@@ -823,12 +823,12 @@ realmName=gatein-domain;
 				<procedure>
 					<step>
 						<para>
-							Obtain a copy of Tomcat and extract it into a suitable location (this location will be referred to as <emphasis>TOMCAT_HOME</emphasis> in this example).
+							Obtain a copy of Tomcat and extract it into a suitable location (this location will be referred to as <emphasis>$PLATFORM_TOMCAT_HOME</emphasis> in this example).
 						</para>
 					</step>
 					<step>
 						<para>
-							Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes) by editing <emphasis>TOMCAT_HOME/conf/server.xml</emphasis> and replacing the 8080 port with 8888.
+							Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes) by editing <emphasis>$PLATFORM_TOMCAT_HOME/conf/server.xml</emphasis> and replacing the 8080 port with 8888.
 							<note>
 								<para>
                            If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
@@ -839,7 +839,7 @@ realmName=gatein-domain;
 					</step>
 					<step>
 						<para>
-							Ensure the <emphasis>TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</emphasis> file looks like this:
+							Ensure the <emphasis>$PLATFORM_TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</emphasis> file looks like this:
             </para> 
             
 <programlisting language="xml">
@@ -868,12 +868,12 @@ realmName=gatein-domain;
 					</step>
 					<step>
 						<para>
-							Copy <emphasis>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/sso-opensso-plugin-&#60;VERSION&#62;.jar</emphasis>, <emphasis>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar</emphasis>, and <emphasis>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/commons-logging-&#60;VERSION&#62;.jar</emphasis> into the Tomcat directory at <emphasis>TOMCAT_HOME/webapps/opensso/WEB-INF/lib</emphasis>.
+							Copy <emphasis>$GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/sso-opensso-plugin-&#60;VERSION&#62;.jar</emphasis>, <emphasis>$GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar</emphasis>, and <emphasis>$GATEIN_SSO_HOME/opensso/plugin/WEB-INF/lib/commons-logging-&#60;VERSION&#62;.jar</emphasis> into the Tomcat directory at <emphasis>$PLATFORM_TOMCAT_HOME/webapps/opensso/WEB-INF/lib</emphasis>.
 						</para>
 					</step>
 					<step>
 						<para>
-							Copy <emphasis>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/classes/gatein.properties</emphasis> into <emphasis>TOMCAT_HOME/webapps/opensso/WEB-INF/classes</emphasis>.
+							Copy <emphasis>$GATEIN_SSO_HOME/opensso/plugin/WEB-INF/classes/gatein.properties</emphasis> into <emphasis>$PLATFORM_TOMCAT_HOME/webapps/opensso/WEB-INF/classes</emphasis>.
 						</para>
 					</step>
 
@@ -944,7 +944,7 @@ realmName=gatein-domain;
 			<procedure>
 				<step>
 					<para>
-						Copy all libraries from <emphasis>GATEIN_SSO_HOME/opensso/gatein.ear/lib</emphasis> into <emphasis>JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or, in Tomcat, into <emphasis>GATEIN_HOME/lib</emphasis>)
+						Copy all libraries from <emphasis>$GATEIN_SSO_HOME/opensso/gatein.ear/lib</emphasis> into <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> (Or, in Tomcat, into <emphasis>GATEIN_HOME/lib</emphasis>)
 					</para>
 				</step>
 				<step>
@@ -1375,7 +1375,7 @@ network.negotiate-auth.using-native-gsslib = true
 			<procedure>
 				<step>
 					<para>
-                        Activate the Host authentication under the <emphasis role="bold">JBOSS_HOME/server/default/conf/login-config.xml </emphasis> file by adding the following host login module:
+                        Activate the Host authentication under the <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/conf/login-config.xml </emphasis> file by adding the following host login module:
           </para>
                         <programlisting><![CDATA[<!-- SPNEGO domain -->
 <application-policy name="host">
@@ -1402,7 +1402,7 @@ network.negotiate-auth.using-native-gsslib = true
         <step>
 					<para>
 						Extend the core authentication mechanisms to support SPNEGO under
-                  <emphasis role="bold">JBOSS_HOME/server/default/deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</emphasis> by
+                  <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</emphasis> by
 						adding the 'SPNEGO' authenticators property.
           </para>
 
@@ -1443,20 +1443,20 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
                    <para>
-                     Add the GateIn SSO module binaries by copying <emphasis role="bold">GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent-VERSION.jar</emphasis> to the <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> directory.
-                     File <emphasis role="bold">GATEIN_SSO_HOME/spnego/gatein.ear/lib/spnego-VERSION.jar</emphasis> needs to be copied to the <emphasis role="bold">JBOSS_HOME/server/default/lib</emphasis> directory.
+                     Add the GateIn SSO module binaries by copying <emphasis role="bold">$GATEIN_SSO_HOME/spnego/gatein.ear/lib/sso-agent-VERSION.jar</emphasis> to the <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/lib</emphasis> directory.
+                     File <emphasis role="bold">$GATEIN_SSO_HOME/spnego/gatein.ear/lib/spnego-VERSION.jar</emphasis> needs to be copied to the <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/lib</emphasis> directory.
           </para>
 				</step>
 				<step>
 					<para>
                       Download library <filename>jboss-negotiation-2.0.4.GA</filename> from location
                       <ulink type="html" url="https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar">https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar</ulink>
-                      and copy this file to <filename>JBOSS_HOME/server/default/lib</filename> directory as well.
+                      and copy this file to <filename>$PLATFORM_JBOSS_HOME/server/default/lib</filename> directory as well.
                    </para>
                 </step>
                 <step>
                   <para>
-                     Modify the <emphasis role="bold">JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below:
+                     Modify the <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below:
                   </para>
 
 						<programlisting language="xml"><![CDATA[
@@ -1523,7 +1523,7 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
 					<para>
-                  Modify <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
+                  Modify <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
 						<programlisting language="xml"><![CDATA[
 <!--	<login-config>
 	  <auth-method>FORM</auth-method>
@@ -1570,7 +1570,7 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
               <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the
-                 <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
+                 <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
               </para>
 <programlisting><![CDATA[
 <filter>
@@ -1603,7 +1603,7 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
 					<para>
-          In <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+          In <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--

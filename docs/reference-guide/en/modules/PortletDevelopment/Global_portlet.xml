@@ -56,10 +56,10 @@
 			</para>
 				<itemizedlist>
 					<listitem>
-						<para><emphasis role="bold">For Tomcat</emphasis>: <emphasis>TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
+						<para><emphasis role="bold">For Tomcat</emphasis>: <emphasis>$PLATFORM_TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
 					</listitem>
 					<listitem>
-						<para><emphasis role="bold">For JBoss</emphasis>: <emphasis>JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
+						<para><emphasis role="bold">For JBoss</emphasis>: <emphasis>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
 					</listitem>
 				</itemizedlist>
 		</listitem>
