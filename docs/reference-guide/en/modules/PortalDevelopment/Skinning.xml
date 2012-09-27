@@ -847,7 +847,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
 
       <para>For example, the property can be passed as a JVM parameter with the
       <emphasis>-D</emphasis> option when running GateIn.</para>
-      <programlisting>sh $JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting>
+      <programlisting>sh $PLATFORM_JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting>
 
       <warning>
           <para>This option may cause display bugs with certain

@@ -15,8 +15,8 @@
        </citetitle>
    </para>
     <para>The email service can use any SMTP account configured in
-    <emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>
-    (or <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis> if you are using Tomcat).</para>
+    <emphasis>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>
+    (or <emphasis>$PLATFORM_TOMCAT_HOME/gatein/conf/configuration.properties</emphasis> if you are using Tomcat).</para>
 
     <para>The relevant section looks like:</para>
 

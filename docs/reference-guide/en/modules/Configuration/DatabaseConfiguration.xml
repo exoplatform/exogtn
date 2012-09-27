@@ -36,9 +36,9 @@
     </citetitle>
   </para>
     <para>To configure the database used by JCR, edit the
-    file:<emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>.</para>
+    file:<emphasis>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>.</para>
 
-    <para> For Tomcat, the file is located at <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis>.</para>
+    <para> For Tomcat, the file is located at <emphasis>$PLATFORM_TOMCAT_HOME/gatein/conf/configuration.properties</emphasis>.</para>
 
     <para>Next, edit the values of driver, url, username and password with the
     values for your JDBC connection. To learn more, refer to your database JDBC driver
@@ -59,15 +59,15 @@ gatein.jcr.datasource.password=
     <para>In case of HSQL, the databases are created automatically. For any
     other databases, you need to create a database named "jdbcjcr_portal"
     (and "jdbcjcr_sample-portal" if you have <emphasis>gatein-sample-portal.ear</emphasis> in
-    <emphasis>$JBOSS_HOME/server/default/deploy</emphasis>). Note that some databases do not accept '-'
+    <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy</emphasis>). Note that some databases do not accept '-'
     in the database name, so you may have to remove
-    <emphasis>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</emphasis>.</para>
+    <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</emphasis>.</para>
 
     <para>Make sure the user has rights to create tables on <emphasis>jdbcjcr_portal</emphasis>, and
     to update them as they will be automatically created during the first startup.</para>
 
     <para>Also, add your database's JDBC driver into the classpath - you can put it in
-    <emphasis>$JBOSS_HOME/server/default/lib</emphasis> (or <emphasis>$TOMCAT_HOME/lib</emphasis>, if you are running on
+    <emphasis>$PLATFORM_JBOSS_HOME/server/default/lib</emphasis> (or <emphasis>$PLATFORM_TOMCAT_HOME/lib</emphasis>, if you are running on
     Tomcat).</para>
 
     <para>MySQL example:</para>
@@ -89,8 +89,8 @@ gatein.jcr.datasource.password=gateinpassword
   </para>
     <para>By default, users are stored in a database. To change the database where users are stored, you need to edit the file:</para>
 
-    <para><emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>For
-    Tomcat, the file is located at <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis></para>
+    <para><emphasis>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis>For
+    Tomcat, the file is located at <emphasis>$PLATFORM_TOMCAT_HOME/gatein/conf/configuration.properties</emphasis></para>
 
     <para>You will find the same type of configuration as in
     <emphasis>jcr-configuration.xml</emphasis>:<programlisting>gatein.idm.datasource.driver=org.hsqldb.jdbcDriver

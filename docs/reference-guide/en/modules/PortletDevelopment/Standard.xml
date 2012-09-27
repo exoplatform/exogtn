@@ -154,7 +154,7 @@
 					</step>
 					<step>
 						<para>
-							Copy the package file into <emphasis>JBOSS_HOME/server/default/deploy</emphasis>.
+							Copy the package file into <emphasis>$PLATFORM_JBOSS_HOME/server/default/deploy</emphasis>.
 						</para>
 					</step>
 					<step>
