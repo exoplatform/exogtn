@@ -116,8 +116,3 @@
 .UIPermissionSelector .UIAction a:hover {
 	color: #058EE6;
 }
- 
-.UIPermissionSelector .PermissionInfoContainer .SelectPermissionIcon	{
-	background: none;
-	width: auto;
-} 
