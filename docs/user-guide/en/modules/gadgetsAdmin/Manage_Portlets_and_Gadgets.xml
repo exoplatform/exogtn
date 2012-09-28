@@ -5,6 +5,143 @@
         ]>
 <section id="sect-User_Guide-Manage_Portlets_and_Gadgets">
   <title>Manage portlets and gadgets</title>
+  <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_Portlet_Gadget_to_Application_list">
+    <title>Add portlets/gadgets to the Application list</title>
+    <para>This section shows you how to add a portlet/gadget to the <guilabel>Application</guilabel> list on the left pane
+      of the <guilabel>Manage Application</guilabel> page.</para>
+    <procedure>
+      <step><para>Click <guilabel>Portlets</guilabel>/<guilabel>Gadgets</guilabel> on the <guilabel>Tab</guilabel> bar to open a list of
+        portlets/gadgets respectively.</para>
+      <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/List_of_portlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/List_of_portlet.png" format="PNG" align="center" scalefit="1"
+                   width="80mm"/>
+      </imageobject>
+    </mediaobject>
+      </step>
+      <step><para>Click the portlet/gadget which you want to add to the <guilabel>Application</guilabel> list.</para>
+      <para>The information of the portlet/gadget is displayed.</para>
+      <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/AddPortletToCategory.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/AddPortletToCategory.png" format="PNG" align="center" scalefit="1"
+                   width="150mm"/>
+      </imageobject>
+    </mediaobject>
+      </step>
+      <step><para>Click the <guilabel>Click here to add this portlet to a category</guilabel> link to open a form which allows you
+      to select a category for the portlet.</para>
+      <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="images/Form_Add_Portlet.png" format="PNG" align="center" scale="110"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="images/Form_Add_Portlet.png" format="PNG" align="center" scalefit="1"
+                   width="90mm"/>
+      </imageobject>
+    </mediaobject>
+      </step>
+      <step><para>Click <guibutton>Save</guibutton> to accept adding the portlet/gadget to the <guilabel>Application</guilabel> list.</para></step>
+
+    </procedure>
+    <note><para>In case, the portlet/gadget was already added to the <guilabel>Application</guilabel> list, there will be no the <guilabel>Click here to add this portlet to a category</guilabel>
+    link.</para></note>
+  </section>
+  <section id="sect-User_Guide-Dashboard_Portlet-Activate_Import_Applications_function">
+    <title>Activate the Import Applications function</title>
+    <note>
+      <para>You can perform this action only when you are a member of the <emphasis>/platform/administrators</emphasis> group.</para>
+    </note>
+    <para>By default, the
+      <guilabel>Import Applications</guilabel>
+      function is hidden. To activate it, you can do as follows:
+    </para>
+    <procedure>
+      <step>
+        <para>Go to the
+          <menuchoice>
+            <guimenu><link linkend="GoToManageApplicationsPage">Manage Applications page</link></guimenu>
+            <guisubmenu>Edit</guisubmenu>
+            <guisubmenu>Page</guisubmenu>
+            <guimenuitem>Layout</guimenuitem>
+          </menuchoice>
+          on the
+          <guilabel>Administration</guilabel>
+          bar.
+        </para>
+      </step>
+      <step>
+        <para>Hover your cursor over the
+          <guilabel>Application Registry</guilabel>
+          portlet, then click
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Edit_portlet_icon.png" format="PNG" scalefit="1" width="4mm"/>
+            </imageobject>
+          </inlinemediaobject>
+          at the upper left corner of that portlet.
+        </para>
+        <para>
+          The
+          <guilabel>Edit</guilabel>
+          form will be displayed.
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata fileref="images/Edit_Mode_Application_Registry.png" format="PNG" align="center" scale="110"/>
+            </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/Edit_Mode_Application_Registry.png" format="PNG" align="center" scalefit="1"
+                         width="150mm"/>
+            </imageobject>
+          </mediaobject>
+        </para>
+      </step>
+      <step>
+        <para>Tick the
+          <guilabel>Change Show Import</guilabel>
+          checkbox, then click
+          <guibutton>Save</guibutton>
+          to accept the changes.
+        </para>
+      </step>
+      <step>
+        <para>Click
+          <guibutton>Close</guibutton>
+          to close the
+          <guilabel>Edit</guilabel>
+          form, then click
+          <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/Finish_icon.png" format="PNG" scalefit="1" width="4mm"/>"
+            </imageobject>
+          </inlinemediaobject>
+          to quit the
+          <guilabel>Page Editor</guilabel>
+          page.
+        </para>
+        <para>The
+          <guilabel>Import Applications</guilabel>
+          button is displayed on the
+          <guilabel>Manage Applications</guilabel>
+          page.
+        </para>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata fileref="images/Activate_import_application_button.png" format="PNG" align="center" scale="110"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="images/Activate_import_application_button.png" format="PNG" align="center" scalefit="1"
+                       width="150mm"/>
+          </imageobject>
+        </mediaobject>
+      </step>
+    </procedure>
+  </section>
   <section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet">
     <title>Import portlets and gadgets</title>
     <para>This feature enables you to import default portlets and gadgets into different categories as follows:</para>
@@ -16,7 +153,9 @@
               <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="17mm"/>"
             </imageobject>
           </inlinemediaobject>
-          at the right corner on the <guilabel>Action</guilabel> bar.
+          at the right corner on the
+          <guilabel>Action</guilabel>
+          bar.
         </para>
       </step>
       <step>
@@ -27,6 +166,15 @@
         <para>All portlets and gadgets of all categories will be imported and listed on the left pane.</para>
       </step>
     </procedure>
+    <note>
+      <para>You can see <inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/ImportApplicationsbutton.png" format="PNG" scalefit="1" width="17mm"/>"
+            </imageobject>
+          </inlinemediaobject> only when the <link linkend="sect-User_Guide-Dashboard_Portlet-Activate_Import_Applications_function">
+       Import Applications function
+          </link> is activated. </para>
+    </note>
   </section>
   <section id="sect-User_Guide-Dashboard_Portlet-View_Information">
     <title>View/Edit detailed information of a portlet/gadget</title>

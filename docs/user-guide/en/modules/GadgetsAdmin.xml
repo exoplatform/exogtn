@@ -5,7 +5,8 @@
         ]>
 <chapter id="chap-User_Guide-Gadgets_Administration">
   <title>Categories, Portlets and Gadgets Administration</title>
-  <para>To manage categories, portlets and gadgets in a portal, you first need to hover your cursor over
+  <para xml:id="GoToManageApplicationsPage">To manage categories, portlets and gadgets in a portal, you first need to go to the
+    <emphasis role="bold">Manage Applications</emphasis> page by hovering your cursor over
     <inlinemediaobject>
       <imageobject>
         <imagedata fileref="images/sawtooth_icon.png" format="PNG" scalefit="1" width="4mm"/>
@@ -93,6 +94,12 @@
         <link linkend="sect-User_Guide-Manage_Portlets_and_Gadgets">Manage portlets and gadgets</link>
       </para>
      <itemizedlist>
+       <listitem>
+         <para><link linkend="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_Portlet_Gadget_to_Application_list">Add portlets/gadgets to the Application list</link> </para>
+       </listitem>
+       <listitem>
+         <para><link linkend="sect-User_Guide-Dashboard_Portlet-Activate_Import_Applications_function">Activate the Import Applications function</link> </para>
+       </listitem>
      <listitem>
      <para>
      <link linkend='sect-User_Guide-Manage_Portlets_and_Gadgets-Import_Gadget_Portlet'>Import portlets and gadgets</link>
