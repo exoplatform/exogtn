@@ -245,7 +245,9 @@ PortalDragDrop.prototype.init = function(e) {
 	        }
 	      }
 	  	}
-
+	  	
+	  	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
+	  	
 	    if(dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27) {
 	    	eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
 	    } else {
@@ -277,9 +279,7 @@ PortalDragDrop.prototype.init = function(e) {
 	    eXo.portal.isInDragging = false;
 	    if (hasChanged) {
 	    	eXo.portal.UIPortal.changeComposerSaveButton();
-	    }
-
-	    this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
+	    }	    
   };
   
   var clickObject = this;
@@ -310,12 +310,15 @@ PortalDragDrop.prototype.init = function(e) {
 PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 	var srcElement = dndEvent.dragObject ;
   var targetElement = dndEvent.foundTargetObject;
+  var dragObject = dndEvent.dragObject;
   
   if(!targetElement || targetElement.foundIndex == null) {
-  	if(dndEvent.dragObject.isAddingNewly) {
-	    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
+  	if(dragObject.isAddingNewly) {
+  		dragObject.parentNode.removeChild(dragObject);
+  	} else if (eXo.core.Browser.isIE7()) {
+  		//Make IE7 rerender dom correctlly, this is a workaround for EXOGTN-1092
+  		dragObject.parentNode.replaceChild(dragObject, dragObject);
   	}
-  	dndEvent.dragObject.style.width = "auto";
   	return;
   }
   
@@ -451,7 +454,6 @@ PortalDragDrop.prototype.createPreview = function(layoutType) {
 PortalDragDrop.prototype.divRowContainerAddChild = function(srcElement, targetElement, insertPosition) {
   var listComponent = eXo.core.DragDrop.dndEvent.foundTargetObject.listComponentInTarget ;
   var uiRowContainer = eXo.core.DOMUtil.findFirstDescendantByClass(targetElement, "div", "UIRowContainer") ;
-  srcElement.style.width = "auto" ;
   
 	var parentNode = srcElement.parentNode;
   if(insertPosition >= 0) {
