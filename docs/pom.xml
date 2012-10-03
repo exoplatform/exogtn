@@ -34,8 +34,13 @@
    <name>GateIn - Portal (docs-aggregator)</name>
 
 <profiles>
-<profile>
-	<id>distrib</id>
+  <profile>
+    <id>doc</id>
+    <activation>
+      <property>
+        <name>!gatein.dev</name>
+      </property>
+    </activation>	
 	<modules>
 		<module>user-guide</module>
 		<module>reference-guide</module>
