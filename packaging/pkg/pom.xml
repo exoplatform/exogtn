@@ -33,6 +33,7 @@
    
    <properties>
      <gatein.working.dir>${basedir}/target</gatein.working.dir><!-- Default value for server installation dir -->
+     <jboss.gatein-ear.dir>${gatein.working.dir}/jboss/server/default/deploy/gatein.ear</jboss.gatein-ear.dir>
    </properties>
    
    
@@ -379,6 +380,44 @@
                             </goals>
                          </execution>
                       </executions>
+                   </plugin>
+                   <!-- Modify rest.war file and portal.war file in gatein.ear directory during JBoss packaging phase-->
+                   <plugin>
+                      <artifactId>maven-antrun-plugin</artifactId>
+                      <version>1.6</version>
+                      <executions>
+                         <execution>
+                             <id>02-prepare-package</id>
+                             <phase>prepare-package</phase>
+                             <configuration>
+                                <target>
+                                    <!-- rest.war -->
+                                    <unzip src="${jboss.gatein-ear.dir}/rest.war" dest="${jboss.gatein-ear.dir}/rest" />
+                                    <move file="${jboss.gatein-ear.dir}/rest/META-INF/context.xml" tofile="${jboss.gatein-ear.dir}/rest/WEB-INF/context.xml" overwrite="true" />
+                                    <replace file="${jboss.gatein-ear.dir}/rest/WEB-INF/context.xml">
+				       <replacetoken><![CDATA[<Realm className='org.apache.catalina.realm.JAASRealm']]></replacetoken>
+				       <replacevalue><![CDATA[<Realm className="org.jboss.web.tomcat.security.JBossWebRealm"
+         certificatePrincipal="org.jboss.security.auth.certs.SubjectDNMapping"]]></replacevalue>
+				    </replace>
+                                    <zip destfile="${jboss.gatein-ear.dir}/rest.war" basedir="${jboss.gatein-ear.dir}/rest" />
+                                    <delete dir="${jboss.gatein-ear.dir}/rest" />
+                                    <!-- 02portal.war -->
+                                    <unzip src="${jboss.gatein-ear.dir}/02portal.war" dest="${jboss.gatein-ear.dir}/02portal" />
+                                    <move file="${jboss.gatein-ear.dir}/02portal/META-INF/context.xml" tofile="${jboss.gatein-ear.dir}/02portal/WEB-INF/context.xml" overwrite="true" />
+                                    <replace file="${jboss.gatein-ear.dir}/02portal/WEB-INF/context.xml">
+				       <replacetoken><![CDATA[<Realm className='org.apache.catalina.realm.JAASRealm']]></replacetoken>
+				       <replacevalue><![CDATA[<Realm className="org.jboss.web.tomcat.security.JBossWebRealm"
+         certificatePrincipal="org.jboss.security.auth.certs.SubjectDNMapping"]]></replacevalue>
+				    </replace>
+                                    <zip destfile="${jboss.gatein-ear.dir}/02portal.war" basedir="${jboss.gatein-ear.dir}/02portal" />
+                                    <delete dir="${jboss.gatein-ear.dir}/02portal" />
+                                </target>
+                             </configuration>
+                         <goals>
+                           <goal>run</goal>
+                         </goals>
+                         </execution>
+                     </executions>
                    </plugin>
 
                    <plugin>
