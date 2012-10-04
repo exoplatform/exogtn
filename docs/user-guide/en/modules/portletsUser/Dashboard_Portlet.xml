@@ -32,10 +32,12 @@
     You can open many gadgets with different settings at once.
   </para>
   </note>
-
-  <section id="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace">
-    <title>Use the Dashboard workspace</title>
-    <procedure>
+  <para xml:id="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace">
+	<citetitle>
+		<emphasis role="bold">Use the Dashboard workspace</emphasis>
+	</citetitle>
+  </para>
+  <procedure>
       <step>
         <para>
           Click
@@ -72,11 +74,11 @@
         <para>
           Drag and drop the selected gadget into the workspace.
         </para>
-      </step>
-	</procedure>
-	<para>
+	  </step>
+  </procedure>
+  <para>
 	In addition, eXo Platform is compatible with most gadgets which can be found <ulink type="http" url="http://www.google.com/ig/directory?synd=open">here.</ulink>
-	</para>
+</para>
 	<mediaobject>
 		<imageobject role="html">
 		  <imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scale="110"/>
@@ -86,13 +88,15 @@
 					 width="120mm"/>
 		</imageobject>
 	</mediaobject>
-  </section>
-
-  <section id="sect-User_Guide-Dashboard_Portlet-Change_gadget_preferences">
-    <title>Change gadget preferences</title>
+  <para xml:id="sect-User_Guide-Dashboard_Portlet-Change_gadget_preferences">
+	<citetitle>
+		<emphasis role="bold">Change gadget preferences</emphasis>
+	</citetitle>
+  </para>
+  <procedure>
     <para>The edit icon on gadgets only displays when the gadget has some gadget preferences. This icon enables users to
       display the edit form and change preferences of a gadget.
-    </para>
+    
     <mediaobject>
       <imageobject role="html">
         <imagedata fileref="images/ChangGadget.png" format="PNG" align="center" scale="50" contentwidth="50"/>
@@ -102,11 +106,9 @@
                    width="150mm"/>
       </imageobject>
     </mediaobject>
-	<citetitle>
-    <para><emphasis role="bold">Change preferences of a gadget</emphasis></para>
-	</citetitle>
+	</para>
+
     <para>The following is an example of changing preferences of the <guilabel>RSS Reader</guilabel> gadget.</para>
-    <procedure>
       <step>
         <para>Click <inlinemediaobject>
           <imageobject>
@@ -138,11 +140,13 @@
         </para>
       </step>
     </procedure>
-  </section>
 
-  <section id="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">
-    <title>Add more external gadgets from Dashboard</title>
-    <procedure>
+  <para xml:id="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">
+	<citetitle>
+		<emphasis role="bold">Add more external gadgets from Dashboard</emphasis>
+	</citetitle>
+  </para>
+  <procedure>
       <step>
         <para>
           Obtain the URL (.xml or .rss) of the gadget you want to add from the gadgets source. For example,
@@ -197,5 +201,4 @@
         </para>
       </step>
     </procedure>
-  </section>
 </section>
