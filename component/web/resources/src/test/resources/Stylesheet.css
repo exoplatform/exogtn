@@ -3662,11 +3662,6 @@ background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/
 background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/Config.gif');
 }
 
-.SelectPermissionIcon {
-	width: 16px; height: 16px;
-background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/SelectPermission.gif');
-}
-
 .Node16x16Icon {
 	width: 16px; height: 16px;
 background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/Node.gif');
@@ -10073,13 +10068,7 @@ background: url('/eXoResources/skin/DefaultSkin/webui/component/UISelector/UIPer
 	padding-left: 22px; /* orientation=lt */
 	line-height: 21px;
 }
- 
-.UIPermissionSelector .PermissionInfoContainer .SelectPermissionIcon	{
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectPermission.gif') no-repeat left center; /* orientation=lt */
-	padding-left: 22px; /* orientation=lt */
-	line-height: 21px;
-	height: auto; width: auto;
-} 
+
 /**
  * Copyright (C) 2009 eXo Platform SAS.
  * 
