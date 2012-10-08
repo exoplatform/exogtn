@@ -75,12 +75,12 @@
  </para>
   <para>
   To do this, set the Java system property <emphasis>exo.product.developing</emphasis> to <emphasis>true</emphasis>.
- GateIn provides two startup scripts that define this property in gatein-dev.sh (for Linux, Mac) and gatein-dev.bat (for Windows).</para>
+ GateIn provides two startup scripts that define this property in <filename>gatein-dev.sh</filename> (for Linux, Mac) and <filename>gatein-dev.bat</filename> (for Windows).</para>
   <para>
   To generate the <emphasis>merged.js</emphasis> file, set this property to <emphasis>false</emphasis>.
  If the property is not set, the default value is false. </para>
   <para>
-  The property can be passed as a JVM parameter with the <emphasis>-D</emphasis> option in your <emphasis>GateIn.sh</emphasis> or <emphasis>GateIn.bat</emphasis> startup script.
+  The property can be passed as a JVM parameter with the <emphasis>-D</emphasis> option in your <emphasis>gatein.sh</emphasis> or <emphasis>gatein.bat</emphasis> startup script.
  </para>
   <para>
   Every JavaScript file is associated with a module name which acts as a namespace.
