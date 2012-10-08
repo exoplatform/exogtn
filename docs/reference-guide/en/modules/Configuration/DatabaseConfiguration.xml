@@ -44,7 +44,7 @@
     values for your JDBC connection. To learn more, refer to your database JDBC driver
     documentation.</para>
 
-    <programlisting role="XML">gatein.jcr.datasource.driver=org.hsqldb.jdbcDriver
+    <programlisting language="xml">gatein.jcr.datasource.driver=org.hsqldb.jdbcDriver
 gatein.jcr.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcjcr_${name}
 gatein.jcr.datasource.username=sa
 gatein.jcr.datasource.password=
@@ -76,7 +76,7 @@ gatein.jcr.datasource.password=
     and assign the rights to create tables to the users.</para>
 
     <para>Add the MySQL's JDBC driver to the classpath, and
-    finally edit <emphasis>gatein.ear/02portal.war/WEB-INF/conf/jcr/jcr-configuration</emphasis>
+    finally edit <emphasis>gatein.ear/portal.war/WEB-INF/conf/jcr/jcr-configuration</emphasis>
     to contain the following:<programlisting>gatein.jcr.datasource.driver=com.mysql.jdbc.Driver
 gatein.jcr.datasource.url=jdbc:mysql://localhost:3306/mygateindb${container.name.suffix}
 gatein.jcr.datasource.username=gateinuser
