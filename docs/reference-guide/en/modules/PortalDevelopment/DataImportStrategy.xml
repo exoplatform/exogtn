@@ -60,7 +60,7 @@
         a UserPortalConfigService initial param. For example, the bellow configuration
         means that default value is <emphasis>MERGE</emphasis>
       </para>
-      <programlisting role="XML"><![CDATA[
+      <programlisting language="xml"><![CDATA[
 <component>
   <key>org.exoplatform.portal.config.UserPortalConfigService</key>
   <type>org.exoplatform.portal.config.UserPortalConfigService</type>
@@ -136,7 +136,7 @@
             </procedure>
          </para>
             Let's see the example with two navigation nodes in each import mode. In this case, there are 2 navigation definitions:
-         <programlisting role="XML"><![CDATA[<node-navigation>
+         <programlisting language="xml"><![CDATA[<node-navigation>
   <page-nodes>
     <node>
       <name>foo</name>
@@ -161,7 +161,7 @@
             <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
          </imageobject>
       </mediaobject>
-      <programlisting role="XML"><![CDATA[<node-navigation>
+      <programlisting language="xml"><![CDATA[<node-navigation>
   <page-nodes>
     <node>
       <name>foo</name>

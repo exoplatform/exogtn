@@ -90,7 +90,7 @@
               <para>Operation reloadConfiguration: reload the configuration file.</para>
             </listitem>
             <listitem>
-              <para>Operation findRoutes: route the request argument through the controller and returns a list of all parameter map resolutions. The argument is a request URI, such as <emphasis>/groups/:platform:administrators/administration/registry</emphasis>. It returns a string representation (<code>List&lt;Map&gt;</code>) of the matched routes.</para>
+              <para>Operation findRoutes: route the request argument through the controller and returns a list of all parameter map resolutions. The argument is a request URI, such as <emphasis>/g/:platform:administrators/administration/registry</emphasis>. It returns a string representation (<code>List&lt;Map&gt;</code>) of the matched routes.</para>
             </listitem>
           </itemizedlist>
         </section>

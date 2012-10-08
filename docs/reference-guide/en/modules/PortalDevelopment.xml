@@ -45,10 +45,6 @@
           <para>Knowledge of the XML resource bundles, which are developed as an alternative to property files.</para>
         </listitem>
         <listitem>
-            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-JavaScript_Inter_Application_Communication">JavaScript Inter Application Communication</link></emphasis></para>
-          <para>Knowledge of the library which is designed to allow applications within a page to exchange data.</para>
-        </listitem>
-        <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Upload_Component">Upload Component</link></emphasis></para>
          <para>Instructions on how to configure the <emphasis role="bold">Upload Service</emphasis>.</para>
         </listitem>
@@ -75,7 +71,6 @@
 	<xi:include href="PortalDevelopment/InternationalizationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/RTLFramework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/XMLResourceBundles.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="PortalDevelopment/JavascriptInterApplicationCommunication.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/UploadComponent.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/AjaxLoadingMaskLayerDeactivation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/JavascriptConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

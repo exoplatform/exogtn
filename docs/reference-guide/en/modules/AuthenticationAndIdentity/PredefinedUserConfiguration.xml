@@ -6,7 +6,7 @@
 <section id="sect-Reference_Guide-Predefined_User_Configuration">
 	<title>Predefined User Configuration</title>
     <para>
-		To specify the initial Organization configuration, the content of <emphasis>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </emphasis> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
+		To specify the initial Organization configuration, the content of <emphasis>portal.war:/WEB-INF/conf/organization/organization-configuration.xml </emphasis> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
 	</para>
 
   <para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
@@ -38,7 +38,7 @@
 		</para>
       <note>
          <para>
-            See <emphasis>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml</emphasis> for the full content.
+            See <emphasis>portal.war:/WEB-INF/conf/organization/organization-configuration.xml</emphasis> for the full content.
          </para>
       </note>
 		

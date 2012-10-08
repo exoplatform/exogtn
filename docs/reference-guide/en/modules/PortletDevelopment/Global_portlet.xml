@@ -41,7 +41,7 @@
     <para>The Global metadata is declared in the
             <emphasis>portlet.xml</emphasis> file conforming with Portlet 2.0 &apos;s XSD.
     </para>
-    <programlisting role="XML">&lt;portlet-app version=&quot;1.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;
+    <programlisting language="xml">&lt;portlet-app version=&quot;1.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;
              xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
              xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;&gt;
 
@@ -76,7 +76,7 @@
                 the XML configuration below, the filter ApplicationMonitoringFilter involves in request handling on any
                 deployed portlet.
 				 </para>
-        <programlisting role="XML">&lt;filter&gt;
+        <programlisting language="xml">&lt;filter&gt;
      &lt;filter-name&gt;org.exoplatform.portal.application.ApplicationMonitoringFilter&lt;/filter-name&gt;
     &lt;filter-class&gt;org.exoplatform.portal.application.ApplicationMonitoringFilter&lt;/filter-class&gt;
     &lt;lifecycle&gt;ACTION_PHASE&lt;/lifecycle&gt;
