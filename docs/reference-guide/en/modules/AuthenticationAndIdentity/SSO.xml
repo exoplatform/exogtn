@@ -400,7 +400,7 @@ realmName=gatein-domain;
 					</listitem>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire content of <emphasis>gatein.ear/portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -416,7 +416,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:</para>
+                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/portal.war/WEB-INF/web.xml</emphasis>:</para>
 <programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -594,7 +594,7 @@ realmName=gatein-domain;
 				</step>
             <step>
                <para>
-                  Copy the file <emphasis>$GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/02portal.war/WEB-INF/classes</emphasis> (or into <emphasis>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>GATEIN_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat)
+                  Copy the file <emphasis>$GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</emphasis> into <emphasis>gatein.ear/portal.war/WEB-INF/classes</emphasis> (or into <emphasis>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</emphasis>, or <emphasis>GATEIN_HOME/conf</emphasis> if &PRODUCT; is running in Tomcat).
                </para>
             </step>
 				<step>
@@ -690,7 +690,7 @@ realmName=gatein-domain;
         <itemizedlist>
           <listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire content of <emphasis>gatein.ear/portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -706,7 +706,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:							
+							Add the following filters at the top of the filter chain in <emphasis>gatein.ear/portal.war/WEB-INF/web.xml</emphasis>:
 <programlisting><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -1040,7 +1040,7 @@ realmName=gatein-domain;
         <itemizedlist>
 					<listitem>
 						<para>
-							Replace the entire contents of <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis> with:</para>
+							Replace the entire content of <emphasis>gatein.ear/portal.war/login/jsp/login.jsp</emphasis> with:</para>
 <programlisting language="html">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -1056,7 +1056,7 @@ realmName=gatein-domain;
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>:
+                  Add the following filters at the top of the filter chain in <emphasis>gatein.ear/portal.war/WEB-INF/web.xml</emphasis>:
 <programlisting><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -1523,7 +1523,7 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
 					<para>
-                  Modify <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
+                  Modify <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/web.xml</emphasis> as below.</para>
 						<programlisting language="xml"><![CDATA[
 <!--	<login-config>
 	  <auth-method>FORM</auth-method>
@@ -1570,7 +1570,7 @@ network.negotiate-auth.using-native-gsslib = true
 				</step>
 				<step>
               <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the
-                 <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
+                 <emphasis role="bold">$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
               </para>
 <programlisting><![CDATA[
 <filter>

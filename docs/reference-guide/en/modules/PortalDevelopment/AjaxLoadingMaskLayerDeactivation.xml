@@ -31,7 +31,7 @@
 			</step>
 			<step>
 				<para>
-					The <emphasis>doAsync()</emphasis> method automatically adds the following new parameter to the parameters list; <emphasis>asyncparam = new Parameter(AJAX ASYNC,&#34;true&#34;); (AJAX ASYNC == &#34;ajax async&#34;)</emphasis>
+					The <emphasis>doAsync()</emphasis> method automatically adds the following new parameter to the parameters list: <emphasis>asyncparam = new Parameter(AJAX ASYNC,&#34;true&#34;); (AJAX ASYNC == &#34;ajax async&#34;)</emphasis>
 				</para>
 				<para>
 					This request is asynchronous and the ajax-loading mask will not deployed.
