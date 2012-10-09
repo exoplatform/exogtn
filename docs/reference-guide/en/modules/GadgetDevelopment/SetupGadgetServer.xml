@@ -47,24 +47,24 @@
       <itemizedlist>
         <listitem>
           <para>
-            <emphasis>key.txt</emphasis>
+            <filename>key.txt</filename>
           </para>
         </listitem>
         <listitem>
           <para>
-            <emphasis>oauthkey.pem</emphasis>
+            <filename>oauthkey.pem</filename>
           </para>
         </listitem>
         <listitem>
           <para>
-            <emphasis>oauthkey_pub.pem</emphasis>
+            <filename>oauthkey_pub.pem</filename>
           </para>
         </listitem>
       </itemizedlist>
       <para>By default, they are located in the
         <emphasis>tomcat/gatein/conf/gadgets</emphasis>
         folder and are configured by system variables in the
-        <emphasis>tomcat/gatein/conf/configuration.properties</emphasis>
+        <filename>tomcat/gatein/conf/configuration.properties</filename>
         file:
       </para>
       <programlisting>
@@ -73,24 +73,24 @@
       </programlisting>
       <para>In case you have other files, you can change these variables to point to them.</para>
       <para>The
-        <emphasis>key.txt</emphasis>
+        <filename>key.txt</filename>
         file contains a secret key used to encrypt the security token used for the user authentication. When starting
         GateIn, this file is read via the
         <emphasis>gatein.gadgets.securitytokenkeyfile</emphasis>
-        path. In case the <emphasis>key.txt</emphasis> file is not found, GateIn automatically generates a new
-        <emphasis>key.txt</emphasis>
+        path. In case the <filename>key.txt</filename> file is not found, GateIn automatically generates a new
+        <filename>key.txt</filename>
         one and save it to the
         <emphasis>gatein.gadgets.securitytokenkeyfile</emphasis>
         path.
       </para>
       <para>
-        <emphasis>oauthkey.pem</emphasis>
+        <filename>oauthkey.pem</filename>
         and
-        <emphasis>oauthkey_pub.pem</emphasis>
+        <filename>oauthkey_pub.pem</filename>
         are a key pair of RSA cryptography standard.
-        <emphasis>oauthkey.pem</emphasis>
+        <filename>oauthkey.pem</filename>
         is known as a private key and
-        <emphasis>oauthkey_pub.pem</emphasis>
+        <filename>oauthkey_pub.pem</filename>
         is a public key. They are the default keys of the gadget container which OAuth gadgets will use to authorize
         with external service providers.
       </para>
@@ -99,7 +99,7 @@
 		<section id="sect-Reference_Guide-Configuration-Gadget_proxy_and_concat_configuration">
 			<title>Configure Gadget proxy and Concat</title>
 			<para>
-				These servers have to be on the same domain as the gadget server. You can configure the container in <emphasis>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</emphasis>.
+				These servers have to be on the same domain as the gadget server. You can configure the container in <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>.
 			</para>
 			
 <programlisting language="javascript">&#34;gadgets.content-rewrite&#34; : {

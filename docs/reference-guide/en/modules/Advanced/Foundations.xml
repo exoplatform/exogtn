@@ -72,10 +72,10 @@
 
       <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis>configuration.xml</emphasis> configuration files.
          The location of the configuration files determines if services are placed into the RootContainer scope, or into the PortalContainer scope.
-         All <emphasis>configuration.xml</emphasis> files located at <emphasis>conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
+         All <filename>configuration.xml</filename> files located at <filename>conf/configuration.xml</filename> in the classpath (any directory, or any jar in the classpath) will have their
       services configured at the RootContainer scope.
-      All configuration.xml files located at <emphasis>conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at the PortalContainer scope.
-      Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <emphasis>WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at the PortalContainer scope.
+      All <filename>configuration.xml</filename> files located at <filename>conf/portal/configuration.xml</filename> in the classpath will have their services configured at the PortalContainer scope.
+      Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <filename>WEB-INF/conf/configuration.xml</filename>, and will also have their services configured at the PortalContainer scope.
       </para>
       <note>
          <para>Portal extensions are described later.</para>
@@ -88,7 +88,7 @@
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
          <title>Components</title>
-         <para>A service component is defined in the <emphasis>configuration.xml file</emphasis> by using <emphasis>&lt;component&gt;</emphasis> element.</para>
+         <para>A service component is defined in the <filename>configuration.xml</filename> file by using <emphasis>&lt;component&gt;</emphasis> element.</para>
          <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis>&lt;type&gt;</emphasis></para>
          <para>Every component has a <emphasis>&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
          If the key is loaded as a class, the Class or String object will be used as a key.</para>
@@ -160,7 +160,8 @@
          <title>Includes, and special URLs</title>
          <para>It is possible to break the <emphasis>configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
          The included files are complete configuration.xml documents, not fragments of text.</para>
-         <para>The following is an example configuration.xml which 'outsources' its content into several files:</para>
+         <para>The following is an example of <filename>configuration.xml</filename>
+             which 'outsources' its content into several files:</para>
          <programlisting language="xml"><![CDATA[
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -551,7 +552,7 @@
          There are two steps necessary to create a portal extension.
       </para>
       <para>
-         First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
+         First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in <filename>web.xml</filename> of your web application.
       </para>
       <example><title>Example of a portal extension called sample-ext:</title>
 

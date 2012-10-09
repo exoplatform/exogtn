@@ -474,7 +474,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class">
 				<title>Portlet Class</title>
 				<para>
-					The code below is from the <emphasis> JSPHelloUser/src/main/java/org/gatein/portal/examples/portlets/JSPHelloUserPortlet.java </emphasis> Java source. It is split in different pieces.
+					The code below is from the <filename> JSPHelloUser/src/main/java/org/gatein/portal/examples/portlets/JSPHelloUserPortlet.java </filename> Java source. It is split in different pieces.
 				</para>
 				<programlistingco>
 					<areaspec>

@@ -163,61 +163,61 @@
          <itemizedlist>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/wsrp-admin-gui.war</emphasis>, which contains the WSRP Configuration portlet
+                  <filename>$GATEIN_HOME/wsrp-admin-gui.war</filename>, which contains the WSRP Configuration portlet
                   with which you can configure consumers to access remote servers and how the WSRP producer is
                   configured.
                </para>
             </listitem>
             <listitem>
-               <para><emphasis>$GATEIN_HOME/wsrp-producer.war</emphasis>, which contains the WSRP producer web
+               <para><filename>$GATEIN_HOME/wsrp-producer.war</filename>, which contains the WSRP producer web
                   application.
                </para>
             </listitem>
             <listitem>
-               <para><emphasis>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</emphasis>, which contains common classes
+               <para><filename>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</filename>, which contains common classes
                   needed by the different WSRP libraries.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</emphasis>, which contains the WSRP
+                  <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</filename>, which contains the WSRP
                   consumer.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</emphasis>, which contains the
+                  <filename>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</filename>, which contains the
                   API classes needed to integrate the WSRP component into portals.
                </para>
 
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</emphasis>, which contains the classes
+                  <filename>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</filename>, which contains the classes
                   needed by the WSRP producer.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</emphasis>, which contains the generated
+                  <filename>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</filename>, which contains the generated
                   JAX-WS classes for WSRP v.1.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</emphasis>, which contains the generated
+                  <filename>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</filename>, which contains the generated
                   JAX-WS classes for WSRP version 2.
                </para>
             </listitem>
             <listitem>
                <para>
-                  <emphasis>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</emphasis>, which
+                  <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which
                   contains the code to integrate the WSRP service into &PRODUCT_NAME;.
                </para>
             </listitem>
          </itemizedlist>
          If you are not going to use WSRP in &PRODUCT_NAME;, you can remove
-         <emphasis>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</emphasis>
+         <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>
          from your &PRODUCT_NAME; distribution to easily deactivate the
          <ulink url="http://community.jboss.org/wiki/WSRPserviceremovalprocedure"> WSRP support</ulink>. Of course, if you want to trim your
          installation, you can also remove all the files mentioned above.
@@ -299,8 +299,8 @@
          not expose local portlets for consumption
          by remote WSRP consumers by default. To make a portlet remotely available, it must be made "remotable" by marking
          it as such in the associated
-         <emphasis>portlet.xml</emphasis>. This is accomplished by using a specific
-         <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>. Setting its value to
+         <filename>portlet.xml</filename>. This is accomplished by using a specific
+         <filename>org.gatein.pc.remotable container-runtime-option</filename>. Setting its value to
          <code>true</code>
          makes the portlet available for the remote consumption, while setting its value to
          <code>false</code>
@@ -392,7 +392,7 @@
          The <emphasis>NotRemotelyExposedPortlet</emphasis>, however, overrides the default behavior and is not remotely
          exposed. Note that in the absence of a top-level
          <emphasis>org.gatein.pc.remotable container-runtime-option</emphasis>
-         value set to<code>true</code>, portlets are not remotely exposed.
+         value set to <code>true</code>, portlets are not remotely exposed.
       </para>
        <para>
 	<prompt>
@@ -481,11 +481,11 @@
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration-Configure_remote_producer_walkthrough">Configure a remote producer walk-through</link></emphasis></para>
              <para>Instructions on how to define access to a remote producer so that its portlets can be consumed within GateIn by using the configuration portlet
-               or using the <emphasis>portlet.xml</emphasis> file.</para>
+               or using the <filename>portlet.xml</filename> file.</para>
            </listitem>
            <listitem>
                <para><emphasis role="bold"><link linkend="wsrp-consumer_configuration-Configure_access_to_remote_producers_via_XML">Configure access to remote producers via XML</link></emphasis></para>
-               <para>Instructions on how to configure consumers by editing the <emphasis>wsrp-consumers-config.xml</emphasis> file with the required and optional configuration information.
+               <para>Instructions on how to configure consumers by editing the <filename>wsrp-consumers-config.xml</filename> file with the required and optional configuration information.
                 </para>
            </listitem>
            <listitem>
@@ -713,7 +713,7 @@
 
             <para>While it is recommended that you use the WSRP Configuration portlet to configure Consumers, eXo Platform provides an
                alternative way to configure consumers by editing the .xml file located at
-               <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>.
+               <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
             </para>
             <programlisting language="xml"><![CDATA[
 <?xml version='1.0' encoding='UTF-8' ?>
@@ -801,13 +801,13 @@
 
          <para>While it is recommended that you use the WSRP Configuration portlet to configure Consumers, eXo Platform provides an
             alternative way to configure consumers by editing the XML file located at
-            <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>.
+            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
             <note>
                <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
                   in
-                  <emphasis>
+                  <filename>
                      $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
-                  </emphasis>
+                  </filename>
                </para>
             </note>
             <note>
@@ -815,7 +815,7 @@
                   time the WSRP service starts and the associated information is then put under control of JCR (Java
                   Content Repository). The subsequent launches of the WSRP service will use the JCR-stored information for
                   all producers that are already known to &PRODUCT_NAME;. More specifically, the
-                  <emphasis>wsrp-consumers-config.xml</emphasis>
+                  <filename>wsrp-consumers-config.xml</filename>
                   file is scanned for producer identifiers.
                   Any identifier that is already known will be by-passed and the JCR information associated with this
                   remote producer will be used. The information defined at the XML level is only processed for producer
@@ -825,7 +825,7 @@
                   <xref linkend="consumer_gui"/>)
                   <emphasis>AND</emphasis>
                   remove the associated information in
-                  <emphasis>wsrp-consumers-config.xml</emphasis>
+                  <filename>wsrp-consumers-config.xml</filename>
                   (if such information exists) as the producer will be re-created the next time the WSRP is launched if
                   that information is not removed.
                </para>
@@ -868,7 +868,7 @@
 				<emphasis role="bold">Optional configuration</emphasis>
 			</citetitle>
 		</para>
-            <para>It is also possible to provide addtional configuration. In some cases, the additional configuration might be important to
+            <para>It is also possible to provide additional configuration. In some cases, the additional configuration might be important to
                establish a proper connection to the remote producer.
             </para>
 
@@ -931,7 +931,7 @@
             Here is the configuration of the
             <emphasis>selfv1</emphasis> and <emphasis>selfv2</emphasis>
             consumers as found in
-            <emphasis>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</emphasis>
+            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
             with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
          </para>
 
@@ -1423,12 +1423,12 @@
        <para>
             You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
             is the preferred way, or by editing the
-            <emphasis>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</emphasis>
+            <filename>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</filename>
             file. Several aspects can be modified with respects to whether the registration is required for consumers to
             access the Producer's services. An XML Schema for the configuration format is available at
-            <emphasis>
+            <filename>
                $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
-            </emphasis>.
+            </filename>.
          </para>
          <para>
 	<prompt>

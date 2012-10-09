@@ -43,9 +43,9 @@
     </citetitle>
   </para>
 
-    <para>The WebApp structure consists of two necessary files, including <emphasis>web.xml</emphasis>, and <emphasis>gadget.xml</emphasis>.</para>
+    <para>The WebApp structure consists of two necessary files, including <filename>web.xml</filename>, and <filename>gadget.xml</filename>.</para>
     <para>In the
-      <emphasis>web.xml</emphasis>
+      <filename>web.xml</filename>
       file, there are 2 requirements: </para>
     <itemizedlist>
       <listitem>
@@ -86,7 +86,7 @@
 </web-app>]]>
     </programlisting>
     <para>The
-      <emphasis>gadget.xml</emphasis>
+      <filename>gadget.xml</filename>
       file is used to locate the configuration of gadgets that you want to add to the <emphasis role="bold">Application
         Registry</emphasis>.
     </para>

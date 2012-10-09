@@ -46,12 +46,12 @@
             </listitem>
           </itemizedlist>
           <para>The goal of the controller (mapping engine) is to <emphasis>decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed, a request contains data that determine how the request will be processed and such data can be encoded in various places in the request, such as the request path, or a query parameter. The controller allows GateIn to route a request according to a set of parameters (a map) instead of the servlet request.</para>
-          <para>The controller configuration is declarative in an .xml file named _controller.xml_, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
-          <para>The controller data cannot be modified by using the portlet interface, but can be still changed at runtime by modifying in the <emphasis>controller.xml</emphasis> file, then calling the <emphasis>WebAppController.reloadConfiguration()</emphasis> method. </para>
+          <para>The controller configuration is declarative in an <filename>.xml</filename> file named <filename>controller.xml</filename>, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering).</para>
+          <para>The controller data cannot be modified by using the portlet interface, but can be still changed at runtime by modifying in the <filename>controller.xml</filename> file, then calling the <emphasis>WebAppController.reloadConfiguration()</emphasis> method. </para>
        
         <section id="sect-Reference_Guide-Navigation_Controller-Building_controller">
           <title>Building controller</title>
-          <para>The controller configuration that contains the routing rules is loaded from the <emphasis>controller.xml</emphasis> file retrieved in the GateIn configuration directory. Its location is determined by the <emphasis >gatein.controller.config</emphasis> property.</para>
+          <para>The controller configuration that contains the routing rules is loaded from the <filename>controller.xml</filename> file retrieved in the GateIn configuration directory. Its location is determined by the <filename>gatein.controller.config</filename> property.</para>
           <para>WebAppController loads and initializes the mapping engine.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
@@ -69,7 +69,7 @@
 ]]></programlisting>
           </programlistingco>
           <para>GateIn's extension project can define their own routing table, thanks to the extension mechanism.</para>
-          <para>The <emphasis >controller.xml</emphasis> file can be changed and reloaded at runtime. This helps the test of different configurations easily (configuration loading operations) and provides more insight into the routing engine (the findRoutes operation). See <emphasis >Rebuiding controller</emphasis> below for more details.</para>
+          <para>The <filename>controller.xml</filename> file can be changed and reloaded at runtime. This helps the test of different configurations easily (configuration loading operations) and provides more insight into the routing engine (the findRoutes operation). See <emphasis>Rebuiding controller</emphasis> below for more details.</para>
           <itemizedlist>
             <listitem>
               <para>
@@ -81,7 +81,7 @@
           <para>It provides the following attributes and operations:</para>
           <itemizedlist>
             <listitem>
-              <para>Attribute configurationPath: the "read-only" configuration path of the <emphasis >controller.xml</emphasis> file.</para>
+              <para>Attribute configurationPath: the "read-only" configuration path of the <filename>controller.xml</filename> file.</para>
             </listitem>
             <listitem>
               <para>Operation loadConfiguration: load a new configuration file from a specified XML path.</para>
@@ -90,7 +90,7 @@
               <para>Operation reloadConfiguration: reload the configuration file.</para>
             </listitem>
             <listitem>
-              <para>Operation findRoutes: route the request argument through the controller and returns a list of all parameter map resolutions. The argument is a request URI, such as <emphasis>/g/:platform:administrators/administration/registry</emphasis>. It returns a string representation (<code>List&lt;Map&gt;</code>) of the matched routes.</para>
+              <para>Operation findRoutes: route the request argument through the controller and returns a list of all parameter map resolutions. The argument is a request URI, such as <filename>/g/:platform:administrators/administration/registry</filename>. It returns a string representation (<code>List&lt;Map&gt;</code>) of the matched routes.</para>
             </listitem>
           </itemizedlist>
         </section>
@@ -99,7 +99,7 @@
           <para>Most of the controller configuration cares about defining rules (Routing table - contains routes object) that will drive the resolution. Routes are processed during the controller initialization to give a tree of node.</para>
           <itemizedlist>
             <listitem>
-              <para> Each node is related to its parent with a matching rule that can either be an <emphasis >exact string matching</emphasis> or a <emphasis >regular expression matching</emphasis>.
+              <para> Each node is related to its parent with a matching rule that can either be an <emphasis>exact string matching</emphasis> or a <emphasis >regular expression matching</emphasis>.
               </para>
             </listitem>
             <listitem>
@@ -145,7 +145,7 @@
           </section>
           <section id="sect-Reference_Guide-Navigation_Controller-Controller_Config-Path_Parameters">
             <title>
-              <emphasis >Path parameters - <emphasis role="italic">Regular expression support</emphasis>
+              <emphasis >Path parameters - Regular expression support
               </emphasis>
             </title>
             <para>Path parameters allow to associate a portion of the request path with a parameter. Such parameter will match any non empty portions of text except the <emphasis >/</emphasis> character (that is the [^/]+ regular expression) otherwise they can be associated with a regular expression for matching specific patterns. Path parameters are mandatory for matching since they are a part of the request path, however it is allowed to write regular expression matching an empty value.</para>
@@ -272,7 +272,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
 </route>
 ]]></programlisting>
             </programlistingco>
-            <para>In that case, the request path "/foo" will always be matched by the first rule before the second rule. This can be misleading since the map (gtn:path=foo) would be rendered as "/foo" as well and would not be matched by the first rule. Such ambiguit can happen, it can be desirable or not.</para>
+            <para>In that case, the request path "/foo" will always be matched by the first rule before the second rule. This can be misleading since the map (gtn:path=foo) would be rendered as "/foo" as well and would not be matched by the first rule. Such ambiguity can happen, it can be desirable or not.</para>
           </section>
           <section id="sect-Reference_Guide-Navigation_Controller-Controller_Config-Route_nesting">
             <title>Route nesting</title>
@@ -345,7 +345,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
               <para>default: HTTP redirection to the default portal of the container.</para>
             </listitem>
             <listitem>
-              <para>staticResource: serve static resources like image, CSS or JavaScript and more in <emphasis >portal.war</emphasis> (see <xref linkend="sect-Reference_Guide-Navigation_Controller-Static_resource_handler"/>).</para>
+              <para>staticResource: serve static resources like image, CSS or JavaScript and more in <filename>portal.war</filename> (see <xref linkend="sect-Reference_Guide-Navigation_Controller-Static_resource_handler"/>).</para>
             </listitem>
           </itemizedlist>
           <para>
@@ -634,7 +634,7 @@ String uri = nodeURL.setNode(node).toString();
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration-Security_Changes">
           <title>Security changes</title>
-          <para>Security configuration needs to be changed to keep the flexibility added by the navigation controller. In particular, the authentication does not depend anymore on path specified in <code>web.xml</code> but relies on the security mandated by the underlying resource instead. Here are the noticeable changes for security:</para>
+          <para>Security configuration needs to be changed to keep the flexibility added by the navigation controller. In particular, the authentication does not depend anymore on path specified in <filename>web.xml</filename> but relies on the security mandated by the underlying resource instead. Here are the noticeable changes for security:</para>
           <itemizedlist>
             <listitem>
               <para>Authentication is now triggered on the "<code>/login</code>" URL when it does not have a username or a password specified. Therefore, the URL <code>/login?initialURI=/classic/home</code> is (more or less) equivalent to <code>/private/classic/home</code>.
@@ -655,7 +655,7 @@ String uri = nodeURL.setNode(node).toString();
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration-Default_handler">
           <title>Default handler</title>
-          <para>Redirection to the default portal used to be done by the <code>index.jsp</code> JSP page. This is not the case anymore, the <emphasis>index.jsp</emphasis> file has been removed and the welcome file in <code>web.xml</code> was removed, too. Instead a specific handler in the routing table has been configured, the sole role of this handler is to redirect the request to the default portal when no other request has been matched previously:</para>
+          <para>Redirection to the default portal used to be done by the <filename>index.jsp</filename> JSP page. This is not the case anymore, the <filename>index.jsp</filename> file has been removed and the welcome file in <filename>web.xml</filename> was removed, too. Instead a specific handler in the routing table has been configured, the sole role of this handler is to redirect the request to the default portal when no other request has been matched previously:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -684,8 +684,8 @@ String uri = nodeURL.setNode(node).toString();
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Static_resource_handler">
           <title>Static resource handler</title>
-          <para>The "/" mapping for the "default" servlet is now replaced by mapping for the <code>org.exoplatform.portal.application.PortalController</code> servlet. It means that you need a handler (<emphasis>org.exoplatform.portal.application.StaticResourceRequestHandler</emphasis>) to serve static resources like image, CSS or JavaScript files in <code>portal.war</code>. And it should be configured, and extended easily thanks to the <code>controller.xml</code> file. This file can be overridden and can be changed and reloaded at runtime (WebAppController is MBean with some operations, such as <code>reloadConfiguration()</code>).</para>
-          <para>Declare StaticResourceHandler in <code>controller.xml</code></para>
+          <para>The "/" mapping for the "default" servlet is now replaced by mapping for the <code>org.exoplatform.portal.application.PortalController</code> servlet. It means that you need a handler (<emphasis>org.exoplatform.portal.application.StaticResourceRequestHandler</emphasis>) to serve static resources like image, CSS or JavaScript files in <filename>portal.war</filename>. And it should be configured, and extended easily thanks to the <filename>controller.xml</filename> file. This file can be overridden and can be changed and reloaded at runtime (WebAppController is MBean with some operations, such as <code>reloadConfiguration()</code>).</para>
+          <para>Declare StaticResourceHandler in <filename>controller.xml</filename></para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -699,7 +699,7 @@ String uri = nodeURL.setNode(node).toString();
 </route>
 ]]></programlisting>
           </programlistingco>
-          <para>And you do not need these kinds of the following mapping in the <emphasis>web.xml</emphasis> in <code>portal.war</code> anymore.</para>
+          <para>And you do not need these kinds of the following mapping in the <filename>web.xml</filename> in <filename>portal.war</filename> anymore.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -757,7 +757,7 @@ String uri = nodeURL.setNode(node).toString();
 </security-constraint>
 ]]></programlisting>
           </programlistingco>
-          <para>You can remove the <emphasis>index.jsp</emphasis> file, and its declaration in the <emphasis>web.xml</emphasis> file thank to the default request handler:</para>
+          <para>You can remove the <filename>index.jsp</filename> file, and its declaration in the <filename>web.xml</filename> file thank to the default request handler:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
             <programlisting language="xml"><![CDATA[
@@ -775,7 +775,7 @@ String uri = nodeURL.setNode(node).toString();
               <para>Dashboard are now bound to a single URL (/users/root by default) and dashboard pages are leaf of this path.</para>
             </listitem>
             <listitem>
-              <para>Dashboard lifecycle can be decoupled (create or destroy) from the identity creation in a configurable manner in <code>UserPortalConfigService</code> and exposed in <code>configuration.properties</code> under <code>gatein.portal.idm.createuserportal</code> and <code>gatein.portal.idm.destroyuserportal</code>.</para>
+              <para>Dashboard lifecycle can be decoupled (create or destroy) from the identity creation in a configurable manner in <code>UserPortalConfigService</code> and exposed in <filename>configuration.properties</filename> under <code>gatein.portal.idm.createuserportal</code> and <code>gatein.portal.idm.destroyuserportal</code>.</para>
             </listitem>
             <listitem>
               <para>By default, dashboard are not created when a user is registered.</para>
@@ -787,8 +787,8 @@ String uri = nodeURL.setNode(node).toString();
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration-Remove_unused_files">
           <title>Remove unused files</title>
-          <para><emphasis role="bold">portal-unavailable.jsp</emphasis>: this file is presented before if a user goes to a non-available portal. But now the server sends a 404 status code instead.</para>
-          <para><emphasis role="bold">portal-warning.jsp</emphasis>: this file is not used in any places.</para>
+          <para><filename>portal-unavailable.jsp</filename>: this file is presented before if a user goes to a non-available portal. But now the server sends a 404 status code instead.</para>
+          <para><filename>portal-warning.jsp</filename>: this file is not used in any places.</para>
         </section>
       </section>
 </section>

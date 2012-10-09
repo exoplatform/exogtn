@@ -35,7 +35,7 @@
     </citetitle>
   </para>
 		<para>
-			The main configuration file is <emphasis >idm-configuration.xml</emphasis>:
+			The main configuration file is <filename>idm-configuration.xml</filename>:
 		</para>
 		<programlistingco>
 			<areaspec>
@@ -130,7 +130,7 @@
 					</para>
 					<variablelist>
 					<varlistentry>
-						<term>config</term>
+						<filename>config</filename>
 						<listitem>
 							<para>
 								(value-param)
@@ -141,7 +141,7 @@
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>hibernate.properties</term>
+						<filename>hibernate.properties</filename>
 						<listitem>
 							<para>
 								(properties-param)
@@ -152,7 +152,7 @@
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>hibernate.annotations</term>
+						<filename>hibernate.annotations</filename>
 						<listitem>
 							<para>
 								A list of annotated classes that will be added to Hibernate configuration.
@@ -160,7 +160,7 @@
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>hibernate.mappings</term>
+						<filename>hibernate.mappings</filename>
 						<listitem>							
 							<para>
 								A list of .xml files that will be added to the hibernate configuration as mapping files.
@@ -168,7 +168,7 @@
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>jndiName</term>
+						<filename>jndiName</filename>
 						<listitem>
 							<para>
 								(value-param)
@@ -179,7 +179,7 @@
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>portalRealm</term>
+						<filename>portalRealm</filename>
 						<listitem>
 							<para>
 								(value-param)
@@ -259,7 +259,7 @@
 									This parameter maps groups added with &PRODUCT; API as children of a given group ID, and stores them with a given group type name in PicketLink IDM.
 								</para>
 								<para>
-									If the parent ID ends with "/*", all child groups will have the mapped group type. Otherwises, only direct (first level) children will use this type. 
+									If the parent ID ends with "/*", all child groups will have the mapped group type. Otherwise, only direct (first level) children will use this type.
 								</para>
 								<para>
 									This can be leveraged by LDAP if the LDAP DN is configured in PicketLink IDM to only store a specific group type. This will then store the given branch in the &PRODUCT; group tree, while all other groups will remain in the database.
@@ -312,7 +312,7 @@
 		
 
 		<para>
-			A sample <emphasis >PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide.
+			A sample <filename>PicketLink IDM</filename> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide.
 		</para>
 		
 <programlisting language="xml">&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;

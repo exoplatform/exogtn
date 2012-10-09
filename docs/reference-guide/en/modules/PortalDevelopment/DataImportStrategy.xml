@@ -264,8 +264,8 @@
 
          <para>
             PortalConfig defines the portal name, permission, layout and some properties
-            of a site. These information are configured in the <emphasis>portal.xml</emphasis>, <emphasis>group.xml</emphasis> or
-            <emphasis>user.xml</emphasis>, depending on the site type. The PortalConfig importer performs a strategy
+            of a site. These information are configured in the <filename>portal.xml</filename>, <filename>group.xml</filename> or
+            <filename>user.xml</filename>, depending on the site type. The PortalConfig importer performs a strategy
             that is based on the mode defined in NewPortalConfigListener, including <emphasis>CONSERVE</emphasis>,
             <emphasis>INSERT</emphasis>, <emphasis>MERGE</emphasis> or <emphasis>OVERWRITE</emphasis>. Let's see how the import mode affects in the process of
             portal data performance:
