@@ -39,7 +39,7 @@
     </para>
     
     <para>The Global metadata is declared in the
-            <emphasis>portlet.xml</emphasis> file conforming with Portlet 2.0 &apos;s XSD.
+            <filename>portlet.xml</filename> file conforming with Portlet 2.0 &apos;s XSD.
     </para>
     <programlisting language="xml">&lt;portlet-app version=&quot;1.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&quot;
              xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -51,15 +51,15 @@
 			<para xml:id="sect-Reference_Guide-Global_Portlet-Location">
 				<emphasis role="bold">Location</emphasis>
 			</para>
-			<para>The path to the global <emphasis>portlet.xml</emphasis> is value of <emphasis >gatein.portlet.config</emphasis> in the <emphasis >configuration.properties</emphasis> file and varied by hosting
+			<para>The path to the global <filename>portlet.xml</filename> is value of <emphasis >gatein.portlet.config</emphasis> in the <filename>configuration.properties</filename> file and varied by hosting
             application servers.
 			</para>
 				<itemizedlist>
 					<listitem>
-						<para><emphasis role="bold">For Tomcat</emphasis>: <emphasis>$PLATFORM_TOMCAT_HOME/gatein/conf/portlet.xml</emphasis></para>
+						<para><emphasis role="bold">For Tomcat</emphasis>: <filename>$PLATFORM_TOMCAT_HOME/gatein/conf/portlet.xml</filename></para>
 					</listitem>
 					<listitem>
-						<para><emphasis role="bold">For JBoss</emphasis>: <emphasis>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/portlet.xml</emphasis></para>
+						<para><emphasis role="bold">For JBoss</emphasis>: <filename>$PLATFORM_JBOSS_HOME/server/default/conf/gatein/portlet.xml</filename></para>
 					</listitem>
 				</itemizedlist>
 		</listitem>
@@ -67,12 +67,12 @@
 			<para xml:id="sect-Reference_Guide-Global_Portlet-Global_metadata_elements">
 				<emphasis role="bold">Global metadata elements</emphasis>
 			</para>
-			<para>The global <emphasis >portlet.xml</emphasis> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
+			<para>The global <filename>portlet.xml</filename> file conforms to the schema of the portlet deployment descriptor defined in the Portlet
             Specification with some restrictions. In this file, the following elements are supported:
 			</para>
 			  <itemizedlist>
 				<listitem>
-				  <para xml:id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter"><emphasis role="bold">Portlet filter</emphasis>: The Portlet filter mappings declared in the global<emphasis > portlet.xml</emphasis> file are applied across portlet applications. With
+				  <para xml:id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_filter"><emphasis role="bold">Portlet filter</emphasis>: The Portlet filter mappings declared in the global<filename> portlet.xml</filename> file are applied across portlet applications. With
                 the XML configuration below, the filter ApplicationMonitoringFilter involves in request handling on any
                 deployed portlet.
 				 </para>
@@ -94,7 +94,7 @@
 				  </para>
 				</listitem>
 				<listitem>
-				  <para xml:id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode"><emphasis role="bold">Portlet Mode and Window State</emphasis>: The global <emphasis>portlet.xml</emphasis> file is considered as an alternative place to declare custom Portlet Modes and Window States.
+				  <para xml:id="sect-Reference_Guide-Global_metadata_elements-Global_Portlet-Portlet_mode"><emphasis role="bold">Portlet Mode and Window State</emphasis>: The global <filename>portlet.xml</filename> file is considered as an alternative place to declare custom Portlet Modes and Window States.
 				</para>
 				</listitem>
 			  </itemizedlist>
