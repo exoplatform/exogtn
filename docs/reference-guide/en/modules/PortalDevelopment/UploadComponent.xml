@@ -81,7 +81,7 @@
 				<para>
 
 					
-					To obtain the limit from the <emphasis>XML</emphasis> configuration, add the following code to the either <emphasis>portlet.xml</emphasis> or <emphasis>portlet-preferences.xml</emphasis>:
+					To obtain the limit from the <emphasis>XML</emphasis> configuration, add the following code to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename>:
 
 				</para>
 

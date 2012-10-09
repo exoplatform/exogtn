@@ -76,10 +76,10 @@ UIAccountForm.action.Reset= ...
 		<citetitle><emphasis role="bold">Portal support</emphasis></citetitle>
     </para>
 		<para>
-			To be loaded by the portal at runtime (actually the resource bundle service), the name of the file must be the same as a property file and it must use the <emphasis role="bold">.xml</emphasis> suffix.
+			To be loaded by the portal at runtime (actually the resource bundle service), the name of the file must be the same as a property file and it must use the <filename>.xml</filename> suffix.
 		</para>
 		<para>
-			For example, for the Account Portlet to be displayed in Arabic, the resource bundle would be <emphasis role="bold"> AccountPortlet_ar.xml</emphasis> rather than <emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
+			For example, for the Account Portlet to be displayed in Arabic, the resource bundle would be <filename> AccountPortlet_ar.xml</filename> rather than <filename>AccountPortlet_ar.properties</filename>.
 		</para>
 <para>
 	<prompt>

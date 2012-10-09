@@ -53,7 +53,7 @@
 		group.
       </para>
 	<para>
-		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component. These handler objects are used to manage each of the five components, including <emphasis>UserHandler</emphasis>, <emphasis>UserProfileHandler</emphasis>, <emphasis>GroupHandler</emphasis>, <emphasis>MembershipTypeHandler</emphasis>, and<emphasis> MembershipHandler</emphasis>.
+		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component. These handler objects are used to manage each of the five components, including <emphasis>UserHandler</emphasis>, <emphasis>UserProfileHandler</emphasis>, <emphasis>GroupHandler</emphasis>, <emphasis>MembershipTypeHandler</emphasis>, and <emphasis> MembershipHandler</emphasis>.
       </para>
 	<para>
 		The five central API components are really designed like persistent

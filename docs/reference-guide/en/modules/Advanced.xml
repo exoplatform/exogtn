@@ -14,7 +14,7 @@
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuring_services">Configure services</link></emphasis></para>
-            <para>Introduction to the <emphasis>configuration.xml</emphasis> configuration files for creating services.</para>
+            <para>Introduction to the <filename>configuration.xml</filename> configuration files for creating services.</para>
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuration_syntax">Configuration syntax</link></emphasis></para>
@@ -120,12 +120,12 @@
      <section id="sect-Reference_Guide-Foundations-Configuring_services">
         <title>Configure services</title>
 
-        <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis>configuration.xml</emphasis> configuration files.
+        <para>GateIn Kernel uses the dependency injection to create services based on the <filename>configuration.xml</filename> configuration files.
            The location of the configuration files determines if services are placed into the RootContainer scope, or into the PortalContainer scope.
-           All <emphasis>configuration.xml</emphasis> files located at <emphasis>conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
+           All <filename>configuration.xml</filename> files located at <filename>conf/configuration.xml</filename> in the classpath (any directory, or any jar in the classpath) will have their
         services configured at the RootContainer scope.
-        All configuration.xml files located at <emphasis>conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at the PortalContainer scope.
-        Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <emphasis>WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at the PortalContainer scope.
+        All <filename>configuration.xml</filename> files located at <filename>conf/portal/configuration.xml</filename> in the classpath will have their services configured at the PortalContainer scope.
+        Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <filename>WEB-INF/conf/configuration.xml</filename>, and will also have their services configured at the PortalContainer scope.
         </para>
         <note>
            <para>Portal extensions are described later.</para>
@@ -194,7 +194,7 @@
         <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
                 <citetitle><emphasis role="bold">Components</emphasis> </citetitle>
          </para>
-           <para>A service component is defined in the <emphasis>configuration.xml file</emphasis> by using <emphasis>&lt;component&gt;</emphasis> element.</para>
+           <para>A service component is defined in the <filename>configuration.xml</filename> file by using <emphasis>&lt;component&gt;</emphasis> element.</para>
            <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis>&lt;type&gt;</emphasis></para>
            <para>Every component has a <emphasis>&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
            If the key is loaded as a class, the Class or String object will be used as a key.</para>
@@ -271,9 +271,9 @@
             </citetitle>
           </para>
 
-          <para>It is possible to break the <emphasis>configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
-           The included files are complete configuration.xml documents, not fragments of text.</para>
-           <para>The following is an example configuration.xml which 'outsources' its content into several files:</para>
+          <para>It is possible to break the <filename>configuration.xml</filename> file into many smaller files, that are then included into a 'master' configuration file.
+           The included files are complete <filename>configuration.xml</filename> documents, not fragments of text.</para>
+           <para>The following is an example of <filename>configuration.xml</filename> which 'outsources' its content into several files:</para>
            <programlisting language="xml"><![CDATA[
   <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -291,7 +291,7 @@
            <note>
               <para>The current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</para>
            </note>
-           <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis>unified servlet context</emphasis> (as explaned in a later section).</para>
+           <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis>unified servlet context</emphasis> (as explained in a later section).</para>
            <para>To include the resolved path related to the current classpath (context classloader), use the <emphasis>'jar:'</emphasis> URL schema.</para>
 
           <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars">
@@ -389,11 +389,11 @@
         <para>
            <emphasis>InitParams</emphasis> are the configuration object that is essentially a map of key-value pairs,
            where key is always a <emphasis>String</emphasis>, and value can be any type that can be described
-           using the kernel configuration.xml.
+           using the kernel <filename>configuration.xml</filename> file.
         </para>
 
         <para>
-           Service components that form &PRODUCT; insfrastructure use the <emphasis>InitParams</emphasis> object to configure themselves.
+           Service components that form &PRODUCT; infrastructure use the <emphasis>InitParams</emphasis> object to configure themselves.
            A component can have one instance of InitParams injected at most. If the service component's constructor takes InitParams
            as any of the parameters, it will automatically be injected at the component instantiation time. The xml configuration
            for a service component that expects the InitParams object must include the &lt;init-params&gt; element (even if the empty one).
@@ -539,7 +539,7 @@
 
         <para>
         The <emphasis>InitParams</emphasis> structure - the names and types of entries is specific for each service,
-           as it is the code inside service components's class that decides what entry names to look up and what types
+           as it is the code inside service components' class that decides what entry names to look up and what types
            it expects to find.
         </para>
            <para>
@@ -771,7 +771,7 @@
            plug-and-play fashion - just drop in a .war archive with the resources, and configure its position on the portal's
            classpath.
            This way any customizations of the portal do not have to involve unpacking and repacking the original portal
-           .war archives. Instead, create your own .war archive with changed resources that override the resources in
+           .war archives. Instead, create your own <filename>.war</filename> archive with changed resources that override the resources in
            the original archive.
         </para>
 
@@ -782,7 +782,8 @@
            There are two steps necessary to create a portal extension.
         </para>
         <para>
-           First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
+           First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in <filename>web.xml</filename>
+            of your web application.
         </para>
         <example><title>Example of a portal extension called sample-ext:</title>
 

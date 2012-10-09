@@ -19,7 +19,7 @@
 			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
 		<para>
-			&PRODUCT; does not require any particular setup for your portlet in most common scenarios and the <emphasis>web.xml</emphasis> file can remain without any &PRODUCT; specific configuration.
+			&PRODUCT; does not require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
 		</para>
 		<para>
 			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
@@ -97,7 +97,7 @@
 			The servlet is the main entry point for incoming requests, it also includes some init codes when the portal is launched. This servlet (<emphasis>org.gatein.wci.command.CommandServlet</emphasis>) is automatically added during deployment and mapped to <emphasis>/tomcatgateinservlet</emphasis>.
 		</para>
 		<para>
-			This is equivalent to adding the following to <emphasis>web.xml</emphasis>.
+			This is equivalent to adding the following to <filename>web.xml</filename>.
 		</para>
 		<note>
 			<para>
@@ -160,7 +160,7 @@ public class MyFilter implements javax.servlet.Filter {
 }
 </programlisting>
 		<para>
-			The Java EE web application configuration file (<emphasis>web.xml</emphasis>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above, &PRODUCT; does not require anything special to be included, only the URL pattern to set has to be known.
+			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above, &PRODUCT; does not require anything special to be included, only the URL pattern to set has to be known.
 		</para>
 		
 <programlisting language="xml">
