@@ -187,14 +187,13 @@
         you would make the following changes:
       </para>
 
-      <programlisting language="xml">&lt;portal-config&gt;
-                &lt;portal-name&gt;classic&lt;/portal-name&gt;
-                &lt;locale&gt;en&lt;/locale&gt;
-                &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
-                &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
-                &lt;skin&gt;MySkin&lt;/skin&gt;
-                ...
-      </programlisting>
+<programlisting language="xml">&lt;portal-config&gt;
+&lt;portal-name&gt;classic&lt;/portal-name&gt;
+&lt;locale&gt;en&lt;/locale&gt;
+&lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
+&lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
+&lt;skin&gt;MySkin&lt;/skin&gt;
+...</programlisting>
   </section>
 
   <section id="sect-Reference_Guide-Skin_Configuration-Skins_in_Page_Markups" role="NotInToc">
@@ -252,8 +251,7 @@
 &lt;link id="web_HomePagePortlet" rel="stylesheet" type="text/css" href= "/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css" /&gt;
 &lt;link id="web_BannerPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css" /&gt;
 ...
-&lt;/head&gt;
-</programlisting>
+&lt;/head&gt;</programlisting>
 
   <note>
     <para>Both window styles and portlet specification CSS classes are included
@@ -310,8 +308,7 @@
     &lt;style-theme&gt;
       &lt;theme-name&gt;MyThemeRed&lt;/theme-name&gt;
     &lt;/style-theme&gt;
-    ...
-      </programlisting>
+    ...</programlisting>
 
 
     <para id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
@@ -474,8 +471,7 @@ skin/Stylesheet.css</programlisting>
     &lt;css-path&gt;/skin/myskin.css&lt;/css-path&gt;
     &lt;overwrite&gt;false&lt;/overwrite&gt;
   &lt;/portal-skin&gt;
-&lt;/gatein-resources&gt;
-      </programlisting>
+&lt;/gatein-resources&gt;</programlisting>
       <para>The default portal skin and window styles are defined in
     <filename>eXoResources.war/WEB-INF/gatein-resources.xml</filename>.
     </para>
@@ -513,10 +509,7 @@ skin/Stylesheet.css</programlisting>
          <para>
          For the portal named <emphasis role="bold">MySkin</emphasis>, the CSS class must be defined as follows:
          </para>
-         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
-            role="bold">MySkinImage</emphasis></programlisting>
-         
-
+         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .MySkinImage</programlisting>
          <para>
          In order for the default skin to know about the skin icon for a new portal skin, the preview screenshot
          needs to be placed in:</para>
@@ -527,8 +520,7 @@ skin/Stylesheet.css</programlisting>
          <emphasis
             role="bold">MySkin</emphasis>, you need to update the following:</para>
          <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
-         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
-            role="bold">MySkinImage</emphasis> {
+         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .MySkinImage {
   margin: auto;
   width: 329px; height:204px;
   background: url('background/MySkin.jpg') no-repeat top;
@@ -602,9 +594,7 @@ skin/Stylesheet.css</programlisting>
 
         <para>Create the CSS file:</para>
 
-
-    <programlisting language="css">
-/*---- MyTheme ----*/
+    <programlisting language="css">/*---- MyTheme ----*/
 .MyTheme .WindowBarCenter .WindowPortletInfo {
   margin-right: 80px; /* orientation=lt */
   margin-left: 80px; /* orientation=rt */
@@ -888,8 +878,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
           </imageobject>
         </mediaobject>
 		<para> </para>
-        <programlisting language="html">
-&lt;div class="Parent"&gt;
+        <programlisting language="html">&lt;div class="Parent"&gt;
   &lt;div class="TopLeft"&gt;
     &lt;div class="TopRight"&gt;
       &lt;div class="TopCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
@@ -905,8 +894,7 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
       &lt;div class="BottomCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
     &lt;/div&gt;
   &lt;div&gt;
-&lt;/div&gt;
-</programlisting>
+&lt;/div&gt;</programlisting>
     </listitem>
 	  <listitem>
 		<para xml:id="sect-Reference_Guide-Some_CSS_techniques-Left_margin_left_pattern"><emphasis role="bold">Left margin left pattern</emphasis></para>

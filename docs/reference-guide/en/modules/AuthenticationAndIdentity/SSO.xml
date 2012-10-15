@@ -290,14 +290,12 @@
                   By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the
                                   <filename>cas.war/WEB-INF/cas-servlet.xml</filename> to include the follow line :
                 </para>
-                                <programlisting>
-        &#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
-                  p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
-                  p:logoutView=&#34;casLogoutView&#34;
-                  p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
-                  p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
-                <emphasis >p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
-                </programlisting>
+<programlisting language="xml">&#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
+p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
+p:logoutView=&#34;casLogoutView&#34;
+p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
+p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
+p:followServiceRedirects=&#34;true&#34;/&#62;</programlisting>
             </note>
 			</section>
 
@@ -313,11 +311,9 @@
 					<itemizedlist>
 						<listitem>
 							<para>
-							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
-							</para>
-<programlisting>
-<![CDATA[
-<authentication>
+							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:</para>
+
+<programlisting language="xml"><![CDATA[<authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
@@ -326,10 +322,7 @@
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
   </login-module>
-</authentication>
-]]>
-</programlisting>
-
+</authentication>]]></programlisting>
 						</listitem>
 						<listitem>
 							<para>
@@ -374,28 +367,20 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
-<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-]]>
-</programlisting>
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
             </para>
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
-<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
-]]>
-</programlisting>
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>]]></programlisting>
 
 					</listitem>
 					<listitem>
@@ -409,14 +394,14 @@ realmName=gatein-domain;
   &#60;/head&#62;
   &#60;body&#62;
   &#60;/body&#62;
-&#60;/html&#62;
-</programlisting>
+&#60;/html&#62;</programlisting>
             </listitem>
          </itemizedlist>
          <itemizedlist>
             <listitem>
                <para>
                   Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:</para>
+
 <programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
@@ -601,11 +586,9 @@ realmName=gatein-domain;
 					<itemizedlist>
 						<listitem>
 							<para>
-								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
-							</para>
-<programlisting>
-<![CDATA[
-<authentication>
+								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:</para>
+
+<programlisting language="xml"><![CDATA[<authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
@@ -615,8 +598,7 @@ realmName=gatein-domain;
     <module-option name="realmName">gatein-domain</module-option>
   </login-module>
 </authentication>
-]]>
-</programlisting>
+]]></programlisting>
 						</listitem>
 						<listitem>
 							<para>
@@ -663,27 +645,20 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
-<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-]]>
-</programlisting>
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+<programlisting><![CDATA[
 <!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
-<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
-]]>
-</programlisting>
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
         </itemizedlist>
@@ -699,15 +674,15 @@ realmName=gatein-domain;
   &#60;/head&#62;
   &#60;body&#62;
   &#60;/body&#62;
-&#60;/html&#62;
-</programlisting>
+&#60;/html&#62;</programlisting>
            </listitem>
         </itemizedlist>
         <itemizedlist>
 					<listitem>
 						<para>
-							Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-<programlisting><![CDATA[<filter>
+							Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:</para>
+
+<programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
    <init-param>
@@ -751,7 +726,6 @@ realmName=gatein-domain;
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
 </filter-mapping>]]></programlisting>
-						</para>
 					</listitem>
         </itemizedlist>
 			<para>
@@ -842,8 +816,7 @@ realmName=gatein-domain;
 							Ensure the <filename>$PLATFORM_TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</filename> file looks like this:
             </para>
 
-<programlisting language="xml">
-&#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
 
 &#60;!DOCTYPE ModuleProperties PUBLIC &#34;=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN&#34;
           &#34;jar://com/sun/identity/authentication/Auth_Module_Properties.dtd&#34;&#62;
@@ -862,8 +835,7 @@ realmName=gatein-domain;
       &#60;/Prompt&#62;
     &#60;/PasswordCallback&#62;
   &#60;/Callbacks&#62;
-&#60;/ModuleProperties&#62;
-</programlisting>
+&#60;/ModuleProperties&#62;</programlisting>
 
 					</step>
 					<step>
@@ -951,11 +923,9 @@ realmName=gatein-domain;
 					<itemizedlist>
 						<listitem>
 							<para>
-								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section
-							</para>
-<programlisting>
-<![CDATA[
-<authentication>
+								In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:</para>
+
+<programlisting language="xml"><![CDATA[<authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
@@ -964,9 +934,7 @@ realmName=gatein-domain;
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
   </login-module>
-</authentication>
-]]>
-</programlisting>
+</authentication>]]></programlisting>
 
 						</listitem>
 						<listitem>
@@ -976,8 +944,7 @@ realmName=gatein-domain;
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
 portalContainerName=portal
-realmName=gatein-domain;
-</programlisting>
+realmName=gatein-domain;</programlisting>
 
 						</listitem>
 					</itemizedlist>
@@ -1012,27 +979,19 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
-<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-]]>
-</programlisting>
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
-<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
-]]>
-</programlisting>
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
         </itemizedlist>
@@ -1049,15 +1008,15 @@ realmName=gatein-domain;
   &#60;/head&#62;
   &#60;body&#62;
   &#60;/body&#62;
-&#60;/html&#62;
-</programlisting>
+&#60;/html&#62;</programlisting>
             </listitem>
          </itemizedlist>
          <itemizedlist>
             <listitem>
                <para>
-                  Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-<programlisting><![CDATA[<filter>
+                  Add the following filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:</para>
+
+<programlisting language="xml"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
    <init-param>
@@ -1105,7 +1064,6 @@ realmName=gatein-domain;
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
 </filter-mapping>]]></programlisting>
-               </para>
             </listitem>
          </itemizedlist>
 
@@ -1162,9 +1120,7 @@ realmName=gatein-domain;
           <para>Correct the setup of network on the machine. For example, if you are using the "server.local.network" domain as your machine where Kerberos and &PRODUCT; are located,
           add the line containing the machine's IP address to the <filename>/etc/hosts</filename> file.
           </para>
-          <programlisting>
-192.168.1.88  server.local.network
-          </programlisting>
+          <programlisting>192.168.1.88  server.local.network</programlisting>
           <note>
           <para>It is not recommended to use loopback addresses.</para>
           </note>
@@ -1179,17 +1135,14 @@ realmName=gatein-domain;
           <itemizedlist>
             <listitem>
               <para>Uncomment on these lines:</para>
-<programlisting>
-default_tgs_enctypes = des3-hmac-sha1
+<programlisting>default_tgs_enctypes = des3-hmac-sha1
 default_tkt_enctypes = des3-hmac-sha1
-permitted_enctypes = des3-hmac-sha1
-</programlisting>
+permitted_enctypes = des3-hmac-sha1</programlisting>
             </listitem>
             <listitem>
               <para>Add <emphasis >local.network</emphasis> as a default realm and it is also added to the list of realms and remove the remains of realms. The content looks like:
               </para>
-<programlisting>
-[libdefaults]
+<programlisting>[libdefaults]
     default_realm = LOCAL.NETWORK
 
 # The following krb5.conf variables are only for MIT Kerberos.
@@ -1239,16 +1192,14 @@ permitted_enctypes = des3-hmac-sha1
 
 [login]
     krb4_convert = true
-    krb4_get_tickets = false
-</programlisting>
+    krb4_get_tickets = false</programlisting>
             </listitem>
           </itemizedlist>
         </step>
         <step>
           <para>Edit the KDC configuration file at <filename>/etc/krb5kdc/kdc.conf</filename> that looks like.
           </para>
-<programlisting>
-[kdcdefaults]
+<programlisting>[kdcdefaults]
     kdc_ports = 750,88
 
 [realms]
@@ -1267,8 +1218,7 @@ permitted_enctypes = des3-hmac-sha1
 
 [logging]
         kdc = FILE:/home/gatein/krb5logs/kdc.log
-        admin_server = FILE:/home/gatein/krb5logs/kadmin.log
-</programlisting>
+        admin_server = FILE:/home/gatein/krb5logs/kadmin.log</programlisting>
           <itemizedlist>
             <listitem>
               <para>Create krb5kdc and krb5logs directory for Kerberos database as shown in the configuration file above.</para></listitem>
@@ -1298,18 +1248,14 @@ sudo kadmin.local
             </listitem>
             <listitem>
               <para>Add the &PRODUCT; machine and keytab file that need to be authenticated.</para>
-<programlisting>
-addprinc -randkey HTTP/server.local.network@LOCAL.NETWORK
-ktadd HTTP/server.local.network@LOCAL.NETWORK
-</programlisting>
+<programlisting>addprinc -randkey HTTP/server.local.network@LOCAL.NETWORK
+ktadd HTTP/server.local.network@LOCAL.NETWORK</programlisting>
             </listitem>
             <listitem>
               <para>Add the default &PRODUCT; user accounts and enter the password for each created user that will be authenticated.</para>
-<programlisting>
-addprinc john
+<programlisting>addprinc john
 addprinc demo
-addprinc root
-</programlisting>
+addprinc root</programlisting>
             </listitem>
           </itemizedlist>
         </step>
@@ -1351,13 +1297,11 @@ kdestroy
           </step>
           <step>
             <para>Enter <emphasis role="bold">network.negotiate-auth</emphasis> and set the value as below:</para>
-<programlisting>
-network.negotiate-auth.allow-proxies = true
+<programlisting>network.negotiate-auth.allow-proxies = true
 network.negotiate-auth.delegation-uris = .local.network
 network.negotiate-auth.gsslib (no-value)
 network.negotiate-auth.trusted-uris = .local.network
-network.negotiate-auth.using-native-gsslib = true
-</programlisting>
+network.negotiate-auth.using-native-gsslib = true</programlisting>
           </step>
     </procedure>
      <note>
@@ -1377,7 +1321,7 @@ network.negotiate-auth.using-native-gsslib = true
 					<para>
                         Activate the Host authentication under the <filename>$PLATFORM_JBOSS_HOME/server/default/conf/login-config.xml </filename> file by adding the following host login module:
           </para>
-                        <programlisting><![CDATA[<!-- SPNEGO domain -->
+<programlisting language="xml"><![CDATA[<!-- SPNEGO domain -->
 <application-policy name="host">
   <authentication>
     <login-module code="com.sun.security.auth.module.Krb5LoginModule" flag="required">
@@ -1389,8 +1333,7 @@ network.negotiate-auth.using-native-gsslib = true
       <module-option name="debug">true</module-option>
     </login-module>
   </authentication>
- </application-policy>
-]]></programlisting>
+ </application-policy>]]></programlisting>
 
             <para>
                The 'keyTab' value should point to the keytab file that was
@@ -1406,8 +1349,7 @@ network.negotiate-auth.using-native-gsslib = true
 						adding the 'SPNEGO' authenticators property.
           </para>
 
-<programlisting language="xml">
-<![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
+<programlisting language="xml"><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
 <property name="authenticators">
   <map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
     <entry>
@@ -1437,9 +1379,7 @@ network.negotiate-auth.using-native-gsslib = true
         <value>org.gatein.sso.spnego.GateInNegotiationAuthenticator</value>
     </entry>
   </map>
-</property>
-]]>
-</programlisting>
+</property>]]></programlisting>
 				</step>
 				<step>
                    <para>
@@ -1459,8 +1399,7 @@ network.negotiate-auth.using-native-gsslib = true
                      Modify the <filename>$PLATFORM_JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> file as below:
                   </para>
 
-						<programlisting language="xml"><![CDATA[
-<deployment xmlns="urn:jboss:bean-deployer:2.0">
+						<programlisting language="xml"><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
 
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-form-auth-domain">
     <authentication>
@@ -1492,7 +1431,6 @@ network.negotiate-auth.using-native-gsslib = true
     </authentication>
   </application-policy>
 
-
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
     <authentication>
      <login-module
@@ -1513,9 +1451,7 @@ network.negotiate-auth.using-native-gsslib = true
    </authentication>
   </application-policy>
 
-</deployment>
-]]>
-</programlisting>
+</deployment>]]></programlisting>
                    <para>
                       This activates SPNEGO LoginModules with fallback to FORM authentication. When SPNEGO is not available and it needs to fallback to FORM, it will use <emphasis role="bold">gatein-form-auth-domain</emphasis> security domain.
                       More details below.
@@ -1524,15 +1460,15 @@ network.negotiate-auth.using-native-gsslib = true
 				<step>
 					<para>
                   Modify <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> as below.</para>
-						<programlisting language="xml"><![CDATA[
-<!--	<login-config>
-	  <auth-method>FORM</auth-method>
+						<programlisting language="xml"><![CDATA[<!--
+<login-config>
+    <auth-method>FORM</auth-method>
 	  <realm-name>gatein-domain</realm-name>
-		<form-login-config>
+	  <form-login-config>
 		  <form-login-page>/initiatelogin</form-login-page>
-			<form-error-page>/errorlogin</form-error-page>
+		  <form-error-page>/errorlogin</form-error-page>
 	  </form-login-config>
-	</login-config>
+</login-config>
 -->
     <login-config>
       <auth-method>SPNEGO</auth-method>
@@ -1541,9 +1477,7 @@ network.negotiate-auth.using-native-gsslib = true
 	     <form-login-page>/initiatelogin</form-login-page>
 	     <form-error-page>/errorlogin</form-error-page>
      </form-login-config>
-    </login-config>
-]]>
-</programlisting>
+    </login-config>]]></programlisting>
           <para>
              This integrates SPNEGO support into the Portal web archive by switching the authentication mechanism from the default "FORM"-based to "SPNEGO"-based authentication.
              You can notice that SPNEGO part also contains the <emphasis role="bold">form-login-config</emphasis> element, which is needed if you want to enable fallback to FORM based authentication.
@@ -1553,18 +1487,15 @@ network.negotiate-auth.using-native-gsslib = true
           </para>
           <para>
              If you don't want fallback to FORM, you can disable form-login-config part and have only:</para>
-                        <programlisting language="xml"><![CDATA[
-    <login-config>
-      <auth-method>SPNEGO</auth-method>
-      <realm-name>SPNEGO</realm-name>
-<!--      <form-login-config>
+                        <programlisting language="xml"><![CDATA[<login-config>
+    <auth-method>SPNEGO</auth-method>
+    <realm-name>SPNEGO</realm-name>
+<!-- <form-login-config>
 	     <form-login-page>/initiatelogin</form-login-page>
 	     <form-error-page>/errorlogin</form-error-page>
      </form-login-config>
 -->
-    </login-config>
-]]>
-</programlisting>
+</login-config>]]></programlisting>
         <para> In this case user needs to authenticate through SPNEGO and if that fails, FORM is not shown but user has authentication error with HTTP code 401.</para>
 
 				</step>
@@ -1572,8 +1503,7 @@ network.negotiate-auth.using-native-gsslib = true
               <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the
                  <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> at the top of the Filter chain.
               </para>
-<programlisting><![CDATA[
-<filter>
+<programlisting language="xml"><![CDATA[<filter>
   <filter-name>LoginRedirectFilter</filter-name>
   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
   <init-param>
@@ -1596,22 +1526,16 @@ network.negotiate-auth.using-native-gsslib = true
 <filter-mapping>
   <filter-name>SPNEGOFilter</filter-name>
   <url-pattern>/login</url-pattern>
-</filter-mapping>
-]]>
-</programlisting>
+</filter-mapping>]]></programlisting>
 
 				</step>
 				<step>
 					<para>
           In <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
-<!--
+<programlisting><![CDATA[<!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
-<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-]]>
-</programlisting>
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>]]></programlisting>
           </para>
         </step>
         <step>

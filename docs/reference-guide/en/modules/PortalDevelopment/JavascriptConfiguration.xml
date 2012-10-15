@@ -89,9 +89,7 @@
   <para>
       Inside the associated JavaScript files, the eXo JavaScript objects are exposed as global variables named after the module.</para>
   <para> For example:</para>
-  <programlisting language="javascript">
-eXo.core.DragDrop = new DragDrop();
-   </programlisting>
+  <programlisting language="javascript">eXo.core.DragDrop = new DragDrop();</programlisting>
   <para>
   It is also possible to use the <emphasis>eXo.require()</emphasis> method to lazy load and evaluate some JavaScript codes.
       This is quite useful for the portlet or gadget applications that will use this JavaScript only once. Otherwise,

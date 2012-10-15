@@ -25,7 +25,7 @@
 			The following example configuration can be found at: &#34;<filename>portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting role="XML">&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
     &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
     &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
     &#60;component-plugins&#62;           
@@ -44,8 +44,7 @@
        &#60;/init-params&#62;
      &#60;/component-plugin&#62;
     &#60;/component-plugins&#62; 
-  &#60;/component&#62;
-</programlisting>
+  &#60;/component&#62;</programlisting>
 		<para>
 			In this example, the <emphasis role="bold">classic</emphasis> portal has been set as the default.
 		</para>
@@ -67,8 +66,7 @@
         <para>
             To delete a portal definition or a portal template definition, you need to define a component plug-in as the example below:
         </para>
-        <programlisting role="XML"><![CDATA[
-<external-component-plugins>
+        <programlisting language="xml"><![CDATA[<external-component-plugins>
     <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
 	<component-plugin>
 	  <name>new.portal.config.user.listener</name>
@@ -106,17 +104,14 @@
 		</object-param>
 	  </init-params>
 	</component-plugin>
-</external-component-plugins>
-         ]]></programlisting>
+</external-component-plugins>]]></programlisting>
         <para xml:id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">
       <citetitle><emphasis role="bold">Set the info bar shown by default for portlet</emphasis></citetitle>
         </para>
             <para>You can set the info bar shown by default for portlets of a portal by adding a property for the <emphasis>portal-config</emphasis> configuration in the <filename>portal.xml</filename> file.</para>
-            <programlisting><![CDATA[
-                    <properties>
-                        <entry key="showPortletInfo">1</entry>
-                    </properties>
-            ]]></programlisting>
+<programlisting language="xml"><![CDATA[<properties>
+    <entry key="showPortletInfo">1</entry>
+</properties>]]></programlisting>
             <para>There are two values for "showPortletInfo": 0 and 1. If the value is 1, the info bar of portlets is shown by default. If the value is 0, it is not.</para>
     <para>
 	<prompt>

@@ -55,8 +55,7 @@
           <para>WebAppController loads and initializes the mapping engine.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<!-- conf/portal/controller-configuration.xml of portal.war -->
+            <programlisting language="xml"><![CDATA[<!-- conf/portal/controller-configuration.xml of portal.war -->
 <component>
   <type>org.exoplatform.web.WebAppController</type>
     <init-params>
@@ -65,8 +64,7 @@
         <value>${gatein.portal.controller.config}</value>
       </value-param>
     </init-params>
-</component>
-]]></programlisting>
+</component>]]></programlisting>
           </programlistingco>
           <para>GateIn's extension project can define their own routing table, thanks to the extension mechanism.</para>
           <para>The <filename>controller.xml</filename> file can be changed and reloaded at runtime. This helps the test of different configurations easily (configuration loading operations) and provides more insight into the routing engine (the findRoutes operation). See <emphasis>Rebuiding controller</emphasis> below for more details.</para>
@@ -125,13 +123,11 @@
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/foo">
+              <programlisting language="xml"><![CDATA[<route path="/foo">
   <route-param qname="gtn:handler">
     <value>portal</value>
   </route-param>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
             </programlistingco>
             <para>This configuration matches the request path "<emphasis >/foo</emphasis>" to the map (gtn:handler=portal). Conversely, it renders the (gtn:handler=portal) map as the "<emphasis >/foo</emphasis>" URL. This example shows two concepts:</para>
             <itemizedlist>
@@ -167,10 +163,8 @@
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/{gtn:path}">
-</route>
-]]></programlisting>
+              <programlisting language="xml"><![CDATA[<route path="/{gtn:path}">
+</route>]]></programlisting>
             </programlistingco>
             <para>As a result of the example above, routing and rendering is as below:</para>
             <programlistingco>
@@ -186,13 +180,11 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
             <para>However, this problem could be solved with the following configuration:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/{gtn:path}">
+              <programlisting language="xml"><![CDATA[<route path="/{gtn:path}">
   <path-param encoding="preserve-path" qname="gtn:path">
     <pattern>.*</pattern>
   </path-param>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
             </programlistingco>
             <itemizedlist>
               <listitem>
@@ -235,11 +227,9 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/">
+              <programlisting language="xml"><![CDATA[<route path="/">
   <request-param name="path" qname="gtn:path"/>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
             </programlistingco>
             <para>Request parameters are declared by a <code>request-param</code> element and will match any value by default. A request like "/?path=foo" is mapped to the (gtn:path=foo) map. The <code>name</code> attribute of the <code>request-param</code> tag defines the request parameter value. This element accepts more configuration:</para>
             <itemizedlist>
@@ -259,8 +249,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
             <para>The order of route declaration is important as it affects on how rules are matched. Sometimes, the same request could be matched by several routes and the routing table is ambiguous.</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/foo">
+              <programlisting language="xml"><![CDATA[<route path="/foo">
   <route-param qname="gtn:handler">
     <value>portal</value>
   </route-param>
@@ -269,8 +258,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
   <path-param encoding="preserve-path" qname="gtn:path">
     <pattern>.*</pattern>
   </path-param>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
             </programlistingco>
             <para>In that case, the request path "/foo" will always be matched by the first rule before the second rule. This can be misleading since the map (gtn:path=foo) would be rendered as "/foo" as well and would not be matched by the first rule. Such ambiguity can happen, it can be desirable or not.</para>
           </section>
@@ -287,8 +275,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
             </itemizedlist>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="xml"><![CDATA[
-<route path="/foo">
+              <programlisting language="xml"><![CDATA[<route path="/foo">
   <route-param qname="gtn:handler">
     <value>portal</value>
   </route-param>
@@ -302,8 +289,7 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
       <value>juu</value>
     </route-param>
   </route>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
             </programlistingco>
             <itemizedlist>
               <listitem>
@@ -399,12 +385,10 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
               <code>PortalURL</code> plays a similar role at the portal level. Its main role is to abstract the creation of an URL for a resource managed by the portal.</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-public abstract class PortalURL<R, U extends PortalURL<U>>
+              <programlisting language="java"><![CDATA[public abstract class PortalURL<R, U extends PortalURL<U>>
 {
    ...
-}
-]]></programlisting>
+}]]></programlisting>
             </programlistingco>
             <para>The <code>PortalURL</code> declaration may seem a bit strange at first sight with two generic types: <code>U</code> and <code>R</code>.</para>
             <itemizedlist>
@@ -437,26 +421,20 @@ public abstract class PortalURL<R, U extends PortalURL<U>>
               <code>PortalURL</code> objects are obtained from <code>RequestContext</code> instance, such as the <code>PortalRequestContext</code>, or the <code>PortletRequestContext</code>. Usually, those are obtained thanks to the <code>getCurrentInstance</code> method of the <code>RequestContext</code> class:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-RequestContext ctx = RequestContext.getCurrentInstance();
-]]></programlisting>
+              <programlisting language="java"><![CDATA[RequestContext ctx = RequestContext.getCurrentInstance();]]></programlisting>
             </programlistingco>
             <para>
               <code>PortalURL</code> are created via to the <code>createURL</code> method that takes an input as a resource type. The resource type is usually a constant and type-safe object that allows to retrieve the <code>PortalURL</code> subclasses:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-RequestContext ctx = RequestContext.getCurrentInstance();
-PortalURL<R, U> url = ctx.createURL(type);
-]]></programlisting>
+              <programlisting language="java"><![CDATA[RequestContext ctx = RequestContext.getCurrentInstance();
+PortalURL<R, U> url = ctx.createURL(type);]]></programlisting>
             </programlistingco>
             <para>In reality, you will use a concrete type constant and have instead more concrete code like:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-RequestContext ctx = RequestContext.getCurrentInstance();
-NodeURL url = ctx.createURL(NodeURL.TYPE);
-]]></programlisting>
+              <programlisting language="java"><![CDATA[RequestContext ctx = RequestContext.getCurrentInstance();
+NodeURL url = ctx.createURL(NodeURL.TYPE);]]></programlisting>
             </programlistingco>
             <note>
               <para>The <code>NodeURL.TYPE</code> is actually declared as <code>new ResourceType&lt;NavigationResource, NodeURL&gt;()</code> that can be described as a <code>type-literal</code> object emulated by a Java anonymous inner class. Such literal was introduced by Neil Gafter as Super Type Token and popularized by Google Guice as Type Literal. It is an interesting way to create a literal representing a kind of Java type.</para>
@@ -469,32 +447,26 @@ NodeURL url = ctx.createURL(NodeURL.TYPE);
             <para>The <code>NodeURL</code> class is one of the subclass of <code>PortalURL</code> that is specialized in navigation node resources:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-public class NodeURL extends PortalURL<NavigationResource, NodeURL>
+<programlisting language="java"><![CDATA[public class NodeURL extends PortalURL<NavigationResource, NodeURL>
 {
    ...
-}
-]]></programlisting>
+}]]></programlisting>
             </programlistingco>
             <para>The <code>NodeURL</code> class does not carry any generic types of its super class, which means that a <code>NodeURL</code> is type-safe and you do not have to worry about generic types.</para>
             <para>Using a <code>NodeURL</code> is pretty straightforward:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-NodeURL url = RequestContext.getCurrentInstance().createURL(NodeURL.TYPE);
+              <programlisting language="java"><![CDATA[NodeURL url = RequestContext.getCurrentInstance().createURL(NodeURL.TYPE);
 url.setResource(new NavigationResource("portal", "classic, "home"));
-String s = url.toString();
-]]></programlisting>
+String s = url.toString();]]></programlisting>
             </programlistingco>
             <para>The <code>NodeURL</code> subclass contains the specialized <code>setter</code> methods to make its usage even easier:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-UserNode node = ...;
+              <programlisting language="java"><![CDATA[UserNode node = ...;
 NodeURL url = RequestContext.getCurrentInstance().createURL(NodeURL.TYPE);
 url.setNode(node);
-String s = url.toString();
-]]></programlisting>
+String s = url.toString();]]></programlisting>
             </programlistingco>
           </section>
           <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL">
@@ -504,10 +476,8 @@ String s = url.toString();
             <para>The <code>ComponentURL</code> subclass is another specialization of <code>PortalURL</code> that allows the creation of WebUI components URLs. <code>ComponentURL</code> is commonly used to trigger WebUI events from client side:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting><![CDATA[
-<% def componentURL = uicomponent.event(...); /*or uicomponent.url(...) */ %>
-  <a href=$componentURL>Click me</a>
-]]></programlisting>
+              <programlisting><![CDATA[<% def componentURL = uicomponent.event(...); /*or uicomponent.url(...) */ %>
+  <a href=$componentURL>Click me</a>]]></programlisting>
             </programlistingco>
             <para>Normally, you should not have to deal with it as the WebUI framework has already an abstraction for managing URL known as <code>URLBuilder</code>. The <code>URLBuilder</code> implementation delegates URL creation to <code>ComponentURL</code> objects.</para>
           </section>
@@ -527,11 +497,9 @@ String s = url.toString();
             </itemizedlist>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-PortletURL url = resp.createRenderURL();
+              <programlisting language="java"><![CDATA[PortletURL url = resp.createRenderURL();
 url.setProperty("gtn:lang", "fr");
-writer.print("<a href='" + url + "'>French</a>");
-]]></programlisting>
+writer.print("<a href='" + url + "'>French</a>");]]></programlisting>
             </programlistingco>
           </section>
           <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-URLBuilder">
@@ -552,19 +520,16 @@ writer.print("<a href='" + url + "'>French</a>");
             <para>In a Groovy template, the mechanism to create an URL is the same as the way of APIs above, however a splash of integration has been done to make creation of NodeURL simpler. A closure is bound under the <code>nodeurl</code> name and is available for invocation anytime. It will simply create a NodeURL object and return it:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-UserNode node = ...;
+              <programlisting language="java"><![CDATA[UserNode node = ...;
 NodeURL url = nodeurl();
 url.setNode(node);
-String s = url.toString();
-]]></programlisting>
+String s = url.toString();]]></programlisting>
             </programlistingco>
             <para>The <code>nodeurl</code> closure is bound to Groovy template in <code>WebuiBindingContext</code>.
             </para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting language="java"><![CDATA[
-// Closure nodeurl()
+              <programlisting language="java"><![CDATA[// Closure nodeurl()
 put("nodeurl", new Closure(this)
 {
   @Override
@@ -572,8 +537,7 @@ put("nodeurl", new Closure(this)
   {
     return context.createURL(NodeURL.TYPE);
   }
-});
-]]></programlisting>
+});]]></programlisting>
             </programlistingco>
           </section>
         </section>
@@ -598,18 +562,14 @@ put("nodeurl", new Closure(this)
           <para>The previous code for creating navigation node was like:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="java"><![CDATA[
-String uri = Util.getPortalRequestContext().getPortalURI() + "home";
-]]></programlisting>
+            <programlisting language="java"><![CDATA[String uri = Util.getPortalRequestContext().getPortalURI() + "home";]]></programlisting>
           </programlistingco>
           <para>The new code will look like:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="java"><![CDATA[
-PortalURL nodeURL = nodeurl();
+            <programlisting language="java"><![CDATA[PortalURL nodeURL = nodeurl();
 NavigationResource resource = new NavigationResource(SiteType.PORTAL, pcontext.getPortalOwner(), "home");
-String uri = nodeURL.setResource(resource).toString();
-]]></programlisting>
+String uri = nodeURL.setResource(resource).toString();]]></programlisting>
           </programlistingco>
           <para>
             <emphasis role="bold">Using UserNode object</emphasis>
@@ -617,19 +577,15 @@ String uri = nodeURL.setResource(resource).toString();
 		  <para>The previous code for creating navigation node was like:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="java"><![CDATA[
-UserNode node = ...;
-String uri = Util.getPortalRequestContext().getPortalURI() + node.getURI()";
-]]></programlisting>
+            <programlisting language="java"><![CDATA[UserNode node = ...;
+String uri = Util.getPortalRequestContext().getPortalURI() + node.getURI()";]]></programlisting>
           </programlistingco>
           <para>The new code will look like</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="java"><![CDATA[
-UserNode node = ...;
+            <programlisting language="java"><![CDATA[UserNode node = ...;
 PortalURL nodeURL = nodeurl();
-String uri = nodeURL.setNode(node).toString();
-]]></programlisting>
+String uri = nodeURL.setNode(node).toString();]]></programlisting>
           </programlistingco>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration-Security_Changes">
@@ -658,16 +614,14 @@ String uri = nodeURL.setNode(node).toString();
           <para>Redirection to the default portal used to be done by the <filename>index.jsp</filename> JSP page. This is not the case anymore, the <filename>index.jsp</filename> file has been removed and the welcome file in <filename>web.xml</filename> was removed, too. Instead a specific handler in the routing table has been configured, the sole role of this handler is to redirect the request to the default portal when no other request has been matched previously:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<controller>
+            <programlisting language="xml"><![CDATA[<controller>
   ...
   <route path="/">
     <route-param qname="gtn:handler">
       <value>default</value>
     </route-param>
   </route>
-</controller>
-]]></programlisting>
+</controller>]]></programlisting>
           </programlistingco>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Legacy_handler">
@@ -688,27 +642,23 @@ String uri = nodeURL.setNode(node).toString();
           <para>Declare StaticResourceHandler in <filename>controller.xml</filename></para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<route path="/{gtn:path}">
+            <programlisting language="xml"><![CDATA[<route path="/{gtn:path}">
   <route-param qname="gtn:handler">
     <value>staticResource</value>
   </route-param>
   <path-param encoding="preserve-path" qname="gtn:path">
     <pattern>.*\.(jpg|png|gif|ico|css)</pattern>
   </path-param>
-</route>
-]]></programlisting>
+</route>]]></programlisting>
           </programlistingco>
           <para>And you do not need these kinds of the following mapping in the <filename>web.xml</filename> in <filename>portal.war</filename> anymore.</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<servlet-mapping>
+            <programlisting language="xml"><![CDATA[<servlet-mapping>
   <servlet-name>default</servlet-name>
   <url-pattern>*.jpg</url-pattern>
 </servlet-mapping>
-...
-]]></programlisting>
+...]]></programlisting>
           </programlistingco>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-PortalWar_WebXMLChanges">
@@ -716,26 +666,22 @@ String uri = nodeURL.setNode(node).toString();
           <para><emphasis >DoLoginServlet declaration</emphasis>:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<servlet>
+<programlisting language="xml"><![CDATA[<servlet>
   <servlet-name>DoLoginServlet</servlet-name>
   <servlet-class>org.exoplatform.web.login.DoLoginServlet</servlet-class>
 </servlet>
 <servlet-mapping>
   <servlet-name>DoLoginServlet</servlet-name>
   <url-pattern>/dologin</url-pattern>
-</servlet-mapping>
-]]></programlisting>
+</servlet-mapping>]]></programlisting>
           </programlistingco>
           <para>Delare <emphasis >portal servlet</emphasis> as the default servlet:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<servlet-mapping>
+            <programlisting language="xml"><![CDATA[<servlet-mapping>
    <servlet-name>portal</servlet-name>
    <url-pattern>/</url-pattern>
-</servlet-mapping>
-]]></programlisting>
+</servlet-mapping>]]></programlisting>
           </programlistingco>
           <para>Some mapping declarations for portal servlet are unused,so you should remove them: <emphasis >
               <emphasis role="italic">/private/* /public/* /admin/* /upload/* /download/*</emphasis>
@@ -744,8 +690,7 @@ String uri = nodeURL.setNode(node).toString();
           <para><emphasis >Add some security constraints</emphasis>:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<security-constraint>
+            <programlisting language="xml"><![CDATA[<security-constraint>
   <web-resource-collection>
     <web-resource-name>user authentication</web-resource-name>
       <url-pattern>/dologin</url-pattern>
@@ -754,17 +699,14 @@ String uri = nodeURL.setNode(node).toString();
       <url-pattern>/users/*</url-pattern>
 ...
   </web-resource-collection>
-</security-constraint>
-]]></programlisting>
+</security-constraint>]]></programlisting>
           </programlistingco>
           <para>You can remove the <filename>index.jsp</filename> file, and its declaration in the <filename>web.xml</filename> file thank to the default request handler:</para>
           <programlistingco>
             <areaspec units="linecolumn"/>
-            <programlisting language="xml"><![CDATA[
-<welcome-file-list>
+            <programlisting language="xml"><![CDATA[<welcome-file-list>
   <welcome-file>/index.jsp</welcome-file>
-</welcome-file-list>
-]]></programlisting>
+</welcome-file-list>]]></programlisting>
           </programlistingco>
         </section>
         <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration-Dashboard_changes">

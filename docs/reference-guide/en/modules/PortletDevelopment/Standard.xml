@@ -622,12 +622,10 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				</para>
 				
 <programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Help mode&#60;/div&#62;
-&#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode where you can find useful information.&#60;/div&#62;
-</programlisting>
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode where you can find useful information.&#60;/div&#62;</programlisting>
 				
 <programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Edit mode&#60;/div&#62;
-&#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode where you can change your portlet preferences.&#60;/div&#62;
-</programlisting>
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode where you can change your portlet preferences.&#60;/div&#62;</programlisting>
 				<para>
 					The landing page contains the links and form to call the portlet:
 				</para>

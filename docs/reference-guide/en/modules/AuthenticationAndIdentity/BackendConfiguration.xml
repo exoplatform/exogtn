@@ -60,8 +60,7 @@
          &#60;/value-param&#62;
        &#60;/init-params&#62;
    &#60;/component&#62;
- 
- 
+
    &#60;component&#62;
       &#60;key&#62;org.exoplatform.services.organization.OrganizationService&#60;/key&#62;
       &#60;type&#62;org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl&#60;/type&#62;
@@ -117,8 +116,6 @@
         &#60;/object&#62;
       &#60;/object-param&#62;
     &#60;/init-params&#62;
- 
- 
    &#60;/component&#62;
  
 &#60;/configuration&#62;
