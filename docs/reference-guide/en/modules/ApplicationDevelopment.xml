@@ -10,7 +10,7 @@
     <itemizedlist>
         <listitem>
             <para><emphasis role="bold"><link linkend="chap-Reference_Guide-Portlet_development">Portlet development</link></emphasis></para>
-          <para>Details of Portlet Primer and global porlet.xml file.</para>
+          <para>Details of Portlet Primer and global <filename>porlet.xml</filename> file.</para>
         </listitem>
         <listitem>
             <para><emphasis role="bold"><link linkend="chap-Reference_Guide-Gadget_development">Gadget development</link></emphasis></para>

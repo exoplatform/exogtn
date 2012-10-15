@@ -14,7 +14,7 @@
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuring_services">Configure services</link></emphasis></para>
-            <para>Introduction to the <emphasis>configuration.xml</emphasis> configuration files for creating services.</para>
+            <para>Introduction to the <filename>configuration.xml</filename> configuration files for creating services.</para>
         </listitem>
 		<listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Foundations-Configuration_syntax">Configuration syntax</link></emphasis></para>
@@ -120,12 +120,12 @@
      <section id="sect-Reference_Guide-Foundations-Configuring_services">
         <title>Configure services</title>
 
-        <para>GateIn Kernel uses the dependency injection to create services based on the <emphasis>configuration.xml</emphasis> configuration files.
+        <para>GateIn Kernel uses the dependency injection to create services based on the <filename>configuration.xml</filename> configuration files.
            The location of the configuration files determines if services are placed into the RootContainer scope, or into the PortalContainer scope.
-           All <emphasis>configuration.xml</emphasis> files located at <emphasis>conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
+           All <filename>configuration.xml</filename> files located at <filename>conf/configuration.xml</filename> in the classpath (any directory, or any jar in the classpath) will have their
         services configured at the RootContainer scope.
-        All configuration.xml files located at <emphasis>conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at the PortalContainer scope.
-        Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <emphasis>WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at the PortalContainer scope.
+        All <filename>configuration.xml</filename> files located at <filename>conf/portal/configuration.xml</filename> in the classpath will have their services configured at the PortalContainer scope.
+        Additionally, <emphasis>portal extensions</emphasis> can contain configuration in <filename>WEB-INF/conf/configuration.xml</filename>, and will also have their services configured at the PortalContainer scope.
         </para>
         <note>
            <para>Portal extensions are described later.</para>
@@ -194,7 +194,7 @@
         <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
                 <citetitle><emphasis role="bold">Components</emphasis> </citetitle>
          </para>
-           <para>A service component is defined in the <emphasis>configuration.xml file</emphasis> by using <emphasis>&lt;component&gt;</emphasis> element.</para>
+           <para>A service component is defined in the <filename>configuration.xml</filename> file by using <emphasis>&lt;component&gt;</emphasis> element.</para>
            <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis>&lt;type&gt;</emphasis></para>
            <para>Every component has a <emphasis>&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
            If the key is loaded as a class, the Class or String object will be used as a key.</para>
@@ -202,8 +202,7 @@
 
            <example>
               <title>Example of service component configuration:</title>
-           <programlisting language="xml"><![CDATA[
-  <?xml version="1.0" encoding="ISO-8859-1"?>
+           <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
   <configuration
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -216,8 +215,7 @@
         ...
 
      </component>
-  </configuration>
-        ]]></programlisting>
+  </configuration>]]></programlisting>
            </example>
 
        <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-External_plugins">
@@ -236,8 +234,7 @@
            <para>In the following example, <emphasis>PortalContainerDefinitionPlugin</emphasis> implements ComponentPlugin:</para>
            <example>
               <title>PortalContainerDefinitionPlugin</title>
-           <programlisting language="xml"><![CDATA[
-  <?xml version="1.0" encoding="UTF-8"?>
+           <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
   <configuration
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -261,8 +258,7 @@
 
         </component-plugin>
      </external-component-plugins>
-  </configuration>
-           ]]></programlisting>
+  </configuration>]]></programlisting>
            </example>
 
           <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-Includes">
@@ -271,27 +267,24 @@
             </citetitle>
           </para>
 
-          <para>It is possible to break the <emphasis>configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
-           The included files are complete configuration.xml documents, not fragments of text.</para>
-           <para>The following is an example configuration.xml which 'outsources' its content into several files:</para>
-           <programlisting language="xml"><![CDATA[
-  <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          <para>It is possible to break the <filename>configuration.xml</filename> file into many smaller files, that are then included into a 'master' configuration file.
+           The included files are complete <filename>configuration.xml</filename> documents, not fragments of text.</para>
+           <para>The following is an example of <filename>configuration.xml</filename> which 'outsources' its content into several files:</para>
+           <programlisting language="xml"><![CDATA[<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
                             http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
         xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
      <import>war:/conf/sample-ext/jcr/jcr-configuration.xml</import>
      <import>war:/conf/sample-ext/portal/portal-configuration.xml</import>
-
-  </configuration>
-           ]]></programlisting>
+</configuration>]]></programlisting>
 
            <para>The special URL is used to refer to another configuration file.
               The URL schema <emphasis>'war:'</emphasis> means that the path following is resolved that is related to the current PortalContainer's servlet context resource path, starting at <emphasis>WEB-INF</emphasis> as the root.</para>
            <note>
               <para>The current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</para>
            </note>
-           <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis>unified servlet context</emphasis> (as explaned in a later section).</para>
+           <para>Also, thanks to the extension mechanism, the servlet context used for resource loading is a <emphasis>unified servlet context</emphasis> (as explained in a later section).</para>
            <para>To include the resolved path related to the current classpath (context classloader), use the <emphasis>'jar:'</emphasis> URL schema.</para>
 
           <para xml:id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars">
@@ -305,8 +298,7 @@
            <para>A good example for this is <emphasis>HibernateService</emphasis>:</para>
            <example id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example">
               <title>HibernateService using variables</title>
-           <programlisting language="xml"><![CDATA[
-  <?xml version="1.0" encoding="ISO-8859-1"?>
+           <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
   <configuration
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -337,8 +329,7 @@
            </properties-param>
         </init-params>
      </component>
-  </configuration>
-           ]]></programlisting>
+</configuration>]]></programlisting>
            </example>
 
           <para>
@@ -389,11 +380,11 @@
         <para>
            <emphasis>InitParams</emphasis> are the configuration object that is essentially a map of key-value pairs,
            where key is always a <emphasis>String</emphasis>, and value can be any type that can be described
-           using the kernel configuration.xml.
+           using the kernel <filename>configuration.xml</filename> file.
         </para>
 
         <para>
-           Service components that form &PRODUCT; insfrastructure use the <emphasis>InitParams</emphasis> object to configure themselves.
+           Service components that form &PRODUCT; infrastructure use the <emphasis>InitParams</emphasis> object to configure themselves.
            A component can have one instance of InitParams injected at most. If the service component's constructor takes InitParams
            as any of the parameters, it will automatically be injected at the component instantiation time. The xml configuration
            for a service component that expects the InitParams object must include the &lt;init-params&gt; element (even if the empty one).
@@ -405,8 +396,7 @@
 
         <example>
            <title>InitParams - properties-param</title>
-           <programlisting language="xml"><![CDATA[
-  <component>
+           <programlisting language="xml"><![CDATA[<component>
      <key>org.exoplatform.services.naming.InitialContextInitializer</key>
      <type>org.exoplatform.services.naming.InitialContextInitializer</type>
      <init-params>
@@ -417,8 +407,7 @@
                     value="org.exoplatform.services.naming.SimpleContextFactory" />
         </properties-param>
      </init-params>
-  </component>
-           ]]></programlisting>
+  </component>]]></programlisting>
         </example>
 
         <para>
@@ -437,8 +426,7 @@
 
         <example>
            <title>InitParams - value-param</title>
-           <programlisting language="xml"><![CDATA[
-  <component>
+           <programlisting language="xml"><![CDATA[<component>
      <key>org.exoplatform.services.transaction.TransactionService</key>
      <type>org.exoplatform.services.transaction.impl.jotm.TransactionServiceJotmImpl</type>
      <init-params>
@@ -447,8 +435,7 @@
            <value>5</value>
         </value-param>
      </init-params>
-  </component>
-           ]]></programlisting>
+</component>]]></programlisting>
         </example>
 
         <para>
@@ -458,8 +445,7 @@
 
         <example>
            <title>InitParams - values-param</title>
-           <programlisting language="xml"><![CDATA[
-  <component>
+           <programlisting language="xml"><![CDATA[<component>
     <key>org.exoplatform.services.resources.ResourceBundleService</key>
     <type>org.exoplatform.services.resources.impl.SimpleResourceBundleService</type>
       <init-params>
@@ -483,8 +469,7 @@
           <value>local.portal.custom</value>
         </values-param>
       </init-params>
-  </component>
-           ]]></programlisting>
+</component>]]></programlisting>
         </example>
 
         <para>
@@ -495,8 +480,7 @@
 
         <example>
            <title>InitParams - object-param</title>
-           <programlisting language="xml"><![CDATA[
-  <component>
+           <programlisting language="xml"><![CDATA[<component>
      <key>org.exoplatform.services.cache.CacheService</key>
      <jmx-name>cache:type=CacheService</jmx-name>
      <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
@@ -523,8 +507,7 @@
            </object>
         </object-param>
      </init-params>
-  </component>
-           ]]></programlisting>
+</component>]]></programlisting>
         </example>
 
         <para>
@@ -539,7 +522,7 @@
 
         <para>
         The <emphasis>InitParams</emphasis> structure - the names and types of entries is specific for each service,
-           as it is the code inside service components's class that decides what entry names to look up and what types
+           as it is the code inside service components' class that decides what entry names to look up and what types
            it expects to find.
         </para>
            <para>
@@ -611,8 +594,7 @@
 
         <example id="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">
            <title>Portal container declaration example</title>
-        <programlisting language="xml"><![CDATA[
-  <?xml version="1.0" encoding="UTF-8"?>
+        <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
   <configuration
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
@@ -689,9 +671,7 @@
            </init-params>
         </component-plugin>
      </external-component-plugins>
-  </configuration>
-        ]]>
-  </programlisting>
+</configuration>]]></programlisting>
         </example>
 
 
@@ -771,7 +751,7 @@
            plug-and-play fashion - just drop in a .war archive with the resources, and configure its position on the portal's
            classpath.
            This way any customizations of the portal do not have to involve unpacking and repacking the original portal
-           .war archives. Instead, create your own .war archive with changed resources that override the resources in
+           .war archives. Instead, create your own <filename>.war</filename> archive with changed resources that override the resources in
            the original archive.
         </para>
 
@@ -782,12 +762,12 @@
            There are two steps necessary to create a portal extension.
         </para>
         <para>
-           First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
+           First, declare <emphasis>PortalConfigOwner</emphasis> servlet context listener in <filename>web.xml</filename>
+            of your web application.
         </para>
         <example><title>Example of a portal extension called sample-ext:</title>
 
-           <programlisting language="xml"><![CDATA[
-  <?xml version="1.0" encoding="ISO-8859-1" ?>
+           <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="ISO-8859-1" ?>
   <!DOCTYPE web-app PUBLIC -//Sun Microsystems, Inc.//DTD Web Application 2.3//EN
        http://java.sun.com/dtd/web-app_2_3.dtd>
   <web-app>
@@ -800,8 +780,7 @@
 
      ...
 
-  </web-app>
-        ]]></programlisting>
+</web-app>]]></programlisting>
         </example>
         <para>
            Then, add the servlet context name of this web application to a proper location in the list of Dependencies of the PortalContainerDefinition
@@ -897,13 +876,11 @@
 
            If your servlet handles the requests by implementing the <emphasis>service()</emphasis> method, you need to rename that method to match
            the following signature:</para>
-           <programlisting language="java"><![CDATA[
-  /**
-   * Use this method instead of Servlet.service()
-   */
-  protected void onService(ExoContainer container, HttpServletRequest req,
-        HttpServletResponse res) throws ServletException, IOException;
-           ]]></programlisting>
+           <programlisting language="java"><![CDATA[/**
+* Use this method instead of Servlet.service()
+*/
+protected void onService(ExoContainer container, HttpServletRequest req,
+HttpServletResponse res) throws ServletException, IOException;]]></programlisting>
         <note>
            <para>
            The reason is that AbstractHttpServlet implements service() to perform its interception, and you don't want to
@@ -914,26 +891,22 @@
            You may also need to access portal information within your <emphasis>HttpSessionListener</emphasis>. Again, make sure to extend the
            provided abstract class - <emphasis>org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
            Also, modify your method signatures as follows:</para>
-           <programlisting language="java"><![CDATA[
-  /**
-   * Use this method instead of HttpSessionListener.sessionCreated()
-   */
-  protected void onSessionCreated(ExoContainer container, HttpSessionEvent event);
+           <programlisting language="java"><![CDATA[/**
+* Use this method instead of HttpSessionListener.sessionCreated()
+*/
+protected void onSessionCreated(ExoContainer container, HttpSessionEvent event);
 
-  /**
-   * Use this method instead of HttpSessionListener.sessionDestroyed()
-   */
-  protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event);
-           ]]></programlisting>
+/**
+* Use this method instead of HttpSessionListener.sessionDestroyed()
+*/
+protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event);]]></programlisting>
         <para>
            There is another method you have to implement in this case:</para>
-           <programlisting language="java"><![CDATA[
-  /**
-   * Method should return true if unified servlet context,
-   * and unified classloader should be made available
-   */
-  protected boolean requirePortalEnvironment();
-           ]]></programlisting>
+           <programlisting language="java"><![CDATA[/**
+* Method should return true if unified servlet context,
+* and unified classloader should be made available
+*/
+protected boolean requirePortalEnvironment();]]></programlisting>
          <para>
            If this method returns true, the current thread's context classloader is set up according to the <emphasis>Dependencies</emphasis>
            configuration, and availability of the associated web applications. If it returns false, the standard
@@ -965,8 +938,7 @@
         <para>An example of this is the Gadgets application which registers the Google gadgets with the current PortalContainer:
         </para>
 
-        <programlisting language="java"><![CDATA[
-  public class GadgetRegister implements ServletContextListener
+        <programlisting language="java"><![CDATA[public class GadgetRegister implements ServletContextListener
   {
      public void contextInitialized(ServletContextEvent event)
      {
@@ -997,8 +969,7 @@
         // PortalContainerDefinitions (via Dependencies configuration)
         PortalContainer.addInitTask(event.getServletContext(), task);
      }
-  }
-        ]]></programlisting>
+  }]]></programlisting>
 
         <para>
            The above example uses <emphasis>PortalContainerPostInitTask</emphasis>, which gets executed after the portal container has been

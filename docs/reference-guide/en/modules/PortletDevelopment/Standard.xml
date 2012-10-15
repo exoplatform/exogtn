@@ -474,7 +474,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class">
 				<title>Portlet Class</title>
 				<para>
-					The code below is from the <emphasis> JSPHelloUser/src/main/java/org/gatein/portal/examples/portlets/JSPHelloUserPortlet.java </emphasis> Java source. It is split in different pieces.
+					The code below is from the <filename> JSPHelloUser/src/main/java/org/gatein/portal/examples/portlets/JSPHelloUserPortlet.java </filename> Java source. It is split in different pieces.
 				</para>
 				<programlistingco>
 					<areaspec>
@@ -622,12 +622,10 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				</para>
 				
 <programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Help mode&#60;/div&#62;
-&#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode where you can find useful information.&#60;/div&#62;
-</programlisting>
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode where you can find useful information.&#60;/div&#62;</programlisting>
 				
 <programlisting language="html">&#60;div class=&#34;portlet-section-header&#34;&#62;Edit mode&#60;/div&#62;
-&#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode where you can change your portlet preferences.&#60;/div&#62;
-</programlisting>
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode where you can change your portlet preferences.&#60;/div&#62;</programlisting>
 				<para>
 					The landing page contains the links and form to call the portlet:
 				</para>

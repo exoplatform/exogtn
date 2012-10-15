@@ -15,9 +15,9 @@
       when every page is rendered.
  </para>
   <para>
-  To do so, every WAR deployed in &PRODUCT; can register the <emphasis>.js</emphasis> files with the <emphasis>gatein-resources.xml</emphasis> configuration file.</para>
+  To do so, every WAR deployed in &PRODUCT; can register the <filename>.js</filename> files with the <filename>gatein-resources.xml</filename> configuration file.</para>
   <para>
-  The example code snippet below is found in the <emphasis>gatein-resources.xml</emphasis> in the <emphasis>eXoResources.war </emphasis>file.</para>
+  The example code snippet below is found in the <filename>gatein-resources.xml</filename> in the <filename>eXoResources.war </filename>file.</para>
   <programlisting language="xml">&lt;javascript&gt;
   &lt;param&gt;
     &lt;js-module&gt;eXo&lt;/js-module&gt;
@@ -66,7 +66,7 @@
 &lt;/javascript&gt;
 </programlisting>
   <para>
-  Note that registered JavaScript files will be merged into a single <emphasis>merged.js</emphasis> file when the server loads. This reduces the number of HTTP calls as shown in the homepage source code:
+  Note that registered JavaScript files will be merged into a single <filename>merged.js</filename> file when the server loads. This reduces the number of HTTP calls as shown in the homepage source code:
  </para>
   <programlisting language="xml">&lt;script type=&quot;text/javascript&quot; src=&quot;/portal/javascript/merged.js&quot;&gt;&lt;/script&gt;
 </programlisting>
@@ -75,12 +75,12 @@
  </para>
   <para>
   To do this, set the Java system property <emphasis>exo.product.developing</emphasis> to <emphasis>true</emphasis>.
- GateIn provides two startup scripts that define this property in gatein-dev.sh (for Linux, Mac) and gatein-dev.bat (for Windows).</para>
+ GateIn provides two startup scripts that define this property in <filename>gatein-dev.sh</filename> (for Linux, Mac) and <filename>gatein-dev.bat</filename> (for Windows).</para>
   <para>
-  To generate the <emphasis>merged.js</emphasis> file, set this property to <emphasis>false</emphasis>.
+  To generate the <filename>merged.js</filename> file, set this property to <emphasis>false</emphasis>.
  If the property is not set, the default value is false. </para>
   <para>
-  The property can be passed as a JVM parameter with the <emphasis>-D</emphasis> option in your <emphasis>GateIn.sh</emphasis> or <emphasis>GateIn.bat</emphasis> startup script.
+  The property can be passed as a JVM parameter with the <command>-D</command> option in your <filename>gatein.sh</filename> or <filename>gatein.bat</filename> startup script.
  </para>
   <para>
   Every JavaScript file is associated with a module name which acts as a namespace.
@@ -89,12 +89,10 @@
   <para>
       Inside the associated JavaScript files, the eXo JavaScript objects are exposed as global variables named after the module.</para>
   <para> For example:</para>
-  <programlisting language="javascript">
-eXo.core.DragDrop = new DragDrop();
-   </programlisting>
+  <programlisting language="javascript">eXo.core.DragDrop = new DragDrop();</programlisting>
   <para>
-  It is also possible to use the <emphasis>eXo.require()</emphasis>method to lazy load and evaluate some JavaScript codes.
+  It is also possible to use the <emphasis>eXo.require()</emphasis> method to lazy load and evaluate some JavaScript codes.
       This is quite useful for the portlet or gadget applications that will use this JavaScript only once. Otherwise,
-      if the library is reusable in several places, it is better to define it in the <emphasis>gatein-resources.xml</emphasis> file.
+      if the library is reusable in several places, it is better to define it in the <filename>gatein-resources.xml</filename> file.
  </para>
 </section>

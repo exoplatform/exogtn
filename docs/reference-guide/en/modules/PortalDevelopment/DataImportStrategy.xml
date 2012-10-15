@@ -60,8 +60,7 @@
         a UserPortalConfigService initial param. For example, the bellow configuration
         means that default value is <emphasis>MERGE</emphasis>
       </para>
-      <programlisting role="XML"><![CDATA[
-<component>
+      <programlisting language="xml"><![CDATA[<component>
   <key>org.exoplatform.portal.config.UserPortalConfigService</key>
   <type>org.exoplatform.portal.config.UserPortalConfigService</type>
   <component-plugins>
@@ -73,9 +72,7 @@
       <value>merge</value>
     </value-param>
   </init-params>
-</component>
-      ]]>
-      </programlisting>
+</component>]]></programlisting>
       <para>
       The way that the import strategy works with the import mode will be clearly demonstrated in next sections for each type of data.
       </para>
@@ -136,7 +133,7 @@
             </procedure>
          </para>
             Let's see the example with two navigation nodes in each import mode. In this case, there are 2 navigation definitions:
-         <programlisting role="XML"><![CDATA[<node-navigation>
+         <programlisting language="xml"><![CDATA[<node-navigation>
   <page-nodes>
     <node>
       <name>foo</name>
@@ -161,7 +158,7 @@
             <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center" scalefit="1" width="100mm"/>
          </imageobject>
       </mediaobject>
-      <programlisting role="XML"><![CDATA[<node-navigation>
+      <programlisting language="xml"><![CDATA[<node-navigation>
   <page-nodes>
     <node>
       <name>foo</name>
@@ -264,8 +261,8 @@
 
          <para>
             PortalConfig defines the portal name, permission, layout and some properties
-            of a site. These information are configured in the <emphasis>portal.xml</emphasis>, <emphasis>group.xml</emphasis> or
-            <emphasis>user.xml</emphasis>, depending on the site type. The PortalConfig importer performs a strategy
+            of a site. These information are configured in the <filename>portal.xml</filename>, <filename>group.xml</filename> or
+            <filename>user.xml</filename>, depending on the site type. The PortalConfig importer performs a strategy
             that is based on the mode defined in NewPortalConfigListener, including <emphasis>CONSERVE</emphasis>,
             <emphasis>INSERT</emphasis>, <emphasis>MERGE</emphasis> or <emphasis>OVERWRITE</emphasis>. Let's see how the import mode affects in the process of
             portal data performance:
