@@ -241,7 +241,7 @@
             Of course, if you have modified the host name and port on which your server runs, you will
             need to update the configuration for the consumer used to consume &PRODUCT_NAME;'s 'self' producer. Please refer to
             the
-            <xref linkend="consumer_configuration"/>
+            <xref linkend="wsrp-consumer_configuration"/>
             to learn how to do so.
          </para>
 
@@ -428,7 +428,7 @@
          the URL for the Producer's WSDL definition. Please refer to your Consumer's documentation for specific
          instructions. For instructions on how to do so in &PRODUCT_NAME;, please
          refer to
-         <xref linkend="consumer_configuration"/>.
+         <xref linkend="wsrp-consumer_configuration"/>.
       </para>
       <para>
          &PRODUCT_NAME;'s Producer is automatically set up when you deploy a portal instance with the WSRP service.
