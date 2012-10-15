@@ -51,60 +51,46 @@
                         <para>
                             This constructor allows you to customize the size limit of uploaded files by using the <emphasis>limitSize</emphasis> parameter. The default value unit is Megabytes.
                         </para>
-                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression,int limitFile, int limitSize)
-                        </programlisting>
+                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression,int limitFile, int limitSize)</programlisting>
                     </listitem>
                     <listitem>
                         <para>This constructor allows you to customize the size limit and the value unit by using the <emphasis>limitSize</emphasis> and <emphasis>unit</emphasis> parameters respectively.</para>
                         <para>In GateIn, you can set the value unit to Megabytes (MB), Kilobytes (KB) or Gigabytes (GB).</para>
-                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression, int limitFile, int limitSize, UploadUnit unit)
-                        </programlisting>
+                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression, int limitFile, int limitSize, UploadUnit unit)</programlisting>
                     </listitem>
                 </itemizedlist>
 				<para>
 					The following is an example using the third form:
 				</para>
-
-                <programlisting language="java">
-                    <![CDATA[
-      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-      int limitFile = Integer.parseInt(portletPref.getValue("uploadFileLimit", "1").trim());
-      int limitSize = Integer.parseInt(portletPref.getValue("uploadFileSizeLimit", "").trim());
-      UploadUnit limitUnit = UploadUnit.valueOf(portletPref.getValue("uploadFileLimitUnit", "MB").trim());
-      UIUploadInput uiInput = new UIUploadInput("upload", "upload", limitFile, limitSize, limitUnit);
-
-                   ]]>
-                </programlisting>
+                <programlisting language="java"><![CDATA[PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+PortletPreferences portletPref = pcontext.getRequest().getPreferences();
+int limitFile = Integer.parseInt(portletPref.getValue("uploadFileLimit", "1").trim());
+int limitSize = Integer.parseInt(portletPref.getValue("uploadFileSizeLimit", "").trim());
+UploadUnit limitUnit = UploadUnit.valueOf(portletPref.getValue("uploadFileLimitUnit", "MB").trim());
+UIUploadInput uiInput = new UIUploadInput("upload", "upload", limitFile, limitSize, limitUnit);]]></programlisting>
 			</step>
 			<step>
 				<para>
-
-					
 					To obtain the limit from the <emphasis>XML</emphasis> configuration, add the following code to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename>:
-
 				</para>
-
-                <programlisting language="xml"><![CDATA[
-                <! The number of files are uploaded -->
-                    <preference>
-                        <name>uploadFileLimit</name>
-                        <value>3</value>
-                        <read-only>false</read-only>
-                    </preference>
-                <! The size limit -->
-                    <preference>
-                        <name>uploadFileSizeLimit</name>
-                        <value>300</value>
-                        <read-only>false</read-only>
-                    </preference>
-                 <! The unit limit -->
-                    <preference>
-                        <name>uploadFileLimitUnit</name>
-                        <value>KB</value>
-                        <read-only>false</read-only>
-                    </preference> ]]>
-                </programlisting>
+<programlisting language="xml"><![CDATA[<! The number of files are uploaded -->
+    <preference>
+        <name>uploadFileLimit</name>
+        <value>3</value>
+        <read-only>false</read-only>
+    </preference>
+<! The size limit -->
+    <preference>
+        <name>uploadFileSizeLimit</name>
+        <value>300</value>
+        <read-only>false</read-only>
+    </preference>
+<! The unit limit -->
+    <preference>
+        <name>uploadFileLimitUnit</name>
+        <value>KB</value>
+        <read-only>false</read-only>
+    </preference> ]]></programlisting>
                 <para>
 					Note that the <parameter>0</parameter> value means unlimited upload size, and the value unit is set to MegaBytes.
 				</para>
@@ -114,12 +100,9 @@
 
 					Use the <emphasis>getUploadDataAsStream()</emphasis> method to get the uploaded data:
                 </para>
-
-                <programlisting language="java">UIUploadInput input = (UIUploadInput)uiForm.getUIInput(&#34;upload&#34;);
-                    InputStream[] inputStreams = input.getUploadDataAsStreams();
-                    ...
-
-                </programlisting>
+<programlisting language="java">UIUploadInput input = (UIUploadInput)uiForm.getUIInput(&#34;upload&#34;);
+InputStream[] inputStreams = input.getUploadDataAsStreams();
+...</programlisting>
 
 			</step>
 			<step>
@@ -141,16 +124,12 @@
 				<para>
 					Use the <literal>removeUploadResource(String uploadId)</literal> method defined in the upload service to purge the file:
                 </para>
-
-                <programlisting language="java">UploadService uploadService =
-                    uiForm.getApplicationComponent(UploadService.class) ;
-                    UIUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
-                    for(String uploadId : uiChild.getUploadIds())
-                    {
-                    uploadService.removeUpload(uploadId) ;
-                    }
-                </programlisting>
-
+<programlisting language="java">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+UIUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
+    for(String uploadId : uiChild.getUploadIds())
+    {
+    uploadService.removeUpload(uploadId) ;
+    }</programlisting>
 				<note>
 					<title>Saving the uploaded file</title>
 					<para>

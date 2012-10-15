@@ -33,14 +33,11 @@
          The following <emphasis >AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
-<programlisting language="java">
-		public Token getToken(String id) throws PathNotFoundException, RepositoryException;
-		public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
-		public String[] getAllTokens();
-		public long getNumberTokens() throws Exception;
-		public String createToken(Credentials credentials) throws IllegalArgumentException,NullPointerException;
-		public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;
-</programlisting>
+<programlisting language="java">public Token getToken(String id) throws PathNotFoundException, RepositoryException;
+public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
+public long getNumberTokens() throws Exception;
+public String createToken(Credentials credentials) throws IllegalArgumentException,NullPointerException;
+public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;</programlisting>
 		<para>
 		</para>
 

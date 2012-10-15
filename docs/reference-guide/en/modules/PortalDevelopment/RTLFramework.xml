@@ -86,59 +86,47 @@
 			<para>
 				In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right:</para>
         
-<programlisting language="css">
-float: left; /* orientation=lt */
+<programlisting language="css">float: left; /* orientation=lt */
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
-white-space: nowrap;
-</programlisting>
+white-space: nowrap;</programlisting>
 
 				 <para>The LT produced output will be:</para>
-         
-<programlisting language="css">
-float: left; /* orientation=lt */
+
+<programlisting language="css">float: left; /* orientation=lt */
 font-weight: bold;
 text-align: center;
-white-space: nowrap;
-</programlisting>
+white-space: nowrap;</programlisting>
 				 
          <para>The RT produced output will be:</para>
          
-<programlisting language="css"> 
-float: right; /* orientation=rt */
+<programlisting language="css">float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
-white-space: nowrap;
-</programlisting>
+white-space: nowrap;</programlisting>
 			</example>
 		
 		<example>
 			<para>
 				In this example, you need to modify the padding according to the orientation:</para>
         
-<programlisting language="css">
-color: white;
+<programlisting language="css">color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
-padding: 0px 0px 0px 5px; /* &#62;orientation=rt */
-</programlisting>
+padding: 0px 0px 0px 5px; /* &#62;orientation=rt */</programlisting>
 
 				 <para>The LT produced output will be:</para>
          
-<programlisting language="css"> 
-color: white;
+<programlisting language="css"> color: white;
 line-height: 24px;
-padding: 0px 5px 0px 0px; /* orientation=lt */
-</programlisting>
+padding: 0px 5px 0px 0px; /* orientation=lt */</programlisting>
 
 				 <para>The RT produced output will be:</para>
          
-<programlisting language="css"> 
-color: white;
+<programlisting language="css"> color: white;
 line-height: 24px;
-padding: 0px 0px 0px 5px; /* orientation=rt */
-</programlisting>
+padding: 0px 0px 0px 5px; /* orientation=rt */</programlisting>
 			
 		</example>
 	
@@ -163,13 +151,11 @@ padding: 0px 0px 0px 5px; /* orientation=rt */
 			Here is an example combining stylesheet and images:
 		</para>
 		
-<programlisting language="css">
-line-height: 24px; 
+<programlisting language="css">line-height: 24px;
 background: url(&#39;background/NavigationTab.gif&#39;) no-repeat right top; /* orientation=lt */
 background: url(&#39;background/NavigationTab-rt.gif&#39;) no-repeat left top; /* orientation=rt */
 padding-right: 2px; /* orientation=lt */
-padding-left: 2px; /* orientation=rt */
-</programlisting>
+padding-left: 2px; /* orientation=rt */</programlisting>
 	
 	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
 		<citetitle><emphasis role="bold">Client side JavaScript</emphasis></citetitle>

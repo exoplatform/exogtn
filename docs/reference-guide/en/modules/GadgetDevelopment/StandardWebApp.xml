@@ -83,14 +83,13 @@
     <url-pattern>/gateinservlet</url-pattern>
   </servlet-mapping>
 
-</web-app>]]>
-    </programlisting>
+</web-app>]]></programlisting>
     <para>The
       <filename>gadget.xml</filename>
       file is used to locate the configuration of gadgets that you want to add to the <emphasis role="bold">Application
         Registry</emphasis>.
     </para>
-    <programlisting language="xml"> <![CDATA[<gadgets
+    <programlisting language="xml"><![CDATA[<gadgets
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gadgets_1_0"
     xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
@@ -118,9 +117,7 @@
   <gadget name="ServicesManagement">
     <path>/gadgets/ServicesManagement/ServicesManagement.xml</path>
   </gadget>
-</gadgets>
-]]>
-    </programlisting>
+</gadgets>]]></programlisting>
     <para>This file has 3 important tags:</para>
     <itemizedlist>
       <listitem>

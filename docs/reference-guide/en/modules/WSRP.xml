@@ -309,8 +309,7 @@
       </para>
       <para>In the following example, the "BasicPortlet" portlet is specified as being remotable.
       </para>
-      <programlisting language="xml"><![CDATA[
-<?xml version="1.0" standalone="yes"?>
+      <programlisting language="xml"><![CDATA[<?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
@@ -340,8 +339,7 @@
          example:
       </para>
       <example>
-                     <programlisting language="xml"><![CDATA[
-<?xml version="1.0" standalone="yes"?>
+                     <programlisting language="xml"><![CDATA[<?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
@@ -365,8 +363,7 @@
       <name>org.gatein.pc.remotable</name>
       <value>true</value>
    </container-runtime-option>
-</portlet-app>]]>
-            </programlisting>
+</portlet-app>]]></programlisting>
 
       </example>
 
@@ -715,8 +712,7 @@
                alternative way to configure consumers by editing the .xml file located at
                <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
             </para>
-            <programlisting language="xml"><![CDATA[
-<?xml version='1.0' encoding='UTF-8' ?>
+            <programlisting language="xml"><![CDATA[<?xml version='1.0' encoding='UTF-8' ?>
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
@@ -936,8 +932,7 @@
          </para>
 
          <example>
-               <programlisting language="xml"><![CDATA[
-<?xml version='1.0' encoding='UTF-8' ?>
+               <programlisting language="xml"><![CDATA[<?xml version='1.0' encoding='UTF-8' ?>
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
@@ -953,8 +948,7 @@
          <registration-data/>
       </wsrp-producer>
    </deployment>
-</deployments>]]>
-               </programlisting>
+</deployments>]]></programlisting>
           
          </example>
 
@@ -963,8 +957,7 @@
 
          <example>
         
-               <programlisting language="xml"><![CDATA[
-<?xml version='1.0' encoding='UTF-8' ?>
+               <programlisting language="xml"><![CDATA[<?xml version='1.0' encoding='UTF-8' ?>
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
@@ -1646,16 +1639,14 @@
       </citetitle>
        </para>
          <para>The extension artifact defines an extra navigational node, whose page contains the WSRP Admin portlet.</para>
-         <programlisting language="xml"><![CDATA[
-              <page-nodes>
-                 <node>
-                    <uri>wsrpConfiguration</uri>
-                    <name>wsrpConfiguration</name>
-                    <label>WSRP</label>
-                    <page-reference>group::/platform/administrators::wsrpConfiguration</page-reference>
-                 </node>
-              </page-nodes> ]]>
-         </programlisting>
+         <programlisting language="xml"><![CDATA[<page-nodes>
+    <node>
+        <uri>wsrpConfiguration</uri>
+        <name>wsrpConfiguration</name>
+        <label>WSRP</label>
+        <page-reference>group::/platform/administrators::wsrpConfiguration</page-reference>
+    </node>
+</page-nodes> ]]></programlisting>
     <para id="wsrp.wsrp_intergration">
       <citetitle>
         <emphasis role="bold">
@@ -1665,8 +1656,7 @@
     </para>
          <para>As the extension package is deployed, the <emphasis>WSRPServiceIntegration</emphasis> service component is started and that triggers the injection
          of the WSRP infrastructure (persistent data, web service endpoints, and more) into GateIn.</para>
-         <programlisting language="xml"><![CDATA[
-   <component>
+         <programlisting language="xml"><![CDATA[<component>
       <key>org.gatein.integration.wsrp.WSRPServiceIntegration</key>
       <type>org.gatein.integration.wsrp.WSRPServiceIntegration</type>
       <init-params>
@@ -1688,8 +1678,7 @@
             <value>2</value>
          </value-param>
       </init-params>
-   </component>]]>
-         </programlisting>
+</component>]]></programlisting>
          <itemizedlist>
            <listitem>
              <para>
