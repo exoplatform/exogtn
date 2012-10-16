@@ -355,9 +355,7 @@ organization.management=Management
            <title>Changing the displayed text for Traditional Chinese in French</title>
            <para>First edit <filename>gatein.ear/portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</filename> where <emphasis>ne</emphasis> is the country code for French, and add
            the following key into it:
-           <programlisting>
-              Locale.zh_TW=Chinois traditionnel
-           </programlisting>
+<programlisting>Locale.zh_TW=Chinois traditionnel</programlisting>
            After a restart the language will be updated in the user interface when a user is trying to change the current language.
            </para>
         </example>
