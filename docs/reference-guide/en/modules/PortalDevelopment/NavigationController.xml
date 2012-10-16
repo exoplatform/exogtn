@@ -389,13 +389,15 @@ Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
 				 <para><link linkend="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Groovy_Templates">Groovy Templates</link>
 				 </para>
 				</listitem>
-			</itemizedlist>
-			
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering-PortalURL">
-            <title>
-              <emphasis>PortalURL</emphasis>
-            </title>
-            <para>
+      </itemizedlist>
+
+          <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Rendering-PortalURL">
+            <citetitle>
+              <emphasis role="bold">PortalURL</emphasis>
+            </citetitle>
+          </para>
+
+          <para>
               <code>PortalURL</code> plays a similar role at the portal level. Its main role is to abstract the creation of an URL for a resource managed by the portal.</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -461,11 +463,13 @@ NodeURL url = ctx.createURL(NodeURL.TYPE);
             <note>
               <para>The <code>NodeURL.TYPE</code> is actually declared as <code>new ResourceType&lt;NavigationResource, NodeURL&gt;()</code> that can be described as a <code>type-literal</code> object emulated by a Java anonymous inner class. Such literal was introduced by Neil Gafter as Super Type Token and popularized by Google Guice as Type Literal. It is an interesting way to create a literal representing a kind of Java type.</para>
             </note>
-          </section>
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-NodeURL">
-            <title>
-              NodeURL
-            </title>
+
+          <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-NodeURL">
+              <citetitle>
+                <emphasis role="bold">NodeURL</emphasis>
+              </citetitle>
+            </para>
+
             <para>The <code>NodeURL</code> class is one of the subclass of <code>PortalURL</code> that is specialized in navigation node resources:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -496,11 +500,13 @@ url.setNode(node);
 String s = url.toString();
 ]]></programlisting>
             </programlistingco>
-          </section>
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL">
-            <title>
-              ComponentURL
-            </title>
+
+            <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL">
+              <citetitle>
+                <emphasis role="bold">ComponentURL</emphasis>
+              </citetitle>
+            </para>
+
             <para>The <code>ComponentURL</code> subclass is another specialization of <code>PortalURL</code> that allows the creation of WebUI components URLs. <code>ComponentURL</code> is commonly used to trigger WebUI events from client side:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -510,9 +516,13 @@ String s = url.toString();
 ]]></programlisting>
             </programlistingco>
             <para>Normally, you should not have to deal with it as the WebUI framework has already an abstraction for managing URL known as <code>URLBuilder</code>. The <code>URLBuilder</code> implementation delegates URL creation to <code>ComponentURL</code> objects.</para>
-          </section>
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL_PortletURLS">
-            <title>Portlet URLs</title>
+
+            <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-ComponentURL_PortletURLS">
+              <citetitle>
+                <emphasis role="bold">Portlet URLs</emphasis>
+              </citetitle>
+            </para>
+
             <para>Portlet URLs API implementation delegates to the portal <code>ComponentURL</code> (via the portlet container SPI). It is possible to control the language in the URL from a <code>PortletURL</code> object by setting the <code>gtn:lang</code> property:</para>
             <itemizedlist>
               <listitem>
@@ -533,10 +543,13 @@ url.setProperty("gtn:lang", "fr");
 writer.print("<a href='" + url + "'>French</a>");
 ]]></programlisting>
             </programlistingco>
-          </section>
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-URLBuilder">
-            <title>Webui <code>URLBuilder</code>
-            </title>
+
+            <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-URLBuilder">
+              <citetitle>
+                <emphasis role="bold">Webui <code>URLBuilder</code></emphasis>
+              </citetitle>
+            </para>
+
             <para>This internal API used to create URL works as usual and delegates to the <code>PortletURL</code> API when the framework is executed in a portlet, and delegates to a <code>ComponentURL</code> API when the framework is executed in the portal context. The API has been modified to take in account the language in URL with two properties on the builder:</para>
             <itemizedlist>
               <listitem>
@@ -546,9 +559,13 @@ writer.print("<a href='" + url + "'>French</a>");
                 <para>removeLocale: a boolean for removing the locale present on the URL.</para>
               </listitem>
             </itemizedlist>
-          </section>
-          <section id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Groovy_Templates">
-            <title>Groovy Templates</title>
+
+             <para xml:id="sect-Reference_Guide-Navigation_Controller-Integrate_Gatein_WebUI_Framework-Groovy_Templates">
+              <citetitle>
+                <emphasis role="bold">Groovy Templates</emphasis>
+              </citetitle>
+            </para>
+
             <para>In a Groovy template, the mechanism to create an URL is the same as the way of APIs above, however a splash of integration has been done to make creation of NodeURL simpler. A closure is bound under the <code>nodeurl</code> name and is available for invocation anytime. It will simply create a NodeURL object and return it:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
@@ -576,7 +593,6 @@ put("nodeurl", new Closure(this)
 ]]></programlisting>
             </programlistingco>
           </section>
-        </section>
       </section>
       <section id="sect-Reference_Guide-Navigation_Controller-Changes_Migration" role="NotInToc">
         <title>Changes and migration from GateIn 3.1.x</title>

@@ -12,6 +12,10 @@
           <para>Knowledge of default gadgets on the system or remote ones and how to create new ones, edit/delete/import them or view them on the dashboard, and more.</para>
         </listitem>
         <listitem>
+            <para><emphasis role="bold"><link linkend="sect-Reference-Guide_Gadgets_Standard-WebApp">Standard WebApp for Gadget importer</link></emphasis></para>
+          <para>Instruction on how to create a WebApp which has a standard structure processed by the Gadget importer.</para>
+        </listitem>
+        <listitem>
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Setup_a_Gadget_Server">Set up a Gadget Server</link></emphasis></para>
            <para>Instructions on how to configure the gadget host and knowledge about security key for gadget container, gadget proxy and concat configuration.</para>
         </listitem>
@@ -32,5 +36,6 @@
 	</itemizedlist>
 
 	<xi:include href="GadgetDevelopment/Gadgets.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="GadgetDevelopment/StandardWebApp.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="GadgetDevelopment/SetupGadgetServer.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </section>

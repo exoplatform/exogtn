@@ -83,8 +83,12 @@
 			The following sections require more textual information.
 		</para>
 	</important>
-	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
-		<title>Existing Gadgets</title>
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
+    <citetitle>
+      <emphasis role="bold">Existing Gadgets</emphasis>
+    </citetitle>
+  </para>
 		<mediaobject>
 			<imageobject role="html">
 				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="444" align="center" />
@@ -93,10 +97,14 @@
 				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
-		<title>Create a new Gadget</title>
+
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
+    <citetitle>
+      <emphasis role="bold">Create a new Gadget</emphasis>
+    </citetitle>
+  </para>
+
 		<mediaobject>
 			<imageobject role="html">
 				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="444" align="center" />
@@ -105,10 +113,14 @@
 				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Remote_Gadget">
-		<title>Remote Gadget</title>
+
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Remote_Gadget">
+    <citetitle>
+      <emphasis role="bold">Remote Gadget</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			This is the reference to a remote gadget (stock one).
 		</para>
@@ -120,10 +132,14 @@
 				<imagedata fileref="images/GadgetDevelopment/Import.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
-		<title>Gadget Importing</title>
+
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Gadget_Importing">
+    <citetitle>
+      <emphasis role="bold">Gadget Importing</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			After referencing the gadget successfully, import it into the local repository.
 		</para>
@@ -135,10 +151,14 @@
 				<imagedata fileref="images/GadgetDevelopment/Imported.png" format="PNG" width="150mm" align="center" scalefit="1" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
-		<title>Gadget Web Editing</title>
+
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
+    <citetitle>
+      <emphasis role="bold">Gadget Web Editing</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			Modify it from the Web where the Gadget was imported:
 		</para>
@@ -150,10 +170,14 @@
 				<imagedata fileref="images/GadgetDevelopment/EditImportedOnline.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing">
-		<title>Gadget IDE Editing</title>
+
+
+  <para xml:id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing">
+    <citetitle>
+      <emphasis role="bold">Gadget IDE Editing</emphasis>
+    </citetitle>
+  </para>
+
 		<para>
 			Edit it from your IDE thanks to the WebDAV protocol:
 		</para>
@@ -165,10 +189,12 @@
 				<imagedata fileref="images/GadgetDevelopment/EditImportedWebDAV.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Gadgets-Dashboard_Viewing">
-		<title>Dashboard Viewing</title>
+
+	<para xml:id="sect-Reference_Guide-Gadgets-Dashboard_Viewing">
+    <citetitle>
+      <emphasis role="bold">Dashboard Viewing</emphasis>
+    </citetitle>
+  </para>
 		<para>
 			View it from the Dashboard when you drag and drop the Gadget from listing to the dashboard.
 		</para>
@@ -180,10 +206,8 @@
 				<imagedata fileref="images/GadgetDevelopment/Dashboard.png" format="PNG" scalefit="1" width="150mm" align="center" />
 			</imageobject>
 		</mediaobject>
-	</section>
 
-  <xi:include href="StandardWebApp.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-</section>
+ </section>
 
 

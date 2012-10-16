@@ -421,9 +421,14 @@ For example, with the above configuration, portal will look for all configuratio
 			</varlistentry>
 		</variablelist>
 	</section>
-
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
-		<title>Group Navigation</title>
+	
+	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_User_Navigation">
+		<title>Group and User Navigation</title>
+    <para xml:id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
+      <citetitle>
+        <emphasis role="bold">Group Navigation</emphasis>
+      </citetitle>
+    </para>
 		<para>
 			Group navigations are dynamically added to the user navigation at login. This allows users to see the menu of all pages assigned to any groups they belong to.
 		</para>
@@ -433,22 +438,24 @@ For example, with the above configuration, portal will look for all configuratio
 		<para>
 			They are also located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <emphasis>ownerType</emphasis> is <emphasis>group</emphasis> and <emphasis>predefinedOwner</emphasis> is the path to the group. For example, <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>.
 		</para>
-	</section>
 
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
-		<title>User Navigation</title>
+		<para xml:id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
+		  <citetitle>
+			<emphasis role="bold">User Navigation</emphasis>
+		  </citetitle>
+		</para>
 		<para>
 			User navigation is the set of nodes and pages that are owned by the user. They are part of the user's dashboard.
 		</para>
 		<para>
 			Two files configure the user navigation (<filename>navigation.xml</filename> and <filename>pages.xml</filename>). They are located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <emphasis>ownerType</emphasis> is <emphasis>user</emphasis> and <emphasis>predefinedOwner</emphasis> is username that want to create the navigation. For example, if administrator want to create navigation for user <emphasis>root</emphasis>, he has to locate the configuration files in <filename>portal.war/WEB-INF/conf/portal/user/root </filename>
 		</para>
-	</section>
+
     <para>
 	<prompt>
 		<emphasis role="bold">See also</emphasis>
 	</prompt>
-</para>
+	</para>
 		<itemizedlist>
            <listitem>
                <para><link linkend="sect-Reference_Guide-Default_Portal_Configuration">Default Portal Configuration</link></para>
@@ -464,5 +471,4 @@ For example, with the above configuration, portal will look for all configuratio
            </listitem>
        </itemizedlist>
 </section>
-
-
+</section>
