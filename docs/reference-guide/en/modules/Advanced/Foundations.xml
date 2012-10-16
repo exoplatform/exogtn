@@ -419,7 +419,7 @@
       </para>
 
       <example id="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">
-         <title>Portal container declaration example</title>
+         <title>Portal container declaration</title>
       <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration

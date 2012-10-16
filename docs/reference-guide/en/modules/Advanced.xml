@@ -516,7 +516,7 @@
         </para>
 
         <para>
-           Also see <link linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">Example: Portal container declaration example</link>
+           Also see <link linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">Example: Portal container declaration</link>
            for an example of specifying a field of the <emphasis>Collection</emphasis> type.
         </para>
 
@@ -593,7 +593,7 @@
         </para>
 
         <example id="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">
-           <title>Portal container declaration example</title>
+           <title>Portal container declaration</title>
         <programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
   <configuration
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
