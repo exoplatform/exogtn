@@ -513,7 +513,7 @@ skin/Stylesheet.css</programlisting>
          <para>
          For the portal named <emphasis role="bold">MySkin</emphasis>, the CSS class must be defined as follows:
          </para>
-         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .MySkinImage</programlisting>
+         <programlisting role="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis role="bold">MySkinImage</emphasis></programlisting>
          <para>
          In order for the default skin to know about the skin icon for a new portal skin, the preview screenshot
          needs to be placed in:</para>
@@ -524,7 +524,8 @@ skin/Stylesheet.css</programlisting>
          <emphasis
             role="bold">MySkin</emphasis>, you need to update the following:</para>
          <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
-         <programlisting language="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .MySkinImage {
+
+         <programlisting role="css">.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis role="bold">MySkinImage</emphasis> {
   margin: auto;
   width: 329px; height:204px;
   background: url('background/MySkin.jpg') no-repeat top;
