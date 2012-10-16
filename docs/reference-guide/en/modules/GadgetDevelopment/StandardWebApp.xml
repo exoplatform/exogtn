@@ -3,7 +3,7 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-Reference-Guide_Gadgets_Standard-WebApp">
+<section id="sect-Reference-Guide_Gadgets_Standard-WebApp" role="NotInToc">
   <title>Standard WebApp for Gadget importer</title>
   <para>In &PRODUCT;, you can create a WebApp folder to contain the configuration of the list of gadgets which are automatically added to the <emphasis role="bold">Application
         Registry</emphasis>.</para>

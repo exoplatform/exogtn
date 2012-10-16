@@ -150,7 +150,7 @@
   <section id="sect-Reference_Guide-Skin_Configuration-Skin_Switching" role="NotInToc">
     <title>Skin Selection</title>
 
-    <para id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-UI">
+    <para xml:id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-UI">
       <citetitle><emphasis role="bold">Select a skin throughout User Interface</emphasis></citetitle>
     </para>
       <para>
@@ -162,7 +162,7 @@
         interface.
 	</para>
 
-    <para id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-config">
+    <para xml:id="sect-Reference_Guide-Skin_Configuration-Skin_Switching-config">
       <citetitle>
         <emphasis role="bold">Set the Default Skin within the configuration files</emphasis>
       </citetitle>
@@ -278,7 +278,7 @@
       </listitem>
     </itemizedlist>
 
-    <para id="sect-Reference_Guid-Skin_Configuration-Skin_Service-Skin_configuration">
+    <para xml:id="sect-Reference_Guid-Skin_Configuration-Skin_Service-Skin_configuration">
       <citetitle><emphasis role="bold"> Skin configuration</emphasis></citetitle>
     </para>
 
@@ -314,7 +314,7 @@
       </programlisting>
 
 
-    <para id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
+    <para xml:id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
       <citetitle><emphasis role="bold">Resource Request Filter</emphasis></citetitle>
     </para>
 
@@ -460,11 +460,13 @@ skin/Stylesheet.css</programlisting>
         which contains the skin will need to be properly configured for the skin service to discover them. This 
         means that <filename>ResourceRequestFilter</filename> and <filename>gatein-resources.xml</filename> should be configured properly.
       </para>
-
-      <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal-skin-configuration">
-        <title>Portal Skin Configuration</title>
-        <para>
-        The <filename>gatein-resources.xml</filename> needs to specify the new portal skin. This includes specifying the name
+      <para xml:id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal-skin-configuration">
+        <citetitle>
+          <emphasis role="bold">Portal Skin Configuration</emphasis>
+        </citetitle>
+      </para>
+       <para>
+        The <filename>gatein-resources.xml</filename> file needs to specify the new portal skin. This includes specifying the name
         of the new skin, where to locate its CSS stylesheet file and whether to overwrite an existing portal theme with
         the same name.
         </para>
@@ -485,11 +487,13 @@ skin/Stylesheet.css</programlisting>
       CSS classes.
       </para>
       </note>
-      </section>
-    
-      <section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal_skin_preview_icon">
-        <title>Portal Skin Preview Icon</title>
-         <para>
+
+      <para xml:id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Portal_skin_preview_icon">
+        <citetitle>
+          <emphasis role="bold">Portal Skin Preview Icon</emphasis>
+        </citetitle>
+      </para>
+             <para>
          When selecting a skin, it is possible to preview it. The current skin needs to
          know about the skin icons for all the available skins; otherwise, it will not be able
          to show the previews. When creating a new portal, it is recommended to include the preview
@@ -534,8 +538,6 @@ skin/Stylesheet.css</programlisting>
   background: url('background/MySkin.jpg') no-repeat top;
   cursor: pointer ;
 }</programlisting>
-
-      </section>
     
     </section>
 
@@ -557,8 +559,12 @@ skin/Stylesheet.css</programlisting>
         </imageobject>
       </mediaobject></para>
 
-	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_configuration">
-	<title>Window Style Configuration</title>
+	<para xml:id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_configuration">
+    <citetitle>
+       <emphasis role="bold">Window Style Configuration</emphasis>
+    </citetitle>
+	</para>
+
 	<para>
 	Window Styles are defined within the <filename>gatein-resources.xml</filename> file which is used by the skin service to
 	deploy the window style into the portal. Window styles can belong in with a window style category, this
@@ -587,10 +593,12 @@ skin/Stylesheet.css</programlisting>
     to all portal skins or that portal skins share a common stylesheet for window decorators.
     </para></note>
 
-    </section>
+    <para xml:id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_css">
+      <citetitle>
+        <emphasis role="bold">Window Style CSS</emphasis>
+      </citetitle>
+    </para>
 
-	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Window_style_css">
-	<title>Window Style CSS</title>
 	<para>
 	To display the window decorators for the skin service, it must have the CSS classes with specific
 	naming related to the window style name. The service will try and display the CSS based on this naming. 
@@ -731,14 +739,19 @@ skin/Stylesheet.css</programlisting>
   height: 30px;
 }
 </programlisting>
-</section>
-<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Set_default_window_style">
-<title>Set Default Window Style</title>
-To set the default window style to be used for a portal, you need to specify the CSS classes
-for a theme called <emphasis>DefaultTheme</emphasis>.
-<note><para>You do not need to specify the DefaultTheme in <filename>gatein-resources.xml</filename>.</para></note>
-</section>
-  </section>
+
+    <para xml:id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin-Set_default_window_style">
+      <citetitle>
+        <emphasis role="bold">Set Default Window Style</emphasis>
+      </citetitle>
+    </para>
+
+	<para>To set the default window style to be used for a portal, you need to specify the CSS classes
+	for a theme called <emphasis>DefaultTheme</emphasis>.</para>
+	<note>
+		<para>You do not need to specify the DefaultTheme in <filename>gatein-resources.xml</filename>.</para>
+	</note>
+	</section>
   
     <section id="sect-Reference_Guide-Skin_Configuration-Portlet_Styles">
     <title>Create a new portlet skin</title>
@@ -775,9 +788,12 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
     <note><para>If the current portal skin is not defined as part of the supported
     skins, the portlet CSS class will not be loaded. It is recommended that you update
     portlet skins whenever a new portal skin is created.</para></note>
-    
-    <section id="sect-Reference_Guide-Tips_and_Tricks-Change_portlet_icons">
-      <title>Change portlet icons</title>
+
+      <para xml:id="sect-Reference_Guide-Tips_and_Tricks-Change_portlet_icons">
+        <citetitle>
+          <emphasis role="bold">Change portlet icons</emphasis>
+        </citetitle>
+      </para>
 
       <para>Each portlet can be represented by a unique icon that you can see in the
       portlet registry or page editor. This icon can be changed by adding an image to the
@@ -805,7 +821,6 @@ for a theme called <emphasis>DefaultTheme</emphasis>.
       portlet icon regardless of what skin is going to be used.
       </para>
       </note>
-    </section>
   </section>
       <section id="sect-Reference_Guide-Skin_Configuration-Portlet_Specification_CSS_Classes">
     <title>Create a new portlet specification CSS class</title>
