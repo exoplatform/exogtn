@@ -421,7 +421,7 @@
            For &lt;properties-param&gt;, the value specification is in the form of one or more &lt;property&gt; elements,
            each of which specifies two strings - a property name, and a property value. Each &lt;properties-params&gt;
            defines one <emphasis>java.util.Properties</emphasis> instance. Also, see
-           <xref linkend="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example"/> for an example.
+           <link linkend="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example">Example: HibernateService using variables</link> for an example.
         </para>
 
         <example>
@@ -516,7 +516,7 @@
         </para>
 
         <para>
-           Also see <xref linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example" />
+           Also see <link linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">Example: Portal container declaration example</link>
            for an example of specifying a field of the <emphasis>Collection</emphasis> type.
         </para>
 
