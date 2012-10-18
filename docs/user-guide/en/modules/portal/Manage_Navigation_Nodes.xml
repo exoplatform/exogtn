@@ -366,7 +366,6 @@
     </para>
     </listitem>
 	<listitem><para>To select a page, you must be a member in the <emphasis role="bold">Access Permission</emphasis> or <emphasis role="bold">Edit Permission</emphasis> list of the selected pages.
-      When the page type is 'User', you cannot select a page of another users.
 	</para>
      </listitem>
      <listitem>
