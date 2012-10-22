@@ -382,7 +382,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       if (eXoGadgets != null)
       {
          ArrayList<String> permissions = new ArrayList<String>();
-         permissions.add(UserACL.EVERYONE);
          String categoryName = "Gadgets";
 
          //
@@ -465,7 +464,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          }
 
          ArrayList<String> permissions = new ArrayList<String>();
-         permissions.add(UserACL.EVERYONE);
          // If no keywords, use the portlet application name
          if (categoryNames.isEmpty())
          {
