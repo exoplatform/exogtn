@@ -20,11 +20,8 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -36,9 +33,9 @@ import java.util.regex.Pattern;
  * Validates whether this value matches one regular expression.
  */
 @Serialized
-public class ExpressionValidator implements Validator
+public class ExpressionValidator extends AbstractValidator
 {
-   private Pattern pattern;
+   private Matcher matcher;
 
    private String key_;
 
@@ -49,44 +46,26 @@ public class ExpressionValidator implements Validator
 
    public ExpressionValidator(final String regex)
    {
-      pattern = Pattern.compile(regex);
+      matcher = Pattern.compile(regex).matcher("");
       key_ = "ExpressionValidator.msg.value-invalid";
    }
 
    public ExpressionValidator(final String regex, final String key)
    {
-      pattern = Pattern.compile(regex);
+      matcher = Pattern.compile(regex).matcher("");
       key_ = key;
    }
 
-   public void validate(final UIFormInput uiInput) throws Exception
+ @Override
+  protected String getMessageLocalizationKey()
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-      {
-         return;
-      }
-      if (uiInput.getValue() != null)
-      {
-         String value = ((String)uiInput.getValue()).trim();
-         if (pattern.matcher(value).matches())
-         {
-            return;
-         }
-      }
-
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
-      {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label};
-      throw new MessageException(new ApplicationMessage(key_, args, ApplicationMessage.WARNING));
+      return key_;
    }
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
+      matcher.reset(value);
+      return matcher.matches();
+
+ }
 }

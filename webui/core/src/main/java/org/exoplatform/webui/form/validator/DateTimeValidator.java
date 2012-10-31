@@ -19,13 +19,11 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
-import org.exoplatform.webui.form.UIFormInput;
-
+ import org.exoplatform.webui.form.UIFormDateTimeInput;
+ import org.exoplatform.webui.form.UIFormInput;
+ 
+import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -37,38 +35,49 @@ import java.text.SimpleDateFormat;
  * Validates whether a date is in a correct format
  */
 
-public class DateTimeValidator implements Validator
+public class DateTimeValidator extends AbstractValidator implements Serializable
 {
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      String s = (String)uiInput.getValue();
+      return "DateTimeValidator.msg.Invalid-input";
+   }
+
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
       UIFormDateTimeInput uiDateInput = (UIFormDateTimeInput)uiInput;
       SimpleDateFormat sdf = new SimpleDateFormat(uiDateInput.getDatePattern_().trim());
 
-      UIForm uiForm = ((UIComponent)uiInput).getAncestorOfType(UIForm.class);
-      String label;
+      // Specify whether or not date/time parsing is to be lenient.
+      sdf.setLenient(false);
       try
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+    	  sdf.parse(value);
+          return true;
       }
-      catch (Exception e)
+      catch (ParseException e)
       {
-         label = uiInput.getName();
+         return false;
       }
-      Object[] args = {label, s};
+}
 
-      try
+   @Override
+   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory, boolean trimValue) throws Exception
+   {
+      if(!(uiInput instanceof UIFormDateTimeInput))
       {
-         // Specify whether or not date/time parsing is to be lenient. 
-         sdf.setLenient(false);
-         sdf.parse(s);
-         return;
+		return null;
       }
-      catch (Exception e)
+      else
       {
-         throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
+        return super.trimmedValueOrNullIfBypassed(value, uiInput, exceptionOnMissingMandatory, trimValue);
       }
+   }
+
+   @Override
+   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
+   {
+      return new Object[]{getLabelFor(uiInput), value};
    }
 }
