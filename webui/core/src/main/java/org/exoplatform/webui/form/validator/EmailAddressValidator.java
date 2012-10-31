@@ -20,10 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
@@ -48,49 +45,37 @@ import org.exoplatform.webui.form.UIFormInput;
  *     and not appear two or more times consecutively
  */
 @Serialized
-public class EmailAddressValidator implements Validator
+public class EmailAddressValidator extends MultipleConditionsValidator
 {
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
    {
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
-      {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
+
       Object[] args = {label};
       
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      
-      String s = (String)uiInput.getValue();
-      int atIndex = s.indexOf('@');
+	int atIndex = value.indexOf('@');
       if (atIndex == -1)
       {
-         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-            ApplicationMessage.WARNING));
+		messages.addMessage("EmailAddressValidator.msg.Invalid-input", args);
       }
       
-      String localPart = s.substring(0, atIndex);
-      String domainName = s.substring(atIndex + 1);
-
-      if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+	else
       {
-         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-            ApplicationMessage.WARNING));
+         String localPart = value.substring(0, atIndex);
+         String domainName = value.substring(atIndex + 1);
+
+         if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+         {
+            messages.addMessage("EmailAddressValidator.msg.Invalid-input", args);
+         }
       }
+	  
    }
 
    private boolean validateLocalPart(char[] localPart)
    {
-      if(!isAlphabet(localPart[0]) || !isAlphabetOrDigit(localPart[localPart.length -1]))
+      if(!Character.isLetter(localPart[0]) || !Character.isLetterOrDigit(localPart[localPart.length - 1]))
       {
          return false;
       }
@@ -100,7 +85,7 @@ public class EmailAddressValidator implements Validator
          char c = localPart[i];
          char next = localPart[i+1];
 
-         if(isAlphabetOrDigit(c) || (isLocalPartSymbol(c) && isAlphabetOrDigit(next)))
+         if(Character.isLetterOrDigit(c) || (isLocalPartSymbol(c) && Character.isLetterOrDigit(next)))
          {
             continue;
          }
@@ -114,7 +99,7 @@ public class EmailAddressValidator implements Validator
 
    private boolean validateDomainName(char[] domainName)
    {
-      if(!isAlphabet(domainName[0]) || !isAlphabetOrDigit(domainName[domainName.length -1]))
+      if(!Character.isLetter(domainName[0]) || !Character.isLetterOrDigit(domainName[domainName.length - 1]))
       {
          return false;
       }
@@ -130,12 +115,12 @@ public class EmailAddressValidator implements Validator
          {
             foundValidLastDot = true;
          }
-         else if(!isAlphabet(c))
+         else if(!Character.isLetter(c))
          {
             foundValidLastDot = false;
          }
 
-         if(isAlphabetOrDigit(c) || (isDomainNameSymbol(c) && isAlphabetOrDigit(next)))
+         if(Character.isLetterOrDigit(c) || (isDomainNameSymbol(c) && Character.isLetterOrDigit(next)))
          {
             continue;
          }
@@ -146,22 +131,7 @@ public class EmailAddressValidator implements Validator
       }
       return foundValidLastDot;
    }
-   
-   private boolean isAlphabet(char c)
-   {
-      return c >= 'a' && c <= 'z';
-   }
-   
-   private boolean isDigit(char c)
-   {
-      return c >= '0' && c <= '9';
-   }
-
-   private boolean isAlphabetOrDigit(char c)
-   {
-      return isAlphabet(c) || isDigit(c);
-   }
-   
+ 
    private boolean isLocalPartSymbol(char c)
    {
       return c == '-' || c == '_' || c == '.';

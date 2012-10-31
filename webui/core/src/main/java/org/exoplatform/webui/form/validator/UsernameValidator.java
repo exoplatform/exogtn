@@ -17,12 +17,10 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
+import java.io.Serializable;
 /**
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
  *
@@ -33,61 +31,51 @@ import org.exoplatform.webui.form.UIFormInput;
  */
 
 @Serialized
-public class UsernameValidator implements Validator
+public class UsernameValidator extends MultipleConditionsValidator implements Serializable
 {
-   private Integer min = 3;
-   private Integer max = 30;
+   protected static final int DEFAULT_MIN_LENGTH = 3;
+   protected static final int DEFAULT_MAX_LENGTH = 30;
+   protected Integer min = DEFAULT_MIN_LENGTH;
+   protected Integer max = DEFAULT_MAX_LENGTH;
    
    public UsernameValidator(Integer min, Integer max)
    {
       this.min = min;
       this.max = max;
    }
-   
-   @Override
-   public void validate(UIFormInput uiInput) throws Exception
+
+   protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      validate(value, label, messages, min, max);
+   }
+
+   static void validate(String value, String label, CompoundApplicationMessage messages, Integer min, Integer max)
+   {
+
+      char[] buff = value.toCharArray();
+       if (buff.length < min || buff.length > max)
       {
-        label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      
-      char[] buff = ((String)uiInput.getValue()).toCharArray();
-      if(buff.length < min || buff.length > max) 
-      {
-         Object[] args = {label, min.toString(), max.toString()};
-         throw new MessageException(new ApplicationMessage("StringLengthValidator.msg.length-invalid", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("StringLengthValidator.msg.length-invalid", new Object[]{label, min.toString(), max.toString()});
+
       }
       
-      if(!isAlphabet(buff[0])) 
+     if (!Character.isLowerCase(buff[0])) 
       {
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("FirstCharacterNameValidator.msg", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label});
+
       }
       
-      if(!isAlphabetOrDigit(buff[buff.length - 1]))
+      if (!Character.isLetterOrDigit(buff[buff.length - 1]))
       {
-         Object[] args = {label, buff[buff.length - 1]};
-         throw new MessageException(new ApplicationMessage("LastCharacterUsernameValidator.msg", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]});
+
       }
       
-      for(int i = 1; i < buff.length -1; i++)
+       for (int i = 1; i < buff.length - 1; i++)
       {
          char c = buff[i];
 
-         if (isAlphabetOrDigit(c))
+         if (Character.isLetterOrDigit(c))
          {
             continue;
          }
@@ -97,42 +85,39 @@ public class UsernameValidator implements Validator
             char next = buff[i + 1];
             if (isSymbol(next))
             {
-               Object[] args = {label, buff[i], buff[i + 1]};
-               throw new MessageException(new ApplicationMessage("ConsecutiveSymbolValidator.msg", args,
-                  ApplicationMessage.WARNING));
+               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]});
+
             }
-            else if (!isAlphabetOrDigit(next))
+            else if (!Character.isLetterOrDigit(next))
             {
-               Object[] args = {label};
-               throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+
             }
          }
          else
          {
-            Object[] args = {label};
-            throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+
          }
       }
+
    }
-   
-   private boolean isAlphabet(char c)
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      return c >= 'a' && c <= 'z';
+      throw new UnsupportedOperationException("Unneeded by this implementation");
    }
    
-   private boolean isDigit(char c)
+@Override
+   protected boolean isValid(String value, UIFormInput uiInput)
    {
-      return c >= '0' && c <= '9';
+      throw new UnsupportedOperationException("Unneeded by this implementation");
    }
    
-   private boolean isSymbol(char c)
+   private static boolean isSymbol(char c)
    {
       return c == '_' || c == '.';
    }
 
-   private boolean isAlphabetOrDigit(char c)
-   {
-      return isAlphabet(c) || isDigit(c);
-   }
 
 }
