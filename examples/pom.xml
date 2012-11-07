@@ -26,7 +26,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.parent</artifactId>
-      <version>3.2.6-CR02-SNAPSHOT</version>
+      <version>3.2.6-PLF</version>
    </parent>
 
    <artifactId>exo.portal.sample</artifactId>
