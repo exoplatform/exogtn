@@ -931,15 +931,13 @@ skin/Stylesheet.css</programlisting>
           </imageobject>
         </mediaobject>
 		<para></para>
-        <programlisting language="html">
-&lt;div class="Parent"&gt;
+        <programlisting language="html">&lt;div class="Parent"&gt;
   &lt;div style="float: left; width: 100px"&gt;
   &lt;/div&gt;
   &lt;div style="margin-left: 105px;"&gt;
   &lt;div&gt;
   &lt;div style="clear: left"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-&lt;/div&gt;
-</programlisting>
+&lt;/div&gt;</programlisting>
       </listitem>
 	</itemizedlist>
   </section>

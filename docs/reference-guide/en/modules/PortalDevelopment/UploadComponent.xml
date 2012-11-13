@@ -44,8 +44,7 @@
                 <itemizedlist>
                     <listitem>
                         <para>This is the default constructor that allows uploading the file with the size of 10 MB.</para>
-                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression, int limitFile)
-                        </programlisting>
+                        <programlisting language="java">public UIUploadInput(String name, String bindingExpression, int limitFile) </programlisting>
                     </listitem>
                     <listitem>
                         <para>
