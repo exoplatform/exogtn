@@ -169,12 +169,10 @@
             <para>As a result of the example above, routing and rendering is as below:</para>
             <programlistingco>
               <areaspec units="linecolumn"/>
-              <programlisting><![CDATA[
-Routing and Rendering
+              <programlisting><![CDATA[Routing and Rendering
 Path "/foo"      <--> the map (gtn:path=foo)
 
-Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
-]]></programlisting>
+Path "/foo:bar"  <--> the map (gtn:path=foo/bar)]]></programlisting>
             </programlistingco>
             <para>If the request path contains another "/" char, it will not work. The default encoding mode is <emphasis >default-form</emphasis>. In the example above, "/foo/bar" is not matched, so the system returns an empty parameter map.</para>
             <para>However, this problem could be solved with the following configuration:</para>

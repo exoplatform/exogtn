@@ -321,8 +321,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports" />
 						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo" />
 					</areaspec>
-<programlisting language="xml">
-&#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
+<programlisting language="xml">&#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
    xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
                                          http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
@@ -339,8 +338,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
           &#60;title&#62;Simplest Hello World Portlet&#60;/title&#62;
       &#60;/portlet-info&#62;
    &#60;/portlet&#62;
-&#60;/portlet-app&#62;
-</programlisting>
+&#60;/portlet-app&#62;</programlisting>
 					<calloutlist>
 						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletname">
 							<para>

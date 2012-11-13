@@ -367,9 +367,7 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
-<programlisting><![CDATA[<!--
-<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
--->
+<programlisting><![CDATA[<!--  <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a> -->
 <a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>]]></programlisting>
 						</para>
 					</listitem>
@@ -654,8 +652,7 @@ realmName=gatein-domain;
 					<listitem>
 						<para>
 						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
-<programlisting><![CDATA[
-<!--
+<programlisting><![CDATA[ <!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
 <a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>]]></programlisting>
@@ -1531,7 +1528,8 @@ network.negotiate-auth.using-native-gsslib = true</programlisting>
 				</step>
 				<step>
 					<para>
-          In <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+          In <filename>$PLATFORM_JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the
+            'Sign In' link as follows:
 <programlisting><![CDATA[<!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->

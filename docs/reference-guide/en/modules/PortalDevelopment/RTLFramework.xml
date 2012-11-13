@@ -9,8 +9,7 @@
 		The text orientation depends on the current locale setting. The orientation is a Java 5 enum that provides a set of functionalities:
 	</para>
 	
-<programlisting language="javascript">
-   LT, // Western Europe
+<programlisting language="javascript">LT, // Western Europe
    RT, // Middle East (Arabic, Hebrew)
    TL, // Japanese, Chinese, Korean
    TR; // Mongolian
@@ -81,54 +80,57 @@
 		<para>
 			Stylesheet authors can annotate their stylesheet to create content that depends on the orientation.
 		</para>
-    
-		<example>
-			<para>
-				In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right:</para>
-        
-<programlisting language="css">float: left; /* orientation=lt */
-float: right; /* orientation=rt */
-font-weight: bold;
-text-align: center;
-white-space: nowrap;</programlisting>
 
-				 <para>The LT produced output will be:</para>
+  <example>
+    <para>
+      In the example, we need to use the orientation to modify the float attribute that will make the horizontal tabs
+      either float on left or on right:
+    </para>
 
-<programlisting language="css">float: left; /* orientation=lt */
-font-weight: bold;
-text-align: center;
-white-space: nowrap;</programlisting>
-				 
-         <para>The RT produced output will be:</para>
-         
-<programlisting language="css">float: right; /* orientation=rt */
-font-weight: bold;
-text-align: center;
-white-space: nowrap;</programlisting>
-			</example>
-		
-		<example>
-			<para>
-				In this example, you need to modify the padding according to the orientation:</para>
-        
-<programlisting language="css">color: white;
-line-height: 24px;
-padding: 0px 5px 0px 0px; /* orientation=lt */
-padding: 0px 0px 0px 5px; /* &#62;orientation=rt */</programlisting>
+    <programlisting language="css">float: left; /* orientation=lt */
+      float: right; /* orientation=rt */
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;</programlisting>
 
-				 <para>The LT produced output will be:</para>
-         
-<programlisting language="css"> color: white;
-line-height: 24px;
-padding: 0px 5px 0px 0px; /* orientation=lt */</programlisting>
+    <para>The LT produced output will be:</para>
 
-				 <para>The RT produced output will be:</para>
-         
-<programlisting language="css"> color: white;
-line-height: 24px;
-padding: 0px 0px 0px 5px; /* orientation=rt */</programlisting>
-			
-		</example>
+    <programlisting language="css">float: left; /* orientation=lt */
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;</programlisting>
+
+    <para>The RT produced output will be:</para>
+
+    <programlisting language="css">float: right; /* orientation=rt */
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;</programlisting>
+  </example>
+
+  <example>
+    <para>
+      In this example, you need to modify the padding according to the orientation:
+    </para>
+
+    <programlisting language="css">color: white;
+      line-height: 24px;
+      padding: 0px 5px 0px 0px; /* orientation=lt */
+      padding: 0px 0px 0px 5px; /* &#62;orientation=rt */ </programlisting>
+
+    <para>The LT produced output will be:</para>
+
+    <programlisting language="css">color: white;
+      line-height: 24px;
+      padding: 0px 5px 0px 0px; /* orientation=lt */ </programlisting>
+
+    <para>The RT produced output will be:</para>
+
+    <programlisting language="css">color: white;
+      line-height: 24px;
+      padding: 0px 0px 0px 5px; /* orientation=rt */ </programlisting>
+
+  </example>
 	
 	<para xml:id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images" role="NotInToc">
 		<citetitle><emphasis role="bold">Images</emphasis></citetitle>

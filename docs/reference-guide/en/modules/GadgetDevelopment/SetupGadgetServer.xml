@@ -67,8 +67,8 @@
         <filename>tomcat/gatein/conf/configuration.properties</filename>
         file:
       </para>
-      <programlisting><command>gatein.gadgets.securitytokenkeyfile=${gatein.conf.dir}/gadgets/key.txt</command>
-<command>gatein.gadgets.signingkeyfile=${gatein.conf.dir}/gadgets/oauthkey.pem</command></programlisting>
+      <command>gatein.gadgets.securitytokenkeyfile=${gatein.conf.dir}/gadgets/key.txt</command>
+      <command>gatein.gadgets.signingkeyfile=${gatein.conf.dir}/gadgets/oauthkey.pem</command>
       <para>In case you have other files, you can change these variables to point to them.</para>
       <para>The
         <filename>key.txt</filename>
