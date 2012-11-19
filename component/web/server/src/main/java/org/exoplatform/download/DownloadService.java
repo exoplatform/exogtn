@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -21,9 +21,12 @@ package org.exoplatform.download;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PortalContainerInfo;
-
+import org.exoplatform.services.cache.CacheListener;
+import org.exoplatform.services.cache.CacheListenerContext;
+import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -35,18 +38,49 @@ import java.util.Map;
 public class DownloadService
 {
 
-   private Cache downloadResources_;    
+   private final ExoCache<String, DownloadResource> downloadResources_;
 
    private Map<String, DownloadResource> defaultResources_;
 
    private PortalContainerInfo pinfo_;
-   
+
    public static final String DOWNLOAD_HANDLER_PATH = "download";
 
    public DownloadService(PortalContainerInfo pinfo, InitParams params) throws Exception
    {
       int maxSize = Integer.parseInt(params.getValueParam("download.resource.cache.size").getValue());
-      downloadResources_ = new Cache(maxSize);
+      ConcurrentFIFOExoCache<String, DownloadResource> tmp = new ConcurrentFIFOExoCache<String, DownloadResource>(maxSize);
+      tmp.addCacheListener(new CacheListener<String, DownloadResource>()
+      {
+         @Override
+         public void onExpire(CacheListenerContext context, String key, DownloadResource obj) throws Exception
+         {
+            if (obj instanceof InputStreamDownloadResource)
+            {
+               try
+               {
+                  obj.getInputStream().close();
+               }
+               catch (IOException ioEx)
+               {
+               }
+            }
+         }
+
+         @Override
+         public void onRemove(CacheListenerContext context, String key, DownloadResource obj) throws Exception {}
+
+         @Override
+         public void onPut(CacheListenerContext context, String key, DownloadResource obj) throws Exception {}
+
+         @Override
+         public void onGet(CacheListenerContext context, String key, DownloadResource obj) throws Exception {}
+
+         @Override
+         public void onClearCache(CacheListenerContext context) throws Exception {}
+      });
+      downloadResources_ = tmp;
+
       defaultResources_ = new HashMap<String, DownloadResource>();
       pinfo_ = pinfo;
    }
@@ -60,7 +94,7 @@ public class DownloadService
    {
       String id = Integer.toString(resource.hashCode());
       if (resource.getDownloadType() != null)
-         id = resource.getDownloadType() + ":/" + id;
+      { id = resource.getDownloadType() + ":/" + id; }
       downloadResources_.put(id, resource);
       return id;
    }
@@ -88,21 +122,8 @@ public class DownloadService
          + "resourceId=" + id;
    }
 
-   @SuppressWarnings("serial")
-   static class Cache extends LinkedHashMap<String, DownloadResource>
+   public ExoCache<String, DownloadResource> getCache()
    {
-
-      int maxSize_ = 100;
-
-      public Cache(int maxSize)
-      {
-         maxSize_ = maxSize;
-      }
-
-      @SuppressWarnings("unused")
-      protected boolean removeEldestEntry(Map.Entry<String, DownloadResource> eldest)
-      {
-         return size() > maxSize_;
-      }
+      return downloadResources_;
    }
 }
