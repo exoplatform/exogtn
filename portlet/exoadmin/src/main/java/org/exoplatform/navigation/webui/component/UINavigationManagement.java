@@ -141,6 +141,15 @@ public class UINavigationManagement extends UIContainer
                uiPortal.refreshUIPage();
             }
          }
+         else
+         {
+           if(targetNode.getId().equals(uiPortal.getSelectedUserNode().getParent().getId()))
+           {
+             targetNode = userPortal.getDefaultPath(UserNodeFilterConfig.builder().build());
+             uiPortal.setNavPath(targetNode);
+             uiPortal.refreshUIPage();
+           }
+         }
       }
    }
 
