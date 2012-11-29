@@ -177,7 +177,7 @@ Each portal, groups and users navigation is indicated by a configuration paragra
 <calloutlist>
 				<callout arearefs="area-Reference_Guide.Portalconf.predifinedOwner">
 					<para>
-						<emphasis> predefinedOwner</emphasis> define the navigation owner, portal will look for the configuration files in folder with this name, if there is no suiable folder, a default portal will be created with name is this value.
+						<emphasis> predefinedOwner</emphasis> define the navigation owner, portal will look for the configuration files in folder with this name, if there is no suitable folder, a default portal will be created and its name is this value.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide.Portalconf.ownerType">
@@ -205,7 +205,7 @@ Each portal, groups and users navigation is indicated by a configuration paragra
 						<emphasis>merge</emphasis>: Import data when it does not exist, update data when it exists.
 						</listitem>
 						<listitem>
-						<emphasis>rewrite</emphasis>: Overwrite data whatsoever.
+						<emphasis>overwrite</emphasis>: Overwrite data whatsoever.
 						</listitem>
 						</itemizedlist>
 				</callout>
