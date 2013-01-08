@@ -16,9 +16,14 @@
             <para><emphasis role="bold"><link linkend="sect-Reference_Guide-EMail_Service_Configuration">Email Service Configuration</link></emphasis></para>
           <para>Instructions on how to configure the email sending services.</para>
         </listitem>
+      <listitem>
+            <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Configuration_Of_Custom_Data_Validators">Configuration of Custom Data Validators</link></emphasis></para>
+          <para>Instructions on how to configure custom data validators.</para>
+        </listitem>
     </itemizedlist>
     <para>After reading this chapter, you can extend more functions for your product and customize to your desires.</para>
     </abstract>
    <xi:include href="Configuration/DatabaseConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="Configuration/EMailServiceConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+   <xi:include href="Configuration/ConfigurationOfCustomDataValidators.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
