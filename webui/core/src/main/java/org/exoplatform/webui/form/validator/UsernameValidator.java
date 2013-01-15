@@ -20,6 +20,7 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
+
 import java.io.Serializable;
 /**
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
@@ -37,6 +38,7 @@ public class UsernameValidator extends MultipleConditionsValidator implements Se
    protected static final int DEFAULT_MAX_LENGTH = 30;
    protected Integer min = DEFAULT_MIN_LENGTH;
    protected Integer max = DEFAULT_MAX_LENGTH;
+   public static final String ALLOWED_SYMBOLS = "'_', '.'";
    
    public UsernameValidator(Integer min, Integer max)
    {
@@ -53,52 +55,64 @@ public class UsernameValidator extends MultipleConditionsValidator implements Se
    {
 
       char[] buff = value.toCharArray();
-       if (buff.length < min || buff.length > max)
+      char c ;
+      boolean hasConsecutive = false;
+      boolean hasInvalid = false;
+      if (buff.length < min || buff.length > max)
       {
          messages.addMessage("StringLengthValidator.msg.length-invalid", new Object[]{label, min.toString(), max.toString()});
-
       }
-      
-     if (!Character.isLowerCase(buff[0])) 
+     
+     c = buff[0];
+     if (!Character.isLowerCase(c)) 
       {
          messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label});
-
       }
       
-      if (!Character.isLetterOrDigit(buff[buff.length - 1]))
+      c = buff[buff.length - 1];
+      if (!isLowerCaseLetterOrDigit(c))
       {
-         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]});
-
+         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, c});
       }
       
-       for (int i = 1; i < buff.length - 1; i++)
+      for (int i = 1; i < buff.length - 1; i++)
       {
-         char c = buff[i];
+         c = buff[i];
 
-         if (Character.isLetterOrDigit(c))
+         if (isLowerCaseLetterOrDigit(c))
          {
             continue;
          }
 
          if (isSymbol(c))
          {
-            char next = buff[i + 1];
-            if (isSymbol(next))
-            {
-               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]});
-
+           char next = buff[i + 1];
+           if (isSymbol(next))
+           {
+             if (!hasConsecutive) {
+               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[] {label, ALLOWED_SYMBOLS });
+               hasConsecutive = true;
+             }
+           }
+           else if (!Character.isLetterOrDigit(next))
+           {
+             if (!hasInvalid) {
+               messages.addMessage("UsernameValidator.msg.Invalid-char",new Object[] { label });
+               hasInvalid = true;
+             }
             }
-            else if (!Character.isLetterOrDigit(next))
-            {
-               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
-
-            }
-         }
-         else
-         {
-            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
-
-         }
+          }
+          else
+          {
+            if (!hasInvalid) {
+              messages.addMessage("UsernameValidator.msg.Invalid-char",new Object[] { label });
+              hasInvalid = true;
+           }
+        }
+         // If we have both error conditions, fail "fast" instead of going on
+        if (hasConsecutive && hasInvalid) {
+          break;
+        }
       }
 
    }
@@ -108,15 +122,19 @@ public class UsernameValidator extends MultipleConditionsValidator implements Se
       throw new UnsupportedOperationException("Unneeded by this implementation");
    }
    
+  private static boolean isLowerCaseLetterOrDigit(char character) {
+    return Character.isDigit(character) || (character >= 'a' && character <= 'z');
+  }
+   
 @Override
    protected boolean isValid(String value, UIFormInput uiInput)
    {
       throw new UnsupportedOperationException("Unneeded by this implementation");
    }
    
-   private static boolean isSymbol(char c)
+   private static boolean isSymbol(char character)
    {
-      return c == '_' || c == '.';
+      return ALLOWED_SYMBOLS.contains( Character.toString(character));
    }
 
 
