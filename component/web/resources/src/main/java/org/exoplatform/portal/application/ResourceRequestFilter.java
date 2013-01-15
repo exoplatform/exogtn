@@ -68,6 +68,27 @@ public class ResourceRequestFilter extends AbstractFilter
  
    public static final String LAST_MODIFIED     = "Last-Modified";    
    
+   private static final long MAX_AGE;
+   
+   static 
+   {
+     long seconds = 2592000;
+     String propValue = PropertyManager.getProperty("gatein.assets.resource.max-age");
+     if (propValue != null)
+     {
+       try
+       {
+         seconds = Long.valueOf(propValue);
+       }
+       catch (NumberFormatException e)
+       {
+         log.warn("The gatein.assets.resource.max-age property is not set properly.");
+       }
+     }
+
+     MAX_AGE = seconds;
+   }
+   
    public void afterInit(FilterConfig filterConfig)
    {
       cfg = filterConfig;
@@ -223,7 +244,7 @@ public class ResourceRequestFilter extends AbstractFilter
                         }
                         httpResponse.setContentType(img.type.getMimeType());
                         httpResponse.setContentLength(img.bytes.length);
-                        httpResponse.setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
+                        httpResponse.setHeader("Cache-Control", "max-age="+MAX_AGE+",s-maxage="+MAX_AGE);
                         processIfModified(imgLastModified, httpResponse);
                         
                         OutputStream out = httpResponse.getOutputStream();
@@ -255,7 +276,7 @@ public class ResourceRequestFilter extends AbstractFilter
          //
          if (!PropertyManager.isDevelopping())
          {
-            httpResponse.addHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
+            httpResponse.setHeader("Cache-Control", "max-age="+MAX_AGE+",s-maxage="+MAX_AGE);
          }
          else
          {
