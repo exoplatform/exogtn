@@ -5,7 +5,7 @@
    <parent>
       <groupId>org.gatein.portal.examples.portlets</groupId>
       <artifactId>parent</artifactId>
-      <version>3.2.7-PLF</version>
+      <version>3.2.8-PLF-SNAPSHOT</version>
    </parent>
 
    <artifactId>struts-jpetstore</artifactId>
