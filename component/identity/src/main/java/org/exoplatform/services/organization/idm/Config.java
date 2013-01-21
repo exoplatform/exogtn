@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.exoplatform.services.jcr.util.Text;
 
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
@@ -163,12 +164,12 @@ public class Config
 
    public String getPLIDMGroupName(String gtnGroupName)
    {
-      return gtnGroupName.replaceAll(getSlashReplacement(), "/");
+      return org.exoplatform.services.jcr.util.Text.unescapeIllegalJcrChars(gtnGroupName);
    }
 
    public String getGtnGroupName(String plidmGroupName)
    {
-      return plidmGroupName.replaceAll("/", getSlashReplacement());
+      return org.exoplatform.services.jcr.util.Text.escapeIllegalJcrChars(plidmGroupName);
    }
 
    Set<String> getTypes(String id)
