@@ -341,10 +341,11 @@ public class GroupDAOImpl implements GroupHandler
 
       for (org.picketlink.idm.api.Role role : allRoles)
       {
-         if (mmm.isCreateMembership(role.getRoleType().getName()))                            
-         {
-            exoGroups.add(convertGroup(role.getGroup()));
-         }
+        Group exoGroup = convertGroup(role.getGroup());
+        if (mmm.isCreateMembership(role.getRoleType().getName(), exoGroup.getId()))
+        {
+          exoGroups.add(exoGroup);
+        }
       }
 
       if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType))
@@ -1181,7 +1182,4 @@ public class GroupDAOImpl implements GroupHandler
    {
       return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
    }
-
-
-
 }

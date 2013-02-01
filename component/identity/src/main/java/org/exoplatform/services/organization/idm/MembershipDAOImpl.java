@@ -161,7 +161,7 @@ public class MembershipDAOImpl implements MembershipHandler
                createGroupKey(plGroupName, orgService.getConfiguration().getGroupType(g.getParentId()));
 
 
-      if (isCreateMembership(mt.getName()))
+      if (isCreateMembership(mt.getName(), g.getId()))
       {
          if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null)
          {
@@ -190,7 +190,10 @@ public class MembershipDAOImpl implements MembershipHandler
          preSave(membership, true);
       }
 
-      getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+      if (isCreateMembership(mt.getName(), g.getId()))
+      {
+        getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+      }
 
       if (broadcast)
       {
@@ -247,7 +250,7 @@ public class MembershipDAOImpl implements MembershipHandler
          preSave(m, false);
       }
 
-      if (isCreateMembership(m.getMembershipType()))
+      if (isCreateMembership(m.getMembershipType(),m.getGroupId()))
       {
 
          try
@@ -342,7 +345,7 @@ public class MembershipDAOImpl implements MembershipHandler
          preDelete(m);
       }
 
-      if (isCreateMembership(m.getMembershipType()))
+      if (isCreateMembership(m.getMembershipType(),m.getGroupId()))
       {
 
          try
@@ -536,10 +539,7 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       if (role != null &&
-          (!isAssociationMapped() ||
-           !getAssociationMapping().equals(role.getRoleType()) ||
-           !ignoreMappedMembershipType())
-         )
+          (!isAssociationMapped() || !getAssociationMapping().equals(role.getRoleType()) || !ignoreMappedMembershipType(groupId))         )
       {
          hasMembership = true;
       }
@@ -628,7 +628,7 @@ public class MembershipDAOImpl implements MembershipHandler
 
       for (RoleType roleType : roleTypes)
       {
-         if (isCreateMembership(roleType.getName()))
+         if (isCreateMembership(roleType.getName(),groupId))
          {
             MembershipImpl m = new MembershipImpl();
             m.setGroupId(groupId);
@@ -709,10 +709,10 @@ public class MembershipDAOImpl implements MembershipHandler
 
       for (Role role : roles)
       {
-         if (isCreateMembership(role.getRoleType().getName()))
+        Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(role.getGroup());
+        if (isCreateMembership(role.getRoleType().getName(), g.getId()))
          {
             MembershipImpl m = new MembershipImpl();
-            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
             m.setGroupId(g.getId());
             m.setUserName(role.getUser().getId());
             m.setMembershipType(role.getRoleType().getName());
@@ -773,7 +773,7 @@ public class MembershipDAOImpl implements MembershipHandler
          log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
          return new ListAccessImpl(Membership.class, Collections.emptyList());
       }
-      return new IDMMembershipListAccess(gtnUser);
+      return new IDMMembershipListAccess(gtnUser, !orgService.getConfiguration().isSkipPaginationInMembershipQuery());
    }
 
    public Collection findMembershipsByGroup(Group group) throws Exception
@@ -796,7 +796,7 @@ public class MembershipDAOImpl implements MembershipHandler
          log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain group: " + group.getId());
          return new ListAccessImpl(Membership.class, Collections.emptyList());
    }
-      return new IDMMembershipListAccess(gtnGroup);
+      return new IDMMembershipListAccess(gtnGroup, !orgService.getConfiguration().isSkipPaginationInMembershipQuery());
    }
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception
@@ -840,7 +840,7 @@ public class MembershipDAOImpl implements MembershipHandler
 
       for (Role role : roles)
       {
-         if (isCreateMembership(role.getRoleType().getName()))
+         if (isCreateMembership(role.getRoleType().getName(),g.getId()))
          {
             MembershipImpl m = new MembershipImpl();
             m.setGroupId(g.getId());
@@ -926,7 +926,7 @@ public class MembershipDAOImpl implements MembershipHandler
 
       try
       {
-         if (isCreateMembership(m.getMembershipType()) &&
+         if (isCreateMembership(m.getMembershipType(),m.getId()) &&
              getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
          {
             if (log.isTraceEnabled())
@@ -1058,16 +1058,16 @@ public class MembershipDAOImpl implements MembershipHandler
       return orgService.getConfiguration().getAssociationMembershipType();
    }
 
-   protected boolean ignoreMappedMembershipType()
+   protected boolean ignoreMappedMembershipType(String groupId)
    {
-      return orgService.getConfiguration().isIgnoreMappedMembershipType();
+     return orgService.getConfiguration().isIgnoreMappedMembershipTypeForGroup(groupId);
    }
 
-   protected boolean isCreateMembership(String typeName)
+   protected boolean isCreateMembership(String typeName, String groupId)
    {
       if (isAssociationMapped() &&
           getAssociationMapping().equals(typeName) &&
-          ignoreMappedMembershipType())
+          ignoreMappedMembershipType(groupId))
       {
          return false;
       }
