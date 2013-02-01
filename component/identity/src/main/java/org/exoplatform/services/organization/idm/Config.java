@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
@@ -50,7 +52,7 @@ public class Config
 
    private String associationMembershipType;
 
-   private boolean ignoreMappedMembershipType = true;
+   private List<String> ignoreMappedMembershipTypeGroupList = new ArrayList<String>();
 
    private boolean useJTA = false;
 
@@ -59,6 +61,8 @@ public class Config
    private boolean sortMemberships = true;
 
    private boolean countPaginatedUsers = true;
+
+   private boolean skipPaginationInMembershipQuery = false;
 
    public Config()
    {
@@ -160,6 +164,28 @@ public class Config
 
       return null;
    }
+   
+  public boolean isIgnoreMappedMembershipTypeForGroup(String groupId) {
+    if ("/".equals(groupId)) {
+      return false;
+    }
+    String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+    for (String id : ignoreMappedMembershipTypeGroupList) {
+      // Check if any mapping that contains '/*' match this id
+      if (id.endsWith("/*")) {
+        id = id.substring(0, id.length() - 2);
+        // Check exact equality case
+      } else if (id.equals(groupId)) {
+        return true;
+      } else {
+        continue;
+      }
+      if (parentId.startsWith(id)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
    public String getPLIDMGroupName(String gtnGroupName)
    {
@@ -281,15 +307,14 @@ public class Config
       this.associationMembershipType = associationMembershipType;
    }
 
-   public boolean isIgnoreMappedMembershipType()
-   {
-      return ignoreMappedMembershipType;
-   }
+  public List<String> getIgnoreMappedMembershipTypeGroupList()
+  {
+    return this.ignoreMappedMembershipTypeGroupList;
+  }
 
-   public void setIgnoreMappedMembershipType(boolean ignoreMappedMembershipType)
-   {
-      this.ignoreMappedMembershipType = ignoreMappedMembershipType;
-   }
+  public void setIgnoreMappedMembershipTypeGroupList(List<String> ignoreMappedMembershipTypeGroupList) {
+    this.ignoreMappedMembershipTypeGroupList = ignoreMappedMembershipTypeGroupList;
+  }
 
    public boolean isUseJTA()
    {
@@ -340,4 +365,14 @@ public class Config
    {
       this.countPaginatedUsers = countPaginatedUsers;
    }
+
+  public boolean isSkipPaginationInMembershipQuery()
+  {
+    return skipPaginationInMembershipQuery;
+  }
+
+  public void setSkipPaginationInMembershipQuery(boolean skipPaginationInMembershipQuery)
+  {
+    this.skipPaginationInMembershipQuery = skipPaginationInMembershipQuery;
+  }
 }
