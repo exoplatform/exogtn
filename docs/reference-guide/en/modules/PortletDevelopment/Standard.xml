@@ -191,9 +191,9 @@
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="9" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.javaclass" />
-						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.portlet" />
-						<area coords="11" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.web" />
+						<area coords="8" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.javaclass" />
+						<area coords="9" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.portlet" />
+						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.web" />
 					</areaspec>
 <programlisting>|-- SimplestHelloWorld-0.0.1.war
 |   `-- WEB-INF
@@ -236,10 +236,10 @@
 				<programlistingco>
 					<areaspec>
 						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.extends" />
-						<area coords="13" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.doview" />
-						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.writer" />
-						<area coords="16" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write" />
-						<area coords="17" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close" />
+						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.doview" />
+						<area coords="13" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.writer" />
+						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write" />
+						<area coords="16" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close" />
 					</areaspec>
 <programlisting language="java">package org.gatein.portal.examples.portlets;
  
@@ -316,7 +316,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="8" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletname" />
+						<area coords="7" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletname" />
 						<area coords="9" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletclass" />
 						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports" />
 						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo" />
@@ -481,7 +481,8 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="25" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.requestDispatcher" />
 						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.include" />
 					</areaspec>
-<programlisting language="java">package org.gatein.portal.examples.portlets;
+<programlisting language="java">
+package org.gatein.portal.examples.portlets;
  
 import java.io.IOException;
  
@@ -550,7 +551,8 @@ public class JSPHelloUserPortlet extends GenericPortlet
 					The generic portlet that is inherited dispatches different views to the methods: <emphasis>doView</emphasis> , <emphasis>doHelp</emphasis> and <emphasis>doEdit</emphasis>.
 				</para>
 				
-<programlisting language="java">...
+<programlisting language="java">
+    ...
    protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
          UnavailableException
    {
@@ -579,11 +581,12 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="2" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.processAction" />
-						<area coords="5" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter" />
-						<area coords="6" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter" />
+						<area coords="3" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.processAction" />
+						<area coords="6" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter" />
+						<area coords="7" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter" />
 					</areaspec>
-<programlisting language="java">...
+<programlisting language="java">
+    ...
          public void processAction(ActionRequest aRequest, ActionResponse aResponse) throws PortletException, IOException,
          UnavailableException
    {
@@ -630,11 +633,11 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				<programlistingco>
 					<areaspec>
 						<area coords="1" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.taglib" />
-						<area coords="13" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method1" />
-						<area coords="20" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.1" />
-						<area coords="24" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.2" />
-						<area coords="30" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.1" />
-						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.2" />
+						<area coords="11" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method1" />
+						<area coords="17" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.1" />
+						<area coords="21" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.2" />
+						<area coords="27" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.1" />
+						<area coords="30" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.2" />
 					</areaspec>
 <programlisting>&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
  
