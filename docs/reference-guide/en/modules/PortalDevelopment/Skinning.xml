@@ -350,28 +350,9 @@
     The default skin for &PRODUCT; is located as part of the <filename>eXoResources.war</filename>.
     The main files associated with the skin are shown below:
     </para>
-    
-    <programlistingco>
-      <areaspec>
-        <area coords="1" id="area-Reference_Guide-Skin_Configuration-Default_Skin-gatein-resources" />
-        <area coords="2" id="area-Reference_Guide-Skin_Configuration-Default_Skin-web" />
-        <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-skin-Stylesheet" />
-      </areaspec>
-	<programlisting>WEB-INF/gatein-resources.xml
-WEB-INF/web.xml
-skin/Stylesheet.css</programlisting>
-<calloutlist>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-gatein-resources">
-          <para><filename>gatein-resources.xml</filename>: defines the skin setup to use.</para>
-        </callout>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-web">
-          <para><filename>web.xml</filename>: contains the resource filter and has the display-name set.</para>
-        </callout>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-skin-Stylesheet">
-          <para><filename>Stylesheet.css</filename>: contains the CSS class definitions for this skin.</para>
-        </callout>
-      </calloutlist>
-    </programlistingco>
+    <para><filename>WEB-INF/gatein-resources.xml</filename>: defines the skin setup to use.</para>
+    <para><filename>EB-INF/web.xml</filename>: contains the resource filter and has the display-name set</para>
+    <para><filename>skin/Stylesheet.css</filename>: contains the CSS class definitions for this skin</para>
     <variablelist>
       <varlistentry>
         <term><filename>gatein-resources.xml</filename></term>
@@ -404,12 +385,13 @@ skin/Stylesheet.css</programlisting>
           
     <programlistingco>
       <areaspec>
-        <area coords="1" id="area-Reference_Guide-Skin_Configuration-Default_Skin-uiportletapplication" />
-        <area coords="2" id="area-Reference_Guide-Skin_Configuration-Default_Skin-components" />
-        <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes" />
-        <area coords="4" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet" />
+        <area coords="2" id="area-Reference_Guide-Skin_Configuration-Default_Skin-uiportletapplication" />
+        <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-components" />
+        <area coords="4" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes" />
+        <area coords="5" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet" />
       </areaspec>
-    <programlisting>@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
+    <programlisting language="xml">
+@import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
 @import url(DefaultSkin/webui/component/Stylesheet.css);
 @import url(PortletThemes/Stylesheet.css);
 @import url(Portlet/Stylesheet.css);</programlisting>
