@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.IOUtil;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -57,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -608,21 +610,40 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       {
          return;
       }
-      ArrayList<Page> list = pageSet.getObject().getPages();
-      for (Page page : list)
-      {
-         RequestLifeCycle.begin(PortalContainer.getInstance());
-         try
-         {      //
-            ImportMode importMode = getRightMode(config.getImportMode());
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try{
+        ImportMode importMode = getRightMode(config.getImportMode());
+        ArrayList<Page> list = pageSet.getObject().getPages();
+        HashMap<String, Page> hashPageList = new HashMap<String, Page>();
+        String ownerType = config.getOwnerType();
+        for (Page page : list) {
+          hashPageList.put(page.getPageId(), page);
+        }
+        // Only delete pages from group/portal, not user page
 
-            PageImporter importer = new PageImporter(importMode, page, dataStorage_);
-            importer.perform();
-         }
-         finally
-         {
-            RequestLifeCycle.end();
-         }
+        if (importMode == ImportMode.OVERWRITE && !ownerType.equals(PortalConfig.USER_TYPE) ) {
+
+          Query<Page> state = new Query<Page>(ownerType, owner, Page.class);
+          ListAccess<Page> listAvaiablePages = dataStorage_.find2(state);
+          Page[] pageList = listAvaiablePages.load(0, listAvaiablePages.getSize());
+
+          for (Page currentPage : pageList) {
+            String currentPageId = currentPage.getPageId();
+            if (!hashPageList.containsKey(currentPageId)) {
+              if (dataStorage_.getPage(currentPageId) != null) {
+                log.info("Remove page named " + currentPageId + " from Portal Data" );
+                dataStorage_.remove(currentPage);
+              }
+            }
+
+          }
+        }
+        for (Page page : list) {
+          PageImporter importer = new PageImporter(importMode, page, dataStorage_);
+          importer.perform();
+        }}
+      finally{
+        RequestLifeCycle.end();
       }
    }
 
