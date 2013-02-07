@@ -158,6 +158,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       
       configs = params.getObjectParamValues(NewPortalConfig.class);
+      
 
       templateConfigs = params.getObjectParamValues(SiteConfigTemplates.class);
 
@@ -183,6 +184,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          overrideExistingData = false;
       }
 
+      for (NewPortalConfig ele : configs)
+      {
+        ele.setOverrideMode(overrideExistingData);
+      }
+      
       this.pomMgr = pomMgr;
    }
 
@@ -245,11 +251,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
                perform = (Status.WANT_REIMPORT == status);
             }
          }
-         
-         if (overrideExistingData)
-         {
-            return true;
-         }
 
          //
          return perform;
@@ -262,10 +263,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    public void run() throws Exception
    {
-      if (!performImport())
-      {
-         return;
-      }
+     boolean prepareImport = performImport();
 
       //
       if (isUseTryCatch)
@@ -276,8 +274,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             for (NewPortalConfig ele : configs)
             {
                try
-               {
-                  initPortalConfigDB(ele);
+               {  
+                 if(ele.getOverrideMode() || prepareImport )
+                 {
+                   initPortalConfigDB(ele);
+                 }
                }
                catch (Exception e)
                {
@@ -288,7 +289,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             {
                try
                {
-                  initPortletPreferencesDB(ele);
+                 if(ele.getOverrideMode() || prepareImport )
+                 {
+                   initPortletPreferencesDB(ele); 
+                 }
                }
                catch (Exception e)
                {
@@ -304,7 +308,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             try
             {
-               initPageDB(ele);
+              if(ele.getOverrideMode() || prepareImport )
+              {
+                initPageDB(ele);
+              }
             }
             catch (Exception e)
             {
@@ -318,7 +325,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             {
                try
                {
-                  initPageNavigationDB(ele);
+                 if(ele.getOverrideMode() || prepareImport )
+                 {
+                   initPageNavigationDB(ele);
+                 }
                }
                catch (Exception e)
                {
@@ -334,7 +344,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             try
             {
-               ele.getPredefinedOwner().clear();
+              if(ele.getOverrideMode() || prepareImport ){
+                ele.getPredefinedOwner().clear();
+              }
+               
             }
             catch (Exception e)
             {
@@ -349,11 +362,15 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             for (NewPortalConfig ele : configs)
             {
-               initPortalConfigDB(ele);
+              if(ele.getOverrideMode() || prepareImport ){
+                initPortalConfigDB(ele);
+              }
             }
             for (NewPortalConfig ele : configs)
             {
-               initPortletPreferencesDB(ele);
+              if(ele.getOverrideMode() || prepareImport ){
+                initPortletPreferencesDB(ele);
+              }
             }
          }
          finally
@@ -362,14 +379,18 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          }
          for (NewPortalConfig ele : configs)
          {
-            initPageDB(ele);
+           if(ele.getOverrideMode() || prepareImport ){
+             initPageDB(ele);
+           }
          }
          RequestLifeCycle.begin(PortalContainer.getInstance());
          try
          {
             for (NewPortalConfig ele : configs)
             {
-               initPageNavigationDB(ele);
+              if(ele.getOverrideMode() || prepareImport ){
+                initPageNavigationDB(ele);
+              }
             }
          }
          finally
@@ -378,7 +399,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          }
          for (NewPortalConfig ele : configs)
          {
-            ele.getPredefinedOwner().clear();
+           if(ele.getOverrideMode() || prepareImport ){
+             ele.getPredefinedOwner().clear();
+           }
          }
       }
       

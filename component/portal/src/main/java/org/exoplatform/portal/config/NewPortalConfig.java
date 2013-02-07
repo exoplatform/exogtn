@@ -44,8 +44,11 @@ public final class NewPortalConfig
    private String description;
 
    private String importMode;
+   
+   private boolean override;
 
-   /**
+
+  /**
     * @deprecated use the location instead
     */
    @Deprecated
@@ -65,6 +68,7 @@ public final class NewPortalConfig
       this.templateName = cfg.templateName;
       this.predefinedOwner = new HashSet<String>(cfg.predefinedOwner);
       this.importMode = cfg.importMode;
+      this.override = cfg.override;
    }
    
    public NewPortalConfig(String path)
@@ -173,4 +177,13 @@ public final class NewPortalConfig
       return "PortalConfig[predefinedOwner=" + predefinedOwner + ",ownerType=" + ownerType + ",templateName="
          + templateName + ",label=" + label + ",description=" + description + ",location=" + location + "]";
    }
+   
+   public boolean getOverrideMode() {
+     return override;
+   }
+
+   public void setOverrideMode(boolean overrideMode) {
+     this.override = overrideMode;
+   }
+
 }
