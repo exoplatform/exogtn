@@ -56,11 +56,11 @@ with the currently supported use case, which is the user name validation during 
           <para>The length must be between 3 and 30 characters.</para>
         </listitem>
         <listitem>
-          <para>Only lowercase letters, numbers, undescores (_) and period (.) can be used.
+          <para>Only lowercase letters, numbers, underscores (_) and period (.) can be used.
           </para>
         </listitem>
         <listitem>
-          <para>No consecutive undescores (_) or period (.) can be used.
+          <para>No consecutive underscores (_) or period (.) can be used.
           </para>
         </listitem>
         <listitem>
