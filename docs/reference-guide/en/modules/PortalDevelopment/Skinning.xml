@@ -350,76 +350,51 @@
     The default skin for &PRODUCT; is located as part of the <filename>eXoResources.war</filename>.
     The main files associated with the skin are shown below:
     </para>
-    <para><filename>WEB-INF/gatein-resources.xml</filename>: defines the skin setup to use.</para>
-    <para><filename>EB-INF/web.xml</filename>: contains the resource filter and has the display-name set</para>
-    <para><filename>skin/Stylesheet.css</filename>: contains the CSS class definitions for this skin</para>
     <variablelist>
       <varlistentry>
-        <term><filename>gatein-resources.xml</filename></term>
+        <term><filename>WEB-INF/gatein-resources.xml</filename></term>
         <listitem>
           <para>
-		    For the default portal skin, this file contains definitions for the portal skin, the window
-		    decorations and defines some JavaScript resources which are not
-		    related to the skin. The default portal skin does not directly define portlet skins which should be
+		    This file defines the skin setup to use. For the default portal skin, this file contains definitions for the portal skin, the window
+		    decorations and defines some JavaScript resources which are not related to the skin. The default portal skin does not directly define portlet skins which should be
 		    provided by the portlets themeselves.
           </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><filename>web.xml</filename></term>
+        <term><filename>WEB-INF/web.xml</filename></term>
         <listitem>
           <para>
-	        For the default portal skin, the <filename>web.xml</filename> of <filename>eXoResources.war</filename> contains a lot
+	        This file contains the resource filter and has the display-name set. For the default portal skin, the <filename>web.xml</filename> of <filename>eXoResources.war</filename> contains a lot
 	        of information which is mostly irrelevant to the portal skinning. The areas of interest
 	        in this file is the ResourceRequestFilter and the fact that the display-name is set.
           </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><filename>Stylesheet.css</filename></term>
+        <term><filename>skin/Stylesheet.css</filename></term>
         <listitem>
           <para>
           This file contains the main stylesheet of the portal skin. The file is the main entry point to the CSS class definitions
-          for the skin. The content of this file is shown below:
+          for the skin. The main content points of this file are:
           </para>
           
-    <programlistingco>
-      <areaspec>
-        <area coords="2" id="area-Reference_Guide-Skin_Configuration-Default_Skin-uiportletapplication" />
-        <area coords="3" id="area-Reference_Guide-Skin_Configuration-Default_Skin-components" />
-        <area coords="4" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes" />
-        <area coords="5" id="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet" />
-      </areaspec>
-    <programlisting language="xml">
+<programlisting language="xml">/* Skin for the main portal page */
 @import url(DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css);
+/* Skins for various portal components */
 @import url(DefaultSkin/webui/component/Stylesheet.css);
+/* Window decoration skins */
 @import url(PortletThemes/Stylesheet.css);
+/* The portlet specification CSS classes */
 @import url(Portlet/Stylesheet.css);</programlisting>
-<calloutlist>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-uiportletapplication">
-          <para>Skin for the main portal page.</para>
-        </callout>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-components">
-          <para>Skins for various portal components.</para>
-        </callout>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-portletthemes">
-          <para>Window decoration skins.</para>
-        </callout>
-        <callout arearefs="area-Reference_Guide-Skin_Configuration-Default_Skin-portlet">
-          <para>The portlet specificiation CSS classes.</para>
-        </callout>
-      </calloutlist>
-    </programlistingco>
-		  <para>
-		  Instead of defining all the CSS classes in this file, you can import other CSS stylesheet files,
-		  some of which may also import other CSS stylesheets. The CSS classes are split up between multiple files to make
-		  it easier for new skins to reuse parts of the default skin.
+
+		  <para>This method imports other CSS stylesheet files (some of which may also import further CSS stylesheets) instead of defining all the CSS classes in this one file. Splitting the CSS classes between multiple files allows new skins to reuse parts of the default skin.
 		  </para>
 		  <para>To reuse the CSS stylesheet from the default portal skin, you need to refer to the default skin from eXoResources.
 		  For example, to include the window decorators from the default skin within a new portal skin, you need to use this import: <filename>@import url(/eXoResources/skin/Portlet/Stylesheet.css);</filename></para>
 		  
 		  <note>
-		  <para>When the portal skin is added to the page, it merges all the CSS stylesheets into a single file.</para>
+			<para>When the portal skin is added to the page, it merges all the CSS stylesheets into a single file.</para>
 		  </note>
         </listitem>
       </varlistentry>
