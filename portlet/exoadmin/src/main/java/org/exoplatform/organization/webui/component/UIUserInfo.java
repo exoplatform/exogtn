@@ -148,13 +148,10 @@ public class UIUserInfo extends UIFormTabPane
                uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
             Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
          }
-         
-         UIUserManagement userManagement = uiUserInfo.getParent();
-         UIListUsers listUser = userManagement.getChild(UIListUsers.class);
+                  
          UIAccountEditInputSet accountInput = uiUserInfo.getChild(UIAccountEditInputSet.class);
          UIUserProfileInputSet userProfile = uiUserInfo.getChild(UIUserProfileInputSet.class);
-         uiUserInfo.setRenderSibling(UIListUsers.class);
-         listUser.search(new Query());
+         uiUserInfo.setRenderSibling(UIListUsers.class);         
          accountInput.reset();
          userProfile.reset();
          event.getRequestContext().setProcessRender(true);
@@ -165,13 +162,10 @@ public class UIUserInfo extends UIFormTabPane
    {
       public void execute(Event<UIUserInfo> event) throws Exception
       {
-         UIUserInfo userInfo = event.getSource();
-         UIUserManagement userManagement = userInfo.getParent();
-         UIListUsers listUser = userManagement.getChild(UIListUsers.class);
+         UIUserInfo userInfo = event.getSource();         
          UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
          UIUserProfileInputSet userProfile = userInfo.getChild(UIUserProfileInputSet.class);
-         userInfo.setRenderSibling(UIListUsers.class);
-         listUser.search(new Query());
+         userInfo.setRenderSibling(UIListUsers.class);         
          accountInput.reset();
          userProfile.reset();
          event.getRequestContext().setProcessRender(true);
