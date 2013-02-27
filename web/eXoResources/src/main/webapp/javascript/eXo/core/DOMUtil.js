@@ -22,6 +22,7 @@
  */
 function DOMUtil() {
 	this.hideElementList = new Array() ;
+        this.disableBackspaceKey();
 } ;
 /**
  * Returns true if elemt has the css class className
@@ -463,6 +464,28 @@ DOMUtil.prototype.get = function(el) {
 DOMUtil.prototype.disableOnClick = function(el) {
 	el.onclick = new Function("return false;");
 }
+
+/**
+ * Disable BackspaceKey in unneccessary element
+ *
+ */
+DOMUtil.prototype.disableBackspaceKey = function() {
+  document.onkeydown = function (evt) {
+    var requiredElements = /INPUT|TEXTAREA/i;
+    if( evt.keyCode == 8 ) { // 8 == backspace
+      if (!requiredElements.test(evt.target.tagName) || evt.target.disabled || evt.target.readOnly ) {
+        if(navigator.appName == 'Microsoft Internet Explorer') { // Cancel bubble for ie
+          window.event.cancelBubble = true ;
+          window.event.returnValue = false ;
+          return ;
+        } else { // Cancel event for Firefox, Opera, Safari
+          event.stopPropagation() ;
+          event.preventDefault() ;
+        }
+      }
+    }
+  };
+};
 
 /****************************************************************************/
 eXo.core.DOMUtil = new DOMUtil() ;
