@@ -466,26 +466,23 @@ DOMUtil.prototype.disableOnClick = function(el) {
 }
 
 /**
- * Disable BackspaceKey in unneccessary element
+ * Disable BackspaceKey in unneccessary element in IE
  *
  */
 DOMUtil.prototype.disableBackspaceKey = function() {
-  document.onkeydown = function (evt) {
-    var requiredElements = /INPUT|TEXTAREA/i;
-    if( evt.keyCode == 8 ) { // 8 == backspace
-      if (!requiredElements.test(evt.target.tagName) || evt.target.disabled || evt.target.readOnly ) {
-        if(navigator.appName == 'Microsoft Internet Explorer') { // Cancel bubble for ie
-          window.event.cancelBubble = true ;
-          window.event.returnValue = false ;
-          return ;
-        } else { // Cancel event for Firefox, Opera, Safari
-          event.stopPropagation() ;
-          event.preventDefault() ;
-        }
+  if(navigator.appName == 'Microsoft Internet Explorer') {
+    document.onkeydown = function (evt) {
+      evt = evt ||  window.event;
+      var keyCode = evt.keyCode;
+      if( keyCode == 8 && ( !evt.srcElement.isTextEdit || evt.srcElement.disabled || evt.srcElement.readOnly )  ) { // 8 == backspace
+        evt.cancelBubble = true ;
+        evt.returnValue = false ;
+        return false;
       }
-    }
-  };
+    };
+  }
 };
+
 
 /****************************************************************************/
 eXo.core.DOMUtil = new DOMUtil() ;
