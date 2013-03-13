@@ -76,11 +76,11 @@
 // jsUriTemplate will have %host% and %js% substituted.
 // No locked domain special cases, but jsUriTemplate must
 // never conflict with a lockedDomainSuffix.
-"gadgets.jsUriTemplate" : "http://%host%/eXoGadgetServer/gadgets/js/%js%",
+"gadgets.jsUriTemplate" : "//%host%/eXoGadgetServer/gadgets/js/%js%",
 
 //New configuration for iframeUri generation:
 "gadgets.uri.iframe.lockedDomainSuffix" :  "-a.example.com:8080",
-"gadgets.uri.iframe.unlockedDomain" : "http://%host%",
+"gadgets.uri.iframe.unlockedDomain" : "//%host%",
 "gadgets.uri.iframe.basePath" : "/eXoGadgetServer/gadgets/ifr",
 
 
@@ -94,7 +94,7 @@
 // Config param to load Opensocial data for social
 // preloads in data pipelining.  %host% will be
 // substituted with the current host.
-"gadgets.osDataUri" : "http://%host%/social/rpc",
+"gadgets.osDataUri" : "//%host%/social/rpc",
 
 "gadgets.signingKeyFile" : "oauthkey.pem",
 "gadgets.signingKeyName" : "exokey",
@@ -138,12 +138,12 @@
   "views" : {
     "home" : {
       "isOnlyVisible" : false,
-      "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/home?{var}",
+      "urlTemplate" : "//%host%/eXoGadgetServer/gadgets/home?{var}",
       "aliases": ["DASHBOARD", "default"]
     },
     "canvas" : {
       "isOnlyVisible" : true,
-      "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/canvas?{var}",
+      "urlTemplate" : "//%host%/eXoGadgetServer/gadgets/canvas?{var}",
       "aliases" : ["FULL_PAGE"]
     }
   },
@@ -240,9 +240,9 @@
   "opensocial" : {
     // Path to fetch opensocial data from
     // Must be on the same domain as the gadget rendering server
-    "path" : "http://%host%/social/rpc",
+    "path" : "//%host%/social/rpc",
     // Path to issue invalidate calls
-    "invalidatePath" : "http://%host%/social/rpc",
+    "invalidatePath" : "//%host%/social/rpc",
     "domain" : "shindig",
     "enableCaja" : false,
     "supportedFields" : {
@@ -270,7 +270,7 @@
   },
   "osapi" : {
     // The endpoints to query for available JSONRPC/REST services
-    "endPoints" : [ "http://%host%/social/rpc" ]
+    "endPoints" : [ "//%host%/social/rpc" ]
   },
   "osml": {
     // OSML library resource.  Can be set to null or the empty string to disable OSML
