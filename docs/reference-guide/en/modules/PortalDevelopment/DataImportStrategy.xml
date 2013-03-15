@@ -9,7 +9,7 @@
        <itemizedlist>
              <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portal_Data_Override">Portal Data Override</link></emphasis></para>
-             <para>Description of method to activate Data Import.</para>
+             <para>Information about Data Import activation.</para>
            </listitem>
               <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Mode">Import Mode</link></emphasis></para>
@@ -35,7 +35,7 @@
    <section id="sect-Reference_Guide-Portal_Data_Override" role="NotInToc">
      <title>Portal Data Override</title>
      <para>
-     In order to use the import on specific Portal metadata, you must set <emphasis>override</emphasis> parameter of <emphasis>NewPortalConfigListener</emphasis> component registing this Portal metadata to <emphasis role="bold">true</emphasis>. If this parameter is missing, its value will be  <emphasis role="bold">false</emphasis> . See the following example:  
+     In order to activate the Data Import on specific Portal metadata, you must set <emphasis>override</emphasis> parameter of <emphasis>NewPortalConfigListener</emphasis> component registering this Portal metadata to <emphasis role="bold">true</emphasis>. If this parameter is missing, its value is <emphasis role="bold">false</emphasis> and the Portal metadata is not reimported. See the following example to activate Data Import:  
      </para>
      <programlisting language="xml"><![CDATA[<component-plugin>
 			<!-- The name of the plugin -->
