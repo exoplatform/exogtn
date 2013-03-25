@@ -34,6 +34,7 @@ import org.picketlink.idm.api.query.UserQueryBuilder;
 
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 /*
@@ -147,6 +148,21 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
             userQueryBuilder.page(0, 0);
             UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
             fullResults = getIDMService().getIdentitySession().list(query);
+            Iterator<org.picketlink.idm.api.User> iterator = fullResults.iterator();
+            while (iterator.hasNext())
+            {
+              org.picketlink.idm.api.User user = iterator.next();
+
+              User gtnUser = new UserImpl(user.getId());
+              ((UserDAOImpl)getOrganizationService().getUserHandler())
+                    .populateUser(gtnUser, getIDMService().getIdentitySession());
+              if (gtnUser.getFirstName() == null && gtnUser.getLastName() == null ){
+                iterator.remove();
+              }
+            }
+            for (int i = 0 ; i < fullResults.size(); i ++){
+
+            }
             result = fullResults.size();
          }
 
