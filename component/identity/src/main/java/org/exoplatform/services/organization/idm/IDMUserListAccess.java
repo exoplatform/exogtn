@@ -160,9 +160,6 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
                 iterator.remove();
               }
             }
-            for (int i = 0 ; i < fullResults.size(); i ++){
-
-            }
             result = fullResults.size();
          }
 

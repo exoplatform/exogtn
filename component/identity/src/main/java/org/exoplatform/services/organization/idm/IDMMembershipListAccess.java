@@ -37,6 +37,7 @@ import org.picketlink.idm.api.query.UserQuery;
 import org.picketlink.idm.impl.api.IdentitySearchCriteriaImpl;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +51,8 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
    private final Group group;
    
    private final org.picketlink.idm.api.User user;
+   
+   private List<org.picketlink.idm.api.Role> fullResults;
 
    private int size = -1;
 
@@ -81,22 +84,27 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
             }
          );
       }
-
-      IdentitySearchCriteria crit = new IdentitySearchCriteriaImpl().page(index, length);
-      crit.sort(SortOrder.ASCENDING);
-
-
+      
       List<Role> roles = null;
-
-      if (group != null)
+      
+      if (fullResults == null)
       {
-         roles = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(group, null, crit));
-      }
-      else if (user != null)
-      {
-         roles = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(user, null, crit));
-      }
+        IdentitySearchCriteria crit = new IdentitySearchCriteriaImpl().page(index, length);
+        crit.sort(SortOrder.ASCENDING);
+      
 
+        if (group != null)
+        {
+           roles = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(group, null, crit));
+        }
+        else if (user != null)
+        {
+           roles = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(user, null, crit));
+        }
+      } else {
+        roles = fullResults.subList(index, index + length);
+      }
+        
 
       Membership[] memberships = new Membership[length];
 
@@ -168,16 +176,37 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
 
       if (size < 0)
       {
-         if (group != null && user == null)
-         {
-            result = getIDMService().getIdentitySession().getRoleManager().getRolesCount(group, null, null);
-         }
-         else if (group == null && user != null)
-         {
-            result = getIDMService().getIdentitySession().getRoleManager().getRolesCount(user, null, null);
-         }
+        if (fullResults != null) {
+           result = fullResults.size();
+        } else {
 
-         size = result;
+          IdentitySearchCriteria crit = new IdentitySearchCriteriaImpl().page(0, 0);
+          crit.sort(SortOrder.ASCENDING);
+
+          if (group != null)
+          {
+            fullResults = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(group, null, crit));
+          }
+          else if (user != null)
+          {
+            fullResults = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(user, null, crit));
+          }
+          Iterator<org.picketlink.idm.api.Role> iterator = fullResults.iterator();
+          while (iterator.hasNext())
+          {
+            org.picketlink.idm.api.Role role = iterator.next();
+
+            User gtnUser = new UserImpl(role.getUser().getId());
+            ((UserDAOImpl)getOrganizationService().getUserHandler())
+                  .populateUser(gtnUser, getIDMService().getIdentitySession());
+            if (gtnUser.getFirstName() == null && gtnUser.getLastName() == null ){
+              iterator.remove();
+            }
+          }
+          result = fullResults.size();
+        }
+
+        size = result;
       }
       else
       {
