@@ -7,6 +7,10 @@
    <title>Data Import Strategy</title>
     <highlights>
        <itemizedlist>
+             <listitem>
+               <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Portal_Data_Override">Portal Data Override</link></emphasis></para>
+             <para>Information about Data Import activation.</para>
+           </listitem>
               <listitem>
                <para><emphasis role="bold"><link linkend="sect-Reference_Guide-Import_Mode">Import Mode</link></emphasis></para>
              <para>Information about modes for the import strategy.</para>
@@ -27,7 +31,31 @@
       <para>
         This section shows you how data are changes in each mode.
       </para>
-
+ 
+   <section id="sect-Reference_Guide-Portal_Data_Override" role="NotInToc">
+     <title>Portal Data Override</title>
+     <para>
+     In order to activate the Data Import on specific Portal metadata, you must set <emphasis>override</emphasis> parameter of <emphasis>NewPortalConfigListener</emphasis> component registering this Portal metadata to <emphasis role="bold">true</emphasis>. If this parameter is missing, its value is <emphasis role="bold">false</emphasis> and the Portal metadata is not reimported. See the following example to activate Data Import:  
+     </para>
+     <programlisting language="xml"><![CDATA[<component-plugin>
+			<!-- The name of the plugin -->
+			<name>new.portal.config.user.listener</name>
+			<!-- The name of the method to call on the UserPortalConfigService in order to register the NewPortalConfigs -->
+			<set-method>initListener</set-method>
+			<!-- The full qualified name of the NewPortalConfigListener -->
+			<type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+			<description>this listener init the portal configuration</description>
+			<init-params>
+		          <value-param>
+		            <name>override</name>
+			    <description>The flag parameter to decide if portal metadata is overriden on restarting server</description>
+			    <value>true</value>
+        		  </value-param>
+                          <!-- List of NewPortalConfig instances-->
+			  ...
+                        </init-params>
+     </component-plugin>]]></programlisting>
+   </section>
    <section id="sect-Reference_Guide-Import_Mode" role="NotInToc">
       <title>Import Mode</title>
       In this section, the following modes for the import strategy are introduced:
