@@ -113,9 +113,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
    public UIUserSelector() throws Exception
    {
       addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null));
-      UIFormSelectBox filterSelectBox = new UIFormSelectBox(FIELD_FILTER, FIELD_FILTER, getFilters());
-      filterSelectBox.setHTMLAttribute("title", "#{UIUserSelector.label.filter}");
-      addUIFormInput(filterSelectBox);
+      addUIFormInput(new UIFormSelectBox(FIELD_FILTER, FIELD_FILTER, getFilters()));
       addUIFormInput(new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null));
       isShowSearch_ = true;
       OrganizationService service = getApplicationComponent(OrganizationService.class);
