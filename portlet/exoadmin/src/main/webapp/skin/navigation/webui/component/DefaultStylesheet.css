@@ -76,7 +76,8 @@
 
 .UIManagement .ManagementBlock .ActionBlock a {
 	line-height: 18px;
-	width: 120px;
+  min-width: 120px;
+  max-width: 250px;
 	display: block;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
