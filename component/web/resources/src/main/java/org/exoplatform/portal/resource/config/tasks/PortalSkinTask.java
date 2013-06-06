@@ -45,7 +45,7 @@ public class PortalSkinTask extends AbstractSkinModule implements SkinConfigTask
    public PortalSkinTask()
    {
       super(SkinService.DEFAULT_SKIN);
-      this.overwrite = true;
+      this.overwrite = false;
       this.moduleName = DEFAULT_MODULE_NAME;
    }
 

@@ -45,7 +45,7 @@ public class PortletSkinTask extends AbstractSkinModule implements SkinConfigTas
    public PortletSkinTask()
    {
       super(SkinService.DEFAULT_SKIN);
-      this.overwrite = true;
+      this.overwrite = false;
    }
 
    private void bindingApplicationName(Element element)
