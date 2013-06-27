@@ -33,7 +33,7 @@ import java.util.List;
  * Created by The eXo Platform SAS
  * Author : Huu-Dung Kieu	
  *          kieuhdung@gmail.com
- * 22 déc. 08  
+ * 22 dÃ©c. 08  
  */
 public class GroupManagement
 {
@@ -119,7 +119,8 @@ public class GroupManagement
       String groupId = group.getId();
       for (Object g : groups)
       {
-         if (((Group)g).getId().startsWith(groupId))
+         String groupIdElement = ((Group)g).getId(); 
+         if (groupIdElement.equalsIgnoreCase(groupId) || (groupIdElement.matches("^" + groupId + "/.*" )))
          {
             ret = true;
             break;
