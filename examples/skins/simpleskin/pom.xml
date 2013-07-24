@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.gatein.portal.examples.skins</groupId>
     <artifactId>parent</artifactId>
-    <version>3.2.9-PLF</version>
+    <version>3.2.10-PLF-SNAPSHOT</version>
   </parent>
 
   <artifactId>gatein-sample-skin</artifactId>
