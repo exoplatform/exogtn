@@ -33,6 +33,7 @@ import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
@@ -100,7 +101,7 @@ public class UIPortalApplication extends UIApplication
    public static final int CONTAINER_VIEW_EDIT_MODE = 4;
    
    public static final UIComponent EMPTY_COMPONENT = new UIComponent(){
-      public String getId() { return "{portal:componentId}"; };
+      public String getId() { return "_portal:componentId_"; };
    };
 
    private int modeState = NORMAL_MODE;
@@ -579,7 +580,7 @@ public class UIPortalApplication extends UIApplication
          lastRequestNavData = requestNavData;
 
          StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
-         js.append(pcontext.getRequestURI()).append("\";\n");
+         js.append(getBaseURL()).append("\";\n");
          
          String url = getPortalURLTemplate();
          js.append("eXo.env.server.portalURLTemplate=\"");
@@ -833,7 +834,7 @@ public class UIPortalApplication extends UIApplication
     * and used for JS based portal url generation.
     * 
     * <p>The portal url template are calculated base on the current request and site state.
-    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&amp;portal:action={portal:action}" ;</code>
+    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId=_portal:uicomponentId_&amp;portal:action=_portal:action_" ;</code>
     * 
     * @return return portal url template
     * @throws UnsupportedEncodingException
@@ -844,8 +845,13 @@ public class UIPortalApplication extends UIApplication
       ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
       urlTemplate.setPath(pcontext.getNodePath());
       urlTemplate.setResource(EMPTY_COMPONENT);
-      urlTemplate.setAction("{portal:action}");
+      urlTemplate.setAction("_portal:action_");
 
       return urlTemplate.toString();
    }
+   public String getBaseURL() throws UnsupportedEncodingException  {
+     PortalRequestContext pcontext = Util.getPortalRequestContext();
+     NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
+     return nodeURL.toString();
+  }
 }

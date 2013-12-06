@@ -29,9 +29,16 @@
   							String actionLink = nodeURL.setNode(node);
   							if(counter == size) note = "Selected";
   				%>
-  							<a href="<%=(node.getPageRef() == null) ? "#" : actionLink%>"	class="$note"><%=node.getEncodedResolvedLabel();%></a> 																
-  				<%			
-  							if(counter < size) {
+  							<% if (node.getPageRef() == null) { %>
+  							  <a href="javascript:void(0);" class="$note"><%=node.getEncodedResolvedLabel();%></a>
+  							<% } else { %>
+  							<% if (uicomponent.isUseAjax()) { %>
+  							<a href="javascript:void(0);" onclick="<%=actionLink%>"  class="$note"><%=node.getEncodedResolvedLabel();%></a>
+  							 <% } else { %>
+  							 <a href="<%=actionLink%>" class="$note"><%=node.getEncodedResolvedLabel();%></a>
+  							 <% } %>
+   						        <%} %>
+  							<%if(counter < size) {
   				%>
   				<div class="RightBlackGridArrowIcon FL RightBlackGridArrow16x16Icon"><span></span></div>									
   				<%	 		 

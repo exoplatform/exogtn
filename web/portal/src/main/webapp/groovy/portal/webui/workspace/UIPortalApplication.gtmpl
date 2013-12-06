@@ -34,7 +34,7 @@
 		 	<meta name="<%=metaName%>" content="<%=metaContent%>" />
 		<% } } %>
 		
-		<link rel="shortcut icon" type="image/x-icon"	href="<%=docBase%>/favicon.ico" />
+		<link rel="shortcut icon" type="image/x-icon" href="<%=docBase%>/favicon.ico" />
 		<%for(skinConfig in portalSkins) {
 		def url = skinConfig.createURL();
 		url.setOrientation(orientation);
@@ -45,7 +45,7 @@
 		def url = portletSkin.createURL();
 		url.setOrientation(orientation);
 		%>
-			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
+			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href="$url" />
 		<%}%>
 
 		<%if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) {
@@ -72,7 +72,7 @@
 			else {%>eXo.env.portal.accessMode = "private" ;<%}%>
 			eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
 			eXo.env.server.context = "<%=docBase%>" ;
-			eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
+			eXo.env.server.portalBaseURL = "<%=uicomponent.getBaseURL()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
 			<% 
@@ -115,7 +115,7 @@
 				
 				var closeIcon = document.createElement("a");
 				closeIcon.className = "CloseLoadIcon";
-				closeIcon.setAttribute("href", "javascript:ajaxAbort();");
+				closeIcon.setAttribute("onclick", "javascript:ajaxAbort();");
 				closeIcon.innerHTML = "&nbsp;";
 				ajaxLoading.appendChild(closeIcon);
 			}
