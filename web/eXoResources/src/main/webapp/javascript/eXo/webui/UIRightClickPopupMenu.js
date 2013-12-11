@@ -69,13 +69,13 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 	eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
 	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
 	contextMenu.style.display = "none" ;
-	var href = elemt.getAttribute('href') ;	
+	var href = elemt.getAttribute('exo:href') ;	
 	if (!href) {
 		return;
 	}
 	if(href.indexOf("ajaxGet") != -1) {
 		href = href.replace("ajaxGet", "ajaxPost");
-		elemt.setAttribute('href', href) ;
+		elemt.setAttribute('exo:href', href) ;
 	}	
 	if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
 		return;
