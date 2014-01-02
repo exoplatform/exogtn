@@ -172,7 +172,12 @@ public class UserDAOImpl implements UserHandler
          getIntegrationCache().invalidateAll();
       }
 
-      persistUserInfo(user, session);
+      try {
+          persistUserInfo(user, session);
+      } catch (IdentityException e) {
+          session.getPersistenceManager().removeUser(user.getUserName(),true);
+          throw e;
+      }
 
       if (broadcast)
       {
@@ -739,7 +744,7 @@ public class UserDAOImpl implements UserHandler
             catch (IdentityException e)
             {
                log.info("Cannot update password: " + user.getUserName() + "; ", e);
-
+               throw e;
             }
          }
       }
