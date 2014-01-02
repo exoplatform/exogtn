@@ -40,6 +40,7 @@ import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /** Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com Jun 25, 2008 */
 @Serialized
@@ -157,7 +158,12 @@ public class UIAccountEditInputSet extends UIFormInputSet
          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.WARNING));
          return false;
       }
+      try {
       service.getUserHandler().saveUser(user, true);
+      } catch (IdentityException e) {
+          uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.fail", null, ApplicationMessage.ERROR));
+          return false;
+      }
       enableChangePassword(false);
       
       ConversationState state = ConversationState.getCurrent();
