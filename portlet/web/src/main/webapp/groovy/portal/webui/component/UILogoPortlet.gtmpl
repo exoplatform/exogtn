@@ -2,6 +2,7 @@
 	import javax.portlet.PortletMode ;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.mop.SiteType;
@@ -12,6 +13,8 @@
 	String portletId = uicomponent.getId() ;	
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"	
 	String navTitle = uicomponent.getNavigationTitle();
+  def encoder = HTMLEntityEncoder.getInstance();
+  navTitle = encoder.encode(navTitle);
 %>
 
 <div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
