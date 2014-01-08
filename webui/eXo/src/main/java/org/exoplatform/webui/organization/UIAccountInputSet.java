@@ -132,7 +132,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
          try {
              service.getUserHandler().createUser(user, true);
          } catch (IdentityException e) {
-             uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.fail", null, ApplicationMessage.ERROR));
+             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.create.user", null, ApplicationMessage.ERROR));
              return false;
          }
          reset();
