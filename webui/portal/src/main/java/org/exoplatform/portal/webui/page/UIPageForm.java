@@ -50,10 +50,10 @@ import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
@@ -213,8 +213,7 @@ public class UIPageForm extends UIFormTabPane
       uiSettingSet.addUIFormInput(ownerIdInput);
       
       uiSettingSet.addUIFormInput(
-            new UIFormStringInput("name", "name", null).addValidator(StringLengthValidator.class, 3, 30)
-               .addValidator(IdentifierValidator.class).addValidator(MandatoryValidator.class))
+            new UIFormStringInput("name", "name", null).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.IDENTIFIER).addValidator(MandatoryValidator.class))
          .addUIFormInput(
             new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 120).
                addValidator(NotHTMLTagValidator.class))

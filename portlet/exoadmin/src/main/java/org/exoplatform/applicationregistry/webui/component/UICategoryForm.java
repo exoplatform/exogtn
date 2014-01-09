@@ -37,9 +37,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 
@@ -71,9 +71,7 @@ public class UICategoryForm extends UIFormTabPane
    {
       super("UICategoryForm");
       UIFormInputSet uiCategorySetting = new UIFormInputSet(FIELD_SETTING);
-      uiCategorySetting.addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(
-         MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
-         IdentifierValidator.class));
+      uiCategorySetting.addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.IDENTIFIER));
       uiCategorySetting.addUIFormInput(new UIFormStringInput(FIELD_DISPLAY_NAME, FIELD_DISPLAY_NAME, null)
          .addValidator(StringLengthValidator.class, 3, 30).addValidator(NotHTMLTagValidator.class));
       uiCategorySetting.addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)

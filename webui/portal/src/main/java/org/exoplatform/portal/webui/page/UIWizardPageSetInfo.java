@@ -48,9 +48,9 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -127,7 +127,7 @@ public class UIWizardPageSetInfo extends UIForm
 
       addChild(UIPageNodeSelector.class, null, null);
       addUIFormInput(new UIFormStringInput(PAGE_NAME, "name", null).addValidator(MandatoryValidator.class)
-         .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
+         .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.IDENTIFIER));
       addUIFormInput(uiSwitchLabelMode);
       addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null).setMaxLength(255).addValidator(
          StringLengthValidator.class, 3, 120));

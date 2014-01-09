@@ -73,9 +73,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
 /**
@@ -135,7 +135,7 @@ public class UIPageNodeForm extends UIFormTabPane
       uiFormLanguagesSelectBox.setOnChange(LANGUAGES_ONCHANGE);
       
       uiSettingSet.addUIFormInput(new UIFormStringInput("URI", "URI", null).setDisabled(true))
-      				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class))
+      				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.IDENTIFIER))
       				.addUIFormInput(uiSwitchLabelMode)
       				.addUIFormInput(new UIFormStringInput(LABEL, LABEL, null).addValidator(StringLengthValidator.class, 3, 120))
       				.addUIFormInput(uiFormLanguagesSelectBox)

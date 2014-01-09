@@ -42,10 +42,10 @@ import org.exoplatform.webui.form.UIFormInputContainer;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import java.util.List;
 
 /**
@@ -73,8 +73,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
       UIFormInputSet uiInputSet = new UIFormInputSet("PageNodeSetting");
 
       uiInputSet.addChild(new UIFormStringInput("pageId", "pageId", null));
-      uiInputSet.addChild(new UIFormStringInput("pageName", "pageName", null).addValidator(StringLengthValidator.class,
-         3, 30).addValidator(IdentifierValidator.class).addValidator(MandatoryValidator.class));
+      uiInputSet.addChild(new UIFormStringInput("pageName", "pageName", null).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.IDENTIFIER).addValidator(MandatoryValidator.class));
       uiInputSet.addChild(new UIFormStringInput("pageTitle", "pageTitle", null).addValidator(
          StringLengthValidator.class, 3, 120).addValidator(NotHTMLTagValidator.class));
 
