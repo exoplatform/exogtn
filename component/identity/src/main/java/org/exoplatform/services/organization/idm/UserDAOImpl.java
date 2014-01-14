@@ -164,7 +164,7 @@ public class UserDAOImpl implements UserHandler
       catch (IdentityException e)
       {
          log.info("Identity operation error: ", e);
-
+         throw e;
       }
 
       if (getIntegrationCache() != null)
@@ -759,7 +759,7 @@ public class UserDAOImpl implements UserHandler
       catch (IdentityException e)
       {
          log.info("Cannot update attributes for user: " + user.getUserName() + "; ", e);
-
+         throw e;
       }
 
    }

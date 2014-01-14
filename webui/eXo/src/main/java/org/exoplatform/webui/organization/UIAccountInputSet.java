@@ -141,7 +141,15 @@ public class UIAccountInputSet extends UIFormInputWithActions
       User user = service.getUserHandler().findUserByName(username);
       invokeSetBindingField(user);
       //    user.setPassword(Util.encodeMD5(pass1x)) ;
-      service.getUserHandler().saveUser(user, true);
+      try 
+      {
+        service.getUserHandler().saveUser(user, true);        
+      } 
+      catch (IdentityException e) 
+      {
+        uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+        return false;
+      }
       return true;
    }
 
