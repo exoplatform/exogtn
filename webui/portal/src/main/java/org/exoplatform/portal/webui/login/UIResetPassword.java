@@ -38,6 +38,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  * Created by The eXo Platform SARL
@@ -128,11 +129,17 @@ public class UIResetPassword extends UIForm
          if (setPassword)
          {
             user_.setPassword(newpassword);
-            orgService.getUserHandler().saveUser(user_, true);
-            uiMaskWorkspace.setUIComponent(null);
-            uiMaskWorkspace.setWindowSize(-1, -1);
-            uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
-
+            try 
+            {
+              orgService.getUserHandler().saveUser(user_, true);
+              uiMaskWorkspace.setUIComponent(null);
+              uiMaskWorkspace.setWindowSize(-1, -1);
+              uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+            } 
+            catch (IdentityException e) 
+            {
+              uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-fail", null, ApplicationMessage.ERROR));
+            }
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }

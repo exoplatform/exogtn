@@ -34,6 +34,7 @@ import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  * Created by The eXo Platform SARL
@@ -128,14 +129,27 @@ public class UIAccountInputSet extends UIFormInputWithActions
             return false;
          }
 
-         service.getUserHandler().createUser(user, true);
+         try {
+             service.getUserHandler().createUser(user, true);
+         } catch (IdentityException e) {
+             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.create.user", null, ApplicationMessage.ERROR));
+             return false;
+         }
          reset();
          return true;
       }
       User user = service.getUserHandler().findUserByName(username);
       invokeSetBindingField(user);
       //    user.setPassword(Util.encodeMD5(pass1x)) ;
-      service.getUserHandler().saveUser(user, true);
+      try 
+      {
+        service.getUserHandler().saveUser(user, true);        
+      } 
+      catch (IdentityException e) 
+      {
+        uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+        return false;
+      }
       return true;
    }
 
