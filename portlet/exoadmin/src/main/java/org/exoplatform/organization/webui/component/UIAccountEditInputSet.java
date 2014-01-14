@@ -159,9 +159,9 @@ public class UIAccountEditInputSet extends UIFormInputSet
          return false;
       }
       try {
-      service.getUserHandler().saveUser(user, true);
+        service.getUserHandler().saveUser(user, true);
       } catch (IdentityException e) {
-          uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.fail", null, ApplicationMessage.ERROR));
+          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
           return false;
       }
       enableChangePassword(false);

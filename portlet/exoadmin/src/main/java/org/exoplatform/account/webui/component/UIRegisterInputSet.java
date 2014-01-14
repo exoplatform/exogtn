@@ -34,6 +34,7 @@ import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
+import org.picketlink.idm.common.exception.IdentityException;
 
 import javax.portlet.PortletPreferences;
 
@@ -170,7 +171,15 @@ public class UIRegisterInputSet extends UIFormInputWithActions
       User user = userHandler.createUserInstance(username);
       bindingFields(user);
 
-      userHandler.createUser(user, true);//Broadcast user creaton event
+      try 
+      {
+         userHandler.createUser(user, true);//Broadcast user creaton event
+      }
+      catch (IdentityException e) 
+      {
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.create.user", null, ApplicationMessage.ERROR));
+         return false;
+      }
       reset();//Reset the input form
       return true;
    }
