@@ -43,6 +43,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UsernameValidator;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  * Created by The eXo Platform SARL
@@ -124,12 +125,20 @@ public class UIAccountProfiles extends UIForm
             user.setLastName(uiForm.getUIStringInput("lastName").getValue());
             user.setEmail(newEmail);
             uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
-            service.getUserHandler().saveUser(user, true);
+            try 
+            {
+              service.getUserHandler().saveUser(user, true);
+            } 
+            catch (IdentityException e) 
+            {
+              uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.fail", null, ApplicationMessage.ERROR));
+              return;
+            }
             
             state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
             UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
             uiWorkingWS.updatePortletsByName("UserInfoPortlet");
-            uiWorkingWS.updatePortletsByName("OrganizationPortlet");            
+            uiWorkingWS.updatePortletsByName("OrganizationPortlet");
          }
          else
          {        

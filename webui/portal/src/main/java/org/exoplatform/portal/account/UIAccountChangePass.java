@@ -39,6 +39,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  * Created by The eXo Platform SARL
@@ -117,15 +118,19 @@ public class UIAccountChangePass extends UIForm
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
             return;
          }
-         user.setPassword(newPass);
-         uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
-         service.getUserHandler().saveUser(user, true);
+         try{
+             user.setPassword(newPass);
+             uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
+             service.getUserHandler().saveUser(user, true);
+             UIAccountSetting ui = uiForm.getParent();
+             ui.getChild(UIAccountProfiles.class).setRendered(true);
+             ui.getChild(UIAccountChangePass.class).setRendered(false);
+             event.getRequestContext().addUIComponentToUpdateByAjax(ui);
+         } catch (IdentityException e) {
+             uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.fail", null, ApplicationMessage.ERROR));
+         }
          uiForm.reset();
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
-         UIAccountSetting ui = uiForm.getParent();
-         ui.getChild(UIAccountProfiles.class).setRendered(true);
-         ui.getChild(UIAccountChangePass.class).setRendered(false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(ui);
          return;
       }
    }
