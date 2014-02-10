@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.exoplatform.doc</groupId>
 			<artifactId>doc-style</artifactId>
-			<version>1.0.12</version>
+			<version>1.0.13-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
 	</dependencies>
