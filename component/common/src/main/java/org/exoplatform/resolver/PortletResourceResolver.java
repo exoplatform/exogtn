@@ -103,4 +103,11 @@ public class PortletResourceResolver extends ResourceResolver
       return scheme_;
    }
 
+   @Override
+   public ResourceKey createResourceKey(String url)
+   {
+      String portletContextName = pcontext_.getPortletContextName();
+      int resolverId = portletContextName != null ? portletContextName.hashCode() : hashCode();
+      return new ResourceKey(resolverId, url);
+   }
 }

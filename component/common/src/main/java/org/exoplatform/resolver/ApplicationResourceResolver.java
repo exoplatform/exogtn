@@ -121,4 +121,10 @@ public class ApplicationResourceResolver extends ResourceResolver
    {
       return "app:";
    }
+
+   @Override
+   public ResourceKey createResourceKey(String url)
+   {
+      return this.getResourceResolver(url).createResourceKey(url);
+   }
 }

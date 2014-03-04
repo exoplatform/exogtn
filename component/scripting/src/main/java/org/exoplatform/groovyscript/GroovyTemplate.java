@@ -20,10 +20,13 @@ package org.exoplatform.groovyscript;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * A Groovy template.
@@ -31,8 +34,9 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyTemplate
+public class GroovyTemplate implements Serializable
 {
+   private static final long serialVersionUID = -8220112880199970451L;
 
    private static String read(Reader reader) throws IOException
    {
@@ -48,8 +52,11 @@ public class GroovyTemplate
    /** The text of the template. */
    private final String templateText;
 
+   private final String templateId;
+   private final String templateName;
+
    /** The groovy script. */
-   private final GroovyScript script;
+   private transient GroovyScript script;
 
    public GroovyTemplate(String id, String name, Reader scriptReader) throws IOException, TemplateCompilationException
    {
@@ -81,16 +88,18 @@ public class GroovyTemplate
       //
       this.script = compiler.build();
       this.templateText = templateText;
+      this.templateId = templateId;
+      this.templateName = templateName;
    }
 
    public String getId()
    {
-      return script.getTemplateId();
+       return this.templateId;
    }
 
    public String getClassName()
    {
-      return script.getScriptClass().getName();
+      return getScript().getScriptClass().getName();
    }
 
    public String getText()
@@ -100,7 +109,7 @@ public class GroovyTemplate
 
    public String getGroovy()
    {
-      return script.getGroovyText();
+      return getScript().getGroovyText();
    }
 
    public void render(Writer writer) throws IOException, TemplateRuntimeException
@@ -115,12 +124,12 @@ public class GroovyTemplate
 
    public void render(Writer writer, Map binding, Locale locale) throws IOException, TemplateRuntimeException
    {
-      script.render(binding, writer, locale);
+       getScript().render(binding, writer, locale);
    }
 
    public void render(Writer writer, Map binding) throws IOException, TemplateRuntimeException
    {
-      script.render(binding, writer, null);
+       getScript().render(binding, writer, null);
    }
 
    public String render() throws IOException, TemplateRuntimeException
@@ -144,5 +153,21 @@ public class GroovyTemplate
       render(buffer, binding, locale);
       buffer.close();
       return buffer.toString();
+   }
+
+   private GroovyScript getScript()
+   {
+      if(this.script == null)
+      {
+         try {
+            GroovyScriptBuilder compiler = new GroovyScriptBuilder(templateId, templateName, templateText);
+            this.script = compiler.build();
+         } catch (TemplateCompilationException ex) {
+            Logger log = LoggerFactory.getLogger(GroovyTemplate.class);
+            log.error(ex.getMessage(), ex);
+         }
+      }
+
+      return this.script;
    }
 }
