@@ -60,9 +60,9 @@ public class UIApplicationForm extends UIForm
    public UIApplicationForm() throws Exception
    {
       addUIFormInput(new UIFormStringInput("applicationName", "applicationName", null).addValidator(
-         MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(NameValidator.class));
+         MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 60).addValidator(NameValidator.class));
       addUIFormInput(new UIFormStringInput("displayName", "displayName", null).addValidator(
-         StringLengthValidator.class, 3, 30).addValidator(NotHTMLTagValidator.class));
+         StringLengthValidator.class, 3, 60).addValidator(NotHTMLTagValidator.class));
       addUIFormInput(new UIFormTextAreaInput("description", "description", null)
          .addValidator(StringLengthValidator.class, 0, 255)
          .addValidator(NotHTMLTagValidator.class));
