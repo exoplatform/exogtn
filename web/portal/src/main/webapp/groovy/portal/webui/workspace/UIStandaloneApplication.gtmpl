@@ -33,7 +33,7 @@
 		 	<meta name="<%=metaName%>" content="<%=metaContent%>" />
 		<% } } %>
 		
-		<link rel="shortcut icon" type="image/x-icon"	href="<%=docBase%>/favicon.ico" />
+		<link rel="shortcut icon" type="image/x-icon" href="<%=docBase%>/favicon.ico" />
 		<%for(skinConfig in portalSkins) {
 		def url = skinConfig.createURL();
 		url.setOrientation(orientation);
@@ -44,7 +44,7 @@
 		def url = portletSkin.createURL();
 		url.setOrientation(orientation);
 		%>
-			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
+			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href="$url" />
 		<%}%>
 		 <script type="text/javascript">
 		 // This variable must be used only to initialize other variables otherwise
@@ -109,5 +109,5 @@
 			
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
 			<span class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></span>
-			<a href="javascript:ajaxAbort();" class="CloseLoadIcon">&nbsp;</a>		
+			<a onclick="javascript:ajaxAbort();" class="CloseLoadIcon">&nbsp;</a>		
 		</div>
