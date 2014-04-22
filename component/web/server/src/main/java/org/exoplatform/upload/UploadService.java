@@ -95,9 +95,6 @@ public class UploadService
 
    public void createUploadResource(String uploadId, HttpServletRequest request) throws FileUploadException
    {
-      File uploadDir = new File(uploadLocation_);
-      if (!uploadDir.exists())
-         uploadDir.mkdirs();
       UploadResource upResource = new UploadResource(uploadId);
       upResource.setFileName("");// Avoid NPE in UploadHandler
       uploadResources.put(upResource.getUploadId(), upResource);
@@ -112,7 +109,7 @@ public class UploadService
          return;
       }
 
-      ServletFileUpload servletFileUpload = makeServletFileUpload(upResource, uploadDir);
+      ServletFileUpload servletFileUpload = makeServletFileUpload(upResource);
       // parse request
       List<FileItem> itemList = null;
       try
@@ -342,19 +339,16 @@ public class UploadService
       return uploadLimits;
    }
 
-   private ServletFileUpload makeServletFileUpload(final UploadResource upResource) {
-     File uploadDir = new File(uploadLocation_);
-     if (!uploadDir.exists())
-       uploadDir.mkdirs();
-     return makeServletFileUpload(upResource, uploadDir);
-   }
-   private ServletFileUpload makeServletFileUpload(final UploadResource upResource, File uploadDir)
+   private ServletFileUpload makeServletFileUpload(final UploadResource upResource)
    {
       // Create a factory for disk-based file items
       DiskFileItemFactory factory = new DiskFileItemFactory();
 
       // Set factory constraints
       factory.setSizeThreshold(0);
+      File uploadDir = new File(uploadLocation_);
+      if (!uploadDir.exists())
+         uploadDir.mkdirs();
       factory.setRepository(uploadDir);
 
       // Create a new file upload handler
