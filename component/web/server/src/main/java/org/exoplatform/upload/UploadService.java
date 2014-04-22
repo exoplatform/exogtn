@@ -73,9 +73,6 @@ public class UploadService
       else
          defaultUploadLimitMB_ = new UploadLimit(Integer.parseInt(params.getValueParam("upload.limit.size").getValue()), UploadUnit.MB);
       uploadLocation_ = tmpDir + "/" + pinfo.getContainerName() + "/eXoUpload";
-      File uploadDir = new File(uploadLocation_);
-      if (!uploadDir.exists())
-         uploadDir.mkdirs();
    }
    
    public void register(MimeTypeUploadPlugin plugin) {
@@ -98,6 +95,9 @@ public class UploadService
 
    public void createUploadResource(String uploadId, HttpServletRequest request) throws FileUploadException
    {
+      File uploadDir = new File(uploadLocation_);
+      if (!uploadDir.exists())
+         uploadDir.mkdirs();
       UploadResource upResource = new UploadResource(uploadId);
       upResource.setFileName("");// Avoid NPE in UploadHandler
       uploadResources.put(upResource.getUploadId(), upResource);
@@ -180,6 +180,9 @@ public class UploadService
    public void createUploadResource(String uploadId, String encoding, String contentType, double contentLength,
                                     InputStream inputStream) throws Exception
    {
+      File uploadDir = new File(uploadLocation_);
+      if (!uploadDir.exists())
+         uploadDir.mkdirs();
       UploadResource upResource = new UploadResource(uploadId);
       RequestStreamReader reader = new RequestStreamReader(upResource);
       uploadResources.put(upResource.getUploadId(), upResource);
