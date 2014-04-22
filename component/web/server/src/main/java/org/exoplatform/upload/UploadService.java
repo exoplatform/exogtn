@@ -112,7 +112,7 @@ public class UploadService
          return;
       }
 
-      ServletFileUpload servletFileUpload = makeServletFileUpload(upResource);
+      ServletFileUpload servletFileUpload = makeServletFileUpload(upResource, uploadDir);
       // parse request
       List<FileItem> itemList = null;
       try
@@ -342,14 +342,20 @@ public class UploadService
       return uploadLimits;
    }
 
-   private ServletFileUpload makeServletFileUpload(final UploadResource upResource)
+   private ServletFileUpload makeServletFileUpload(final UploadResource upResource) {
+     File uploadDir = new File(uploadLocation_);
+     if (!uploadDir.exists())
+       uploadDir.mkdirs();
+     return makeServletFileUpload(upResource, uploadDir);
+   }
+   private ServletFileUpload makeServletFileUpload(final UploadResource upResource, File uploadDir)
    {
       // Create a factory for disk-based file items
       DiskFileItemFactory factory = new DiskFileItemFactory();
 
       // Set factory constraints
       factory.setSizeThreshold(0);
-      factory.setRepository(new File(uploadLocation_));
+      factory.setRepository(uploadDir);
 
       // Create a new file upload handler
       ServletFileUpload upload = new ServletFileUpload(factory);
