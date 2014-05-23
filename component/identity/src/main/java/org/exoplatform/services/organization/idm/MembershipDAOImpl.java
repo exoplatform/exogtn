@@ -176,7 +176,11 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       if (isAssociationMapped() && getAssociationMapping().equals(mt.getName()))
-      {
+      { 
+    	  if (getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, user.getUserName())) 
+           {
+    	      return;
+	        }
          getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
       }
 
