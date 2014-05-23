@@ -260,7 +260,9 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       try
       {
          // We need to restart Hibernate transaction if it's available. First rollback old one and then start new one
-        
+        if(idmTransaction==null){
+        	 idmTransaction = idmService_.getIdentitySession().getTransaction();
+        }
          if (idmTransaction.isActive())
          {
            idmTransaction.rollback();
