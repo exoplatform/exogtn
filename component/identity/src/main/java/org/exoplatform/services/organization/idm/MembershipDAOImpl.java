@@ -237,7 +237,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       if (hasRole)
@@ -261,7 +261,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
       }
       if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()))
@@ -274,7 +274,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
       }
 
@@ -319,7 +319,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       boolean associated = false;
@@ -332,6 +332,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
+         orgService.recoverFromIDMError(null);
       }
 
       if (!hasRole &&
@@ -356,7 +357,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
       }
 
@@ -372,7 +373,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
       }
 
@@ -411,7 +412,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -452,7 +453,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
 
          Set<String> keys = new HashSet<String>();
@@ -468,7 +469,7 @@ public class MembershipDAOImpl implements MembershipHandler
             {
                //TODO:
                log.info("Identity operation error: ", e);
-
+               orgService.recoverFromIDMError(null);
             }
          }
 
@@ -516,7 +517,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       if (isAssociationMapped() && getAssociationMapping().equals(type) && associated)
@@ -535,7 +536,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       if (role != null &&
@@ -621,7 +622,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -648,7 +649,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       if (isAssociationMapped() && associated)
@@ -702,7 +703,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -733,7 +734,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
 
          for (org.picketlink.idm.api.Group group : groups)
@@ -831,7 +832,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -863,7 +864,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-
+            orgService.recoverFromIDMError(null);
          }
 
          for (org.picketlink.idm.api.User user : users)
@@ -945,7 +946,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       try
@@ -970,7 +971,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-
+         orgService.recoverFromIDMError(null);
       }
 
       if (log.isTraceEnabled())

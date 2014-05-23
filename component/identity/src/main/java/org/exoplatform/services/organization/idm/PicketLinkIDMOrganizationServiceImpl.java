@@ -28,6 +28,9 @@ import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.picketlink.idm.api.Transaction;
 import org.picocontainer.Startable;
 
 import javax.naming.InitialContext;
@@ -50,6 +53,8 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    public static final String CONFIGURATION_OPTION = "configuration";
 
    private Config configuration = new Config();
+
+  private static final Logger log = LoggerFactory.getLogger(PicketLinkIDMOrganizationServiceImpl.class);
 
    public PicketLinkIDMOrganizationServiceImpl(InitParams params, PicketLinkIDMService idmService)
       throws Exception
@@ -168,6 +173,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    public void flush()
    {
+	   Transaction transaction = null;
       try
       {
 
@@ -188,10 +194,19 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          }
          else
          {
-            if (idmService_.getIdentitySession().getTransaction().isActive())
-            {
+           try
+           {
+        	 transaction=idmService_.getIdentitySession().getTransaction();
+             if (transaction.isActive())
+             {
                idmService_.getIdentitySession().save();
-            }
+             }
+           }
+           catch (Exception e)
+           {
+             log.error(e.getMessage(), e);
+             recoverFromIDMError(transaction);
+           }
          }
 
       }
@@ -205,6 +220,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    public void endRequest(ExoContainer container)
    {
+	  Transaction transaction = null;
       try
       {
          if (configuration.isUseJTA())
@@ -217,10 +233,19 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          }            
          else
          {
-            if (idmService_.getIdentitySession().getTransaction().isActive())
-            {
-               idmService_.getIdentitySession().getTransaction().commit();
-            }
+           try
+           {
+        	   transaction = idmService_.getIdentitySession().getTransaction();
+        	   if (transaction.isActive()) 
+        	   {
+        		   transaction.commit();
+				}
+           }
+           catch (Exception e)
+           {
+             log.error(e.getMessage(), e);
+             recoverFromIDMError(transaction);
+           }
          }
       }
       catch (Exception e)
@@ -229,6 +254,25 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       }
    }
 
+   // Should be used only for non-JTA environment
+   public void recoverFromIDMError(Transaction idmTransaction )
+   {
+      try
+      {
+         // We need to restart Hibernate transaction if it's available. First rollback old one and then start new one
+        
+         if (idmTransaction.isActive())
+         {
+           idmTransaction.rollback();
+           idmTransaction.start();
+           log.info("IDM error recovery finished. Old transaction has been rolled-back and new transaction has been started");
+         }
+      }
+      catch (Exception e)
+      {
+         log.warn("Error during recovery of old error", e);
+      }
+   }
 
    public Config getConfiguration()
    {
