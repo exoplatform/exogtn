@@ -237,7 +237,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (hasRole)
@@ -261,7 +261,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
       if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()))
@@ -274,7 +274,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -319,7 +319,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       boolean associated = false;
@@ -332,7 +332,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (!hasRole &&
@@ -357,7 +357,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -373,7 +373,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -412,7 +412,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -453,7 +453,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
          Set<String> keys = new HashSet<String>();
@@ -469,7 +469,7 @@ public class MembershipDAOImpl implements MembershipHandler
             {
                //TODO:
                log.info("Identity operation error: ", e);
-               orgService.recoverFromIDMError(null);
+               orgService.recoverFromIDMError();
             }
          }
 
@@ -517,7 +517,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (isAssociationMapped() && getAssociationMapping().equals(type) && associated)
@@ -536,7 +536,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (role != null &&
@@ -622,7 +622,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -649,7 +649,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (isAssociationMapped() && associated)
@@ -703,7 +703,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -734,7 +734,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
          for (org.picketlink.idm.api.Group group : groups)
@@ -832,7 +832,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
@@ -864,7 +864,7 @@ public class MembershipDAOImpl implements MembershipHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
          for (org.picketlink.idm.api.User user : users)
@@ -946,7 +946,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       try
@@ -971,7 +971,7 @@ public class MembershipDAOImpl implements MembershipHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (log.isTraceEnabled())

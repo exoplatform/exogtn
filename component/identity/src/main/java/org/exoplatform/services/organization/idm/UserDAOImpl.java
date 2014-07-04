@@ -163,7 +163,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (getIntegrationCache() != null)
@@ -178,7 +178,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
           session.getPersistenceManager().removeUser(user.getUserName(),true);
-          orgService.recoverFromIDMError(null);
+          orgService.recoverFromIDMError();
       }
 
       if (broadcast)
@@ -247,7 +247,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot obtain user: " + userName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (foundUser == null)
@@ -264,7 +264,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot cleanup user relationships: " + userName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       User exoUser = getPopulatedUser(userName, session);
@@ -281,7 +281,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot remove user: " + userName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (getIntegrationCache() != null)
@@ -416,7 +416,7 @@ public class UserDAOImpl implements UserHandler
          catch (Exception e)
          {
             log.info("Cannot authenticate user: " + username + "; ",  e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -607,7 +607,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot find user by email: " + email + "; ", e );
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       User user = null;
@@ -657,7 +657,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot obtain group: " + groupId + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       qb.addRelatedGroup(jbidGroup);
@@ -746,7 +746,7 @@ public class UserDAOImpl implements UserHandler
             catch (Exception e)
             {
                log.info("Cannot update password: " + user.getUserName() + "; ", e);
-               orgService.recoverFromIDMError(null);
+               orgService.recoverFromIDMError();
             }
          }
       }
@@ -761,7 +761,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot update attributes for user: " + user.getUserName() + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
    }
@@ -779,7 +779,7 @@ public class UserDAOImpl implements UserHandler
       catch (Exception e)
       {
          log.info("Cannot obtain user: " + userName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (u == null)
@@ -811,7 +811,7 @@ public class UserDAOImpl implements UserHandler
       {
 
          log.info("Cannot obtain attributes for user: " + user.getUserName() + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (attrs == null)

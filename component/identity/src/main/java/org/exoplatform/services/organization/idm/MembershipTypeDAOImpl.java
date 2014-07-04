@@ -127,7 +127,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
          log.info("Error when creating Membership", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (broadcast)
@@ -195,7 +195,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
          log.info("Identity error when finding membership type " + name, e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       MembershipType mt = null;
@@ -251,7 +251,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
         catch (Exception e)
         {
            log.info("Error occured when removing membership type", e);
-           orgService.recoverFromIDMError(null);
+           orgService.recoverFromIDMError();
         }
 
          if (broadcast)
@@ -285,7 +285,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
          log.info("Exception occured when looking for membership type", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       List<MembershipType> mts = new LinkedList<MembershipType>();
@@ -325,7 +325,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
          log.info("Exception occured when finding role type", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
          return;
       }
 
@@ -344,7 +344,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
          log.info("Exception when updating membership type", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       return;
@@ -362,7 +362,7 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       catch (Exception e)
       {
           log.info("Identity error occured when populating membership type", e);
-          orgService.recoverFromIDMError(null);
+          orgService.recoverFromIDMError();
           return;
       }
 

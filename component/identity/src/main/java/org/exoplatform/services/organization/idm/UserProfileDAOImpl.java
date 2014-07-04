@@ -160,7 +160,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (foundUser == null)
@@ -244,7 +244,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (u == null)
@@ -262,7 +262,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (attrs == null || attrs.isEmpty())
@@ -324,7 +324,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
    }
@@ -345,7 +345,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
    }
 

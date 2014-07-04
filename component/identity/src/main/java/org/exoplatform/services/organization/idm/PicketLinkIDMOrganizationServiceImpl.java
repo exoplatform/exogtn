@@ -255,6 +255,29 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    }
 
    // Should be used only for non-JTA environment
+   public void recoverFromIDMError() throws Exception
+   {
+      try
+      {
+         // We need to restart Hibernate transaction if it's available. First rollback old one and then start new one
+         Transaction idmTransaction = idmService_.getIdentitySession().getTransaction();
+         if (idmTransaction.isActive())
+         {
+           idmTransaction.rollback();
+           log.info("IDM error recovery finished. Old transaction has been rolled-back and new transaction has been started");
+         }
+      }
+      catch (Exception e)
+      {
+         log.warn("Error during recovery of old error", e);
+         throw new RuntimeException("An error occured. IDM operation rolledback", e);
+      }
+      
+      throw new RuntimeException("An error occured. IDM operation rolledback");
+      
+   }
+   
+   // Should be used only for non-JTA environment
    public void recoverFromIDMError(Transaction idmTransaction )
    {
       try
@@ -272,8 +295,10 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       }
       catch (Exception e)
       {
-         log.warn("Error during recovery of old error", e);
+    	  throw new RuntimeException("An error occured. IDM operation rolledback", e);
       }
+      
+      throw new RuntimeException("An error occured. IDM operation rolledback");
    }
 
    public Config getConfiguration()

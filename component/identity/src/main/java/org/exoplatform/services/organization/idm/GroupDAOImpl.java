@@ -150,7 +150,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             log.info("Cannot obtain group: " + parentPLGroupName, e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
          ((ExtGroup)child).setId(parent.getId() + "/" + child.getGroupName());
@@ -187,7 +187,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          log.info("Cannot associate groups: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (broadcast)
@@ -259,7 +259,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          log.info("Cannot obtain group: " + plGroupName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (jbidGroup == null)
@@ -290,7 +290,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          log.info("Cannot clear group relationships: " + plGroupName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       try
@@ -301,7 +301,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          log.info("Cannot remove group: " + plGroupName + "; ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (broadcast)
@@ -337,7 +337,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       Set<Group> exoGroups = new HashSet<Group>();
@@ -366,7 +366,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
          for (org.picketlink.idm.api.Group group : groups)
@@ -475,7 +475,7 @@ public class GroupDAOImpl implements GroupHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -500,7 +500,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       // Get members of all types mapped below the parent group id path.
@@ -520,7 +520,7 @@ public class GroupDAOImpl implements GroupHandler
             {
                //TODO:
                log.info("Identity operation error: ", e);
-               orgService.recoverFromIDMError(null);
+               orgService.recoverFromIDMError();
             }
          }
       }
@@ -631,7 +631,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       List<Group> exoGroups = new LinkedList<Group>();
@@ -682,7 +682,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       // Check for all type groups mapped as part of the group tree but not connected with the root group by association
@@ -699,7 +699,7 @@ public class GroupDAOImpl implements GroupHandler
             {
                //TODO:
                log.info("Identity operation error: ", e);
-               orgService.recoverFromIDMError(null);
+               orgService.recoverFromIDMError();
             }
          }
       }
@@ -792,7 +792,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       String gtnGroupName = getGtnGroupName(jbidGroup.getName());
@@ -918,7 +918,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       // Check if there is cross reference so we ended in a loop and break the process.
@@ -1039,7 +1039,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (jbidGroup == null)
@@ -1054,7 +1054,7 @@ public class GroupDAOImpl implements GroupHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
@@ -1086,7 +1086,7 @@ public class GroupDAOImpl implements GroupHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
 
       }
@@ -1164,7 +1164,7 @@ public class GroupDAOImpl implements GroupHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError(null);
+         orgService.recoverFromIDMError();
       }
 
       if (rootGroup == null)
@@ -1181,7 +1181,7 @@ public class GroupDAOImpl implements GroupHandler
          {
             //TODO:
             log.info("Identity operation error: ", e);
-            orgService.recoverFromIDMError(null);
+            orgService.recoverFromIDMError();
          }
       }
 
