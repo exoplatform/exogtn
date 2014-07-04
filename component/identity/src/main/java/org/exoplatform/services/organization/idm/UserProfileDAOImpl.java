@@ -49,7 +49,6 @@ public class UserProfileDAOImpl implements UserProfileHandler
    private static Logger log = LoggerFactory.getLogger(UserProfileDAOImpl.class);
 
    static private UserProfile NOT_FOUND = new UserProfileImpl();
-
    private PicketLinkIDMService service_;
 
    private List<UserProfileEventListener> listeners_;
@@ -160,7 +159,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError();
+         orgService.recoverFromIDMError(e);
       }
 
       if (foundUser == null)
@@ -244,7 +243,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError();
+         orgService.recoverFromIDMError(e);
       }
 
       if (u == null)
@@ -262,7 +261,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError();
+         orgService.recoverFromIDMError(e);
       }
 
       if (attrs == null || attrs.isEmpty())
@@ -324,7 +323,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError();
+         orgService.recoverFromIDMError(e);
       }
 
    }
@@ -345,7 +344,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       {
          //TODO:
          log.info("Identity operation error: ", e);
-         orgService.recoverFromIDMError();
+         orgService.recoverFromIDMError(e);
       }
    }
 
